@@ -163,6 +163,20 @@
      ]
     }
    }
+  ],
+  "fallback_any": [
+   {
+    "text": "Oh! I like that answer.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hm. That made me smile.",
+    "expr": "happy"
+   },
+   {
+    "text": "Good answer. A very good one.",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [
@@ -1266,5 +1280,258 @@
     }
    }
   }
- ]
+ ],
+ "replyPools": {
+  "yes": {
+   "icon": "👍",
+   "phrases": [
+    {
+     "text": "Yes!"
+    },
+    {
+     "text": "Yep!"
+    },
+    {
+     "text": "Totally!"
+    },
+    {
+     "text": "Uh-huh!"
+    },
+    {
+     "text": "Obviously!"
+    },
+    {
+     "text": "Always!"
+    },
+    {
+     "text": "Of course!"
+    },
+    {
+     "text": "Yes yes yes!"
+    }
+   ]
+  },
+  "no": {
+   "icon": "🙅",
+   "phrases": [
+    {
+     "text": "Nope!"
+    },
+    {
+     "text": "Nuh-uh!"
+    },
+    {
+     "text": "Not really"
+    },
+    {
+     "text": "No way!"
+    },
+    {
+     "text": "Nah!"
+    },
+    {
+     "text": "Not today!"
+    }
+   ]
+  },
+  "unsure": {
+   "icon": "🤔",
+   "phrases": [
+    {
+     "text": "Maybe?"
+    },
+    {
+     "text": "Hmm…"
+    },
+    {
+     "text": "I don't know!"
+    },
+    {
+     "text": "No idea!"
+    },
+    {
+     "text": "Kind of?"
+    },
+    {
+     "text": "Who knows!"
+    }
+   ]
+  },
+  "listen": {
+   "icon": "👂",
+   "phrases": [
+    {
+     "text": "(just listen)"
+    },
+    {
+     "text": "(lean in)"
+    },
+    {
+     "text": "(listen quietly)"
+    },
+    {
+     "text": "(snuggle in and listen)"
+    }
+   ]
+  },
+  "nod": {
+   "icon": "🙂",
+   "phrases": [
+    {
+     "text": "(nod)"
+    },
+    {
+     "text": "(nod nod)"
+    },
+    {
+     "text": "(smile)"
+    },
+    {
+     "text": "(thumbs up)"
+    }
+   ]
+  },
+  "giggle": {
+   "icon": "😆",
+   "phrases": [
+    {
+     "text": "(giggle)"
+    },
+    {
+     "text": "(laugh)"
+    },
+    {
+     "text": "Ha ha!"
+    },
+    {
+     "text": "Hee hee!"
+    },
+    {
+     "text": "(snort-laugh)"
+    },
+    {
+     "text": "Ha!"
+    }
+   ]
+  },
+  "ask_more": {
+   "icon": "🗣️",
+   "phrases": [
+    {
+     "text": "Tell me!"
+    },
+    {
+     "text": "Then what?"
+    },
+    {
+     "text": "What was it?"
+    },
+    {
+     "text": "Tell me more!"
+    },
+    {
+     "text": "And then?"
+    }
+   ]
+  },
+  "later": {
+   "icon": "⏳",
+   "phrases": [
+    {
+     "text": "Later"
+    },
+    {
+     "text": "Maybe later"
+    },
+    {
+     "text": "Another time"
+    },
+    {
+     "text": "Not right now"
+    }
+   ]
+  },
+  "wow": {
+   "icon": "🤩",
+   "phrases": [
+    {
+     "text": "Wow!"
+    },
+    {
+     "text": "Whoa!"
+    },
+    {
+     "text": "Cool!"
+    },
+    {
+     "text": "No way!"
+    },
+    {
+     "text": "Amazing!"
+    }
+   ]
+  },
+  "silly": {
+   "icon": "🤪",
+   "phrases": [
+    {
+     "text": "Something silly!"
+    },
+    {
+     "text": "Banana!"
+    },
+    {
+     "text": "A giant sock!"
+    },
+    {
+     "text": "Wiggly noodles!"
+    }
+   ]
+  }
+ },
+ "intentMap": {
+  "yes": [
+   "Yes!",
+   "Yep!",
+   "Totally!",
+   "Uh-huh!",
+   "Obviously!",
+   "Always!"
+  ],
+  "no": [
+   "Nope!",
+   "Nuh-uh!",
+   "Not really"
+  ],
+  "unsure": [
+   "I don't know",
+   "No idea",
+   "Maybe?"
+  ],
+  "listen": [
+   "(just listen)"
+  ],
+  "nod": [
+   "(nod)"
+  ],
+  "giggle": [
+   "(giggle)",
+   "(laugh)",
+   "Ha ha!",
+   "Hee hee!"
+  ],
+  "ask_more": [
+   "Tell me!",
+   "What was it?"
+  ],
+  "later": [
+   "Later"
+  ],
+  "wow": [
+   "No way!"
+  ],
+  "silly": [
+   "Something silly!"
+  ]
+ }
 }

@@ -1463,6 +1463,80 @@
      "varSet": "map_stars_name"
     }
    }
+  ],
+  "carry_on": [
+   {
+    "text": "…that's alright. We can sit with it. Hoo.",
+    "expr": "love"
+   },
+   {
+    "text": "No hurry… I'll go on, softly.",
+    "expr": "love"
+   },
+   {
+    "text": "Mm… a quiet answer. I like those too.",
+    "expr": "love"
+   }
+  ],
+  "fallback_silly": [
+   {
+    "text": "Hoo hoo… that's a moonish idea.",
+    "expr": "happy"
+   }
+  ],
+  "fallback_unsure": [
+   {
+    "text": "Not knowing is cozy… we can wonder.",
+    "expr": "curious"
+   }
+  ],
+  "fallback_yes": [
+   {
+    "text": "Mm. Yes… I thought so too.",
+    "expr": "happy"
+   }
+  ],
+  "fallback_no": [
+   {
+    "text": "No… that's alright. Hoo.",
+    "expr": "neutral"
+   }
+  ],
+  "fallback_listen": [
+   {
+    "text": "…thank you for listening with me.",
+    "expr": "love"
+   }
+  ],
+  "fallback_any": [
+   {
+    "text": "Hoo… I didn't expect that. How lovely.",
+    "expr": "surprised"
+   },
+   {
+    "text": "Mm… a new thought. I'll keep it.",
+    "expr": "happy"
+   }
+  ],
+  "drift_bridge": [
+   {
+    "text": "…that reminds me of something else. Hoo.",
+    "expr": "curious"
+   },
+   {
+    "text": "Mm… one thought leads to another…",
+    "expr": "curious"
+   }
+  ],
+  "lost_thought": [
+   {
+    "text": "…I was going to say something. It floated off.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "Hm… the thought flew away. Silent flight.",
+    "expr": "curious"
+   }
   ]
  },
  "conversations": [
@@ -24439,5 +24513,87 @@
     }
    }
   }
- ]
+ ],
+ "persona": {
+  "petPhrases": [
+   "Hoo, indeed.",
+   "How lovely.",
+   "Well, well…",
+   "Quietly wonderful.",
+   "Mm. Yes.",
+   "Softly, now.",
+   "That's a moon-ish thought.",
+   "Hoo-hum."
+  ],
+  "words": [
+   "moonish",
+   "hushful",
+   "twinklesome",
+   "dusklight",
+   "featherly",
+   "softish"
+  ]
+ },
+ "topicGroups": {
+  "sky": [
+   "moon",
+   "stars",
+   "sky",
+   "sunrise",
+   "sunset",
+   "cloud",
+   "fog",
+   "frost",
+   "snow",
+   "star",
+   "night"
+  ],
+  "sounds": [
+   "crickets",
+   "owlhoot",
+   "silence",
+   "music",
+   "far",
+   "clock",
+   "rain",
+   "wind",
+   "river"
+  ],
+  "creatures": [
+   "moth",
+   "firefly",
+   "mouse",
+   "hedgehog",
+   "bat",
+   "snail",
+   "caterpillar",
+   "owl"
+  ],
+  "cozy": [
+   "books",
+   "window",
+   "tea",
+   "teacup",
+   "lantern",
+   "bedtime",
+   "nest",
+   "yawn",
+   "map",
+   "story",
+   "sleepy"
+  ],
+  "nature": [
+   "dew",
+   "feather",
+   "pinecone",
+   "leaves",
+   "tree",
+   "honey",
+   "mushroom",
+   "seashell",
+   "puddle",
+   "shadow",
+   "wings"
+  ]
+ }
 }

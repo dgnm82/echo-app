@@ -14,7 +14,7 @@ window.CONFIG = {
     {bond:370, id:'talent3', label:'Talent 3'},
     {bond:440, id:'talent4', label:'Talent 4 + restless signs'},
     {bond:500, id:'ready',   label:'Ready for the wild'}],
-  maxDecayHours: 48, callbackMinAgeHours: 24, ambientMin: 25, ambientMax: 60, graceDays: 3,
+  maxDecayHours: 48, callbackMinAgeHours: 24, carryOnSeconds: 45, maxConversationsPerSession: 2, ambientMin: 25, ambientMax: 60, graceDays: 3,
   checkins: [[1,'postcard'],[3,'postcard'],[7,'note'],[14,'sign'],[30,'postcard'],[60,'note'],[90,'sign']], napSeconds: 20, sitSeconds: 8 // nap/sit shortened from 120s/20s for demo
 };
 // Creature profiles (spec v0.3). All spoken text lives in dialogue/*.json.

@@ -1598,6 +1598,88 @@
      "varSet": "cricket_slyte_name"
     }
    }
+  ],
+  "carry_on": [
+   {
+    "text": "That's okay. We can just sit. …Anyway!",
+    "expr": "love"
+   },
+   {
+    "text": "No rush. I'll keep going. Okay okay!",
+    "expr": "happy"
+   },
+   {
+    "text": "Thinking face? Same. So, anyway…",
+    "expr": "curious"
+   }
+  ],
+  "fallback_silly": [
+   {
+    "text": "Ha-HA! That's so silly it might be true.",
+    "expr": "excited"
+   }
+  ],
+  "fallback_unsure": [
+   {
+    "text": "Not knowing is fun. Mysteries!",
+    "expr": "curious"
+   }
+  ],
+  "fallback_yes": [
+   {
+    "text": "Yes! My tail agrees.",
+    "expr": "happy"
+   }
+  ],
+  "fallback_no": [
+   {
+    "text": "No? Okay. Noted. Pouncing on.",
+    "expr": "happy"
+   }
+  ],
+  "fallback_listen": [
+   {
+    "text": "You're a good listener. Ears up!",
+    "expr": "love"
+   }
+  ],
+  "fallback_any": [
+   {
+    "text": "Ooh. I didn't expect that. I like it!",
+    "expr": "surprised"
+   },
+   {
+    "text": "Huh! New idea. Filing it in my ears.",
+    "expr": "happy"
+   }
+  ],
+  "drift_bridge": [
+   {
+    "text": "Ooh— that reminds me of something!",
+    "expr": "excited"
+   },
+   {
+    "text": "Wait wait. That makes me think of…",
+    "expr": "curious"
+   },
+   {
+    "text": "Psst. Related thought. Ready?",
+    "expr": "happy"
+   }
+  ],
+  "lost_thought": [
+   {
+    "text": "It was about a leaf. …It was a good leaf.",
+    "expr": "curious"
+   },
+   {
+    "text": "I had a thought. It ran off. Fast thought.",
+    "expr": "happy"
+   },
+   {
+    "text": "Where was I? …Nowhere. Nice place.",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [
@@ -25014,5 +25096,87 @@
     }
    }
   }
- ]
+ ],
+ "persona": {
+  "petPhrases": [
+   "Yip-yip!",
+   "Sneaky-good!",
+   "Ooh, a mystery!",
+   "Tail says yes.",
+   "Pounce-worthy!",
+   "That's a shiny idea.",
+   "Okay okay okay!",
+   "Ha-HA!"
+  ],
+  "words": [
+   "glimmery",
+   "sneakful",
+   "pouncy",
+   "tremendous-ish",
+   "boop-worthy",
+   "sparkleful"
+  ]
+ },
+ "topicGroups": {
+  "sky": [
+   "moon",
+   "star",
+   "cloud",
+   "rainbow",
+   "wind",
+   "kite",
+   "balloon",
+   "snow"
+  ],
+  "water": [
+   "puddle",
+   "rain",
+   "frog",
+   "bubble",
+   "snail"
+  ],
+  "bugs": [
+   "beetle",
+   "ant",
+   "ladybug",
+   "cricket",
+   "cocoon",
+   "squirrel"
+  ],
+  "home": [
+   "treehouse",
+   "door",
+   "bed",
+   "sock",
+   "button",
+   "lantern",
+   "teapot",
+   "mirror",
+   "map",
+   "code"
+  ],
+  "nature": [
+   "leaf",
+   "flower",
+   "dandelion",
+   "pinecone",
+   "stick",
+   "nut",
+   "berry",
+   "feather",
+   "hill",
+   "hole",
+   "pebble",
+   "honeycake"
+  ],
+  "me": [
+   "hiccup",
+   "sneeze",
+   "yawn",
+   "tail",
+   "shadow",
+   "echo",
+   "bottlecap"
+  ]
+ }
 }

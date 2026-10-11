@@ -22,7 +22,8 @@ function say(t){try{if(!(S&&S.voice&&window.speechSynthesis))return;const vs=loc
 if(window.speechSynthesis&&'onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
-const B=(k,x)=>Dialogue.bark(k,x);
+const PET_KEYS=new Set(['hello','fed_fav','game_end','hunt_found','seek_found','sky_named','gift_got','reveal_reply']);
+const B=(k,x)=>{const l=Dialogue.bark(k,x);return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
 function remember(t,tag){S.memories.push(t);if(tag){S.memTags=S.memTags||[];if(!S.memTags.includes(tag))S.memTags.push(tag);(S.memTagAt=S.memTagAt||{})[tag]=S.memTagAt[tag]||now()}save()}
@@ -84,7 +85,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{if(S.released)return afterHome();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released)return afterHome();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
   h(`<div class="full" style="position:relative;background:none"><div style="font-size:72px">🦊🦉</div><h1>Project Echo</h1><p>Prototype for playtesting. A grown-up sets this up.</p>
@@ -101,7 +102,7 @@ function discover(){
 }
 async function reveal(kind){
   Object.assign(S,{kind,g:genEcho(kind),needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],vars:{},seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString()});
-  S.g.name=E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');
+  S.g.name=E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
   const e=E();
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)">${svg(kind,S.g,'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
   setTimeout(()=>{const c=$('#cr');c.style.opacity=1;c.style.bottom='10%'},300);
@@ -144,9 +145,9 @@ function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happ
 function hop(){react('happy')}
 function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
 // two-tap reply choices (S9)
-function choices(list,cb){
-  let sel=-1;ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}"><span class="ic">${c[0]}</span>${c[1]}</button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
-  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
+function choices(list,cb,opts){
+  let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}"><span class="ic">${c[0]}</span>${c[1]}</button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
+  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
 }
 function maybeChat(){
   const n=S.needs;
@@ -154,14 +155,22 @@ function maybeChat(){
     return setTimeout(()=>{if(!document.getElementById('feed')){sess.asked=0;return}talk(B('ask_ready'),60000);choices([['🌲',"Let's go together",null],['🤗','Not yet',null]],i=>{
       S.releasePath='echo-asked';if(i===0)return release(false,true);
       S.graceUntil=now()+C.graceDays*864e5;S.releasePath=null;save();talk(B('stay_more'))})},1500)}
-  if(sess.chats>=2||Math.random()<.35)return;
+  if(sess.chats>=C.maxConversationsPerSession||Math.random()<.35)return;
   if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
   const conv=Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
-function runConv(conv,done){
-  Dialogue.run(conv,{tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>talk(l,ms),choose:(list,cb)=>choices(list,cb),setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
-    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},()=>{addBond(C.bond.reply);done&&done()});
+function initDialogue(){Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
+function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
+  Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>talk(l,ms),choose:(list,cb,o)=>choices(list,cb,o),setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
+    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(C.bond.reply);save();
+    // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
+    const onHome=()=>document.getElementById('feed')&&!document.querySelector('.full');
+    const nx=info&&info.carriedOn?null:Dialogue.afterConversation(conv,depth);
+    if(nx&&nx.type==='lost'&&onHome()){talk(nx.line);sess.lost=(sess.lost||0)+1}
+    else if(nx&&nx.type==='drift'&&sess.chats<C.maxConversationsPerSession&&onHome()){sess.chats++;sess.drift=(sess.drift||0)+1;talk(nx.line);
+      return setTimeout(()=>{if(onHome())runConv(nx.conv,done,depth+1)},2600)}
+    done&&done()},depth);
 }
 function feed(){
   if(asleep())return; const e=E();
@@ -331,6 +340,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

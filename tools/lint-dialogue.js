@@ -33,7 +33,7 @@ const RULES=[
  // gendered assumptions about the child
  ['gender',/\b(good|big) (boy|girl)\b/i,'gender'],
 ];
-const EXPR=new Set(['neutral','happy','excited','eating','love','curious','surprised','sleepy','sad']);
+const EXPR=new Set(['neutral','happy','excited','eating','love','curious','surprised','sleepy','sad','delighted','thinking','giggling','proud','shy','wistful','concentrating']);
 const REACT=new Set(['happy','excited','pet','eat','sad','sleepy']);
 const FEELINGS=/\b(felt|feel|feeling|sad|upset|cried|scared|worried|good day|bad day|not great|gray days?)\b/i;
 let errors=0,warnings=0;

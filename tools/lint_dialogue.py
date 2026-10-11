@@ -6,16 +6,16 @@ Usage: python3 lint_dialogue.py [dir]   (default: ../dialogue relative to this s
 import json, re, sys, os
 from collections import defaultdict
 
-EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad"}
+EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad","delighted","thinking","giggling","proud","shy","wistful","concentrating"}
 REACT = {"happy","excited","pet","eat","sad","sleepy"}
 KNOWN_KEYS = {"hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
   "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","first_gift","favplace","trust","release_invite",
   "release_forced","hug_more","walk_memory","walk_end","gift_ask","gift_got","goodbye_ask","farewell","look_back"}
-NEW_KEYS = {"ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-KEY_PREFIX = {"slyte": ("talent_","hunt_","camo_","seek_"), "whimber": ("talent_","sky_"), "shared": ("talent_",)}
+NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
+KEY_PREFIX = {"slyte": ("talent_","hunt_","camo_","seek_","fallback_"), "whimber": ("talent_","sky_","fallback_"), "shared": ("talent_","fallback_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
 NODE_KEYS = {"lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
-CHOICE_KEYS = {"lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
+CHOICE_KEYS = {"intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation"}
 
@@ -42,7 +42,7 @@ def check_cond(c, where):
 
 def check_tokens(text, where):
     for t in re.findall(r"\{([^{}]*)\}", text):
-        if t in TOKENS or t.startswith("var:") or t.startswith("pick:"): continue
+        if t in TOKENS or t == "pet_phrase" or t.startswith(("var:","pick:","word:")): continue
         err(where, f"unknown substitution {{{t}}}")
     if re.search(r"\{[^}]*$|^[^{]*\}", text): err(where, "unbalanced braces")
 
