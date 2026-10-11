@@ -25,7 +25,18 @@ function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{
 const B=(k,x)=>Dialogue.bark(k,x);
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
-function remember(t,tag){S.memories.push(t);if(tag){S.memTags=S.memTags||[];if(!S.memTags.includes(tag))S.memTags.push(tag)}save()}
+function remember(t,tag){S.memories.push(t);if(tag){S.memTags=S.memTags||[];if(!S.memTags.includes(tag))S.memTags.push(tag);(S.memTagAt=S.memTagAt||{})[tag]=S.memTagAt[tag]||now()}save()}
+// callbacks (Overhaul B8): memory >= callbackMinAgeHours old, each memory <= 3 callbacks, <= 1 per session moment
+function callbackLine(){const at=S.memTagAt||{},cnt=S.cbCount||{};
+  const ok=l=>{const tags=[];(function walk(c){if(!c)return;if(c.hasMemory)tags.push(c.hasMemory);(c.any||[]).forEach(walk)})(l.cond);
+    return tags.every(t=>at[t]!=null&&now()-at[t]>=C.callbackMinAgeHours*36e5&&(cnt[t]||0)<3)};
+  const b=Dialogue.bark('callback',null,ok);if(!b)return null;
+  (function walk(c){if(!c)return;if(c.hasMemory){(S.cbCount=S.cbCount||{})[c.hasMemory]=(S.cbCount[c.hasMemory]||0)+1}(c.any||[]).forEach(walk)})(b.src.cond);save();return b}
+// ambient chatter (B11): every ambientMin–ambientMax s when nothing else is happening on Home
+let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setTimeout(()=>{
+  const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
+  if(!busy){const cb=Math.random()<.25?callbackLine():null;talk(cb||B('ambient'));sess.ambient=(sess.ambient||0)+1}
+  scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000)}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
 function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;document.body.appendChild(d);return d}
@@ -122,9 +133,9 @@ function home(greet){
   if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now())home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet&&S.graceUntil&&graceDay>=C.graceDays&&S.lastDayLine!==graceDay){S.lastDayLine=graceDay;save();talk(B('last_day'))}
   else if(greet&&S.graceUntil){talk(B('grace_hello'))}
-  else if(greet){talk(B('hello'))}
+  else if(greet){talk(B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   else if(ready&&!sess.readyLine){sess.readyLine=1;talk(B('ready_hint'))}
-  setTimeout(flushMilestones,400);
+  setTimeout(flushMilestones,400);scheduleAmbient();
 }
 function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text);clearTimeout(talk.t);
@@ -143,11 +154,13 @@ function maybeChat(){
     return setTimeout(()=>{if(!document.getElementById('feed')){sess.asked=0;return}talk(B('ask_ready'),60000);choices([['🌲',"Let's go together",null],['🤗','Not yet',null]],i=>{
       S.releasePath='echo-asked';if(i===0)return release(false,true);
       S.graceUntil=now()+C.graceDays*864e5;S.releasePath=null;save();talk(B('stay_more'))})},1500)}
-  if(sess.chats>=2||Math.random()<.35)return; const conv=Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
+  if(sess.chats>=2||Math.random()<.35)return;
+  if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
+  const conv=Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
 function runConv(conv,done){
-  Dialogue.run(conv,{say:(l,ms)=>talk(l,ms),choose:(list,cb)=>choices(list,cb),setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
+  Dialogue.run(conv,{tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>talk(l,ms),choose:(list,cb)=>choices(list,cb),setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
     remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},()=>{addBond(C.bond.reply);done&&done()});
 }
 function feed(){
@@ -318,6 +331,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},runConv:(id,d)=>runConv(id,d)};
+window.__echo={get state(){return S},runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

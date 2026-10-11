@@ -7,6 +7,14 @@
    {
     "text": "Zzz… ({name} is napping. It will wake soon.)",
     "expr": "sleepy"
+   },
+   {
+    "text": "Zzz… ({name} is curled up, dreaming something nice.)",
+    "expr": "sleepy"
+   },
+   {
+    "text": "({name} twitches in its sleep. A happy dream, probably.)",
+    "expr": "sleepy"
    }
   ],
   "last_day": [
@@ -20,6 +28,11 @@
     "text": "I can stay a little longer. A few more days. Then I really should go live my wild life.",
     "expr": "love",
     "react": "happy"
+   },
+   {
+    "text": "A few more days together. Then home, to my wild life.",
+    "expr": "love",
+    "react": "happy"
    }
   ],
   "hug_more": [
@@ -30,6 +43,11 @@
    },
    {
     "text": "(Squeeze!) That one was the best one yet.",
+    "expr": "love",
+    "react": "pet"
+   },
+   {
+    "text": "(A long, soft hug.) That one was extra warm.",
     "expr": "love",
     "react": "pet"
    }
@@ -45,6 +63,11 @@
     "text": "The {gift}! I'll keep it forever. FOREVER.",
     "expr": "excited",
     "react": "excited"
+   },
+   {
+    "text": "I'll keep the {gift} somewhere safe. Somewhere special.",
+    "expr": "love",
+    "react": "happy"
    }
   ],
   "goodbye_ask": [
@@ -63,6 +86,10 @@
    {
     "text": "(It stops… and looks back once.)",
     "expr": "happy"
+   },
+   {
+    "text": "(It turns, just for a moment, and looks happy.)",
+    "expr": "happy"
    }
   ],
   "walk_memory": [
@@ -78,6 +105,10 @@
   "walk_end": [
    {
     "text": "I'll remember all of it.",
+    "expr": "love"
+   },
+   {
+    "text": "This is the spot. It feels just right.",
     "expr": "love"
    }
   ],
@@ -109,6 +140,28 @@
    {
     "text": "{name} {trust}.",
     "expr": "love"
+   }
+  ],
+  "time_morning": [
+   {
+    "text": "Good morning. The day is brand new.",
+    "expr": "happy",
+    "cond": {
+     "time": [
+      "morning"
+     ]
+    }
+   }
+  ],
+  "time_evening": [
+   {
+    "text": "The day is winding down. Cozy time.",
+    "expr": "love",
+    "cond": {
+     "time": [
+      "evening"
+     ]
+    }
    }
   ]
  },
@@ -207,6 +260,1011 @@
     "bondMin": 140
    },
    "privacy": "feelings: respond in the moment, never store"
+  },
+  {
+   "id": "shared_rock",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Look… a smooth rock. It fits in a paw perfectly.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Where do smooth rocks get smooth?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌊",
+       "label": "The river",
+       "reply": "The river polished it. For a long, long time.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_rock": "The river"
+       },
+       "memory": "You picked: The river (rock)",
+       "memoryTag": "shared_rock"
+      },
+      {
+       "icon": "🤲",
+       "label": "Lots of holding",
+       "reply": "Lots of holding. Maybe someone held it a lot.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_rock": "Lots of holding"
+       },
+       "memory": "You picked: Lots of holding (rock)",
+       "memoryTag": "shared_rock"
+      },
+      {
+       "icon": "✨",
+       "label": "Magic",
+       "reply": "Magic smoothing. A gentle kind.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_rock": "Magic"
+       },
+       "memory": "You picked: Magic (rock)",
+       "memoryTag": "shared_rock"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about it.",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Mm.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_sky",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "The sky is a different color than yesterday. I think.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What color is the sky right now?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "💙",
+       "label": "Blue",
+       "reply": "Blue. The most sky color of all.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sky": "Blue"
+       },
+       "memory": "You picked: Blue (sky)",
+       "memoryTag": "shared_sky"
+      },
+      {
+       "icon": "🩷",
+       "label": "Pink",
+       "reply": "Pink! The sky is blushing a little.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sky": "Pink"
+       },
+       "memory": "You picked: Pink (sky)",
+       "memoryTag": "shared_sky"
+      },
+      {
+       "icon": "🩶",
+       "label": "Grey",
+       "reply": "Grey. A cozy-blanket kind of sky.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sky": "Grey"
+       },
+       "memory": "You picked: Grey (sky)",
+       "memoryTag": "shared_sky"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about that.",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Yes.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_sound",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Listen… do you hear that little sound?",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What do you think it is?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🐦",
+       "label": "A bird",
+       "reply": "A bird! Saying something. Probably hello.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sound": "A bird"
+       },
+       "memory": "You picked: A bird (sound)",
+       "memoryTag": "shared_sound"
+      },
+      {
+       "icon": "🍃",
+       "label": "The leaves",
+       "reply": "The leaves are whispering to each other.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sound": "The leaves"
+       },
+       "memory": "You picked: The leaves (sound)",
+       "memoryTag": "shared_sound"
+      },
+      {
+       "icon": "🤷",
+       "label": "No idea",
+       "reply": "No idea. A mystery sound. I like it.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_sound": "No idea"
+       },
+       "memory": "You picked: No idea (sound)",
+       "memoryTag": "shared_sound"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about this.",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. That was nice.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_gift",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "I found a tiny thing today. For the memory book.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What should we call it?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "💎",
+       "label": "A treasure",
+       "reply": "A treasure. Yes. That's what it is.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_gift": "A treasure"
+       },
+       "memory": "You picked: A treasure (gift)",
+       "memoryTag": "shared_gift"
+      },
+      {
+       "icon": "🎁",
+       "label": "A present",
+       "reply": "A present. From the day, to us.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_gift": "A present"
+       },
+       "memory": "You picked: A present (gift)",
+       "memoryTag": "shared_gift"
+      },
+      {
+       "icon": "🙂",
+       "label": "Just a thing",
+       "reply": "Just a thing. A good thing.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_gift": "Just a thing"
+       },
+       "memory": "You picked: Just a thing (gift)",
+       "memoryTag": "shared_gift"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about it. (gift thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Good thinking.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_color",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "If I could be any color for a day…",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Which color should I be?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🟣",
+       "label": "Purple",
+       "reply": "Purple! Like a berry. Like dusk.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_color": "Purple"
+       },
+       "memory": "You picked: Purple (color)",
+       "memoryTag": "shared_color"
+      },
+      {
+       "icon": "🟢",
+       "label": "Green",
+       "reply": "Green, like the grass. I'd hide so well.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_color": "Green"
+       },
+       "memory": "You picked: Green (color)",
+       "memoryTag": "shared_color"
+      },
+      {
+       "icon": "🌈",
+       "label": "All of them",
+       "reply": "All of them? A rainbow me. Wow.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_color": "All of them"
+       },
+       "memory": "You picked: All of them (color)",
+       "memoryTag": "shared_color"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about that. (color thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Lovely.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_weekend",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Some days feel long and slow, like a stretch.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Do you like slow days or busy days?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🐢",
+       "label": "Slow days",
+       "reply": "Slow days. Me too. Lots of time to notice things.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_weekend": "Slow days"
+       },
+       "memory": "You picked: Slow days (weekend)",
+       "memoryTag": "shared_weekend"
+      },
+      {
+       "icon": "🏃",
+       "label": "Busy days",
+       "reply": "Busy days! So much happens. Whoosh.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_weekend": "Busy days"
+       },
+       "memory": "You picked: Busy days (weekend)",
+       "memoryTag": "shared_weekend"
+      },
+      {
+       "icon": "🔀",
+       "label": "Both",
+       "reply": "Both. Some of each. That's a good answer.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_weekend": "Both"
+       },
+       "memory": "You picked: Both (weekend)",
+       "memoryTag": "shared_weekend"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about this. (weekend thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Mm. The weekend one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_song",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "I made up a song. It only has one word.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Want to hear it?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "👍",
+       "label": "Yes!",
+       "reply": "La. …That was it. La.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_song": "Yes!"
+       },
+       "memory": "You picked: Yes (song)",
+       "memoryTag": "shared_song"
+      },
+      {
+       "icon": "🎤",
+       "label": "Sing it louder!",
+       "reply": "LA! …Okay, a little louder. La.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_song": "Sing it louder!"
+       },
+       "memory": "You picked: Sing it louder (song)",
+       "memoryTag": "shared_song"
+      },
+      {
+       "icon": "🎶",
+       "label": "Add a word!",
+       "reply": "La-dee! Now it has two. You helped.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_song": "Add a word!"
+       },
+       "memory": "You picked: Add a word (song)",
+       "memoryTag": "shared_song"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about it. (song thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Yes. The song one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_seasons",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "The leaves outside are changing. A little every day.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What's your favorite season?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌸",
+       "label": "Spring",
+       "reply": "Spring. When everything wakes up.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_seasons": "Spring"
+       },
+       "memory": "You picked: Spring (seasons)",
+       "memoryTag": "shared_seasons"
+      },
+      {
+       "icon": "☀️",
+       "label": "Summer",
+       "reply": "Summer. Long warm evenings.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_seasons": "Summer"
+       },
+       "memory": "You picked: Summer (seasons)",
+       "memoryTag": "shared_seasons"
+      },
+      {
+       "icon": "❄️",
+       "label": "Winter",
+       "reply": "Winter. Snow and cozy blankets.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_seasons": "Winter"
+       },
+       "memory": "You picked: Winter (seasons)",
+       "memoryTag": "shared_seasons"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about that. (seasons thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. That was nice. The seasons one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_pretend_boat",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "What if we had a boat? A tiny one?",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Where would our boat go?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🏝️",
+       "label": "An island",
+       "reply": "An island! With one palm tree. And us.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_pretend_boat": "An island"
+       },
+       "memory": "You picked: An island (pretend boat)",
+       "memoryTag": "shared_pretend_boat"
+      },
+      {
+       "icon": "🌙",
+       "label": "The moon",
+       "reply": "A moon boat! Floating up. Very slowly.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_pretend_boat": "The moon"
+       },
+       "memory": "You picked: The moon (pretend boat)",
+       "memoryTag": "shared_pretend_boat"
+      },
+      {
+       "icon": "🛁",
+       "label": "The bathtub",
+       "reply": "The bathtub. Very brave boat.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_pretend_boat": "The bathtub"
+       },
+       "memory": "You picked: The bathtub (pretend boat)",
+       "memoryTag": "shared_pretend_boat"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about this. (pretend boat thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Good thinking. The pretend boat one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_drawing",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "If I could draw, I'd draw something round.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What should I draw?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "☀️",
+       "label": "The sun",
+       "reply": "The sun. A round, happy one.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_drawing": "The sun"
+       },
+       "memory": "You picked: The sun (drawing)",
+       "memoryTag": "shared_drawing"
+      },
+      {
+       "icon": "🍪",
+       "label": "A cookie",
+       "reply": "A cookie. Then I'd want a cookie.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_drawing": "A cookie"
+       },
+       "memory": "You picked: A cookie (drawing)",
+       "memoryTag": "shared_drawing"
+      },
+      {
+       "icon": "🙂",
+       "label": "A face",
+       "reply": "A face. Smiling. Like that.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_drawing": "A face"
+       },
+       "memory": "You picked: A face (drawing)",
+       "memoryTag": "shared_drawing"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about it. (drawing thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Lovely. The drawing one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_hug",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Do you know what's nice? A hug that lasts a little long.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Big hug or small hug?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🤗",
+       "label": "Big hug",
+       "reply": "A big one. (Squeeze.) Mmm.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_hug": "Big hug"
+       },
+       "memory": "You picked: Big hug (hug)",
+       "memoryTag": "shared_hug"
+      },
+      {
+       "icon": "🤏",
+       "label": "Small hug",
+       "reply": "A small one. (A tiny squeeze.) Still counts.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_hug": "Small hug"
+       },
+       "memory": "You picked: Small hug (hug)",
+       "memoryTag": "shared_hug"
+      },
+      {
+       "icon": "🙅",
+       "label": "No hug now",
+       "reply": "That's okay. We can just sit.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_hug": "No hug now"
+       },
+       "memory": "You picked: No hug now (hug)",
+       "memoryTag": "shared_hug"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about that. (hug thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Mm. The hug one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_dream_shared",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "I had a dream I was a cloud. A very soft one.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "Do you think clouds dream?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "💭",
+       "label": "Yes!",
+       "reply": "Cloud dreams. Floaty ones.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_dream_shared": "Yes!"
+       },
+       "memory": "You picked: Yes (dream shared)",
+       "memoryTag": "shared_dream_shared"
+      },
+      {
+       "icon": "🙅",
+       "label": "No",
+       "reply": "No dreams? Then they just float. That's nice too.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_dream_shared": "No"
+       },
+       "memory": "You picked: No (dream shared)",
+       "memoryTag": "shared_dream_shared"
+      },
+      {
+       "icon": "🤷",
+       "label": "Maybe",
+       "reply": "Maybe. Maybe they dream about rain.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_dream_shared": "Maybe"
+       },
+       "memory": "You picked: Maybe (dream shared)",
+       "memoryTag": "shared_dream_shared"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about this. (dream shared thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Yes. The dream shared one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_number",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Three is a good number. It has a nice shape.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What's your favorite number?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "1️⃣",
+       "label": "One",
+       "reply": "One. Just one. Simple and brave.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_number": "One"
+       },
+       "memory": "You picked: One (number)",
+       "memoryTag": "shared_number"
+      },
+      {
+       "icon": "7️⃣",
+       "label": "Seven",
+       "reply": "Seven. That one sounds lucky.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_number": "Seven"
+       },
+       "memory": "You picked: Seven (number)",
+       "memoryTag": "shared_number"
+      },
+      {
+       "icon": "💯",
+       "label": "A hundred",
+       "reply": "A hundred! That's a whole lot of ones.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_number": "A hundred"
+       },
+       "memory": "You picked: A hundred (number)",
+       "memoryTag": "shared_number"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about it. (number thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. That was nice. The number one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_smell",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "The air smells different today. Like rain, maybe.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What's the best smell?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌧️",
+       "label": "Rain",
+       "reply": "Rain. The ground smells fresh.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_smell": "Rain"
+       },
+       "memory": "You picked: Rain (smell)",
+       "memoryTag": "shared_smell"
+      },
+      {
+       "icon": "🍪",
+       "label": "Cookies",
+       "reply": "Cookies. Warm ones.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_smell": "Cookies"
+       },
+       "memory": "You picked: Cookies (smell)",
+       "memoryTag": "shared_smell"
+      },
+      {
+       "icon": "🌸",
+       "label": "Flowers",
+       "reply": "Flowers. Of course. The flowers would agree.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_smell": "Flowers"
+       },
+       "memory": "You picked: Flowers (smell)",
+       "memoryTag": "shared_smell"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about that. (smell thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Good thinking. The smell one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
+  },
+  {
+   "id": "shared_walk",
+   "trigger": "idle",
+   "weight": 1,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "If we went on a walk, I'd want to see everything.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2200
+    },
+    "b": {
+     "say": "What should we find on our walk?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🐌",
+       "label": "A snail",
+       "reply": "A snail. We'd walk very slowly together.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_walk": "A snail"
+       },
+       "memory": "You picked: A snail (walk)",
+       "memoryTag": "shared_walk"
+      },
+      {
+       "icon": "🪨",
+       "label": "A cool rock",
+       "reply": "A cool rock. One for the memory book.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_walk": "A cool rock"
+       },
+       "memory": "You picked: A cool rock (walk)",
+       "memoryTag": "shared_walk"
+      },
+      {
+       "icon": "🌈",
+       "label": "A rainbow",
+       "reply": "A rainbow. We'd have to be lucky.",
+       "expr": "happy",
+       "goto": "c",
+       "set": {
+        "sh_walk": "A rainbow"
+       },
+       "memory": "You picked: A rainbow (walk)",
+       "memoryTag": "shared_walk"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "reply": "I'll keep wondering about this. (walk thoughts)",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "I like thinking about this with you. Lovely. The walk one was good.",
+     "expr": "love",
+     "bond": 1
+    }
+   }
   }
  ]
 }
