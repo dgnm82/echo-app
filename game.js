@@ -20,7 +20,7 @@ function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}c
 const SFX=(n,o)=>{try{window.Sound&&Sound.play(n,o)}catch(e){}};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
-const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','sky_named','gift_got','reveal_reply']);
+const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','trail_done','connect_special','gift_got','reveal_reply']);
 const B=(k,x)=>{const l=Dialogue.bark(k,x);return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
@@ -242,17 +242,18 @@ function book(){
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
-  // Whimber (spec v0.3 §0, day 1): Night Sky (signature, daily +3) + Starlight Pairs + Hollow Builder
-  if(S.kind!=='fox')return choices([['⭐','Night Sky',null],['🌙','Starlight Pairs',null],['🏡','Hollow Builder',null]],i=>start([nightSky,memoryGame,fortBuilder][i]));
-  // Play picker (spec v0.3 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
-  choices([['⭐','Shiny Pairs',null],['🏠','Fort Builder',null]],i=>start(i===0?memoryGame:fortBuilder));
+  // Play picker (spec v0.3 §0; Night Sky cut): signature Pairs game (daily +3) + Builder on day 1, Trail at bond 70, Connect at bond 140
+  const G=gamesFor();choices(G.map(x=>[x[0],x[1],null]),i=>start(G[i][2]));
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
-function gameShell(title){GT++;h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
+  if(S.bond>=C.unlock.trail)L.push([fox?'🍂':'✨',fox?'Leaf Trail':'Firefly Parade',trailGame]);
+  if(S.bond>=C.unlock.connect&&window.connectGame)L.push([fox?'🫐':'🌙',fox?'Berry Connect':'Moonlight Connect',window.connectGame]);return L}
+function gameShell(title){GT++;const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 function endGame(finished){GT++;if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
-  if((next===nightSky||next&&next.signature)&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
+  if(next&&next.signature&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
   const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
 
 // ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
@@ -335,7 +336,7 @@ const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'com
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
 function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){
-  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',TITLE=fox?'Shiny Pairs':'Starlight Pairs',NEXT=fox?MEM_NEXT:MEM_PLAIN;
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',TITLE=fox?'Shiny Pairs':'Starlight Pairs',NEXT=MEM_NEXT;
   const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({species:SP,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:fox&&S.talents.includes('Master of Disguise')});
   const total=g.L.pairs,img=it=>`px/mem/${SP}_${it}`;let nightVision=!fox&&S.talents.includes('Night Vision');let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
   gameShell(`${TITLE} · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
@@ -357,7 +358,7 @@ function memoryGame(){
     if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
       if(misses%3===0)talk(B('pairs_miss'),1800);
       // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
-      if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('radar_jingle',{pan:(col/(g.cols-1))*2-1,vol:.6})}}
+      if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('slyte_radar_ears_twinkle',{pan:(col/(g.cols-1))*2-1,vol:.6})}}
     if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
     if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,NEXT)}
     if(e.type==='done')finish()}
@@ -379,27 +380,70 @@ function memoryGame(){
   window.__mem=g;window.__memTap=i=>B_[i].click();
   talk(B('pairs_start'),2400);
 }
-const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // Whimber's Starlight Pairs is not its signature game
+const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Night Sky was cut: Starlight Pairs is now Whimber's signature too)
 // Sweet-Dream Lullaby (spec v0.3 §1/§2): in the evening, a finished board/build ends with a yawn and leads into a nap
 function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
-// Night Sky (Whimber's signature) in pixel: 16px twinkling star sprites, gold 1px constellation lines on a canvas, pixel guess icons
-function nightSky(round){
-  gameShell(`Night Sky · picture ${round+1}/3`);const gs=$('#gs');gs.classList.add('skygame');
-  const VW=180,VH=300,n=5+Math.floor(Math.random()*3),pts=[];let guard=0;
-  while(pts.length<n&&guard++<500){const q=[16+Math.floor(Math.random()*148),40+Math.floor(Math.random()*150)];if(pts.every(p=>Math.hypot(p[0]-q[0],p[1]-q[1])>30))pts.push(q)}
-  gs.insertAdjacentHTML('beforeend',`<canvas id="skyc" class="skyc" width="${VW}" height="${VH}"></canvas><div class="skyecho creature" id="cr">${svg('owl',S.g,'curious')}</div>
-    <div class="skynames">${(S.constellations||[]).slice(-3).map(c=>`<span>${PI('✦')}${c}</span>`).join('')}</div>`);
-  const cx=$('#skyc').getContext('2d');let path=[];const nv=S.talents.includes('Night Vision')&&round===1;
-  function line(a,b){let [x0,y0]=a,[x1,y1]=b;const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let err=dx+dy,k=0;cx.fillStyle='#FFD27A';
-    for(;;){if(k++%3!==2)cx.fillRect(x0,y0,1,1);if(x0===x1&&y0===y1)break;const e2=2*err;if(e2>=dy){err+=dy;x0+=sx}if(e2<=dx){err+=dx;y0+=sy}}}
-  talk(B('sky_start'),60000);
-  pts.forEach((p,i)=>{const b=document.createElement('button');b.className='star pxstar'+(nv?' nv':'');b.style.left=(p[0]-8)+'px';b.style.top=(p[1]-8)+'px';b.setAttribute('aria-label','Star');gs.appendChild(b);
-    b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');SFX('sky_star_connect',{gap:30});if(path.length)line(pts[path[path.length-1]],p);path.push(i);react('happy');
-      if(path.length===n){line(p,pts[path[0]]);const opts=[['🥄','Spoon'],['🐈','Stretchy cat'],['🐋','Whale'],['🏡','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
-        talk(B('sky_guess',{guess:opts[0][1].toLowerCase()}),60000);
-        choices(opts.map(o=>[o[0],o[1],null]),k=>{SFX('sky_named_chord');const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));setExpr('delighted');roundDone(round,nightSky)})}}});
-  if(nv)toast('Night Vision: the stars glow brighter for you');
+// ---------- Sparkle trail (game spec v0.3 §3): Leaf Trail (Slyte) / Firefly Parade (Whimber), unlocks at bond 70 ----------
+function trailState(){return S.trail=S.trail||{games:0}}
+function trailLevel(){const t=trailState(),set=S.trailLevel||'auto';if(t.games===0)return 'easy';return set==='auto'?'standard':set}
+function trailGame(){
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',ts=trailState(),level=trailLevel(),TITLE=fox?'Leaf Trail':'Firefly Parade';
+  const silent=!fox&&S.talents.includes('Silent Flight'),nv=!fox&&S.talents.includes('Night Vision'),radar=fox&&S.talents.includes('Radar Ears');
+  const g=TrailEngine.create({level,seed:(S.g.seed||1)*23+ts.games*5+1,jumper:fox&&S.talents.includes('Super Jumper')});
+  const W=g.w*16,H=g.h*16,ms=g.L.ms*(silent?2:1),v=PIXEL.variant(S.g.seed,SP),stepMode=g.L.step;
+  gameShell(`${TITLE} · 0/${g.goal}`);const gs=$('#gs');gs.classList.add('trailgame');if(nv)gs.classList.add('nv');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="tc" class="tc" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Trail board"></canvas>
+    <div class="trside"><i class="pxi" style="background-image:url(px/trail/f_${SP}_0.png);background-size:32px 16px"></i><span id="tcount">0/${g.goal}</span><span id="textra"></span>${level==='standard'?'':`<span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}</div>
+    ${stepMode?'<div class="trhint">Hold to walk</div>':''}<div class="trecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>`);
+  const cv=$('#tc'),cx=cv.getContext('2d'),IM={};const ld=(k,s)=>{IM[k]=new Image();IM[k].src=s};
+  ld('tok',`px/trail/tok_${SP}_${v.pal}.png`);[0,1,2].forEach(i=>ld('f'+i,`px/trail/f_${SP}_${i}.png`));ld('rare',`px/trail/rare_${SP}.png`);ld('obs',`px/trail/obs_${SP}.png`);
+  ld('ta',`px/trail/tile_${SP}_a.png`);ld('tb',`px/trail/tile_${SP}_b.png`);
+  let t=0,alive=true,held=false,happyT=0,paused=false,pickups=0,finale=null;
+  function draw(){if(!alive)return;t++;for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)cx.drawImage((x*7+y*3)%5?IM.ta:IM.tb,x*16,y*16);
+    if(nv){cx.fillStyle='rgba(20,14,40,.55)';cx.fillRect(0,0,W,H)}
+    g.obs.forEach(k=>{const [x,y]=k.split(',').map(Number);cx.drawImage(IM.obs,x*16,y*16)});
+    const p=g.pickup;if(p&&!g.done){const im=p.rare?IM.rare:IM.f0;if(p.rare)cx.drawImage(im,p.x*16,p.y*16-(t>>2)%2);else cx.drawImage(im,((t>>2)%2)*16,0,16,16,p.x*16,p.y*16,16,16)}
+    const F=TrailEngine.followers(g);
+    F.forEach((q,i)=>{if(nv){cx.fillStyle='rgba(255,227,154,.35)';cx.fillRect(q.x*16-2,q.y*16-2,20,20)}cx.drawImage(IM['f'+(i%3)],(((t>>2)+i)%2)*16,0,16,16,q.x*16,q.y*16,16,16)});
+    if(finale)finale();
+    const fr=(happyT>0?2:0)+((t>>2)%2);if(happyT>0)happyT--;cx.save();const hx=g.head.x*16,hy=g.head.y*16;
+    if(g.dir===3){cx.translate(hx+16,hy);cx.scale(-1,1);cx.drawImage(IM.tok,fr*16,0,16,16,0,0,16,16)}else cx.drawImage(IM.tok,fr*16,0,16,16,hx,hy,16,16);cx.restore()}
+  const loop=setInterval(draw,83);
+  const mover=setInterval(()=>{if(!alive||paused||g.done)return;if(stepMode&&!held)return;TrailEngine.step(g);after()},ms);
+  function after(){for(const e of TrailEngine.take(g)){
+      if(e.type==='pickup'){pickups++;happyT=8;SFX(pickups%5===0?'trail_pickup_5':'trail_pickup_1',{vol:.6});if(pickups%4===0)talk(B('trail_pickup'),1500);else say('*')}
+      if(e.type==='bump'){if(!silent)SFX('trail_bump_boop',{gap:400,vol:.5});if(Math.random()<.35)talk(B('trail_bump'),1500)}
+      if(e.type==='hop')happyT=6;
+      if(e.type==='spawn'&&radar)SFX('slyte_radar_ears_twinkle',{pan:(e.x/(g.w-1))*2-1,vol:.5,gap:300});   // Radar Ears: a twinkle from the side the next leaf is on
+      if(e.type==='long')talk(B('trail_long'),1800);
+      if(e.type==='round'&&e.round<2)roundDone(e.round,TR_NEXT);
+      if(e.type==='done')finish()}
+    $('#tcount').textContent=`${g.count}/${g.goal}`;$('#textra').textContent=TrailEngine.extra(g)?`+${TrailEngine.extra(g)}`:'';const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.count}/${g.goal}`}
+  function finish(){ts.games++;const F=TrailEngine.followers(g).slice(0,6);
+    if(fox){finale=()=>{F.forEach((q,i)=>{cx.drawImage(IM['f'+(i%3)],0,0,16,16,g.head.x*16+((i*5)%9)-4,g.head.y*16+((i*3)%5)-2,16,16)})};remember(`We made a trail of ${g.goal} leaves and pounced in the pile`,'trail_'+g.goal)}
+    else{finale=()=>{cx.fillStyle='#FFD27A';for(let i=1;i<F.length;i++){const a=F[i-1],b=F[i];const n=12;for(let k=0;k<=n;k+=2)cx.fillRect(Math.round(a.x*16+8+(b.x-a.x)*16*k/n),Math.round(a.y*16+8+(b.y-a.y)*16*k/n),1,1)}};
+      remember('Our firefly parade made a little constellation','trail_parade')}
+    const c=$('#cr');c.classList.add('show');setExpr('delighted');react('excited');talk(B('trail_done'),2400);save();
+    gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${fox?'Leaf pile pounce!':'A little constellation!'}</span>${PI('✨')}</div>`);
+    setTimeout(()=>{stop();roundDone(2,TR_NEXT)},1800)}
+  function stop(){alive=false;clearInterval(loop);clearInterval(mover);document.removeEventListener('keydown',key);document.removeEventListener('keyup',keyup)}
+  // phone: drag and the Echo follows the finger (easy: walks only while the finger is down)
+  const cell=e=>{const r=cv.getBoundingClientRect(),k=r.width/W;return [Math.floor((e.clientX-r.left)/k/16),Math.floor((e.clientY-r.top)/k/16)]};
+  cv.addEventListener('pointerdown',e=>{held=true;const [x,y]=cell(e);TrailEngine.steer(g,x,y);cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',e=>{if(!held)return;const [x,y]=cell(e);TrailEngine.steer(g,x,y)});
+  ['pointerup','pointercancel'].forEach(n=>cv.addEventListener(n,()=>held=false));
+  // handheld (spec §3): ◀ ▶ turn left/right, A = little dash (easy: hold A to walk), B = pause
+  function key(e){if(!document.getElementById('tc')){stop();return}const k=e.key.toLowerCase();
+    if(k==='arrowleft')TrailEngine.turn(g,-1);else if(k==='arrowright')TrailEngine.turn(g,1);
+    else if(k==='a'||k==='z'||k===' '){if(stepMode)held=true;else if(!e.repeat){TrailEngine.step(g,true);after()}}
+    else if(k==='b'||k==='x'){paused=!paused;toast(paused?'Paused':'Go!')}else return;e.preventDefault()}
+  function keyup(e){const k=e.key.toLowerCase();if(stepMode&&(k==='a'||k==='z'||k===' '))held=false}
+  document.addEventListener('keydown',key);document.addEventListener('keyup',keyup);
+  $('#quit').onclick=()=>{stop();endGame(false)};
+  window.__trail=g;window.__trailAfter=after;window.__trailHold=v=>held=v;
+  talk(B('trail_start'),2400);
 }
+const TR_NEXT=()=>{};   // one trail spans the 3 rounds (ends at 1/3, 2/3 and the goal)
 
 // ---------- release (§5.8) ----------
 function release(forced,go){
@@ -482,6 +526,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},trailGame:()=>trailGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

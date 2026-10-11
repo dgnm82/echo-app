@@ -261,33 +261,6 @@
     "expr": "love"
    }
   ],
-  "sky_start": [
-   {
-    "text": "Tap the stars, in any order. Let's see what picture they make…",
-    "expr": "curious"
-   },
-   {
-    "text": "The sky is ready. Connect whichever stars you like.",
-    "expr": "happy"
-   }
-  ],
-  "sky_guess": [
-   {
-    "text": "Hmm… it looks like a {guess}. Or a very stretchy cat. What do you think it is?",
-    "expr": "curious"
-   },
-   {
-    "text": "Hoo… is that a {guess}? I'm not sure. You tell me.",
-    "expr": "curious"
-   }
-  ],
-  "sky_named": [
-   {
-    "text": "{constellation}… Hoo. It will be in our sky from now on.",
-    "expr": "love",
-    "react": "happy"
-   }
-  ],
   "trust": [
    {
     "text": "…you're a wonderful friend. Quietly wonderful. A starlight listener knows.",
@@ -1276,6 +1249,36 @@
    {
     "text": "the hollow is ready… it smells like moss and moonlight.",
     "expr": "proud"
+   }
+  ],
+  "trail_start": [
+   {
+    "text": "hoo… the little lights want to come along.",
+    "expr": "happy"
+   }
+  ],
+  "trail_pickup": [
+   {
+    "text": "another little light… welcome.",
+    "expr": "happy"
+   }
+  ],
+  "trail_long": [
+   {
+    "text": "such a long parade… they're humming.",
+    "expr": "proud"
+   }
+  ],
+  "trail_bump": [
+   {
+    "text": "oh… a soft bump. hoo hoo.",
+    "expr": "giggling"
+   }
+  ],
+  "trail_done": [
+   {
+    "text": "look… the parade made a little constellation.",
+    "expr": "delighted"
    }
   ]
  },

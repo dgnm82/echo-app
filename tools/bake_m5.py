@@ -58,7 +58,7 @@ def starimg(lit, f):
     if lit:
         for dx, dy in ((2, 2), (-2, 2), (2, -2), (-2, -2)): p[7+dx, 7+dy] = Yc
     return im
-for lit in (0, 1):
+for lit in ():   # Night Sky cut (round after M5): star sprites no longer baked
     for f in (0, 1): starimg(lit, f).save(f'px/sky_star{"_on" if lit else ""}_{f}.png')
 ICOL = BP.ICOL
 ICONS = {

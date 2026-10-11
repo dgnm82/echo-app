@@ -308,8 +308,8 @@
   ],
   "talent_Riddle Solver": [
    {
-    "text": "Your turn to hide something. I bet I can find it. Probably.",
-    "expr": "curious"
+    "text": "Ding! My brain got sparkly. I can spot shapes now. Let's make berry shapes!",
+    "expr": "excited"
    }
   ],
   "trust": [
@@ -1388,6 +1388,48 @@
     "text": "Every pair found. We make a good team.",
     "expr": "proud",
     "react": "happy"
+   }
+  ],
+  "trail_start": [
+   {
+    "text": "Follow-the-leaf! I lead. Okay, you lead.",
+    "expr": "excited"
+   }
+  ],
+  "trail_pickup": [
+   {
+    "text": "Another leaf! Crunchy.",
+    "expr": "happy"
+   },
+   {
+    "text": "Got one! It swirls behind me.",
+    "expr": "delighted"
+   }
+  ],
+  "trail_long": [
+   {
+    "text": "Look at my tail of leaves!",
+    "expr": "proud"
+   }
+  ],
+  "trail_bump": [
+   {
+    "text": "Boop! Hee hee. Turning!",
+    "expr": "giggling"
+   },
+   {
+    "text": "Oops, a bump. My nose is fine.",
+    "expr": "giggling"
+   }
+  ],
+  "trail_done": [
+   {
+    "text": "Leaf pile! POUNCE!",
+    "expr": "excited"
+   },
+   {
+    "text": "All the leaves! Best pile ever.",
+    "expr": "delighted"
    }
   ]
  },
@@ -12447,7 +12489,7 @@
      ]
     },
     "c": {
-     "say": "Your turn to hide next time.",
+     "say": "That was fun! Next time, let's build my fort together.",
      "expr": "happy",
      "bond": 1
     }

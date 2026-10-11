@@ -205,15 +205,14 @@ input[type=checkbox]{width:8px;height:8px}
 .pxfly{transition:left 2s steps(24),bottom 2s steps(24)!important;bottom:150px!important}
 .mcardbtn.shimmer{animation:shim 166ms steps(1,end) 6}
 @keyframes shim{50%{filter:brightness(1.35)}}
-.skygame .skyc{position:absolute;left:0;top:0;width:180px;height:300px;image-rendering:pixelated;pointer-events:none}
-.skygame .pxstar{position:absolute;width:16px!important;height:16px!important;margin:0!important;padding:0;border:0!important;border-radius:0!important;box-shadow:none!important;min-height:0!important;
-  background:url(px/sky_star_0.png) no-repeat!important;animation:skytw 664ms steps(1) infinite;image-rendering:pixelated}
-.skygame .pxstar::before{content:'';position:absolute;inset:-12px}
-@keyframes skytw{50%{background-image:url(px/sky_star_1.png)}}
-.skygame .pxstar.on{background-image:url(px/sky_star_on_0.png)!important;animation:skytw2 664ms steps(1) infinite}
-@keyframes skytw2{50%{background-image:url(px/sky_star_on_1.png)}}
-.skygame .pxstar.nv{filter:brightness(1.3)}
-.skygame .skyecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important}
-.skygame .skynames{position:absolute;left:56px;bottom:4px;display:flex;flex-direction:column;gap:1px;color:#C8BCFF;font-size:8px}
-.skygame .skynames span{display:flex;align-items:center;gap:2px}
-.skygame .bubble{top:auto!important;bottom:52px;left:4px;transform:none;max-width:172px}
+/* ===== Sparkle trail (spec v0.3 §3) ===== */
+.trailgame .tc{position:absolute;left:2px;top:4px;image-rendering:pixelated;touch-action:none;border:1px solid #3B2A5C}
+.trailgame .trside{position:absolute;right:4px;bottom:6px;display:flex;align-items:center;gap:2px;color:#FFF6E6;font-size:8px;background:#3B2A5C;padding:2px 3px;border:1px solid #FFD27A}
+.trailgame .trhint{position:absolute;left:4px;top:248px;color:#FFF6E6;font-size:8px}
+.trailgame .trecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important;visibility:hidden}
+.trailgame .trecho.show{visibility:visible}
+.trailgame .bubble{top:auto!important;bottom:28px;left:56px;right:2px;width:auto!important;transform:none;max-width:none;white-space:normal!important;z-index:5}
+.trailgame .fbdone{position:absolute;left:30px;top:100px;width:120px;z-index:6}
+
+.trailgame .fbdone,.congame .fbdone{position:absolute;left:12px;top:70px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
+.trailgame .fbdone{left:30px;top:100px;width:112px;z-index:6}

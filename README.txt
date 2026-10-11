@@ -68,3 +68,11 @@ Milestone 5: Whimber in pixel
 - Whimber picker (spec v0.3 day 1): Night Sky (signature) + Starlight Pairs + Hollow Builder. Talents: Night Vision (partner shimmer in
   Starlight Pairs; brighter stars in Night Sky), Silent Flight (silent Hollow Builder), Sweet-Dream Lullaby (evening board/build -> nap).
 - handheld.html?echo=whimber shows Whimber. Tests: tests/phone_whimber_test.py, ECHO=owl tests/phone_release_test.py.
+
+Round after M5: Cole's fixes, Night Sky cut, Sparkle trail (M6 part 1)
+- dialogue_fixes.md applied (Riddle Solver talent line #1, slyte_pinecone_hide node c). Radar Ears plays slyte_radar_ears_twinkle.
+- Night Sky cut: code, sky_* barks, star sprites, sky sounds, Night Vision star hook removed. Starlight Pairs is Whimber's signature (daily +3).
+  Old saves keep named constellations as ordinary memories (and Whimber's day-7 postcard still uses the first one).
+- trail.js + Leaf Trail / Firefly Parade (spec v0.3 §3), unlocks at bond 70: drag to steer (easy = walk only while held), soft walls,
+  max 12 followers + counter, rare pickup x3, finale (leaf-pile pounce / parade constellation memory). Handheld ◀ ▶ turn, A dash (easy: hold), B pause.
+  Talents: Super Jumper (hop bushes), Radar Ears (panned twinkle toward the next leaf), Silent Flight (half speed, no bump sound), Night Vision (dim scene, glowing followers).

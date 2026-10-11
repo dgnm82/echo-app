@@ -5,7 +5,7 @@
 const W=window,BASE='sfx/';
 const CORE=['ui_tap','ui_back','ui_panel_open','bond_meter_tick','care_feed_eat','care_pet_sparkle','care_nap_tuck'];
 const SPECIES=k=>{const s=k==='owl'||k==='whimber'?'whimber':'slyte';return [s+'_chirp_happy',s+'_chirp_curious',s+'_chirp_sleepy',s+'_pet_motif',s+'_arrival',s+'_release']};
-const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','memory_pair_found','memory_all_cleared','radar_jingle','sky_star_connect','sky_named_chord'];
+const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','trail_pickup_1','trail_pickup_5','trail_bump_boop','memory_pair_found','memory_all_cleared','slyte_radar_ears_twinkle',];
 // expression -> chirp mood (happy / curious / sleepy); sad and wistful use the soft sleepy chirp
 const MOOD={happy:'happy',delighted:'happy',giggling:'happy',proud:'happy',love:'happy',excited:'happy',eating:'happy',
   curious:'curious',thinking:'curious',surprised:'curious',concentrating:'curious',neutral:'curious',shy:'curious',
