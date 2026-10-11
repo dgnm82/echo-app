@@ -11,7 +11,7 @@ D.timers={set:(f,ms)=>setTimeout(f,ms),clear:t=>clearTimeout(t)};
 D.mem={};                                 // persisted by the game (S.dlg): lineAt, topicAt, phraseAt, petSince
 D.persona=null;                           // {petPhrase, word}
 D.cfg={lineDays:7,coreLineHours:24,topicDays:5,carryOnMs:45000,petEvery:10,driftChances:[0.6,0.3,0],lostThoughtChance:1/8};
-const CORE=/^(fed|fed_fav|full|pet|sit|nap|napping|not_sleepy|hello|game_tired|game_end|hunt_|seek_|camo_|sky_|time_|carry_on|fallback|drift_bridge|lost_thought)/;
+const CORE=/^(fed|fed_fav|full|pet|sit|nap|napping|not_sleepy|hello|game_tired|game_end|pairs_|sky_|time_|carry_on|fallback|drift_bridge|lost_thought)/;
 const rand=a=>a[Math.floor(D.rand()*a.length)];
 const hash=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)};
 

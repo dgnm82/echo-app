@@ -312,97 +312,6 @@
     "expr": "curious"
    }
   ],
-  "hunt_start": [
-   {
-    "text": "Don't look! …Okay, you can look. Wait, no, my tail's out.",
-    "expr": "happy"
-   },
-   {
-    "text": "Hidden! Totally hidden. Super hidden. Go!",
-    "expr": "excited"
-   }
-  ],
-  "hunt_guess": [
-   {
-    "text": "Not there. VERY good guess, though. It's somewhere {hint}.",
-    "expr": "curious"
-   },
-   {
-    "text": "Nope! Ooh, but you're getting warmer. Something… {hint}.",
-    "expr": "happy"
-   }
-  ],
-  "hunt_hint": [
-   {
-    "text": "Psst… it's in the {spot}. I didn't say that.",
-    "expr": "happy"
-   }
-  ],
-  "hunt_point": [
-   {
-    "text": "(Slyte points at the {spot} with its WHOLE body.) …What? I'm just standing here.",
-    "expr": "happy"
-   }
-  ],
-  "hunt_found": [
-   {
-    "text": "You found it! How?! Did the treasure whisper to you? I think it wanted to be found.",
-    "expr": "surprised",
-    "react": "excited"
-   },
-   {
-    "text": "FOUND! You have the best eyes in the whole meadow.",
-    "expr": "excited",
-    "react": "excited"
-   },
-   {
-    "text": "Yesss! You're a treasure-finding champion!",
-    "expr": "excited",
-    "react": "happy"
-   }
-  ],
-  "camo_start": [
-   {
-    "text": "I'm hiding! You'll NEVER find me. (giggle)",
-    "expr": "happy"
-   }
-  ],
-  "camo_found": [
-   {
-    "text": "You found me! How?! Was it the tail? It was the tail.",
-    "expr": "surprised",
-    "react": "excited"
-   }
-  ],
-  "seek_start": [
-   {
-    "text": "Your turn! Tap a spot to hide my shiny trinket. I won't peek. (peeks)",
-    "expr": "happy"
-   }
-  ],
-  "seek_wrong": [
-   {
-    "text": "It's in the {spot}! …No.",
-    "expr": "curious"
-   },
-   {
-    "text": "The {spot}! Definitely the {spot}. …Not the {spot}.",
-    "expr": "surprised"
-   }
-  ],
-  "seek_teapot": [
-   {
-    "text": "It's… in the teapot! …It's not in the teapot. Who put a teapot here?",
-    "expr": "surprised"
-   }
-  ],
-  "seek_found": [
-   {
-    "text": "Found it! …You're SO good at this. That took me forever.",
-    "expr": "excited",
-    "react": "excited"
-   }
-  ],
   "trust": [
    {
     "text": "You're my favorite discovery. Basically forever.",
@@ -1417,6 +1326,67 @@
    {
     "text": "I put the roof on myself. Ta-da!",
     "expr": "delighted",
+    "react": "happy"
+   }
+  ],
+  "pairs_start": [
+   {
+    "text": "Pairs! Find two that match. I'll cheer.",
+    "expr": "excited",
+    "react": "excited"
+   },
+   {
+    "text": "Card time! Flip two. I'll watch the corners.",
+    "expr": "curious"
+   }
+  ],
+  "pairs_pair": [
+   {
+    "text": "A pair! Paws up!",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Those two belong together. Fwip!",
+    "expr": "happy"
+   },
+   {
+    "text": "Match! My tail did a loop.",
+    "expr": "giggling"
+   }
+  ],
+  "pairs_miss": [
+   {
+    "text": "Ooh, close! I saw where that one went.",
+    "expr": "curious"
+   },
+   {
+    "text": "Not a pair. Now we both know more!",
+    "expr": "thinking"
+   }
+  ],
+  "pairs_hint": [
+   {
+    "text": "Psst. My ears say over there.",
+    "expr": "curious"
+   }
+  ],
+  "pairs_disguise": [
+   {
+    "text": "Hee hee! That card is ME. Found me!",
+    "expr": "giggling",
+    "react": "excited"
+   }
+  ],
+  "pairs_done": [
+   {
+    "text": "ALL the pairs! Best card game ever.",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Every pair found. We make a good team.",
+    "expr": "proud",
     "react": "happy"
    }
   ]

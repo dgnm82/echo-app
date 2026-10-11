@@ -179,3 +179,23 @@ input[type=checkbox]{width:8px;height:8px}
 .book h2{font-size:8px!important;line-height:10px;margin:8px 0 3px;padding-bottom:1px;border-bottom:1px solid #EBD7BC;color:#7A5AC8;display:flex;align-items:center;gap:3px}
 .bkportrait{width:56px;height:56px;margin:4px 0;display:flex;align-items:center;justify-content:center;background:url(px/pc_meadow.png) -48px -20px;border:1px solid #3B2A5C}
 .bkportrait .echo-svg{width:48px;height:48px}
+/* ===== Shiny Pairs (Memory, spec v0.3 §1): 36x48 cards, 4x5 grid (easy 3x4) ===== */
+.memgame .memgrid{position:absolute;left:50%;top:4px;transform:translateX(-50%);display:grid;gap:2px 4px}
+.memgame .memgrid.c4{grid-template-columns:repeat(4,36px)}.memgame .memgrid.c3{grid-template-columns:repeat(3,36px);gap:4px;top:10px}
+.mcardbtn{width:36px;height:48px;padding:0;border:0;background:no-repeat 0 0;image-rendering:pixelated;cursor:pointer;touch-action:manipulation;box-shadow:none!important;min-height:0!important}
+.mcardbtn.cur{outline:1px solid #FFD27A;outline-offset:1px}
+@keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+.mcardbtn.wiggle{animation:wig 332ms steps(1,end) 2}
+.memgame .memecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important}
+.memgame .memecho.r-happy,.memgame .memecho.r-excited{animation:pxhop2 664ms steps(1,end) 1}
+.memgame .memside{position:absolute;right:4px;bottom:6px;display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:#FFF6E6;font-size:8px}
+.memgame .memside #mcount{display:none}
+.memgame .bubble{top:auto!important;bottom:2px;left:54px;right:2px;width:auto!important;transform:none;max-width:none;z-index:5;white-space:normal!important}
+.memgame .bubble::after{left:-4px;top:auto;bottom:8px}
+.memgame .memdone{top:110px;z-index:6}
+/* postcard fronts: per-card pose of this Echo's sprite (v0.5 front notes) */
+.pcecho.pose-leap{bottom:20px}.pcecho.pose-tail{left:92px;bottom:10px}.pcecho.pose-berry{left:64px;bottom:2px}
+.pcecho.pose-pounce{left:56px;bottom:-14px;clip-path:inset(0 0 14px 0)}.pcecho.pose-curl{left:96px;bottom:6px}
+.pcecho.pose-glide{bottom:22px}.pcecho.pose-gaze{left:100px;bottom:16px}.pcecho.pose-small{left:96px;bottom:20px}
+.memgame .fbdone{position:absolute;left:12px;top:70px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
+.memgame .memdone{top:116px;left:34px;z-index:6}

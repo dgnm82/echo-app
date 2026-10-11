@@ -20,7 +20,7 @@ function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}c
 const SFX=(n,o)=>{try{window.Sound&&Sound.play(n,o)}catch(e){}};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
-const PET_KEYS=new Set(['hello','fed_fav','game_end','hunt_found','seek_found','sky_named','gift_got','reveal_reply']);
+const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','sky_named','gift_got','reveal_reply']);
 const B=(k,x)=>{const l=Dialogue.bark(k,x);return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
@@ -85,7 +85,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released)return afterHome();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=svg('owl',genEcho('owl'),'happy');
@@ -212,7 +212,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b1').onclick=()=>{cl();addBond(60/C.demoSpeed);home()};
   d.querySelector('#b2').onclick=()=>{cl();addBond(500);home()};
@@ -220,6 +220,7 @@ function dev(){
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
   d.querySelector('#b6').onclick=cl;
+  d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
   d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
 }
@@ -242,14 +243,14 @@ function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
   if(S.kind!=='fox')return start(nightSky); // Hollow Builder (Whimber's falling-blocks game) comes in a later milestone
-  // Play picker (spec v0.2 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
-  choices([['⭐','Shiny Search',null],['🏠','Fort Builder',null]],i=>start(i===0?shinyHunt:fortBuilder));
+  // Play picker (spec v0.3 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
+  choices([['⭐','Shiny Pairs',null],['🏠','Fort Builder',null]],i=>start(i===0?memoryGame:fortBuilder));
 }
 function gameShell(title){h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 function endGame(finished){if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
-  if((next===shinyHunt||next===nightSky)&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
+  if((next===nightSky||next&&next.signature)&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
   if(round>=2)setTimeout(()=>endGame(true),2200);else setTimeout(()=>next(round+1),2200)}
 
 // ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
@@ -326,30 +327,53 @@ function fortBuilder(round){
   window.__fort=g;window.__fortAfter=after;
   talk(round===0?B('stack_start'):B('stack_floor_next'),2400);draw();
 }
-function shinyHunt(round){
-  gameShell(`Shiny Search · round ${round+1}/3`);const gs=$('#gs');
-  const spots=[['🪵','log','woody'],['🍂','leaf pile','crunchy'],['🏠','treehouse fort','cozy'],['🫖','teapot','tea-ish'],['🥾','boot','smelly']];
-  const pos=[[10,40],[60,35],[35,55],[12,72],[62,70]];
-  const camo=S.talents.includes('Master of Disguise')&&round===1, seek=S.talents.includes('Riddle Solver')&&round===2;
-  const target=Math.floor(Math.random()*5);let miss=0;
-  spots.forEach((s,i)=>{const b=document.createElement('button');b.className='spot';b.style.left=pos[i][0]+'%';b.style.top=pos[i][1]+'%';b.textContent=s[0];b.dataset.i=i;gs.appendChild(b)});
-  const BTN=[...gs.querySelectorAll('.spot')];
-  if(seek){talk(B('seek_start'),60000);
-    BTN.forEach(b=>b.onclick=()=>{const h=+b.dataset.i;BTN.forEach(x=>x.onclick=null);b.style.outline='4px solid gold';let tries=[0,1,2,3,4].filter(x=>x!==h).sort(()=>Math.random()-.5).slice(0,2);
-      const seq=[...tries,h];let k=0;const step=()=>{const i=seq[k];BTN[i].animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:500});
-        if(i===h){talk(B('seek_found'));S.memories.push('You hid the trinket in the '+spots[h][1]);roundDone(round,shinyHunt)}
-        else{talk(spots[i][1]==='teapot'?B('seek_teapot'):B('seek_wrong',{spot:spots[i][1]}));k++;setTimeout(step,1800)}};setTimeout(step,1200)});return}
-  talk(B(camo?'camo_start':'hunt_start'),60000);
-  if(camo&&Math.random()<.75){const t=document.createElement('div');t.textContent='🦊';t.style.cssText=`position:absolute;font-size:28px;left:${pos[target][0]+12}%;top:${pos[target][1]+8}%;pointer-events:none`;gs.appendChild(t)}
-  if(S.talents.includes('Radar Ears'))setTimeout(()=>{jingle(pos[target][0]<40?-1:1);toast('🎵 jingle… (from the '+(pos[target][0]<40?'left':'right')+')')},1500);
-  BTN.forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(b.classList.contains('miss'))return;
-    if(i===target){SFX('shiny_found_jingle');b.textContent=camo?'🦊':'💎';BTN.forEach(x=>x.onclick=null);talk(B(camo?'camo_found':'hunt_found'));if(round===0&&!S.memories.some(m=>m.includes('teapot')))S.memories.push(`You found the treasure in the ${spots[i][1]}`);roundDone(round,shinyHunt);return}
-    miss++;b.classList.add('miss');
-    if(miss>=4){BTN[target].animate([{transform:'translateY(0)'},{transform:'translateY(-14px)'},{transform:'translateY(0)'}],{duration:400,iterations:4});talk(B('hunt_point',{spot:spots[target][1]}))}
-    else if(miss>=3)talk(B('hunt_hint',{spot:spots[target][1]}))
-    else talk(B('hunt_guess',{hint:spots[target][2]}))});
+// ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
+const PAIR_NAMES={blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Slytes'};
+function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
+function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
+function memoryGame(){
+  const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:S.talents.includes('Master of Disguise')});
+  const total=g.L.pairs,img=it=>`px/mem/slyte_${it}`;let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
+  gameShell(`Shiny Pairs · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
+  gs.insertAdjacentHTML('beforeend',`<div class="memgrid c${g.cols}" id="mg" role="grid" aria-label="Cards">${g.cards.map((c,i)=>`<button class="mcardbtn" data-i="${i}" aria-label="Card ${i+1}"></button>`).join('')}</div>
+    <div class="memecho creature" id="cr">${svg('fox',S.g,'happy')}</div><div class="memside"><span id="mcount">0/${total}</span><div id="mstars"></div>${level==='standard'?'':`<div class="fblvl">${level==='easy'?'Easy':'Big-kid'}</div>`}</div>`);
+  const B_=[...gs.querySelectorAll('.mcardbtn')];
+  function face(i){const c=g.cards[i],el=B_[i];el.style.backgroundImage=`url(${c.up||c.paired?img(c.item)+(c.paired?'_glow':''):img('back')}.png)`;el.classList.toggle('paired',c.paired);el.classList.toggle('cur',g.cursor===i&&kbd);
+    el.setAttribute('aria-label',c.up||c.paired?(PAIR_NAMES[c.item]||c.item):'Face-down card')}
+  function flipAnim(i){const el=B_[i],c=g.cards[i];el.style.backgroundImage=`url(${img('flip_back')}.png)`;setTimeout(()=>{el.style.backgroundImage=`url(${img(c.item)}_flip.png)`;setTimeout(()=>face(i),83)},83)}
+  const all=()=>B_.forEach((_,i)=>face(i));all();
+  function tap(i){if(!alive)return;MemoryEngine.flip(g,i);handle()}
+  function handle(){for(const e of MemoryEngine.take(g)){
+    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:.7});flipAnim(e.i);if(g.cards[e.i].item==='slyte_token'){react('excited');talk(B('pairs_disguise'),1800)}}
+    if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
+    if(e.type==='pair'){SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
+      if(pairsSaid%2===0)talk(Math.random()<.5?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:B('pairs_pair'),1800);else say('*')}
+    if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
+      if(misses%3===0)talk(B('pairs_miss'),1800);
+      // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
+      if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('radar_jingle',{pan:(col/(g.cols-1))*2-1,vol:.6})}}
+    if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
+    if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,MEM_NEXT)}
+    if(e.type==='done')finish()}
+    $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`Shiny Pairs · ${g.pairs}/${total}`;
+    if(g.L.stars)$('#mstars').innerHTML=Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('');}
+  function finish(){alive=false;p.games++;p.boards++;if(level!=='bigkid'){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
+    SFX('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
+    gs.insertAdjacentHTML('beforeend',`<div class="fbdone memdone">${PI('✨')}<span>All ${total} pairs!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
+    setTimeout(()=>roundDone(2,MEM_NEXT),600);document.removeEventListener('keydown',key)}
+  B_.forEach((b,i)=>b.onclick=()=>{kbd=false;if(g.pending){MemoryEngine.resolve(g);handle();return}tap(i)});
+  // handheld (◀ ▶ A B): ◀ ▶ reading order skipping paired cards, B jumps down a row, A flips; after a miss any button turns cards back
+  function key(e){if(!document.getElementById('mg')){document.removeEventListener('keydown',key);return}const k=e.key.toLowerCase();
+    const known=['arrowleft','arrowright','arrowdown','a','z',' ','enter','b','x'];if(!known.includes(k))return;e.preventDefault();kbd=true;
+    if(g.pending){MemoryEngine.resolve(g);handle();all();return}
+    if(k==='arrowleft')MemoryEngine.cursorMove(g,-1);else if(k==='arrowright')MemoryEngine.cursorMove(g,1);else if(k==='b'||k==='x'||k==='arrowdown')MemoryEngine.cursorDown(g);
+    else tap(g.cursor);all()}
+  document.addEventListener('keydown',key);
+  $('#quit').onclick=()=>{alive=false;clearTimeout(backT);document.removeEventListener('keydown',key);endGame(false)};
+  window.__mem=g;window.__memTap=i=>B_[i].click();
+  talk(B('pairs_start'),2400);
 }
-function jingle(pan){try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain(),p=a.createStereoPanner?a.createStereoPanner():null;o.frequency.value=1320;g.gain.setValueAtTime(.15,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.6);o.connect(g);if(p){p.pan.value=pan;g.connect(p);p.connect(a.destination)}else g.connect(a.destination);o.start();o.stop(a.currentTime+.6)}catch(e){}}
+const MEM_NEXT=Object.assign(()=>{},{signature:true});   // one board spans the 3 rounds; roundDone() only books each round
 function nightSky(round){
   gameShell(`Night Sky · picture ${round+1}/3`);const gs=$('#gs');gs.className='scene owl-bg';
   const n=5+Math.floor(Math.random()*3), pts=[];let guard=0;while(pts.length<n&&guard++<500){const q=[12+Math.random()*76,30+Math.random()*45];if(pts.every(p=>Math.hypot(p[0]-q[0],(p[1]-q[1])*1.6)>18))pts.push(q)}
@@ -402,7 +426,7 @@ function release(forced,go){
   }
 }
 function closure(){
-  const g=S.g;S.released=now();S.postcards=[];S.checkins=buildCheckins();save();
+  const g=S.g;S.released=now();S.postcards=[];S.checkins=buildCheckins();S.pcv=Postcards.VERSION;save();
   const d=full(`<div class="mcard closure"><div class="mtop">${PI('⭐')}<span class="mt">${g.name} is home</span>${PI('⭐')}</div><div class="cstar"><i></i></div><p class="mline">${g.name} is home, off to live its wild life.</p><p class="mline">You helped it grow strong and brave.</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
   setTimeout(()=>{d.querySelector('#cont').innerHTML='<button class="btn">Continue</button>';d.querySelector('button').onclick=()=>{d.remove();feelings()}},5000);
 }
@@ -413,25 +437,21 @@ function feelings(){
   d.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;sel.has(i)?sel.delete(i):sel.add(i);b.classList.toggle('sel');say(f[i][1])});
   d.querySelector('#ok').onclick=()=>{d.remove();const d2=full(`<div class="mcard"><div class="mtop">${PI('❤️')}</div><p class="mline">It's okay to feel more than one thing.</p><button class="btn">${PI('📖')}<span class="lbl">Memory Book</span></button></div>`);d2.classList.add('milestone');say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
 }
-function buildCheckins(){
-  const e=E(),g=S.g,c=S.child,mem=(S.memories.filter(m=>!m.startsWith('You said'))[1]||S.memories[0]||'the day we met'),con=(S.constellations||[])[0],lc=mem.charAt(0).toLowerCase()+mem.slice(1);
-  const T={postcard:['I made it! The '+(S.gift||e.treasure)+' came too. It likes it here.',
-     S.kind==='fox'?`I used my ${S.talents[1]||'disguise'} today and NOBODY found me. You would have. I still think about how ${lc}.`:`I used my ${S.talents[0]||'night eyes'} to count fireflies. I still think about how ${lc}.`,
-     S.kind==='fox'?'The meadow turned all gold for autumn. I pounced into the biggest leaf pile and thought of you.':(con?`${con} was out tonight, right over my hollow.`:'The first snow fell on my hollow. Very quiet. Very nice.')],
-   note:[S.kind==='fox'?'Psst. Do you think clouds play hide-and-seek? I think they peek.':'I wondered today… where does the wind sleep?',`I still think about ${lc}. It makes me ${S.kind==='fox'?'swish my tail':'fluff my feathers'}.`],
-   sign:[e.sign.slice(e.sign.indexOf(' ')+1),'a tiny '+e.token+', left just for you']};
-  const used={postcard:0,note:0,sign:0};
-  return C.checkins.map(([day,type])=>({day,type,text:type==='sign'?`(Found: ${T.sign[used.sign++]}.) ${S.kind==='fox'?'…yip! (from far away)':'…hoo… (from far away)'}`:`Dear ${c}, ${T[type][used[type]++]} — ${g.name}`,delivered:false}));
-}
+function buildCheckins(){ // Echo_Postcards.docx v0.5: six postcards (days 1, 3, 7, 14, 30, 60)
+  return Postcards.build({kind:S.kind,child:S.child,gift:S.gift,memories:S.memories,constellation:(S.constellations||[])[0]})}
+// migrate a v0.3 check-in schedule (postcards, notes, signs) to the v0.5 postcards; keep how far the child has got
+function migrateCheckins(){if(!S||!S.released||S.pcv===Postcards.VERSION)return;const old=S.checkins||[];
+  const upTo=Math.max(0,...old.filter(k=>k.delivered).map(k=>k.day));S.checkins=buildCheckins();S.checkins.forEach(k=>{if(k.day<=upTo)k.delivered=true});
+  S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · postcard</b><br>${k.text}`);S.pcv=Postcards.VERSION;save()}
 function deliverCheckins(){
   const due=(S.checkins||[]).filter(k=>!k.delivered&&S.released+k.day*864e5<=now());
   if(!due.length||S.lastCheckinDate===new Date(now()).toDateString())return null;
   due.forEach(k=>k.delivered=true);S.lastCheckinDate=new Date(now()).toDateString();
   S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><br>${k.text}`);save();return due[due.length-1];
 }
-function pcScene(k,i){return S.kind==='fox'?(k.type==='postcard'?['meadow','meadow','autumn'][i%3]:'meadow'):'night'}
+function pcScene(k,i){return k.scene||(S.kind==='fox'?'meadow':'night')}
 function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=e.token==='leaf'?'🍃':'🪶';
-  const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i></div>`
+  const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho pose-${k.pose||'tall'}">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i></div>`
     :k.type==='sign'?`<div class="pcfront sign" style="background-image:url(px/pc_${scene}.png)"><i class="pcsign">${PI(e.sign.split(' ')[0])}</i></div>`
     :`<div class="pcfront note"><i class="pcstamp">${PI('✉️')}</i><span>a note from ${g.name}</span></div>`;
   return `<div class="pcard${mini?' mini':''}">${front}<div class="pcback"><b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><p>${k.text}</p></div></div>`}
@@ -449,6 +469,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

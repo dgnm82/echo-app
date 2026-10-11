@@ -4,8 +4,12 @@ Plank/window/leaf-roof tiles come from Nya's game_mocks.py (same palette); door/
 import re, sys
 from PIL import Image, ImageDraw
 sys.path.insert(0, '/workspace/echo/style_research/src')
+from PIL import Image as _I
+_save = _I.Image.save
+_I.Image.save = lambda self, fp, *a, **k: None if '/game_design/' in str(fp) else _save(self, fp, *a, **k)
 src = open('/workspace/echo/game_design/src/game_mocks.py').read()
 exec(src[:src.index('def glow(')])          # CM, img(), ITEMS (no mock rendering)
+_I.Image.save = _save
 OUT = 'px/fort'
 T = dict(ITEMS)
 T['door'] = img(["bbbbbbbbbbbbbbbb", "bNNNNNNNNNNNNNNb", "bBBBBbbbbbbBBBBb", "bBBBbMMMMMMbBBBb", "bBBbMmmmmmmMbBBb", "bBBbMmBBBBmMbBBb", "bBBbMmBBBBmMbBBb", "bBBbMmBBBBmMbBBb",

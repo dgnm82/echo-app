@@ -5,7 +5,7 @@
 const W=window,BASE='sfx/';
 const CORE=['ui_tap','ui_back','ui_panel_open','bond_meter_tick','care_feed_eat','care_pet_sparkle','care_nap_tuck'];
 const SPECIES=k=>{const s=k==='owl'||k==='whimber'?'whimber':'slyte';return [s+'_chirp_happy',s+'_chirp_curious',s+'_chirp_sleepy',s+'_pet_motif',s+'_arrival',s+'_release']};
-const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','shiny_found_jingle','shiny_radar_jingle','sky_star_connect','sky_named_chord'];
+const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','memory_pair_found','memory_all_cleared','radar_jingle','sky_star_connect','sky_named_chord'];
 // expression -> chirp mood (happy / curious / sleepy); sad and wistful use the soft sleepy chirp
 const MOOD={happy:'happy',delighted:'happy',giggling:'happy',proud:'happy',love:'happy',excited:'happy',eating:'happy',
   curious:'curious',thinking:'curious',surprised:'curious',concentrating:'curious',neutral:'curious',shy:'curious',
@@ -23,7 +23,7 @@ function unlock(){if(unlocked)return;const c=ac();if(!c)return;unlocked=true;
 ['pointerdown','touchend','keydown'].forEach(ev=>W.addEventListener(ev,unlock,{capture:true,passive:true}));
 function play(n,o){o=o||{};if(!on()||!unlocked||!ctx)return false;const now=performance.now();if(last[n]&&now-last[n]<(o.gap||60))return false;last[n]=now;
   const b=buf[n];if(!b){load(n);return false}
-  const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;s.playbackRate.value=o.rate||1;g.gain.value=o.vol==null?.8:o.vol;s.connect(g);g.connect(ctx.destination);s.start(0);
+  const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;s.playbackRate.value=o.rate||1;g.gain.value=o.vol==null?.8:o.vol;s.connect(g);let out=g;if(o.pan&&ctx.createStereoPanner){const pn=ctx.createStereoPanner();pn.pan.value=Math.max(-1,Math.min(1,o.pan));g.connect(pn);out=pn}out.connect(ctx.destination);s.start(0);
   if(o.voice){try{voiceNode&&voiceNode.stop()}catch(e){}voiceNode=s}return true}
 function chirp(text,kind,expr){
   const sp=kind==='owl'?'whimber':'slyte';let m=MOOD[expr]||null;const t=String(text||'');
