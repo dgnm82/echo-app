@@ -51,5 +51,9 @@ T('d) pet phrase + invented word are per-Echo, deterministic, and pet phrase ≤
   fresh('whimber');D.setPersona(7);assert(J('whimber').persona.petPhrases.includes(D.persona.petPhrase));});
 T('lint data: reply pools and persona exist for both species',()=>{for(const sp of ['slyte','whimber']){const d=J(sp);assert.equal(d.persona.petPhrases.length,8);assert.equal(d.persona.words.length,6);assert(d.barks.carry_on&&d.barks.lost_thought&&d.barks.drift_bridge)}
   assert(Object.keys(J('shared').replyPools).length>=8);});
+T('e) all 13 Overhaul expressions have CSS and are accepted by both lints',()=>{const css=fs.readFileSync(path.join(__dirname,'..','style.css'),'utf8');
+  const E=['neutral','happy','delighted','curious','thinking','surprised','giggling','proud','shy','sleepy','wistful','sad','concentrating'];
+  for(const e of E){if(e!=='neutral')assert(css.includes('[data-expr='+e+']')||css.includes('[data-expr='+e+' ')||new RegExp('\\[data-expr='+e+'\\]').test(css),'css for '+e)}
+  const py=fs.readFileSync(path.join(__dirname,'lint_dialogue.py'),'utf8'),js=fs.readFileSync(path.join(__dirname,'lint-dialogue.js'),'utf8');for(const e of E){assert(py.includes('"'+e+'"'),'py lint '+e);assert(js.includes("'"+e+"'"),'js lint '+e)}});
 let fail=0;for(const [n,f] of tests){try{f();console.log('PASS',n)}catch(e){fail++;console.log('FAIL',n,'\n   ',e.message)}}
 console.log(`\n${tests.length-fail}/${tests.length} engine tests passed`);process.exit(fail?1:0);

@@ -13,7 +13,7 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
 ```json
 { "text": "Psst! Hi {child}!", "expr": "excited", "react": "happy", "cond": { "bondMin": 140 }, "weight": 2 }
 ```
-- `expr`: facial expression cue. One of `neutral, happy, excited, eating, love, curious, surprised, sleepy, sad`.
+- `expr`: facial expression cue. The 13 Overhaul expressions are `neutral, happy, delighted, curious, thinking, surprised, giggling, proud, shy, sleepy, wistful, sad` (gentle sad) and `concentrating`. `excited`, `eating` and `love` are also accepted.
 - `react`: optional body animation. One of `happy, excited, pet, eat, sad, sleepy`.
 - `lintAllow`: optional list of lint rule ids allowed on this line, node or choice (see tools/lint-dialogue.js).
 - `privacy: "feelings…"` on a conversation: the lint then rejects any memory or variable writes in it. Feelings answers are never stored.
@@ -54,3 +54,11 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
 ## Text substitution
 `{name} {child} {fav} {treasure} {place} {release} {trust} {quirk} {token} {gift} {memory}`, plus per-call values (`{spot} {hint} {guess} {constellation}`), `{var:key}` for a conversation variable, and `{pick:a|b|c}` for a random choice.
 Variables, memory tags and seen conversations are saved with the Echo (`S.vars`, `S.memTags`, `S.seen`).
+
+## Engine v3 additions
+- **Kid-reply pools** (`shared.json` → `replyPools`, `intentMap`): a choice can carry `"intent"`. A label of `"@pool:<intent>"`, or a generic label listed in `intentMap` (e.g. "Yes!", "(just listen)"), is swapped for a fresh phrasing each time it's shown. The least-recently-used phrasing is chosen, with no duplicates in one menu. Intents: yes, no, unsure, listen, nod, giggle, ask_more, later, wow, silly.
+- **Fallbacks**: barks `fallback_<intent>` and `fallback_any`. They're used when a choice has neither `reply` nor `goto`, or when a `goto` points nowhere.
+- **Carry-on**: if no reply comes within `CONFIG.carryOnSeconds` (45), the Echo says a `carry_on` line and continues through the `listen` choice if there is one, otherwise it ends gently. Any tap restarts the timer.
+- **Drift / lost thought**: after a conversation, about 1 in 8 end with a `lost_thought` line. Otherwise there's a chance to drift (0.6, then 0.3, then 0) via a `drift_bridge` line into a conversation on a linked topic. Topics are linked by species `topicGroups`; a conversation's topic is `conv.topic` or the second id segment. Drift counts toward the 2-conversations-per-session limit.
+- **No-repeat**: an exact bark line isn't reused within 7 days (24 h for core reaction keys). When every line is recent, the least-recently-used one is picked. A topic isn't offered again within 5 days. Stored in `S.dlg`.
+- **Persona** (species `persona`): 8 `petPhrases` and 6 invented `words`; the Echo's seed picks one of each. `{pet_phrase}` is filled at most once per 10 lines. The game also prepends the pet phrase at approved points (hello, favourite food, game wins, gift). `{word:shiny}` becomes the invented word, and any sibling invented word in a line is replaced with this Echo's word.

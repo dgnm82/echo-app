@@ -10,10 +10,12 @@ function eyes(cx1,cx2,cy,r,iris,ol,big){
   const one=(cx,flip)=>`
    <g class="eye-open"><g class="blink" style="transform-origin:${cx}px ${cy}px">
      <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*1.12}" fill="#fffdf6" stroke="${ol}" stroke-width="2.2"/>
-     <ellipse class="iris" cx="${cx+(flip?-1:1)}" cy="${cy+1}" rx="${r*.72}" ry="${r*.82}" fill="${iris}"/>
+     <g class="look"><ellipse class="iris" cx="${cx+(flip?-1:1)}" cy="${cy+1}" rx="${r*.72}" ry="${r*.82}" fill="${iris}"/>
      <ellipse cx="${cx+(flip?-1:1)}" cy="${cy+2}" rx="${r*.42}" ry="${r*.5}" fill="#160d1e"/>
      <ellipse cx="${cx+(flip?-1:1)}" cy="${cy+r*.45}" rx="${r*.5}" ry="${r*.18}" fill="${lt(iris,.45)}" opacity=".7"/>
-     <circle cx="${cx-r*.3}" cy="${cy-r*.38}" r="${r*.26}" fill="#fff"/><circle cx="${cx+r*.32}" cy="${cy+r*.2}" r="${r*.1}" fill="#fff"/>
+     <circle cx="${cx-r*.3}" cy="${cy-r*.38}" r="${r*.26}" fill="#fff"/><circle cx="${cx+r*.32}" cy="${cy+r*.2}" r="${r*.1}" fill="#fff"/></g>
+     <path class="lid" d="M${cx-r*1.15} ${cy-r*1.3} L${cx+r*1.15} ${cy-r*1.3} L${cx+r*1.15} ${cy-r*.15} Q${cx} ${cy+r*.25} ${cx-r*1.15} ${cy-r*.15}Z" fill="var(--lid,#8a5a3a)"/>
+     <path class="lidline" d="M${cx-r*1.05} ${cy-r*.12} Q${cx} ${cy+r*.28} ${cx+r*1.05} ${cy-r*.12}" stroke="${ol}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
    </g></g>
    <path class="eye-happy" d="M${cx-r} ${cy+2} Q${cx} ${cy-r*1.1} ${cx+r} ${cy+2}" stroke="${ol}" stroke-width="3.6" fill="none" stroke-linecap="round"/>
    <path class="eye-sleepy" d="M${cx-r} ${cy} Q${cx} ${cy+r*.7} ${cx+r} ${cy}" stroke="${ol}" stroke-width="3.6" fill="none" stroke-linecap="round"/>
@@ -32,7 +34,7 @@ function fox(g){
   const mk=g.marking==='star'?`<path d="M120 62l3.5 7.5 8 1-6 5.5 1.6 8-7.1-4-7.1 4 1.6-8-6-5.5 8-1z" fill="${a}" opacity=".95"/>`
     :g.marking==='stripe'?`<path d="M114 56q6-4 12 0l-2 26q-4 3-8 0z" fill="${a}" opacity=".9"/>`
     :g.marking==='spot'?`<ellipse cx="88" cy="196" rx="9" ry="6" fill="${a}" opacity=".9"/><ellipse cx="152" cy="200" rx="6" ry="4" fill="${a}" opacity=".9"/>`:'';
-  return `<svg class="echo-svg fox" viewBox="0 0 240 260" data-expr="neutral">${defs(id,c,a)}
+  return `<svg class="echo-svg fox" viewBox="0 0 240 260" data-expr="neutral" style="--lid:${c}">${defs(id,c,a)}
   <ellipse cx="120" cy="244" rx="78" ry="12" fill="url(#shadow${id})"/>
   <g class="tail" style="transform-origin:160px 214px">
     <path d="M150 220 C200 230 238 196 226 140 C220 112 196 98 186 112 C204 140 196 176 150 196 Z" fill="url(#body${id})" stroke="${ol}" stroke-width="3" stroke-linejoin="round"/>
@@ -65,6 +67,7 @@ function fox(g){
       <ellipse class="m-o" cx="120" cy="154" rx="5" ry="6" fill="#7a2a36" stroke="${ol}" stroke-width="2.2"/>
       <g class="m-chew"><ellipse cx="120" cy="153" rx="9" ry="5" fill="#7a2a36" stroke="${ol}" stroke-width="2.2"/></g>
     </g>
+    <g class="paw-mouth"><ellipse cx="128" cy="156" rx="15" ry="11" fill="${dk(c,.3)}" stroke="${ol}" stroke-width="2.5"/><path d="M120 150 v8 M127 148 v9 M134 150 v8" stroke="${ol}" stroke-width="1.6" opacity=".6"/></g>
   </g>
   <g class="fx"><text class="z" x="170" y="60" font-size="22" fill="#fff">z</text><text class="z z2" x="186" y="40" font-size="16" fill="#fff">z</text>
    <path class="heart" d="M190 70 c-6-10-20-4-14 6 l14 12 14-12 c6-10-8-16-14-6z" fill="#ff7088"/><path class="tear" d="M156 118 q-5 8 0 12 q5-4 0-12z" fill="#9fd8ff"/></g>
@@ -75,7 +78,7 @@ function owl(g){
   const scal=[];for(let r=0;r<4;r++)for(let i=0;i<4-(r>2?1:0);i++){const x=96+i*16+(r%2?8:0)-(r>2?-8:0),y=168+r*16;scal.push(`<path d="M${x-7} ${y} q7 8 14 0" stroke="${dk(a,.35)}" stroke-width="2" fill="none" opacity=".55"/>`)}
   const mk=g.marking==='star'?`<path d="M120 56l3 6.5 7 .8-5.2 4.8 1.4 7-6.2-3.6-6.2 3.6 1.4-7-5.2-4.8 7-.8z" fill="${a}"/>`
     :g.marking==='stripe'?`<path d="M116 50 q4-3 8 0 l-1 22 q-3 2-6 0z" fill="${a}"/>`:g.marking==='spot'?`<circle cx="76" cy="186" r="6" fill="${a}"/><circle cx="164" cy="196" r="5" fill="${a}"/>`:'';
-  return `<svg class="echo-svg owl" viewBox="0 0 240 260" data-expr="neutral">${defs(id,c,a)}
+  return `<svg class="echo-svg owl" viewBox="0 0 240 260" data-expr="neutral" style="--lid:${a}">${defs(id,c,a)}
   <ellipse cx="120" cy="246" rx="70" ry="11" fill="url(#shadow${id})"/>
   <g class="body breathe" style="transform-origin:120px 244px">
     <path d="M120 64 C178 64 194 128 186 180 C180 222 156 240 120 240 C84 240 60 222 54 180 C46 128 62 64 120 64Z" fill="url(#body${id})" stroke="${ol}" stroke-width="3"/>
@@ -94,6 +97,7 @@ function owl(g){
     ${mk.includes('186')?'':mk}
     <path d="M120 70 C112 60 96 58 84 62 C64 70 60 100 70 120 C80 140 108 142 120 128 C132 142 160 140 170 120 C180 100 176 70 156 62 C144 58 128 60 120 70Z" fill="url(#acc${id})" stroke="${dk(a,.3)}" stroke-width="2"/>
     <g class="brows"><path class="brow browL" d="M74 74 Q88 66 104 74" stroke="${ol}" stroke-width="3.4" fill="none" stroke-linecap="round"/><path class="brow browR" d="M136 74 Q152 66 166 74" stroke="${ol}" stroke-width="3.4" fill="none" stroke-linecap="round"/></g>
+    <g class="glow"><circle cx="94" cy="98" r="25" fill="none" stroke="#ffd84a" stroke-width="5" opacity=".8"/><circle cx="146" cy="98" r="25" fill="none" stroke="#ffd84a" stroke-width="5" opacity=".8"/></g>
     ${eyes(94,146,98,17,g.eye,ol,true)}
     <ellipse class="blush" cx="72" cy="124" rx="9" ry="5" fill="#ff8a8a" opacity="0"/><ellipse class="blush" cx="168" cy="124" rx="9" ry="5" fill="#ff8a8a" opacity="0"/>
     <g class="mouths">
