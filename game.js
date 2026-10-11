@@ -445,6 +445,80 @@ function trailGame(){
 }
 const TR_NEXT=()=>{};   // one trail spans the 3 rounds (ends at 1/3, 2/3 and the goal)
 
+// ---------- Connect (game spec v0.3 §4): Berry Connect (Slyte) / Moonlight Connect (Whimber), unlocks at bond 140 ----------
+function conState(){return S.connect=S.connect||{games:0}}
+function conLevel(){const c=conState(),set=S.connectLevel||'auto';if(c.games===0)return 'easy';return set==='auto'?'standard':set}
+function connectGame(){
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',cs=conState(),level=conLevel(),TITLE=fox?'Berry Connect':'Moonlight Connect';
+  const nv=!fox&&S.talents.includes('Night Vision'),jumper=fox&&S.talents.includes('Super Jumper'),lull=!fox&&S.talents.includes('Sweet-Dream Lullaby')&&['evening','night'].includes(tod());
+  const g=ConnectEngine.create({species:SP,level,seed:(S.g.seed||1)*29+cs.games*3+1,shapes:fox&&S.talents.includes('Riddle Solver')});
+  const Z=24,W=g.w*Z,H=g.h*Z,NAME={blackberry:'blackberries',honey_cake:'honey cakes',nut:'nuts',leaf:'leaves',apple:'apples',star:'stars',moon:'moons',dewdrop:'dewdrops',comet:'comets',firefly:'fireflies'};
+  gameShell(`${TITLE} · round 1/3`);const gs=$('#gs');gs.classList.add('congame');if(!fox)gs.classList.add('night');
+  gs.insertAdjacentHTML('beforeend',`<div class="cgoal" id="cgoal"></div><canvas id="cc" class="cc" width="${W}" height="${H}" style="width:${W}px;height:${H}px;left:${(180-W)/2}px" aria-label="Connect board"></canvas>
+    <div class="conecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div><div class="conside">${jumper?'<button class="btn small" id="hop">Hop!</button>':''}<span id="cstars"></span>${level==='standard'?'':`<span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}</div>`);
+  const cv=$('#cc'),cx=cv.getContext('2d'),IM={},ld=(k,s)=>{IM[k]=new Image();IM[k].src=s};
+  [...g.kinds,g.fav].forEach(k=>ld(k,`px/connect/${k}.png`));ld('*','px/connect/sparkle.png');ld('ring','px/connect/favring.png');[0,1,2,3].forEach(i=>ld('b'+i,`px/connect/burst${i}.png`));
+  let path=[],alive=true,t=0,burst=[],idle=0,hint=null,mode='pick',pickI=0,cursor=0,hopUsed=false;
+  const GOLD=fox?'#FFD27A':'#FFF1C4';
+  function goalBar(){$('#cgoal').innerHTML=`<span>Gather</span><i class="pxi" aria-label="${NAME[g.goal]||g.goal}" style="background-image:url(px/connect/${g.goal}.png)"></i><span>${g.got}/${g.L.goal}</span>`;
+    const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · round ${Math.min(3,g.round+1)}/3`;if(g.L.stars)$('#cstars').innerHTML=Array.from({length:ConnectEngine.stars(g)},()=>PI('🌟')).join('')}
+  function cxy(i){return [(i%g.w)*Z,Math.floor(i/g.w)*Z]}
+  function draw(){if(!alive)return;t++;idle+=83;
+    for(let i=0;i<g.cells.length;i++){const [x,y]=cxy(i);cx.fillStyle=((i%g.w)+Math.floor(i/g.w))%2?(fox?'#C99A6A':'#3B2A5C'):(fox?'#B58457':'#2E2452');cx.fillRect(x,y,Z,Z)}
+    const B_=ConnectEngine.bunches(g);
+    if(nv&&B_[0]){cx.fillStyle='rgba(255,241,196,.22)';B_[0].cells.forEach(i=>{const [x,y]=cxy(i);cx.fillRect(x,y,Z,Z)})}           // Night Vision: the biggest bunch glows softly
+    if(hint&&(t>>2)%2){cx.fillStyle='rgba(255,210,122,.35)';hint.forEach(i=>{const [x,y]=cxy(i);cx.fillRect(x,y,Z,Z)})}
+    if(kbd&&mode==='pick'&&B_.length){const b=B_[pickI%B_.length];cx.strokeStyle='#FFD27A';cx.lineWidth=1;b.cells.forEach(i=>{const [x,y]=cxy(i);cx.strokeRect(x+.5,y+.5,Z-1,Z-1)})}
+    if(kbd&&mode==='free'){const [x,y]=cxy(cursor);cx.strokeStyle=(t>>2)%2?'#FFD27A':'#FFFFFF';cx.strokeRect(x+1.5,y+1.5,Z-3,Z-3)}
+    for(let i=0;i<g.cells.length;i++){const c=g.cells[i],[x,y]=cxy(i);if(!c)continue;const im=c==='*'?IM['*']:c==='!'?IM[g.fav]:IM[c];const lift=path.includes(i)?1:0;
+      if(im)cx.drawImage(im,x+4,y+4-lift);if(c==='!')cx.drawImage(IM.ring,x+2,y+2)}
+    // thread: 2px gold with an ink edge, through item centres
+    if(path.length>1){for(const [w,col] of [[4,'#3B2A5C'],[2,GOLD]]){cx.strokeStyle=col;cx.lineWidth=w;cx.beginPath();path.forEach((i,j)=>{const [x,y]=cxy(i);j?cx.lineTo(x+12,y+12):cx.moveTo(x+12,y+12)});cx.stroke()}}
+    burst=burst.filter(b=>{if(b.f<4){const [x,y]=cxy(b.i);cx.drawImage(IM['b'+b.f],x+4,y+4);b.f++;return true}return false});
+    if(idle>(g.L.hintMs||1e9)&&!hint&&B_[0]){hint=B_[0].cells;react('curious');if(Math.random()<.5)talk(B('connect_hint'),1500)}}
+  const loop=setInterval(draw,83);let kbd=false;
+  function link(i){if(i==null||i<0)return;if(path.length>1&&path[path.length-2]===i){path.pop();return}if(ConnectEngine.canAdd(g,path,i)){path.push(i);SFX('ui_tap',{gap:30,vol:.35,rate:fox?1+path.length*.08:.8+path.length*.05})}}
+  function letGo(){const p=path.slice();path=[];if(!ConnectEngine.gather(g,p)){return}idle=0;hint=null;after()}
+  function after(){for(const e of ConnectEngine.take(g)){
+      if(e.type==='gather'){e.cells.forEach(i=>burst.push({i,f:0}));SFX(e.big?'connect_big_group':'connect_group_3',{vol:.7});react('happy');if(e.big)talk(B('connect_big'),1800);else say('*')}
+      if(e.type==='special'&&e.special==='!'){SFX('connect_special_trinket');setExpr('delighted');talk(B('connect_special'),2000)}
+      if(e.type==='shape')toast('Shape goal! +2');
+      if(e.type==='shuffle'){react('excited');talk(B('connect_shuffle'),1800)}
+      if(e.type==='goal'&&e.round>0)talk(B('connect_start'),1800);
+      if(e.type==='round'&&e.round<2)roundDone(e.round,CN_NEXT);
+      if(e.type==='done')finish()}
+    goalBar()}
+  function finish(){cs.games++;setExpr('delighted');react('excited');remember(fox?'We gathered big bunches of berries together':'We gathered moonlight together, bunch by bunch','connect_'+SP);save();
+    gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>All gathered!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:ConnectEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
+    setTimeout(()=>{stop();roundDone(2,CN_NEXT);lullaby()},1600)}
+  function stop(){alive=false;clearInterval(loop);document.removeEventListener('keydown',key)}
+  // phone: drag through touching same items and lift to gather; tap mode: tap items one by one, tap the last again to gather
+  const cellAt=e=>{const r=cv.getBoundingClientRect(),k=r.width/W,x=Math.floor((e.clientX-r.left)/k/Z),y=Math.floor((e.clientY-r.top)/k/Z);return x<0||y<0||x>=g.w||y>=g.h?-1:y*g.w+x};
+  let down=null,moved=false;
+  cv.addEventListener('pointerdown',e=>{kbd=false;idle=0;const i=cellAt(e);down=i;moved=false;if(path.length&&path[path.length-1]===i)return;if(path.length&&!ConnectEngine.canAdd(g,path,i))path=[];link(i);cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',e=>{if(down==null)return;const i=cellAt(e);if(i!==down&&i>=0){moved=true;down=i;link(i)}});
+  cv.addEventListener('pointerup',e=>{const i=cellAt(e),was=down;down=null;
+    if(moved){letGo();return}
+    if(path.length&&path[path.length-1]===i&&(path.length>=3||g.cells[i]==='!')&&was===i&&path._tapped){letGo();return}
+    path._tapped=true;if(path.length===1&&g.cells[i]!=='!')path._tapped=true});
+  if(jumper)$('#hop').onclick=()=>{if(hopUsed)return;hopUsed=true;$('#hop').disabled=true;react('excited');ConnectEngine.reshuffle(g);after()};   // Super Jumper: once per round, a free reshuffle
+  // handheld (spec §4): ◀ ▶ cycle bunches (biggest first), A gathers; B toggles free threading (◀ ▶ cursor, A link, B gather)
+  function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();const A=k==='a'||k==='z'||k===' '||k==='enter',Bk=k==='b'||k==='x';
+    if(!['arrowleft','arrowright'].includes(k)&&!A&&!Bk)return;e.preventDefault();kbd=true;idle=0;const B_=ConnectEngine.bunches(g);
+    if(mode==='pick'){if(k==='arrowright')pickI=(pickI+1)%Math.max(1,B_.length);else if(k==='arrowleft')pickI=(pickI-1+B_.length)%Math.max(1,B_.length);
+      else if(A&&B_.length){ConnectEngine.gatherSet(g,B_[pickI%B_.length].cells);pickI=0;after()}else if(Bk){mode='free';path=[];toast('Free threading')}return}
+    if(!path.length){if(k==='arrowright')cursor=(cursor+1)%g.cells.length;else if(k==='arrowleft')cursor=(cursor-1+g.cells.length)%g.cells.length;else if(A)link(cursor);else if(Bk){mode='pick';toast('Bunch picker')}return}
+    const nb=g.cells.map((_,j)=>j).filter(j=>ConnectEngine.canAdd(g,path,j));
+    if(k==='arrowright'||k==='arrowleft'){if(nb.length){const ci=nb.indexOf(cursor);cursor=nb[(ci+(k==='arrowright'?1:nb.length-1)+(ci<0?1:0))%nb.length]}}
+    else if(A&&nb.includes(cursor))link(cursor);else if(Bk){if(ConnectEngine.valid(g,path))letGo();else path=[]}}
+  document.addEventListener('keydown',key);
+  $('#quit').onclick=()=>{stop();endGame(false)};
+  window.__con=g;window.__conAfter=after;window.__conGather=p=>{path=[];if(ConnectEngine.gather(g,p))after()};
+  goalBar();talk(B('connect_start'),2400);
+}
+const CN_NEXT=()=>{};   // one board, a new goal item each round; roundDone() books each round
+window.connectGame=connectGame;
+
 // ---------- release (§5.8) ----------
 function release(forced,go){
   if(mq.length&&!forced)return flushMilestones();
@@ -526,6 +600,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},trailGame:()=>trailGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

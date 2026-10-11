@@ -76,3 +76,11 @@ Round after M5: Cole's fixes, Night Sky cut, Sparkle trail (M6 part 1)
 - trail.js + Leaf Trail / Firefly Parade (spec v0.3 §3), unlocks at bond 70: drag to steer (easy = walk only while held), soft walls,
   max 12 followers + counter, rare pickup x3, finale (leaf-pile pounce / parade constellation memory). Handheld ◀ ▶ turn, A dash (easy: hold), B pause.
   Talents: Super Jumper (hop bushes), Radar Ears (panned twinkle toward the next leaf), Silent Flight (half speed, no bump sound), Night Vision (dim scene, glowing followers).
+
+Milestone 6 part 2: Connect (spec v0.3 §4), unlocks at bond 140
+- connect.js + Berry Connect / Moonlight Connect: drag through 3+ touching same items (tap mode: tap one by one, tap the last again), no swaps, no fail.
+  Easy 6x5 / 4 kinds / goal 8 (first game), Standard 7x7 / 5 kinds / goal 12, Big-kid stars by thread count (<=15). 3 rounds, one goal item each.
+  6+ links leave a sparkle wildcard (also gathers its row); 9+ or a loop leaves the favourite (trinket / feather) that gathers every item of one kind.
+  No dead ends (auto shake + bark); hint glow after 3 s (easy) / 6 s. Handheld: ◀ ▶ bunch picker + A; B = free threading.
+  Talents: Riddle Solver (straight line of 4+ = shape goal, +2), Super Jumper (one free reshuffle per game), Night Vision (biggest bunch glows), Lullaby (evening nap after).
+- Sounds reuse samples only: connect_group_3 / connect_big_group / connect_special_trinket, ui_tap per link, trail_pickup_1/_5, trail_bump_boop.

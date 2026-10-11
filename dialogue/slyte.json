@@ -1431,6 +1431,40 @@
     "text": "All the leaves! Best pile ever.",
     "expr": "delighted"
    }
+  ],
+  "connect_start": [
+   {
+    "text": "Berries! Link up the bunch. Ready? Go!",
+    "expr": "excited"
+   },
+   {
+    "text": "New round! Find the touching ones.",
+    "expr": "curious"
+   }
+  ],
+  "connect_big": [
+   {
+    "text": "A big bunch! My tail is doing loops.",
+    "expr": "delighted"
+   }
+  ],
+  "connect_special": [
+   {
+    "text": "A shiny trinket! For ME? Fwip!",
+    "expr": "delighted"
+   }
+  ],
+  "connect_shuffle": [
+   {
+    "text": "Hmm. Shake-shake! New berries.",
+    "expr": "giggling"
+   }
+  ],
+  "connect_hint": [
+   {
+    "text": "Psst. Those ones touch.",
+    "expr": "curious"
+   }
   ]
  },
  "conversations": [

@@ -1280,6 +1280,36 @@
     "text": "look… the parade made a little constellation.",
     "expr": "delighted"
    }
+  ],
+  "connect_start": [
+   {
+    "text": "hoo… let's gather some moonlight.",
+    "expr": "happy"
+   }
+  ],
+  "connect_big": [
+   {
+    "text": "oh… a whole little family of moons.",
+    "expr": "delighted"
+   }
+  ],
+  "connect_special": [
+   {
+    "text": "a feather… soft as a cloud.",
+    "expr": "delighted"
+   }
+  ],
+  "connect_shuffle": [
+   {
+    "text": "let's stir the sky a little…",
+    "expr": "curious"
+   }
+  ],
+  "connect_hint": [
+   {
+    "text": "hoo? …those ones are neighbours.",
+    "expr": "curious"
+   }
   ]
  },
  "conversations": [
