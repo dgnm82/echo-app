@@ -1,7 +1,8 @@
 // Shiny Pairs engine (Memory card game, game spec v0.3 §1). Pure logic, testable in node.
 // One board spans the 3 rounds; rounds end at pairs 3/6/10 (easy 2/4/6). No timer, no fail, no turn limit.
 (function(root){
-const DECK={slyte:['blackberry','honey_cake','trinket','leaf','nut','apple','daisy','pinecone','mushroom','ball']};
+const DECK={slyte:['blackberry','honey_cake','trinket','leaf','nut','apple','daisy','pinecone','mushroom','ball'],
+  whimber:['star','moon','leaf_green','comet','feather','dewdrop','firefly','lantern','cloud','book']};
 const LEVELS={easy:{pairs:6,cols:3,rows:4,hintAfter:2,rounds:[2,4,6]},standard:{pairs:10,cols:4,rows:5,hintAfter:3,rounds:[3,6,10]},
   bigkid:{pairs:10,cols:4,rows:5,hintAfter:0,rounds:[3,6,10],stars:true}};
 function rng(seed){let s=(seed>>>0)||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}

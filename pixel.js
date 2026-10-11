@@ -3,6 +3,7 @@
 (function(){
 const W=window, TICK=83, N=48;
 const PAL=['mint-teal','violet-rose','sunset-gold','rose-sapphire','teal-gold','sky-periwinkle'];
+const POWL=['lilac-night','sky-teal','plum-blush','mint-aurora','peach-dusk'];   // Whimber: the 5 POWL ramps (guide §6)
 const FR={idle:[0,1,2,3,4,5],blink:6,ear1:7,ear2:8,tail1:9,tail2:10,happy:11,eat1:12,eat2:13,pet1:14,pet2:15,cur1:16,cur2:17,shy1:18,shy2:19,sl1:20,sl2:21,nap1:22,nap2:23,sad:24,sur:25,think:26,gig:27};
 // expression -> looping frame sequence [[column, ticks],...]; loop = index the loop restarts from (guide 9.2 timings)
 const F_=FR,SEQ={happy:[[F_.happy,8],[F_.gig,4]],delighted:[[F_.gig,3],[F_.happy,5]],love:[[F_.pet2,6],[F_.pet1,6]],excited:[[F_.gig,2],[F_.happy,2]],
@@ -16,9 +17,11 @@ const REACT={eat:[[F_.eat1,2],[F_.eat2,2],[F_.eat1,2],[F_.eat2,2],[F_.happy,4]],
 const IDLE_T=[3,2,2,2,2,2];               // guide §9.2 idle loop ticks
 function rng(s){let a=s>>>0||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 // seeded variation within the guide: palette (6 ramps) + fluff preset (0-3); ear/tail/eye fixed (open decision)
-function variant(seed){const r=rng((seed||1)^0x9e37);return {pal:PAL[Math.floor(r()*PAL.length)],fluff:Math.floor(r()*4)}}
+function variant(seed,sp){const r=rng((seed||1)^0x9e37),P=sp==='whimber'?POWL:PAL;return {pal:P[Math.floor(r()*P.length)],fluff:Math.floor(r()*4)}}
 function stageFromBond(bond){const f=Math.max(0,Math.min(1,(bond||0)/500));return f<.25?1:f<.5?2:f<.75?3:4}
 function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.released)return 4;if(S.releasePath)return 5;return stageFromBond(S.bond)}catch(e){return 1}}
+function whimber(g,stage){const v=variant(g&&g.seed,'whimber');stage=stage||stageNow();
+  return `<div class="echo-svg px-echo owl" role="img" aria-label="Whimber" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/whimber_${v.pal}_f${v.fluff}.png)"></div>`}
 function slyte(g,stage){const v=variant(g&&g.seed);stage=stage||stageNow();
   return `<div class="echo-svg px-echo fox" role="img" aria-label="Slyte" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/slyte_${v.pal}_f${v.fluff}.png)"></div>`}
 // ---- 12 fps clock: idle loop + random blink / ear flick / tail flick, expression overrides
@@ -36,7 +39,7 @@ function step(el){if(el._ev)return evStep(el);const st=+el.dataset.stage||1,ex=e
   const sq=SEQ[ex];
   if(s.q.length){const [c,n]=s.q[0];col=c;if(--s.q[0][1]<=0)s.q.shift()}
   else if(sq){const L=sq.s||sq,lp=sq.loop||0;col=L[s.si][0];if(++s.sh>=L[s.si][1]){s.sh=0;s.si++;if(s.si>=L.length)s.si=lp}}
-  else{ if(--s.nb<=0){s.q.push([FR.blink,2]);s.nb=rand(24,72)}            // blink: 2 ticks every 2-6 s
+  else{ if(--s.nb<=0){s.q.push([el.classList.contains('owl')&&(s.alt=!s.alt)?FR.think:FR.blink,2]);s.nb=rand(24,72)}            // blink: 2 ticks every 2-6 s
         if(--s.ne<=0){s.q.push([FR.ear1,2],[FR.ear2,2]);s.ne=rand(48,108)} // ear flick
         if(--s.nt<=0){s.q.push([FR.tail1,2],[FR.tail2,2],[FR.tail1,1]);s.nt=rand(60,120)} // tail flick
         if(++s.hold>=IDLE_T[s.i]){s.hold=0;s.i=(s.i+1)%6}col=FR.idle[s.i]}
@@ -58,11 +61,11 @@ W.Chirp={enabled:true,last:null,play(text,kind){this.last={text:String(text),kin
   try{W.dispatchEvent(new CustomEvent('echo-chirp',{detail:this.last}))}catch(e){}}};
 function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
-const EMO={'🍎':'apple','🫐':'berry','🍯':'honey','🌰':'nut','🐟':'fish','🥓':'meat','💧':'water','✋':'hand','🌙':'moon','🌲':'tree','🤗':'heart','💗':'heart','❤️':'heart','📖':'book',
+const EMO={'🥄':'spoon','🐈':'cat','🐋':'whale','🏡':'house','🐉':'dragon','🎈':'balloon','✦':'sparkle','🍎':'apple','🫐':'berry','🍯':'honey','🌰':'nut','🐟':'fish','🥓':'meat','💧':'water','✋':'hand','🌙':'moon','🌲':'tree','🤗':'heart','💗':'heart','❤️':'heart','📖':'book',
   '✕':'close','🌟':'sticker','✨':'sparkle','💎':'gem','💬':'talk','👍':'yes','👂':'ear','🙂':'smile','😂':'laugh','😄':'laugh','🤪':'silly','😮':'wow','🤔':'question','⏰':'later','👋':'hand','😊':'smile','🎵':'talk','⭐':'sticker','🏠':'fort','🤫':'smile','👃':'nose','🍃':'leaf','🪶':'feather','😌':'proud','😢':'sad','😮':'wow','📬':'mail_open','📪':'mail_closed','🖼️':'postcard','✉️':'postcard','⏩':'skip','🌿':'leaf','🦊':'sticker','▶':'skip','🌼':'sparkle','🍂':'leaf'};
 const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'laugh',ask_more:'talk',later:'later',wow:'wow',silly:'silly'};
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();

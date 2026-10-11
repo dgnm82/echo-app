@@ -1,6 +1,6 @@
 import asyncio,sys,os
 from playwright.async_api import async_playwright
-URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';PFX=sys.argv[2] if len(sys.argv)>2 else '';OUT='/tmp/relpt-'+PFX
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';PFX=sys.argv[2] if len(sys.argv)>2 else '';OUT=(sys.argv[3] if len(sys.argv)>3 else '/tmp/relpt-')+PFX;KIND=os.environ.get('ECHO','fox');SEL='#tree' if KIND=='owl' else '#bush'
 async def run(b,dev,vp,errs,full=True):
   pg=await b.new_page(**vp);pg.on('pageerror',lambda e:errs.append(dev+':'+str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(dev+' console:'+m.text))
   pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
@@ -10,7 +10,7 @@ async def run(b,dev,vp,errs,full=True):
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(700)
   await pg.screenshot(path=f'{OUT}{dev}-setup.png')
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(700);await pg.screenshot(path=f'{OUT}{dev}-discover.png')
-  await pg.click('#bush');await pg.wait_for_timeout(560);await pg.screenshot(path=f'{OUT}{dev}-reveal-arrival-mid.png')
+  await pg.click(SEL);await pg.wait_for_timeout(560);await pg.screenshot(path=f'{OUT}{dev}-reveal-arrival-mid.png')
   await pg.wait_for_timeout(2600);await pg.screenshot(path=f'{OUT}{dev}-reveal.png')
   await pick();await pg.wait_for_timeout(3000)
   if not full:await pg.close();return

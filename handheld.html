@@ -17,7 +17,8 @@ button{font:10px PS2P,monospace;padding:8px 10px;margin:4px;background:#FFD27A;c
 <script>
 (()=>{const c=document.getElementById('c'),x=c.getContext('2d');x.imageSmoothingEnabled=false;
 const q=new URLSearchParams(location.search);let save=null;try{save=JSON.parse(localStorage.getItem('echo-proto-v1'))}catch(e){}
-let seed=+(q.get('seed')||(save&&save.kind==='fox'&&save.g&&save.g.seed)||7),bond=q.has('stage')?[0,150,300,450,450][(+q.get('stage')||1)-1]:(save&&save.bond)||0,release=q.get('stage')==='5';
+const SP=(q.get('echo')||(save&&save.kind==='owl'?'whimber':'slyte'))==='whimber'?'whimber':'slyte';
+let seed=+(q.get('seed')||(save&&save.g&&save.g.seed)||7),bond=q.has('stage')?[0,150,300,450,450][(+q.get('stage')||1)-1]:(save&&save.bond)||0,release=q.get('stage')==='5';
 const img={},load=(k,src)=>new Promise(r=>{const i=new Image();i.onload=()=>{img[k]=i;r()};i.src=src});
 // 12x12 icons, ink + 2 colours (feed bowl, heart, star, moon)
 const IC={feed:["....YYYY....","...YGGGGY...","..YGGGGGGY..","............","KKKKKKKKKKKK","KBBBBBBBBBBK",".KBBBBBBBBK.","..KBBBBBBK..","...KKKKKK...","............","............","............"],
@@ -27,7 +28,7 @@ const IC={feed:["....YYYY....","...YGGGGY...","..YGGGGGGY..","............","KKK
 const COL={K:'#3B2A5C',Y:'#FFD27A',G:'#8CCB7E',B:'#B9A6FF',P:'#FF9EC0'};
 const ACTS=['feed','pet','play','sleep'];let sel=-1,anim=null,t=0;
 function stage(){return release?5:PIXEL.stageFromBond(bond)}
-function draw(){const v=PIXEL.variant(seed),sh=img['s'+v.pal+v.fluff];x.fillStyle='#2E2452';x.fillRect(0,0,60,80);
+function draw(){const v=PIXEL.variant(seed,SP),sh=img['s'+v.pal+v.fluff];x.fillStyle='#2E2452';x.fillRect(0,0,60,80);
   x.drawImage(img.bg,60,186,60,52,0,8,60,52);
   // status strip (8 rows): heart + 5 bond segments
   x.fillStyle='#FFF6E6';x.fillRect(0,0,60,8);x.fillStyle='#3B2A5C';x.fillRect(0,7,60,1);
@@ -35,8 +36,9 @@ function draw(){const v=PIXEL.variant(seed),sh=img['s'+v.pal+v.fluff];x.fillStyl
   for(let i=0;i<5;i++){x.fillStyle='#3B2A5C';x.fillRect(8+i*10,2,9,4);x.fillStyle=(bond/500)>i/5+.001?'#FF8FB8':'#EBD7BC';x.fillRect(9+i*10,3,7,2)}
   // Echo (48x48) on the stage, feet on the stage floor
   let col=PIXEL.FR.idle[Math.floor(t/2)%6],dy=0;
-  if(anim){const k=anim.n;if(anim.a==='sleep')col=PIXEL.FR.blink;else col=PIXEL.FR.happy;if(anim.a==='play')dy=-[0,3,6,8,8,6,3,0][Math.min(7,k%8)];}
-  else if(t%40>=38)col=PIXEL.FR.blink;
+  if(anim){const k=anim.n;if(anim.a==='sleep')col=k<6?PIXEL.FR.sl1:PIXEL.FR.nap1;else if(anim.a==='feed')col=k%4<2?PIXEL.FR.eat1:PIXEL.FR.eat2;else if(anim.a==='pet')col=k%6<3?PIXEL.FR.pet1:PIXEL.FR.pet2;else col=PIXEL.FR.happy;if(anim.a==='play')dy=-[0,3,6,8,8,6,3,0][Math.min(7,k%8)];}
+  else if(t%40>=38)col=SP==='whimber'&&t%80>=40?PIXEL.FR.think:PIXEL.FR.blink;   // Whimber blinks one eye at a time
+  else if(SP==='whimber'&&t%90>=84)col=PIXEL.FR.tail1;
   x.drawImage(sh,col*48,(stage()-1)*48,48,48,6,10+dy,48,48);
   // choice bar (20 rows): four 15x20 cells
   x.fillStyle='#3B2A5C';x.fillRect(0,60,60,20);
@@ -54,6 +56,6 @@ addEventListener('keydown',e=>{const n=+e.key;if(n>=1&&n<=4)act(n-1)});addEventL
 document.getElementById('g').onclick=e=>{const g=document.getElementById('grid');g.style.display=g.style.display==='block'?'none':'block'};
 document.getElementById('s').onclick=()=>{const s=stage();if(s>=4&&!release)release=true;else{release=false;bond=[150,300,450,0][Math.min(3,s-1)]}};
 document.getElementById('v').onclick=()=>{seed=1+Math.floor(Math.random()*99999)};
-Promise.all([load('bg','px/bg_dusk_f0.png'),...PIXEL.PAL.flatMap(p=>[0,1,2,3].map(f=>load('s'+p+f,`px/slyte_${p}_f${f}.png`)))]).then(()=>{fit();setInterval(()=>{t++;if(anim&&++anim.n>12)anim=null;draw()},83);if(q.get('grid'))document.getElementById('grid').style.display='block';window.__hh={ready:true}});
+Promise.all([load('bg',SP==='whimber'?'px/bg_night_f0.png':'px/bg_dusk_f0.png'),...(SP==='whimber'?PIXEL.POWL:PIXEL.PAL).flatMap(p=>[0,1,2,3].map(f=>load('s'+p+f,`px/${SP}_${p}_f${f}.png`)))]).then(()=>{fit();setInterval(()=>{t++;if(anim&&++anim.n>12)anim=null;draw()},83);if(q.get('grid'))document.getElementById('grid').style.display='block';window.__hh={ready:true}});
 })();
 </script></body></html>

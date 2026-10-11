@@ -1181,6 +1181,102 @@
     "text": "Hm… the thought flew away. Silent flight.",
     "expr": "curious"
    }
+  ],
+  "pairs_start": [
+   {
+    "text": "hoo… let's find the stars that belong together.",
+    "expr": "happy"
+   },
+   {
+    "text": "cards… face down, like sleepy stars. let's wake two.",
+    "expr": "curious"
+   }
+  ],
+  "pairs_pair": [
+   {
+    "text": "two moons… side by side now.",
+    "expr": "happy"
+   },
+   {
+    "text": "those two belong together… hoo.",
+    "expr": "happy"
+   },
+   {
+    "text": "a pair… how lovely.",
+    "expr": "happy"
+   }
+  ],
+  "pairs_miss": [
+   {
+    "text": "not quite… i'll remember that one too.",
+    "expr": "thinking"
+   },
+   {
+    "text": "hmm… that one is hiding. we'll find it.",
+    "expr": "curious"
+   }
+  ],
+  "pairs_hint": [
+   {
+    "text": "hoo? …over there, maybe.",
+    "expr": "curious"
+   }
+  ],
+  "pairs_done": [
+   {
+    "text": "every pair is together… how lovely.",
+    "expr": "proud"
+   },
+   {
+    "text": "all of them… found. you have a gentle memory.",
+    "expr": "happy"
+   }
+  ],
+  "stack_start": [
+   {
+    "text": "let's make the hollow cozy… one piece at a time.",
+    "expr": "happy"
+   }
+  ],
+  "stack_floor_next": [
+   {
+    "text": "another floor… slowly, slowly.",
+    "expr": "happy"
+   }
+  ],
+  "stack_row": [
+   {
+    "text": "a row… soft and snug.",
+    "expr": "happy"
+   },
+   {
+    "text": "hoo… that fits.",
+    "expr": "happy"
+   }
+  ],
+  "stack_floor": [
+   {
+    "text": "hoo… i can already hear how quiet it is in there.",
+    "expr": "happy"
+   }
+  ],
+  "stack_high": [
+   {
+    "text": "the sky is getting closer…",
+    "expr": "curious"
+   }
+  ],
+  "stack_disguise": [
+   {
+    "text": "hoo… a little surprise.",
+    "expr": "giggling"
+   }
+  ],
+  "stack_done": [
+   {
+    "text": "the hollow is ready… it smells like moss and moonlight.",
+    "expr": "proud"
+   }
   ]
  },
  "conversations": [

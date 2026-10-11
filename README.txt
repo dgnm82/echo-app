@@ -58,3 +58,13 @@ Shiny Pairs + postcards v0.5 round
 - postcards.js: the six Echo_Postcards.docx v0.5 postcards (days 1, 3, 7, 14, 30, 60) for Slyte and Whimber with doc fallbacks; old v0.3 saves migrate
   (days already reached stay delivered). New pixel scenes: log, bramble, sunset, field, stars, library, autumnnight, frost.
 - Tests: tools/test-memory.js, tools/test-postcards.js, tests/phone_memory_test.py.
+
+Milestone 5: Whimber in pixel
+- tools/bake_whimber.py: Whimber sheets per POWL palette (5) x fluff preset (0-3), same 28 frame slots as Slyte (idle, one-eye blink,
+  feather ruffle, head swivel, happy, eat, pet, curious, shy, sleepy, nap, sad, surprised, think, giggle) x stages 1-5, plus _ev sheets
+  (arrival; release = wings up, glide-up dissolve, home star). Crest/chest mark/gem follow the fluff preset.
+- tools/bake_m5.py: Hollow Builder blocks (bark, moss roof, moon window, door, star lantern, feather nest), tree-hollow Home prop states,
+  Night Sky star sprites, guess icons, night Home background. Starlight Pairs cards come from tools/bake_mem.py.
+- Whimber picker (spec v0.3 day 1): Night Sky (signature) + Starlight Pairs + Hollow Builder. Talents: Night Vision (partner shimmer in
+  Starlight Pairs; brighter stars in Night Sky), Silent Flight (silent Hollow Builder), Sweet-Dream Lullaby (evening board/build -> nap).
+- handheld.html?echo=whimber shows Whimber. Tests: tests/phone_whimber_test.py, ECHO=owl tests/phone_release_test.py.

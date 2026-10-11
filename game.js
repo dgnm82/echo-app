@@ -88,7 +88,7 @@ function start(){
   Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
-  const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=svg('owl',genEcho('owl'),'happy');
+  const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
   h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo">${PI('✨')}<span>Project Echo</span>${PI('✨')}</div>
      <div class="tpair"><div class="tslot">${fox}</div><div class="tslot owl">${owl}</div></div>
      <p>Prototype for playtesting. A grown-up sets this up.</p>
@@ -107,7 +107,7 @@ async function reveal(kind){
   Object.assign(S,{kind,g:genEcho(kind),needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],vars:{},seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString()});
   S.g.name=E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
   const e=E();
-  const px=kind==='fox'&&window.PIXEL;
+  const px=!!window.PIXEL;
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
   // Arrival (guide 9.2, P0): falling star -> sparkles spiral in -> forms heart-out in light form -> blink open -> hop (~2 s)
   SFX(kind==='fox'?'slyte_arrival':'whimber_arrival');if(px){const el=$('#cr .px-echo');el.dataset.stage=1;PIXEL.event(el,'arrival')}
@@ -231,7 +231,7 @@ function book(){
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
-  ${S.kind==='fox'?`<h2>Our treehouse fort</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
+  ${S.kind?`<h2>Our ${S.kind==='fox'?'treehouse fort':'tree hollow'}</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
@@ -242,16 +242,18 @@ function book(){
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
-  if(S.kind!=='fox')return start(nightSky); // Hollow Builder (Whimber's falling-blocks game) comes in a later milestone
+  // Whimber (spec v0.3 §0, day 1): Night Sky (signature, daily +3) + Starlight Pairs + Hollow Builder
+  if(S.kind!=='fox')return choices([['⭐','Night Sky',null],['🌙','Starlight Pairs',null],['🏡','Hollow Builder',null]],i=>start([nightSky,memoryGame,fortBuilder][i]));
   // Play picker (spec v0.3 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
   choices([['⭐','Shiny Pairs',null],['🏠','Fort Builder',null]],i=>start(i===0?memoryGame:fortBuilder));
 }
-function gameShell(title){h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
-function endGame(finished){if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
+let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
+function gameShell(title){GT++;h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function endGame(finished){GT++;if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
   if((next===nightSky||next&&next.signature)&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
-  if(round>=2)setTimeout(()=>endGame(true),2200);else setTimeout(()=>next(round+1),2200)}
+  const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
 
 // ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
 function fortState(){return S.fort=S.fort||{stage:0,decor:0,homes:0,rounds:0,slow:0,best:0}}
@@ -259,22 +261,23 @@ function fortLevel(){const f=fortState(),set=S.fortLevel||'auto';
   if(f.rounds<2)return 'easy';                 // the first 2 rounds ever are forced to Easy
   if(set!=='auto')return set;                  // grown-up toggle (dev tools)
   return f.slow>=2?'easy':'standard'}          // automatic Easy after 2 slow rounds; drops back after a quick one
-function fortProp(){if(S.kind!=='fox')return '';const f=fortState(),open=S.badges.includes('place')?'_open':'';
-  const nm=f.stage>=3&&f.decor?`fort_3_d${f.decor}`:`fort_${f.stage}`;
-  return `<div class="fortprop${open?' open':''}" aria-label="Treehouse fort" style="background-image:url(px/fort/${nm}${open}.png)"></div>`}
+function fortProp(){const f=fortState(),open=S.badges.includes('place')?'_open':'',fox=S.kind==='fox',b=fox?'fort':'hollow';
+  const nm=f.stage>=3&&f.decor?`${b}_3_d${f.decor}`:`${b}_${f.stage}`;
+  return `<div class="fortprop ${b}${open?' open':''}" aria-label="${fox?'Treehouse fort':'Tree hollow'}" style="background-image:url(px/${b}/${nm}${open}.png)"></div>`}
 function fortBuilder(round){
   const f=fortState(),level=fortLevel(),hh=/[?&]board=hh/.test(location.search),t0=now();
-  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+f.rounds*7+round,w:hh?5:8,h:hh?6:12,disguise:S.talents.includes('Master of Disguise'),round});
+  const fox=S.kind==='fox',DIR=fox?'fort':'hollow',HOME=fox?'treehouse fort':'tree hollow',quiet=!fox&&S.talents.includes('Silent Flight');
+  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+f.rounds*7+round,w:hh?5:8,h:hh?6:12,disguise:fox&&S.talents.includes('Master of Disguise'),round});
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
-  gameShell(`Fort · floor ${round+1}/3`);const gs=$('#gs');gs.classList.add('fortgame');
+  gameShell(`${fox?'Fort':'Hollow'} · floor ${round+1}/3`);const gs=$('#gs');gs.classList.add('fortgame');
   gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Fort board"></canvas>
     <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
       <div class="fbrows" id="fbrows"></div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
-    <div class="fbecho creature" id="cr">${svg('fox',S.g,'happy')}</div>
+    <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
     <canvas id="fbs" class="fbstrip" width="${W}" height="24" style="width:${W}px" aria-label="Home so far"></canvas>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
   const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d'),sx=$('#fbs').getContext('2d');
-  const IM={};['plank','window','leafroof','door','lantern','flag','slyte'].forEach(k=>{IM[k]=new Image();IM[k].src=`px/fort/b_${k}.png`;IM['m_'+k]=new Image();IM['m_'+k].src=`px/fort/m_${k==='slyte'?'plank':k}.png`});
+  const IM={};['plank','window','leafroof','door','lantern','flag','slyte'].forEach(k=>{IM[k]=new Image();IM[k].src=`px/${DIR}/b_${k}.png`;IM['m_'+k]=new Image();IM['m_'+k].src=`px/${DIR}/m_${k==='slyte'?'plank':k}.png`});
   IM.ghost=new Image();IM.ghost.src='px/fort/ghost.png';[0,1,2].forEach(i=>{IM['glow'+i]=new Image();IM['glow'+i].src=`px/fort/glow${i}.png`});
   let glowRows=0,glowT=0,alive=true,rowsSaid=0;
   function draw(){if(!alive)return;cx.fillStyle='#2E2452';cx.fillRect(0,0,W,H);cx.fillStyle='#3B2A5C';
@@ -292,7 +295,7 @@ function fortBuilder(round){
   const fall=g.L.fallMs?setInterval(()=>{FortEngine.tick(g);after()},g.L.fallMs):0; // Easy: the piece hovers until B
   function stop(){alive=false;clearInterval(loop);if(fall)clearInterval(fall);document.removeEventListener('keydown',key)}
   function after(){for(const e of FortEngine.take(g)){
-      if(e.type==='settle')SFX('blocks_land',{vol:.6});if(e.type==='floor')SFX('blocks_floor_done');if(e.type==='row'||e.type==='row-auto'){SFX('blocks_row_glow');glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
+      if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});if(e.type==='floor')SFX('blocks_floor_done');if(e.type==='row'||e.type==='row-auto'){SFX('blocks_row_glow');glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
       if(e.type==='high'){talk(B('stack_high'),1800)}
       if(e.type==='disguise'){react('excited');talk(B('stack_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
@@ -305,17 +308,17 @@ function fortBuilder(round){
     sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);for(let x=0;x<g.w;x++)sx.drawImage(IM.m_leafroof,x*8+(W-g.w*8)/2,16);
     setExpr('happy');react('happy');talk(B('stack_done'),2200);
     const roofBefore=f.stage>=3;if(f.stage<3)f.stage++;else f.decor=Math.min(3,f.decor+1);
-    if(f.stage>=3&&!roofBefore){f.homes++;remember('We built the fort three floors high','fort_home')}
-    else remember(f.stage<3?`We built floor ${f.stage} of the treehouse fort`:'We added a decoration to the treehouse fort','fort_'+f.stage+'_'+f.decor);
+    if(f.stage>=3&&!roofBefore){f.homes++;remember(fox?'We built the fort three floors high':'We made the tree hollow cozy, three floors high','fort_home')}
+    else remember(f.stage<3?`We built floor ${f.stage} of the ${HOME}`:`We added a decoration to the ${HOME}`,'fort_'+f.stage+'_'+f.decor);
     if(f.stage>=3)(S.homesBuilt=S.homesBuilt||[]).push({day:S.days,decor:f.decor});
-    banner(f.stage>=3&&!roofBefore?'Fort built!':roofBefore?'New decoration!':`Fort floor ${f.stage} built!`,fortProp());
-    save();roundDone(round,fortBuilder)}
+    banner(f.stage>=3&&!roofBefore?(fox?'Fort built!':'Hollow built!'):roofBefore?'New decoration!':`${fox?'Fort':'Hollow'} floor ${f.stage} built!`,fortProp());
+    save();roundDone(round,fortBuilder);lullaby()}
   function banner(t,img){gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${t}</span>${PI('✨')}${img?`<div class="fbdprop">${img}</div>`:''}${g.L.stars?`<div>${Array.from({length:FortEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`)}
   // touch: drag the piece sideways, tap it to turn, swipe down to drop
   let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
   cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){FortEngine.moveTo(g,col);draw()}});
   cv.addEventListener('pointerup',e=>{if(!pd)return;const dy=(e.clientY-pd.y)/pd.k,dt=Date.now()-pd.t;if(dy>36&&dt<600){FortEngine.drop(g);after()}else if(!pd.moved&&Math.abs(dy)<8){FortEngine.rotate(g);draw()}pd=null});
-  $('#kL').onclick=()=>{if(FortEngine.move(g,-1))SFX('blocks_move',{vol:.5});draw()};$('#kR').onclick=()=>{if(FortEngine.move(g,1))SFX('blocks_move',{vol:.5});draw()};$('#kA').onclick=()=>{if(FortEngine.rotate(g))SFX('blocks_rotate',{vol:.6});draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
+  $('#kL').onclick=()=>{if(FortEngine.move(g,-1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kR').onclick=()=>{if(FortEngine.move(g,1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kA').onclick=()=>{if(FortEngine.rotate(g)&&!quiet)SFX('blocks_rotate',{vol:.6});draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
   // handheld scheme (spec §0, confirmed): ◀ ▶ move, A turn, B drop (hold = faster fall)
   function key(e){const k=e.key.toLowerCase();if(!document.getElementById('fb')){stop();return}
     if(k==='arrowleft'){FortEngine.move(g,-1)}else if(k==='arrowright'){FortEngine.move(g,1)}
@@ -328,15 +331,16 @@ function fortBuilder(round){
   talk(round===0?B('stack_start'):B('stack_floor_next'),2400);draw();
 }
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
-const PAIR_NAMES={blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Slytes'};
+const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'comets',feather:'feathers',dewdrop:'dewdrops',firefly:'fireflies',lantern:'lanterns',cloud:'clouds',book:'books',whimber_token:'Whimbers',blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Slytes'};
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
 function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){
-  const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:S.talents.includes('Master of Disguise')});
-  const total=g.L.pairs,img=it=>`px/mem/slyte_${it}`;let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
-  gameShell(`Shiny Pairs · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',TITLE=fox?'Shiny Pairs':'Starlight Pairs',NEXT=fox?MEM_NEXT:MEM_PLAIN;
+  const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({species:SP,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:fox&&S.talents.includes('Master of Disguise')});
+  const total=g.L.pairs,img=it=>`px/mem/${SP}_${it}`;let nightVision=!fox&&S.talents.includes('Night Vision');let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
+  gameShell(`${TITLE} · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
   gs.insertAdjacentHTML('beforeend',`<div class="memgrid c${g.cols}" id="mg" role="grid" aria-label="Cards">${g.cards.map((c,i)=>`<button class="mcardbtn" data-i="${i}" aria-label="Card ${i+1}"></button>`).join('')}</div>
-    <div class="memecho creature" id="cr">${svg('fox',S.g,'happy')}</div><div class="memside"><span id="mcount">0/${total}</span><div id="mstars"></div>${level==='standard'?'':`<div class="fblvl">${level==='easy'?'Easy':'Big-kid'}</div>`}</div>`);
+    <div class="memecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div><div class="memside"><span id="mcount">0/${total}</span><div id="mstars"></div>${level==='standard'?'':`<div class="fblvl">${level==='easy'?'Easy':'Big-kid'}</div>`}</div>`);
   const B_=[...gs.querySelectorAll('.mcardbtn')];
   function face(i){const c=g.cards[i],el=B_[i];el.style.backgroundImage=`url(${c.up||c.paired?img(c.item)+(c.paired?'_glow':''):img('back')}.png)`;el.classList.toggle('paired',c.paired);el.classList.toggle('cur',g.cursor===i&&kbd);
     el.setAttribute('aria-label',c.up||c.paired?(PAIR_NAMES[c.item]||c.item):'Face-down card')}
@@ -344,7 +348,9 @@ function memoryGame(){
   const all=()=>B_.forEach((_,i)=>face(i));all();
   function tap(i){if(!alive)return;MemoryEngine.flip(g,i);handle()}
   function handle(){for(const e of MemoryEngine.take(g)){
-    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:.7});flipAnim(e.i);if(g.cards[e.i].item==='slyte_token'){react('excited');talk(B('pairs_disguise'),1800)}}
+    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(g.cards[e.i].item==='slyte_token'){react('excited');talk(B('pairs_disguise'),1800)}
+      // Night Vision (spec v0.3 §1): the partner of the first flipped card shimmers faintly once (once per board, default)
+      if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
     if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
     if(e.type==='pair'){SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
       if(pairsSaid%2===0)talk(Math.random()<.5?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:B('pairs_pair'),1800);else say('*')}
@@ -353,14 +359,14 @@ function memoryGame(){
       // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
       if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('radar_jingle',{pan:(col/(g.cols-1))*2-1,vol:.6})}}
     if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
-    if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,MEM_NEXT)}
+    if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,NEXT)}
     if(e.type==='done')finish()}
-    $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`Shiny Pairs · ${g.pairs}/${total}`;
+    $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.pairs}/${total}`;
     if(g.L.stars)$('#mstars').innerHTML=Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('');}
   function finish(){alive=false;p.games++;p.boards++;if(level!=='bigkid'){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
     SFX('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
     gs.insertAdjacentHTML('beforeend',`<div class="fbdone memdone">${PI('✨')}<span>All ${total} pairs!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
-    setTimeout(()=>roundDone(2,MEM_NEXT),600);document.removeEventListener('keydown',key)}
+    setTimeout(()=>{roundDone(2,NEXT);lullaby()},600);document.removeEventListener('keydown',key)}
   B_.forEach((b,i)=>b.onclick=()=>{kbd=false;if(g.pending){MemoryEngine.resolve(g);handle();return}tap(i)});
   // handheld (◀ ▶ A B): ◀ ▶ reading order skipping paired cards, B jumps down a row, A flips; after a miss any button turns cards back
   function key(e){if(!document.getElementById('mg')){document.removeEventListener('keydown',key);return}const k=e.key.toLowerCase();
@@ -373,19 +379,26 @@ function memoryGame(){
   window.__mem=g;window.__memTap=i=>B_[i].click();
   talk(B('pairs_start'),2400);
 }
-const MEM_NEXT=Object.assign(()=>{},{signature:true});   // one board spans the 3 rounds; roundDone() only books each round
+const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // Whimber's Starlight Pairs is not its signature game
+// Sweet-Dream Lullaby (spec v0.3 §1/§2): in the evening, a finished board/build ends with a yawn and leads into a nap
+function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
+// Night Sky (Whimber's signature) in pixel: 16px twinkling star sprites, gold 1px constellation lines on a canvas, pixel guess icons
 function nightSky(round){
-  gameShell(`Night Sky · picture ${round+1}/3`);const gs=$('#gs');gs.className='scene owl-bg';
-  const n=5+Math.floor(Math.random()*3), pts=[];let guard=0;while(pts.length<n&&guard++<500){const q=[12+Math.random()*76,30+Math.random()*45];if(pts.every(p=>Math.hypot(p[0]-q[0],(p[1]-q[1])*1.6)>18))pts.push(q)}
-  const ln=document.createElementNS('http://www.w3.org/2000/svg','svg');ln.setAttribute('class','lines');ln.setAttribute('viewBox','0 0 100 100');ln.setAttribute('preserveAspectRatio','none');gs.appendChild(ln);
-  (S.constellations||[]).slice(-3).forEach(c=>{const t=document.createElement('div');t.textContent='✦ '+c;t.style.cssText='position:absolute;bottom:4%;left:4%;opacity:.5;font-size:12px';gs.appendChild(t)});
-  talk(B('sky_start'),60000);let path=[];
-  pts.forEach((p,i)=>{const b=document.createElement('button');b.className='star';b.style.left=p[0]+'%';b.style.top=p[1]+'%';gs.appendChild(b);
-    b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');SFX('sky_star_connect',{gap:30});if(path.length){const q=pts[path[path.length-1]];ln.innerHTML+=`<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" stroke="#ffe27a" stroke-width=".6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/>`}path.push(i);
-      if(path.length===n){const opts=[['🥄','Spoon'],['🐈','Stretchy cat'],['🐋','Whale'],['🏠','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
+  gameShell(`Night Sky · picture ${round+1}/3`);const gs=$('#gs');gs.classList.add('skygame');
+  const VW=180,VH=300,n=5+Math.floor(Math.random()*3),pts=[];let guard=0;
+  while(pts.length<n&&guard++<500){const q=[16+Math.floor(Math.random()*148),40+Math.floor(Math.random()*150)];if(pts.every(p=>Math.hypot(p[0]-q[0],p[1]-q[1])>30))pts.push(q)}
+  gs.insertAdjacentHTML('beforeend',`<canvas id="skyc" class="skyc" width="${VW}" height="${VH}"></canvas><div class="skyecho creature" id="cr">${svg('owl',S.g,'curious')}</div>
+    <div class="skynames">${(S.constellations||[]).slice(-3).map(c=>`<span>${PI('✦')}${c}</span>`).join('')}</div>`);
+  const cx=$('#skyc').getContext('2d');let path=[];const nv=S.talents.includes('Night Vision')&&round===1;
+  function line(a,b){let [x0,y0]=a,[x1,y1]=b;const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let err=dx+dy,k=0;cx.fillStyle='#FFD27A';
+    for(;;){if(k++%3!==2)cx.fillRect(x0,y0,1,1);if(x0===x1&&y0===y1)break;const e2=2*err;if(e2>=dy){err+=dy;x0+=sx}if(e2<=dx){err+=dx;y0+=sy}}}
+  talk(B('sky_start'),60000);
+  pts.forEach((p,i)=>{const b=document.createElement('button');b.className='star pxstar'+(nv?' nv':'');b.style.left=(p[0]-8)+'px';b.style.top=(p[1]-8)+'px';b.setAttribute('aria-label','Star');gs.appendChild(b);
+    b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');SFX('sky_star_connect',{gap:30});if(path.length)line(pts[path[path.length-1]],p);path.push(i);react('happy');
+      if(path.length===n){line(p,pts[path[0]]);const opts=[['🥄','Spoon'],['🐈','Stretchy cat'],['🐋','Whale'],['🏡','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
         talk(B('sky_guess',{guess:opts[0][1].toLowerCase()}),60000);
-        choices(opts.map(o=>[o[0],o[1],null]),k=>{SFX('sky_named_chord');const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));roundDone(round,nightSky)})}}});
-  if(S.talents.includes('Night Vision')&&round===1)toast('Night Vision: the stars glow brighter for you');
+        choices(opts.map(o=>[o[0],o[1],null]),k=>{SFX('sky_named_chord');const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));setExpr('delighted');roundDone(round,nightSky)})}}});
+  if(nv)toast('Night Vision: the stars glow brighter for you');
 }
 
 // ---------- release (§5.8) ----------
@@ -415,9 +428,9 @@ function release(forced,go){
       talk(B('farewell'),60000);
       const px=$('#cr .px-echo');
       if(px){ // pixel departure: a few steps up the path, a look back, then the must-ship release dissolve (face last, sparkles to the home star)
-        setTimeout(()=>{const c=$('#cr');c.classList.add('pxwalk');c.style.left='70%';
+        setTimeout(()=>{const c=$('#cr');c.classList.add(S.kind==='fox'?'pxwalk':'pxfly');c.style.left='70%';
           setTimeout(()=>{talk(B('look_back'),3000);
-            setTimeout(()=>{$('#b').style.display='none';SFX('slyte_release');PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk('…yip! …yip… …yip…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
+            setTimeout(()=>{$('#b').style.display='none';SFX(S.kind==='fox'?'slyte_release':'whimber_release');PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
         return}
       setTimeout(()=>{const c=$('#cr');c.style.transition='all 3s';c.style.left='110%';c.style.transform='translateX(-50%) scale(.5)';
         setTimeout(()=>{c.style.transition='all .5s';c.style.left='88%';talk(B('look_back'),3000);

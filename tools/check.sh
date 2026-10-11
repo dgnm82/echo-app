@@ -11,5 +11,5 @@ echo "== engine unit tests"; node tools/test-engine.js | tail -1
 echo "== fort builder tests"; node tools/test-fort.js | tail -1
 echo "== shiny pairs tests"; node tools/test-memory.js | tail -1
 echo "== postcard tests"; node tools/test-postcards.js | tail -1
-if [[ "${1:-}" == "--phone" ]]; then echo "== phone playthrough"; python3 /workspace/echo-test.py; python3 tests/phone_engine_test.py; python3 tests/phone_fort_test.py; python3 tests/phone_release_test.py; python3 tests/phone_sound_test.py; python3 tests/phone_memory_test.py; fi
+if [[ "${1:-}" == "--phone" ]]; then echo "== phone playthrough"; python3 /workspace/echo-test.py; python3 tests/phone_engine_test.py; python3 tests/phone_fort_test.py; python3 tests/phone_release_test.py; python3 tests/phone_sound_test.py; python3 tests/phone_memory_test.py; python3 tests/phone_whimber_test.py; ECHO=owl python3 tests/phone_release_test.py http://localhost:8765/ owl- /tmp/; fi
 echo "ALL CHECKS PASSED"
