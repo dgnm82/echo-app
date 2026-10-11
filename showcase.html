@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Project Echo: plush Slyte & Whimber showcase</title><link rel="icon" href="data:,"><script src="spirit.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#120e26;color:#fbf3ff;font-family:"Trebuchet MS",system-ui,sans-serif}
+header{text-align:center;padding:14px 14px 4px}h1{margin:0;font-size:21px}header p{margin:6px auto 0;max-width:640px;font-size:14px;opacity:.8}
+.bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px}
+.bar button{min-height:46px;border:0;border-radius:23px;padding:8px 16px;font:600 15px inherit;font-family:inherit;background:#3f356e;color:#fbf3ff;cursor:pointer}
+.bar button[aria-pressed=true]{background:#ffd98a;color:#2a1f3a}
+.stage{position:relative;max-width:1200px;margin:0 auto;aspect-ratio:16/9;overflow:hidden;border-radius:22px;box-shadow:0 10px 40px #000a;contain:paint}
+@media (max-width:700px){.stage{aspect-ratio:3/4;border-radius:0}}
+.layer{position:absolute;left:-4%;top:-4%;width:108%;height:108%;transition:transform .3s ease-out}.layer svg{width:100%;height:100%;display:block}
+.actor{position:absolute;bottom:5%;width:min(31%,330px);transform:translateX(-50%);transition:left 2.2s ease-in-out}
+@media (max-width:700px){.actor{width:44%;bottom:10%}}
+.actor svg{width:100%;height:auto;display:block;overflow:visible}
+.cap{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:#0008;padding:7px 14px;border-radius:16px;font-size:14px;white-space:nowrap}
+.mote{position:absolute;bottom:-4%;width:var(--z);height:var(--z);border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0,#b8ffcf 30%,#7affb000 70%);animation:rise var(--d) linear var(--delay) infinite;opacity:0}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}50%{transform:translate(var(--x1),-45vh)}85%{opacity:.8}100%{transform:translate(var(--x2),-95vh);opacity:0}}
+.gf{animation:gp 3.5s ease-in-out infinite}@keyframes gp{50%{opacity:.45}}
+html.lowfx .mote:nth-child(3n),html.lowfx .mote:nth-child(3n+1){display:none}html.lowfx .gf{animation:none}
+h2{text-align:center;font-size:18px;margin:26px 0 4px}.cmpnote{text-align:center;font-size:13px;opacity:.75;margin:0 12px 10px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:900px;margin:0 auto;padding:0 14px 30px}
+.cmp figure{margin:0;border-radius:20px;background:linear-gradient(#3a2a7a,#a04a8a 70%,#2f5a52 70%);padding:10px 10px 0;text-align:center;overflow:hidden}
+.cmp figcaption{padding:8px;font-size:14px;background:#0005;margin:0 -10px}
+@media (max-width:560px){.cmp{grid-template-columns:1fr}}
+footer{text-align:center;font-size:12px;opacity:.6;padding-bottom:24px}
+</style></head><body>
+<header><h1>Slyte & Whimber: plush spirit Echoes</h1><p>A twilight meadow showcase. The two Echoes wander, play and switch expressions on a loop. Style preview only; the game itself is unchanged.</p></header>
+<div class="bar"><button id="pause" aria-pressed="false">⏸ Pause</button><button id="fxbtn">✨ Full effects</button><button id="seeds">🎲 New seeds</button></div>
+<div class="stage" id="stage"><div class="cap" id="cap">…</div></div>
+<h2>Compare: v2 spirit Slyte vs plush Slyte</h2><p class="cmpnote">Same seed, two directions: the v2 spirit fox from style-test-v2 on the left, the plush version on the right.</p>
+<div class="cmp"><figure><div id="cmpA"></div><figcaption>v2 spirit Slyte</figcaption></figure><figure><div id="cmpB"></div><figcaption>Plush Slyte</figcaption></figure></div>
+<footer>Project Echo prototype · showcase</footer>
+<script>
+(()=>{const $=s=>document.querySelector(s),R=SPIRIT.rng(42);
+const V='viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice"';
+let stars='';for(let i=0;i<140;i++)stars+=`<circle cx="${(R()*1600)|0}" cy="${(R()*480)|0}" r="${(.6+R()*1.8).toFixed(1)}" fill="#fff" opacity="${(.35+R()*.65).toFixed(2)}"/>`;
+const grass=(n,y0,y1,cols)=>{let o='';for(let i=0;i<n;i++){const x=R()*1600,y=y0+R()*(y1-y0),h=12+26*(y-y0)/(y1-y0)+R()*8;o+=`<path d="M${x|0} ${y|0} q${(3+R()*5).toFixed(1)} ${(-h*.55).toFixed(1)} ${((R()-.35)*12).toFixed(1)} ${(-h).toFixed(1)}" stroke="${cols[(R()*cols.length)|0]}" stroke-width="${(2+R()*2.5).toFixed(1)}" fill="none" stroke-linecap="round"/>`}return o};
+let fl='';const cs=['#9ff7ff','#ffc8ff','#fff2a0','#b8ffcf','#ffd0ec'];for(let i=0;i<46;i++){const x=R()*1600,y=700+R()*190,s=4+7*(y-700)/190,c=cs[(R()*5)|0];
+  fl+=`<g class="gf" style="animation-delay:-${(R()*3.5).toFixed(2)}s"><circle cx="${x|0}" cy="${y|0}" r="${(s*3.4).toFixed(1)}" fill="url(#glw)"/><path d="M${x|0} ${(y+s)|0} v${(s*2.4)|0}" stroke="#2f7a5a" stroke-width="1.8"/>${[0,72,144,216,288].map(a=>`<ellipse cx="${x|0}" cy="${(y-s*.6).toFixed(1)}" rx="${(s*.45).toFixed(1)}" ry="${(s*.7).toFixed(1)}" fill="${c}" transform="rotate(${a} ${x|0} ${y|0})"/>`).join('')}<circle cx="${x|0}" cy="${y|0}" r="${(s*.4).toFixed(1)}" fill="#fff"/></g>`}
+const layers=[[0,`<svg ${V}><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#140f3a"/><stop offset=".45" stop-color="#3a2a7a"/><stop offset=".75" stop-color="#a04a8a"/><stop offset="1" stop-color="#ff9a7a"/></linearGradient><radialGradient id="mg" cx="78%" cy="20%" r="14%"><stop offset="0" stop-color="#fff8e0" stop-opacity=".55"/><stop offset="1" stop-color="#fff8e0" stop-opacity="0"/></radialGradient></defs><rect width="1600" height="900" fill="url(#sk)"/>${stars}<rect width="1600" height="900" fill="url(#mg)"/><path d="M1250 140 A40 40 0 1 0 1278 208 A32 32 0 1 1 1250 140Z" fill="#fff6dc"/></svg>`],
+ [8,`<svg ${V}><path d="M0 560 L160 450 L300 520 L460 410 L640 520 L800 460 L980 530 L1150 430 L1330 520 L1480 470 L1600 500 V900 H0Z" fill="#5a4a9a"/><path d="M0 600 Q300 540 640 580 T1600 570 V900 H0Z" fill="#3f5a8a"/></svg>`],
+ [16,`<svg ${V}><path d="M0 650 Q400 590 800 630 T1600 620 V900 H0Z" fill="#2f5a62"/><g fill="#24484f"><ellipse cx="200" cy="630" rx="120" ry="70"/><ellipse cx="1380" cy="620" rx="140" ry="80"/></g><g transform="translate(1180 520)"><path d="M0 130 C-6 80 8 50 0 10" stroke="#3a2a4a" stroke-width="14" fill="none"/><ellipse cx="0" cy="10" rx="80" ry="60" fill="#6a4a9a"/><ellipse cx="26" cy="-10" rx="40" ry="28" fill="#8a64b8"/></g></svg>`],
+ [26,`<svg ${V}><defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f7a6a"/><stop offset="1" stop-color="#1f4a44"/></linearGradient><radialGradient id="glw"><stop offset="0" stop-color="#fffbe0" stop-opacity=".8"/><stop offset="1" stop-color="#fffbe0" stop-opacity="0"/></radialGradient></defs><path d="M0 700 Q400 660 800 690 T1600 680 V900 H0Z" fill="url(#md)"/>${grass(260,690,900,['#2f6a5a','#3f8a72','#5aa088','#24584a'])}${fl}</svg>`]];
+const st=$('#stage');st.insertAdjacentHTML('afterbegin',layers.map(([d,s])=>`<div class="layer" data-d="${d}">${s}</div>`).join(''));
+let m='';for(let k=0;k<16;k++)m+=`<div class="mote" style="left:${(R()*100).toFixed(1)}%;--z:${(6+R()*9)|0}px;--d:${(8+R()*8).toFixed(1)}s;--delay:${(-R()*16).toFixed(1)}s;--x1:${((R()-.5)*80)|0}px;--x2:${((R()-.5)*120)|0}px"></div>`;
+st.insertAdjacentHTML('beforeend',`<div class="actor" id="fox" style="left:30%"></div><div class="actor" id="owl" style="left:70%"></div>`+m);
+st.addEventListener('pointermove',e=>{const b=st.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;st.querySelectorAll('.layer').forEach(l=>l.style.transform=`translate(${-x*l.dataset.d}px,${-y*l.dataset.d*.4}px)`)});
+let fs=1207,os=58331;const A={};
+function place(){$('#fox').innerHTML=SPIRIT.plushFox(SPIRIT.pvariant('fox',fs));$('#owl').innerHTML=SPIRIT.plushOwl(SPIRIT.pvariant('owl',os));A.fox=$('#fox svg');A.owl=$('#owl svg');
+  $('#cmpA').innerHTML=SPIRIT.fox(SPIRIT.variant('fox',fs));$('#cmpB').innerHTML=SPIRIT.plushFox(SPIRIT.pvariant('fox',fs));document.querySelectorAll('.cmp svg').forEach(s=>s.setAttribute('data-expr','happy'))}
+place();
+const pos={fox:30,owl:70};
+function go(who,x,motion){const el=$('#'+who),s=A[who];s.classList.toggle('face-left',x<pos[who]);pos[who]=x;el.style.left=x+'%';SPIRIT.motion(s,motion,2200)}
+const ex=(who,e)=>SPIRIT.setExpr(A[who],e),mo=(who,n,ms)=>SPIRIT.motion(A[who],n,ms);
+const steps=[
+ ['Wandering the meadow',()=>{go('fox',42,'walk');go('owl',62,'hop');ex('fox','happy');ex('owl','neutral')}],
+ ['Slyte pounces · Whimber flaps',()=>{mo('fox','pounce',1200);ex('fox','delighted');mo('owl','flap',1300);ex('owl','excited')}],
+ ['Tail swish · head swivel',()=>{mo('fox','swish',1100);ex('fox','curious');mo('owl','swivel',1800);ex('owl','curious')}],
+ ['Happy bounce',()=>{mo('fox','bounce',900);mo('owl','bounce',900);ex('fox','giggling');ex('owl','giggling')}],
+ ['Swapping places',()=>{go('fox',72,'walk');go('owl',26,'walk');ex('fox','proud');ex('owl','happy')}],
+ ['Thinking it over',()=>{ex('fox','thinking');ex('owl','surprised');mo('owl','swivel',1800)}],
+ ['Sleepy curl-up',()=>{A.fox.classList.add('m-curl');A.owl.classList.add('m-curl');ex('fox','sleepy');ex('owl','sleepy')}],
+ ['Waking up',()=>{A.fox.classList.remove('m-curl');A.owl.classList.remove('m-curl');ex('fox','shy');ex('owl','love');mo('fox','bounce',900)}],
+ ['Back home',()=>{go('fox',32,'walk');go('owl',68,'hop');ex('fox','happy');ex('owl','delighted')}],
+];
+let i=0,paused=false;function step(){if(paused)return;const [c,f]=steps[i%steps.length];$('#cap').textContent=c;f();i++}
+step();setInterval(step,2300);
+$('#pause').onclick=()=>{paused=!paused;$('#pause').setAttribute('aria-pressed',paused);$('#pause').textContent=paused?'▶ Play':'⏸ Pause'};
+$('#seeds').onclick=()=>{fs=1+Math.floor(Math.random()*99999);os=1+Math.floor(Math.random()*99999);place()};
+const fxUI=()=>{$('#fxbtn').textContent=SPIRIT.fx.low?'🐢 Reduced effects':'✨ Full effects';$('#fxbtn').setAttribute('aria-pressed',SPIRIT.fx.low)};SPIRIT.fx.listeners.push(fxUI);fxUI();$('#fxbtn').onclick=()=>SPIRIT.fx.toggle();
+window.__show={step:()=>i};
+})();
+</script></body></html>

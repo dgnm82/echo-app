@@ -235,3 +235,148 @@ function setExpr(el,e){el.setAttribute('data-expr',EX[e]?e:'neutral')}
 W.SPIRIT={variant,describe,fox,EXPRS,EX,setExpr,fx,life,rng,mix,star,_css:()=>css,_add:c=>{css+=c;const st=document.getElementById('spirit-css');if(st)st.textContent=css},_parts:{face,common,furStrokes,L,S,SX,uid:()=>++uid,OWLPAL}};
 injectCSS();fx.decide();setInterval(life,250);
 })();
+// ======================= PLUSH ECHOES (main game) =======================
+// Soft, chubby plush-toy take on the spirit creatures: big round head, scalloped fluffy silhouettes,
+// fuzzy radial shading with a warm inner glow, pastel jewel tones and gentle round glowing marks.
+(function(){
+const SP=window.SPIRIT,{face,furStrokes,L,S,SX}=SP._parts,mix=SP.mix,rng=SP.rng,star=SP.star;
+const PFOX=[{n:'mint-lilac',f:['#d8fff2','#9fe6dc','#b9a8f0'],g:'#e8fffb',e:'#3fb8b0',w:'#ffd8ec'},{n:'peach-rose',f:['#fff0e0','#ffc4a8','#f4a0c0'],g:'#fff4e0',e:'#e0805a',w:'#ffe0d0'},
+  {n:'butter-peach',f:['#fffbe0','#ffe0a0','#ffb898'],g:'#fffbd8',e:'#d89a30',w:'#ffeac8'},{n:'sky-lilac',f:['#eef6ff','#b8d8ff','#c8b0f4'],g:'#f0f8ff',e:'#5a88e0',w:'#e8dcff'},
+  {n:'blush-lavender',f:['#fff0f6','#ffc8e0','#c8b4f8'],g:'#fff0fa',e:'#c060a8',w:'#ffd8f0'}];
+const POWL=[{n:'lilac-night',f:['#f4f0ff','#c8bcff','#8a80d8'],g:'#f4f4ff',e:'#f0b030',w:'#e8e0ff'},{n:'sky-teal',f:['#effcff','#b4e4f4','#7ab0d8'],g:'#eaffff',e:'#f0a030',w:'#d8f4ff'},
+  {n:'plum-blush',f:['#fff0fa','#f0c0e0','#b088c8'],g:'#fff0fa',e:'#f4c040',w:'#ffe0f0'},{n:'mint-aurora',f:['#f0fff6','#bcf0d8','#88b8d8'],g:'#efffff',e:'#e89030',w:'#dcfff0'},
+  {n:'peach-dusk',f:['#fff6ec','#ffd4b4','#c09ad0'],g:'#fff8f0',e:'#50b8e8',w:'#ffe8d8'}];
+function pvariant(kind,seed){const r=rng(((seed>>>0)||1)^0x5eed),pick=a=>a[Math.floor(r()*a.length)],span=(a,b)=>a+(b-a)*r();
+  if(kind==='owl')return {kind,plush:1,seed,pal:pick(POWL),mark:pick(['stars','constellation','moonbands']),moongem:r()<.55,crest:pick(['tufts','plume','none']),accent:pick(['leaf','flower','none']),
+    head:span(.96,1.05),body:span(.94,1.08),wing:span(.9,1.1),eyeSize:span(.96,1.06)};
+  return {kind,plush:1,seed,pal:pick(PFOX),mark:pick(['dots','swirl','stars']),horns:r()<.35,gem:r()<.45,accent:pick(['leaf','flower','none']),
+    ear:span(.9,1.1),tail:span(.9,1.12),head:span(.97,1.04),body:span(.94,1.08),eyeSize:span(.96,1.06)}}
+// scalloped / tufted outline around an ellipse: n bumps of height b
+function fluff(cx,cy,rx,ry,n,b,jit,r){const pt=(a,k)=>[cx+Math.cos(a)*(rx+k),cy+Math.sin(a)*(ry+k)];let d='';
+  for(let i=0;i<=n;i++){const a=i/n*Math.PI*2-Math.PI/2,[x,y]=pt(a,0);if(!i){d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;continue}
+    const am=(i-.5)/n*Math.PI*2-Math.PI/2,[qx,qy]=pt(am,b*(1+(r?(r()-.5)*jit:0)));d+=` Q${qx.toFixed(1)} ${qy.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`}return d+'Z'}
+function defs(id,P){const [c1,c2,c3]=P.f;return `
+  <radialGradient id="pf${id}" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="${c1}"/><stop offset=".55" stop-color="${c2}"/><stop offset="1" stop-color="${c3}"/></radialGradient>
+  <radialGradient id="pw${id}" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="${P.w}" stop-opacity=".9"/><stop offset="1" stop-color="${P.w}" stop-opacity="0"/></radialGradient>
+  <radialGradient id="pc${id}" cx=".5" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="${mix('#fffaf6',c2,.3)}"/></radialGradient>
+  <linearGradient id="pt${id}" x1="0" y1="1" x2=".6" y2="0"><stop offset="0" stop-color="${c3}"/><stop offset=".55" stop-color="${c2}"/><stop offset=".85" stop-color="${c1}"/><stop offset="1" stop-color="#fff"/></linearGradient>
+  <linearGradient id="wispg${id}" x1="0" y1="1" x2=".3" y2="0"><stop offset="0" stop-color="${c1}"/><stop offset=".6" stop-color="${P.g}"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="iris${id}" cx=".5" cy=".65"><stop offset="0" stop-color="${mix(P.e,'#fff8d0',.6)}"/><stop offset=".6" stop-color="${P.e}"/><stop offset="1" stop-color="${mix(P.e,'#2a1a3a',.45)}"/></radialGradient>
+  <radialGradient id="shadow${id}"><stop offset="0" stop-color="#2a1a3a" stop-opacity=".3"/><stop offset="1" stop-color="#2a1a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="aura${id}"><stop offset="0" stop-color="${P.g}" stop-opacity=".35"/><stop offset="1" stop-color="${P.g}" stop-opacity="0"/></radialGradient>
+  <linearGradient id="crys${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="${P.g}"/><stop offset="1" stop-color="${P.e}"/></linearGradient>
+  <filter id="glow${id}" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="soft${id}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>`}
+const softFur=(r,n,cx,cy,rx,ry,col,w)=>{let o='';for(let i=0;i<n;i++){const a=r()*Math.PI*2,k=.55+r()*.42,x=cx+Math.cos(a)*rx*k,y=cy+Math.sin(a)*ry*k,dx=Math.cos(a)*6,dy=Math.sin(a)*6+3;
+  o+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} q${(dx*.5+1).toFixed(1)} ${(dy*.5).toFixed(1)} ${dx.toFixed(1)} ${dy.toFixed(1)}" stroke="${col}" stroke-width="${w}" fill="none" stroke-linecap="round" opacity="${(.25+r()*.3).toFixed(2)}"/>`}return o};
+const accent=(v,ink,x,y)=>v.accent==='leaf'?`<g transform="translate(${x} ${y}) rotate(28)"><path d="M0 0 C10 -10 24 -8 30 0 C24 8 10 10 0 0Z" fill="#a8e8b8" stroke="${ink}" stroke-width="1.6"/><path d="M2 0 H26" stroke="#5aa878" stroke-width="1.2"/></g>`
+  :v.accent==='flower'?`<g transform="translate(${x} ${y})">${[0,72,144,216,288].map(a=>`<ellipse rx="6" ry="8.5" cy="-7" fill="#ffe0f0" stroke="${ink}" stroke-width="1.3" transform="rotate(${a})"/>`).join('')}<circle r="4.5" fill="#fff0a0" stroke="${ink}" stroke-width="1.3"/></g>`:'';
+function plushFox(v){if(typeof v==='number')v=pvariant('fox',v);const id='pf'+SP._parts.uid(),P=v.pal,[c1,c2,c3]=P.f,G=P.g,ink=mix(c3,'#3a2050',.55),r=rng(v.seed+9),rim='#ffffff';
+  const head=fluff(150,168,86,70,26,7,.6,r),body=fluff(150,262,60,46,18,6,.6,r),chest=fluff(150,252,34,30,10,5,.5,r),muz=fluff(150,204,44,24,12,4,.4,r);
+  const ear=(cls,x,d)=>`<g class="${cls}"><g class="sp-earpose"><g transform="${S(x,118,v.ear)}">
+    <path d="M${x-26*d} 128 C${x-30*d} 96 ${x-20*d} 66 ${x-6*d} 58 Q${x+2*d} 54 ${x+8*d} 62 C${x+22*d} 78 ${x+32*d} 100 ${x+30*d} 122 Z" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M${x-15*d} 120 C${x-17*d} 98 ${x-10*d} 80 ${x-3*d} 74 C${x+6*d} 84 ${x+16*d} 100 ${x+17*d} 116 Z" fill="${P.w}" opacity=".95"/>
+    <path class="sp-pulse fx-glow" d="M${x-10*d} 76 C${x-6*d} 66 ${x-2*d} 60 ${x+2*d} 60 C${x+6*d} 62 ${x+10*d} 68 ${x+12*d} 76 Q${x} 72 ${x-10*d} 76Z" fill="${G}" filter="url(#glow${id})"/></g></g></g>`;
+  const paw=(x,cls,back)=>`<g class="sp-leg ${cls}" style="transform-origin:${x}px 280px"><ellipse cx="${x}" cy="300" rx="17" ry="12" fill="${back?mix(c3,'#3a2050',.12):`url(#pf${id})`}" stroke="${ink}" stroke-width="2.2"/>${back?'':`${L(`M${x-5} 306 v-5 M${x+5} 306 v-5`,ink,1.4,'',.6)}<ellipse class="sp-pulse" cx="${x}" cy="309" rx="8" ry="2.5" fill="${G}" opacity=".6"/>`}</g>`;
+  const marks=v.mark==='dots'?`<circle cx="150" cy="122" r="3.6"/><circle cx="140" cy="130" r="2.4"/><circle cx="160" cy="130" r="2.4"/><circle cx="84" cy="186" r="2.6"/><circle cx="90" cy="196" r="2"/><circle cx="216" cy="186" r="2.6"/><circle cx="210" cy="196" r="2"/>`
+    :v.mark==='swirl'?`<path d="M144 132 q-2 -12 8 -12 q8 0 6 8 q-2 5 -7 3" stroke="${G}" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="86" cy="190" r="2.6"/><circle cx="214" cy="190" r="2.6"/>`
+    :`${star(150,124,7,G)}${star(86,190,4,G)}${star(214,190,4,G)}`;
+  const horns=v.horns?`<g><ellipse cx="128" cy="104" rx="6" ry="9" fill="url(#crys${id})" stroke="${ink}" stroke-width="1.8" transform="rotate(-14 128 104)"/><ellipse cx="172" cy="104" rx="6" ry="9" fill="url(#crys${id})" stroke="${ink}" stroke-width="1.8" transform="rotate(14 172 104)"/><circle cx="126" cy="100" r="2" fill="#fff"/><circle cx="170" cy="100" r="2" fill="#fff"/></g>`:'';
+  const gem=v.gem?`<g><circle cx="150" cy="${v.mark==='dots'||v.mark==='stars'?140:120}" r="7" fill="url(#crys${id})" stroke="${ink}" stroke-width="1.8"/><circle class="sp-pulse fx-glow" cx="150" cy="${v.mark==='dots'||v.mark==='stars'?140:120}" r="6" fill="${G}" opacity=".55" filter="url(#glow${id})"/><circle cx="147" cy="${v.mark==='dots'||v.mark==='stars'?137:117}" r="2" fill="#fff"/></g>`:'';
+  const tailP=fluff(0,0,1,1,1,0)&&`M200 282 C246 296 282 262 276 220 C272 192 280 172 292 156 C282 154 272 146 268 132 C262 146 254 158 248 168 C232 190 236 220 200 252Z`;
+  const tailFluff=fluff(258,214,30,46,16,6,.7,r);
+  const tail=`<g transform="rotate(18 258 214)"><path d="${tailFluff}" fill="url(#pt${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/></g>
+    <path d="M200 286 C226 292 246 270 246 240" stroke="${c2}" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M200 286 C226 292 246 270 246 240" stroke="${c1}" stroke-width="12" fill="none" stroke-linecap="round" opacity=".6"/>
+    <g class="sp-tip"><path d="${fluff(276,170,18,22,10,5,.6,r)}" fill="#fff" opacity=".95"/>
+     <path class="sp-wisp" d="M268 158 C266 140 274 126 288 116 C284 132 286 144 280 160Z" fill="url(#wispg${id})"/><path class="sp-wisp sp-w2" d="M280 166 C290 150 306 142 318 142 C306 150 298 162 290 176Z" fill="url(#wispg${id})" opacity=".8"/>
+     <ellipse class="sp-pulse fx-glow" cx="278" cy="166" rx="14" ry="16" fill="${G}" opacity=".7" filter="url(#glow${id})"/></g>
+    ${softFur(r,12,256,220,24,40,'#fff',1.6)}
+    ${[[292,130,0],[304,160,.6],[270,112,1.2],[312,190,1.8]].map(([x,y,dl],i)=>`<g class="sp-spark${i>1?' sp-x':''}" style="animation-delay:-${dl}s">${star(x,y,4.5,'#fff')}</g>`).join('')}`;
+  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-fox sp-plush fox" data-expr="neutral" role="img" aria-label="Slyte">
+  <defs>${defs(id,P)}<clipPath id="hc${id}"><path d="${head}"/></clipPath><clipPath id="bc${id}"><path d="${body}"/></clipPath></defs>
+  <g class="sp-move"><g class="sp-dir"><g class="sp-curl">
+  <ellipse class="sp-aura sp-pulse" cx="150" cy="210" rx="140" ry="128" fill="url(#aura${id})"/>
+  <ellipse class="sp-shadow" cx="150" cy="310" rx="84" ry="11" fill="url(#shadow${id})"/>
+  <g class="sp-tail sp-tailBack"><g class="sp-tailInner"><g transform="${S(200,270,v.tail)}">${tail}</g></g></g>
+  <g class="sp-breath">
+    ${paw(118,'sp-legBL',1)}${paw(182,'sp-legBR',1)}
+    <g transform="${SX(150,300,v.body,1)}"><path d="${body}" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+      <g clip-path="url(#bc${id})"><ellipse cx="150" cy="276" rx="56" ry="34" fill="url(#pw${id})"/>${softFur(r,22,150,262,58,44,mix(c3,'#3a2050',.2),1.5)}</g>
+      <path d="${chest}" fill="url(#pc${id})"/>${softFur(r,10,150,252,30,26,mix(c2,'#fff',.2),1.3)}
+      <g class="sp-pulse fx-glow" filter="url(#glow${id})" fill="${G}"><circle cx="106" cy="262" r="3"/><circle cx="194" cy="262" r="3"/><circle cx="112" cy="274" r="2"/><circle cx="188" cy="274" r="2"/></g></g>
+    ${paw(128,'sp-legFL')}${paw(172,'sp-legFR')}
+  </g>
+  <g class="sp-tailFront"><path d="M200 286 C236 306 170 326 108 312 C88 308 86 294 100 294 C134 304 172 300 200 278Z" fill="url(#pt${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="${fluff(100,300,14,11,8,4,.5,r)}" fill="#fff"/><ellipse class="sp-pulse fx-glow" cx="98" cy="300" rx="10" ry="7" fill="${G}" opacity=".7" filter="url(#glow${id})"/><g class="sp-spark">${star(86,288,4.5,'#fff')}</g></g>
+  <g class="sp-headbob"><g class="sp-headpose"><g class="sp-swivel"><g transform="${S(150,200,v.head)}">
+    ${ear('sp-earL',112,-1)}${ear('sp-earR',188,1)}
+    <path d="${head}" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+    <g clip-path="url(#hc${id})"><ellipse cx="150" cy="196" rx="80" ry="50" fill="url(#pw${id})"/><ellipse cx="200" cy="200" rx="40" ry="50" fill="${c3}" opacity=".18" filter="url(#soft${id})"/>
+      ${softFur(r,30,150,168,84,68,mix(c3,'#3a2050',.15),1.4)}${softFur(r,14,150,130,60,30,'#fff',1.4)}</g>
+    <path d="${muz}" fill="url(#pc${id})"/>
+    ${L('M106 112 C124 102 146 100 166 102',rim,4,'',.55)}
+    <g class="sp-pulse fx-glow" filter="url(#glow${id})" fill="${G}">${marks}</g>${horns}${gem}${accent(v,ink,206,118)}
+    ${face({id,ink,lidFill:`url(#pf${id})`,R:22*v.eyeSize,ex1:114,ex2:186,ey:168,mx:150,my:214})}
+  </g></g></g></g>
+  </g></g></g></svg>`}
+SP.pvariant=pvariant;SP.plushFox=plushFox;SP._parts.fluff=fluff;SP._parts.pdefs=defs;SP._parts.softFur=softFur;SP._parts.accent=accent;SP._parts.POWL=POWL;
+SP.describe=(old=>v=>v.plush?(v.kind==='owl'?[v.pal.n,v.mark,v.moongem&&'moon gem',v.crest!=='none'&&v.crest+' crest',v.accent!=='none'&&v.accent]:[v.pal.n,v.mark+' marks',v.horns&&'nub horns',v.gem&&'gem',v.accent!=='none'&&v.accent]).filter(Boolean).join(' · '):old(v))(SP.describe);
+SP._add(`.sp-plush .sp-tail{transform-origin:200px 270px}.sp-plush .sp-tailInner{transform-origin:200px 270px}.sp-plush .sp-headbob,.sp-plush .sp-headpose{transform-origin:150px 230px}`);
+})();
+// ---------- plush Whimber (spirit owl) + motions ----------
+(function(){
+const SP=window.SPIRIT,{face,L,S,SX,fluff,pdefs,softFur,accent}=SP._parts,mix=SP.mix,rng=SP.rng,star=SP.star;
+function plushOwl(v){if(typeof v==='number')v=SP.pvariant('owl',v);const id='po'+SP._parts.uid(),P=v.pal,[c1,c2,c3]=P.f,G=P.g,ink=mix(c3,'#2a1a48',.55),r=rng(v.seed+13);
+  const head=fluff(150,160,92,76,28,7,.7,r),body=fluff(150,256,70,54,20,7,.7,r),belly=fluff(150,262,44,38,12,5,.5,r),discL=fluff(114,166,32,32,12,4,.4,r),discR=fluff(186,166,32,32,12,4,.4,r);
+  let scal='';for(let row=0;row<3;row++)for(let i=-2+(row%2?.5:0);i<=2;i++){const x=150+i*15,y=246+row*13;if(Math.abs(i)>2-row*.4)continue;scal+=`<path d="M${x-7} ${y} q7 8 14 0" stroke="${mix(c2,'#ffffff',.1)}" stroke-width="2" fill="none" opacity=".7"/>`}
+  const wing=(cls,x,d)=>`<g class="${cls}" style="transform-origin:${x}px 226px"><g transform="${S(x,226,v.wing)}"><path d="M${x} 222 C${x-34*d} 226 ${x-44*d} 262 ${x-30*d} 294 Q${x-24*d} 304 ${x-16*d} 298 Q${x-12*d} 306 ${x-4*d} 298 C${x+6*d} 276 ${x+8*d} 246 ${x} 222Z" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+    ${L(`M${x-12*d} 240 q-8 ${20} -10 ${44} M${x-4*d} 244 q-4 20 -6 40`,mix(c3,'#2a1a48',.2),1.6,'',.5)}
+    <path class="sp-pulse fx-glow" d="M${x-30*d} 290 Q${x-24*d} 304 ${x-16*d} 298 Q${x-12*d} 306 ${x-4*d} 298 Q${x-14*d} 286 ${x-30*d} 290Z" fill="${G}" filter="url(#glow${id})"/></g></g>`;
+  const foot=(x,cls)=>`<g class="sp-leg ${cls}" style="transform-origin:${x}px 300px"><g fill="#ffc878" stroke="${ink}" stroke-width="1.8"><ellipse cx="${x-7}" cy="308" rx="5" ry="6"/><ellipse cx="${x}" cy="310" rx="5" ry="6.5"/><ellipse cx="${x+7}" cy="308" rx="5" ry="6"/></g></g>`;
+  const crest=v.crest==='tufts'?`<g><path d="${'M98 110 C86 94 86 76 96 68 Q102 64 106 72 C110 84 116 92 124 100Z'}" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.2"/><path d="M202 110 C214 94 214 76 204 68 Q198 64 194 72 C190 84 184 92 176 100Z" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.2"/><circle class="sp-pulse fx-glow" cx="99" cy="72" r="4" fill="${G}" filter="url(#glow${id})"/><circle class="sp-pulse fx-glow" cx="201" cy="72" r="4" fill="${G}" filter="url(#glow${id})"/></g>`
+    :v.crest==='plume'?`<g>${[-14,0,14].map((dx,i)=>`<path d="M${150+dx} 90 C${146+dx*1.6} 72 ${152+dx*1.8} 58 ${162+dx*1.6} 54 C${156+dx*1.4} 66 ${158+dx} 78 ${154+dx} 90Z" fill="url(#pf${id})" stroke="${ink}" stroke-width="2"/>`).join('')}<circle class="sp-pulse fx-glow" cx="162" cy="56" r="4" fill="${G}" filter="url(#glow${id})"/></g>`:'';
+  const marks=v.mark==='stars'?`${star(110,246,5,G)}${star(190,250,4,G)}${star(150,226,4,G)}`
+    :v.mark==='constellation'?`<g stroke="${G}" stroke-width="1.4" fill="none" opacity=".8"><path d="M118 238 L134 252 L130 270 M134 252 L150 246"/></g><g fill="${G}"><circle cx="118" cy="238" r="3"/><circle cx="134" cy="252" r="3"/><circle cx="130" cy="270" r="2.4"/><circle cx="150" cy="246" r="2.4"/></g>`
+    :`<g fill="none" stroke="${G}" stroke-width="2.6" stroke-linecap="round"><path d="M104 230 q-6 14 0 28"/><path d="M196 230 q6 14 0 28"/></g>`;
+  const moon=v.moongem?`<g><path d="M158 105 A15 15 0 1 0 158 133 A11 11 0 0 1 158 105Z" fill="url(#crys${id})" stroke="${ink}" stroke-width="1.6"/><path class="sp-pulse fx-glow" d="M158 105 A15 15 0 1 0 158 133 A11 11 0 0 1 158 105Z" fill="${G}" opacity=".5" filter="url(#glow${id})"/></g>`:`${star(150,118,6,G)}`;
+  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-owl sp-plush owl" data-expr="neutral" role="img" aria-label="Whimber">
+  <defs>${pdefs(id,P)}<clipPath id="hc${id}"><path d="${head}"/></clipPath><clipPath id="bc${id}"><path d="${body}"/></clipPath></defs>
+  <g class="sp-move"><g class="sp-dir"><g class="sp-curl">
+  <ellipse class="sp-aura sp-pulse" cx="150" cy="200" rx="140" ry="130" fill="url(#aura${id})"/>
+  <ellipse class="sp-shadow" cx="150" cy="314" rx="80" ry="11" fill="url(#shadow${id})"/>
+  <g class="sp-breath">
+    <path d="M136 296 L130 316 L142 310 L150 320 L158 310 L170 316 L164 296Z" fill="${c3}" stroke="${ink}" stroke-width="2"/>
+    ${foot(130,'sp-legFL')}${foot(170,'sp-legFR')}
+    <g transform="${SX(150,300,v.body,1)}"><path d="${body}" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+     <g clip-path="url(#bc${id})"><ellipse cx="150" cy="270" rx="60" ry="40" fill="url(#pw${id})"/>${softFur(r,22,150,256,66,50,mix(c3,'#2a1a48',.2),1.5)}</g>
+     <path d="${belly}" fill="url(#pc${id})"/>${scal}<g class="sp-pulse fx-glow" filter="url(#glow${id})">${marks}</g></g>
+    ${wing('sp-wingL',96,1)}${wing('sp-wingR',204,-1)}
+  </g>
+  <g class="sp-headbob"><g class="sp-headpose"><g class="sp-swivel"><g transform="${S(150,200,v.head)}">
+    ${crest}<path d="${head}" fill="url(#pf${id})" stroke="${ink}" stroke-width="2.4" stroke-linejoin="round"/>
+    <g clip-path="url(#hc${id})"><ellipse cx="150" cy="190" rx="84" ry="52" fill="url(#pw${id})"/>${softFur(r,32,150,160,90,74,mix(c3,'#2a1a48',.15),1.4)}${softFur(r,12,150,118,60,24,'#fff',1.4)}</g>
+    <path d="${discL}" fill="url(#pc${id})" opacity=".95"/><path d="${discR}" fill="url(#pc${id})" opacity=".95"/>
+    ${L('M100 104 C124 92 150 90 176 94',"#fff",4,'',.5)}${moon}${accent(v,ink,210,108)}
+    ${face({id,ink,lidFill:'#fffaf6',R:22*v.eyeSize,ex1:114,ex2:186,ey:166,mx:150,my:202,beak:'#ffc870'})}
+  </g></g></g></g>
+  </g></g></g></svg>`}
+SP.plushOwl=plushOwl;
+SP._add(`
+.sp .sp-move{transform-origin:150px 312px}.sp .sp-curl{transform-origin:150px 312px;transition:transform .6s ease}
+.sp.m-walk .sp-move{animation:mwalk .5s ease-in-out infinite}@keyframes mwalk{50%{transform:translateY(-6px) rotate(1.5deg)}}
+.sp.m-walk .sp-legFL,.sp.m-walk .sp-legBR{animation:mstep .5s ease-in-out infinite}.sp.m-walk .sp-legFR,.sp.m-walk .sp-legBL{animation:mstep .5s ease-in-out infinite reverse}
+@keyframes mstep{0%,100%{transform:rotate(-14deg) translateY(-3px)}50%{transform:rotate(14deg)}}
+.sp-owl.m-walk .sp-move{animation:mwaddle .45s ease-in-out infinite}@keyframes mwaddle{25%{transform:rotate(-5deg) translateY(-3px)}75%{transform:rotate(5deg) translateY(-3px)}}
+.sp.m-hop .sp-move{animation:mhop .55s cubic-bezier(.3,.7,.4,1) infinite}@keyframes mhop{0%,100%{transform:scale(1.06,.92)}20%{transform:scale(.95,1.06)}50%{transform:translateY(-38px) scale(.97,1.03)}85%{transform:translateY(0) scale(1.05,.94)}}
+.sp.m-pounce .sp-move{animation:mpounce 1.2s cubic-bezier(.3,.6,.3,1)}@keyframes mpounce{0%{transform:none}30%{transform:scale(1.1,.82) translateY(4px)}55%{transform:translate(18px,-60px) rotate(-12deg) scale(.95,1.06)}78%{transform:translate(30px,0) scale(1.1,.88)}100%{transform:none}}
+.sp.m-swish .sp-tailInner{animation:mswish 1.1s ease-in-out}@keyframes mswish{25%{transform:rotate(-34deg)}55%{transform:rotate(24deg)}80%{transform:rotate(-10deg)}}
+.sp.m-flap .sp-wingL{animation:mflapL .32s ease-in-out infinite}.sp.m-flap .sp-wingR{animation:mflapR .32s ease-in-out infinite}.sp.m-flap .sp-move{animation:mlift 1.3s ease-in-out}
+@keyframes mflapL{50%{transform:rotate(55deg)}}@keyframes mflapR{50%{transform:rotate(-55deg)}}@keyframes mlift{40%,70%{transform:translateY(-34px)}}
+.sp .sp-swivel{transform-origin:150px 200px}.sp.m-swivel .sp-swivel{animation:mswivel 1.8s ease-in-out}@keyframes mswivel{20%,40%{transform:rotate(-24deg) translateX(-6px)}60%,80%{transform:rotate(22deg) translateX(6px)}}
+.sp.m-bounce .sp-move{animation:mbounce .9s ease-out}@keyframes mbounce{15%{transform:scale(1.12,.86)}40%{transform:translateY(-34px) scale(.92,1.1)}65%{transform:scale(1.08,.92)}82%{transform:translateY(-8px)}}
+.sp.m-curl .sp-curl{transform:translateY(10px) scale(1.06,.86)}.sp.m-curl .sp-headbob{transform:translateY(16px)}.sp.m-curl .sp-breath{animation-duration:5.5s}
+.sp-owl.m-curl .sp-wingL{transform:rotate(-14deg)}.sp-owl.m-curl .sp-wingR{transform:rotate(14deg)}
+`);
+// play a motion class for ms (or keep it with ms=0)
+SP.motion=(el,name,ms)=>{el.classList.remove('m-'+name);void el.getBoundingClientRect();el.classList.add('m-'+name);clearTimeout(el['_m'+name]);if(ms)el['_m'+name]=setTimeout(()=>el.classList.remove('m-'+name),ms)};
+})();
