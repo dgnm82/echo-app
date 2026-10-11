@@ -1,0 +1,575 @@
+{
+ "version": 2,
+ "species": "whimber",
+ "vars": {},
+ "barks": {
+  "hello": [
+   {
+    "text": "Hoo… there you are. I was just thinking about you. Slowly.",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "Oh. Hello. The sky felt quieter without you.",
+    "expr": "love"
+   },
+   {
+    "text": "Mm… good morning. My feathers are still waking up.",
+    "expr": "sleepy",
+    "cond": {
+     "time": [
+      "morning"
+     ]
+    }
+   },
+   {
+    "text": "Hoo. It's getting dark. My favorite part.",
+    "expr": "happy",
+    "cond": {
+     "time": [
+      "evening",
+      "night"
+     ]
+    }
+   },
+   {
+    "text": "Hello, {child}. I saved you the comfiest spot on the branch.",
+    "expr": "love",
+    "cond": {
+     "bondMin": 140
+    }
+   }
+  ],
+  "grace_hello": [
+   {
+    "text": "Hoo… one of our last few days. Let's look at the sky together, the way we like.",
+    "expr": "love"
+   }
+  ],
+  "ready_hint": [
+   {
+    "text": "Hoo… at night I hear the tree hollow calling me. I'm not sad. Just… listening. When you're ready.",
+    "expr": "curious"
+   }
+  ],
+  "ask_ready": [
+   {
+    "text": "Hoo… I think I'm ready to go home now. To my tree hollow. Would you walk with me?",
+    "expr": "love"
+   }
+  ],
+  "reveal": [
+   {
+    "text": "Hoo… hello. I'm Whimber. I think I'm your Whimber. I {quirk}. Hello…",
+    "expr": "curious"
+   }
+  ],
+  "reveal_reply": [
+   {
+    "text": "Hoo. I'm glad it's you.",
+    "expr": "love",
+    "react": "happy"
+   }
+  ],
+  "fed": [
+   {
+    "text": "Thank you. That was… very kind. Hoo.",
+    "expr": "eating",
+    "react": "eat"
+   },
+   {
+    "text": "Mm. (small, polite crunching) Lovely.",
+    "expr": "eating",
+    "react": "eat"
+   }
+  ],
+  "fed_fav": [
+   {
+    "text": "Oh… my favorite. You remembered. Or you guessed. Either is lovely.",
+    "expr": "love",
+    "react": "happy"
+   },
+   {
+    "text": "{fav}… hoo hoo! (a happy little wing-wiggle)",
+    "expr": "excited",
+    "react": "excited"
+   }
+  ],
+  "full": [
+   {
+    "text": "I'm quite full. Like a moon.",
+    "expr": "happy"
+   }
+  ],
+  "pet": [
+   {
+    "text": "Hoo… (it fluffs up)",
+    "expr": "love",
+    "react": "pet"
+   },
+   {
+    "text": "(Slow blink.) That's nice.",
+    "expr": "love",
+    "react": "pet"
+   },
+   {
+    "text": "Mm. Right there, by the ear tufts.",
+    "expr": "love",
+    "react": "pet"
+   }
+  ],
+  "sit": [
+   {
+    "text": "…we don't have to say anything. Sitting is enough.",
+    "expr": "love"
+   }
+  ],
+  "nap": [
+   {
+    "text": "Into the hollow… I'll dream of stars.",
+    "expr": "sleepy",
+    "react": "sleepy"
+   }
+  ],
+  "not_sleepy": [
+   {
+    "text": "Not quite sleepy yet. Owls nap on their own schedule. Hoo.",
+    "expr": "curious"
+   }
+  ],
+  "game_tired": [
+   {
+    "text": "Hoo… enough stars for today. My eyes are full.",
+    "expr": "sleepy"
+   }
+  ],
+  "game_end": [
+   {
+    "text": "That was a lovely sky. Thank you.",
+    "expr": "love",
+    "react": "happy"
+   }
+  ],
+  "talent_Night Vision": [
+   {
+    "text": "Oh… I can see in the dark. Everything is softly glowing.",
+    "expr": "surprised"
+   }
+  ],
+  "talent_Silent Flight": [
+   {
+    "text": "I flew across the whole room and… I couldn't hear myself. How odd. How lovely.",
+    "expr": "surprised"
+   }
+  ],
+  "talent_Super Radar Hearing": [
+   {
+    "text": "Shh… I can hear a frog three gardens away.",
+    "expr": "curious"
+   }
+  ],
+  "talent_Nightmare Banisher": [
+   {
+    "text": "See that little gray cloud? Watch… (it turns into stars). There. I'll keep watch.",
+    "expr": "love"
+   }
+  ],
+  "sky_start": [
+   {
+    "text": "Tap the stars, in any order. Let's see what picture they make…",
+    "expr": "curious"
+   },
+   {
+    "text": "The sky is ready. Connect whichever stars you like.",
+    "expr": "happy"
+   }
+  ],
+  "sky_guess": [
+   {
+    "text": "Hmm… it looks like a {guess}. Or a very thin cat. What do you think it is?",
+    "expr": "curious"
+   },
+   {
+    "text": "Hoo… is that a {guess}? I'm not sure. You tell me.",
+    "expr": "curious"
+   }
+  ],
+  "sky_named": [
+   {
+    "text": "{constellation}. Hoo. It will be in our sky from now on.",
+    "expr": "love",
+    "react": "happy"
+   }
+  ]
+ },
+ "conversations": [
+  {
+   "id": "whimber_sleepy_stars",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "I wonder… do stars get sleepy in the daytime?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "😴",
+       "label": "Yes, they nap",
+       "goto": "b",
+       "reply": "A sky full of napping stars. Hoo. I like that.",
+       "expr": "happy",
+       "set": {
+        "starTheory": "napping"
+       }
+      },
+      {
+       "icon": "✨",
+       "label": "They hide",
+       "goto": "b",
+       "reply": "Hiding… just behind the blue. Patient, like me.",
+       "set": {
+        "starTheory": "hiding"
+       }
+      },
+      {
+       "icon": "🤷",
+       "label": "I don't know",
+       "goto": "b",
+       "reply": "Me neither. Not knowing is nice to wonder about.",
+       "set": {
+        "starTheory": "a mystery"
+       }
+      }
+     ]
+    },
+    "b": {
+     "say": "If you were a star, what color would you be?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "💛",
+       "label": "Gold",
+       "reply": "A warm gold star. I'd find you first every night.",
+       "expr": "love",
+       "set": {
+        "starColor": "gold"
+       }
+      },
+      {
+       "icon": "💙",
+       "label": "Blue",
+       "reply": "Blue stars are the brightest. Of course.",
+       "expr": "happy",
+       "set": {
+        "starColor": "blue"
+       }
+      },
+      {
+       "icon": "🌈",
+       "label": "Rainbow",
+       "reply": "A rainbow star. Hoo… the other stars would be so curious.",
+       "expr": "surprised",
+       "set": {
+        "starColor": "rainbow"
+       }
+      }
+     ]
+    }
+   },
+   "weight": 2
+  },
+  {
+   "id": "whimber_night_sound",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "What sound do you like best at night?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🦗",
+       "label": "Crickets",
+       "goto": "b",
+       "reply": "Crickets. Tiny violins. Yes.",
+       "set": {
+        "nightSound": "crickets"
+       }
+      },
+      {
+       "icon": "🌧️",
+       "label": "Rain",
+       "goto": "b",
+       "reply": "Rain on leaves… I could listen all night. I do, actually.",
+       "expr": "love",
+       "set": {
+        "nightSound": "rain"
+       }
+      },
+      {
+       "icon": "🤫",
+       "label": "Quiet",
+       "goto": "b",
+       "reply": "The quiet has its own sound, doesn't it.",
+       "set": {
+        "nightSound": "the quiet"
+       }
+      }
+     ]
+    },
+    "b": {
+     "say": "Close your eyes for a moment. I'll listen for {var:nightSound} with you.",
+     "expr": "sleepy",
+     "next": "c",
+     "wait": 3500
+    },
+    "c": {
+     "say": "…there. Hoo. Thank you for listening with me.",
+     "expr": "love",
+     "memory": "We listened for {var:nightSound} together",
+     "memoryTag": "listened",
+     "bond": 2
+    }
+   },
+   "weight": 2
+  },
+  {
+   "id": "whimber_bright_thing",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "When I feel a little gray inside, I look for one bright thing. What's your bright thing?",
+     "expr": "sad",
+     "choices": [
+      {
+       "icon": "🧸",
+       "label": "A toy",
+       "goto": "b",
+       "reply": "A friend you can hold. Very wise.",
+       "expr": "love"
+      },
+      {
+       "icon": "👪",
+       "label": "My family",
+       "goto": "b",
+       "reply": "Your nest. Of course.",
+       "expr": "love"
+      },
+      {
+       "icon": "🦉",
+       "label": "You!",
+       "goto": "b",
+       "reply": "Oh… (Whimber slowly blinks both eyes.) Me too. You, I mean.",
+       "expr": "love",
+       "react": "pet",
+       "bond": 2
+      }
+     ]
+    },
+    "b": {
+     "say": "I'll remember your bright thing. For gray days.",
+     "expr": "love",
+     "memory": "You told me about your bright thing for gray days",
+     "memoryTag": "bright"
+    }
+   },
+   "weight": 1,
+   "cond": {
+    "bondMin": 100
+   }
+  },
+  {
+   "id": "whimber_story",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Would you tell me a very short story? Just one sentence. I love stories.",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🐉",
+       "label": "A dragon story",
+       "goto": "b",
+       "set": {
+        "story": "a dragon who was afraid of the dark"
+       }
+      },
+      {
+       "icon": "🚀",
+       "label": "A space story",
+       "goto": "b",
+       "set": {
+        "story": "a rocket that visited the moon"
+       }
+      },
+      {
+       "icon": "🐭",
+       "label": "A mouse story",
+       "goto": "b",
+       "set": {
+        "story": "a mouse who found a giant cheese"
+       }
+      }
+     ]
+    },
+    "b": {
+     "say": "Hoo… {var:story}. (It closes its eyes, picturing it.)",
+     "expr": "sleepy",
+     "next": "c",
+     "wait": 3000
+    },
+    "c": {
+     "say": "What happened at the end?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "😊",
+       "label": "Happy ending",
+       "reply": "The best kind. I'll dream about it.",
+       "expr": "love",
+       "memory": "You told me a story about {var:story}",
+       "memoryTag": "story",
+       "bond": 2
+      },
+      {
+       "icon": "😮",
+       "label": "A surprise!",
+       "reply": "A surprise ending! Hoo! I didn't see that coming. Truly.",
+       "expr": "surprised",
+       "memory": "You told me a surprise story about {var:story}",
+       "memoryTag": "story",
+       "bond": 2
+      }
+     ]
+    }
+   },
+   "weight": 2,
+   "cond": {
+    "bondMin": 60
+   }
+  },
+  {
+   "id": "whimber_star_color_callback",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Last night I looked for a {var:starColor} star. I think I found you up there.",
+     "expr": "love",
+     "choices": [
+      {
+       "icon": "⭐",
+       "label": "That's me!",
+       "reply": "I waved. Quietly.",
+       "expr": "happy"
+      },
+      {
+       "icon": "🤗",
+       "label": "Aww",
+       "reply": "Hoo.",
+       "expr": "love",
+       "react": "pet"
+      }
+     ]
+    }
+   },
+   "weight": 3,
+   "cond": {
+    "varSet": "starColor",
+    "bondMin": 200
+   }
+  },
+  {
+   "id": "whimber_wise",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "People say owls are wise. I don't think I know very much. Is that okay?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "👍",
+       "label": "Totally okay",
+       "goto": "b",
+       "reply": "Hoo. What a relief.",
+       "expr": "happy"
+      },
+      {
+       "icon": "🧠",
+       "label": "You know lots",
+       "goto": "b",
+       "reply": "Maybe I know how to listen. That's a kind of knowing.",
+       "expr": "love"
+      }
+     ]
+    },
+    "b": {
+     "say": "What's something you know that I don't?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🔢",
+       "label": "Counting",
+       "reply": "Teach me someday. I always lose count after \"hoo.\"",
+       "expr": "happy"
+      },
+      {
+       "icon": "🎨",
+       "label": "Drawing",
+       "reply": "Draw me a moon sometime? I'd keep it in the hollow.",
+       "expr": "love"
+      },
+      {
+       "icon": "🤸",
+       "label": "Cartwheels",
+       "reply": "Cartwheels! I'd fall right off my branch. Hoo hoo!",
+       "expr": "excited",
+       "react": "happy"
+      }
+     ]
+    }
+   },
+   "weight": 1,
+   "cond": {
+    "bondMin": 140
+   }
+  },
+  {
+   "id": "whimber_restless",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "At night the old tree hollow hums a little. Like it's saying my name.",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌳",
+       "label": "What does it say?",
+       "goto": "b",
+       "reply": "\"Whimber… whimber…\" Very softly."
+      },
+      {
+       "icon": "🤗",
+       "label": "I'm here too",
+       "goto": "b",
+       "reply": "You are. That's the loudest sound of all.",
+       "expr": "love"
+      }
+     ]
+    },
+    "b": {
+     "say": "Not yet, though. Tonight I'm right here.",
+     "expr": "love"
+    }
+   },
+   "weight": 2,
+   "cond": {
+    "bondMin": 440
+   }
+  }
+ ]
+}

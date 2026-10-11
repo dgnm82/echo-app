@@ -1,0 +1,214 @@
+{
+ "version": 2,
+ "species": "shared",
+ "vars": {},
+ "barks": {
+  "napping": [
+   {
+    "text": "Zzz… ({name} is napping. It will wake soon.)",
+    "expr": "sleepy"
+   }
+  ],
+  "last_day": [
+   {
+    "text": "Tomorrow I'll go home. Let's make today a really good one.",
+    "expr": "love"
+   }
+  ],
+  "stay_more": [
+   {
+    "text": "I can stay a little longer. A few more days. Then I really should go live my wild life.",
+    "expr": "love",
+    "react": "happy"
+   }
+  ],
+  "hug_more": [
+   {
+    "text": "(A big, warm hug.) Mmm. Okay, one more is allowed.",
+    "expr": "love",
+    "react": "pet"
+   },
+   {
+    "text": "(Squeeze!) That one was the best one yet.",
+    "expr": "love",
+    "react": "pet"
+   }
+  ],
+  "gift_ask": [
+   {
+    "text": "Before I go… can I take something with you-smell on it? Something to remember.",
+    "expr": "curious"
+   }
+  ],
+  "gift_got": [
+   {
+    "text": "The {gift}! I'll keep it forever. FOREVER.",
+    "expr": "excited",
+    "react": "excited"
+   }
+  ],
+  "goodbye_ask": [
+   {
+    "text": "How do you want to say goodbye?",
+    "expr": "love"
+   }
+  ],
+  "farewell": [
+   {
+    "text": "({name} {trust}.) I'm so excited and a tiny bit sad, both at once. You helped me grow strong. Thank you, {child}.",
+    "expr": "love"
+   }
+  ],
+  "look_back": [
+   {
+    "text": "(It stops… and looks back once.)",
+    "expr": "happy"
+   }
+  ],
+  "walk_memory": [
+   {
+    "text": "Remember? {memory}.",
+    "expr": "happy"
+   },
+   {
+    "text": "I still think about it: {memory}.",
+    "expr": "love"
+   }
+  ],
+  "walk_end": [
+   {
+    "text": "I'll remember all of it.",
+    "expr": "love"
+   }
+  ],
+  "release_invite": [
+   {
+    "text": "{name} walks to the edge of the meadow and looks back at you.",
+    "expr": "curious"
+   }
+  ],
+  "release_forced": [
+   {
+    "text": "It's time. {name} walks to the edge of the meadow and looks back at you, happy.",
+    "expr": "happy"
+   }
+  ],
+  "first_gift": [
+   {
+    "text": "{name} gives you a {treasure} it was saving. \"For you. Keep it safe.\"",
+    "expr": "love"
+   }
+  ],
+  "favplace": [
+   {
+    "text": "{name} shows you its {place}. Naps there are extra cozy now.",
+    "expr": "happy"
+   }
+  ],
+  "trust": [
+   {
+    "text": "{name} {trust}.",
+    "expr": "love"
+   }
+  ]
+ },
+ "conversations": [
+  {
+   "id": "shared_feelings_check",
+   "trigger": "idle",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Can I ask you something? How was your day today?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "😊",
+       "label": "Good!",
+       "goto": "good",
+       "reply": "Good days are the best kind. Tell me one good thing? …Actually, just smiling is fine too.",
+       "expr": "happy"
+      },
+      {
+       "icon": "😐",
+       "label": "Okay",
+       "goto": "okay",
+       "reply": "Okay days are allowed. They're like plain toast. Still toast."
+      },
+      {
+       "icon": "😢",
+       "label": "Not great",
+       "goto": "hard",
+       "reply": "Oh. Then I'll sit right here with you. You don't have to say anything.",
+       "expr": "sad"
+      },
+      {
+       "icon": "🤫",
+       "label": "Just sit",
+       "goto": "sit",
+       "reply": "(It settles in beside you, warm and quiet.)",
+       "expr": "love"
+      }
+     ]
+    },
+    "good": {
+     "say": "Should we save today in the Memory Book?",
+     "expr": "happy",
+     "choices": [
+      {
+       "icon": "📖",
+       "label": "Yes!",
+       "reply": "Saved! A golden day.",
+       "memory": "You had a really good day, and you told me",
+       "memoryTag": "good_day",
+       "bond": 2
+      },
+      {
+       "icon": "🙂",
+       "label": "No need",
+       "reply": "Okay. I'll just remember it in my head."
+      }
+     ]
+    },
+    "okay": {
+     "say": "Want to do something fun together after this?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🎲",
+       "label": "Play",
+       "reply": "Yes! Tap Play whenever you want."
+      },
+      {
+       "icon": "💗",
+       "label": "Cuddle",
+       "reply": "Cuddles it is.",
+       "expr": "love",
+       "react": "pet"
+      }
+     ]
+    },
+    "hard": {
+     "say": "…",
+     "expr": "love",
+     "next": "hard2",
+     "wait": 2200
+    },
+    "hard2": {
+     "say": "I'm really glad you're here with me.",
+     "expr": "love",
+     "memory": "One day you felt not great, and we sat together",
+     "memoryTag": "sat_sad"
+    },
+    "sit": {
+     "say": "…",
+     "expr": "love"
+    }
+   },
+   "weight": 1,
+   "cond": {
+    "bondMin": 140
+   }
+  }
+ ]
+}
