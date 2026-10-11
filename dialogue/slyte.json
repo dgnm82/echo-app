@@ -15,7 +15,7 @@
     "react": "happy"
    },
    {
-    "text": "You came back! I knew you would. I mean I hoped. I mean I KNEW.",
+    "text": "You came back! YAY! My tail did a whole circle. Two circles!",
     "expr": "happy",
     "react": "happy"
    },
@@ -36,7 +36,7 @@
     }
    },
    {
-    "text": "Psst. You look sleepy. Want to just hang out?",
+    "text": "Psst. I feel cozy-sleepy today. Want to just hang out?",
     "expr": "curious",
     "cond": {
      "time": [
@@ -47,11 +47,11 @@
   ],
   "grace_hello": [
    {
-    "text": "Remember the first time we met in the dusk meadow? Last time we played my favorite game. Let's do it again!",
+    "text": "Remember the first time we met in the dusk meadow? I think about it a lot. Want to play my favorite game?",
     "expr": "love"
    },
    {
-    "text": "Psst. One of our last days. Let's make it a leaf-pile kind of day.",
+    "text": "Psst. Let's make today a leaf-pile kind of day. The best kind.",
     "expr": "happy"
    }
   ],
@@ -69,7 +69,7 @@
   ],
   "reveal": [
    {
-    "text": "Psst! Hi! I'm Slyte! Not just any Slyte — me! I {quirk}. Are we friends now?",
+    "text": "Psst! Hi! I'm Slyte! Not just any Slyte — me! ({name} {quirk}.) Are we friends now?",
     "expr": "excited",
     "react": "excited"
    }
@@ -107,7 +107,7 @@
   ],
   "full": [
    {
-    "text": "I'm so full my tail is round.",
+    "text": "All done! My tummy says thank you.",
     "expr": "happy"
    },
    {
@@ -134,7 +134,7 @@
   ],
   "sit": [
    {
-    "text": "…this is nice. Quiet is nice. Shh, don't tell anyone I said that.",
+    "text": "…this is nice. Quiet is nice. Who knew? Not me. I'm a very bouncy Slyte.",
     "expr": "love"
    }
   ],
@@ -153,13 +153,13 @@
   ],
   "game_tired": [
    {
-    "text": "My paws are tired! Let's play again next time.",
+    "text": "My paws are tired! That was so much fun.",
     "expr": "sleepy"
    }
   ],
   "game_end": [
    {
-    "text": "Best. Game. EVER. Again tomorrow?",
+    "text": "Best. Game. EVER. My tail is still wiggling.",
     "expr": "excited",
     "react": "excited"
    }
@@ -172,7 +172,7 @@
   ],
   "talent_Master of Disguise": [
    {
-    "text": "Look! I'm a bush! …You can still see me? Rude. Amazing, but rude.",
+    "text": "Look! I'm a bush! …You can still see me? Wow. Your eyes are SO good.",
     "expr": "excited"
    }
   ],
@@ -296,7 +296,7 @@
        "goto": "b",
        "reply": "A tree! Up high where nobody looks. Smart. Very sneaky.",
        "set": {
-        "hideSpot": "a tree"
+        "hideSpot": "Up a tree"
        }
       },
       {
@@ -305,7 +305,7 @@
        "goto": "b",
        "reply": "Ooh, a bed fort. The best kind of fort.",
        "set": {
-        "hideSpot": "under your bed"
+        "hideSpot": "A bed fort"
        }
       },
       {
@@ -315,7 +315,7 @@
        "reply": "A BUCKET? …That's so silly it would totally work.",
        "expr": "excited",
        "set": {
-        "hideSpot": "a bucket"
+        "hideSpot": "In a bucket"
        }
       },
       {
@@ -355,7 +355,7 @@
     "c": {
      "say": "I'll remember that. {var:hideSpot}, no snacks. Legendary.",
      "expr": "happy",
-     "memory": "You told me you'd hide in {var:hideSpot}",
+     "memory": "You told me your best hiding spot: {var:hideSpot}",
      "memoryTag": "hide_spot"
     },
     "sit": {
@@ -406,13 +406,13 @@
      ]
     },
     "b": {
-     "say": "Where should I keep it? I have a secret spot in the treehouse fort, but it's SECRET.",
+     "say": "Where should I keep it? I have a special spot in the treehouse fort. A VERY special spot.",
      "expr": "curious",
      "choices": [
       {
        "icon": "🏠",
        "label": "Treehouse",
-       "reply": "The fort it is! Psst… now you know where my secret spot is. Don't tell. Okay you can tell one person.",
+       "reply": "The fort it is! Now you know my special spot. You can tell everybody!",
        "memory": "We decided the shiny thing ({var:capVerdict}) goes in the treehouse fort",
        "memoryTag": "cap",
        "bond": 2
@@ -451,7 +451,7 @@
        "icon": "💬",
        "label": "Tell me",
        "goto": "b",
-       "reply": "Sometimes when it's too quiet. But you're here now, so it's fine.",
+       "reply": "Sometimes when it's too quiet. Then I chase a leaf, and the wobbly goes away. Mostly.",
        "expr": "love"
       },
       {
@@ -536,7 +536,7 @@
     "end": {
      "say": "See? Nothing is boring if you squint.",
      "expr": "happy",
-     "memory": "Slyte taught you how to make boring things into adventures",
+     "memory": "We turned boring things into adventures together",
      "memoryTag": "boring"
     }
    },
@@ -551,7 +551,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "Psst… can you keep a secret?",
+     "say": "Psst… want to hear a surprise? A big one?",
      "expr": "curious",
      "choices": [
       {
@@ -568,12 +568,12 @@
      ]
     },
     "b": {
-     "say": "Okay. Come closer. Closer… My real favorite food isn't what everyone thinks. It's {fav}. Shh!",
+     "say": "Okay. Come closer. Closer… My real favorite food is… {fav}! You can tell EVERYBODY.",
      "expr": "happy",
      "next": "c"
     },
     "c": {
-     "say": "Now YOU tell ME a secret. Or a pretend one!",
+     "say": "Now YOU tell ME something silly. A pretend one!",
      "expr": "excited",
      "choices": [
       {
@@ -581,21 +581,21 @@
        "label": "I have a dragon",
        "reply": "I KNEW it. I could smell the smoke.",
        "expr": "surprised",
-       "memory": "You told me a secret: you have a dragon",
+       "memory": "You told me a pretend story: you have a dragon",
        "memoryTag": "secret"
       },
       {
        "icon": "🍪",
        "label": "I like cookies",
-       "reply": "That's the best secret. I won't tell the cookies.",
-       "memory": "You told me a secret about cookies",
+       "reply": "Cookies! The best. I'll tell the cookies you said hi.",
+       "memory": "You told me you like cookies",
        "memoryTag": "secret"
       },
       {
        "icon": "🤫",
-       "label": "It's a secret",
-       "reply": "A secret secret! Even better. I'll guard it with my tail.",
-       "memory": "We have a secret too secret to say",
+       "label": "I can fly!",
+       "reply": "Pretend-flying! Take me with you! Whoosh!",
+       "memory": "We pretended you could fly",
        "memoryTag": "secret"
       }
      ]
@@ -612,7 +612,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "Psst. I went looking in {var:hideSpot} today. Because you said you'd hide there. You weren't there! Sneaky.",
+     "say": "Psst. I was thinking about your hiding spot today. {var:hideSpot}! Still a great one.",
      "expr": "happy",
      "choices": [
       {
@@ -655,7 +655,7 @@
        "icon": "🧭",
        "label": "It's calling you",
        "goto": "b",
-       "reply": "Maybe! Like a secret map in my nose.",
+       "reply": "Maybe! Like a treasure map in my nose.",
        "expr": "surprised"
       }
      ]

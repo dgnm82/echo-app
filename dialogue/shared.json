@@ -36,7 +36,7 @@
   ],
   "gift_ask": [
    {
-    "text": "Before I go… can I take something with you-smell on it? Something to remember.",
+    "text": "Before I go… can I take something with me? Something to remember you by.",
     "expr": "curious"
    }
   ],
@@ -83,13 +83,13 @@
   ],
   "release_invite": [
    {
-    "text": "{name} walks to the edge of the meadow and looks back at you.",
+    "text": "{name} walks toward {release} and looks back at you.",
     "expr": "curious"
    }
   ],
   "release_forced": [
    {
-    "text": "It's time. {name} walks to the edge of the meadow and looks back at you, happy.",
+    "text": "It's time. {name} walks toward {release} and looks back at you, happy.",
     "expr": "happy"
    }
   ],
@@ -119,14 +119,14 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "Can I ask you something? How was your day today?",
+     "say": "My day was full of little things. Was yours a sunny one?",
      "expr": "curious",
      "choices": [
       {
        "icon": "😊",
        "label": "Good!",
        "goto": "good",
-       "reply": "Good days are the best kind. Tell me one good thing? …Actually, just smiling is fine too.",
+       "reply": "Good days are the best kind. Yay! (a happy little wiggle)",
        "expr": "happy"
       },
       {
@@ -152,21 +152,20 @@
      ]
     },
     "good": {
-     "say": "Should we save today in the Memory Book?",
+     "say": "Sunny days are good for playing. Want to play something?",
      "expr": "happy",
      "choices": [
       {
-       "icon": "📖",
-       "label": "Yes!",
-       "reply": "Saved! A golden day.",
-       "memory": "You had a really good day, and you told me",
-       "memoryTag": "good_day",
-       "bond": 2
+       "icon": "🎲",
+       "label": "Let's play!",
+       "reply": "Yes! Tap Play whenever you like.",
+       "expr": "excited",
+       "react": "happy"
       },
       {
        "icon": "🙂",
-       "label": "No need",
-       "reply": "Okay. I'll just remember it in my head."
+       "label": "Maybe later",
+       "reply": "Okay! Later is good too."
       }
      ]
     },
@@ -196,9 +195,7 @@
     },
     "hard2": {
      "say": "I'm really glad you're here with me.",
-     "expr": "love",
-     "memory": "One day you felt not great, and we sat together",
-     "memoryTag": "sat_sad"
+     "expr": "love"
     },
     "sit": {
      "say": "…",
@@ -208,7 +205,8 @@
    "weight": 1,
    "cond": {
     "bondMin": 140
-   }
+   },
+   "privacy": "feelings: respond in the moment, never store"
   }
  ]
 }

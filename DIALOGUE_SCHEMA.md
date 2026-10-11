@@ -15,6 +15,8 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
 ```
 - `expr`: facial expression cue. One of `neutral, happy, excited, eating, love, curious, surprised, sleepy, sad`.
 - `react`: optional body animation. One of `happy, excited, pet, eat, sad, sleepy`.
+- `lintAllow`: optional list of lint rule ids allowed on this line, node or choice (see tools/lint-dialogue.js).
+- `privacy: "feelings…"` on a conversation: the lint then rejects any memory or variable writes in it. Feelings answers are never stored.
 - Keys the game uses: hello, grace_hello, last_day, ready_hint, ask_ready, stay_more, reveal, reveal_reply, fed, fed_fav, full, pet, sit, nap, napping, not_sleepy, game_tired, game_end, talent_<Talent Name>, first_gift, favplace, trust, hunt_*/camo_*/seek_* (Slyte), sky_* (Whimber), release_invite, release_forced, hug_more, walk_memory, walk_end, gift_ask, gift_got, goodbye_ask, farewell, look_back.
 
 ## Conversation (multi-turn)

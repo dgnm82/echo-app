@@ -10,7 +10,7 @@
     "react": "happy"
    },
    {
-    "text": "Oh. Hello. The sky felt quieter without you.",
+    "text": "Oh. Hello. The sky did something lovely today. I'm glad you're here.",
     "expr": "love"
    },
    {
@@ -42,7 +42,7 @@
   ],
   "grace_hello": [
    {
-    "text": "Hoo… one of our last few days. Let's look at the sky together, the way we like.",
+    "text": "Hoo… let's look at the sky together today, the way we like.",
     "expr": "love"
    }
   ],
@@ -60,7 +60,7 @@
   ],
   "reveal": [
    {
-    "text": "Hoo… hello. I'm Whimber. I think I'm your Whimber. I {quirk}. Hello…",
+    "text": "Hoo… hello. I'm Whimber. I think I'm your Whimber. ({name} {quirk}.) Hello…",
     "expr": "curious"
    }
   ],
@@ -97,7 +97,7 @@
   ],
   "full": [
    {
-    "text": "I'm quite full. Like a moon.",
+    "text": "I'm all done, thank you. My tummy is humming a happy hum.",
     "expr": "happy"
    }
   ],
@@ -133,7 +133,7 @@
   ],
   "not_sleepy": [
    {
-    "text": "Not quite sleepy yet. Owls nap on their own schedule. Hoo.",
+    "text": "Not quite sleepy yet. Whimbers nap on their own schedule. Hoo.",
     "expr": "curious"
    }
   ],
@@ -186,7 +186,7 @@
   ],
   "sky_guess": [
    {
-    "text": "Hmm… it looks like a {guess}. Or a very thin cat. What do you think it is?",
+    "text": "Hmm… it looks like a {guess}. Or a very stretchy cat. What do you think it is?",
     "expr": "curious"
    },
    {
@@ -368,10 +368,8 @@
      ]
     },
     "b": {
-     "say": "I'll remember your bright thing. For gray days.",
-     "expr": "love",
-     "memory": "You told me about your bright thing for gray days",
-     "memoryTag": "bright"
+     "say": "A bright thing. Hoo. What a lovely idea to keep.",
+     "expr": "love"
     }
    },
    "weight": 1,
@@ -487,7 +485,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "People say owls are wise. I don't think I know very much. Is that okay?",
+     "say": "People say Whimbers are wise. I don't think I know very much. Is that okay?",
      "expr": "curious",
      "choices": [
       {

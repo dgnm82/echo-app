@@ -4,10 +4,22 @@ const app=$('#app'), ov=$('#overlay');
 const KEY='echo-proto-v1';
 let S=load(), sess={feeds:0,games:0,naps:0,chats:0};
 const rnd=(seed)=>()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s)purgeFeelings(s);return s}catch(e){return null}}
+// Privacy: never persist the child's feelings. Remove any legacy data of that kind.
+function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=true}
+  const bad=/you had a really good day|felt not great|bright thing for gray days|how you feel|you felt/i;
+  if(Array.isArray(s.memories)){const n=s.memories.length;s.memories=s.memories.filter(m=>!bad.test(m));if(s.memories.length!==n)ch=true}
+  if(Array.isArray(s.memTags)){const n=s.memTags.length;s.memTags=s.memTags.filter(t=>!['good_day','sat_sad','bright','feelings'].includes(t));if(s.memTags.length!==n)ch=true}
+  if(Array.isArray(s.checkins))s.checkins.forEach(k=>{if(bad.test(k.text)){k.text=k.text.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.');ch=true}});
+  if(Array.isArray(s.postcards)){const p=s.postcards.map(x=>bad.test(x)?x.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.'):x);if(p.join()!==s.postcards.join()){s.postcards=p;ch=true}}
+  if(ch)try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
 function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}}
 function E(){return CR[S.kind]}
-function say(t){try{if(S&&S.voice&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,''));u.rate=S.kind==='owl'?.85:1.15;u.pitch=S.kind==='owl'?.8:1.4;speechSynthesis.speak(u)}}catch(e){}}
+function localVoices(){try{return (speechSynthesis.getVoices()||[]).filter(v=>v.localService===true)}catch(e){return []}}
+function say(t){try{if(!(S&&S.voice&&window.speechSynthesis))return;const vs=localVoices();if(!vs.length)return; // on-device voices only; otherwise stay silent (text is still shown)
+  const en=vs.filter(v=>/^en/i.test(v.lang));const v=(en.length?en:vs)[0];speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,''));u.voice=v;u.lang=v.lang;u.rate=S.kind==='owl'?.85:1.15;u.pitch=S.kind==='owl'?.8:1.4;speechSynthesis.speak(u)}catch(e){}}
+if(window.speechSynthesis&&'onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
 const B=(k,x)=>Dialogue.bark(k,x);
@@ -29,7 +41,7 @@ function genEcho(kind){
     marking:pick(['star','stripe','spot','none']), quirk:pick(cr.quirks), fav:pick(cr.foods),
     playful:+(0.5+r()*0.5).toFixed(2), name:null};
 }
-function svg(kind,g,m){const ex=m==='sleep'?'sleepy':m==='sad'?'sad':m==='happy'?'happy':(m||'neutral');return ART.creature(kind,g).replace('data-expr="neutral"',`data-expr="${ex}"`)}
+function svg(kind,g,m){const ex=m==='sleep'?'sleepy':m==='sad'?'neutral':m==='happy'?'happy':(m||'neutral');return ART.creature(kind,g).replace('data-expr="neutral"',`data-expr="${ex}"`)}
 function mood(){const n=S.needs;const m=Math.min(n.food,n.play,n.rest,n.comfort);return S.napUntil>now()?'sleep':m>60?'happy':m<25?'sad':'ok'}
 function want(){const n=S.needs;const e=[['food','🍎'],['play','⚽'],['rest','🛏️'],['comfort','💗']].sort((a,b)=>n[a[0]]-n[b[0]])[0];return n[e[0]]<60?e[1]:null}
 
@@ -117,7 +129,7 @@ function home(greet){
 function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text);clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
-function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='sad'?'sad':m==='happy'?'happy':'neutral'}
+function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
 function hop(){react('happy')}
 function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
 // two-tap reply choices (S9)
@@ -200,7 +212,7 @@ function gameShell(title){h(`<div class="top"><b>${title}</b><button class="btn 
 function endGame(finished){if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);if(round>=2)setTimeout(()=>endGame(true),2200);else setTimeout(()=>next(round+1),2200)}
 function shinyHunt(round){
-  gameShell(`Shiny Hunt · round ${round+1}/3`);const gs=$('#gs');
+  gameShell(`Shiny Search · round ${round+1}/3`);const gs=$('#gs');
   const spots=[['🪵','log','woody'],['🍂','leaf pile','crunchy'],['🏠','treehouse fort','cozy'],['🫖','teapot','tea-ish'],['🥾','boot','smelly']];
   const pos=[[10,40],[60,35],[35,55],[12,72],[62,70]];
   const camo=S.talents.includes('Master of Disguise')&&round===1, seek=S.talents.includes('Riddle Solver')&&round===2;
@@ -231,7 +243,7 @@ function nightSky(round){
   talk(B('sky_start'),60000);let path=[];
   pts.forEach((p,i)=>{const b=document.createElement('button');b.className='star';b.style.left=p[0]+'%';b.style.top=p[1]+'%';gs.appendChild(b);
     b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');if(path.length){const q=pts[path[path.length-1]];ln.innerHTML+=`<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" stroke="#ffe27a" stroke-width=".6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/>`}path.push(i);
-      if(path.length===n){const opts=[['🥄','Spoon'],['🐈','Thin cat'],['🐋','Whale'],['🏠','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
+      if(path.length===n){const opts=[['🥄','Spoon'],['🐈','Stretchy cat'],['🐋','Whale'],['🏠','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
         talk(B('sky_guess',{guess:opts[0][1].toLowerCase()}),60000);
         choices(opts.map(o=>[o[0],o[1],null]),k=>{const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));roundDone(round,nightSky)})}}});
   if(S.talents.includes('Night Vision')&&round===1)toast('Night Vision: the stars glow brighter for you');
@@ -276,14 +288,14 @@ function feelings(){
   const f=[['😊','Happy'],['😌','Proud'],['😢','Sad'],['😮','Surprised'],['🙂','Okay']],sel=new Set();
   const d=full(`<h1>How do you feel?</h1><p>You can pick more than one.</p><div class="row">${f.map((x,i)=>`<button class="btn" data-i="${i}"><span class="ic">${x[0]}</span>${x[1]}</button>`).join('')}</div><button class="btn" id="ok" style="background:#ffe27a">Done</button>`);
   d.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;sel.has(i)?sel.delete(i):sel.add(i);b.classList.toggle('sel');say(f[i][1])});
-  d.querySelector('#ok').onclick=()=>{S.feelings=[...sel].map(i=>f[i][1]);save();d.remove();const d2=full(`<p style="font-size:22px">It's okay to feel more than one thing.</p><button class="btn">Memory Book</button>`);say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
+  d.querySelector('#ok').onclick=()=>{d.remove();const d2=full(`<p style="font-size:22px">It's okay to feel more than one thing.</p><button class="btn">Memory Book</button>`);say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
 }
 function buildCheckins(){
   const e=E(),g=S.g,c=S.child,mem=(S.memories.filter(m=>!m.startsWith('You said'))[1]||S.memories[0]||'the day we met'),con=(S.constellations||[])[0],lc=mem.charAt(0).toLowerCase()+mem.slice(1);
   const T={postcard:['I made it! The '+(S.gift||e.treasure)+' came too. It likes it here.',
      S.kind==='fox'?`I used my ${S.talents[1]||'disguise'} today and NOBODY found me. You would have. I still think about how ${lc}.`:`I used my ${S.talents[0]||'night eyes'} to count fireflies. I still think about how ${lc}.`,
      S.kind==='fox'?'The meadow turned all gold for autumn. I pounced into the biggest leaf pile and thought of you.':(con?`${con} was out tonight, right over my hollow.`:'The first snow fell on my hollow. Very quiet. Very nice.')],
-   note:[S.kind==='fox'?'Psst. Do you think clouds play hide-and-seek? I think they cheat.':'I wondered today… where does the wind sleep?',`I still think about ${lc}. It makes me ${S.kind==='fox'?'swish my tail':'fluff my feathers'}.`],
+   note:[S.kind==='fox'?'Psst. Do you think clouds play hide-and-seek? I think they peek.':'I wondered today… where does the wind sleep?',`I still think about ${lc}. It makes me ${S.kind==='fox'?'swish my tail':'fluff my feathers'}.`],
    sign:[e.sign.slice(e.sign.indexOf(' ')+1),'a tiny '+e.token+', left just for you']};
   const used={postcard:0,note:0,sign:0};
   return C.checkins.map(([day,type])=>({day,type,text:type==='sign'?`(Found: ${T.sign[used.sign++]}.) ${S.kind==='fox'?'…yip! (from far away)':'…hoo… (from far away)'}`:`Dear ${c}, ${T[type][used[type]++]} — ${g.name}`,delivered:false}));
