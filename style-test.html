@@ -1,0 +1,231 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Slyte — layered 2D puppet style test</title><link rel="icon" href="data:,">
+<style>
+:root{--ink:#3b2a24;--paper:#fbf3e4}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"Trebuchet MS",system-ui,sans-serif;background:#2a2340;color:var(--paper)}
+header{padding:16px 18px 6px;text-align:center}
+h1{margin:0;font-size:22px;letter-spacing:.5px}header p{margin:6px auto 0;max-width:640px;font-size:14px;opacity:.8}
+.controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px 12px 14px;position:sticky;top:0;z-index:5;background:linear-gradient(#2a2340 75%,#2a234000)}
+.controls button{min-height:48px;min-width:84px;border:0;border-radius:24px;padding:8px 16px;font:600 16px inherit;font-family:inherit;background:#fbf3e4;color:var(--ink);box-shadow:0 3px 0 #0004;cursor:pointer}
+.controls button[aria-pressed=true]{background:#ffd27a;outline:3px solid #fff8}
+.controls button.alt{background:#4a3f6e;color:#fbf3e4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 14px 24px;max-width:1500px;margin:0 auto}
+@media (max-width:860px){.grid{grid-template-columns:1fr;max-width:520px}}
+.card{border-radius:22px;overflow:hidden;background:#000;box-shadow:0 10px 30px #0006;position:relative}
+.scene{position:relative;aspect-ratio:3/4;overflow:hidden;touch-action:pan-y}
+.layer{position:absolute;left:-6%;top:-4%;width:112%;height:108%;will-change:transform;transition:transform .25s ease-out}
+.layer svg{width:100%;height:100%;display:block}
+.puppet{position:absolute;left:50%;bottom:9%;width:74%;transform:translateX(-50%);will-change:transform}
+.puppet svg{width:100%;height:auto;overflow:visible;display:block}
+.label{position:absolute;left:12px;top:10px;background:#0006;color:#fff;font-size:13px;padding:6px 10px;border-radius:14px;backdrop-filter:blur(4px)}
+.leaf{position:absolute;top:-8%;width:22px;height:22px;pointer-events:none;animation:fall var(--d) linear var(--delay) infinite}
+.leaf svg{width:100%;height:100%;animation:spin var(--s) ease-in-out infinite alternate}
+@keyframes fall{0%{transform:translate(0,0)}25%{transform:translate(var(--x1),28vh)}50%{transform:translate(var(--x2),56vh)}75%{transform:translate(var(--x1),84vh)}100%{transform:translate(var(--x2),120vh)}}
+@keyframes spin{from{transform:rotate(-40deg) scaleX(1)}to{transform:rotate(60deg) scaleX(.4)}}
+/* ---- puppet rig: every part pivots around its own joint (transform-box:view-box + px origins) ---- */
+.rig *{transform-box:view-box}
+.breath{animation:breath 3.4s ease-in-out infinite;transform-origin:150px 300px}
+@keyframes breath{50%{transform:scale(1.022,.982)}}
+.headbob{animation:headbob 3.4s ease-in-out infinite;transform-origin:150px 196px}
+@keyframes headbob{50%{transform:translateY(2.5px) rotate(.6deg)}}
+.tail{animation:tailsway 3s ease-in-out infinite;transform-origin:196px 262px}
+@keyframes tailsway{0%,100%{transform:rotate(0)}45%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.earL{transform-origin:112px 118px}.earR{transform-origin:188px 118px}
+.flickL .earL{animation:flickL .5s ease-out}.flickR .earR{animation:flickR .5s ease-out}
+@keyframes flickL{25%{transform:rotate(-16deg)}55%{transform:rotate(7deg)}}@keyframes flickR{25%{transform:rotate(16deg)}55%{transform:rotate(-7deg)}}
+.tflick .tailInner{animation:tflick .7s ease-out}
+@keyframes tflick{30%{transform:rotate(-14deg)}65%{transform:rotate(6deg)}}
+.tailInner{transform-origin:196px 262px}
+.lid{transform-origin:center;transform:scaleY(0);transform-box:fill-box}
+.blink .lid{transform:scaleY(1)}
+.lid{transition:transform .07s ease-in}
+/* expression layers */
+.x{opacity:0;transition:opacity .18s}
+[data-expr=happy] .x-happy,[data-expr=curious] .x-curious,[data-expr=sleepy] .x-sleepy,[data-expr=silly] .x-silly,[data-expr=shy] .x-shy{opacity:1}
+[data-expr=happy] .x-open,[data-expr=sleepy] .x-open{opacity:0}
+.x-open{opacity:1;transition:opacity .18s}
+[data-expr] .m-neutral{opacity:0}
+[data-expr=silly] .eyeL .x-open{opacity:0}
+.headpose{transition:transform .5s cubic-bezier(.3,1.4,.5,1);transform-origin:150px 196px}
+[data-expr=curious] .headpose{transform:rotate(-11deg)}
+[data-expr=silly] .headpose{transform:rotate(9deg) translateY(-2px)}
+[data-expr=sleepy] .headpose{transform:translateY(7px) rotate(4deg)}
+[data-expr=shy] .headpose{transform:translateY(8px) rotate(6deg)}
+[data-expr=happy] .headpose{transform:translateY(-3px)}
+.earpose{transition:transform .45s ease}
+[data-expr=curious] .earL .earpose{transform:rotate(-10deg)} [data-expr=curious] .earR .earpose{transform:rotate(6deg)}
+[data-expr=sleepy] .earL .earpose{transform:rotate(-20deg)} [data-expr=sleepy] .earR .earpose{transform:rotate(20deg)}
+[data-expr=shy] .earL .earpose{transform:rotate(-34deg) translateY(6px)} [data-expr=shy] .earR .earpose{transform:rotate(34deg) translateY(6px)}
+[data-expr=silly] .earL .earpose{transform:rotate(-24deg)}
+.earL .earpose{transform-origin:112px 118px}.earR .earpose{transform-origin:188px 118px}
+.tailpose{transition:transform .6s ease;transform-origin:196px 262px}
+[data-expr=happy] .tail{animation-duration:.7s}
+[data-expr=silly] .tail{animation-duration:1s}
+[data-expr=sleepy] .tail{animation-duration:6s}
+[data-expr=shy] .tailpose{transform:rotate(-58deg) translate(-8px,10px)}
+[data-expr=shy] .tail{animation:none}
+.pupils{transition:transform .35s ease}
+[data-expr=shy] .pupils{transform:translate(5px,5px)}
+[data-expr=curious] .pupils{transform:translate(-3px,-3px)}
+[data-expr=sleepy] .breath{animation-duration:5.5s}
+.zz{opacity:0}[data-expr=sleepy] .zz{animation:zz 3s ease-in-out infinite}
+@keyframes zz{0%{opacity:0;transform:translate(0,0)}30%{opacity:1}100%{opacity:0;transform:translate(16px,-30px)}}
+.hop{animation:hop .55s cubic-bezier(.3,1.5,.5,1)}
+@keyframes hop{40%{transform:translateX(-50%) translateY(-7%) scale(.97,1.04)}75%{transform:translateX(-50%) translateY(0) scale(1.05,.95)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+footer{text-align:center;font-size:12px;opacity:.6;padding:0 0 24px}
+</style></head><body>
+<header><h1>Slyte: layered 2D puppet style test</h1><p>Painterly, cel-shaded parts on a rig. Tap a Slyte to make it hop. Drag or tilt to see the parallax. Three Slytes from three different seeds.</p></header>
+<div class="controls" role="toolbar" aria-label="Expressions">
+  <button data-e="happy" aria-pressed="true">😊 Happy</button><button data-e="curious">🤔 Curious</button><button data-e="sleepy">😴 Sleepy</button><button data-e="silly">😜 Silly</button><button data-e="shy">☺️ Shy</button>
+  <button class="alt" id="reroll">🎲 New seeds</button>
+</div>
+<main class="grid" id="grid"></main>
+<footer>Style test only. It isn't part of the game. Project Echo prototype.</footer>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const hx=c=>c.replace('#','').match(/../g).map(x=>parseInt(x,16));
+const mix=(a,b,t)=>'#'+hx(a).map((v,i)=>Math.round(v+(hx(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+let uid=0;
+function variant(seed){const r=rng(seed),pick=a=>a[Math.floor(r()*a.length)],span=(a,b)=>a+(b-a)*r();
+  return {seed,coat:pick(['#e3762e','#cf5a2a','#dc9446','#bd6a3c','#ec9a52','#c7713a']),cream:pick(['#fff3df','#fbe7c8','#f6ecdc']),
+    paws:pick(['#5b3326','#4a2c2a','#6b4130']),eye:pick(['#3f7a4a','#3a5fa8','#b8801e','#6a4a2a','#2f8a86']),
+    marking:pick(['blaze','socks','freckles','tailband','none']),ear:span(.86,1.18),tail:span(.86,1.18),head:span(.95,1.07),leg:span(.9,1.12),body:span(.92,1.08),eyeSize:span(.92,1.1)}}
+// ---- the puppet: separate parts, each in its own pivot group (outer = animation, inner = pose, innermost = proportions)
+function slyte(v){const id='s'+(++uid),c=v.coat,sh=mix(c,'#3a1a40',.32),deep=mix(c,'#2a1030',.55),rim='#fff0c4',hi=mix(c,'#fff4d0',.45),ink=mix(c,'#1e0e16',.7),cr=v.cream,crs=mix(cr,c,.28);
+  const S=(cx,cy,s)=>`translate(${cx} ${cy}) scale(${s}) translate(${-cx} ${-cy})`;
+  const SX=(cx,cy,sx,sy)=>`translate(${cx} ${cy}) scale(${sx} ${sy}) translate(${-cx} ${-cy})`;
+  const legC=v.marking==='socks'?v.paws:c;
+  const eye=(cx,cls,flip)=>{const r=15*v.eyeSize;return `<g class="${cls}">
+     <g class="x-open"><ellipse cx="${cx}" cy="172" rx="${r}" ry="${r*1.12}" fill="#fffaf0" stroke="${ink}" stroke-width="2.4"/>
+       <g class="pupils"><ellipse cx="${cx+(flip?-1:1)}" cy="174" rx="${r*.74}" ry="${r*.86}" fill="${v.eye}"/><ellipse cx="${cx+(flip?-1:1)}" cy="179" rx="${r*.6}" ry="${r*.32}" fill="${mix(v.eye,'#fff8c0',.45)}" opacity=".7"/>
+       <ellipse cx="${cx+(flip?-1:1)}" cy="175" rx="${r*.42}" ry="${r*.52}" fill="#170c18"/><circle cx="${cx-r*.32}" cy="${172-r*.42}" r="${r*.28}" fill="#fff"/><circle cx="${cx+r*.3}" cy="${172+r*.22}" r="${r*.11}" fill="#fff"/></g>
+       <path class="lid" d="M${cx-r-2} ${172-r*1.2} h${2*r+4} v${r*2.3} h${-2*r-4}z" fill="${c}"/></g>
+     <path class="x x-happy" d="M${cx-r} 176 Q${cx} ${158} ${cx+r} 176" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>
+     <path class="x x-sleepy" d="M${cx-r} 174 Q${cx} ${183} ${cx+r} 174" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>
+     ${cls==='eyeL'?`<path class="x x-silly" d="M${cx-r} 174 Q${cx} 164 ${cx+r} 174 M${cx-r+2} 170 l-6 -5 M${cx+r-2} 170 l6 -5" stroke="${ink}" stroke-width="3.6" fill="none" stroke-linecap="round"/>`:''}
+   </g>`};
+  const ear=(cls,x,dir)=>`<g class="${cls}"><g class="earpose"><g transform="${S(x,118,v.ear)}">
+     <path d="M${x-22*dir} 128 C${x-26*dir} 92 ${x-14*dir} 52 ${x-4*dir} 40 C${x+10*dir} 56 ${x+28*dir} 84 ${x+34*dir} 112 Z" fill="url(#coat${id})" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+     <path d="M${x-12*dir} 118 C${x-14*dir} 92 ${x-8*dir} 68 ${x-3*dir} 58 C${x+8*dir} 72 ${x+18*dir} 92 ${x+22*dir} 110 Z" fill="${deep}"/>
+     <path d="M${x-7*dir} 110 C${x-8*dir} 94 ${x-5*dir} 80 ${x-2*dir} 72 C${x+5*dir} 82 ${x+11*dir} 96 ${x+13*dir} 108 Z" fill="${mix(cr,'#f2a0a0',.35)}" opacity=".8"/>
+     <path d="M${x-4*dir} 42 C${x+8*dir} 58 ${x+24*dir} 82 ${x+31*dir} 106" stroke="${rim}" stroke-width="3" fill="none" stroke-linecap="round" opacity="${dir>0?.85:.35}"/>
+   </g></g></g>`;
+  const leg=(x,front)=>`<g transform="${SX(x,236,1,v.leg)}"><path d="M${x-13} 236 C${x-14} 262 ${x-14} 282 ${x-12} 298 L${x+12} 298 C${x+14} 282 ${x+14} 262 ${x+13} 236 Z" fill="${front?legC:mix(legC,'#2a1030',.18)}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+     <ellipse cx="${x}" cy="300" rx="16" ry="8" fill="${v.paws}" stroke="${ink}" stroke-width="3"/>${front?`<path d="M${x+9} 244 C${x+11} 262 ${x+11} 280 ${x+9} 292" stroke="${rim}" stroke-width="2.4" fill="none" opacity=".7"/>`:''}</g>`;
+  return `<svg viewBox="0 0 300 330" class="rig" data-expr="happy" role="img" aria-label="Slyte, seed ${v.seed}">
+  <defs>
+   <linearGradient id="coat${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${c}"/><stop offset="1" stop-color="${mix(c,'#5a2040',.18)}"/></linearGradient>
+   <linearGradient id="cream${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="${crs}"/></linearGradient>
+   <clipPath id="bodyclip${id}"><path d="M150 186 C198 186 214 236 206 290 L94 290 C86 236 102 186 150 186Z"/></clipPath>
+   <clipPath id="headclip${id}"><path d="M150 108 C200 108 226 140 224 172 C236 182 234 196 220 200 C206 226 180 238 150 238 C120 238 94 226 80 200 C66 196 64 182 76 172 C74 140 100 108 150 108Z"/></clipPath>
+   <radialGradient id="shadow${id}"><stop offset="0" stop-color="#1a0c20" stop-opacity=".35"/><stop offset="1" stop-color="#1a0c20" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="150" cy="306" rx="96" ry="13" fill="url(#shadow${id})"/>
+  <!-- TAIL (pivot at base) -->
+  <g class="tail"><g class="tailpose"><g class="tailInner"><g transform="${S(196,262,v.tail)}">
+    <path d="M186 276 C244 288 286 244 276 182 C270 150 246 132 232 146 C252 178 246 222 186 248 Z" fill="url(#coat${id})" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M200 262 C240 258 262 228 264 192" stroke="${sh}" stroke-width="10" fill="none" stroke-linecap="round" opacity=".5"/>
+    ${v.marking==='tailband'?`<path d="M246 164 C262 170 272 182 276 196 L262 204 C258 190 252 180 238 172Z" fill="${deep}" opacity=".85"/>`:''}
+    <path d="M232 146 C246 132 270 150 276 182 C278 194 277 204 275 212 C262 190 250 166 232 146Z" fill="url(#cream${id})" stroke="${ink}" stroke-width="2.6"/>
+    <path d="M240 140 C258 142 272 162 276 186" stroke="${rim}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/>
+  </g></g></g></g>
+  <!-- BODY + LEGS (breathing) -->
+  <g class="breath">
+    ${leg(118,false)}${leg(182,false)}
+    <g transform="${SX(150,290,v.body,1)}">
+      <path d="M150 186 C198 186 214 236 206 290 L94 290 C86 236 102 186 150 186Z" fill="url(#coat${id})" stroke="${ink}" stroke-width="3"/>
+      <g clip-path="url(#bodyclip${id})"><path d="M176 186 C210 210 216 260 206 300 L232 300 L232 180Z" fill="${sh}" opacity=".55"/>
+        <path d="M126 196 C136 214 164 214 174 196 C180 232 172 268 150 282 C128 268 120 232 126 196Z" fill="url(#cream${id})"/></g>
+      <path d="M170 190 C196 200 208 236 206 270" stroke="${rim}" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".85"/>
+    </g>
+    ${leg(128,true)}${leg(172,true)}
+  </g>
+  <!-- HEAD (pivot at neck) -->
+  <g class="headbob"><g class="headpose"><g transform="${S(150,196,v.head)}">
+    ${ear('earL',112,-1)}${ear('earR',188,1)}
+    <path d="M150 108 C200 108 226 140 224 172 C236 182 234 196 220 200 C206 226 180 238 150 238 C120 238 94 226 80 200 C66 196 64 182 76 172 C74 140 100 108 150 108Z" fill="url(#coat${id})" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+    <g clip-path="url(#headclip${id})">
+      <path d="M196 116 C222 140 230 182 220 206 C206 226 184 236 164 238 L240 238 L240 100Z" fill="${sh}" opacity=".45"/>
+      <path d="M76 190 C92 180 112 182 126 196 C136 214 142 226 150 230 C158 226 164 214 174 196 C188 182 208 180 224 190 C214 222 186 240 150 240 C114 240 86 222 76 190Z" fill="url(#cream${id})"/>
+      ${v.marking==='blaze'?`<path d="M142 112 C146 108 154 108 158 112 L156 160 C152 166 148 166 144 160Z" fill="url(#cream${id})" opacity=".95"/>`:''}
+      ${v.marking==='freckles'?`<g fill="${deep}" opacity=".55"><circle cx="104" cy="200" r="2.4"/><circle cx="112" cy="206" r="2"/><circle cx="98" cy="208" r="1.8"/><circle cx="196" cy="200" r="2.4"/><circle cx="188" cy="206" r="2"/><circle cx="202" cy="208" r="1.8"/></g>`:''}
+    </g>
+    <path d="M118 116 C134 110 150 108 166 110" stroke="${rim}" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>
+    <path d="M196 120 C216 134 226 156 224 172" stroke="${rim}" stroke-width="3.4" fill="none" stroke-linecap="round" opacity=".85"/>
+    <!-- brows -->
+    <g class="x-open"><path d="M98 144 Q110 138 122 142" stroke="${ink}" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M178 142 Q190 138 202 144" stroke="${ink}" stroke-width="3.2" fill="none" stroke-linecap="round"/></g>
+    <g class="x x-curious"><path d="M98 138 Q110 128 122 134" stroke="${ink}" stroke-width="3.2" fill="none" stroke-linecap="round"/></g>
+    ${eye(112,'eyeL',false)}${eye(188,'eyeR',true)}
+    <ellipse cx="94" cy="206" rx="13" ry="7" fill="#ff8f8f" class="x x-happy" opacity=".5"/><ellipse cx="206" cy="206" rx="13" ry="7" fill="#ff8f8f" class="x x-happy"/>
+    <g class="x x-shy"><ellipse cx="94" cy="206" rx="15" ry="8" fill="#ff7f86" opacity=".7"/><ellipse cx="206" cy="206" rx="15" ry="8" fill="#ff7f86" opacity=".7"/><path d="M86 200 l6 6 M94 198 l6 6 M200 198 l6 6 M208 200 l6 6" stroke="#e85a6a" stroke-width="2" opacity=".7"/></g>
+    <!-- nose -->
+    <path d="M140 204 Q150 198 160 204 Q157 214 150 215 Q143 214 140 204Z" fill="#2a1820"/><ellipse cx="146" cy="205" rx="3.6" ry="1.8" fill="#fff" opacity=".7"/>
+    <!-- mouths -->
+    <path class="m-neutral" d="M138 222 Q144 228 150 222 Q156 228 162 222" stroke="${ink}" stroke-width="2.8" fill="none" stroke-linecap="round" style="opacity:var(--mn,1)"/>
+    <g class="x x-happy"><path d="M134 220 Q150 246 166 220Z" fill="#7a2a36" stroke="${ink}" stroke-width="2.6" stroke-linejoin="round"/><path d="M142 232 Q150 227 158 232 Q154 241 150 241 Q146 241 142 232Z" fill="#ff8f9a"/></g>
+    <ellipse class="x x-curious" cx="150" cy="226" rx="5.5" ry="6.5" fill="#7a2a36" stroke="${ink}" stroke-width="2.4"/>
+    <g class="x x-sleepy"><ellipse cx="150" cy="226" rx="8" ry="${5}" fill="#7a2a36" stroke="${ink}" stroke-width="2.4"><animate attributeName="ry" values="2;8;2" dur="5s" repeatCount="indefinite"/></ellipse></g>
+    <g class="x x-silly"><path d="M136 222 Q150 234 164 222" stroke="${ink}" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M146 228 Q146 244 154 244 Q161 243 160 228Z" fill="#ff7f8f" stroke="${ink}" stroke-width="2.2"/><path d="M153 230 v9" stroke="#e05a70" stroke-width="1.6"/></g>
+    <path class="x x-shy" d="M142 224 Q150 228 158 224" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  </g></g></g>
+  <g class="zz"><text x="216" y="112" font-size="22" fill="#fff" font-weight="700">z</text><text x="232" y="92" font-size="15" fill="#fff" font-weight="700">z</text></g>
+  </svg>`;
+}
+// ---- painted background, split into parallax layers (far → near). Static per card, no filters (phone friendly)
+function grass(r,n,y0,y1,cols){let o='';for(let i=0;i<n;i++){const x=r()*600,y=y0+r()*(y1-y0),h=10+22*(y-y0)/(y1-y0)+r()*8,c=cols[Math.floor(r()*cols.length)];o+=`<path d="M${x} ${y} q${3+r()*5} ${-h*.55} ${(r()-.35)*12} ${-h}" stroke="${c}" stroke-width="${2+r()*2.5}" fill="none" stroke-linecap="round"/>`}return o}
+function flowers(r,n,y0,y1){let o='';const cs=['#ffd166','#ff9fb2','#fff6e8','#c9a8ff','#ffb36b'];for(let i=0;i<n;i++){const x=r()*600,y=y0+r()*(y1-y0),s=2+4*(y-y0)/(y1-y0);o+=`<circle cx="${x}" cy="${y}" r="${s}" fill="${cs[Math.floor(r()*cs.length)]}"/><circle cx="${x}" cy="${y}" r="${s*.38}" fill="#fff4b0"/>`}return o}
+function layers(seed){const r=rng(seed*7+3);const V='viewBox="0 0 600 800" preserveAspectRatio="xMidYMax slice"';
+ return [
+  `<svg ${V}><defs><linearGradient id="sky${seed}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc7e6"/><stop offset=".5" stop-color="#cde6df"/><stop offset=".78" stop-color="#ffe2b4"/><stop offset="1" stop-color="#ffd59a"/></linearGradient>
+   <radialGradient id="sun${seed}" cx="72%" cy="22%" r="45%"><stop offset="0" stop-color="#fffbe6"/><stop offset=".2" stop-color="#fff1c2" stop-opacity=".7"/><stop offset="1" stop-color="#fff1c2" stop-opacity="0"/></radialGradient></defs>
+   <rect width="600" height="800" fill="url(#sky${seed})"/><rect width="600" height="800" fill="url(#sun${seed})"/>
+   <g opacity=".85" fill="#fff8ee"><path d="M60 170 q14-30 52-22 q20-26 56-8 q38-4 38 24 q-6 14-30 14 h-104 q-24-2-12-8z"/><path d="M360 110 q10-22 38-14 q16-20 42-4 q28-2 28 18 q-4 10-22 10 h-76 q-18-2-10-10z" opacity=".8"/></g></svg>`,
+  `<svg ${V}><path d="M0 470 L60 400 L110 440 L170 360 L240 430 L300 380 L370 440 L430 370 L500 430 L560 390 L600 420 V800 H0Z" fill="#a8b8d6"/>
+   <path d="M170 360 L190 384 L178 380 L160 392Z M430 370 L452 396 L438 392 L418 402Z" fill="#eef2fb" opacity=".9"/>
+   <path d="M0 500 Q120 450 250 480 T600 470 V800 H0Z" fill="#9fc0b4"/></svg>`,
+  `<svg ${V}><path d="M0 540 Q150 490 300 520 T600 515 V800 H0Z" fill="#86b46a"/>
+   <g fill="#5f8f4c"><ellipse cx="80" cy="512" rx="46" ry="34"/><ellipse cx="118" cy="500" rx="34" ry="30" fill="#6fa055"/><ellipse cx="520" cy="506" rx="54" ry="38"/><ellipse cx="480" cy="514" rx="30" ry="22" fill="#79ab5c"/></g>
+   <g transform="translate(470 420)"><rect x="-7" y="30" width="14" height="70" fill="#7a5638"/><ellipse cx="0" cy="22" rx="44" ry="40" fill="#6f9e52"/><ellipse cx="-18" cy="34" rx="26" ry="22" fill="#5c8a45"/><ellipse cx="16" cy="6" rx="22" ry="18" fill="#8cbb68"/>
+   <path d="M-24 62 h48 l-6 -18 h-36z" fill="#a8784a"/><path d="M-28 62 l28 -18 28 18z" fill="#cf5d3c"/></g></svg>`,
+  `<svg ${V}><defs><linearGradient id="mead${seed}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8d064"/><stop offset=".45" stop-color="#7fb24a"/><stop offset="1" stop-color="#4f8636"/></linearGradient></defs>
+   <path d="M0 600 Q160 566 320 584 T600 576 V800 H0Z" fill="url(#mead${seed})"/>
+   <path d="M0 610 Q160 578 320 596" stroke="#d6ef8a" stroke-width="4" fill="none" opacity=".5"/>
+   ${grass(r,150,590,800,['#5f9440','#7fb04a','#a4cf62','#4d7d33','#b8dc72'])}${flowers(r,46,590,790)}</svg>`,
+ ]}
+const FG=seed=>{const r=rng(seed*13+1);return `<svg viewBox="0 0 600 800" preserveAspectRatio="xMidYMax slice">${grass(r,70,770,815,['#3f6e2c','#4d7d33','#5f9440'])}</svg>`};
+const DEPTH=[0,6,12,20,32];
+const leafSVG=c=>`<svg viewBox="0 0 20 20"><path d="M10 1 C17 5 18 13 10 19 C2 13 3 5 10 1Z" fill="${c}"/><path d="M10 3 V18" stroke="#00000033" stroke-width="1"/></svg>`;
+let expr='happy';const cards=[];
+function build(seeds){const g=$('#grid');g.innerHTML='';cards.length=0;
+  seeds.forEach((seed,i)=>{const v=variant(seed);const el=document.createElement('section');el.className='card';
+    const L=layers(seed);const r=rng(seed+99);
+    let leaves='';for(let k=0;k<7;k++){leaves+=`<div class="leaf" style="left:${r()*100}%;--d:${9+r()*8}s;--delay:${-r()*16}s;--s:${1.6+r()*1.6}s;--x1:${(r()-.5)*60}px;--x2:${(r()-.5)*90}px">${leafSVG(['#e8913a','#d4612e','#f0b04a','#c84a2a'][k%4])}</div>`}
+    el.innerHTML=`<div class="scene">${L.map((s,j)=>`<div class="layer" data-depth="${DEPTH[j]}">${s}</div>`).join('')}
+      <div class="puppet">${slyte(v)}</div><div class="layer" data-depth="${DEPTH[4]}" style="pointer-events:none">${FG(seed)}</div>${leaves}
+      <div class="label">Seed ${seed} · ${v.marking} · ears ${v.ear.toFixed(2)} · tail ${v.tail.toFixed(2)}</div></div>`;
+    g.appendChild(el);const svg=el.querySelector('.rig');svg.setAttribute('data-expr',expr);
+    const pup=el.querySelector('.puppet');pup.addEventListener('click',()=>{pup.classList.remove('hop');void pup.offsetWidth;pup.classList.add('hop')});
+    cards.push({el,svg,seed});
+    const sc=el.querySelector('.scene');sc.addEventListener('pointermove',e=>{const b=sc.getBoundingClientRect();parallax(el,(e.clientX-b.left)/b.width-.5,(e.clientY-b.top)/b.height-.5)});
+    sc.addEventListener('pointerleave',()=>parallax(el,0,0));
+  });
+}
+function parallax(card,x,y){card.querySelectorAll('.layer').forEach(l=>{const d=+l.dataset.depth;l.style.transform=`translate(${-x*d}px,${-y*d*.5}px)`})}
+window.addEventListener('deviceorientation',e=>{if(e.gamma==null)return;const x=Math.max(-1,Math.min(1,e.gamma/30))*.5,y=Math.max(-1,Math.min(1,(e.beta-45)/30))*.5;cards.forEach(c=>parallax(c.el,x,y))});
+// idle life: random blinks, ear flicks and tail flicks per puppet (more natural than fixed loops)
+function life(){cards.forEach(c=>{const s=c.svg,t=performance.now();
+  if(!c.nb||t>c.nb){s.classList.add('blink');setTimeout(()=>s.classList.remove('blink'),130);if(Math.random()<.2)setTimeout(()=>{s.classList.add('blink');setTimeout(()=>s.classList.remove('blink'),120)},260);c.nb=t+2200+Math.random()*3500}
+  if(!c.ne||t>c.ne){const k=Math.random()<.5?'flickL':'flickR';s.classList.add(k);setTimeout(()=>s.classList.remove(k),520);c.ne=t+3000+Math.random()*5000}
+  if(!c.nt||t>c.nt){s.classList.add('tflick');setTimeout(()=>s.classList.remove('tflick'),720);c.nt=t+4000+Math.random()*6000}})}
+setInterval(life,250);
+document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{expr=b.dataset.e;document.querySelectorAll('[data-e]').forEach(x=>x.setAttribute('aria-pressed',x===b));cards.forEach(c=>c.svg.setAttribute('data-expr',expr))});
+const seeds0=[1207,58331,904];build(seeds0);
+$('#reroll').onclick=()=>build([0,0,0].map(()=>1+Math.floor(Math.random()*99999)));
+window.__styleTest={setExpr:e=>document.querySelector(`[data-e=${e}]`).click(),cards:()=>cards.length};
+})();
+</script></body></html>
