@@ -60,7 +60,7 @@
   ],
   "gift_got": [
    {
-    "text": "The {gift}! I'll keep it forever. FOREVER.",
+    "text": "The {gift}! I'll keep it always. Always always.",
     "expr": "excited",
     "react": "excited"
    },
@@ -330,13 +330,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about it.",
+       "reply": "I'll keep turning that one over. Like the rock.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Mm.",
+     "say": "Smooth thoughts. Smooth rock. Good pair.",
      "expr": "love",
      "bond": 1
     }
@@ -397,13 +397,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about that.",
+       "reply": "The sky will keep changing while we wonder.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Yes.",
+     "say": "Tomorrow's sky will be a different one. That's the fun of it.",
      "expr": "love",
      "bond": 1
     }
@@ -464,13 +464,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about this.",
+       "reply": "Let's both listen for it again.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. That was nice.",
+     "say": "Sounds come and go. That one was a nice visitor.",
      "expr": "love",
      "bond": 1
     }
@@ -531,13 +531,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about it. (gift thoughts)",
+       "reply": "Some little things don't need a name.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Good thinking.",
+     "say": "It goes in the memory book. Right in the middle.",
      "expr": "love",
      "bond": 1
     }
@@ -598,13 +598,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about that. (color thoughts)",
+       "reply": "I'll try all the colors in my head.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Lovely.",
+     "say": "For now I'll stay my own color. It suits me.",
      "expr": "love",
      "bond": 1
     }
@@ -665,13 +665,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about this. (weekend thoughts)",
+       "reply": "Slow or busy. Both have good parts.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Mm. The weekend one was good.",
+     "say": "Whatever kind of day it is, this part is nice.",
      "expr": "love",
      "bond": 1
     }
@@ -732,13 +732,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about it. (song thoughts)",
+       "reply": "La. …That was my whole song.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Yes. The song one was good.",
+     "say": "One word, two words. Still a song.",
      "expr": "love",
      "bond": 1
     }
@@ -799,13 +799,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about that. (seasons thoughts)",
+       "reply": "Every season has something to notice.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. That was nice. The seasons one was good.",
+     "say": "The leaves will tell us when it changes.",
      "expr": "love",
      "bond": 1
     }
@@ -866,13 +866,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about this. (pretend boat thoughts)",
+       "reply": "Our pretend boat can go anywhere.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Good thinking. The pretend boat one was good.",
+     "say": "Pretend boats never get wet socks. Good boats.",
      "expr": "love",
      "bond": 1
     }
@@ -933,13 +933,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about it. (drawing thoughts)",
+       "reply": "A round thing. Maybe a pebble. Maybe a moon.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Lovely. The drawing one was good.",
+     "say": "I'll draw it in the air. (Swirl.) There.",
      "expr": "love",
      "bond": 1
     }
@@ -1000,13 +1000,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about that. (hug thoughts)",
+       "reply": "We can just sit. That's nice too.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Mm. The hug one was good.",
+     "say": "Hugs and sitting. Both are good.",
      "expr": "love",
      "bond": 1
     }
@@ -1067,13 +1067,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about this. (dream shared thoughts)",
+       "reply": "Maybe dreams are clouds for sleeping.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Yes. The dream shared one was good.",
+     "say": "Floaty thoughts. I like those.",
      "expr": "love",
      "bond": 1
     }
@@ -1134,13 +1134,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about it. (number thoughts)",
+       "reply": "All the numbers are good at something.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. That was nice. The number one was good.",
+     "say": "I'll count the stars to that number later.",
      "expr": "love",
      "bond": 1
     }
@@ -1201,13 +1201,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about that. (smell thoughts)",
+       "reply": "Sniff. I'll keep sniffing until I decide.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Good thinking. The smell one was good.",
+     "say": "Smells are like little memories in the air.",
      "expr": "love",
      "bond": 1
     }
@@ -1268,13 +1268,13 @@
       {
        "icon": "👂",
        "label": "(just listen)",
-       "reply": "I'll keep wondering about this. (walk thoughts)",
+       "reply": "We'd find something good. We always do.",
        "goto": "c"
       }
      ]
     },
     "c": {
-     "say": "I like thinking about this with you. Lovely. The walk one was good.",
+     "say": "A pretend walk still counts as a walk.",
      "expr": "love",
      "bond": 1
     }
