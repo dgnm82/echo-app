@@ -13,5 +13,6 @@ echo "== shiny pairs tests"; node tools/test-memory.js | tail -1
 echo "== postcard tests"; node tools/test-postcards.js | tail -1
 echo "== trail tests"; node tools/test-trail.js | tail -1
 echo "== connect tests"; node tools/test-connect.js | tail -1
+echo "== config tests"; node tools/test-config.js | tail -1
 if [[ "${1:-}" == "--phone" ]]; then echo "== phone playthrough"; python3 /workspace/echo-test.py; python3 tests/phone_engine_test.py; python3 tests/phone_fort_test.py; python3 tests/phone_release_test.py; python3 tests/phone_sound_test.py; python3 tests/phone_memory_test.py; python3 tests/phone_whimber_test.py; python3 tests/phone_trail_test.py; python3 tests/phone_connect_test.py; python3 tests/phone_bondup_test.py; ECHO=owl python3 tests/phone_release_test.py http://localhost:8765/ owl- /tmp/; fi
 echo "ALL CHECKS PASSED"

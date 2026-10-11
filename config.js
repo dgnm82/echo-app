@@ -16,7 +16,8 @@ window.CONFIG = {
     {bond:500, id:'ready',   label:'Ready for the wild'}],
   maxDecayHours: 48, callbackMinAgeHours: 24, carryOnSeconds: 45, maxConversationsPerSession: 2, ambientMin: 25, ambientMax: 60, graceDays: 3,
   unlock: {trail:70, connect:140}, // game spec v0.3 §0: Trail at Talent 1 (bond 70), Connect at Favorite place (bond 140)
-  checkins: [[1,'postcard'],[3,'postcard'],[7,'postcard'],[14,'postcard'],[30,'postcard'],[60,'postcard']], // Echo_Postcards.docx v0.5 (postcards.js builds the text) napSeconds: 20, sitSeconds: 8 // nap/sit shortened from 120s/20s for demo
+  checkins: [[1,'postcard'],[3,'postcard'],[7,'postcard'],[14,'postcard'],[30,'postcard'],[60,'postcard']], // Echo_Postcards.docx v0.5 (postcards.js builds the text)
+  napSeconds: 20, sitSeconds: 8, // nap/sit shortened from 120s/20s for demo
 };
 // Creature profiles (spec v0.3). All spoken text lives in dialogue/*.json.
 window.CREATURES = {
