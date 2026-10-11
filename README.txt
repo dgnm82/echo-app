@@ -31,3 +31,11 @@ PIXEL ART — MILESTONE 3 (Fort Builder, game spec v0.2 §3)
   (hold = faster fall). ?board=hh plays the 5x6 handheld board.
 - Treehouse fort Home prop grows per finished game (frame → 1 → 2 floors → roof → decorations), opens at bond 140.
 - Assets: tools/bake_fort.py -> px/fort/. Phone playthrough: tests/phone_fort_test.py (in check.sh --phone).
+
+PIXEL ART — MILESTONE 4 (arrival, release, postcards)
+- Event sheets px/slyte_*_ev.png (tools/bake_events.py): arrival (15 frames, guide 9.2 P0) and release dissolve
+  (13 frames, P1 must-ship: hearts, outside-in dissolve with face last, home star). PIXEL.event(el,kind,cb).
+- Pixel title/setup card, discover (rustling bush, blinking eyes), arrival on reveal, glowing stepping-stone path
+  that grows over the grace days, release walk at night, closure + feelings cards (feelings never saved),
+  after-release meadow with pixel mailbox/signs, painted pixel postcards (px/pc_*.png, tools/bake_m4.py),
+  Memory Book page with postcard thumbnails. tests/phone_release_test.py runs in check.sh --phone.

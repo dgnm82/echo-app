@@ -87,24 +87,30 @@ function start(){
   Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released)return afterHome();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
-  h(`<div class="full" style="position:relative;background:none"><div style="font-size:72px">🦊🦉</div><h1>Project Echo</h1><p>Prototype for playtesting. A grown-up sets this up.</p>
-   <input id="nick" maxlength="12" placeholder="Child's nickname"><label style="font-size:16px"><input type="checkbox" id="voice" checked style="width:auto"> Chirp sounds</label>
-   <button class="btn" id="go">Start ▶</button></div>`);
+  const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=svg('owl',genEcho('owl'),'happy');
+  h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo">${PI('✨')}<span>Project Echo</span>${PI('✨')}</div>
+     <div class="tpair"><div class="tslot">${fox}</div><div class="tslot owl">${owl}</div></div>
+     <p>Prototype for playtesting. A grown-up sets this up.</p>
+     <input id="nick" maxlength="12" placeholder="Child's nickname" aria-label="Child's nickname"><label class="tchk"><input type="checkbox" id="voice" checked> Chirp sounds</label>
+     <button class="btn" id="go">${PI('▶')}<span class="lbl">Start</span></button></div></div>`);
   $('#go').onclick=()=>{S={child:($('#nick').value||'friend').slice(0,12),voice:$('#voice').checked};discover()};
 }
 function discover(){
   h(`<div class="scene dusk"><div class="bg pxbg pxbg-discover"></div><div class="bubble">The meadow at dusk. Something is moving… Tap one!</div>
-   <button class="propbtn" id="bush" aria-label="Rustling bush" style="left:2px;bottom:76px;width:66px;height:42px">${ART.props.bush}</button>
-   <button class="propbtn" id="tree" aria-label="Tree with glowing eyes" style="right:8px;bottom:80px;width:72px;height:150px">${ART.props.tree}</button>
-   <p style="position:absolute;bottom:3%;width:100%;text-align:center;opacity:.85;font-size:13px">(Card scan is deferred in this web prototype)</p></div>`);
+   <button class="propbtn rustle" id="bush" aria-label="Rustling bush" style="left:2px;bottom:76px;width:66px;height:42px"><i class="leafbit a"></i><i class="leafbit b"></i></button>
+   <button class="propbtn" id="tree" aria-label="Tree with glowing eyes" style="right:8px;bottom:80px;width:72px;height:150px"><i class="treeeyes"></i></button>
+   <p class="dnote">Card scan is deferred in this web prototype</p></div>`);
   $('#bush').onclick=()=>reveal('fox');$('#tree').onclick=()=>reveal('owl');
 }
 async function reveal(kind){
   Object.assign(S,{kind,g:genEcho(kind),needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],vars:{},seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString()});
   S.g.name=E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
   const e=E();
-  h(`<div class="scene ${e.bg}"><div class="creature" id="cr" style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)">${svg(kind,S.g,'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
-  setTimeout(()=>{const c=$('#cr');c.style.opacity=1;c.style.bottom='10%'},300);
+  const px=kind==='fox'&&window.PIXEL;
+  h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
+  // Arrival (guide 9.2, P0): falling star -> sparkles spiral in -> forms heart-out in light form -> blink open -> hop (~2 s)
+  if(px){const el=$('#cr .px-echo');el.dataset.stage=1;PIXEL.event(el,'arrival')}
+  else setTimeout(()=>{const c=$('#cr');c.style.opacity=1;c.style.bottom='10%'},300);
   setTimeout(()=>{talk(B('reveal'),60000);
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
         save();talk(B('reveal_reply'));remember('The day we met in the dusk meadow','met');
@@ -118,7 +124,7 @@ function home(greet){
   if(S.graceUntil&&now()>=S.graceUntil)return release(true);
   const graceDay=S.graceUntil?Math.floor((now()-(S.graceUntil-C.graceDays*864e5))/864e5)+1:0;
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
-   <div class="scene ${e.bg}" id="sc">${ready?`<div class="glowpath" id="path"></div><div style="position:absolute;right:4px;bottom:12%;font-size:22px;display:flex;flex-direction:column;pointer-events:none">${e.pathIcon.repeat(Math.max(1,graceDay))}</div>`:''}
+   <div class="scene ${e.bg}" id="sc">${ready?`<button class="pxpath" id="path" aria-label="Glowing path home" style="background-image:url(px/path_${Math.min(3,Math.max(1,graceDay))}.png)"></button>`:''}
    ${fortProp()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">Take home…</span></button>`:''}</div>
@@ -219,14 +225,14 @@ function dev(){
 function book(){
   const e=E(),d=document.createElement('div');d.className='book';
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>
-  <div style="width:140px">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
+  <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
   ${S.kind==='fox'?`<h2>Our treehouse fort</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
-  ${S.postcards?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
+  ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
   SCR().appendChild(d);d.querySelector('#x').onclick=()=>d.remove();
 }
 
@@ -361,14 +367,15 @@ function nightSky(round){
 function release(forced,go){
   if(mq.length&&!forced)return flushMilestones();
   const e=E(),g=S.g;if(!S.releasePath)S.releasePath='child';if(forced)S.releasePath='grace-ended';
-  h(`<div class="scene ${e.bg}" id="sc"><div class="glowpath"></div><div class="creature" id="cr" style="left:80%">${svg(S.kind,g,'happy')}</div><div class="bubble" id="b"></div></div>`);
+  h(`<div class="scene ${e.bg} relscene" id="sc"><div class="pxpath on" style="background-image:url(px/path_3.png)"></div><div class="creature" id="cr" style="left:80%">${svg(S.kind,g,'happy')}</div><div class="bubble" id="b"></div></div>`);
+  const pxe=$('#cr .px-echo');if(pxe)pxe.dataset.stage=4;   // bonded until the departure; stage 5 plays as the release event
   if(go){setTimeout(walk,500)}
   else if(forced){const ask=()=>{talk(B('release_forced'),60000);
     choices([['🤗','One more hug',null],['🌲',"Let's go",null]],i=>{if(i===0){hop();talk(B('hug_more'),2500);setTimeout(ask,2600)}else walk()})};ask()}
   else{talk(B('release_invite'),60000);
     choices([['🌲',"Let's go",null],['🤗','Wait',null]],i=>{if(i===1){S.releasePath=null;home();return}walk()})}
   function walk(){
-    const sc=$('#sc');sc.style.transition='filter 4s';sc.style.filter='hue-rotate(-20deg) brightness(.85)';const c=$('#cr');c.style.left='50%';
+    const sc=$('#sc');sc.classList.add('walking');const c=$('#cr');c.style.left='50%';setTimeout(()=>{const bg=sc.querySelector('.pxbg');if(bg)bg.className='bg pxbg pxbg-night'},2000);
     const lines=[{text:`We're going to ${e.release}. It's not far.`,expr:'happy'},...S.memories.slice(-3).map(m=>B('walk_memory',{memory:m.replace(/\.$/,'')})),B('walk_end')];let k=0;
     const step=()=>{if(k<lines.length){talk(lines[k++],60000);setTimeout(step,3300)}else gift()};step();
   }
@@ -381,6 +388,12 @@ function release(forced,go){
     talk(B('goodbye_ask'),60000);
     choices([['👋','Wave',null],['🤗','Hug',null],['👃','Nose-tap',null]],i=>{
       talk(B('farewell'),60000);
+      const px=$('#cr .px-echo');
+      if(px){ // pixel departure: a few steps up the path, a look back, then the must-ship release dissolve (face last, sparkles to the home star)
+        setTimeout(()=>{const c=$('#cr');c.classList.add('pxwalk');c.style.left='70%';
+          setTimeout(()=>{talk(B('look_back'),3000);
+            setTimeout(()=>{$('#b').style.display='none';PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk('…yip! …yip… …yip…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
+        return}
       setTimeout(()=>{const c=$('#cr');c.style.transition='all 3s';c.style.left='110%';c.style.transform='translateX(-50%) scale(.5)';
         setTimeout(()=>{c.style.transition='all .5s';c.style.left='88%';talk(B('look_back'),3000);
           setTimeout(()=>{c.style.opacity=0;talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3500)},2500)},3200)},6000);
@@ -389,14 +402,15 @@ function release(forced,go){
 }
 function closure(){
   const g=S.g;S.released=now();S.postcards=[];S.checkins=buildCheckins();save();
-  const d=full(`<h1>${g.name} is home, off to live its wild life.</h1><p>You helped it grow strong and brave.</p><div id="cont" style="height:64px"></div>`);
+  const d=full(`<div class="mcard closure"><div class="mtop">${PI('⭐')}<span class="mt">${g.name} is home</span>${PI('⭐')}</div><div class="cstar"><i></i></div><p class="mline">${g.name} is home, off to live its wild life.</p><p class="mline">You helped it grow strong and brave.</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
   setTimeout(()=>{d.querySelector('#cont').innerHTML='<button class="btn">Continue</button>';d.querySelector('button').onclick=()=>{d.remove();feelings()}},5000);
 }
 function feelings(){
   const f=[['😊','Happy'],['😌','Proud'],['😢','Sad'],['😮','Surprised'],['🙂','Okay']],sel=new Set();
-  const d=full(`<h1>How do you feel?</h1><p>You can pick more than one.</p><div class="row">${f.map((x,i)=>`<button class="btn" data-i="${i}"><span class="ic">${x[0]}</span>${x[1]}</button>`).join('')}</div><button class="btn" id="ok" style="background:#ffe27a">Done</button>`);
+  // nothing chosen here is saved (privacy rule); the screen only answers in the moment
+  const d=full(`<div class="mcard feel"><div class="mtop"><span class="mt">How do you feel?</span></div><p class="mline">You can pick more than one.</p><div class="fgrid">${f.map((x,i)=>`<button class="btn" data-i="${i}">${PI(x[0])}<span class="lbl">${x[1]}</span></button>`).join('')}</div><button class="btn" id="ok">Done</button></div>`);d.classList.add('milestone');
   d.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;sel.has(i)?sel.delete(i):sel.add(i);b.classList.toggle('sel');say(f[i][1])});
-  d.querySelector('#ok').onclick=()=>{d.remove();const d2=full(`<p style="font-size:22px">It's okay to feel more than one thing.</p><button class="btn">Memory Book</button>`);say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
+  d.querySelector('#ok').onclick=()=>{d.remove();const d2=full(`<div class="mcard"><div class="mtop">${PI('❤️')}</div><p class="mline">It's okay to feel more than one thing.</p><button class="btn">${PI('📖')}<span class="lbl">Memory Book</span></button></div>`);d2.classList.add('milestone');say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
 }
 function buildCheckins(){
   const e=E(),g=S.g,c=S.child,mem=(S.memories.filter(m=>!m.startsWith('You said'))[1]||S.memories[0]||'the day we met'),con=(S.constellations||[])[0],lc=mem.charAt(0).toLowerCase()+mem.slice(1);
@@ -414,13 +428,21 @@ function deliverCheckins(){
   due.forEach(k=>k.delivered=true);S.lastCheckinDate=new Date(now()).toDateString();
   S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><br>${k.text}`);save();return due[due.length-1];
 }
+function pcScene(k,i){return S.kind==='fox'?(k.type==='postcard'?['meadow','meadow','autumn'][i%3]:'meadow'):'night'}
+function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=e.token==='leaf'?'🍃':'🪶';
+  const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i></div>`
+    :k.type==='sign'?`<div class="pcfront sign" style="background-image:url(px/pc_${scene}.png)"><i class="pcsign">${PI(e.sign.split(' ')[0])}</i></div>`
+    :`<div class="pcfront note"><i class="pcstamp">${PI('✉️')}</i><span>a note from ${g.name}</span></div>`;
+  return `<div class="pcard${mini?' mini':''}">${front}<div class="pcback"><b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><p>${k.text}</p></div></div>`}
 function afterHome(){
   const e=E(),g=S.g;ov.innerHTML='';const fresh=deliverCheckins(),sign=fresh&&fresh.type==='sign',days=Math.floor((now()-S.released)/864e5),ic=e.sign.split(' ')[0];
-  h(`<div class="top"><b>The meadow · day +${days}</b><button class="btn small" id="book">📖</button></div><div class="scene ${e.bg}"><div class="bubble">${g.name} is home in ${e.release}.${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):' Letters from the wild arrive now and then.'}</div>
-  <button class="spot" id="mail" style="left:40%;bottom:20%;width:100px;height:100px;font-size:64px">${fresh&&!sign?'📬':'📪'}</button>
-  ${sign?`<button class="spot" id="sign" style="left:12%;bottom:42%;font-size:44px">${ic}</button>`:''}</div>
-  <div class="dock" style="grid-template-columns:1fr 1fr"><button class="btn" id="pc">⏩ Skip ahead a day (demo)</button><button class="btn" id="again">🌿 Discover a new Echo</button></div>`);
-  const show=()=>{const d=full(`<div style="font-size:56px">${fresh.type==='postcard'?'🖼️':fresh.type==='note'?'✉️':ic}</div><div style="width:150px">${svg(S.kind,g,'happy')}</div><p>${fresh.text}</p><button class="btn">Keep it in my Memory Book</button>`);say(fresh.text);d.querySelector('button').onclick=()=>{d.remove();$('#mail').textContent='📪'}};
+  h(`<div class="top"><b>The meadow · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after"><div class="bubble">${g.name} is home in ${e.release}.${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):' Letters from the wild arrive now and then.'}</div>
+  <div class="farstar"><i></i></div>
+  <button class="spot mailbox${fresh&&!sign?' full':''}" id="mail" aria-label="Mailbox">${PI(fresh&&!sign?'📬':'📪')}</button>
+  ${sign?`<button class="spot signspot" id="sign" aria-label="Something left for you">${PI(ic)}</button>`:''}</div>
+  <div class="dock two"><button class="btn" id="pc">${PI('⏩')}<span class="lbl">Skip a day (demo)</span></button><button class="btn" id="again">${PI('🌿')}<span class="lbl">New Echo</span></button></div>`);
+  const i=(S.checkins||[]).filter(k=>k.delivered).length-1;
+  const show=()=>{const d=full(`<div class="pcwrap">${postcardHTML(fresh,i)}<button class="btn">${PI('📖')}<span class="lbl">Keep it in my Memory Book</span></button></div>`);d.classList.add('milestone');say(fresh.text);d.querySelector('button').onclick=()=>{d.remove();const m=$('#mail');m.classList.remove('full');m.innerHTML=PI('📪')}};
   $('#book').onclick=book;$('#mail').onclick=()=>fresh&&!sign?show():book();if(sign)$('#sign').onclick=()=>{$('#sign').remove();show()};
   $('#pc').onclick=()=>{S.clockOffset=(S.clockOffset||0)+864e5;save();afterHome();const nx=(S.checkins||[]).find(k=>!k.delivered);if(nx)toast('Next letter around day +'+nx.day)};
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};

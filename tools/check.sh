@@ -9,5 +9,5 @@ echo "== lint_dialogue.py"; python3 tools/lint_dialogue.py dialogue | tail -4
 echo "== guardrail lint"; node tools/lint-dialogue.js dialogue --js game.js --js config.js | tail -1
 echo "== engine unit tests"; node tools/test-engine.js | tail -1
 echo "== fort builder tests"; node tools/test-fort.js | tail -1
-if [[ "${1:-}" == "--phone" ]]; then echo "== phone playthrough"; python3 /workspace/echo-test.py; python3 tests/phone_engine_test.py; python3 tests/phone_fort_test.py; fi
+if [[ "${1:-}" == "--phone" ]]; then echo "== phone playthrough"; python3 /workspace/echo-test.py; python3 tests/phone_engine_test.py; python3 tests/phone_fort_test.py; python3 tests/phone_release_test.py; fi
 echo "ALL CHECKS PASSED"

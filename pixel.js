@@ -22,7 +22,14 @@ function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.rel
 function slyte(g,stage){const v=variant(g&&g.seed);stage=stage||stageNow();
   return `<div class="echo-svg px-echo fox" role="img" aria-label="Slyte" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/slyte_${v.pal}_f${v.fluff}.png)"></div>`}
 // ---- 12 fps clock: idle loop + random blink / ear flick / tail flick, expression overrides
-function step(el){const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
+// one-shot event animations from the _ev sheet (guide 9.2): arrival (P0) and release dissolve (P1, must ship)
+const EV={arrival:{row:0,t:[1,1,1,1,1,1,1,1,1,1,1,3,2,2,6]},release:{row:1,t:[3,2,1,1,1,1,1,2,1,1,2,3,3]}};
+function event(el,kind,cb){if(!el)return;const e=EV[kind];if(!el._base)el._base=el.style.backgroundImage;
+  el._ev={kind,row:e.row,t:e.t,i:0,k:0,cb};el.style.backgroundImage=el._base.replace('.png','_ev.png');evStep(el)}
+function evStep(el){const v=el._ev;el.style.backgroundPosition=`${-v.i*N}px ${-v.row*N}px`;el._col='ev'+v.row+':'+v.i;
+  if(++v.k>=v.t[v.i]){v.k=0;v.i++;if(v.i>=v.t.length){el._ev=null;if(v.kind==='release'){el.style.visibility='hidden'}else{el.style.backgroundImage=el._base}
+    try{v.cb&&v.cb()}catch(e){console.error(e)}}}}
+function step(el){if(el._ev)return evStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
   if(!s){s=el._s={i:0,hold:0,q:[],nb:rand(24,72),ne:rand(48,108),nt:rand(60,120),t:0}}
   s.t++;let col;
   if(s.ex!==ex){s.ex=ex;s.si=0;s.sh=0}
@@ -49,13 +56,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 // ---- Echoes don't talk: they chirp. Sound comes later; this is the hook.
 W.Chirp={enabled:true,last:null,play(text,kind){this.last={text:String(text),kind,at:Date.now()};
   try{W.dispatchEvent(new CustomEvent('echo-chirp',{detail:this.last}))}catch(e){}}};
-function react(el,kind){if(!el)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
+function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
 const EMO={'🍎':'apple','🫐':'berry','🍯':'honey','🌰':'nut','🐟':'fish','🥓':'meat','💧':'water','✋':'hand','🌙':'moon','🌲':'tree','🤗':'heart','💗':'heart','❤️':'heart','📖':'book',
-  '✕':'close','🌟':'sticker','✨':'sparkle','💎':'gem','💬':'talk','👍':'yes','👂':'ear','🙂':'smile','😂':'laugh','😄':'laugh','🤪':'silly','😮':'wow','🤔':'question','⏰':'later','👋':'hand','😊':'smile','🎵':'talk','⭐':'sticker','🏠':'fort'};
+  '✕':'close','🌟':'sticker','✨':'sparkle','💎':'gem','💬':'talk','👍':'yes','👂':'ear','🙂':'smile','😂':'laugh','😄':'laugh','🤪':'silly','😮':'wow','🤔':'question','⏰':'later','👋':'hand','😊':'smile','🎵':'talk','⭐':'sticker','🏠':'fort','🤫':'smile','👃':'nose','🍃':'leaf','🪶':'feather','😌':'proud','😢':'sad','😮':'wow','📬':'mail_open','📪':'mail_closed','🖼️':'postcard','✉️':'postcard','⏩':'skip','🌿':'leaf','🦊':'sticker','▶':'skip','🌼':'sparkle','🍂':'leaf'};
 const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'laugh',ask_more:'talk',later:'later',wow:'wow',silly:'silly'};
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();

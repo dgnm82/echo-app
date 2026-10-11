@@ -123,3 +123,59 @@ input[type=checkbox]{width:8px;height:8px}
 .fortbook{display:flex;align-items:center;gap:4px}.fortbook .fortprop{position:static}
 .fortgame .fbdone{position:absolute;left:12px;top:70px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
 .fortgame .fbdprop{flex-basis:100%;display:flex;justify-content:center}.fortgame .fbdprop .fortprop{position:static}
+/* ===== Milestone 4: arrival, release, postcards, Memory Book ===== */
+/* title / setup */
+.scene.title{display:flex;align-items:center;justify-content:center}
+.tcard{position:relative;width:160px;padding:6px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.tlogo{display:flex;align-items:center;gap:3px;color:#C9782E}
+.tpair{display:flex;gap:8px}.tslot{width:48px;height:48px;position:relative}.tslot .echo-svg{width:48px;height:48px}
+.tcard p{margin:0;font-size:8px;line-height:10px}
+.tcard input#nick{width:140px;height:18px;padding:2px 4px;font-size:8px;border:1px solid #3B2A5C;background:#fff;color:#3B2A5C}
+.tchk{display:flex;align-items:center;gap:4px;font-size:8px}.tchk input{width:10px;height:10px;margin:0}
+.tcard #go{flex-direction:row;gap:3px;min-width:80px}
+/* discover: bush rustles in whole pixels, eyes blink in the tree */
+@keyframes rustle{0%,100%{transform:translateX(0)}25%{transform:translateX(-1px)}75%{transform:translateX(1px)}}
+.propbtn.rustle{animation:rustle 498ms steps(1,end) infinite}
+.leafbit{position:absolute;width:2px;height:2px;background:#8CCB7E;box-shadow:1px 1px 0 #4E8A5A}
+.leafbit.a{left:20px;top:2px;animation:leafup 1.3s steps(6,end) infinite}.leafbit.b{left:44px;top:6px;animation:leafup 1.7s steps(6,end) infinite .5s}
+@keyframes leafup{0%{transform:translate(0,0);opacity:1}100%{transform:translate(4px,-14px);opacity:0}}
+.treeeyes{position:absolute;left:30px;top:52px;width:2px;height:2px;background:#FFD27A;box-shadow:6px 0 0 #FFD27A;animation:blinkeyes 3s steps(1,end) infinite}
+@keyframes blinkeyes{0%,92%{opacity:1}93%,97%{opacity:0}98%{opacity:1}}
+.dnote{position:absolute;bottom:4px;left:0;right:0;margin:0;text-align:center;font-size:8px;line-height:9px;color:#FFF6E6}
+/* glowing path: grows with the grace days; release scene path */
+.pxpath{position:absolute;left:96px;bottom:70px;width:80px;height:80px;background:no-repeat 0 0;background-size:auto;border:0;padding:0;image-rendering:pixelated;animation:pathglow 1s steps(2,end) infinite;cursor:pointer}
+.relscene .pxpath{left:40px;width:140px;pointer-events:none}
+@keyframes pathglow{0%{filter:brightness(1)}100%{filter:brightness(1.15)}}
+.creature.pxwalk{transition:left 2s steps(12,end)!important}
+.relscene.walking .creature{transition:left 3s steps(18,end)}
+.relscene.homestar::after,.farstar i,.cstar i{content:"";position:absolute;width:1px;height:1px;background:#fff;box-shadow:1px 0 0 #FFD27A,-1px 0 0 #FFD27A,0 1px 0 #FFD27A,0 -1px 0 #FFD27A,2px 0 0 #FFD27A,-2px 0 0 #FFD27A,0 2px 0 #FFD27A,0 -2px 0 #FFD27A;animation:twinkle 664ms steps(1,end) infinite}
+.relscene.homestar::after{right:8px;top:10px}
+.farstar i{right:20px;top:18px}.farstar{position:absolute;inset:0;pointer-events:none}
+.cstar{position:relative;height:12px}.cstar i{left:50%;top:5px}
+@keyframes twinkle{0%{opacity:1}50%{opacity:.4}}
+.mcard .fgrid{display:grid;grid-template-columns:1fr;gap:3px;margin:4px 0}
+.mcard .fgrid .btn{flex-direction:row;justify-content:flex-start;gap:3px;min-height:22px;padding:2px 3px}
+.mcard .fgrid .btn.sel{background:#FFF0B8;box-shadow:0 0 0 1px #FF8FB8,0 2px 0 #3B2A5C}
+.mcard .btn{flex-direction:row;gap:3px}
+/* after release: mailbox and signs (16px icons drawn at 2x = integer) */
+.spot.mailbox{position:absolute;left:74px;bottom:70px;width:36px;height:36px;padding:0;background:#FFF6E6;border:1px solid #3B2A5C;display:flex;align-items:center;justify-content:center;font-size:0}
+.spot.mailbox .pxi,.spot.signspot .pxi{transform:scale(2)}
+.spot.mailbox.full{animation:rustle 664ms steps(1,end) infinite;box-shadow:0 0 0 1px #FFD27A}
+.spot.signspot{position:absolute;left:20px;bottom:120px;width:34px;height:34px;padding:0;background:none;border:0;display:flex;align-items:center;justify-content:center;animation:pathglow 1s steps(2,end) infinite}
+.dock.two{grid-template-columns:1fr 1fr}.dock.two .btn{flex-direction:row;gap:3px;height:32px}
+/* painted pixel postcards */
+.pcwrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pcard{width:160px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #1f1838;padding:3px}
+.pcfront{position:relative;width:152px;height:80px;background:no-repeat 0 0;image-rendering:pixelated}
+.pcfront.note{background:#FFFDF6;border:1px solid #EBD7BC;display:flex;align-items:center;justify-content:center;font-size:8px;color:#9A86B8}
+.pcecho{position:absolute;left:52px;bottom:4px;width:48px;height:48px}.pcecho .echo-svg{width:48px;height:48px}
+.pcstamp{position:absolute;right:3px;top:3px;padding:1px;background:#fff;border:1px dashed #FF8FB8}
+.pcsign{position:absolute;left:60px;bottom:10px;transform:scale(2)}
+.pcback{padding:3px 2px 1px;font-size:8px;line-height:10px}.pcback b{font-weight:normal;color:#C9782E}.pcback p{margin:2px 0 0}
+.pcard.mini{width:auto;margin:3px 0}
+/* Memory Book page */
+.book{background:#FFF6E6!important;color:#3B2A5C;font-size:8px;line-height:10px;padding:6px!important}
+.book h1{font-size:8px!important;line-height:10px;display:flex;align-items:center;gap:3px;color:#C9782E}
+.book h2{font-size:8px!important;line-height:10px;margin:8px 0 3px;padding-bottom:1px;border-bottom:1px solid #EBD7BC;color:#7A5AC8;display:flex;align-items:center;gap:3px}
+.bkportrait{width:56px;height:56px;margin:4px 0;display:flex;align-items:center;justify-content:center;background:url(px/pc_meadow.png) -48px -20px;border:1px solid #3B2A5C}
+.bkportrait .echo-svg{width:48px;height:48px}
