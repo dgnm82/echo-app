@@ -16,7 +16,8 @@ function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=
 function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}}
 function E(){return CR[S.kind]}
 // Echoes have no voices: they speak in musical chirps (sound comes later). Text-to-speech is off.
-function say(t){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind)}catch(e){}}
+function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}catch(e){}}
+const SFX=(n,o)=>{try{window.Sound&&Sound.play(n,o)}catch(e){}};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
 const PET_KEYS=new Set(['hello','fed_fav','game_end','hunt_found','seek_found','sky_named','gift_got','reveal_reply']);
@@ -109,7 +110,7 @@ async function reveal(kind){
   const px=kind==='fox'&&window.PIXEL;
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
   // Arrival (guide 9.2, P0): falling star -> sparkles spiral in -> forms heart-out in light form -> blink open -> hop (~2 s)
-  if(px){const el=$('#cr .px-echo');el.dataset.stage=1;PIXEL.event(el,'arrival')}
+  SFX(kind==='fox'?'slyte_arrival':'whimber_arrival');if(px){const el=$('#cr .px-echo');el.dataset.stage=1;PIXEL.event(el,'arrival')}
   else setTimeout(()=>{const c=$('#cr');c.style.opacity=1;c.style.bottom='10%'},300);
   setTimeout(()=>{talk(B('reveal'),60000);
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
@@ -117,7 +118,7 @@ async function reveal(kind){
         setTimeout(()=>{home();toast('Tip: tap the buttons below to care for '+S.g.name)},2400);
       })},1800)},1700);
 }
-function renderBadge(){const el=$('#bond');if(!el)return;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
+function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){
   ov.innerHTML='';
   const e=E(), m=mood(), w=want(), ready=S.badges.includes('ready');
@@ -144,7 +145,7 @@ function home(greet){
   setTimeout(flushMilestones,400);scheduleAmbient();
 }
 function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
-  b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text);clearTimeout(talk.t);
+  b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr);clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
 function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
 function hop(){react('happy')}
@@ -152,7 +153,7 @@ function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
 // two-tap reply choices (S9)
 function choices(list,cb,opts){
   let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
-  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
+  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;SFX('ui_tap');opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
 }
 function maybeChat(){
   const n=S.needs;
@@ -184,21 +185,21 @@ function feed(){
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
     S.needs.food=clamp(S.needs.food+(fav?C.restore.foodFav:C.restore.food));if(!S.foods.includes(f))S.foods.push(f);
-    addBond(fav?C.bond.feedFav:C.bond.feed);hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
+    addBond(fav?C.bond.feedFav:C.bond.feed);SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
 }
 function comfort(){
   if(asleep())return; const e=E();
   choices([['✋','Pet',null],['🌙','Sit together',null]],i=>{
     if(i===0){pet();return}
     const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
-    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);hop();maybeChat()},C.sitSeconds*1000);
+    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
   });
 }
-function pet(){if(asleep())return;S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();talk(B('pet'),1800)}
+function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();talk(B('pet'),1800)}
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
   sess.naps++;const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
-  S.napUntil=now()+C.napSeconds*1000;addBond(C.bond.nap);save();talk(B('nap'));setTimeout(home,1500);
+  S.napUntil=now()+C.napSeconds*1000;addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));setTimeout(home,1500);
 }
 function how(){
   const p=document.querySelector('.panel');if(p)return p.remove();const n=S.needs;
@@ -207,11 +208,11 @@ function how(){
   const d=document.createElement('div');d.className='panel howpanel';d.setAttribute('role','dialog');d.setAttribute('aria-label','How am I?');
   d.innerHTML=`<div class="ptitle">How am I?</div>`+rows.map(([k,ic,lb])=>`<div class="hrow">${window.PIXEL?PIXEL.icon(ic):''}<span class="hl">${lb}</span><span class="hbar">${seg(n[k])}</span></div>`).join('')+
    `<div class="hfoot">${window.PIXEL?PIXEL.icon('heart'):''}<span>Bond ${S.bond}/500</span></div><div class="hfoot"><span>Day ${S.days}</span></div><div class="hint2">Tap to close</div>`;
-  app.appendChild(d);d.onclick=()=>d.remove();
+  SFX('ui_panel_open');app.appendChild(d);d.onclick=()=>{SFX('ui_back');d.remove()};
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Voice ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b1').onclick=()=>{cl();addBond(60/C.demoSpeed);home()};
   d.querySelector('#b2').onclick=()=>{cl();addBond(500);home()};
@@ -233,13 +234,13 @@ function book(){
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
-  SCR().appendChild(d);d.querySelector('#x').onclick=()=>d.remove();
+  SFX('ui_panel_open');SCR().appendChild(d);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove()};
 }
 
 // ---------- mini-games (§6.3) ----------
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
-  const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
+  SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
   if(S.kind!=='fox')return start(nightSky); // Hollow Builder (Whimber's falling-blocks game) comes in a later milestone
   // Play picker (spec v0.2 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
   choices([['⭐','Shiny Search',null],['🏠','Fort Builder',null]],i=>start(i===0?shinyHunt:fortBuilder));
@@ -290,7 +291,7 @@ function fortBuilder(round){
   const fall=g.L.fallMs?setInterval(()=>{FortEngine.tick(g);after()},g.L.fallMs):0; // Easy: the piece hovers until B
   function stop(){alive=false;clearInterval(loop);if(fall)clearInterval(fall);document.removeEventListener('keydown',key)}
   function after(){for(const e of FortEngine.take(g)){
-      if(e.type==='row'||e.type==='row-auto'){glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
+      if(e.type==='settle')SFX('blocks_land',{vol:.6});if(e.type==='floor')SFX('blocks_floor_done');if(e.type==='row'||e.type==='row-auto'){SFX('blocks_row_glow');glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
       if(e.type==='high'){talk(B('stack_high'),1800)}
       if(e.type==='disguise'){react('excited');talk(B('stack_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
@@ -313,7 +314,7 @@ function fortBuilder(round){
   let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
   cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){FortEngine.moveTo(g,col);draw()}});
   cv.addEventListener('pointerup',e=>{if(!pd)return;const dy=(e.clientY-pd.y)/pd.k,dt=Date.now()-pd.t;if(dy>36&&dt<600){FortEngine.drop(g);after()}else if(!pd.moved&&Math.abs(dy)<8){FortEngine.rotate(g);draw()}pd=null});
-  $('#kL').onclick=()=>{FortEngine.move(g,-1);draw()};$('#kR').onclick=()=>{FortEngine.move(g,1);draw()};$('#kA').onclick=()=>{FortEngine.rotate(g);draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
+  $('#kL').onclick=()=>{if(FortEngine.move(g,-1))SFX('blocks_move',{vol:.5});draw()};$('#kR').onclick=()=>{if(FortEngine.move(g,1))SFX('blocks_move',{vol:.5});draw()};$('#kA').onclick=()=>{if(FortEngine.rotate(g))SFX('blocks_rotate',{vol:.6});draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
   // handheld scheme (spec §0, confirmed): ◀ ▶ move, A turn, B drop (hold = faster fall)
   function key(e){const k=e.key.toLowerCase();if(!document.getElementById('fb')){stop();return}
     if(k==='arrowleft'){FortEngine.move(g,-1)}else if(k==='arrowright'){FortEngine.move(g,1)}
@@ -342,7 +343,7 @@ function shinyHunt(round){
   if(camo&&Math.random()<.75){const t=document.createElement('div');t.textContent='🦊';t.style.cssText=`position:absolute;font-size:28px;left:${pos[target][0]+12}%;top:${pos[target][1]+8}%;pointer-events:none`;gs.appendChild(t)}
   if(S.talents.includes('Radar Ears'))setTimeout(()=>{jingle(pos[target][0]<40?-1:1);toast('🎵 jingle… (from the '+(pos[target][0]<40?'left':'right')+')')},1500);
   BTN.forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(b.classList.contains('miss'))return;
-    if(i===target){b.textContent=camo?'🦊':'💎';BTN.forEach(x=>x.onclick=null);talk(B(camo?'camo_found':'hunt_found'));if(round===0&&!S.memories.some(m=>m.includes('teapot')))S.memories.push(`You found the treasure in the ${spots[i][1]}`);roundDone(round,shinyHunt);return}
+    if(i===target){SFX('shiny_found_jingle');b.textContent=camo?'🦊':'💎';BTN.forEach(x=>x.onclick=null);talk(B(camo?'camo_found':'hunt_found'));if(round===0&&!S.memories.some(m=>m.includes('teapot')))S.memories.push(`You found the treasure in the ${spots[i][1]}`);roundDone(round,shinyHunt);return}
     miss++;b.classList.add('miss');
     if(miss>=4){BTN[target].animate([{transform:'translateY(0)'},{transform:'translateY(-14px)'},{transform:'translateY(0)'}],{duration:400,iterations:4});talk(B('hunt_point',{spot:spots[target][1]}))}
     else if(miss>=3)talk(B('hunt_hint',{spot:spots[target][1]}))
@@ -356,10 +357,10 @@ function nightSky(round){
   (S.constellations||[]).slice(-3).forEach(c=>{const t=document.createElement('div');t.textContent='✦ '+c;t.style.cssText='position:absolute;bottom:4%;left:4%;opacity:.5;font-size:12px';gs.appendChild(t)});
   talk(B('sky_start'),60000);let path=[];
   pts.forEach((p,i)=>{const b=document.createElement('button');b.className='star';b.style.left=p[0]+'%';b.style.top=p[1]+'%';gs.appendChild(b);
-    b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');if(path.length){const q=pts[path[path.length-1]];ln.innerHTML+=`<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" stroke="#ffe27a" stroke-width=".6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/>`}path.push(i);
+    b.onclick=()=>{if(b.classList.contains('on'))return;b.classList.add('on');SFX('sky_star_connect',{gap:30});if(path.length){const q=pts[path[path.length-1]];ln.innerHTML+=`<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" stroke="#ffe27a" stroke-width=".6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/>`}path.push(i);
       if(path.length===n){const opts=[['🥄','Spoon'],['🐈','Stretchy cat'],['🐋','Whale'],['🏠','House'],['🐉','Dragon'],['🎈','Balloon']].sort(()=>Math.random()-.5).slice(0,3);
         talk(B('sky_guess',{guess:opts[0][1].toLowerCase()}),60000);
-        choices(opts.map(o=>[o[0],o[1],null]),k=>{const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));roundDone(round,nightSky)})}}});
+        choices(opts.map(o=>[o[0],o[1],null]),k=>{SFX('sky_named_chord');const nm=`The ${opts[k][1]}`;(S.constellations=S.constellations||[]).push(nm);remember(`We named a constellation: ${nm}`,'constellation');talk(B('sky_named',{constellation:nm}));roundDone(round,nightSky)})}}});
   if(S.talents.includes('Night Vision')&&round===1)toast('Night Vision: the stars glow brighter for you');
 }
 
@@ -392,11 +393,11 @@ function release(forced,go){
       if(px){ // pixel departure: a few steps up the path, a look back, then the must-ship release dissolve (face last, sparkles to the home star)
         setTimeout(()=>{const c=$('#cr');c.classList.add('pxwalk');c.style.left='70%';
           setTimeout(()=>{talk(B('look_back'),3000);
-            setTimeout(()=>{$('#b').style.display='none';PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk('…yip! …yip… …yip…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
+            setTimeout(()=>{$('#b').style.display='none';SFX('slyte_release');PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk('…yip! …yip… …yip…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
         return}
       setTimeout(()=>{const c=$('#cr');c.style.transition='all 3s';c.style.left='110%';c.style.transform='translateX(-50%) scale(.5)';
         setTimeout(()=>{c.style.transition='all .5s';c.style.left='88%';talk(B('look_back'),3000);
-          setTimeout(()=>{c.style.opacity=0;talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3500)},2500)},3200)},6000);
+          setTimeout(()=>{SFX(S.kind==='fox'?'slyte_release':'whimber_release');c.style.opacity=0;talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3500)},2500)},3200)},6000);
     });
   }
 }

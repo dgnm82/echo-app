@@ -39,3 +39,12 @@ PIXEL ART — MILESTONE 4 (arrival, release, postcards)
   that grows over the grace days, release walk at night, closure + feelings cards (feelings never saved),
   after-release meadow with pixel mailbox/signs, painted pixel postcards (px/pc_*.png, tools/bake_m4.py),
   Memory Book page with postcard thumbnails. tests/phone_release_test.py runs in check.sh --phone.
+
+SOUND (quick round before milestone 5)
+- sound.js + sfx/ (28 mp3s copied from Cole's /workspace/echo/sound_design/samples; no music, shimmer or esp32).
+- Echo lines -> species chirp by expression (happy / curious / sleepy; sad+wistful -> sleepy), pet-phrase lines ->
+  pet motif. Care: feed eat, hug/pet + sit sparkle, rest nap tuck, Play opens picker (panel sound). UI: choice tap,
+  panel open/back (How am I?, Memory Book), bond tick. Cues: arrival + release. Games: Fort Builder move/rotate/land/
+  row/floor, Shiny Search found jingle, Night Sky star connect + named chord.
+- Web Audio, unlocked on first tap (iOS); core + species sounds preload after unlock, game sounds 1.5 s later.
+  Gated by the "Chirp sounds" toggle (dev: Sound on/off). tests/phone_sound_test.py in check.sh --phone.
