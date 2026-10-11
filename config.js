@@ -32,7 +32,7 @@ window.CREATURES = {
     "neutral": [
       "🍎 apple slice"
     ],
-    "place": "hollow log",
+    "place": "treehouse fort",
     "release": "the sunlit flower meadow",
     "treasure": "shiny trinket",
     "token": "leaf",

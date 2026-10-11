@@ -15,11 +15,8 @@ function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=
   if(ch)try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
 function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}}
 function E(){return CR[S.kind]}
-function localVoices(){try{return (speechSynthesis.getVoices()||[]).filter(v=>v.localService===true)}catch(e){return []}}
-function say(t){try{if(!(S&&S.voice&&window.speechSynthesis))return;const vs=localVoices();if(!vs.length)return; // on-device voices only; otherwise stay silent (text is still shown)
-  const en=vs.filter(v=>/^en/i.test(v.lang));const v=(en.length?en:vs)[0];speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(String(t).replace(/\(.*?\)/g,''));u.voice=v;u.lang=v.lang;u.rate=S.kind==='owl'?.85:1.15;u.pitch=S.kind==='owl'?.8:1.4;speechSynthesis.speak(u)}catch(e){}}
-if(window.speechSynthesis&&'onvoiceschanged' in speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+// Echoes have no voices: they speak in musical chirps (sound comes later). Text-to-speech is off.
+function say(t){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind)}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
 const PET_KEYS=new Set(['hello','fed_fav','game_end','hunt_found','seek_found','sky_named','gift_got','reveal_reply']);
@@ -89,14 +86,14 @@ function start(){
 }
 function setup(){
   h(`<div class="full" style="position:relative;background:none"><div style="font-size:72px">🦊🦉</div><h1>Project Echo</h1><p>Prototype for playtesting. A grown-up sets this up.</p>
-   <input id="nick" maxlength="12" placeholder="Child's nickname"><label style="font-size:16px"><input type="checkbox" id="voice" checked style="width:auto"> Read lines aloud</label>
+   <input id="nick" maxlength="12" placeholder="Child's nickname"><label style="font-size:16px"><input type="checkbox" id="voice" checked style="width:auto"> Chirp sounds</label>
    <button class="btn" id="go">Start ▶</button></div>`);
   $('#go').onclick=()=>{S={child:($('#nick').value||'friend').slice(0,12),voice:$('#voice').checked};discover()};
 }
 function discover(){
-  h(`<div class="scene dusk"><div class="bubble">The meadow at dusk. Something is moving… Tap one!</div>
-   <button class="propbtn" id="bush" aria-label="Rustling bush" style="left:4%;bottom:20%;width:48%;height:26%">${ART.props.bush}</button>
-   <button class="propbtn" id="tree" aria-label="Tree with glowing eyes" style="right:2%;bottom:24%;width:44%;height:46%">${ART.props.tree}</button>
+  h(`<div class="scene dusk"><div class="bg pxbg pxbg-discover"></div><div class="bubble">The meadow at dusk. Something is moving… Tap one!</div>
+   <button class="propbtn" id="bush" aria-label="Rustling bush" style="left:2px;bottom:76px;width:66px;height:42px">${ART.props.bush}</button>
+   <button class="propbtn" id="tree" aria-label="Tree with glowing eyes" style="right:8px;bottom:80px;width:72px;height:150px">${ART.props.tree}</button>
    <p style="position:absolute;bottom:3%;width:100%;text-align:center;opacity:.85;font-size:13px">(Card scan is deferred in this web prototype)</p></div>`);
   $('#bush').onclick=()=>reveal('fox');$('#tree').onclick=()=>reveal('owl');
 }
@@ -123,7 +120,7 @@ function home(greet){
    <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?'<button class="btn" id="rel" style="position:absolute;right:10px;top:10px">🌲 Take home…</button>':''}</div>
-   <div class="dock"><button class="btn" id="feed"><span class="ic">🍎</span>Feed</button><button class="btn" id="play"><span class="ic">🎲</span>Play</button><button class="btn" id="comfort"><span class="ic">💗</span>Comfort</button><button class="btn" id="rest"><span class="ic">🛏️</span>Rest</button></div>
+   <div class="dock"><button class="btn" id="feed"><span class="ic">🍎</span>Feed</button><button class="btn" id="play"><span class="ic">🎲</span>Play</button><button class="btn" id="comfort"><span class="ic">💗</span>Hug</button><button class="btn" id="rest"><span class="ic">🛏️</span>Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
   renderBadge();
   $('#feed').onclick=feed;$('#play').onclick=play;$('#comfort').onclick=comfort;$('#rest').onclick=rest;$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
