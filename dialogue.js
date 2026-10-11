@@ -29,7 +29,7 @@ D.use=function(species,sh,sp){
     persona:sp.persona||{petPhrases:[],words:[]},groupOf};
   return D.lib;
 };
-// topic = explicit conv.topic, else the second id segment (slyte_shadow_talk → shadow)
+// topic = explicit conv.topic, else the second id segment (slyte_puddle_talk → puddle)
 D.topic=c=>c.topic||(c.id.split('_')[1]||c.id);
 // pick this Echo's pet phrase and invented word deterministically from its seed (Overhaul D3)
 D.setPersona=function(seed){const p=D.lib.persona;const s=Math.abs(seed|0)||1;
