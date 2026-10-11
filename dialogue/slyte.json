@@ -1465,6 +1465,31 @@
     "text": "Psst. Those ones touch.",
     "expr": "curious"
    }
+  ],
+  "bond_up_2": [
+   {
+    "text": "Whoa! New sparkles! I think those are from us.",
+    "expr": "surprised",
+    "react": "excited"
+   }
+  ],
+  "bond_up_3": [
+   {
+    "text": "Look at my tail! Fluffier AND sparklier. We did that.",
+    "expr": "proud"
+   }
+  ],
+  "bond_up_4": [
+   {
+    "text": "I'm all the way me now. Best team in the meadow!",
+    "expr": "delighted"
+   }
+  ],
+  "bond_up_5": [
+   {
+    "text": "Look how bright I shine! We grew all this light together.",
+    "expr": "proud"
+   }
   ]
  },
  "conversations": [

@@ -1310,6 +1310,30 @@
     "text": "hoo? …those ones are neighbours.",
     "expr": "curious"
    }
+  ],
+  "bond_up_2": [
+   {
+    "text": "Hoo… my feathers are humming. I think they like you.",
+    "expr": "surprised"
+   }
+  ],
+  "bond_up_3": [
+   {
+    "text": "Oh… I can see my own colors now. How lovely.",
+    "expr": "delighted"
+   }
+  ],
+  "bond_up_4": [
+   {
+    "text": "Hoo-hoo… this is my real shape. Thank you for listening.",
+    "expr": "love"
+   }
+  ],
+  "bond_up_5": [
+   {
+    "text": "So much light… we made all of it together. Hoo.",
+    "expr": "proud"
+   }
   ]
  },
  "conversations": [

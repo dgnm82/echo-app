@@ -12,7 +12,7 @@ KNOWN_KEYS = {"hello","grace_hello","last_day","ready_hint","ask_ready","stay_mo
   "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust","release_invite",
   "release_forced","hug_more","walk_memory","walk_end","gift_ask","gift_got","goodbye_ask","farewell","look_back"}
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-KEY_PREFIX = {"slyte": ("talent_","pairs_","trail_","connect_","fallback_"), "whimber": ("talent_","pairs_","trail_","connect_","fallback_"), "shared": ("talent_","fallback_")}
+KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "shared": ("talent_","fallback_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
 NODE_KEYS = {"lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
 CHOICE_KEYS = {"intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}

@@ -84,3 +84,10 @@ Milestone 6 part 2: Connect (spec v0.3 §4), unlocks at bond 140
   No dead ends (auto shake + bark); hint glow after 3 s (easy) / 6 s. Handheld: ◀ ▶ bunch picker + A; B = free threading.
   Talents: Riddle Solver (straight line of 4+ = shape goal, +2), Super Jumper (one free reshuffle per game), Night Vision (biggest bunch glows), Lullaby (evening nap after).
 - Sounds reuse samples only: connect_group_3 / connect_big_group / connect_special_trinket, ui_tap per link, trail_pickup_1/_5, trail_bump_boop.
+
+Post-M6 round
+1) Bond-up scene (bond_up.md v0.1): bondup.js. Plays on the next return to Home (never mid-game, mid-conversation or during a nap), before any milestone card.
+   1->2 at 125, 2->3 at 250, 3->4 at 375, 4->5 at 500 (celebration only; the release flow is unchanged). Dim, integer zoom x2/x3, sparkle gather,
+   outside-in silhouette glow, squash + stage swap with one ramped warm flash, inside-out reveal, burst + hearts + hop, BOND UP! banner + bond_up_N line.
+   Skippable after 1 s. Saved as "Bond moments" in the Memory Book with Replay. Calm effects (dev menu / prefers-reduced-motion) = 2.5 s dither cross-fade.
+   Short bond-ups toggle in the dev menu. Sting: bondup_sting_slyte / _whimber (sound v2 cues).

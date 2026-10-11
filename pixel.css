@@ -223,3 +223,10 @@ input[type=checkbox]{width:8px;height:8px}
 .congame .conside{position:absolute;right:4px;bottom:56px;display:flex;align-items:center;gap:3px;color:#FFF6E6;font-size:8px}
 .congame .bubble{top:auto!important;bottom:4px;left:56px;right:2px;width:auto!important;transform:none;max-width:none;white-space:normal!important;z-index:5}
 .congame .fbdone{left:30px;top:90px;width:112px;z-index:6}
+/* ===== Bond-up scene (bond_up.md) ===== */
+canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60;image-rendering:pixelated}
+.bondup-ui{position:absolute;inset:0;z-index:61;pointer-events:none}
+.bondup-ui .bubanner{position:absolute;left:30px;right:30px;top:40px;background:#FFF6E6;border:2px solid #3B2A5C;box-shadow:0 0 0 1px #FFD27A;text-align:center;padding:4px;color:#3B2A5C;font-size:8px;display:flex;flex-direction:column;gap:3px}
+.bondup-ui .bubanner b{font-size:16px;color:#E0457B;font-weight:normal}
+.bondup-ui .buline{display:block!important;position:absolute;left:8px;right:8px;top:auto;bottom:74px;width:auto!important;transform:none;max-width:none;white-space:normal!important}
+.book .bmom{display:flex;align-items:center;justify-content:space-between;gap:4px}
