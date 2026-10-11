@@ -1902,21 +1902,21 @@
        "reply": "I KNEW it. I could smell the smoke.",
        "expr": "surprised",
        "memory": "You told me a pretend story: you have a dragon",
-       "memoryTag": "secret"
+       "memoryTag": "pretend"
       },
       {
        "icon": "🍪",
        "label": "I like cookies",
        "reply": "Cookies! The best. I'll tell the cookies you said hi.",
        "memory": "You told me you like cookies",
-       "memoryTag": "secret"
+       "memoryTag": "pretend"
       },
       {
        "icon": "🤫",
        "label": "I can fly!",
        "reply": "Pretend-flying! Take me with you! Whoosh!",
        "memory": "We pretended you could fly",
-       "memoryTag": "secret"
+       "memoryTag": "pretend"
       }
      ]
     }
@@ -4406,7 +4406,7 @@
       {
        "icon": "👑",
        "label": "A crown!",
-       "reply": "A crown! It fits my ear. Mostly. King Slyte!",
+       "reply": "A crown! It fits my ear. Mostly. Crown Slyte! Sparkly Slyte!",
        "expr": "happy",
        "goto": "c",
        "set": {
@@ -18805,8 +18805,8 @@
       },
       {
        "icon": "👑",
-       "label": "A tiny king",
-       "reply": "A tiny king! In a tiny castle. Your Tiny Highness!",
+       "label": "A tiny castle",
+       "reply": "A tiny castle! With a tiny drawbridge and a tiny snack room!",
        "expr": "happy",
        "goto": "c",
        "set": {

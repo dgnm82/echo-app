@@ -56,7 +56,7 @@ window.CREATURES = {
   },
   "owl": {
     "name": "Whimber",
-    "title": "The Night Watchman",
+    "title": "The Starlight Listener",
     "badge": "🪶",
     "bg": "owl-bg",
     "foods": [
@@ -77,7 +77,7 @@ window.CREATURES = {
       "Night Vision",
       "Silent Flight",
       "Super Radar Hearing",
-      "Nightmare Banisher"
+      "Sweet-Dream Lullaby"
     ],
     "trust": "wraps a big soft wing across the bottom of the screen like a velvet blanket, then gently preens the edge",
     "quirks": [

@@ -255,9 +255,9 @@
     "expr": "curious"
    }
   ],
-  "talent_Nightmare Banisher": [
+  "talent_Sweet-Dream Lullaby": [
    {
-    "text": "See that little gray cloud? Watch… (it turns into stars). There. I'll keep watch.",
+    "text": "Look… (the stars twinkle on, one by one). There. Sweet dreams. Hoo.",
     "expr": "love"
    }
   ],
@@ -437,7 +437,7 @@
     }
    },
    {
-    "text": "…the quiet hours. I'll keep watch over the sky.",
+    "text": "…the quiet hours. The sky and I keep each other company.",
     "expr": "sleepy",
     "cond": {
      "time": [
