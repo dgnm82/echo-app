@@ -22,3 +22,12 @@ PIXEL ART — MILESTONE 2 (care + dialogue)
   one-row-per-option choice sheet, How am I? panel with segmented bars, milestone card, Memory Book chips.
 - 26 hand-placed 16x16 icons (px/i_*.png) replace emoji in care/dialogue UI; dialogue choices use their
   reply-intent icon. Dev button moved to the scene corner, tip/toast below it.
+
+PIXEL ART — MILESTONE 3 (Fort Builder, game spec v0.2 §3)
+- fort.js: pure falling-blocks engine (no game over; full rows become fort floor rows; 3 rows = a floor; pan-up when
+  the stack nears the top, gaps become windows). Levels easy/standard/big-kid per spec. tools/test-fort.js (9 tests).
+- Play picker for Slyte: Shiny Search (signature, daily +3 bond) and Fort Builder (day 1). Whimber: Night Sky only.
+- Controls: phone drag / tap-to-turn / swipe-down + on-screen ◀ ▶ A B; keyboard ←/→, A/Z/↑/Space turn, B/X/Enter drop
+  (hold = faster fall). ?board=hh plays the 5x6 handheld board.
+- Treehouse fort Home prop grows per finished game (frame → 1 → 2 floors → roof → decorations), opens at bond 140.
+- Assets: tools/bake_fort.py -> px/fort/. Phone playthrough: tests/phone_fort_test.py (in check.sh --phone).

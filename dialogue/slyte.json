@@ -1343,6 +1343,82 @@
     "text": "Where was I? …Nowhere. Nice place.",
     "expr": "happy"
    }
+  ],
+  "stack_start": [
+   {
+    "text": "Fort time! Planks go up, not sideways. Mostly.",
+    "expr": "excited",
+    "react": "excited"
+   },
+   {
+    "text": "Let's build my fort. You stack, I supervise!",
+    "expr": "happy"
+   }
+  ],
+  "stack_floor_next": [
+   {
+    "text": "Next floor! Up we go.",
+    "expr": "happy"
+   },
+   {
+    "text": "Another floor. My fort is getting tall!",
+    "expr": "curious"
+   }
+  ],
+  "stack_row": [
+   {
+    "text": "Ooh, a whole row. So cozy.",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "That row is perfect. Fwip!",
+    "expr": "delighted"
+   },
+   {
+    "text": "Gaps are fine. Those are windows.",
+    "expr": "giggling"
+   }
+  ],
+  "stack_floor": [
+   {
+    "text": "A whole floor! I'm moving in.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Floor done! I can see my tail from up here.",
+    "expr": "proud"
+   }
+  ],
+  "stack_high": [
+   {
+    "text": "Higher! Higher!",
+    "expr": "excited"
+   },
+   {
+    "text": "Let's build higher! The sky is close.",
+    "expr": "curious"
+   }
+  ],
+  "stack_disguise": [
+   {
+    "text": "Hee hee. That block was secretly ME.",
+    "expr": "giggling",
+    "react": "excited"
+   }
+  ],
+  "stack_done": [
+   {
+    "text": "Roof on! Our fort is three floors high!",
+    "expr": "proud",
+    "react": "happy"
+   },
+   {
+    "text": "I put the roof on myself. Ta-da!",
+    "expr": "delighted",
+    "react": "happy"
+   }
   ]
  },
  "conversations": [

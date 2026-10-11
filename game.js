@@ -119,7 +119,7 @@ function home(greet){
   const graceDay=S.graceUntil?Math.floor((now()-(S.graceUntil-C.graceDays*864e5))/864e5)+1:0;
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg}" id="sc">${ready?`<div class="glowpath" id="path"></div><div style="position:absolute;right:4px;bottom:12%;font-size:22px;display:flex;flex-direction:column;pointer-events:none">${e.pathIcon.repeat(Math.max(1,graceDay))}</div>`:''}
-   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
+   ${fortProp()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">Take home…</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
@@ -205,7 +205,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Voice ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b4">Voice ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b1').onclick=()=>{cl();addBond(60/C.demoSpeed);home()};
   d.querySelector('#b2').onclick=()=>{cl();addBond(500);home()};
@@ -213,6 +213,7 @@ function dev(){
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
   d.querySelector('#b6').onclick=cl;
+  d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
 }
 function book(){
@@ -222,6 +223,7 @@ function book(){
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
+  ${S.kind==='fox'?`<h2>Our treehouse fort</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.postcards?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
@@ -231,11 +233,92 @@ function book(){
 // ---------- mini-games (§6.3) ----------
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
-  sess.games++; S.needs.rest=clamp(S.needs.rest-5); (S.kind==='fox'?shinyHunt:nightSky)(0);
+  const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
+  if(S.kind!=='fox')return start(nightSky); // Hollow Builder (Whimber's falling-blocks game) comes in a later milestone
+  // Play picker (spec v0.2 §0): the signature game first with a star and the daily bonus, then Fort Builder (day 1)
+  choices([['⭐','Shiny Search',null],['🏠','Fort Builder',null]],i=>start(i===0?shinyHunt:fortBuilder));
 }
 function gameShell(title){h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 function endGame(finished){if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
-function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);if(round>=2)setTimeout(()=>endGame(true),2200);else setTimeout(()=>next(round+1),2200)}
+function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
+  // signature-only daily bonus (spec §0/§4): first signature round of the day
+  if((next===shinyHunt||next===nightSky)&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
+  if(round>=2)setTimeout(()=>endGame(true),2200);else setTimeout(()=>next(round+1),2200)}
+
+// ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
+function fortState(){return S.fort=S.fort||{stage:0,decor:0,homes:0,rounds:0,slow:0,best:0}}
+function fortLevel(){const f=fortState(),set=S.fortLevel||'auto';
+  if(f.rounds<2)return 'easy';                 // the first 2 rounds ever are forced to Easy
+  if(set!=='auto')return set;                  // grown-up toggle (dev tools)
+  return f.slow>=2?'easy':'standard'}          // automatic Easy after 2 slow rounds; drops back after a quick one
+function fortProp(){if(S.kind!=='fox')return '';const f=fortState(),open=S.badges.includes('place')?'_open':'';
+  const nm=f.stage>=3&&f.decor?`fort_3_d${f.decor}`:`fort_${f.stage}`;
+  return `<div class="fortprop${open?' open':''}" aria-label="Treehouse fort" style="background-image:url(px/fort/${nm}${open}.png)"></div>`}
+function fortBuilder(round){
+  const f=fortState(),level=fortLevel(),hh=/[?&]board=hh/.test(location.search),t0=now();
+  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+f.rounds*7+round,w:hh?5:8,h:hh?6:12,disguise:S.talents.includes('Master of Disguise'),round});
+  const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
+  gameShell(`Fort · floor ${round+1}/3`);const gs=$('#gs');gs.classList.add('fortgame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Fort board"></canvas>
+    <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
+      <div class="fbrows" id="fbrows"></div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
+    <div class="fbecho creature" id="cr">${svg('fox',S.g,'happy')}</div>
+    <canvas id="fbs" class="fbstrip" width="${W}" height="24" style="width:${W}px" aria-label="Home so far"></canvas>
+    <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
+  const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d'),sx=$('#fbs').getContext('2d');
+  const IM={};['plank','window','leafroof','door','lantern','flag','slyte'].forEach(k=>{IM[k]=new Image();IM[k].src=`px/fort/b_${k}.png`;IM['m_'+k]=new Image();IM['m_'+k].src=`px/fort/m_${k==='slyte'?'plank':k}.png`});
+  IM.ghost=new Image();IM.ghost.src='px/fort/ghost.png';[0,1,2].forEach(i=>{IM['glow'+i]=new Image();IM['glow'+i].src=`px/fort/glow${i}.png`});
+  let glowRows=0,glowT=0,alive=true,rowsSaid=0;
+  function draw(){if(!alive)return;cx.fillStyle='#2E2452';cx.fillRect(0,0,W,H);cx.fillStyle='#3B2A5C';
+    for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)if((x+y)%2)cx.fillRect(x*16,y*16,16,16);
+    for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){const c=g.grid[y][x];if(c)cx.drawImage(IM[c],x*16,y*16)}
+    const p=g.piece;if(p){const gy=FortEngine.ghostY(g);if(gy!==p.y)p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
+      p.cells.forEach(([a,b],i)=>{if(p.y+b>=0)cx.drawImage(IM[p.mats[i]],(p.x+a)*16,(p.y+b)*16)})}
+    nx.clearRect(0,0,32,32);const q=g.next;if(q){const s=q.cells.length>3||Math.max(...q.cells.map(c=>c[0]))>1?8:16;q.cells.forEach(([a,b],i)=>nx.drawImage(IM[q.mats[i]],a*s,b*s,s,s))}
+    sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);const rows=g.strip.slice(-3);
+    rows.forEach((r,j)=>r.forEach((c,x)=>sx.drawImage(IM['m_'+(c==='slyte'?'plank':c)],x*8+(W-g.w*8)/2,24-8*(rows.length-j))));
+    if(glowRows>0){sx.drawImage(IM['glow'+(glowT%3)],0,24-8*Math.min(3,glowRows),W,8*Math.min(3,glowRows));glowT++;if(glowT>8){glowRows=0;glowT=0}}
+    $('#fbrows').innerHTML=Array.from({length:g.goal},(_,i)=>`<i class="${i<g.rows?'on':''}"></i>`).join('');
+    if(g.L.stars)$('#fbstars').innerHTML=Array.from({length:3},(_,i)=>window.PIXEL?PIXEL.icon(i<FortEngine.stars(g)?'sticker':'talk').replace('class="pxi"',`class="pxi${i<FortEngine.stars(g)?'':' dim'}"`):'').join('');}
+  const loop=setInterval(draw,83);   // 12 fps
+  const fall=g.L.fallMs?setInterval(()=>{FortEngine.tick(g);after()},g.L.fallMs):0; // Easy: the piece hovers until B
+  function stop(){alive=false;clearInterval(loop);if(fall)clearInterval(fall);document.removeEventListener('keydown',key)}
+  function after(){for(const e of FortEngine.take(g)){
+      if(e.type==='row'||e.type==='row-auto'){glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
+      if(e.type==='high'){talk(B('stack_high'),1800)}
+      if(e.type==='disguise'){react('excited');talk(B('stack_disguise'),2000)}}
+    if(g.done&&alive)finish();draw()}
+  function chirp(){try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}}
+  function finish(){draw();stop();const secs=(now()-t0)/1000;f.rounds++;
+    if(level!=='bigkid'){if(secs>60)f.slow++;else if(secs<35&&f.slow)f.slow=0}
+    if(S.talents.includes('Super Jumper'))react('happy');
+    if(round<2){banner(`Floor ${round+1} done!`,'');talk(B('stack_floor'),2000);roundDone(round,fortBuilder);save();return}
+    // round 3: Slyte places the roof itself and hops; the Home prop grows one step (frame -> 1 -> 2 floors -> roof, then decorations)
+    sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);for(let x=0;x<g.w;x++)sx.drawImage(IM.m_leafroof,x*8+(W-g.w*8)/2,16);
+    setExpr('happy');react('happy');talk(B('stack_done'),2200);
+    const roofBefore=f.stage>=3;if(f.stage<3)f.stage++;else f.decor=Math.min(3,f.decor+1);
+    if(f.stage>=3&&!roofBefore){f.homes++;remember('We built the fort three floors high','fort_home')}
+    else remember(f.stage<3?`We built floor ${f.stage} of the treehouse fort`:'We added a decoration to the treehouse fort','fort_'+f.stage+'_'+f.decor);
+    if(f.stage>=3)(S.homesBuilt=S.homesBuilt||[]).push({day:S.days,decor:f.decor});
+    banner(f.stage>=3&&!roofBefore?'Fort built!':roofBefore?'New decoration!':`Fort floor ${f.stage} built!`,fortProp());
+    save();roundDone(round,fortBuilder)}
+  function banner(t,img){gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${t}</span>${PI('✨')}${img?`<div class="fbdprop">${img}</div>`:''}${g.L.stars?`<div>${Array.from({length:FortEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`)}
+  // touch: drag the piece sideways, tap it to turn, swipe down to drop
+  let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){FortEngine.moveTo(g,col);draw()}});
+  cv.addEventListener('pointerup',e=>{if(!pd)return;const dy=(e.clientY-pd.y)/pd.k,dt=Date.now()-pd.t;if(dy>36&&dt<600){FortEngine.drop(g);after()}else if(!pd.moved&&Math.abs(dy)<8){FortEngine.rotate(g);draw()}pd=null});
+  $('#kL').onclick=()=>{FortEngine.move(g,-1);draw()};$('#kR').onclick=()=>{FortEngine.move(g,1);draw()};$('#kA').onclick=()=>{FortEngine.rotate(g);draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
+  // handheld scheme (spec §0, confirmed): ◀ ▶ move, A turn, B drop (hold = faster fall)
+  function key(e){const k=e.key.toLowerCase();if(!document.getElementById('fb')){stop();return}
+    if(k==='arrowleft'){FortEngine.move(g,-1)}else if(k==='arrowright'){FortEngine.move(g,1)}
+    else if(k==='a'||k==='z'||k==='arrowup'||k===' '){FortEngine.rotate(g)}
+    else if(k==='b'||k==='x'||k==='enter'){if(e.repeat){FortEngine.soft(g)}else FortEngine.drop(g)}
+    else if(k==='arrowdown'){FortEngine.soft(g)}else return;e.preventDefault();after()}
+  document.addEventListener('keydown',key);
+  $('#quit').onclick=()=>{stop();endGame(false)};
+  window.__fort=g;window.__fortAfter=after;
+  talk(round===0?B('stack_start'):B('stack_floor_next'),2400);draw();
+}
 function shinyHunt(round){
   gameShell(`Shiny Search · round ${round+1}/3`);const gs=$('#gs');
   const spots=[['🪵','log','woody'],['🍂','leaf pile','crunchy'],['🏠','treehouse fort','cozy'],['🫖','teapot','tea-ish'],['🥾','boot','smelly']];
@@ -343,6 +426,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

@@ -52,9 +52,9 @@ W.Chirp={enabled:true,last:null,play(text,kind){this.last={text:String(text),kin
 function react(el,kind){if(!el)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
 const EMO={'🍎':'apple','🫐':'berry','🍯':'honey','🌰':'nut','🐟':'fish','🥓':'meat','💧':'water','✋':'hand','🌙':'moon','🌲':'tree','🤗':'heart','💗':'heart','❤️':'heart','📖':'book',
-  '✕':'close','🌟':'sticker','✨':'sparkle','💎':'gem','💬':'talk','👍':'yes','👂':'ear','🙂':'smile','😂':'laugh','😄':'laugh','🤪':'silly','😮':'wow','🤔':'question','⏰':'later','👋':'hand','😊':'smile','🎵':'talk'};
+  '✕':'close','🌟':'sticker','✨':'sparkle','💎':'gem','💬':'talk','👍':'yes','👂':'ear','🙂':'smile','😂':'laugh','😄':'laugh','🤪':'silly','😮':'wow','🤔':'question','⏰':'later','👋':'hand','😊':'smile','🎵':'talk','⭐':'sticker','🏠':'fort'};
 const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'laugh',ask_more:'talk',later:'later',wow:'wow',silly:'silly'};
-const ICON_FILE={feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
+const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
 W.PIXEL={react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};

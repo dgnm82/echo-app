@@ -4,7 +4,7 @@ window.CONFIG = {
   decayPerHour: {food:8, play:6, rest:5, comfort:4},
   restore: {food:30, foodFav:40, play:15, playFinish:15, rest:50, restFav:60, pet:5, sit:15},
   sessionLimits: {feeds:3, games:2, naps:1},
-  bond: {feed:3, feedFav:6, round:4, pet:1, sit:5, nap:3, reply:3, hello:5},
+  bond: {feed:3, feedFav:6, round:4, signatureDaily:3, pet:1, sit:5, nap:3, reply:3, hello:5},
   milestones: [
     {bond:20,  id:'name',    label:'First friend sticker'},
     {bond:70,  id:'talent1', label:'Talent 1'},
