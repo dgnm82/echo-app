@@ -37,7 +37,9 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000)}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
-function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;document.body.appendChild(d);return d}
+const SCR=()=>document.getElementById('screen')||document.body;
+const PI=(e,intent)=>window.PIXEL?PIXEL.icon(PIXEL.iconName(e,intent)):e;
+function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;SCR().appendChild(d);return d}
 const now=()=>Date.now()+((S&&S.clockOffset)||0);
 const clamp=v=>Math.max(0,Math.min(100,v));
 
@@ -76,7 +78,7 @@ function flushMilestones(){
   else if(m.id==='trust'){title='Trust gesture';line=B('trust')}
   else if(m.id==='ready'){title='Ready for the wild';line=B('ready_hint')}
   S.stickers.push(title);save();
-  const d=full(`<div style="font-size:64px">${ti>=0?'✨':'🌟'}</div><h1>${title}</h1><div style="width:170px">${svg(S.kind,S.g,line.expr||'happy')}</div><p>${line.text}</p><p style="font-size:14px;opacity:.7">Sticker added to your Memory Book</p><button class="btn">Yay!</button>`);
+  const d=full(`<div class="mcard"><div class="mtop">${PI(ti>=0?'✨':'🌟')}<span class="mt">${title}</span>${PI(ti>=0?'✨':'🌟')}</div><div class="mstage">${svg(S.kind,S.g,line.expr||'happy')}</div><p class="mline">${line.text}</p><p class="mnote">${PI('🌟')}<span>Sticker added to your Memory Book</span></p><button class="btn">Yay!</button></div>`);d.classList.add('milestone');
   say(line.text); d.querySelector('button').onclick=()=>{d.remove();home();setTimeout(flushMilestones,300)};
 }
 function talentLine(t){return B('talent_'+t).text}
@@ -109,18 +111,18 @@ async function reveal(kind){
         setTimeout(()=>{home();toast('Tip: tap the buttons below to care for '+S.g.name)},2400);
       })},1800)},1700);
 }
-function renderBadge(){const el=$('#bond');if(el)el.innerHTML=`${E().badge}<span class="bar"><i style="width:${S.bond/5}%"></i></span>`}
+function renderBadge(){const el=$('#bond');if(!el)return;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){
   ov.innerHTML='';
   const e=E(), m=mood(), w=want(), ready=S.badges.includes('ready');
   if(S.graceUntil&&now()>=S.graceUntil)return release(true);
   const graceDay=S.graceUntil?Math.floor((now()-(S.graceUntil-C.graceDays*864e5))/864e5)+1:0;
-  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small" id="book">📖</button><button class="btn small" id="how">?</button></div></div>
+  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg}" id="sc">${ready?`<div class="glowpath" id="path"></div><div style="position:absolute;right:4px;bottom:12%;font-size:22px;display:flex;flex-direction:column;pointer-events:none">${e.pathIcon.repeat(Math.max(1,graceDay))}</div>`:''}
-   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${w}</div>`:''}
+   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
-   ${ready?'<button class="btn" id="rel" style="position:absolute;right:10px;top:10px">🌲 Take home…</button>':''}</div>
-   <div class="dock"><button class="btn" id="feed"><span class="ic">🍎</span>Feed</button><button class="btn" id="play"><span class="ic">🎲</span>Play</button><button class="btn" id="comfort"><span class="ic">💗</span>Hug</button><button class="btn" id="rest"><span class="ic">🛏️</span>Rest</button></div>
+   ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">Take home…</span></button>`:''}</div>
+   <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
   renderBadge();
   $('#feed').onclick=feed;$('#play').onclick=play;$('#comfort').onclick=comfort;$('#rest').onclick=rest;$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
@@ -143,7 +145,7 @@ function hop(){react('happy')}
 function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
 // two-tap reply choices (S9)
 function choices(list,cb,opts){
-  let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}"><span class="ic">${c[0]}</span>${c[1]}</button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
+  let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
 }
 function maybeChat(){
@@ -173,7 +175,7 @@ function feed(){
   if(asleep())return; const e=E();
   if(sess.feeds>=C.sessionLimits.feeds||S.needs.food>=95)return talk(B('full'));
   const pool=[...e.foods].sort(()=>Math.random()-.5).slice(0,2); if(!pool.includes(S.g.fav))pool[0]=S.g.fav; pool.push(e.neutral[0]); pool.sort(()=>Math.random()-.5);
-  ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}"><span class="ic">${f.split(' ')[0]}</span>${f.split(' ').slice(1).join(' ')}</button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
+  ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
     S.needs.food=clamp(S.needs.food+(fav?C.restore.foodFav:C.restore.food));if(!S.foods.includes(f))S.foods.push(f);
     addBond(fav?C.bond.feedFav:C.bond.feed);hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
@@ -194,7 +196,11 @@ function rest(){
 }
 function how(){
   const p=document.querySelector('.panel');if(p)return p.remove();const n=S.needs;
-  const d=document.createElement('div');d.className='panel';d.innerHTML=`<b>How am I?</b>`+['food','play','rest','comfort'].map(k=>`<div>${k}<span class="bar"><i style="width:${n[k]}%"></i></span></div>`).join('')+`<div style="opacity:.7">Bond ${S.bond}/500 · day ${S.days}</div>`;
+  const seg=v=>Array.from({length:10},(_,i)=>`<i class="hs${v>i*10+5?' on':''}"></i>`).join('');
+  const rows=[['food','feed','Food'],['play','play','Play'],['rest','sleep','Rest'],['comfort','pet','Hugs']];
+  const d=document.createElement('div');d.className='panel howpanel';d.setAttribute('role','dialog');d.setAttribute('aria-label','How am I?');
+  d.innerHTML=`<div class="ptitle">How am I?</div>`+rows.map(([k,ic,lb])=>`<div class="hrow">${window.PIXEL?PIXEL.icon(ic):''}<span class="hl">${lb}</span><span class="hbar">${seg(n[k])}</span></div>`).join('')+
+   `<div class="hfoot">${window.PIXEL?PIXEL.icon('heart'):''}<span>Bond ${S.bond}/500</span></div><div class="hfoot"><span>Day ${S.days}</span></div><div class="hint2">Tap to close</div>`;
   app.appendChild(d);d.onclick=()=>d.remove();
 }
 function dev(){
@@ -211,15 +217,15 @@ function dev(){
 }
 function book(){
   const e=E(),d=document.createElement('div');d.className='book';
-  d.innerHTML=`<button class="btn" style="float:right" id="x">✕</button><h1 style="margin:0">📖 Memory Book</h1>
+  d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>
   <div style="width:140px">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
-  <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">🌟 ${s}</span>`).join('')||'<i>none yet</i>'}
-  <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">✨ ${s}</span>`).join('')||'<i>none yet</i>'}
-  <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${s}${s===S.g.fav?' ❤️':''}</span>`).join('')||'<i>none yet</i>'}
-  <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">💎 ${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.postcards?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
-  document.body.appendChild(d);d.querySelector('#x').onclick=()=>d.remove();
+  SCR().appendChild(d);d.querySelector('#x').onclick=()=>d.remove();
 }
 
 // ---------- mini-games (§6.3) ----------

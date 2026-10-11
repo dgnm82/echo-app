@@ -147,7 +147,7 @@ D.run=function(conv,ui,done){
         const li=shown.findIndex(s=>s.intent==='listen');
         T.set(()=>{if(li>=0)pickChoice(li,true);else{answered=true;finish({carriedOn:true})}},Math.max(2000,cl.text.length*55))},D.cfg.carryOnMs)};
       arm();
-      ui.choose(shown.map(s=>[s.icon,s.label]),i=>pickChoice(i),{onTap:arm});
+      ui.choose(shown.map(s=>[s.icon,s.label,s.intent]),i=>pickChoice(i),{onTap:arm});
     }else{ui.say(line);const wait=n.wait||Math.max(1800,line.text.length*55);
       if(n.next&&!tangentUsed&&ui.tangent&&D.rand()<(ui.tangentRate||0.15)){tangentUsed=true;
         T.set(()=>{const t=ui.tangent();if(!t)return go(n.next);ui.say(t);T.set(()=>go(n.next),Math.max(2200,t.text.length*55))},wait)}

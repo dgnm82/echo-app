@@ -18,11 +18,52 @@ FRAMES = [('idle', p) for p in IDLE] + [
   ('tail1', dict(pose=dict(bob=0, sway=14))), ('tail2', dict(pose=dict(bob=0, sway=-7))),
   ('happy', dict(pose=dict(bob=1, sway=4), eyes='happy', hearts=True)),
 ]
+# ---- care frames (guide 9.2: eat, pet, curious, shy, sleepy/nap, plus sad/surprised/think/giggle for expressions)
+FRAMES += [
+  ('eat1', dict(pose=dict(bob=1, sway=2), xf=(1, 1, -9, 0), eyes='open+mopen')), ('eat2', dict(pose=dict(bob=1, sway=2), xf=(1, 1, -9, 0), eyes='happy+mchomp')),
+  ('pet1', dict(pose=dict(bob=1, sway=4), xf=(1.02, .96, 0, 0), eyes='happy+blush2', hearts=True)), ('pet2', dict(pose=dict(bob=0, sway=3), eyes='happy+blush2', hearts=True)),
+  ('curious1', dict(pose=dict(bob=0, sway=6), xf=(1, 1, 9, 0), ear=1.1, eyes='wide+mo')), ('curious2', dict(pose=dict(bob=1, sway=8), xf=(1, 1, 9, 0), ear=1.1, eyes='open+mo')),
+  ('shy1', dict(pose=dict(bob=1, sway=-26), eyes='happy+blush2')), ('shy2', dict(pose=dict(bob=1, sway=-22), eyes='half+blush2')),
+  ('sleepy1', dict(pose=dict(bob=1, sway=0), eyes='half')), ('sleepy2', dict(pose=dict(bob=1, sway=-4), eyes='blink')),
+  ('nap1', dict(pose=dict(bob=1, sway=-12), eyes='blink+z1', halo=0)), ('nap2', dict(pose=dict(bob=0, sway=-12), eyes='blink+z2', halo=0)),
+  ('sad', dict(pose=dict(bob=1, sway=-6), ear=.9, eyes='half+mfrown')), ('surprised', dict(pose=dict(bob=0, sway=4), ear=1.12, eyes='wide+mo')),
+  ('think', dict(pose=dict(bob=0, sway=2), eyes='wink+mflat')), ('giggle', dict(pose=dict(bob=1, sway=6), xf=(1, 1.02, 0, 0), eyes='happy+mopen')),
+]
+_FOX = PE.SPECIES['slyte']; _orig_face = type(_FOX).face
+def _face(self, put, F, N, C, eyes, v):
+    """extends the guide face templates with half lids, wide eyes, mouths, extra blush and nap z's (hand-placed pixels)."""
+    parts = eyes.split('+'); base = parts[0]; ex = set(parts[1:]); H = PE.H
+    _orig_face(self, put, F, N, C, {'half': 'open', 'wide': 'open'}.get(base, base), v)
+    E = H(C['eye']); FUR = H(C['fur'])
+    for exx, d in ((160, -1), (240, 1)):
+        x0, y0 = F((exx, 180))
+        if base == 'half':      # top two rows become lid (fur), lid line in eye ink
+            for dx in range(-2, 2):
+                put(x0+dx, y0-2, FUR); put(x0+dx, y0-1, E)
+        if base == 'wide':      # one more white pixel, smaller iris
+            put(x0-1+(0 if d < 0 else 0), y0, H('#FFFFFF'))
+    nx, ny = F((200, 258))
+    if 'mopen' in ex: put(nx-1, ny+2, E); put(nx, ny+2, E); put(nx-1, ny+3, H('#FF8FB8')); put(nx, ny+3, E)
+    if 'mchomp' in ex: put(nx-2, ny+2, E); put(nx-1, ny+3, E); put(nx, ny+3, E); put(nx+1, ny+2, E)
+    if 'mo' in ex: put(nx-1, ny+2, E); put(nx, ny+2, E); put(nx-1, ny+3, E); put(nx, ny+3, E)
+    if 'mfrown' in ex: put(nx-2, ny+3, E); put(nx-1, ny+2, E); put(nx, ny+2, E); put(nx+1, ny+3, E)
+    if 'mflat' in ex: put(nx-1, ny+2, E); put(nx, ny+2, E); put(nx+1, ny+2, E)
+    if 'blush2' in ex:
+        for bx in (136, 264):
+            x0, y0 = F((bx, 216)); dd = 1 if bx > 200 else -1
+            for k in (0, 1, 2): put(x0+dd*k, y0, H(C['blush']))
+            put(x0+dd, y0+1, H(C['blush']))
+    for zk, (zx, zy) in (('z1', (40, 8)), ('z2', (41, 5))):
+        if zk in ex:
+            for a, b in ((0, 0), (1, 0), (2, 0), (3, 0), (2, 1), (1, 2), (0, 3), (1, 3), (2, 3), (3, 3)): put(zx+a, zy+b, H('#FFFFFF'))
+            for a, b in ((0, 0), (1, 0), (2, 0), (1, 1), (0, 2), (1, 2), (2, 2)): put(zx-5+a, zy+6+b, H('#FFD27A'))
+type(_FOX).face = _face
 def frame(v, stage, spec, phase):
     spec = dict(spec); vv = dict(v)
     if 'ear' in spec: vv['ear'] = spec.pop('ear')
     if stage == 5:   # release: happy eyes, hearts, gentle dissolve + home star
-        return PE.render('slyte', vv, N=N, stage=5, eyes='happy', dissolve=.35, hearts=True, star_home=True, phase=phase, pose=spec.get('pose'))
+        e = spec.get('eyes', 'open'); e = e if e.split('+')[0] in ('blink', 'half', 'wink') else 'happy+' + '+'.join(e.split('+')[1:])
+        return PE.render('slyte', vv, N=N, stage=5, eyes=e.rstrip('+'), dissolve=.35, hearts=True, star_home=True, phase=phase, pose=spec.get('pose'), xf=spec.get('xf', (1, 1, 0, 0)))
     return PE.render('slyte', vv, N=N, stage=stage, phase=phase, **spec)
 def sheet(v):
     im = Image.new('RGBA', (N*len(FRAMES), N*5), (0, 0, 0, 0))
@@ -54,6 +95,42 @@ def backdrop(W, Hh, ground, kind='dusk', f=0):
             bg.alpha_composite(g, (tx*16, ground+ty))
     ImageDraw.Draw(bg).line([0, ground, W, ground], fill=PE.H(U.TP['g0']))
     return bg
+ICOL = dict(K='#3B2A5C', W='#FFFFFF', C='#FFF6E6', Y='#FFD27A', O='#F2A65A', P='#FF8FB8', R='#E8705A', G='#8CCB7E', D='#5E9E5A', B='#B9A6FF', T='#7FD4E8', N='#B07A4A', M='#8A5A3A', V='#7A5AC8')
+ICONS = {  # 16x16, ink + up to 2-3 colours, hand-placed (guide 8: icons ink plus 2 colours)
+ 'berry': ["................","........DD......",".......D........","....KKKDKKK.....","...KVVKVVVVK....","..KVWVVKVVVVK...","..KVVVVKVWVVK...","..KKKVVVVVVKK...","..KVVVKKKVVVK...","..KVWVVVKVVVK...","..KVVVVVKVVK....","...KVVVVKKK.....","....KKKKK.......","................","................","................"],
+ 'honey': ["................","................","....KKKKKKKK....","...KYYYYYYYYK...","..KYYWYYYYOYYK..","..KYYYYYYYYYYK..","..KOOOOOOOOOOK..","..KYYYYYYYYYYK..","..KYYYYYWYYYYK..","..KOOOOOOOOOOK..","..KYYYYYYYYYYK..","...KKKKKKKKKK...","................","................","................","................"],
+ 'nut': ["................",".......KK.......","......KMMK......","....KKMMMMKK....","...KMMMMMMMMK...","...KKKKKKKKKK...","...KNNNNNNNNK...","...KNWNNNNNNK...","...KNNNNNNNNK...","....KNNNNNNK....",".....KNNNNK.....","......KKKK......","................","................","................","................"],
+ 'apple': ["................",".......K.DD.....",".......KDD......","....KKKKKKK.....","...KRRRRRRRK....","..KRWRRRRRRRK...","..KRWRRRRRRRK...","..KRRRRRRRRRK...","..KRRRRRRRRRK...","..KRRRRRRRRRK...","...KRRRRRRRK....","....KKRKRKK.....",".....K.K.K......","................","................","................"],
+ 'fish': ["................","................","................",".....KKKKK......","...KKTTTTTKK..KK","..KTWTTTTTTTKKTK",".KTKTTTTTTTTTTTK",".KTTTTTTTTTTKKTK","..KTTTTTTTTK..KK","...KKTTTTKK.....",".....KKKK.......","................","................","................","................","................"],
+ 'meat': ["................","................","..........KK....",".........KWWK...",".....KKKKWWK....","...KKRRRKKK.....","..KRRWRRRRK.....","..KRRRRRRRK.....","..KRRRRRRK......","...KRRRRK.......","....KKKK........","................","................","................","................","................"],
+ 'water': ["................",".......K........","......KTK.......","......KTK.......",".....KTTTK......",".....KTTTK......","....KTWTTTK.....","....KTWTTTK.....","...KTTTTTTTK....","...KTTTTTTTK....","...KTTTTTTTK....","....KTTTTTK.....",".....KKKKK......","................","................","................"],
+ 'hand': ["................","......K.K.K.....",".....KCKCKCK....",".....KCKCKCK.K..",".....KCKCKCKKCK.","..KK.KCCCCCKCK..",".KCCKKCCCCCCCK..",".KCCCKCCCCCCK...","..KCCCCCCCCCK...","...KCCCCCCCK....","....KCCCCCK.....",".....KKKKK......","................","................","................","................"],
+ 'moon': ["................","......KKKK......","....KKYYYK......","...KYYYKK.......","..KYYYK.........","..KYYK..........","..KYYK..........","..KYYK..........","..KYYYK.........","...KYYYKK.......","....KKYYYKKKK...","......KKKKYK....","................","................","................","................"],
+ 'book': ["................","................","..KKKKKK.KKKKKK.","..KCCCCCKCCCCCK.","..KCKKKCKCKKKCK.","..KCCCCCKCCCCCK.","..KCKKKCKCKKKCK.","..KCCCCCKCCCCCK.","..KCKKCCKCKKCCK.","..KCCCCCKCCCCCK.","..KPPPPPKPPPPPK.","...KKKKKKKKKKK..","................","................","................","................"],
+ 'question': ["................","......KKKK......",".....KYYYYK.....","....KYYKKYYK....","....KYK..KYK....","........KYYK....",".......KYYK.....","......KYYK......","......KYYK......","......KKKK......","......KYYK......","......KKKK......","................","................","................","................"],
+ 'close': ["................","................","...KK......KK...","..KPPK....KPPK..","...KPPK..KPPK...","....KPPKKPPK....",".....KPPPPK.....","......KPPK......",".....KPPPPK.....","....KPPKKPPK....","...KPPK..KPPK...","..KPPK....KPPK..","...KK......KK...","................","................","................"],
+ 'sticker': ["................",".......KK.......","......KYYK......","......KYYK......","..KKKKKYYKKKKK..","..KYYYYYYYYWYK..","...KYYYYYYYYK...","....KYYYYYYK....","....KYYKKYYK....","...KYYK..KYYK...","...KKK....KKK...","................","................","................","................","................"],
+ 'sparkle': ["................",".......K........","......KYK.......","......KYK.......","....KKYWYKK.....","...KYYWWWYYK....","....KKYWYKK.....","......KYK...K...","......KYK..KYK..",".......K....K...","..K.............",".KYK............","..K.............","................","................","................"],
+ 'gem': ["................","................","....KKKKKKK.....","...KTWTTTTTK....","..KTWWTTTTTTK...","..KKKKKKKKKKK...","...KTTWTTTTK....","....KTTTTTK.....",".....KTTTK......","......KTK.......",".......K........","................","................","................","................","................"],
+ 'heart': ["................","................","...KK....KK.....","..KPPK..KPPK....",".KPWPPKKPPPPK...",".KPWPPPPPPPPK...",".KPPPPPPPPPPK...","..KPPPPPPPPK....","...KPPPPPPK.....","....KPPPPK......",".....KPPK.......","......KK........","................","................","................","................"],
+ 'tree': ["................","......KKKK......","....KKGGGGKK....","...KGGWGGGGGK...","..KGGGGGGGDGGK..","..KGDGGGGGGGGK..","..KGGGGGDGGGGK..","...KKGGGGGGKK...",".....KKNNKK.....","......KNNK......","......KNNK......","....KKKKKKKK....","................","................","................","................"],
+ 'talk': ["................","................","..KKKKKKKKKKK...",".KCCCCCCCCCCCK..",".KCKKCKKCKKCCK..",".KCCCCCCCCCCCK..",".KCKKKCKKKKCCK..",".KCCCCCCCCCCCK..","..KKKKCCKKKKK...","......KCK.......","......KK........","................","................","................","................","................"],
+ 'yes': ["................","................","................","............KK..","...........KGK..","..........KGK...","..KK.....KGK....",".KGGK...KGK.....","..KGGK.KGK......","...KGGKGK.......","....KGGK........",".....KK.........","................","................","................","................"],
+ 'no': ["................","................","....KKKKKKK.....","...KCCCCCCCK....","..KCCCCCCCCCK...","..KCKKCCCKKCK...","..KCCCCCCCCCK...","..KCCKKKKKCCK...","..KCCCCCCCCCK...","...KCCCCCCCK....","....KKKKKKK.....","................","................","................","................","................"],
+ 'ear': ["................","....KKKKK.......","...KCCCCCK......","..KCCKKKCCK.....","..KCKPPPKCK.....","..KCKPKKCCK.....","..KCCKPKCK......","...KCCKCCK......","....KCCCK.......",".....KCCK.......","......KK........","................","................","................","................","................"],
+ 'smile': ["................","................","....KKKKKKK.....","...KYYYYYYYK....","..KYYKYYYKYYK...","..KYYKYYYKYYK...","..KYYYYYYYYYK...","..KYKYYYYYKYK...","..KYYKKKKKYYK...","...KYYYYYYYK....","....KKKKKKK.....","................","................","................","................","................"],
+ 'laugh': ["................","................","....KKKKKKK.....","...KYYYYYYYK....","..KYKYKYKYKYK...","..KYYYYYYYYYK...","..KYKKKKKKKYK...","..KYKPPPPPKYK...","..KYYKPPPKYYK...","...KYYKKKYYK....","....KKKKKKK.....","................","................","................","................","................"],
+ 'silly': ["................","................","....KKKKKKK.....","...KYYYYYYYK....","..KYKYYYYKKYK...","..KYYYYYYYYYK...","..KYYYYYYYYYK...","..KYKKKKKKKYK...","..KYYYKPPKYYK...","...KYYKPPKYK....","....KKKKKKK.....","................","................","................","................","................"],
+ 'wow': ["................","................","....KKKKKKK.....","...KYYYYYYYK....","..KYKKYYYKKYK...","..KYKKYYYKKYK...","..KYYYYYYYYYK...","..KYYYKKKYYYK...","..KYYYKPKYYYK...","...KYYKKKYYK....","....KKKKKKK.....","................","................","................","................","................"],
+ 'later': ["................","................","....KKKKKKK.....","...KCCCCCCCK....","..KCCCCKCCCCK...","..KCCCCKCCCCK...","..KCCCCKCCCCK...","..KCCCCKKKCCK...","..KCCCCCCCCCK...","...KCCCCCCCK....","....KKKKKKK.....","................","................","................","................","................"],
+}
+def bake_icons():
+    for nm, rows in ICONS.items():
+        im = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+        for y, r in enumerate(rows):
+            for x, ch in enumerate(r):
+                if ch != '.': im.putpixel((x, y), PE.H(ICOL[ch]))
+        im.save(f'{OUT}/i_{nm}.png')
 def bake_world():
     W, Hh = 180, 320
     for kind in ('dusk', 'night'):
@@ -70,6 +147,7 @@ def bake_world():
     for x, y in ((112, 112), (128, 100), (144, 108), (120, 124), (150, 122), (104, 126), (136, 118)): d.alpha_composite(U.t_bush(), (x, y))
     d.save(f'{OUT}/bg_discover.png')
     for nm in ('feed', 'pet', 'play', 'sleep'): U.icon(nm).save(f'{OUT}/icon_{nm}.png')
+    bake_icons()
     U.heart(True).save(f'{OUT}/heart_full.png'); U.heart(False).save(f'{OUT}/heart_empty.png')
     U.panel(24, 24).save(f'{OUT}/panel.png'); U.button(24, 24).save(f'{OUT}/button.png'); U.button(24, 24, True).save(f'{OUT}/button_d.png')
     U.bubble(24, 24, '').save(f'{OUT}/bubble.png')

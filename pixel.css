@@ -12,28 +12,16 @@ html,body{background:#2E2452}
 .pxbg-night{background-image:url(px/bg_night_f0.png);animation:pxtw 1000ms steps(1) infinite}
 @keyframes pxtw{50%{background-image:url(px/bg_night_f1.png)}}
 .pxbg-discover{background-image:url(px/bg_discover.png)}
-.top{padding:2px 3px;gap:2px;min-height:18px;background:#FFF6E6;border-bottom:1px solid #3B2A5C;color:#3B2A5C;font-size:8px}
 .top b{font-weight:normal}
-.badge{font-size:8px;background:#FFF6E6!important;color:#3B2A5C!important;border:1px solid #3B2A5C!important;padding:1px 2px;min-height:14px;gap:2px}
-.bar{width:30px;height:5px;background:#EBD7BC;border:1px solid #3B2A5C}.bar i{background:#FF8FB8}
 .btn{min-height:26px;min-width:26px;border:1px solid #3B2A5C;background:#FFD27A;color:#3B2A5C;font-size:8px;font-weight:normal;padding:2px 3px;box-shadow:0 2px 0 #3B2A5C;line-height:10px;gap:1px}
 .btn:active{transform:translateY(2px);box-shadow:none;background:#F2A65A}
-.btn .ic{font-size:10px;line-height:12px}
 .btn.small{min-height:14px;min-width:14px;font-size:8px;background:#FFF6E6;color:#3B2A5C;padding:1px 3px}
 .btn.sel{outline:1px solid #FF8FB8}
 .dock{gap:2px;padding:3px 3px 4px;background:#3B2A5C}
-.dock .btn{min-height:30px}
-#feed .ic,#play .ic,#comfort .ic,#rest .ic{font-size:0;width:16px;height:16px;display:block;background:center/16px 16px no-repeat}
-#feed .ic{background-image:url(px/icon_feed.png)}#play .ic{background-image:url(px/icon_play.png)}#comfort .ic{background-image:url(px/icon_pet.png)}#rest .ic{background-image:url(px/icon_sleep.png)}
 .creature{width:48px!important;height:48px;bottom:64px!important}
 .creature.idle{animation:none}
 .creature svg{filter:none}
 .px-echo{width:48px;height:48px;background-repeat:no-repeat}
-.bubble{width:max-content;background:#fff;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #EBD7BC;font-size:8px;line-height:10px;padding:4px;max-width:164px;top:6px}
-.bubble::after{display:none}
-.thought{width:20px;height:20px;font-size:10px;border:1px solid #3B2A5C;right:30px;bottom:72px}
-.choices{padding:3px;gap:3px;grid-template-columns:repeat(auto-fit,minmax(52px,1fr));background:#3B2A5CEE;border-top:1px solid #FFD27A}
-.choices .hint{font-size:8px;color:#FFF6E6}
 .full{font-size:8px;line-height:10px;padding:8px;background:#2E2452EE;color:#FFF6E6}
 .full h1{font-size:10px;line-height:12px;margin:4px 0}
 .full p{margin:4px 0}
@@ -43,16 +31,73 @@ html,body{background:#2E2452}
 #screen .full>div:first-child[style*="font-size"]{font-size:16px!important;line-height:18px}
 #screen .btn .ic{font-size:10px}
 .full [style*="width:1"]{width:64px!important}
-#toast{font-size:8px;line-height:10px;padding:3px 5px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C;top:22px;bottom:auto;width:max-content;max-width:160px;font-weight:normal}
+#toast{font-size:8px;line-height:10px;padding:3px 5px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C;top:40px;bottom:auto;width:max-content;max-width:160px;font-weight:normal}
 input{font-size:8px!important;padding:3px;border:1px solid #3B2A5C;background:#fff;color:#3B2A5C}
 input[type=checkbox]{width:8px;height:8px}
 .panel,.book,.postcard{font-size:8px;line-height:10px;padding:4px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C}
 .book h2{font-size:10px}
-.dbg{top:20px!important;left:2px!important}
-.dbg .btn{min-height:12px!important;font-size:8px;opacity:.6}
 .propbtn{background:transparent!important;border:0!important}
 .propbtn svg{display:none}
 .glowpath{opacity:.5}
 .spot{font-size:12px}
 .star{width:14px!important;height:14px!important;font-size:10px}
 .row{gap:2px}
+
+/* ===== Milestone 2: real pixel layouts for care + dialogue (virtual px) ===== */
+.pxi{display:inline-block;width:16px;height:16px;background:no-repeat 0 0;image-rendering:pixelated;vertical-align:middle;flex:none}
+/* top bar: bond meter (heart + 5 segments), name, Memory Book + How am I */
+.top{height:20px;min-height:20px;padding:1px 2px;gap:2px;background:#FFF6E6;border-bottom:1px solid #3B2A5C;color:#3B2A5C;display:flex;align-items:center;justify-content:space-between}
+.top b{font-weight:normal;font-size:8px}
+#bond{display:flex;align-items:center;gap:1px;padding:2px;min-height:16px;background:#FFF6E6!important;border:1px solid #3B2A5C!important}
+#bond .pxheart{width:7px;height:6px;background:url(px/heart_full.png) no-repeat;margin-right:1px}
+#bond .seg{width:6px;height:5px;background:#EBD7BC;border:1px solid #3B2A5C}#bond .seg.on{background:#FF8FB8}
+.btn.small.ico{width:18px;height:18px;min-width:18px;min-height:18px;padding:0;display:flex;align-items:center;justify-content:center;background:#FFF6E6;box-shadow:0 1px 0 #3B2A5C}
+/* dock: four 43x32 buttons, 16px icon over an 8px label */
+.dock{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px 2px 3px;background:#3B2A5C}
+.dock .btn{min-height:32px;height:32px;flex-direction:column;justify-content:center;gap:0;padding:1px 0}
+/* thought bubble: 22x22 white box with the needed care icon, two pixel dots toward the Echo */
+.thought{width:22px;height:22px;padding:2px;background:#fff;border:1px solid #3B2A5C;left:calc(50% + 24px);right:auto;bottom:118px;display:flex;align-items:center;justify-content:center;font-size:8px}
+.thought::after{content:"";position:absolute;left:-1px;bottom:-5px;width:3px;height:3px;background:#fff;box-shadow:0 0 0 1px #3B2A5C,-4px 4px 0 -0px #fff,-4px 4px 0 1px #3B2A5C}
+/* speech bubble: white 9-slice, 4-row pixel tail */
+.bubble{left:50%;top:4px;transform:translateX(-50%);width:max-content;max-width:164px;padding:4px 5px;background:#fff;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #EBD7BC;font-size:8px;line-height:10px;text-align:left;animation:none}
+.bubble::after{content:"";display:block;position:absolute;left:50%;bottom:-2px;width:1px;height:1px;background:transparent;box-shadow:-3px 0px 0 #3B2A5C,-2px 0px 0 #FFFFFF,-1px 0px 0 #FFFFFF,0px 0px 0 #FFFFFF,1px 0px 0 #FFFFFF,2px 0px 0 #FFFFFF,3px 0px 0 #3B2A5C,-2px 1px 0 #3B2A5C,-1px 1px 0 #FFFFFF,0px 1px 0 #FFFFFF,1px 1px 0 #FFFFFF,2px 1px 0 #3B2A5C,-1px 2px 0 #3B2A5C,0px 2px 0 #FFFFFF,1px 2px 0 #3B2A5C,0px 3px 0 #3B2A5C;transform:translateY(1px)}
+/* dialogue + food choices: bottom sheet over the dock, 2-3 buttons, 16px icon + wrapped 8px label */
+#overlay{position:absolute;left:0;right:0;bottom:0;max-width:none}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(54px,1fr));gap:3px;padding:3px 3px 4px;background:#3B2A5C;border-top:1px solid #FFD27A}
+.choices .btn{flex-direction:column;justify-content:center;min-height:36px;padding:2px 1px;gap:1px}
+.choices .lbl{display:block;font-size:8px;line-height:9px;text-align:center;word-break:break-word}
+.choices .btn.sel{outline:none;background:#FFF0B8;box-shadow:0 0 0 1px #FF8FB8,0 2px 0 #3B2A5C}
+.choices .hint{grid-column:1/-1;color:#FFF6E6;font-size:8px;text-align:center;line-height:9px}
+/* How am I? panel */
+.howpanel{position:absolute;left:12px;right:12px;top:44px;z-index:20;padding:5px 6px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #3B2A5C;font-size:8px;line-height:10px}
+.howpanel .ptitle{text-align:center;color:#C9782E;margin-bottom:3px}
+.howpanel .hrow{display:flex;align-items:center;gap:3px;height:18px}
+.howpanel .hl{width:36px}
+.howpanel .hbar{display:flex;gap:1px}
+.howpanel .hs{width:5px;height:6px;background:#EBD7BC;border:1px solid #3B2A5C}.howpanel .hs.on{background:#FF8FB8}
+.howpanel .hfoot{display:flex;align-items:center;gap:3px;margin-top:2px}
+.howpanel .hint2{text-align:center;margin-top:3px;color:#9A86B8}
+/* milestone moment card */
+.full.milestone{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;background:#2E2452DD}
+.mcard{width:160px;padding:6px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;text-align:center}
+.mcard .mtop{display:flex;align-items:center;justify-content:center;gap:3px}
+.mcard .mt{color:#C9782E}
+.mcard .mstage{width:48px;height:48px;margin:6px auto;position:relative}
+.mcard .mstage .echo-svg{width:48px;height:48px}
+.mcard .mline{margin:4px 0;text-align:left}
+.mcard .mnote{display:flex;align-items:center;gap:3px;margin:4px 0;color:#9A86B8;text-align:left}
+.mcard .btn{margin:4px auto 0;min-width:56px}
+/* first-visit tip no longer under the dev button: dev sits at the scene's top-left, toast below it */
+.dbg{position:absolute;top:22px!important;left:2px!important;z-index:5}
+.dbg .btn{min-height:12px!important;height:12px;font-size:8px;padding:0 2px;opacity:.6;box-shadow:none}
+.rel{position:absolute;right:3px;top:3px;flex-direction:row;gap:2px;min-height:20px}
+.chip{display:inline-flex;align-items:center;gap:2px;font-size:8px;padding:1px 3px;margin:1px;border:1px solid #3B2A5C;background:#fff}
+/* reactions move in whole pixels (guide 9.1), frames come from the sprite */
+@keyframes pxhop{0%{transform:translateX(-50%) translateY(0)}14%{transform:translateX(-50%) translateY(-3px)}28%{transform:translateX(-50%) translateY(-6px)}42%{transform:translateX(-50%) translateY(-8px)}58%{transform:translateX(-50%) translateY(-6px)}72%{transform:translateX(-50%) translateY(-3px)}86%,100%{transform:translateX(-50%) translateY(0)}}
+.creature.r-happy,.creature.r-excited{animation:pxhop 664ms steps(1,end) 1}
+.creature.r-pet,.creature.r-eat,.creature.r-sad,.creature.r-sleepy{animation:none}
+/* choices: one row per option (icon left, label right) so long words never split */
+.choices{grid-template-columns:1fr}
+.choices .btn{flex-direction:row;justify-content:flex-start;min-height:22px;padding:2px 4px;gap:4px}
+.choices .lbl{text-align:left;word-break:normal;overflow-wrap:anywhere}
+.choices{margin:0!important}
