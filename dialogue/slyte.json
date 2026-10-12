@@ -1793,7 +1793,7 @@
   ],
   "list_trail_done": [
    {
-    "text": "Leaf Trail, check! My paws will remember that one.",
+    "text": "Meadow Dash, check! My paws will remember that one.",
     "expr": "happy"
    }
   ],
@@ -2034,6 +2034,137 @@
    {
     "text": "Lots at first! Then now and then. Squirrels keep me busy.",
     "expr": "giggling"
+   }
+  ],
+  "run_start": [
+   {
+    "text": "Meadow dash! I bound, you press jump.",
+    "expr": "excited",
+    "react": "excited"
+   },
+   {
+    "text": "Psst. Logs ahead. I'm SO ready.",
+    "expr": "happy"
+   },
+   {
+    "text": "Ooh! Running day. Tail says go.",
+    "expr": "excited"
+   },
+   {
+    "text": "Ready? Hop, hop, pounce!",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "run_bump": [
+   {
+    "text": "Oof! Tumble-roll. Still counts.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Hee hee! I meant that. Probably.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Fwip! Rolled right over it. Basically.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Whoops! Puddle paws. Hee!",
+    "expr": "giggling"
+   },
+   {
+    "text": "Mrrp! Bouncy rock. Keep going!",
+    "expr": "happy"
+   }
+  ],
+  "run_treasure": [
+   {
+    "text": "Shiny! Into my pocket.",
+    "expr": "happy"
+   },
+   {
+    "text": "Treasure! Sneaky-good grab.",
+    "expr": "proud"
+   },
+   {
+    "text": "Got one! My nose knew.",
+    "expr": "happy"
+   }
+  ],
+  "run_gold": [
+   {
+    "text": "A golden trinket! SO shiny!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Ooh! The sparkly kind!",
+    "expr": "delighted"
+   }
+  ],
+  "run_stretch": [
+   {
+    "text": "Signpost! We're zooming.",
+    "expr": "excited"
+   },
+   {
+    "text": "Another stretch! Paws are happy.",
+    "expr": "happy"
+   }
+  ],
+  "run_best": [
+   {
+    "text": "New best! Tail up, tail up!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "NEW best! I'm basically a comet.",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "run_done": [
+   {
+    "text": "Phew! What a run. My tail is dizzy.",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "Rest stop! We bounded SO far.",
+    "expr": "proud"
+   },
+   {
+    "text": "Logs jumped, treasure found. Basically heroes.",
+    "expr": "proud",
+    "react": "happy"
+   }
+  ],
+  "run_start_hh": [
+   {
+    "text": "Ready? Hop!",
+    "expr": "excited"
+   },
+   {
+    "text": "Logs! I'm ready.",
+    "expr": "happy"
+   }
+  ],
+  "run_best_hh": [
+   {
+    "text": "New best! Tail up!",
+    "expr": "delighted"
+   }
+  ],
+  "run_done_hh": [
+   {
+    "text": "Phew! Big run.",
+    "expr": "happy"
+   },
+   {
+    "text": "Rest stop!",
+    "expr": "proud"
    }
   ]
  },

@@ -1675,7 +1675,7 @@
   ],
   "list_trail_done": [
    {
-    "text": "The firefly parade… I'll hum about it for a long while.",
+    "text": "Moonlight Glide… I'll hum about it for a long while.",
     "expr": "happy"
    }
   ],
@@ -1919,6 +1919,124 @@
    {
     "text": "Often at first… then now and then. Owls write slowly.",
     "expr": "happy"
+   }
+  ],
+  "run_start": [
+   {
+    "text": "Hoo… shall we glide a while?",
+    "expr": "happy"
+   },
+   {
+    "text": "Hold to rise… let go to float. I like that.",
+    "expr": "curious"
+   },
+   {
+    "text": "Well… the night is wide open.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hm. Branches and clouds… we'll drift past them.",
+    "expr": "thinking"
+   }
+  ],
+  "run_bump": [
+   {
+    "text": "Oh… a cloud bump. Soft, though.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Hoo hoo… I tumbled. Rather fun.",
+    "expr": "giggling"
+   },
+   {
+    "text": "A little twirl… I meant that. Maybe.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Oops… feathers everywhere.",
+    "expr": "giggling"
+   }
+  ],
+  "run_treasure": [
+   {
+    "text": "A soft feather… for the nest.",
+    "expr": "happy"
+   },
+   {
+    "text": "Oh. A feather. How lovely.",
+    "expr": "happy"
+   },
+   {
+    "text": "Mm… that one glowed.",
+    "expr": "curious"
+   }
+  ],
+  "run_gold": [
+   {
+    "text": "A moon feather… it glows.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Hoo… the golden kind.",
+    "expr": "delighted"
+   }
+  ],
+  "run_stretch": [
+   {
+    "text": "Hm. That's a long way already.",
+    "expr": "proud"
+   },
+   {
+    "text": "Another hill… the stars came too.",
+    "expr": "happy"
+   }
+  ],
+  "run_best": [
+   {
+    "text": "Hoo… a new best. Quietly wonderful.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Oh… our farthest yet. I like that.",
+    "expr": "proud"
+   }
+  ],
+  "run_done": [
+   {
+    "text": "Hoo… what a gentle flight. Let's rest a while.",
+    "expr": "sleepy",
+    "react": "happy"
+   },
+   {
+    "text": "Well… we glided so far.",
+    "expr": "proud"
+   },
+   {
+    "text": "Mm. Rest now… my wings are humming.",
+    "expr": "sleepy"
+   }
+  ],
+  "run_start_hh": [
+   {
+    "text": "Hoo… let's glide.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hold to rise.",
+    "expr": "curious"
+   }
+  ],
+  "run_best_hh": [
+   {
+    "text": "Oh… a new best.",
+    "expr": "delighted"
+   }
+  ],
+  "run_done_hh": [
+   {
+    "text": "Hoo… rest now.",
+    "expr": "sleepy"
    }
   ]
  },
