@@ -559,6 +559,7 @@ function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')
 // ---- runners (spec v0.6 §3): Meadow Dash (Slyte, tap = jump) / Moonlight Glide (Whimber, hold = rise). No fail state. ----
 // saves from before v0.6: the Sparkle trail and Connect are gone. Their memories stay in the Memory Book (read-only facts); their state goes.
 function gamesMigrate(){if(!S||S.gv===6)return;delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5;S.gv=6}   // saved with the next save (no save here: it would reset S.last)
+const RUN_BUSH=[40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400];
 function runState(){S.run=S.run||{best:{},runs:0,hard:0,auto:null};S.run.best=S.run.best||{};return S.run}
 function runLevel(){const rs=runState();const set=S.runLevel||'auto';if(set!=='auto')return set;if(rs.runs<2)return 'easy';return rs.auto||'standard'}
 function runGame(){
@@ -566,7 +567,7 @@ function runGame(){
   const T=n=>S.talents.includes(n),silent=!fox&&T('Silent Flight'),nv=!fox&&T('Night Vision');
   const evening=tod()==='evening'||tod()==='night';
   const g=RunnerEngine.create({kind:fox?'jump':'glide',level,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
-  const best0=rs.best[level]||0,firstEver=!rs.runs;let cheered=false,lastLine=-9,treN=0,bumpN=0,lastTre=0;
+  const best0=rs.best[level]||0,firstEver=!rs.runs;let cheered=false,lastLine=-9,lastFlap=-9,treN=0,bumpN=0,lastTre=0;
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame');
   const tre=fox?'trinket':'feather';
   gs.insertAdjacentHTML('beforeend',`<canvas id="rc" width="360" height="640" aria-label="${TITLE}"></canvas>
@@ -574,8 +575,9 @@ function runGame(){
   const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{IM[k]=new Image();IM[k].src='px/'+s+'.png'};
-  if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy'].forEach(k=>ld(k,'run/slyte_'+k))}
-  else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240','bush40','bush60','bush80'].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,'run/whimber_'+k))}
+  if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));const st=PIXEL.stageNow(),sd=st>=4?'':'s'+Math.min(Math.max(st,1),3)+'/';   // runner frames match the home Slyte's stage (runner_polish.md §2)
+    ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].forEach(k=>ld(k,'run/'+sd+'slyte_'+k))}
+  else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,'run/whimber_'+k))}
   ld('tre','items/'+tre);ld('gold','run/'+tre+'_gold');
   let alive=true,acc=0,last=performance.now(),happy=0,signs=[],restProp=null,pops=[],frame=0;
   const lineOK=()=>g.t-lastLine>=6;const line=(k,ms)=>{if(!lineOK())return false;lastLine=g.t;talk(B(k),ms||1800);return true};
@@ -591,18 +593,17 @@ function runGame(){
       else if(o.type==='rock')cx.drawImage(IM.rock,x-1+wob,o.y-2);else if(o.type==='puddle')cx.drawImage(IM.puddle,x-1,o.y-1-(o.pushed?1:0));
       else if(o.type==='cloud')cx.drawImage(IM.cloud,x+wob,o.y);
       else if(o.type==='branch'){const L=[120,160,200,240].find(v=>v>=o.h)||240,im=IM['branch'+L];cx.drawImage(im,x-1+wob,o.h-im.height+2)}
-      else if(o.type==='bush'){if(o.h<=80){const im=IM['bush'+([40,60,80].find(v=>v>=o.h)||80)];cx.drawImage(im,x+wob,o.y-(im.height-o.h)*.3)}else for(let y=o.y;y<o.y+o.h;y+=30)cx.drawImage(IM.bush60,x+wob,y-15)}}
+      else if(o.type==='bush'){const h=RUN_BUSH.filter(v=>v<=o.h).pop()||40;cx.drawImage(IM['bush'+h],x+wob,531-h)}}   // flat-base bushes stand on the grass (runner_polish.md §4)
     for(const t of g.tre){const x=Math.round(t.x-d)-8;if(x>370||x<-20)continue;cx.drawImage(t.gold?IM.gold:IM.tre,x,Math.round(t.y-8+(Math.sin(g.t*4+t.id)>0?-1:0)))}
     for(const s of signs){const x=Math.round(s-d);if(x>-20&&x<370)cx.drawImage(fox?IM.sign:IM.sign_twi,x,(fox?470:528)-13)}
     if(restProp!==null){const x=Math.round(restProp-d);if(fox)cx.drawImage(IM.sunrock,x,470-21);else{cx.drawImage(IM.bench,x,528-8);cx.drawImage(IM.moss,x+1,528-14)}}}
   function echo(){let k;const F=Math.floor(g.t*12);
     if(fox){k=g.tumble>0?'tumble':g.phase!=='run'&&g.mult<.05?'tumble':happy>0?'run_happy':g.air?(g.vy<0?'jump':'fall'):'run'+(F%6)}
     else{k=g.tumble>0?'tumble':happy>0||(g.phase!=='run'&&g.mult<.05)?'glide_happy':g.held?'flap'+(F%4):'glide'}
+    if(fox&&g.disguised>0)k=g.disguised<.2?'reveal':'disguise'+(Math.floor(g.t*4)%2);   // Master of Disguise: the secretly-Slyte bush, then the pop-out
     const im=IM[k];if(!im)return;const x=fox?16:20,y=Math.round(g.y-48+(fox?0:6));
-    if(g.disguised>0&&IM.bush40===undefined){cx.globalAlpha=.35}
     if(g.tumble>0){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
     else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;cx.drawImage(im,x,y)}cx.globalAlpha=1;
-    if(g.disguised>0){cx.fillStyle='#6DB274';cx.fillRect(x+10,y+22,28,22);cx.fillStyle='#3B2A5C';cx.fillRect(x+10,y+43,28,1)}   // Master of Disguise: a little bush
     for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
   function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+(g.treasures+g.gold);if(cheered)$('#rm').classList.add('gold')}
   function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
@@ -610,7 +611,8 @@ function runGame(){
       if(g.phase==='run'&&g.stretchT>g.L.stretch-2.5&&signs.length<=g.stretch)signs.push(g.dist+40+g.speed*2.5);handle()}
     bg();drawObs();echo();hud();requestAnimationFrame(tick)}
   function handle(){for(const e of RunnerEngine.take(g)){
-      if(e.type==='jump'||e.type==='hop2'){SFX('memory_card_flip',{vol:.25,gap:100})}
+      if(e.type==='jump'||e.type==='hop2'){SFX('run_hop_'+(1+Math.floor(Math.random()*3)),{vol:.6,gap:100})}
+      if(e.type==='flap'&&g.t-lastFlap>=.25){lastFlap=g.t;SFX('run_flap_'+(1+Math.floor(Math.random()*3)),{vol:.5})}   // one shared 0.25 s throttle for the 3 variants
       if(e.type==='treasure'||e.type==='gold'){treN++;happy=.3;pops.push({s:e.type==='gold'?'+30':'+10',x:60,y:g.y-50,t:1,c:'#FFD27A'});
         if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');line('run_gold',1800)}
         else{lastTre=(g.t-lastTre>8)?1:lastTre+1;SFX(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
@@ -618,7 +620,7 @@ function runGame(){
       if(e.type==='giggle'){if(!(bumpN%3===0&&line('run_bump',1800)))giggle()}
       if(e.type==='disguise'){giggle();react('excited')}
       if(e.type==='radar')SFX('slyte_radar_ears_twinkle',{pan:1,vol:.5,gap:300});
-      if(e.type==='chime')SFX('run_treasure_1',{pan:0,vol:.35,rate:1+(320-e.y)/900,gap:300});
+      if(e.type==='chime')SFX('whimber_radar_hearing_chime',{pan:0,vol:.4,rate:1+(320-e.y)/900,gap:300});
       if(e.type==='cue'){const c=$('#rcue');if(c){c.classList.remove('on');void c.offsetWidth;c.classList.add('on')}}
       if(e.type==='stretch'){SFX('blocks_row_glow',{vol:.6});const b=g.stretchBumps[e.n]||0;
         if(b>=5)rs.hard=(rs.hard||0)+1;else rs.hard=0;if(rs.hard>=2)rs.auto='easy';if(b<=1&&rs.auto==='easy')rs.auto=null;
