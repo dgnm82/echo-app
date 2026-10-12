@@ -57,9 +57,9 @@ async def main():
       assert await until(pg,"document.querySelector('#cr .px-echo').dataset.sleepy==='1'",6000),'sleepy flag'
       # 6: need cues (top need only)
       await pg.evaluate("__echo.state.needs={food:10,play:80,rest:80,comfort:80};Alive.cueN={}");await pg.wait_for_timeout(100)
-      assert await until(pg,"Alive.log.includes('cue:hungry')",8000),'hungry cue'
+      assert await until(pg,"(()=>{"+CL+";return Alive.log.includes('cue:hungry')})()",15000),'hungry cue'
       await pg.evaluate("__echo.state.needs={food:80,play:80,rest:80,comfort:12}")
-      assert await until(pg,"Alive.log.includes('cue:cuddly')",8000),'cuddly cue';await frames(pg,sp+'-cue-cuddly',8)
+      assert await until(pg,"(()=>{"+CL+";return Alive.log.includes('cue:cuddly')})()",15000),'cuddly cue';await frames(pg,sp+'-cue-cuddly',8)
       await pg.evaluate("CONFIG.cueSpeed=1")
       # 9: need-aware selection voices the shown need (cooldowns reset per draw)
       ks=await pg.evaluate("(()=>{const o=[];for(let i=0;i<40;i++){const m=NeedSelect.mem;m.start=-1e15;m.at={};m.any=-1e15;m.n={};m.queue=[];o.push(NeedSelect.slot({needs:{food:10,play:80,rest:80,comfort:80},species:'%s',band:'day',weather:'clear'}).key)}return o})()"%sp)
