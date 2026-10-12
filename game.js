@@ -558,7 +558,7 @@ const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Ni
 function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
 // ---- runners (spec v0.6 §3): Meadow Dash (Slyte, tap = jump) / Moonlight Glide (Whimber, hold = rise). No fail state. ----
 // saves from before v0.6: the Sparkle trail and Connect are gone. Their memories stay in the Memory Book (read-only facts); their state goes.
-function gamesMigrate(){if(!S||S.gv===6)return;delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5;S.gv=6;save()}
+function gamesMigrate(){if(!S||S.gv===6)return;delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5;S.gv=6}   // saved with the next save (no save here: it would reset S.last)
 function runState(){S.run=S.run||{best:{},runs:0,hard:0,auto:null};S.run.best=S.run.best||{};return S.run}
 function runLevel(){const rs=runState();const set=S.runLevel||'auto';if(set!=='auto')return set;if(rs.runs<2)return 'easy';return rs.auto||'standard'}
 function runGame(){
