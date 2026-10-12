@@ -216,7 +216,7 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 /* ===== Living Echo (living_echo.md) ===== */
 #sc .creature{transform:translateX(-50%)}
 .px-echo.lvflip{transform:scaleX(-1)}
-.px-echo.lvtilt{transform:rotate(-8deg)}
+/* .lvtilt was a CSS rotate (breaks the pixel grid and cancelled .lvflip); the tilt now uses the baked curious frames cur1/cur2 */
 .lvprop,.lvfx{position:absolute;background:no-repeat;image-rendering:pixelated;pointer-events:none}
 .lvprop{z-index:5}
 .lvfx{width:16px;height:16px;z-index:40}

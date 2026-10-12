@@ -225,12 +225,12 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     fort_flag:()=>setExpr('proud'),
     sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
     lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
-    stargaze:()=>{setExpr('thinking');const px=document.querySelector('#cr .px-echo');if(px)px.classList.add('lvtilt')},
+    stargaze:()=>{setExpr('thinking')},
     nap:()=>{setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
     read:()=>{setExpr('thinking');if(S.kind!=='fox')lvFx('px/i_book.png',x+14,y-18,'',dur)},
     lantern:()=>setExpr('curious'),preen:()=>setExpr('shy'),hop:()=>react('happy'),
     giggle:()=>{setExpr('giggling');react('happy')},peek:()=>setExpr('shy'),think:()=>setExpr('thinking'),warm:()=>setExpr('happy'),excited:()=>{setExpr('excited');react('excited')},
-    tilt:()=>{setExpr('curious');const px=document.querySelector('#cr .px-echo');if(px)px.classList.add('lvtilt')}};
+    tilt:()=>{setExpr('curious')}};
   clearInterval(LIVE.zT);(A[name]||(()=>{}))()}
 function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null}
 function lvPick(band,found){const last=(S.lvLast||[]).slice(-2);let opts=lvOptions(band).filter(o=>!last.includes(o.wp+':'+o.act));
