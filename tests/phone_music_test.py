@@ -20,8 +20,8 @@ async def run(b,p,kind,errs):
   assert not [u for u in reqs if u.startswith('music/') and u.endswith('.mp3')]
   assert any(u.startswith('music/') and u.endswith('.ogg') and s==200 for u,s in reqs.items()),reqs
   # a game switches to its own theme
-  await pg.evaluate("__echo.state.bondShown=5;__echo.state.bond=150;__echo.connectGame()");await pg.wait_for_timeout(2500)
-  g=await pg.evaluate("Music.playing");assert g==('game_berry_connect_loop' if kind=='fox' else 'game_moonlight_connect_loop'),g
+  await pg.evaluate("__echo.state.bondShown=5;__echo.state.bond=150;__echo.runGame()");await pg.wait_for_timeout(2500)
+  g=await pg.evaluate("Music.playing");assert g==('game_meadow_dash_loop' if kind=='fox' else 'game_moonlight_glide_loop'),g
   await pg.click('#quit');await pg.wait_for_timeout(3000)
   # v2 voice: expression -> mood takes
   await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());Sound.chirp('Hi!', '%s','giggling')"%kind);await pg.wait_for_timeout(800)

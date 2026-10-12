@@ -205,24 +205,7 @@ input[type=checkbox]{width:8px;height:8px}
 .pxfly{transition:left 2s steps(24),bottom 2s steps(24)!important;bottom:150px!important}
 .mcardbtn.shimmer{animation:shim 166ms steps(1,end) 6}
 @keyframes shim{50%{filter:brightness(1.35)}}
-/* ===== Sparkle trail (spec v0.3 §3) ===== */
-.trailgame .tc{position:absolute;left:2px;top:4px;image-rendering:pixelated;touch-action:none;border:1px solid #3B2A5C}
-.trailgame .trside{position:absolute;right:4px;bottom:6px;display:flex;align-items:center;gap:2px;color:#FFF6E6;font-size:8px;background:#3B2A5C;padding:2px 3px;border:1px solid #FFD27A}
-.trailgame .trhint{position:absolute;left:4px;top:248px;color:#FFF6E6;font-size:8px}
-.trailgame .trecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important;visibility:hidden}
-.trailgame .trecho.show{visibility:visible}
-.trailgame .bubble{top:auto!important;bottom:28px;left:56px;right:2px;width:auto!important;transform:none;max-width:none;white-space:normal!important;z-index:5}
-.trailgame .fbdone{position:absolute;left:30px;top:100px;width:120px;z-index:6}
 
-.trailgame .fbdone,.congame .fbdone{position:absolute;left:12px;top:70px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
-.trailgame .fbdone{left:30px;top:100px;width:112px;z-index:6}
-/* ===== Connect (spec v0.3 §4) ===== */
-.congame .cgoal{position:absolute;left:2px;right:2px;top:2px;height:16px;display:flex;align-items:center;gap:3px;background:#FFF6E6;border:1px solid #3B2A5C;color:#3B2A5C;font-size:8px;padding:0 2px}
-.congame .cc{position:absolute;top:22px;image-rendering:pixelated;touch-action:none;border:1px solid #3B2A5C}
-.congame .conecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important}
-.congame .conside{position:absolute;right:4px;bottom:56px;display:flex;align-items:center;gap:3px;color:#FFF6E6;font-size:8px}
-.congame .bubble{top:auto!important;bottom:4px;left:56px;right:2px;width:auto!important;transform:none;max-width:none;white-space:normal!important;z-index:5}
-.congame .fbdone{left:30px;top:90px;width:112px;z-index:6}
 /* ===== Bond-up scene (bond_up.md) ===== */
 canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60;image-rendering:pixelated}
 .bondup-ui{position:absolute;inset:0;z-index:61;pointer-events:none}
@@ -287,3 +270,16 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 /* Living Echo stays under every overlay: the scene is its own stacking context; while a modal is open the away sprite hides */
 #sc{isolation:isolate;z-index:0}
 #sc.lvmodal.lvaway #cr,#sc.lvmodal #cr.lvmoving{visibility:hidden}
+
+/* ===== Runners (spec v0.6 §3): world 360x640 at x1 under the x2 UI ===== */
+.rungame{position:relative;overflow:visible;touch-action:none;user-select:none;-webkit-user-select:none}
+.rungame #rc{position:absolute;left:0;top:-21px;width:180px;height:320px;image-rendering:pixelated;z-index:0}
+.top{position:relative;z-index:5}
+.rungame .bubble{top:6px!important;left:8px!important;right:8px!important;width:auto!important;max-width:none;transform:none!important;white-space:normal!important;z-index:3}
+.rungame .runhint{position:absolute;left:0;right:0;top:200px;text-align:center;color:#3B2A5C;font-size:8px;z-index:2;transition:opacity .3s}.rungame .runhint.off{opacity:0}
+.rungame .runcue{position:absolute;left:82px;bottom:6px;width:16px;height:16px;background-size:16px 16px;image-rendering:pixelated;opacity:0;z-index:2}
+.rungame .runcue.on{animation:runcue .6s steps(2,end)}@keyframes runcue{0%,100%{opacity:0}50%{opacity:1}}
+.rungame .runbest{position:absolute;left:44px;top:56px;padding:3px 5px;background:#FFD27A;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #1f1838;display:flex;gap:3px;align-items:center;z-index:4}
+.top #rm.gold{color:#C9781E}.top b .pxi{width:8px;height:8px;background-size:8px 8px;vertical-align:-1px}
+.rungame .fbdone{position:absolute;left:30px;top:90px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
+.rungame .fbdone .rb{width:100%;color:#C9781E}

@@ -88,7 +88,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 const TAGLINE="ECHO: Every creature has a story to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
 function setup(){
@@ -413,14 +413,13 @@ function book(){
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
-  // Play picker (spec v0.3 §0; Night Sky cut): signature Pairs game (daily +3) + Builder on day 1, Trail at bond 70, Connect at bond 140
+  // Play picker (spec v0.3 §0; Night Sky cut): signature Pairs game (daily +3) + Builder on day 1, the runner at bond 70 (spec v0.6; bond 140 unlocks no game)
   const G=gamesFor();choices(G.map(x=>[x[0],x[1],null]),i=>start(G[i][2]));
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
 function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
-  if(S.bond>=C.unlock.trail)L.push([fox?'🍂':'✨',fox?'Leaf Trail':'Firefly Parade',trailGame]);
-  if(S.bond>=C.unlock.connect&&window.connectGame)L.push([fox?'🫐':'🌙',fox?'Berry Connect':'Moonlight Connect',window.connectGame]);return L}
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/trail|parade/.test(t)?'trail':'connect';(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/trail|parade/.test(t)?(fox?'leaf_trail':'firefly_parade'):(fox?'berry_connect':'moonlight_connect'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+  if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
@@ -532,7 +531,7 @@ function memoryGame(){
       // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
       if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('slyte_radar_ears_twinkle',{pan:(col/(g.cols-1))*2-1,vol:.6})}
       // Super Radar Hearing (spec v0.4 §1, Whimber): after a miss, a soft B♭ chime from the side where the partner card lies
-      if(S.kind!=='fox'&&S.talents.includes('Super Radar Hearing')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('trail_pickup_1',{pan:(col/(g.cols-1))*2-1,vol:.5})}}
+      if(S.kind!=='fox'&&S.talents.includes('Super Radar Hearing')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('run_treasure_1',{pan:(col/(g.cols-1))*2-1,vol:.5})}}
     if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
     if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,NEXT)}
     if(e.type==='done')finish()}
@@ -557,144 +556,97 @@ function memoryGame(){
 const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Night Sky was cut: Starlight Pairs is now Whimber's signature too)
 // Sweet-Dream Lullaby (spec v0.3 §1/§2): in the evening, a finished board/build ends with a yawn and leads into a nap
 function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
-// ---------- Sparkle trail (game spec v0.3 §3): Leaf Trail (Slyte) / Firefly Parade (Whimber), unlocks at bond 70 ----------
-function trailState(){return S.trail=S.trail||{games:0}}
-function trailLevel(){const t=trailState(),set=S.trailLevel||'auto';if(t.games===0)return 'easy';return set==='auto'?'standard':set}
-function trailGame(){
-  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',ts=trailState(),level=trailLevel(),TITLE=fox?'Leaf Trail':'Firefly Parade';
-  const silent=!fox&&S.talents.includes('Silent Flight'),nv=!fox&&S.talents.includes('Night Vision'),radar=fox&&S.talents.includes('Radar Ears');
-  const g=TrailEngine.create({level,seed:(S.g.seed||1)*23+ts.games*5+1,jumper:fox&&S.talents.includes('Super Jumper')});
-  const W=g.w*16,H=g.h*16,ms=g.L.ms*(silent?2:1),v=PIXEL.variant(S.g.seed,SP),stepMode=g.L.step;
-  gameShell(`${TITLE} · 0/${g.goal}`);const gs=$('#gs');gs.classList.add('trailgame');if(nv)gs.classList.add('nv');
-  gs.insertAdjacentHTML('beforeend',`<canvas id="tc" class="tc" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Trail board"></canvas>
-    <div class="trside"><i class="pxi" style="background-image:url(px/trail/f_${SP}_0.png);background-size:32px 16px"></i><span id="tcount">0/${g.goal}</span><span id="textra"></span>${level==='standard'?'':`<span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}</div>
-    ${stepMode?'<div class="trhint">Hold to walk</div>':''}<div class="trecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>`);
-  const cv=$('#tc'),cx=cv.getContext('2d'),IM={};const ld=(k,s)=>{IM[k]=new Image();IM[k].src=s};
-  ld('tok',`px/trail/tok_${SP}_${v.pal}.png`);[0,1,2].forEach(i=>ld('f'+i,`px/trail/f_${SP}_${i}.png`));ld('rare',`px/trail/rare_${SP}.png`);ld('obs',`px/trail/obs_${SP}.png`);
-  ld('ta',`px/trail/tile_${SP}_a.png`);ld('tb',`px/trail/tile_${SP}_b.png`);
-  let t=0,alive=true,held=false,happyT=0,paused=false,pickups=0,finale=null;
-  function draw(){if(!alive)return;t++;for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)cx.drawImage((x*7+y*3)%5?IM.ta:IM.tb,x*16,y*16);
-    if(nv){cx.fillStyle='rgba(20,14,40,.55)';cx.fillRect(0,0,W,H)}
-    g.obs.forEach(k=>{const [x,y]=k.split(',').map(Number);cx.drawImage(IM.obs,x*16,y*16)});
-    const p=g.pickup;if(p&&!g.done){const im=p.rare?IM.rare:IM.f0;if(p.rare)cx.drawImage(im,p.x*16,p.y*16-(t>>2)%2);else cx.drawImage(im,((t>>2)%2)*16,0,16,16,p.x*16,p.y*16,16,16)}
-    const F=TrailEngine.followers(g);
-    F.forEach((q,i)=>{if(nv){cx.fillStyle='rgba(255,227,154,.35)';cx.fillRect(q.x*16-2,q.y*16-2,20,20)}cx.drawImage(IM['f'+(i%3)],(((t>>2)+i)%2)*16,0,16,16,q.x*16,q.y*16,16,16)});
-    if(finale)finale();
-    const fr=(happyT>0?2:0)+((t>>2)%2);if(happyT>0)happyT--;cx.save();const hx=g.head.x*16,hy=g.head.y*16;
-    if(g.dir===3){cx.translate(hx+16,hy);cx.scale(-1,1);cx.drawImage(IM.tok,fr*16,0,16,16,0,0,16,16)}else cx.drawImage(IM.tok,fr*16,0,16,16,hx,hy,16,16);cx.restore()}
-  const loop=setInterval(draw,83);
-  const mover=setInterval(()=>{if(!alive||paused||g.done)return;if(stepMode&&!held)return;TrailEngine.step(g);after()},ms);
-  function after(){for(const e of TrailEngine.take(g)){
-      if(e.type==='pickup'&&e.rare)talk(B('trail_rare'),1500);
-      if(e.type==='pickup'){pickups++;happyT=8;SFX(pickups%5===0?'trail_pickup_5':'trail_pickup_1',{vol:.6});if(pickups%4===0)talk(B('trail_pickup'),1500);else say('*')}
-      if(e.type==='bump'){if(!silent)SFX('trail_bump_boop',{gap:400,vol:.5});if(Math.random()<.35)talk(B('trail_bump'),1500)}
-      if(e.type==='hop')happyT=6;
-      if(e.type==='spawn'&&radar)SFX('slyte_radar_ears_twinkle',{pan:(e.x/(g.w-1))*2-1,vol:.5,gap:300});   // Radar Ears: a twinkle from the side the next leaf is on
-      if(e.type==='long')talk(B('trail_long'),1800);
-      if(e.type==='round'&&e.round<2)roundDone(e.round,TR_NEXT);
+// ---- runners (spec v0.6 §3): Meadow Dash (Slyte, tap = jump) / Moonlight Glide (Whimber, hold = rise). No fail state. ----
+// saves from before v0.6: the Sparkle trail and Connect are gone. Their memories stay in the Memory Book (read-only facts); their state goes.
+function gamesMigrate(){if(!S||S.gv===6)return;delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5;S.gv=6;save()}
+function runState(){S.run=S.run||{best:{},runs:0,hard:0,auto:null};S.run.best=S.run.best||{};return S.run}
+function runLevel(){const rs=runState();const set=S.runLevel||'auto';if(set!=='auto')return set;if(rs.runs<2)return 'easy';return rs.auto||'standard'}
+function runGame(){
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',rs=runState(),level=runLevel(),TITLE=fox?'Meadow Dash':'Moonlight Glide';
+  const T=n=>S.talents.includes(n),silent=!fox&&T('Silent Flight'),nv=!fox&&T('Night Vision');
+  const evening=tod()==='evening'||tod()==='night';
+  const g=RunnerEngine.create({kind:fox?'jump':'glide',level,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
+  const best0=rs.best[level]||0,firstEver=!rs.runs;let cheered=false,lastLine=-9,treN=0,bumpN=0,lastTre=0;
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame');
+  const tre=fox?'trinket':'feather';
+  gs.insertAdjacentHTML('beforeend',`<canvas id="rc" width="360" height="640" aria-label="${TITLE}"></canvas>
+    <div class="runhint" id="rhint">${rs.runs?'':(fox?'tap = jump':'hold = rise, let go = glide')}</div><div class="runcue" id="rcue" style="background-image:url(px/i_${fox?'paw':'feather'}.png)"></div>`);
+  const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
+  if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
+  const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{IM[k]=new Image();IM[k].src='px/'+s+'.png'};
+  if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy'].forEach(k=>ld(k,'run/slyte_'+k))}
+  else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240','bush40','bush60','bush80'].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,'run/whimber_'+k))}
+  ld('tre','items/'+tre);ld('gold','run/'+tre+'_gold');
+  let alive=true,acc=0,last=performance.now(),happy=0,signs=[],restProp=null,pops=[],frame=0;
+  const lineOK=()=>g.t-lastLine>=6;const line=(k,ms)=>{if(!lineOK())return false;lastLine=g.t;talk(B(k),ms||1800);return true};
+  const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
+  function bg(){const d=g.dist;
+    if(fox){cx.drawImage(IM.meadow_sky,0,0);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
+      cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448)}
+    else{cx.drawImage(IM.hill_sky,0,0);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
+      [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
+  function drawObs(){const d=g.dist;for(const o of g.obs){const x=Math.round(o.x-d);if(x>370||x<-60)continue;const wob=o.pushed?Math.round(Math.sin(g.t*30)*2):0;
+      if(nv&&!o.pushed&&x<360+g.speed*.5){cx.fillStyle='rgba(255,227,154,.25)';cx.fillRect(x-2,o.y-2,o.w+4,Math.min(o.h+4,640))}
+      if(o.type==='log')cx.drawImage(IM.log,x-1+wob,o.y-2);else if(o.type==='logs'){cx.drawImage(IM.log,x-1,o.y+12);cx.drawImage(IM.log,x-1,o.y-2)}
+      else if(o.type==='rock')cx.drawImage(IM.rock,x-1+wob,o.y-2);else if(o.type==='puddle')cx.drawImage(IM.puddle,x-1,o.y-1-(o.pushed?1:0));
+      else if(o.type==='cloud')cx.drawImage(IM.cloud,x+wob,o.y);
+      else if(o.type==='branch'){const L=[120,160,200,240].find(v=>v>=o.h)||240,im=IM['branch'+L];cx.drawImage(im,x-1+wob,o.h-im.height+2)}
+      else if(o.type==='bush'){if(o.h<=80){const im=IM['bush'+([40,60,80].find(v=>v>=o.h)||80)];cx.drawImage(im,x+wob,o.y-(im.height-o.h)*.3)}else for(let y=o.y;y<o.y+o.h;y+=30)cx.drawImage(IM.bush60,x+wob,y-15)}}
+    for(const t of g.tre){const x=Math.round(t.x-d)-8;if(x>370||x<-20)continue;cx.drawImage(t.gold?IM.gold:IM.tre,x,Math.round(t.y-8+(Math.sin(g.t*4+t.id)>0?-1:0)))}
+    for(const s of signs){const x=Math.round(s-d);if(x>-20&&x<370)cx.drawImage(fox?IM.sign:IM.sign_twi,x,(fox?470:528)-13)}
+    if(restProp!==null){const x=Math.round(restProp-d);if(fox)cx.drawImage(IM.sunrock,x,470-21);else{cx.drawImage(IM.bench,x,528-8);cx.drawImage(IM.moss,x+1,528-14)}}}
+  function echo(){let k;const F=Math.floor(g.t*12);
+    if(fox){k=g.tumble>0?'tumble':g.phase!=='run'&&g.mult<.05?'tumble':happy>0?'run_happy':g.air?(g.vy<0?'jump':'fall'):'run'+(F%6)}
+    else{k=g.tumble>0?'tumble':happy>0||(g.phase!=='run'&&g.mult<.05)?'glide_happy':g.held?'flap'+(F%4):'glide'}
+    const im=IM[k];if(!im)return;const x=fox?16:20,y=Math.round(g.y-48+(fox?0:6));
+    if(g.disguised>0&&IM.bush40===undefined){cx.globalAlpha=.35}
+    if(g.tumble>0){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
+    else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;cx.drawImage(im,x,y)}cx.globalAlpha=1;
+    if(g.disguised>0){cx.fillStyle='#6DB274';cx.fillRect(x+10,y+22,28,22);cx.fillStyle='#3B2A5C';cx.fillRect(x+10,y+43,28,1)}   // Master of Disguise: a little bush
+    for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
+  function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+(g.treasures+g.gold);if(cheered)$('#rm').classList.add('gold')}
+  function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
+    acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=1/60){RunnerEngine.step(g,1/60);acc-=1/60;if(happy>0)happy-=1/60;pops.forEach(p=>p.t-=1/60);pops=pops.filter(p=>p.t>0);
+      if(g.phase==='run'&&g.stretchT>g.L.stretch-2.5&&signs.length<=g.stretch)signs.push(g.dist+40+g.speed*2.5);handle()}
+    bg();drawObs();echo();hud();requestAnimationFrame(tick)}
+  function handle(){for(const e of RunnerEngine.take(g)){
+      if(e.type==='jump'||e.type==='hop2'){SFX('memory_card_flip',{vol:.25,gap:100})}
+      if(e.type==='treasure'||e.type==='gold'){treN++;happy=.3;pops.push({s:e.type==='gold'?'+30':'+10',x:60,y:g.y-50,t:1,c:'#FFD27A'});
+        if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');line('run_gold',1800)}
+        else{lastTre=(g.t-lastTre>8)?1:lastTre+1;SFX(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
+      if(e.type==='bump'){bumpN++;if(!silent)SFX('run_tumble_boop',{gap:400,vol:.5})}
+      if(e.type==='giggle'){if(!(bumpN%3===0&&line('run_bump',1800)))giggle()}
+      if(e.type==='disguise'){giggle();react('excited')}
+      if(e.type==='radar')SFX('slyte_radar_ears_twinkle',{pan:1,vol:.5,gap:300});
+      if(e.type==='chime')SFX('run_treasure_1',{pan:0,vol:.35,rate:1+(320-e.y)/900,gap:300});
+      if(e.type==='cue'){const c=$('#rcue');if(c){c.classList.remove('on');void c.offsetWidth;c.classList.add('on')}}
+      if(e.type==='stretch'){SFX('blocks_row_glow',{vol:.6});const b=g.stretchBumps[e.n]||0;
+        if(b>=5)rs.hard=(rs.hard||0)+1;else rs.hard=0;if(rs.hard>=2)rs.auto='easy';if(b<=1&&rs.auto==='easy')rs.auto=null;
+        if(e.n<2){lastLine=-9;line('run_stretch',1800);roundDone(e.n,RUN_NEXT)}}
+      if(e.type==='rest')restProp=g.dist+40+g.base*1.05;
       if(e.type==='done')finish()}
-    $('#tcount').textContent=`${g.count}/${g.goal}`;$('#textra').textContent=TrailEngine.extra(g)?`+${TrailEngine.extra(g)}`:'';const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.count}/${g.goal}`}
-  function finish(){ts.games++;const F=TrailEngine.followers(g).slice(0,6);
-    if(fox){finale=()=>{F.forEach((q,i)=>{cx.drawImage(IM['f'+(i%3)],0,0,16,16,g.head.x*16+((i*5)%9)-4,g.head.y*16+((i*3)%5)-2,16,16)})};remember(`We made a trail of ${g.goal} leaves and pounced in the pile`,'trail_'+g.goal)}
-    else{finale=()=>{cx.fillStyle='#FFD27A';for(let i=1;i<F.length;i++){const a=F[i-1],b=F[i];const n=12;for(let k=0;k<=n;k+=2)cx.fillRect(Math.round(a.x*16+8+(b.x-a.x)*16*k/n),Math.round(a.y*16+8+(b.y-a.y)*16*k/n),1,1)}};
-      remember('Our firefly parade made a little constellation','trail_parade')}
-    const c=$('#cr');c.classList.add('show');setExpr('delighted');react('excited');talk(B('trail_done'),2400);save();
-    gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${fox?'Leaf pile pounce!':'A little constellation!'}</span>${PI('✨')}</div>`);
-    setTimeout(()=>{stop();roundDone(2,TR_NEXT)},1800)}
-  function stop(){alive=false;clearInterval(loop);clearInterval(mover);document.removeEventListener('keydown',key);document.removeEventListener('keyup',keyup)}
-  // phone: drag and the Echo follows the finger (easy: walks only while the finger is down)
-  const cell=e=>{const r=cv.getBoundingClientRect(),k=r.width/W;return [Math.floor((e.clientX-r.left)/k/16),Math.floor((e.clientY-r.top)/k/16)]};
-  cv.addEventListener('pointerdown',e=>{held=true;const [x,y]=cell(e);TrailEngine.steer(g,x,y);cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
-  cv.addEventListener('pointermove',e=>{if(!held)return;const [x,y]=cell(e);TrailEngine.steer(g,x,y)});
-  ['pointerup','pointercancel'].forEach(n=>cv.addEventListener(n,()=>held=false));
-  // handheld (spec §3): ◀ ▶ turn left/right, A = little dash (easy: hold A to walk), B = pause
-  function key(e){if(!document.getElementById('tc')){stop();return}const k=e.key.toLowerCase();
-    if(k==='arrowleft')TrailEngine.turn(g,-1);else if(k==='arrowright')TrailEngine.turn(g,1);
-    else if(k==='a'||k==='z'||k===' '){if(stepMode)held=true;else if(!e.repeat){TrailEngine.step(g,true);after()}}
-    else if(k==='b'||k==='x'){paused=!paused;toast(paused?'Paused':'Go!')}else return;e.preventDefault()}
-  function keyup(e){const k=e.key.toLowerCase();if(stepMode&&(k==='a'||k==='z'||k===' '))held=false}
+    if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;happy=1.2;SFX('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
+      gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>NEW BEST!</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2200);
+      if(!fox)S.hillStars=Math.min(12,(S.hillStars||0)+1)}}
+  function finish(){const m=Math.floor(g.dist/16),n=g.treasures+g.gold,sc=RunnerEngine.score(g);rs.runs++;
+    const isBest=sc>(rs.best[level]||0);if(isBest)rs.best[level]=sc;
+    if(isBest&&m>=50)remember(`Our longest run was ${m} m`,'run_best');if(n>=5)remember(`We found ${n} ${tre}s in one run`,'run_haul');
+    SFX('run_finale',{vol:.7});react('happy');setExpr('happy');
+    if(!fox&&T('Sweet-Dream Lullaby')&&evening)setTimeout(()=>{setExpr('sleepy');talk(B('yawn'),1800)},1500);
+    gs.insertAdjacentHTML('beforeend',`<div class="fbdone runcard"><span>${m} m + ${n}×</span><i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span>= ${sc}</span><span class="rb">${firstEver?'Our best!':isBest?'New best!':'Best: '+rs.best[level]}</span></div>`);
+    lastLine=-9;line('run_done',2400);save();if(window.Music)setTimeout(()=>Music.duck(false),10);
+    setTimeout(()=>{stop();roundDone(2,RUN_NEXT)},1400)}
+  function stop(){alive=false;document.removeEventListener('keydown',key);document.removeEventListener('keyup',keyup)}
+  const down=e=>{if(e.target.closest&&e.target.closest('.top'))return;RunnerEngine.press(g);const h=$('#rhint');if(h&&rs.runs===0)h.classList.add('off')},up=()=>RunnerEngine.release(g);
+  gs.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(n=>gs.addEventListener(n,up));
+  function key(e){if(!document.getElementById('rc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='enter'||k==='a'||k==='z')&&!e.repeat){RunnerEngine.press(g);e.preventDefault()}}
+  function keyup(e){const k=e.key.toLowerCase();if(k===' '||k==='enter'||k==='a'||k==='z')RunnerEngine.release(g)}
   document.addEventListener('keydown',key);document.addEventListener('keyup',keyup);
   $('#quit').onclick=()=>{stop();endGame(false)};
-  window.__trail=g;window.__trailAfter=after;window.__trailHold=v=>held=v;
-  talk(B('trail_start'),2400);
+  window.__run=g;window.__runHandle=handle;
+  lastLine=-9;line('run_start',2400);requestAnimationFrame(t=>{last=t;tick(t)});
 }
-const TR_NEXT=()=>{};   // one trail spans the 3 rounds (ends at 1/3, 2/3 and the goal)
-
-// ---------- Connect (game spec v0.3 §4): Berry Connect (Slyte) / Moonlight Connect (Whimber), unlocks at bond 140 ----------
-function conState(){return S.connect=S.connect||{games:0}}
-function conLevel(){const c=conState(),set=S.connectLevel||'auto';if(c.games===0)return 'easy';return set==='auto'?'standard':set}
-function connectGame(){
-  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',cs=conState(),level=conLevel(),TITLE=fox?'Berry Connect':'Moonlight Connect';
-  const nv=!fox&&S.talents.includes('Night Vision'),jumper=fox&&S.talents.includes('Super Jumper'),lull=!fox&&S.talents.includes('Sweet-Dream Lullaby')&&['evening','night'].includes(tod());
-  const g=ConnectEngine.create({species:SP,level,seed:(S.g.seed||1)*29+cs.games*3+1,shapes:fox&&S.talents.includes('Riddle Solver')});
-  (S.vars=S.vars||{}).connect5=g.kinds.length>=5;   // gates the apple/firefly lines (trail_connect_barks.md §6.1)
-  const Z=24,W=g.w*Z,H=g.h*Z,NAME={blackberry:'blackberries',honey_cake:'honey cakes',nut:'nuts',leaf:'leaves',apple:'apples',star:'stars',moon:'moons',dewdrop:'dewdrops',comet:'comets',firefly:'fireflies'};
-  gameShell(`${TITLE} · round 1/3`);const gs=$('#gs');gs.classList.add('congame');if(!fox)gs.classList.add('night');
-  gs.insertAdjacentHTML('beforeend',`<div class="cgoal" id="cgoal"></div><canvas id="cc" class="cc" width="${W}" height="${H}" style="width:${W}px;height:${H}px;left:${(180-W)/2}px" aria-label="Connect board"></canvas>
-    <div class="conecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div><div class="conside">${jumper?'<button class="btn small" id="hop">Hop!</button>':''}<span id="cstars"></span>${level==='standard'?'':`<span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}</div>`);
-  const cv=$('#cc'),cx=cv.getContext('2d'),IM={},ld=(k,s)=>{IM[k]=new Image();IM[k].src=s};
-  [...g.kinds,g.fav].forEach(k=>ld(k,`px/connect/${k}.png`));ld('*','px/connect/sparkle.png');ld('ring','px/connect/favring.png');[0,1,2,3].forEach(i=>ld('b'+i,`px/connect/burst${i}.png`));
-  let path=[],alive=true,t=0,burst=[],idle=0,hint=null,mode='pick',pickI=0,cursor=0,hopUsed=false;
-  const GOLD=fox?'#FFD27A':'#FFF1C4';
-  function goalBar(){$('#cgoal').innerHTML=`<span>Gather</span><i class="pxi" aria-label="${NAME[g.goal]||g.goal}" style="background-image:url(px/connect/${g.goal}.png)"></i><span>${g.got}/${g.L.goal}</span>`;
-    const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · round ${Math.min(3,g.round+1)}/3`;if(g.L.stars)$('#cstars').innerHTML=Array.from({length:ConnectEngine.stars(g)},()=>PI('🌟')).join('')}
-  function cxy(i){return [(i%g.w)*Z,Math.floor(i/g.w)*Z]}
-  function draw(){if(!alive)return;t++;idle+=83;
-    for(let i=0;i<g.cells.length;i++){const [x,y]=cxy(i);cx.fillStyle=((i%g.w)+Math.floor(i/g.w))%2?(fox?'#C99A6A':'#3B2A5C'):(fox?'#B58457':'#2E2452');cx.fillRect(x,y,Z,Z)}
-    const B_=ConnectEngine.bunches(g);
-    if(nv&&B_[0]){cx.fillStyle='rgba(255,241,196,.22)';B_[0].cells.forEach(i=>{const [x,y]=cxy(i);cx.fillRect(x,y,Z,Z)})}           // Night Vision: the biggest bunch glows softly
-    if(hint&&(t>>2)%2){cx.fillStyle='rgba(255,210,122,.35)';hint.forEach(i=>{const [x,y]=cxy(i);cx.fillRect(x,y,Z,Z)})}
-    if(kbd&&mode==='pick'&&B_.length){const b=B_[pickI%B_.length];cx.strokeStyle='#FFD27A';cx.lineWidth=1;b.cells.forEach(i=>{const [x,y]=cxy(i);cx.strokeRect(x+.5,y+.5,Z-1,Z-1)})}
-    if(kbd&&mode==='free'){const [x,y]=cxy(cursor);cx.strokeStyle=(t>>2)%2?'#FFD27A':'#FFFFFF';cx.strokeRect(x+1.5,y+1.5,Z-3,Z-3)}
-    for(let i=0;i<g.cells.length;i++){const c=g.cells[i],[x,y]=cxy(i);if(!c)continue;const im=c==='*'?IM['*']:c==='!'?IM[g.fav]:IM[c];const lift=path.includes(i)?1:0;
-      if(im)cx.drawImage(im,x+4,y+4-lift);if(c==='!')cx.drawImage(IM.ring,x+2,y+2)}
-    // thread: 2px gold with an ink edge, through item centres
-    if(path.length>1){for(const [w,col] of [[4,'#3B2A5C'],[2,GOLD]]){cx.strokeStyle=col;cx.lineWidth=w;cx.beginPath();path.forEach((i,j)=>{const [x,y]=cxy(i);j?cx.lineTo(x+12,y+12):cx.moveTo(x+12,y+12)});cx.stroke()}}
-    burst=burst.filter(b=>{if(b.f<4){const [x,y]=cxy(b.i);cx.drawImage(IM['b'+b.f],x+4,y+4);b.f++;return true}return false});
-    if(idle>(g.L.hintMs||1e9)&&!hint&&B_[0]){hint=B_[0].cells;react('curious');if(Math.random()<.5)talk(B('connect_hint'),1500)}}
-  const loop=setInterval(draw,83);let kbd=false;
-  function link(i){if(i==null||i<0)return;if(path.length>1&&path[path.length-2]===i){path.pop();return}if(ConnectEngine.canAdd(g,path,i)){path.push(i);SFX('ui_tap',{gap:30,vol:.35,rate:fox?1+path.length*.08:.8+path.length*.05})}}
-  function letGo(){const p=path.slice();path=[];if(!ConnectEngine.gather(g,p)){return}idle=0;hint=null;after()}
-  function after(){for(const e of ConnectEngine.take(g)){
-      if(e.type==='gather'){e.cells.forEach(i=>burst.push({i,f:0}));SFX(e.big?'connect_big_group':'connect_group_3',{vol:.7});react('happy');if(e.big)talk(B('connect_big'),1800);else say('*')}
-      if(e.type==='special'&&e.special==='!'){SFX('connect_special_trinket');setExpr('delighted');talk(B('connect_special'),2000)}
-      if(e.type==='shape')toast('Shape goal! +2');
-      if(e.type==='shuffle'){react('excited');talk(B('connect_shuffle'),1800)}
-      if(e.type==='goal'&&e.round>0)talk(B('connect_round',{goal:NAME[e.kind]||e.kind}),1800);
-      if(e.type==='round'&&e.round<2)roundDone(e.round,CN_NEXT);
-      if(e.type==='done')finish()}
-    goalBar()}
-  function finish(){cs.games++;setExpr('delighted');react('excited');remember(fox?'We gathered big bunches of berries together':'We gathered moonlight together, bunch by bunch','connect_'+SP);save();
-    gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>All gathered!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:ConnectEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
-    setTimeout(()=>{stop();roundDone(2,CN_NEXT);lullaby()},1600)}
-  function stop(){alive=false;clearInterval(loop);document.removeEventListener('keydown',key)}
-  // phone: drag through touching same items and lift to gather; tap mode: tap items one by one, tap the last again to gather
-  const cellAt=e=>{const r=cv.getBoundingClientRect(),k=r.width/W,x=Math.floor((e.clientX-r.left)/k/Z),y=Math.floor((e.clientY-r.top)/k/Z);return x<0||y<0||x>=g.w||y>=g.h?-1:y*g.w+x};
-  let down=null,moved=false;
-  cv.addEventListener('pointerdown',e=>{kbd=false;idle=0;const i=cellAt(e);down=i;moved=false;if(path.length&&path[path.length-1]===i)return;if(path.length&&!ConnectEngine.canAdd(g,path,i))path=[];link(i);cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
-  cv.addEventListener('pointermove',e=>{if(down==null)return;const i=cellAt(e);if(i!==down&&i>=0){moved=true;down=i;link(i)}});
-  cv.addEventListener('pointerup',e=>{const i=cellAt(e),was=down;down=null;
-    if(moved){letGo();return}
-    if(path.length&&path[path.length-1]===i&&(path.length>=3||g.cells[i]==='!')&&was===i&&path._tapped){letGo();return}
-    path._tapped=true;if(path.length===1&&g.cells[i]!=='!')path._tapped=true});
-  if(jumper)$('#hop').onclick=()=>{if(hopUsed)return;hopUsed=true;$('#hop').disabled=true;react('excited');ConnectEngine.reshuffle(g);after()};   // Super Jumper: once per round, a free reshuffle
-  // handheld (spec §4): ◀ ▶ cycle bunches (biggest first), A gathers; B toggles free threading (◀ ▶ cursor, A link, B gather)
-  function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();const A=k==='a'||k==='z'||k===' '||k==='enter',Bk=k==='b'||k==='x';
-    if(!['arrowleft','arrowright'].includes(k)&&!A&&!Bk)return;e.preventDefault();kbd=true;idle=0;const B_=ConnectEngine.bunches(g);
-    if(mode==='pick'){if(k==='arrowright')pickI=(pickI+1)%Math.max(1,B_.length);else if(k==='arrowleft')pickI=(pickI-1+B_.length)%Math.max(1,B_.length);
-      else if(A&&B_.length){ConnectEngine.gatherSet(g,B_[pickI%B_.length].cells);pickI=0;after()}else if(Bk){mode='free';path=[];toast('Free threading')}return}
-    if(!path.length){if(k==='arrowright')cursor=(cursor+1)%g.cells.length;else if(k==='arrowleft')cursor=(cursor-1+g.cells.length)%g.cells.length;else if(A)link(cursor);else if(Bk){mode='pick';toast('Bunch picker')}return}
-    const nb=g.cells.map((_,j)=>j).filter(j=>ConnectEngine.canAdd(g,path,j));
-    if(k==='arrowright'||k==='arrowleft'){if(nb.length){const ci=nb.indexOf(cursor);cursor=nb[(ci+(k==='arrowright'?1:nb.length-1)+(ci<0?1:0))%nb.length]}}
-    else if(A&&nb.includes(cursor))link(cursor);else if(Bk){if(ConnectEngine.valid(g,path))letGo();else path=[]}}
-  document.addEventListener('keydown',key);
-  $('#quit').onclick=()=>{stop();endGame(false)};
-  window.__con=g;window.__conAfter=after;window.__conGather=p=>{path=[];if(ConnectEngine.gather(g,p))after()};
-  goalBar();talk(B('connect_start'),2400);
-}
-const CN_NEXT=()=>{};   // one board, a new goal item each round; roundDone() books each round
-window.connectGame=connectGame;
-
+const RUN_NEXT=()=>{};   // one run spans the 3 rounds (a signpost ends each stretch; the rest stop ends the run)
 // ---------- Farewell arc (echo/farewell/farewell_arc.md v0.2, Cole's defaults) ----------
 // active -> almost_ready (Ready rule, spec §5.7) -> [grace: 3 session-days] -> walking -> ceremony (C0-C10, step saved) -> released
 const FWC=()=>Object.assign({glanceFromBond:140,restlessBond:440,readyBond:500,readyDays:7,readySessionDays:6,altDay:14,altBond:350,almostMin:2,almostMax:3,
@@ -724,10 +676,10 @@ function fwGreet(){const f=fw(),t=fwToday();
   if(f.state==='almost_ready'){talk(B('almost_hello'));return true}
   if(f.state==='grace'){if(f.graceDays.length===FWC().graceDays&&f.lastDay!==t){f.lastDay=t;save();talk(B('last_day'))}else talk(B('grace_hello'));return true}
   return false}
-function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
-  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',trail:fox?'Leaf Trail':'Firefly Parade',connect:fox?'Berry Connect':'Moonlight Connect'};
+function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).filter(k=>['pairs','builder','run'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
+  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',run:fox?'Meadow Dash':'Moonlight Glide'};
   (S.vars=S.vars||{}).listGame=GN[top];const cb=Object.values(S.cbCount||{}).reduce((a,b)=>a+b,0);
-  return [{id:top==='builder'?'place':top==='trail'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
+  return [{id:top==='builder'?'place':top==='run'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
 const FW_ITEM={play:0,food:1,place:2,trail:3,memory:4,cozy:5};
 function fwTick(id,game){const f=fw();if(!fwShowPath())return;const it=f.list.find(x=>x.id===id||(game&&x.game===game&&['play','place','trail'].includes(x.id)));if(!it||it.done)return;
   it.done=true;save();const all=f.list.every(x=>x.done);
@@ -899,6 +851,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},runGame:()=>runGame(),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();
