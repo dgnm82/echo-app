@@ -23,16 +23,16 @@ async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]
     for kind,nm in (('fox','slyte'),('owl','whimber')):
-      pg=await newecho(b,p,kind,errs);L="__echo.living"
-      assert await pg.evaluate(L+".st")=='present' and await pg.evaluate(L+".pos")==[90,199]
+      pg=await newecho(b,p,kind,errs);L="__echo.living";HP=[90,199] if kind=='fox' else [90,133]   # Whimber home v2: stage on the limb
+      assert await pg.evaluate(L+".st")=='present' and await pg.evaluate(L+".pos")==HP
       # Wander: idle -> walks/flies to a waypoint and does that spot's behaviour (shortened idle for the test)
       await pg.evaluate("CONFIG.livingSpeed=.05;__echo.living.start(false)")
       assert await until(pg,L+".st==='wander'&&!!"+L+".act",15000),'wandered'
       await pg.wait_for_timeout(300);await pg.screenshot(path=f'{OUT}/living-{nm}-wander-{await pg.evaluate(L+".act")}.png')
-      pos=await pg.evaluate(L+".pos");assert pos!=[90,199],pos
+      pos=await pg.evaluate(L+".pos");assert pos!=HP,pos
       # Present: a care tap calls it back to the stage spot within ~2 s
       await pg.evaluate("CONFIG.livingSpeed=1");await pg.click('#feed');await pg.wait_for_timeout(2300)
-      dbg=await pg.evaluate(L+'.dbg()');pos=await pg.evaluate(L+'.pos');assert pos==[90,199] and dbg['st']=='present',(pos,dbg)
+      dbg=await pg.evaluate(L+'.dbg()');pos=await pg.evaluate(L+'.pos');assert pos==HP and dbg['st']=='present',(pos,dbg)
       # Routine: band change (evening -> the sunset routine for Slyte / lantern for Whimber; night -> moon yip / stargaze)
       await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';document.getElementById('b').style.display='none'")
       await pg.wait_for_timeout(3500);await pg.evaluate("document.getElementById('b').style.display='none'");await pg.evaluate(L+".routine('night')")
@@ -43,7 +43,7 @@ async def main():
       assert await pg.evaluate(L+".st")=='found',await pg.evaluate(L+".st");act=await pg.evaluate(L+".foundAct");await pg.screenshot(path=f'{OUT}/living-{nm}-found-{act}.png')
       assert await until(pg,"document.getElementById('b').style.display==='block'",3000);txt=await pg.inner_text('#b');print(nm,'found',act,'|',txt);assert not BAD.search(txt)
       await pg.screenshot(path=f'{OUT}/living-{nm}-found-noticed.png')
-      assert await until(pg,L+".st==='present'&&JSON.stringify("+L+".pos)==='[90,199]'",8000),'came over after noticing'
+      assert await until(pg,L+".st==='present'&&JSON.stringify("+L+".pos)==="+repr(str(HP).replace(' ','')),8000),'came over after noticing'
       await pg.close()
     print('ERR',errs);assert not errs;await b.close();print('living test OK')
 asyncio.run(main())
