@@ -1,6 +1,9 @@
 # foods.js from aliveness/foods.json: only foods whose 16 px icon exists are offered (F2 v1: 12 new icons).
 import json,os
 F=json.load(open('/workspace/echo/aliveness/foods.json'))
+missing=[(sp,x['id']) for sp in ('slyte','whimber') for x in F[sp]
+         if not os.path.exists('px/'+('i_'+x['icon'][4:] if x['icon'].startswith('new:') else x['icon'])+'.png')]
+if missing: print('WARNING foods without icon:',missing)
 out={'tiers':F['tiers'],'slyte':[],'whimber':[]}
 for sp in ('slyte','whimber'):
     for x in F[sp]:

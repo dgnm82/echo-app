@@ -26,7 +26,7 @@ async def main():
       await pg.wait_for_timeout(400)
       # 8/1: menu = 3 foods with drawn icons (Whimber's seeds no longer a speech bubble)
       await pg.click('#feed');await pg.wait_for_timeout(300);ic=await pg.evaluate("[...document.querySelectorAll('#overlay .choices .pxi')].map(i=>i.dataset.icon)")
-      assert len(ic)==3 and 'talk' not in ic,ic;await pg.screenshot(path=f'{OUT}/{sp}-feed-menu.png')
+      assert len(ic)==3 and 'talk' not in ic,ic;n=await pg.evaluate("FOODS['%s'].length"%sp); assert n==(44 if sp=='slyte' else 43),n;await pg.screenshot(path=f'{OUT}/{sp}-feed-menu.png')
       # 7: food drop/float/plate -> eat -> reaction
       await pg.locator('#overlay .choices button').first.click();await pg.wait_for_timeout(150);await frames(pg,sp+'-eat',30)
       assert await pg.evaluate("__echo.state.foods.length")>=1
