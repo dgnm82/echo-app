@@ -36,7 +36,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
-    const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||B('ambient'));sess.ambient=(sess.ambient||0)+1}
+    const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000)}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
@@ -141,6 +141,7 @@ function home(greet){
   // stroke to pet
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
+  if(window.Alive)Alive.twinkle();
   if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene'))home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet)fwSession();
   if(greet&&fwGreet()){}
@@ -199,7 +200,7 @@ const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,ban
 function lvEl(){return document.getElementById('cr')}
 function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
   c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));
-  const px=c.querySelector('.px-echo');if(px&&face!=null)px.classList.toggle('lvflip',face<0)}
+  const px=c.querySelector('.px-echo');if(px&&face!=null&&px.classList.contains('lvflip')!==(face<0)){px.classList.toggle('lvflip',face<0);PIXEL.blink(px)}}   // blink on turn (B1)
 function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
 function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');const c=lvEl();if(c)c.classList.remove('lvmoving')}
 function lvMove(to,done,fast){   // Slyte trots on the ground (2 px/tick, 3 when called over); Whimber flies a quadratic arc (3 px/tick, apex 12-20 px)
@@ -309,7 +310,7 @@ function playBondUp(from,to,live,done){
     window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,line:lineObj,lowfx:lowFx(),short:!!S.shortBondUp,
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
-function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
+function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
   b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr);clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
 function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
@@ -320,15 +321,25 @@ function choices(list,cb,opts){
   let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;SFX('ui_tap');opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
 }
+// H1 need-aware selection (aliveness/selection/need_select.js). Weather: no weather system in v1, so lines tagged with
+// rain/wind/fog stay out; snow lines only in Dec-Feb by device month (Daniel's default).
+function snowSeason(){const m=new Date(now()).getMonth();return m===11||m<=1}
+function needCtx(){return {needs:S.needs,species:S.kind==='fox'?'slyte':'whimber',band:tod(),weather:snowSeason()?'snow':'clear'}}
+function needLine(){if(!window.NeedSelect)return B('ambient');const r=NeedSelect.slot(needCtx());return (r&&r.line)||B('ambient')}
+function needInit(){if(!window.NeedSelect)return;const sp=S.kind==='fox'?'slyte':'whimber';NeedSelect.now=now;NeedSelect.tags=(window.NEED_TAGS||{})[sp]||{barks:{},convs:{}};
+  if(!needInit.done){needInit.done=1;NeedSelect.session();
+    const ok=v=>{const tg=NeedSelect.tags.convs[v.id]||[];return !tg.some(t=>t.startsWith('w_')&&!(t==='w_snow'&&snowSeason()))};   // weather chats follow the same rule
+    const pc=NeedSelect.pickConversation;NeedSelect.pickConversation=ctx=>{const D=Dialogue,el=D.eligible;D.eligible=(tr,f)=>el(tr,v=>ok(v)&&(!f||f(v)));try{return pc(ctx)}finally{D.eligible=el}}}
+  NeedSelect.cfg.weatherP=0}
 function maybeChat(){
   const n=S.needs;
   if(fwCalm())return;
   if(sess.chats>=C.maxConversationsPerSession||Math.random()<.35)return;
   if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;fwTick('memory');sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
-  const conv=Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
+  const conv=window.NeedSelect?NeedSelect.pickConversation(needCtx()):Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
-function initDialogue(){Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
+function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
   Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
@@ -341,9 +352,41 @@ function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=
       return setTimeout(()=>{if(onHome())runConv(nx.conv,done,depth+1)},2600)}
     done&&done()},depth);
 }
+// F2: bigger food list (foods.js from aliveness/foods.json), seeded likes and gentle dislikes. F1: the food arrives and is eaten.
+function fhash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function foodList(){return ((window.FOODS||{})[S.kind==='fox'?'slyte':'whimber'])||[]}
+function foodLabel(f){return f.emoji+' '+f.name}
+function foodTaste(f){const favName=(S.g.fav||'').split(' ').slice(1).join(' ');if(f.name===favName||foodLabel(f)===S.g.fav)return 'favorite';
+  const r=fhash((S.g.seed||1)+':'+f.id)%100;
+  if(f.taste==='not_for_me')return r<34?'not_for_me':'okay';                 // ~2 of 6 not-for-me foods per Echo; the rest are just okay
+  if(f.taste==='like')return r<15?'love':'like';                              // a couple of surprise loves
+  if(f.taste==='favorite_pool')return 'like';return f.taste}
+function foodByLabel(l){return foodList().find(f=>foodLabel(f)===l)||foodList().find(f=>f.name===(l||'').split(' ').slice(1).join(' '))}
+function foodMenu(){const L=foodList(),tried=new Set(S.foods),pick=a=>a.length?a[Math.floor(Math.random()*a.length)]:null;
+  const fav=L.find(f=>foodTaste(f)==='favorite')||L[0];const loved=L.filter(f=>['love','favorite'].includes(foodTaste(f))&&tried.has(foodLabel(f)));
+  const a=Math.random()<.5||!loved.length?fav:pick(loved);
+  const b=pick(L.filter(f=>f!==a&&['like','okay'].includes(foodTaste(f))&&tried.has(foodLabel(f))))||pick(L.filter(f=>f!==a&&['like','okay','love'].includes(foodTaste(f))));
+  sess.dmenu=(sess.dmenu||0)+1;const dOK=!sess.lastDislikeMenu||sess.dmenu-sess.lastDislikeMenu>=4;   // at most 1 possible dislike, at most 1 dislike menu in 4
+  let fresh=L.filter(f=>f!==a&&f!==b&&!tried.has(foodLabel(f)));if(!dOK)fresh=fresh.filter(f=>foodTaste(f)!=='not_for_me');
+  const c=pick(fresh)||pick(L.filter(f=>f!==a&&f!==b&&foodTaste(f)!=='not_for_me'));if(c&&foodTaste(c)==='not_for_me')sess.lastDislikeMenu=sess.dmenu;
+  return [a,b,c].filter(Boolean).sort(()=>Math.random()-.5)}
+function foodIcon(f){return `<i class="pxi" data-icon="${f.icon.slice(2)}" style="background-image:url(px/${f.icon}.png)"></i>`}
 function feed(){
-  if(asleep())return; const e=E();
+  if(asleep())return;
   if(sess.feeds>=C.sessionLimits.feeds||S.needs.food>=95)return talk(B('full'));
+  if(!foodList().length)return feedOld();
+  const pool=foodMenu();
+  ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${foodIcon(f)}<span class="lbl">${f.name}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
+  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],tier=foodTaste(f),T=FOODS.tiers[tier],lbl=foodLabel(f),fav=tier==='favorite',first=!S.foods.includes(lbl);sess.feeds++;
+    if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('hungry')}
+    S.needs.food=clamp(S.needs.food+T.food);if(first)S.foods.push(lbl);(S.foodTiers=S.foodTiers||{})[lbl]=tier;   // a disliked food still restores +15
+    addBond(T.bond);SFX('care_feed_eat');if(fav)fwTick('food');save();
+    if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${lbl}`,'favfood');
+    if(tier==='not_for_me'&&first)remember(FOODS.tiers.not_for_me.memory.replace('{food}',f.name),'food_'+f.id);
+    const line=()=>{const own=Dialogue.bark('food_'+f.id);talk(fav?B('fed_fav'):tier==='not_for_me'?(own||B('fed')):(Math.random()<.6&&own)||B('fed'))};
+    if(window.Alive)Alive.food(f,tier,()=>{if(document.getElementById('feed'))line();maybeChat()});else{hop();setExpr('eating');line();maybeChat()}});
+}
+function feedOld(){const e=E();
   const pool=[...e.foods].sort(()=>Math.random()-.5).slice(0,2); if(!pool.includes(S.g.fav))pool[0]=S.g.fav; pool.push(e.neutral[0]); pool.sort(()=>Math.random()-.5);
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
@@ -354,14 +397,18 @@ function comfort(){
   if(asleep())return; const e=E();
   choices([['✋','Pet',null],['🌙','Sit together',null]],i=>{
     if(i===0){pet();return}
-    const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
-    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
+    const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';if(window.Alive)Alive.sit(true);talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
+    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';if(window.Alive)Alive.sit(false);needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
   });
 }
-function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();talk(B('pet'),1800)}
+function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
+function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();if(window.Alive)Alive.petFx();talk(B('pet'),1800)}
+function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('cuddly')}}
+function hug(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);save();   // E1 press-and-hold hug
+  const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
-  sess.naps++;const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
+  sess.naps++;if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('sleepy')}const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
   S.napUntil=now()+C.napSeconds*1000;S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6)
 addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));setTimeout(home,1500);
 }
@@ -398,7 +445,8 @@ function book(){
   ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(S.keepsake.type==='glowleaf'?'🍂':'💫')}${S.keepsake.name}</span>`:''}
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
-  <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
+    return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
   ${S.kind?`<h2>Our ${S.kind==='fox'?'treehouse fort':'tree hollow'}</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
   ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Bond up! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
@@ -421,7 +469,7 @@ function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starl
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
 function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
-function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
+function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
   if(next&&next.signature&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
@@ -855,6 +903,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

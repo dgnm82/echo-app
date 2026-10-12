@@ -284,3 +284,18 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .rungame .fbdone{position:absolute;left:30px;top:90px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
 .rungame .fbdone .rb{width:100%;color:#C9781E}
 .pxscene.sc-branch .creature{bottom:130px}   /* Whimber home v2: the default perch is on the limb (y 190), not the grass */
+
+/* ---- Echo aliveness v1 (alive.js): scene effects sit inside #sc, so every modal covers them */
+.alfx{position:absolute;background:no-repeat;background-size:100% 100%;image-rendering:pixelated;pointer-events:none;z-index:40}
+.alfx.alfood,.alfx.alplate{z-index:9}.alfx.alfood{background-size:16px 16px;background-position:0 0}
+#sc .creature.alshiver{animation:alshiver 332ms steps(1,end) 2}
+@keyframes alshiver{0%{margin-left:0}25%{margin-left:1px}50%{margin-left:0}75%{margin-left:-1px}}
+#sc .creature.alwiggle{animation:alwiggle 664ms steps(1,end) 1}
+@keyframes alwiggle{0%,50%{margin-left:0}12%,62%{margin-left:-1px}25%,75%{margin-left:1px}}
+#sc .creature.alhug .px-echo{margin-top:1px}
+#sc .creature.alsit{margin-bottom:-3px}
+#sc .creature.alscoot{margin-bottom:-3px}
+.pxscene .thought{animation:albob 1328ms steps(1,end) infinite}
+@keyframes albob{0%,100%{margin-bottom:0}50%{margin-bottom:1px}}
+.altwinkle{position:absolute;left:50%;bottom:0;width:180px;height:320px;margin-left:-90px;pointer-events:none;z-index:1;image-rendering:pixelated;animation:altw 1s steps(1,end) infinite;background:url(px/scenes/branch_twi_tw0.png) no-repeat}
+@keyframes altw{0%{background-image:url(px/scenes/branch_twi_tw0.png)}50%{background-image:url(px/scenes/branch_twi_tw1.png)}}
