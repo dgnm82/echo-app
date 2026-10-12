@@ -2024,6 +2024,513 @@
     "text": "Rest stop!",
     "expr": "proud"
    }
+  ],
+  "need_hungry": [
+   {
+    "text": "Psst. My tummy is doing a drum roll. Bum-bum-bum.",
+    "expr": "curious"
+   },
+   {
+    "text": "(Sniffs the air.) Is that a snack smell? Could be a snack smell.",
+    "expr": "curious"
+   },
+   {
+    "text": "My tummy just did a tiny yip. Snack o'clock, maybe?",
+    "expr": "giggling"
+   },
+   {
+    "text": "(Licks its nose.) I'm thinking about berries. Big ones.",
+    "expr": "thinking"
+   },
+   {
+    "text": "Snack idea! Something crunchy. Or squishy. Or both!",
+    "expr": "excited"
+   },
+   {
+    "text": "(Pats its tummy.) Rumble-rumble. It's a happy rumble.",
+    "expr": "giggling"
+   }
+  ],
+  "need_cuddly": [
+   {
+    "text": "Psst. In the wild, Slytes nap in one big fluffy pile.",
+    "expr": "happy"
+   },
+   {
+    "text": "Back home, the stars hum at bedtime. Hugs sound like that.",
+    "expr": "love"
+   },
+   {
+    "text": "(Scoots a bit closer.) Hi. Just scooting. Scooting is nice.",
+    "expr": "shy"
+   },
+   {
+    "text": "My tail is extra fluffy right now. Good for snuggles.",
+    "expr": "love"
+   },
+   {
+    "text": "I was thinking about my star home. It's cozy here too.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Wiggles its ears.) Ear scratches are allowed. Just saying.",
+    "expr": "shy"
+   }
+  ],
+  "need_playful": [
+   {
+    "text": "My paws are extra bouncy. Boing. Boing. Boing!",
+    "expr": "excited",
+    "react": "excited"
+   },
+   {
+    "text": "Psst. My tail wants a game. It told me.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Zoomies are coming. I can feel them in my ears.",
+    "expr": "excited"
+   },
+   {
+    "text": "(Wiggles, ready to pounce.) Ready… set… pounce!",
+    "expr": "excited",
+    "react": "happy"
+   },
+   {
+    "text": "I have so much bounce today. Where does it all go?",
+    "expr": "curious"
+   },
+   {
+    "text": "Game idea! You pick. I'll do the bouncing.",
+    "expr": "happy"
+   }
+  ],
+  "need_sleepy": [
+   {
+    "text": "(Big yawn.) My ears are getting floppy.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "My tail is a pillow. I'm checking. Yep, still a pillow.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "(Blinks slowly.) My blinks are getting longer. Blink… blink.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "A cozy nap would be nice. A leafy one.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "(Yawns so wide it squeaks.) Oops. Sleepy squeak.",
+    "expr": "giggling"
+   },
+   {
+    "text": "My paws are done bouncing for now. Snooze mode.",
+    "expr": "sleepy"
+   }
+  ],
+  "need_content": [
+   {
+    "text": "Everything is just right. Even my whiskers.",
+    "expr": "happy"
+   },
+   {
+    "text": "Mrrp. Good day to be a fox.",
+    "expr": "love"
+   },
+   {
+    "text": "(Sits tall, tail curled.) Tummy good. Paws good. Ears good.",
+    "expr": "proud"
+   },
+   {
+    "text": "I'm so happy my tail is wagging by itself.",
+    "expr": "delighted"
+   },
+   {
+    "text": "(Hums a bouncy tune.) Doo-doo-dee. Happy fox song.",
+    "expr": "happy"
+   },
+   {
+    "text": "Right now is a really good now.",
+    "expr": "love"
+   }
+  ],
+  "after_hug": [
+   {
+    "text": "That did it. I'm warm from ears to tail.",
+    "expr": "love"
+   },
+   {
+    "text": "Pile of two. Best pile.",
+    "expr": "love"
+   },
+   {
+    "text": "(Fluffs up.) I'm extra fluffy now. Thanks to you.",
+    "expr": "happy"
+   }
+  ],
+  "after_play": [
+   {
+    "text": "Phew! My bounce is all used up. The good way.",
+    "expr": "happy"
+   },
+   {
+    "text": "That was fun. My tail is still wiggling.",
+    "expr": "delighted"
+   },
+   {
+    "text": "(Flops down happily.) Okay. Fun level: very.",
+    "expr": "giggling"
+   }
+  ],
+  "wake_up": [
+   {
+    "text": "(Stretches.) Good nap! My tail is fully charged.",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "(Blinks awake.) I dreamed about pancakes. Big ones.",
+    "expr": "curious"
+   },
+   {
+    "text": "Morning-ish! Or nap-o'clock-later. Either way, hi!",
+    "expr": "excited"
+   }
+  ],
+  "look_tap": [
+   {
+    "text": "Ooh? What's over there?",
+    "expr": "curious"
+   },
+   {
+    "text": "(Ears swivel.) Hm? A something?",
+    "expr": "curious"
+   },
+   {
+    "text": "Did you find a shiny thing?",
+    "expr": "curious"
+   },
+   {
+    "text": "(Looks where you tapped.) Ooh. Good spot.",
+    "expr": "happy"
+   }
+  ],
+  "weather_breezy": [
+   {
+    "text": "(Ears flap in the breeze.) Wind says hi. Hi, wind!",
+    "expr": "happy"
+   },
+   {
+    "text": "Breezy day! My tail is a flag.",
+    "expr": "giggling"
+   }
+  ],
+  "weather_drizzle": [
+   {
+    "text": "Pitter-pat! I'm wearing a leaf hat.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Catches a drop on its nose.) Boop. Rain boop.",
+    "expr": "giggling"
+   }
+  ],
+  "weather_snow": [
+   {
+    "text": "Snowflakes! I caught one on my nose. Got it.",
+    "expr": "excited"
+   },
+   {
+    "text": "(Hops in the snow.) Paw prints! Look, I'm writing.",
+    "expr": "delighted"
+   }
+  ],
+  "weather_fog": [
+   {
+    "text": "Fog! The trees are playing hide-and-peek.",
+    "expr": "curious"
+   },
+   {
+    "text": "(Sniffs the mist.) Smells like a cloud came down to visit.",
+    "expr": "curious"
+   }
+  ],
+  "weather_rainbow": [
+   {
+    "text": "A rainbow! I want to sniff it. It's very far.",
+    "expr": "excited"
+   },
+   {
+    "text": "Rainbow after rain. Like a thank-you from the sky.",
+    "expr": "love"
+   }
+  ],
+  "food_wild_blackberries": [
+   {
+    "text": "Bumpy berries! Every bump is a tiny surprise.",
+    "expr": "eating"
+   }
+  ],
+  "food_honey_cakes": [
+   {
+    "text": "Warm and sticky. My whiskers are honey whiskers now.",
+    "expr": "eating"
+   }
+  ],
+  "food_roasted_nuts": [
+   {
+    "text": "Tok-tok-CRUNCH. Best sound in the whole forest.",
+    "expr": "eating"
+   }
+  ],
+  "food_apple_slice": [
+   {
+    "text": "Crunchy apple! It sounds like a tiny drum.",
+    "expr": "eating"
+   }
+  ],
+  "food_strawberries": [
+   {
+    "text": "Strawberries have freckles. I'm eating the freckles first.",
+    "expr": "eating"
+   }
+  ],
+  "food_blueberries": [
+   {
+    "text": "Tiny blue moons. I'm eating a whole sky.",
+    "expr": "eating"
+   }
+  ],
+  "food_raspberries": [
+   {
+    "text": "A raspberry fits on my nose like a hat. Then, nom.",
+    "expr": "eating"
+   }
+  ],
+  "food_pear_slices": [
+   {
+    "text": "Pear! Soft and drippy. Drip, drip, slurp.",
+    "expr": "eating"
+   }
+  ],
+  "food_banana_coins": [
+   {
+    "text": "Banana coins! I'm rich. Chomp. Less rich.",
+    "expr": "eating"
+   }
+  ],
+  "food_watermelon": [
+   {
+    "text": "Juicy! The drips went all the way to my tail.",
+    "expr": "eating"
+   }
+  ],
+  "food_orange_segments": [
+   {
+    "text": "Little sunshine boats. Sticky paws. Worth it.",
+    "expr": "neutral"
+   }
+  ],
+  "food_fruit_salad": [
+   {
+    "text": "Every bite is a different fruit. A snack party!",
+    "expr": "eating"
+   }
+  ],
+  "food_corn_cob": [
+   {
+    "text": "Corn rows! I go left to right. Then a new row.",
+    "expr": "eating"
+   }
+  ],
+  "food_carrot_sticks": [
+   {
+    "text": "Crunch! Carrots are loud. I like loud snacks.",
+    "expr": "eating"
+   }
+  ],
+  "food_snap_peas": [
+   {
+    "text": "Peas in a tiny green boat. Pop! Pop!",
+    "expr": "eating"
+   }
+  ],
+  "food_cucumber": [
+   {
+    "text": "Cool and crunchy. A snack from the shade.",
+    "expr": "neutral"
+   }
+  ],
+  "food_sweet_potato": [
+   {
+    "text": "Sweet potato! Orange and soft and toasty.",
+    "expr": "eating"
+   }
+  ],
+  "food_cheese_cubes": [
+   {
+    "text": "Cheese blocks! I could build a fort. Nom. No fort.",
+    "expr": "eating"
+   }
+  ],
+  "food_mac_and_cheese": [
+   {
+    "text": "Mac and cheese! Every noodle is a tiny tunnel.",
+    "expr": "eating"
+   }
+  ],
+  "food_pizza": [
+   {
+    "text": "Pizza! The cheese stretched all the way to my ears.",
+    "expr": "eating"
+   }
+  ],
+  "food_pancakes": [
+   {
+    "text": "Pancakes! A stack. A tower. A tasty tower.",
+    "expr": "eating"
+   }
+  ],
+  "food_waffles": [
+   {
+    "text": "Waffle squares are little windows. I ate the windows.",
+    "expr": "eating"
+   }
+  ],
+  "food_muffin": [
+   {
+    "text": "A muffin with berry polka dots. Very fancy.",
+    "expr": "eating"
+   }
+  ],
+  "food_honey_toast": [
+   {
+    "text": "Crunchy toast, sticky honey. Crunch-sticky. My new word.",
+    "expr": "eating"
+   }
+  ],
+  "food_scrambled_eggs": [
+   {
+    "text": "Fluffy eggs! Like a little yellow cloud. A warm one.",
+    "expr": "eating"
+   }
+  ],
+  "food_grilled_cheese": [
+   {
+    "text": "Toasty outside, melty inside. A cozy sandwich.",
+    "expr": "eating"
+   }
+  ],
+  "food_quesadilla": [
+   {
+    "text": "Folded and melty! A cheese envelope. Delivery for me.",
+    "expr": "eating"
+   }
+  ],
+  "food_rice_ball": [
+   {
+    "text": "A rice ball! It fits right in my paws.",
+    "expr": "eating"
+   }
+  ],
+  "food_dumplings": [
+   {
+    "text": "Dumplings are little pillows. Snack pillows!",
+    "expr": "eating"
+   }
+  ],
+  "food_spaghetti": [
+   {
+    "text": "Long noodle! Still slurping. Still slurping. Done!",
+    "expr": "eating"
+   }
+  ],
+  "food_noodle_soup": [
+   {
+    "text": "Slurp! Warm noodles. My nose is toasty.",
+    "expr": "neutral"
+   }
+  ],
+  "food_yogurt": [
+   {
+    "text": "Cold and creamy. Yogurt whiskers. Worth it.",
+    "expr": "eating"
+   }
+  ],
+  "food_applesauce": [
+   {
+    "text": "Applesauce is an apple that took a nap.",
+    "expr": "eating"
+   }
+  ],
+  "food_cornbread": [
+   {
+    "text": "Cornbread! Crumbly. I'm saving one crumb. Nope, ate it.",
+    "expr": "neutral"
+   }
+  ],
+  "food_ice_pop": [
+   {
+    "text": "Brrr! A cold snack. My ears got extra pointy.",
+    "expr": "neutral"
+   }
+  ],
+  "food_oat_cookie": [
+   {
+    "text": "A cookie! Crunchy edges first. That's the rule.",
+    "expr": "eating"
+   }
+  ],
+  "food_birthday_cake": [
+   {
+    "text": "Cake! Is it a birthday? It's the cake's birthday.",
+    "expr": "eating"
+   }
+  ],
+  "food_spring_water": [
+   {
+    "text": "Slurp-slurp. Cool water makes my nose wiggle.",
+    "expr": "eating"
+   }
+  ],
+  "food_lemon": [
+   {
+    "text": "Ooh, sour! My face went all scrunchy. That one's yours.",
+    "expr": "shy"
+   }
+  ],
+  "food_hot_sauce": [
+   {
+    "text": "Hot hot! My ears got toasty. I'll stick to berries.",
+    "expr": "shy"
+   }
+  ],
+  "food_pickle": [
+   {
+    "text": "A pickle is a very brave snack. Too brave for my nose.",
+    "expr": "shy"
+   }
+  ],
+  "food_olives": [
+   {
+    "text": "Olives are very serious snacks. My tongue is giggly.",
+    "expr": "shy"
+   }
+  ],
+  "food_sparkling_water": [
+   {
+    "text": "Fizzy! It tickled my nose. Plain water, maybe?",
+    "expr": "shy"
+   }
+  ],
+  "food_brussels_sprouts": [
+   {
+    "text": "Tiny cabbages! My nose is still deciding. Maybe later.",
+    "expr": "shy"
+   }
   ]
  },
  "conversations": [
@@ -15885,6 +16392,107 @@
      "set": {
       "listStarted": true
      }
+    }
+   }
+  },
+  {
+   "id": "slyte_picnic_pretend",
+   "topic": "picnic",
+   "trigger": "idle",
+   "weight": 2,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. My tummy is humming a picnic song.",
+     "expr": "curious",
+     "next": "b",
+     "wait": 2400
+    },
+    "b": {
+     "say": "Pretend picnic? What goes on the blanket first?",
+     "expr": "excited",
+     "choices": [
+      {
+       "icon": "🍎",
+       "label": "Apples!",
+       "reply": "Apples. Crunchy and red. Excellent start.",
+       "expr": "happy",
+       "goto": "c"
+      },
+      {
+       "icon": "🍯",
+       "label": "Honey cake!",
+       "reply": "Honey cake! Sticky paws are allowed at picnics.",
+       "expr": "giggling",
+       "goto": "c"
+      },
+      {
+       "icon": "🫐",
+       "label": "Berries!",
+       "reply": "Berries! I'll make a berry smile on the plate.",
+       "expr": "delighted",
+       "goto": "c"
+      }
+     ]
+    },
+    "c": {
+     "say": "Best pretend picnic ever. My tummy agrees.",
+     "expr": "happy",
+     "react": "happy"
+    }
+   }
+  },
+  {
+   "id": "slyte_pile_cozy",
+   "topic": "pile",
+   "trigger": "idle",
+   "weight": 2,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. Want to know how Slytes stay cozy in the wild?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌟",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "We nap in one big fluffy pile. Tails on top, like blankets.",
+     "expr": "happy",
+     "next": "c",
+     "wait": 3000
+    },
+    "c": {
+     "say": "A hug feels a bit like that pile. Warm-warm.",
+     "expr": "love",
+     "choices": [
+      {
+       "icon": "🤗",
+       "label": "Here's a hug",
+       "reply": "(Snuggles in.) Mrrp. A pile of two.",
+       "expr": "love",
+       "react": "pet",
+       "bond": 1
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "reply": "Mrrp. Sitting near you is cozy too.",
+       "expr": "happy"
+      }
+     ]
     }
    }
   }

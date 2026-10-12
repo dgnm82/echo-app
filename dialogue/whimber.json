@@ -1907,6 +1907,506 @@
     "text": "Hoo… rest now.",
     "expr": "sleepy"
    }
+  ],
+  "need_hungry": [
+   {
+    "text": "…my tummy made a tiny hoot. Pardon me.",
+    "expr": "shy"
+   },
+   {
+    "text": "Hm… I'm thinking about something warm to nibble.",
+    "expr": "thinking"
+   },
+   {
+    "text": "(Sniffs softly.) …something smells nice. Snack time, perhaps.",
+    "expr": "curious"
+   },
+   {
+    "text": "…a little snack would be lovely. Whenever it suits.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Fluffs, then smooths.) …a small rumble. A polite one.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Hoo… I keep dreaming of crispy things.",
+    "expr": "thinking"
+   }
+  ],
+  "need_cuddly": [
+   {
+    "text": "…in the wild, owls sit wing to wing. Very snug.",
+    "expr": "love"
+   },
+   {
+    "text": "Hoo… my home sky hums softly. Hugs sound a bit like that.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Shuffles along the branch, a little closer.) …there.",
+    "expr": "shy"
+   },
+   {
+    "text": "…I was thinking of my star nest. It's warm here too.",
+    "expr": "happy"
+   },
+   {
+    "text": "…my feathers are extra soft right now. Good for hugs.",
+    "expr": "love"
+   },
+   {
+    "text": "(Leans in, just a little.) …hello. Mm.",
+    "expr": "shy"
+   }
+  ],
+  "need_playful": [
+   {
+    "text": "…my wings feel fluttery. A game, perhaps?",
+    "expr": "curious"
+   },
+   {
+    "text": "Hoo… I could do a loop. A small, careful loop.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Hops on the branch.) …hop. Hop-hop. Hoo.",
+    "expr": "giggling",
+    "react": "happy"
+   },
+   {
+    "text": "…I feel like counting something. Stars, or games.",
+    "expr": "curious"
+   },
+   {
+    "text": "(Wiggles its tail feathers.) …that's my ready-for-fun wiggle.",
+    "expr": "giggling"
+   },
+   {
+    "text": "…a little play would be just the thing.",
+    "expr": "happy"
+   }
+  ],
+  "need_sleepy": [
+   {
+    "text": "…my eyes are getting heavy. One… then the other.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "Hoo… a nap would be soft right now.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "(Tucks one foot up.) …that means sleepy, in owl.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "…yawns are visiting. Three so far.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "(A long, slow blink.) …mm. Cozy-ish.",
+    "expr": "sleepy"
+   },
+   {
+    "text": "…the hollow is calling. Very quietly.",
+    "expr": "sleepy"
+   }
+  ],
+  "need_content": [
+   {
+    "text": "…all is well. The breeze agrees.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hoo… a calm sort of happy. My favorite sort.",
+    "expr": "love"
+   },
+   {
+    "text": "(Settles, round and soft.) …just right.",
+    "expr": "happy"
+   },
+   {
+    "text": "…tummy cozy, feathers tidy, heart warm. Hoo.",
+    "expr": "proud"
+   },
+   {
+    "text": "…I could stay on this branch a long, happy while.",
+    "expr": "love"
+   },
+   {
+    "text": "(Hums softly.) …hm-hm-hoo. A content song.",
+    "expr": "happy"
+   }
+  ],
+  "after_hug": [
+   {
+    "text": "…there. Snug again. Thank you.",
+    "expr": "love"
+   },
+   {
+    "text": "Hoo… wing to wing. Just right.",
+    "expr": "love"
+   },
+   {
+    "text": "(Fluffs up very round.) …that warmed every feather.",
+    "expr": "happy"
+   }
+  ],
+  "after_play": [
+   {
+    "text": "…that was a lovely game. My wings are smiling.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hoo… happy-tired. The nice kind.",
+    "expr": "love"
+   },
+   {
+    "text": "(Settles feathers.) …fun, and then calm. Perfect.",
+    "expr": "happy"
+   }
+  ],
+  "wake_up": [
+   {
+    "text": "(Opens one eye, then the other.) …awake. The nap was soft.",
+    "expr": "happy"
+   },
+   {
+    "text": "…mm. I dreamed of a quiet pond. Hello again.",
+    "expr": "curious"
+   },
+   {
+    "text": "(Stretches one wing.) …rested. Hoo.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "look_tap": [
+   {
+    "text": "…hm? Oh. Something there?",
+    "expr": "curious"
+   },
+   {
+    "text": "(Head turns.) …I heard a tap.",
+    "expr": "curious"
+   },
+   {
+    "text": "…what did you find? Hoo.",
+    "expr": "curious"
+   },
+   {
+    "text": "(Peers where you tapped.) …ah. A nice spot.",
+    "expr": "happy"
+   }
+  ],
+  "weather_breezy": [
+   {
+    "text": "…the breeze is combing my feathers. Thank you, breeze.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Ear tufts sway.) …windy. The leaves are whispering.",
+    "expr": "curious"
+   }
+  ],
+  "weather_drizzle": [
+   {
+    "text": "…tiny rain. Each drop says tap.",
+    "expr": "happy"
+   },
+   {
+    "text": "(Tucks under a leaf.) …a leaf umbrella. Hoo.",
+    "expr": "giggling"
+   }
+  ],
+  "weather_snow": [
+   {
+    "text": "…snow is falling very quietly. Listen.",
+    "expr": "curious"
+   },
+   {
+    "text": "(A flake lands on its beak.) …cold. Sparkly.",
+    "expr": "surprised"
+   }
+  ],
+  "weather_fog": [
+   {
+    "text": "…the fog is a soft blanket for the trees.",
+    "expr": "thinking"
+   },
+   {
+    "text": "Hoo… everything is hushed and soft pink.",
+    "expr": "curious"
+   }
+  ],
+  "weather_rainbow": [
+   {
+    "text": "Hoo… a rainbow. All the colors, holding wings.",
+    "expr": "delighted"
+   },
+   {
+    "text": "…after the rain, a ribbon of color. Lovely.",
+    "expr": "love"
+   }
+  ],
+  "food_smoked_fish": [
+   {
+    "text": "…crispy, and a little smoky. Like a campfire story.",
+    "expr": "eating"
+   }
+  ],
+  "food_meat_nibbles": [
+   {
+    "text": "Mm… savory. A small nibble, then another small nibble.",
+    "expr": "eating"
+   }
+  ],
+  "food_spring_water": [
+   {
+    "text": "…cool water. It tastes like early morning.",
+    "expr": "eating"
+   }
+  ],
+  "food_sunflower_seeds": [
+   {
+    "text": "Seeds… tiny, and tidy. Hoo.",
+    "expr": "neutral"
+   }
+  ],
+  "food_fish_sticks": [
+   {
+    "text": "Fish sticks… crunchy outside, soft inside. Hoo… lovely.",
+    "expr": "eating"
+   }
+  ],
+  "food_salmon_bites": [
+   {
+    "text": "…salmon. Pink and warm. My favorite color of dinner.",
+    "expr": "eating"
+   }
+  ],
+  "food_tuna_sandwich": [
+   {
+    "text": "…a tuna sandwich. I'll take very small, careful bites.",
+    "expr": "eating"
+   }
+  ],
+  "food_chicken_soup": [
+   {
+    "text": "…warm soup. I'm holding the warm with both wings.",
+    "expr": "eating"
+   }
+  ],
+  "food_mac_and_cheese": [
+   {
+    "text": "Hoo… mac and cheese. Soft little noodle moons.",
+    "expr": "eating"
+   }
+  ],
+  "food_pizza": [
+   {
+    "text": "…pizza. The cheese made a long, long bridge.",
+    "expr": "eating"
+   }
+  ],
+  "food_mashed_potatoes": [
+   {
+    "text": "Mashed potatoes… like a soft little cloud.",
+    "expr": "eating"
+   }
+  ],
+  "food_rice_bowl": [
+   {
+    "text": "…rice. Hundreds of tiny pillows. I counted three.",
+    "expr": "neutral"
+   }
+  ],
+  "food_scrambled_eggs": [
+   {
+    "text": "…fluffy eggs. Soft as my belly feathers.",
+    "expr": "eating"
+   }
+  ],
+  "food_oatmeal_honey": [
+   {
+    "text": "Oatmeal with a honey swirl… a very cozy breakfast.",
+    "expr": "eating"
+   }
+  ],
+  "food_warm_milk": [
+   {
+    "text": "…warm milk. Very sleepy-making. Hoo.",
+    "expr": "eating"
+   }
+  ],
+  "food_chamomile": [
+   {
+    "text": "…chamomile. It smells like a quiet garden.",
+    "expr": "eating"
+   }
+  ],
+  "food_blueberries": [
+   {
+    "text": "…blueberries. Small and round, like little night skies.",
+    "expr": "eating"
+   }
+  ],
+  "food_pear_slices": [
+   {
+    "text": "…pear. Soft and a little drippy. Mm.",
+    "expr": "neutral"
+   }
+  ],
+  "food_apple_slices": [
+   {
+    "text": "…apple. A crisp little crunch. Pardon me.",
+    "expr": "neutral"
+   }
+  ],
+  "food_banana": [
+   {
+    "text": "…banana. Soft and sweet. No crunching needed.",
+    "expr": "eating"
+   }
+  ],
+  "food_melon": [
+   {
+    "text": "…melon. Cool and juicy, like a summer evening.",
+    "expr": "eating"
+   }
+  ],
+  "food_cheese_cubes": [
+   {
+    "text": "…cheese. Little golden blocks. Hoo.",
+    "expr": "eating"
+   }
+  ],
+  "food_grilled_cheese": [
+   {
+    "text": "…grilled cheese. Warm, and a little stretchy.",
+    "expr": "eating"
+   }
+  ],
+  "food_dumplings": [
+   {
+    "text": "…dumplings. Little pockets with a surprise inside.",
+    "expr": "eating"
+   }
+  ],
+  "food_rice_ball": [
+   {
+    "text": "…a rice ball. Round, like the moon on a good night.",
+    "expr": "eating"
+   }
+  ],
+  "food_spaghetti": [
+   {
+    "text": "…one very long noodle. I'm being patient with it.",
+    "expr": "neutral"
+   }
+  ],
+  "food_meatballs": [
+   {
+    "text": "…meatballs. Round and warm. I'll start with one.",
+    "expr": "eating"
+   }
+  ],
+  "food_turkey_slices": [
+   {
+    "text": "…turkey. Savory and soft. A thank-you kind of food.",
+    "expr": "eating"
+   }
+  ],
+  "food_sweet_potato": [
+   {
+    "text": "…sweet potato. Orange, like the sky at dusk.",
+    "expr": "eating"
+   }
+  ],
+  "food_peas": [
+   {
+    "text": "…peas. Each one is a tiny green pearl.",
+    "expr": "neutral"
+   }
+  ],
+  "food_cucumber": [
+   {
+    "text": "…cucumber. Cool and quiet, as snacks go.",
+    "expr": "neutral"
+   }
+  ],
+  "food_yogurt": [
+   {
+    "text": "…yogurt. A little stays on my beak. That's fine.",
+    "expr": "eating"
+   }
+  ],
+  "food_applesauce": [
+   {
+    "text": "…applesauce. Smooth, like a calm pond.",
+    "expr": "eating"
+   }
+  ],
+  "food_honey_cake": [
+   {
+    "text": "…a honey cake. Sweet, and very soft.",
+    "expr": "eating"
+   }
+  ],
+  "food_cornbread": [
+   {
+    "text": "…cornbread. Crumbly. I'll tidy each crumb.",
+    "expr": "neutral"
+   }
+  ],
+  "food_oat_cookie": [
+   {
+    "text": "…a cookie. I'll make it last a long time.",
+    "expr": "eating"
+   }
+  ],
+  "food_birthday_cake": [
+   {
+    "text": "…cake. A little party, just for a moment. Hoo.",
+    "expr": "eating"
+   }
+  ],
+  "food_ice_pop": [
+   {
+    "text": "Hoo… very cold. My beak is shivering. You enjoy it.",
+    "expr": "shy"
+   }
+  ],
+  "food_hot_sauce": [
+   {
+    "text": "…oh. Spicy. My ear tufts went straight up. Not for me.",
+    "expr": "shy"
+   }
+  ],
+  "food_lemon": [
+   {
+    "text": "…sour. My eyes went small. This one is yours.",
+    "expr": "shy"
+   }
+  ],
+  "food_granola_bar": [
+   {
+    "text": "…crumbs in my feathers. Perhaps a softer snack?",
+    "expr": "shy"
+   }
+  ],
+  "food_toffee": [
+   {
+    "text": "…very sticky. My beak is stuck… no, it's free. Phew.",
+    "expr": "shy"
+   }
+  ],
+  "food_sparkling_water": [
+   {
+    "text": "…fizzy. It tickles my beak. Plain water, perhaps?",
+    "expr": "shy"
+   }
   ]
  },
  "conversations": [
@@ -14774,6 +15274,119 @@
      "set": {
       "listStarted": true
      }
+    }
+   }
+  },
+  {
+   "id": "whimber_starnest_story",
+   "topic": "starnest",
+   "trigger": "idle",
+   "weight": 2,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Hoo… may I tell you about the nests at home?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌟",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "…in the wild, owls sit wing to wing on one long branch.",
+     "expr": "happy",
+     "next": "c",
+     "wait": 3200
+    },
+    "c": {
+     "say": "…everyone shares a little warmth. Like a quilt of feathers.",
+     "expr": "love",
+     "next": "d",
+     "wait": 3200
+    },
+    "d": {
+     "say": "…a hug here feels the same. Soft and snug.",
+     "expr": "love",
+     "choices": [
+      {
+       "icon": "🤗",
+       "label": "Here's a hug",
+       "reply": "(Fluffs up round.) …wing to wing. Hoo.",
+       "expr": "love",
+       "react": "pet",
+       "bond": 1
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "reply": "…sitting close is lovely too.",
+       "expr": "happy"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "whimber_moonsnack_pretend",
+   "topic": "moonsnack",
+   "trigger": "idle",
+   "weight": 2,
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "…my tummy made a tiny hoot. Did you hear it?",
+     "expr": "shy",
+     "choices": [
+      {
+       "icon": "😂",
+       "label": "Ha ha!",
+       "intent": "giggle",
+       "reply": "…it's a polite tummy. It said excuse me.",
+       "expr": "giggling",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "…shall we pretend a moon snack? What would it taste like?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🍯",
+       "label": "Like honey",
+       "reply": "…honey moon. Sweet and glowy. Mm.",
+       "expr": "happy"
+      },
+      {
+       "icon": "💧",
+       "label": "Like cool water",
+       "reply": "…cool and clear. A sip of night sky.",
+       "expr": "happy"
+      },
+      {
+       "icon": "🌟",
+       "label": "Like stars",
+       "reply": "…sparkly. A little fizzy, maybe. Hoo.",
+       "expr": "delighted"
+      }
+     ]
     }
    }
   }
