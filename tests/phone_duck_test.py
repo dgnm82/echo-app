@@ -15,7 +15,10 @@ async def main():
         if await pg.evaluate("!!Music.playing"):break
         await pg.wait_for_timeout(200)
       sp='slyte' if kind=='fox' else 'whimber'
-      await pg.evaluate(f"Sound.preload&&Sound.preload(['{sp}_happy_1','{sp}_happy_2','{sp}_happy_3'])");await pg.wait_for_timeout(1500)
+      await pg.evaluate(f"Sound.preload&&Sound.preload(['{sp}_happy_1','{sp}_happy_2','{sp}_happy_3'])");
+      for _ in range(100):
+        if await pg.evaluate(f"['{sp}_happy_1','{sp}_happy_2','{sp}_happy_3'].every(n=>Sound.loaded.includes(n))"):break
+        await pg.wait_for_timeout(200)
       await pg.wait_for_timeout(1600)   # let any earlier duck recover
       r=await pg.evaluate(f"""(async()=>{{Music.ducks=[];const ok=Sound.chirp('Hi!','{kind}','happy');await new Promise(r=>setTimeout(r,150));const low=Music.level;
          const d=Music.ducks[0];await new Promise(r=>setTimeout(r,(d?d.ms:600)+450));return {{ok,low,d,after:Music.level,playing:Music.playing}}}})()""")
