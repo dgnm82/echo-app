@@ -140,7 +140,7 @@ function home(greet){
   // stroke to pet
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
-  if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now())home()},Math.max(500,S.napUntil-now()+200));return}
+  if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene'))home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet)fwSession();
   if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs)}
@@ -307,7 +307,7 @@ function playBondUp(from,to,live,done){
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX('bondup_sting_'+(S.kind==='fox'?'slyte':'whimber'),{vol:.9});
     window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,line:lineObj,lowfx:lowFx(),short:!!S.shortBondUp,
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
-      onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
+      onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
 function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr);clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
@@ -329,7 +329,8 @@ function maybeChat(){
 }
 function initDialogue(){Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
-  Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>talk(l,ms),choose:(list,cb,o)=>choices(list,cb,o),setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
+  Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
+    setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
     remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(C.bond.reply);save();
     // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
     const onHome=()=>document.getElementById('feed')&&!document.querySelector('.full');
@@ -374,7 +375,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b12">Shared device ${S.fwShared?'on':'off'}</button><button class="btn" id="b13">Let ${S.g&&S.g.name||'it'} stay a while ${fw().paused?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
@@ -384,6 +385,7 @@ function dev(){
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();if(window.Music)Music.refresh();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
   d.querySelector('#b6').onclick=cl;
+  d.querySelector('#b12').onclick=()=>{S.fwShared=!S.fwShared;save();cl();dev()};d.querySelector('#b13').onclick=()=>{const f=fw();f.paused=!f.paused;save();cl();dev()};
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
   d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
@@ -713,7 +715,7 @@ function fwMigrate(){if(!S||!S.kind||S.released||S.fw)return;const f=fw();
   else if(S.badges.includes('ready'))f.grandfather=1;   // already Ready under the old rule: the almost-ready news plays at the next calm moment
   save()}
 // session-days: called once per new session (home(true))
-function fwSession(){const f=fw(),t=fwToday();
+function fwSession(){const f=fw(),t=fwToday();if(f.paused)return;
   if(f.state==='almost_ready'&&!f.almostDays.includes(t))f.almostDays.push(t);
   if(f.state==='grace'&&t!==f.askedDay&&!f.graceDays.includes(t)){f.graceDays.push(t);if(f.graceDays.length>FWC().graceDays){f.state='walking';f.walkDay=t}}
   save()}
@@ -748,7 +750,7 @@ function fwHomeBits(){   // home star + path / star trail for the Home scene
     else if(outdoor)h+=`<div class="fwtrail">${fwTrailHTML(n*(f.state==='almost_ready'?1:2))}</div>`}
   return h}
 // calm moments (after a care action): the almost-ready news, the ask, the Echo-led walking / flying day
-function fwCalm(){const f=fw(),c=FWC(),n=S.needs;sess.t0=sess.t0||now();
+function fwCalm(){const f=fw(),c=FWC(),n=S.needs;sess.t0=sess.t0||now();if(f.paused)return false;   // grown-up: "Let {name} stay a while" (§10, decision 8)
   if(sess.welcomeBack||sess.fwBusy||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup'))return false;
   if(Math.min(n.food,n.play,n.rest,n.comfort)<40||now()-sess.t0<c.calmAfterMs||tod()==='night'||(S.napUntil||0)>now())return false;
   if(f.state==='active'&&fwReady()){if(bondTarget()>(S.bondShown||1))return false;   // bond-up 5 plays first (on Home)
@@ -783,7 +785,12 @@ function fwSparkles(){const sc=$('#sc'),c=$('#cr .px-echo');if(!sc||!c)return;co
   for(let i=0;i<n;i++){const s=document.createElement('i');s.className='fwspark';s.style.left=Math.round(x0+(Math.random()*16-8))+'px';s.style.top=Math.round(y0+(Math.random()*16-8))+'px';sc.appendChild(s);
     setTimeout(()=>{s.style.left=sx+'px';s.style.top=sy+'px';s.style.opacity=0},60+i*70);setTimeout(()=>s.remove(),2400+i*70)}}
 function fwStep(n){const f=fw();f.step=n;save()}
-async function fwCeremony(path,resume){
+function fwCeremony(path,resume){
+  if(resume||!S.fwShared||sess.fwSharedOk)return fwCeremony0(path,resume);
+  const d=full(`<div class="mcard fwshared"><p>${fwUI('ui_sibling_card',0)}</p><div class="row"><button class="btn" id="fsy">${fwUI('ui_sibling_card',1)}</button><button class="btn" id="fsn">${fwUI('ui_sibling_card',2)}</button></div></div>`);
+  d.querySelector('#fsy').onclick=()=>{d.remove();sess.fwSharedOk=1;fwCeremony0(path)};
+  d.querySelector('#fsn').onclick=()=>{d.remove();home()}}      // back Home; no grace day used
+async function fwCeremony0(path,resume){
   const f=fw(),fox=S.kind==='fox',e=E();if(!resume){f.path=path;f.step=0;f.gift=null}f.state='ceremony';S.releasePath=f.path;save();
   try{lvStop();clearTimeout(LIVE.noticeT);clearInterval(LIVE.timer)}catch(x){}clearTimeout(ambT);if(window.Music)Music.home(S.kind);
   ov.innerHTML='';document.querySelectorAll('.full').forEach(x=>x.remove());
@@ -841,7 +848,7 @@ async function fwCeremony(path,resume){
   await new Promise(res=>{if(!pxe)return res();PIXEL.event(pxe,'release',res);setTimeout(fwSparkles,900);
     if(!fox){const [sx,sy]=fwStarXY();const x0=parseFloat(c.style.left)||58,b0=parseFloat(c.style.bottom)||64,tx=sx,tb=263-sy-24,n=26;let i=0;   // forward glide arc toward its star, never straight up
       const t=setInterval(()=>{i++;const k=i/n;c.style.left=Math.round(x0+(tx-x0)*k)+'px';c.style.bottom=Math.round(b0+(tb-b0)*k+10*Math.sin(Math.PI*k))+'px';if(i>=n)clearInterval(t)},83)}});
-  const s=$('#fwstar');if(s)s.classList.add('answer');await fwSay(B('last_call'));closure()}
+  const s=$('#fwstar');if(s)s.classList.add('answer');if(window.Sound&&S.voice!==false)Sound.play((fox?'slyte':'whimber')+'_pet_motif',{vol:.6});await fwSay(B('last_call'));closure()}
 function fwRelease(){const f=fw();S.released=now();f.state='released';S.postcards=[];S.checkins=buildCheckins();S.pcv=Postcards.VERSION;save()}
 function fwResumeCheck(){const f=S.fw;if(!f||S.released)return false;   // closed mid-ceremony before C9: resume at the edge / on the branch
   if(f.state==='ceremony'){fwCeremony(f.path,true);return true}return false}
@@ -891,6 +898,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();
