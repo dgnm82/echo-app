@@ -39,10 +39,14 @@ function step(el){if(el._ev)return evStep(el);const st=+el.dataset.stage||1,ex=e
   const sq=SEQ[ex];
   if(s.q.length){const [c,n]=s.q[0];col=c;if(--s.q[0][1]<=0)s.q.shift()}
   else if(sq){const L=sq.s||sq,lp=sq.loop||0;col=L[s.si][0];if(++s.sh>=L[s.si][1]){s.sh=0;s.si++;if(s.si>=L.length)s.si=lp}}
-  else{ if(--s.nb<=0){s.q.push([el.classList.contains('owl')&&(s.alt=!s.alt)?FR.think:FR.blink,2]);s.nb=rand(24,72)}            // blink: 2 ticks every 2-6 s
+  else{ const sleepy=el.dataset.sleepy==='1';
+        if(--s.nb<=0){const b=el.classList.contains('owl')&&(s.alt=!s.alt)?FR.think:FR.blink;   // blink pack (aliveness B1): 2 ticks every 2-6 s,
+          if(sleepy)s.q.push([FR.blink,6],[FR.sl1,3]);                                             // heavy when sleepy (6 ticks, then sl1)
+          else if(Math.random()<.15)s.q.push([FR.blink,2],[FR.idle[0],2],[FR.blink,2]);            // double blink ~15%
+          else s.q.push([b,2]);s.nb=rand(24,72)}
         if(--s.ne<=0){s.q.push([FR.ear1,2],[FR.ear2,2]);s.ne=rand(48,108)} // ear flick
         if(--s.nt<=0){s.q.push([FR.tail1,2],[FR.tail2,2],[FR.tail1,1]);s.nt=rand(60,120)} // tail flick
-        if(++s.hold>=IDLE_T[s.i]){s.hold=0;s.i=(s.i+1)%6}col=FR.idle[s.i]}
+        if(++s.hold>=IDLE_T[s.i]*(sleepy?1.4:1)){s.hold=0;s.i=(s.i+1)%6}col=FR.idle[s.i]}
   el.style.backgroundPosition=`${-col*N}px ${-(st-1)*N}px`;el._col=col}
 const rand=(a,b)=>a+Math.floor(Math.random()*(b-a));
 setInterval(()=>document.querySelectorAll('.px-echo').forEach(step),TICK);
@@ -59,6 +63,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 // ---- Echoes don't talk: they chirp. Sound comes later; this is the hook.
 W.Chirp={enabled:true,last:null,play(text,kind){this.last={text:String(text),kind,at:Date.now()};
   try{W.dispatchEvent(new CustomEvent('echo-chirp',{detail:this.last}))}catch(e){}}};
+function queue(el,seq,add){if(!el||el._ev)return;if(!el._s)step(el);const q=seq.map(x=>x.slice());el._s.q=add?el._s.q.concat(q):q}   // play raw frames once
+function blink(el,slow){queue(el,[[FR.blink,slow?5:2]],true)}   // slow blink on pet / love lines; a blink on every turn
 function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
 const EMO={'🌻':'seeds','🌸':'flower','🪨':'pebble','📜':'scroll','🐾':'stamp_paw','🍂':'glowleaf','💫':'starfeather','🥄':'spoon','🐈':'cat','🐋':'whale','🏡':'house','🐉':'dragon','🎈':'balloon','✦':'sparkle','🍎':'apple','🫐':'berry','🍯':'honey','🌰':'nut','🐟':'fish','🥓':'meat','💧':'water','✋':'hand','🌙':'moon','🌲':'tree','🤗':'heart','💗':'heart','❤️':'heart','📖':'book',
@@ -67,5 +73,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={queue,blink,whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();
