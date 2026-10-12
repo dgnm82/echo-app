@@ -6,7 +6,7 @@ PLAY="""async (n)=>{for(let i=0;i<n&&window.__fort&&!__fort.done;i++){const g=__
   for(let r=0;r<best.r;r++)FortEngine.rotate(g);FortEngine.moveTo(g,best.x);document.getElementById('kB').click();await new Promise(r=>setTimeout(r,90))}}"""
 async def run(b,dev,vp,errs,q=''):
   pg=await b.new_page(**vp);pg.on('pageerror',lambda e:errs.append(dev+':'+str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(dev+' console:'+m.text))
-  await pg.goto(URL+q);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600)
+  await pg.goto(URL+q);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(600)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(400);await pg.click('#bush');await pg.wait_for_timeout(4500)
   c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2600)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''");await pg.wait_for_timeout(300)

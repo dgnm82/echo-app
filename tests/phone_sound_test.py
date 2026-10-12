@@ -8,7 +8,7 @@ async def main():
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=user-gesture-required']);errs=[];bad=[];ok=[]
     pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.on('response',lambda r:('/sfx/' in r.url) and (ok if r.status==200 else bad).append((r.status,r.url.split('/sfx/')[1])))
-    await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(500)
+    await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
     assert not await pg.evaluate("Sound.unlocked"),'locked before first tap'
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush');await pg.wait_for_timeout(5000)
     c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3500)

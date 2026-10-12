@@ -254,3 +254,33 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .mcard.places .place{display:flex;align-items:center;gap:4px;text-align:left;font-size:8px;min-height:30px}
 .mcard.places .place i{width:24px;height:24px;background-size:180px 320px;background-position:-78px -230px;image-rendering:pixelated;border:1px solid #3B2A5C;flex:none}
 .mcard.places .place.on{outline:1px solid #FFD27A}
+/* ===== Farewell arc (farewell_arc.md v0.2) ===== */
+.fwstar{position:absolute;width:13px;height:13px;border:0;padding:0;background:transparent no-repeat 0 0/26px 13px;image-rendering:pixelated;z-index:3;animation:fwtw 1s steps(1,end) infinite;cursor:pointer}
+.fwstar.l1{animation-duration:2s}
+@keyframes fwtw{0%{background-position:0 0}50%{background-position:-13px 0}}
+.fwstar.answer{animation-duration:.5s}
+.fwtrail{position:absolute;inset:0;pointer-events:none;z-index:2}
+.fwtr{position:absolute;width:1px;height:1px;background:#FFF3C8;box-shadow:1px 0 0 #FFD27A,-1px 0 0 #FFD27A,0 1px 0 #FFD27A,0 -1px 0 #FFD27A}
+.fwscene{background-color:#7A5592}
+.fwscene .creature{transform:translateX(-50%)}
+.fwscene.fwcut::before{content:"";position:absolute;inset:0;background:#F7B79A;z-index:40;animation:fwcut .35s steps(3) forwards}
+@keyframes fwcut{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.fwgrass{position:absolute;left:0;right:0;bottom:56px;height:16px;z-index:6;pointer-events:none;
+  background:repeating-linear-gradient(90deg,#5E8E6E 0 2px,#79A97C 2px 4px,#94BF8A 4px 5px,#79A97C 5px 7px);clip-path:polygon(0 40%,4% 0,8% 40%,12% 10%,16% 45%,20% 0,25% 40%,30% 10%,35% 45%,40% 0,45% 40%,50% 5%,55% 45%,60% 0,65% 40%,70% 10%,75% 45%,80% 0,85% 40%,90% 10%,95% 45%,100% 0,100% 100%,0 100%)}
+.fwglow{position:absolute;left:84px;bottom:84px;width:13px;height:13px;z-index:7;pointer-events:none;opacity:0;background:url(px/fw/star_3.png) 0 0/26px 13px;image-rendering:pixelated}
+.fwglow.on{animation:fwpulse .5s steps(1,end) 3}
+@keyframes fwpulse{0%{opacity:1}50%{opacity:0}}
+.fwspark{position:absolute;width:2px;height:2px;background:#FFF3C8;box-shadow:0 0 0 1px #FFD27A;z-index:8;transition:left 1.6s steps(12),top 1.6s steps(12),opacity .4s steps(2) 1.4s;pointer-events:none}
+.fwkeep{position:absolute;left:22px;bottom:40px;width:16px;height:16px;border:0;padding:0;background:transparent no-repeat 0 0/32px 16px;image-rendering:pixelated;z-index:9}
+.fwkeep.glim{animation:fwglim 1s steps(1,end) infinite}
+@keyframes fwglim{0%{background-position:0 0}50%{background-position:-16px 0}}
+.fwkeep.kept{animation:none;left:-40px;transition:left .6s steps(6)}
+.fwkeep.after{left:30px;bottom:24px}
+.fwpost{position:absolute;left:8px;top:40px;z-index:9;display:flex;gap:3px;padding:3px;background:#FFF6D6;border:1px solid #3B2A5C}
+.fwpost i{display:block;width:16px;height:16px;background-size:16px 16px;image-rendering:pixelated}
+.fwback .px-echo{transform:scaleX(-1)}
+.px-echo.fwglance{transform:translateX(1px)}
+.mcard.fwlist .fwrow{display:flex;align-items:center;gap:4px;font-size:8px;line-height:10px;text-align:left;padding:3px 0;border-bottom:1px solid #E6D8B8;position:relative}
+.mcard.fwlist .fwrow.done span{color:#86573F}
+.mcard.fwlist .fwstamp{position:absolute;right:0;top:1px;width:16px;height:16px;background-size:16px 16px;image-rendering:pixelated}
+.after.pxscene .mailbox{top:auto;left:118px;bottom:30px}

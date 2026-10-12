@@ -8,7 +8,7 @@ async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);pg=await b.new_page(**p.devices['iPhone 13'])
     errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
-    await pg.goto(URL);await pg.evaluate('window.__wiped=1;localStorage.clear()');await pg.reload()
+    await pg.goto(URL);await pg.evaluate('window.__wiped=1;localStorage.clear();localStorage.setItem("echo-nosetup","1")');await pg.reload()
     await pg.uncheck('#voice');await pg.click('#go');await pg.click('#bush');await pg.wait_for_timeout(3800)
     c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2600)
     await pg.evaluate("""window.__said=[];new MutationObserver(()=>{const b=document.getElementById('b');if(b&&b.style.display!=='none'&&window.__said[window.__said.length-1]!==b.textContent)window.__said.push(b.textContent)}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true});

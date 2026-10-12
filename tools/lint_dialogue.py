@@ -9,14 +9,18 @@ from collections import defaultdict
 EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad","delighted","thinking","giggling","proud","shy","wistful","concentrating"}
 REACT = {"happy","excited","pet","eat","sad","sleepy"}
 KNOWN_KEYS = {"hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
-  "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust","release_invite",
-  "release_forced","hug_more","walk_memory","walk_end","gift_ask","gift_got","goodbye_ask","farewell","look_back"}
+  "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust",
+  "hug_more","walk_memory","gift_ask","gift_got","farewell","look_back"}
+FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5","restless","almost_hello","list_nudge","list_play_done","list_food_done",
+  "list_place_done","list_trail_done","list_memory_done","list_cozy_done","list_complete","time_to_go","one_more_game","after_one_more","walk_start","walk_list",
+  "edge_arrive","edge_explain","keepsake_give","thanks","next_postcards","two_goodbyes","resume_edge","path_tap_early","last_call","thanks_hug","thanks_wave",
+  "thanks_nose","thanks_words","write_a_lot"}   # farewell_arc.md v0.2 (release_invite / release_forced / goodbye_ask / walk_end retired)
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "shared": ("talent_","fallback_")}
+KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","trail_","connect_","fallback_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
-NODE_KEYS = {"lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
-CHOICE_KEYS = {"intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
-CONV_KEYS = {"id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
+NODE_KEYS = {"gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
+CHOICE_KEYS = {"gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
+CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal"}
 
 BANNED = [r"traitor", r"cheat\w*", r"rude", r"liars?", r"stupid", r"dumb", r"fat", r"skinny", r"thin", r"diet\w*",
@@ -85,12 +89,12 @@ def lint_file(path, seen_ids, dup_pool):
         if not words(text): return  # pure beats like "…" are not lines
         dup_pool[re.sub(r"\s+", " ", text.strip().lower())].append(f"{fn}:{where}")
     for key, lines in d.get("barks", {}).items():
-        if key not in KNOWN_KEYS and key not in NEW_KEYS and not key.startswith(KEY_PREFIX.get(sp, ())):
+        if key not in KNOWN_KEYS and key not in NEW_KEYS and key not in FAREWELL_KEYS and not key.startswith(KEY_PREFIX.get(sp, ())):
             err(fn, f"unknown bark key {key!r}")
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
-            extra = set(b) - {"text","expr","react","cond","weight"}
+            extra = set(b) - {"text","expr","react","cond","weight","gesture"}
             if extra: err(fn, f"{w} unknown fields {extra}")
             if b.get("expr") not in EXPR: err(fn, f"{w} bad expr {b.get('expr')!r}")
             if "react" in b and b["react"] not in REACT: err(fn, f"{w} bad react {b['react']!r}")
@@ -101,7 +105,7 @@ def lint_file(path, seen_ids, dup_pool):
         if cid in seen_ids: err(fn, f"duplicate conversation id {cid}")
         seen_ids.add(cid)
         if set(c) - CONV_KEYS: warn(fn, f"{w0} unknown fields {set(c)-CONV_KEYS}")
-        if c.get("trigger") != "idle": err(fn, f"{w0} trigger must be 'idle'")
+        if c.get("trigger") not in ("idle","first_home","ready"): err(fn, f"{w0} trigger must be idle, first_home or ready")
         if "cond" in c: check_cond(c["cond"], f"{fn} {w0}")
         nodes = c.get("nodes", {})
         if c.get("start") not in nodes: err(fn, f"{w0} start node missing"); continue

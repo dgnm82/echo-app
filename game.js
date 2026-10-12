@@ -34,7 +34,9 @@ function callbackLine(){const at=S.memTagAt||{},cnt=S.cbCount||{};
 // ambient chatter (B11): every ambientMin–ambientMax s when nothing else is happening on Home
 let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setTimeout(()=>{
   const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
-  if(!busy){const cb=Math.random()<.25?callbackLine():null;talk(cb||B('ambient'));sess.ambient=(sess.ambient||0)+1}
+  if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
+    else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
+    const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||B('ambient'));sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000)}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
@@ -72,6 +74,7 @@ function addBond(n,silent){
 let mq=[];function queueMilestone(m){mq.push(m)}
 function flushMilestones(){
   if(!mq.length||document.querySelector('.full')||!document.getElementById('feed'))return; const m=mq.shift(), e=E(); let title='',line='';
+  if(m.id==='ready')return flushMilestones();   // farewell arc: the Ready moment is the almost-ready conversation + list (fwCalm)
   const ti=['talent1','talent2','talent3','talent4'].indexOf(m.id);
   if(ti>=0){const t=e.talents[ti];S.talents.push(t);title=`Talent: ${t}!`;line=B('talent_'+t);}
   else if(m.id==='name'){title='A new friend!';line=B('first_gift');S.treasures.push(e.treasure)}
@@ -85,7 +88,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
@@ -115,34 +118,33 @@ async function reveal(kind){
   setTimeout(()=>{talk(B('reveal'),60000);
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
         save();talk(B('reveal_reply'));remember('The day we met in the dusk meadow','met');
-        setTimeout(()=>{home();toast('Tip: tap the buttons below to care for '+S.g.name)},2400);
+        setTimeout(()=>{home();const tip=()=>toast('Tip: tap the buttons below to care for '+S.g.name);
+          if(localStorage.getItem('echo-nosetup'))return tip();sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from':'whimber_where_from',()=>{sess.fwBusy=0;tip()}),600)},2400);
       })},1800)},1700);
 }
 function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){
   ov.innerHTML='';
-  const e=E(), m=mood(), w=want(), ready=S.badges.includes('ready');
-  if(S.graceUntil&&now()>=S.graceUntil)return release(true);
-  const graceDay=S.graceUntil?Math.floor((now()-(S.graceUntil-C.graceDays*864e5))/864e5)+1:0;
-  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
-   <div class="scene ${e.bg} pxscene" id="sc" style="${scStyle()}">${ready?`<button class="pxpath" id="path" aria-label="Glowing path home" style="background-image:url(px/path_${Math.min(3,Math.max(1,graceDay))}.png)"></button>`:''}
+  const e=E(), m=mood(), w=want(), ready=fwShowPath();
+  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
+   <div class="scene ${e.bg} pxscene" id="sc" style="${scStyle()}">${fwHomeBits()}
    ${curScene()===scHome()?fortProp():''}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
-   ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">Take home…</span></button>`:''}</div>
+   ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">${fwUI('ui_path_button',S.kind==='fox'?0:1)}</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
   renderBadge();
   $('#feed').onclick=feed;$('#play').onclick=play;$('#comfort').onclick=comfort;$('#rest').onclick=rest;$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
-  if(ready){$('#rel').onclick=()=>release(false);$('#path').onclick=()=>release(false)}
+  if(ready){$('#rel').onclick=fwStartByChild;if($('#path'))$('#path').onclick=fwStartByChild;$('#fwl').onclick=fwList}
+  if($('#fwstar')&&S.kind!=='fox'&&ready)$('#fwstar').onclick=fwStartByChild;
   // stroke to pet
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
   if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now())home()},Math.max(500,S.napUntil-now()+200));return}
-  if(greet&&S.graceUntil&&graceDay>=C.graceDays&&S.lastDayLine!==graceDay){S.lastDayLine=graceDay;save();talk(B('last_day'))}
-  else if(greet&&S.graceUntil){talk(B('grace_hello'))}
+  if(greet)fwSession();
+  if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs)}
   else if(greet){talk(B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
-  else if(ready&&!sess.readyLine){sess.readyLine=1;talk(B('ready_hint'))}
   if(LIVE.st!=='found')lvStart(false);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
@@ -300,7 +302,7 @@ function playBondUp(from,to,live,done){
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX('bondup_sting_'+(S.kind==='fox'?'slyte':'whimber'),{vol:.9});
     window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,line:lineObj,lowfx:lowFx(),short:!!S.shortBondUp,
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
-      onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live){renderBadge();SFX('bond_meter_tick');home()}done&&done()}})})}
+      onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
 function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr);clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
@@ -314,12 +316,9 @@ function choices(list,cb,opts){
 }
 function maybeChat(){
   const n=S.needs;
-  if(S.badges.includes('ready')&&!S.graceUntil&&!sess.asked&&Math.min(n.food,n.play,n.rest,n.comfort)>=40){sess.asked=1;
-    return setTimeout(()=>{if(!document.getElementById('feed')){sess.asked=0;return}talk(B('ask_ready'),60000);choices([['🌲',"Let's go together",null],['🤗','Not yet',null]],i=>{
-      S.releasePath='echo-asked';if(i===0)return release(false,true);
-      S.graceUntil=now()+C.graceDays*864e5;S.releasePath=null;save();talk(B('stay_more'))})},1500)}
+  if(fwCalm())return;
   if(sess.chats>=C.maxConversationsPerSession||Math.random()<.35)return;
-  if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
+  if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;fwTick('memory');sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
   const conv=Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
@@ -342,14 +341,14 @@ function feed(){
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
     S.needs.food=clamp(S.needs.food+(fav?C.restore.foodFav:C.restore.food));if(!S.foods.includes(f))S.foods.push(f);
-    addBond(fav?C.bond.feedFav:C.bond.feed);SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
+    addBond(fav?C.bond.feedFav:C.bond.feed);SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav)fwTick('food');if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
 }
 function comfort(){
   if(asleep())return; const e=E();
   choices([['✋','Pet',null],['🌙','Sit together',null]],i=>{
     if(i===0){pet();return}
     const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
-    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
+    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
   });
 }
 function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();talk(B('pet'),1800)}
@@ -375,7 +374,7 @@ function dev(){
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
   d.querySelector('#b1').onclick=()=>{cl();addBond(60/C.demoSpeed);home()};
-  d.querySelector('#b2').onclick=()=>{cl();addBond(500);S.bondShown=Math.max(S.bondShown||1,4);home()};
+  d.querySelector('#b2').onclick=()=>{cl();addBond(500);S.met=Math.min(S.met||now(),now()-8*864e5);S.days=Math.max(S.days||1,6);sess.t0=now()-36e5;S.bondShown=Math.max(S.bondShown||1,4);home()};
   d.querySelector('#b3').onclick=()=>{cl();sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;S.last=now()-6*36e5;simulate();save();home(true)};
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();if(window.Music)Music.refresh();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
@@ -388,6 +387,7 @@ function book(){
   const e=E(),d=document.createElement('div');d.className='book';
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
+  ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(S.keepsake.type==='glowleaf'?'🍂':'💫')}${S.keepsake.name}</span>`:''}
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>`<span class="chip">${PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${s===S.g.fav?PI('❤️'):''}</span>`).join('')||'<i>none yet</i>'}
@@ -412,8 +412,9 @@ let GT=0;   // game token: a pending next-round timer is dropped if the child le
 function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
   if(S.bond>=C.unlock.trail)L.push([fox?'🍂':'✨',fox?'Leaf Trail':'Firefly Parade',trailGame]);
   if(S.bond>=C.unlock.connect&&window.connectGame)L.push([fox?'🫐':'🌙',fox?'Berry Connect':'Moonlight Connect',window.connectGame]);return L}
-function gameShell(title){GT++;if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/trail|parade/.test(t)?(fox?'leaf_trail':'firefly_parade'):(fox?'berry_connect':'moonlight_connect'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
-function endGame(finished){GT++;if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/trail|parade/.test(t)?'trail':'connect';(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/trail|parade/.test(t)?(fox?'leaf_trail':'firefly_parade'):(fox?'berry_connect':'moonlight_connect'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+let curGame=null;
+function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
   if(next&&next.signature&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
@@ -686,47 +687,163 @@ function connectGame(){
 const CN_NEXT=()=>{};   // one board, a new goal item each round; roundDone() books each round
 window.connectGame=connectGame;
 
-// ---------- release (§5.8) ----------
-function release(forced,go){
-  if(mq.length&&!forced)return flushMilestones();
-  const e=E(),g=S.g;if(!S.releasePath)S.releasePath='child';if(forced)S.releasePath='grace-ended';
-  h(`<div class="scene ${e.bg} relscene" id="sc"><div class="pxpath on" style="background-image:url(px/path_3.png)"></div><div class="creature" id="cr" style="left:80%">${svg(S.kind,g,'happy')}</div><div class="bubble" id="b"></div></div>`);
-  const pxe=$('#cr .px-echo');if(pxe)pxe.dataset.stage=4;   // bonded until the departure; stage 5 plays as the release event
-  if(go){setTimeout(walk,500)}
-  else if(forced){const ask=()=>{talk(B('release_forced'),60000);
-    choices([['🤗','One more hug',null],['🌲',"Let's go",null]],i=>{if(i===0){hop();talk(B('hug_more'),2500);setTimeout(ask,2600)}else walk()})};ask()}
-  else{talk(B('release_invite'),60000);
-    choices([['🌲',"Let's go",null],['🤗','Wait',null]],i=>{if(i===1){S.releasePath=null;home();return}walk()})}
-  function walk(){
-    const sc=$('#sc');sc.classList.add('walking');const c=$('#cr');c.style.left='50%';setTimeout(()=>{const bg=sc.querySelector('.pxbg');if(bg)bg.className='bg pxbg pxbg-night'},2000);
-    const lines=[{text:`We're going to ${e.release}. It's not far.`,expr:'happy'},...S.memories.slice(-3).map(m=>B('walk_memory',{memory:m.replace(/\.$/,'')})),B('walk_end')];let k=0;
-    const step=()=>{if(k<lines.length){talk(lines[k++],60000);setTimeout(step,3300)}else gift()};step();
-  }
-  function gift(){
-    talk(B('gift_ask'),60000);
-    const opts=[['💎',S.treasures[0]||e.treasure],[S.g.fav.split(' ')[0],S.g.fav.split(' ').slice(1).join(' ')],[e.token==='leaf'?'🍃':'🪶','a '+e.token]];
-    choices(opts.map(o=>[o[0],o[1],null]),i=>{S.gift=opts[i][1];hop();talk(B('gift_got'),4000);setTimeout(bye,3500)});
-  }
-  function bye(){
-    talk(B('goodbye_ask'),60000);
-    choices([['👋','Wave',null],['🤗','Hug',null],['👃','Nose-tap',null]],i=>{
-      talk(B('farewell'),60000);
-      const px=$('#cr .px-echo');
-      if(px){ // pixel departure: a few steps up the path, a look back, then the must-ship release dissolve (face last, sparkles to the home star)
-        setTimeout(()=>{const c=$('#cr');c.classList.add(S.kind==='fox'?'pxwalk':'pxfly');c.style.left='70%';
-          setTimeout(()=>{talk(B('look_back'),3000);
-            setTimeout(()=>{$('#b').style.display='none';SFX(S.kind==='fox'?'slyte_release':'whimber_release');PIXEL.event(px,'release',()=>{$('#sc').classList.add('homestar');talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3200)})},2600)},2000)},5000);
-        return}
-      setTimeout(()=>{const c=$('#cr');c.style.transition='all 3s';c.style.left='110%';c.style.transform='translateX(-50%) scale(.5)';
-        setTimeout(()=>{c.style.transition='all .5s';c.style.left='88%';talk(B('look_back'),3000);
-          setTimeout(()=>{SFX(S.kind==='fox'?'slyte_release':'whimber_release');c.style.opacity=0;talk(S.kind==='fox'?'…yip! …yip… …yip…':'…hoo… …hoo… …hoo…',3000);setTimeout(closure,3500)},2500)},3200)},6000);
-    });
-  }
-}
+// ---------- Farewell arc (echo/farewell/farewell_arc.md v0.2, Cole's defaults) ----------
+// active -> almost_ready (Ready rule, spec §5.7) -> [grace: 3 session-days] -> walking -> ceremony (C0-C10, step saved) -> released
+const FWC=()=>Object.assign({glanceFromBond:140,restlessBond:440,readyBond:500,readyDays:7,readySessionDays:6,altDay:14,altBond:350,almostMin:2,almostMax:3,
+  graceDays:C.graceDays||3,longAbsenceDays:14,calmAfterMs:60000,lineMs:0,thanksWindowMs:5000},C.farewell||{});
+function fw(){return S.fw=S.fw||{state:'active',almostDays:[],graceDays:[],list:[],step:null}}
+function fwToday(){return new Date(now()).toDateString()}
+function fwReady(){const c=FWC(),d=(now()-(S.met||now()))/864e5;if(fw().grandfather&&S.bond>=c.readyBond)return true;
+  return (S.bond>=c.readyBond&&d>=c.readyDays&&(S.days||1)>=c.readySessionDays)||(d>=c.altDay&&S.bond>=c.altBond)}
+function fwShowPath(){return ['almost_ready','grace','walking'].includes(fw().state)}
+function fwLib(k){return (Dialogue.lib&&Dialogue.lib.barks[k])||[]}
+function fwUI(k,i){const l=fwLib(k)[i||0];return l?Dialogue.fill(l.text):''}
+function fwLine(k,i,extra){const l=fwLib(k)[i];return l?{text:Dialogue.fill(l.text,extra),expr:l.expr||'happy',react:l.react}:B(k,extra)}
+function fwPickDone(k){const L=fwLib(k),done=fw().list.length&&fw().list.every(x=>x.done);const i=L.findIndex(l=>done?!!l.cond:!l.cond);return fwLine(k,Math.max(0,i))}
+// migrate saves from the old release flow (wall-clock grace, bond-only Ready, a half-done walk)
+function fwMigrate(){if(!S||!S.kind||S.released||S.fw)return;const f=fw();
+  if(S.graceUntil){const start=S.graceUntil-(C.graceDays||3)*864e5,used=Math.max(0,Math.min(FWC().graceDays,Math.floor((now()-start)/864e5)));
+    f.state='grace';f.askedDay='migrated';f.graceDays=Array.from({length:used},(_,i)=>'migrated-'+i);f.list=fwBuildList();delete S.graceUntil}
+  else if(S.releasePath){f.state='walking';f.list=fwBuildList();S.releasePath=null}
+  else if(S.badges.includes('ready'))f.grandfather=1;   // already Ready under the old rule: the almost-ready news plays at the next calm moment
+  save()}
+// session-days: called once per new session (home(true))
+function fwSession(){const f=fw(),t=fwToday();
+  if(f.state==='almost_ready'&&!f.almostDays.includes(t))f.almostDays.push(t);
+  if(f.state==='grace'&&t!==f.askedDay&&!f.graceDays.includes(t)){f.graceDays.push(t);if(f.graceDays.length>FWC().graceDays){f.state='walking';f.walkDay=t}}
+  save()}
+function fwGreet(){const f=fw(),t=fwToday();
+  if(f.state==='almost_ready'){talk(B('almost_hello'));return true}
+  if(f.state==='grace'){if(f.graceDays.length===FWC().graceDays&&f.lastDay!==t){f.lastDay=t;save();talk(B('last_day'))}else talk(B('grace_hello'));return true}
+  return false}
+function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
+  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',trail:fox?'Leaf Trail':'Firefly Parade',connect:fox?'Berry Connect':'Moonlight Connect'};
+  (S.vars=S.vars||{}).listGame=GN[top];const cb=Object.values(S.cbCount||{}).reduce((a,b)=>a+b,0);
+  return [{id:top==='builder'?'place':top==='trail'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
+const FW_ITEM={play:0,food:1,place:2,trail:3,memory:4,cozy:5};
+function fwTick(id,game){const f=fw();if(!fwShowPath())return;const it=f.list.find(x=>x.id===id||(game&&x.game===game&&['play','place','trail'].includes(x.id)));if(!it||it.done)return;
+  it.done=true;save();const all=f.list.every(x=>x.done);
+  setTimeout(()=>{if(document.getElementById('feed'))talk(B(all?'list_complete':'list_'+it.id+'_done'),3200)},1600)}
+function fwListIcon(it){return it.id==='food'?PI(S.g.fav.split(' ')[0]):PI({play:'🎲',place:'🏡',trail:'🍃',memory:'📖',cozy:'🌙'}[it.id])}
+function fwList(){const f=fw(),fox=S.kind==='fox';
+  const d=full(`<div class="mcard fwlist"><div class="mtop">${PI('📜')}<span class="mt">${fwUI('ui_list_title')}</span></div>
+    ${f.list.map(it=>`<div class="fwrow${it.done?' done':''}">${fwListIcon(it)}<span>${fwUI('ui_list_items',FW_ITEM[it.id])}</span>${it.done?`<i class="fwstamp" style="background-image:url(px/i_stamp_${fox?'paw':'feather'}.png)"></i>`:''}</div>`).join('')}
+    <p class="mline">${B('list_nudge').text}</p><button class="btn" id="fwx">Okay!</button></div>`);d.style.zIndex=95;d.classList.add('milestone');
+  d.querySelector('#fwx').onclick=()=>d.remove();return d}
+function fwStarLevel(){const s=S.bondShown||PIXEL.stageFromBond(S.bond);return s>=5?3:s>=4?2:s>=3?1:0}
+function fwStarXY(){return S.kind==='fox'?[118,108]:[104,105]}   // Slyte: low over the meadow's edge; Whimber: its star low over the far trees (phone (104,162) bg)
+function fwStarHTML(lvl,id){if(!lvl)return '';const [x,y]=fwStarXY();return `<button class="fwstar l${lvl}" id="${id||'fwstar'}" aria-label="${S.g.name}'s home star" style="left:${x-6}px;top:${y-6}px;background-image:url(px/fw/star_${lvl}.png)"></button>`}
+function fwTrailHTML(n){if(S.kind==='fox')return '';const [sx,sy]=fwStarXY(),ax=58,ay=150;let o='';
+  for(let i=1;i<=Math.min(6,n);i++){const t=i/7,x=Math.round(ax+(sx-ax)*t),y=Math.round(ay+(sy-ay)*t-18*Math.sin(Math.PI*t));o+=`<i class="fwtr" style="left:${x-1}px;top:${y-1}px"></i>`}return o}
+function fwHomeBits(){   // home star + path / star trail for the Home scene
+  const f=fw(),outdoor=!(S.kind!=='fox'&&curScene().id==='library');let h='';
+  if(outdoor)h+=fwStarHTML(fwStarLevel());
+  if(fwShowPath()){const n=f.state==='almost_ready'?Math.max(1,f.almostDays.length):f.state==='grace'?3+f.graceDays.length:6;
+    if(S.kind==='fox')h+=`<button class="pxpath" id="path" aria-label="Glowing path" style="background-image:url(px/path_${Math.min(3,n)}.png)"></button>`;
+    else if(outdoor)h+=`<div class="fwtrail">${fwTrailHTML(n*(f.state==='almost_ready'?1:2))}</div>`}
+  return h}
+// calm moments (after a care action): the almost-ready news, the ask, the Echo-led walking / flying day
+function fwCalm(){const f=fw(),c=FWC(),n=S.needs;sess.t0=sess.t0||now();
+  if(sess.welcomeBack||sess.fwBusy||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup'))return false;
+  if(Math.min(n.food,n.play,n.rest,n.comfort)<40||now()-sess.t0<c.calmAfterMs||tod()==='night'||(S.napUntil||0)>now())return false;
+  if(f.state==='active'&&fwReady()){if(bondTarget()>(S.bondShown||1))return false;   // bond-up 5 plays first (on Home)
+    sess.fwBusy=1;f.state='almost_ready';f.readyAt=now();f.almostDays=[fwToday()];f.list=fwBuildList();if(!S.badges.includes('ready'))S.badges.push('ready');S.stickers.push('Ready for the wild');save();
+    setTimeout(()=>runConv(S.kind==='fox'?'slyte_almost_ready':'whimber_almost_ready',()=>{sess.fwBusy=0;home();setTimeout(fwList,300)}),1200);return true}
+  if(f.state==='almost_ready'&&!sess.asked){const k=f.almostDays.length,done=f.list.filter(x=>x.done).length;
+    if(k>=c.almostMax||(k>=c.almostMin&&done>=2)){sess.asked=1;setTimeout(()=>fwAsk(),1200);return true}}
+  if(f.state==='walking'&&!sess.walkOffered){sess.walkOffered=1;setTimeout(()=>fwTimeToGo(),1200);return true}
+  return false}
+function fwAsk(){if(!document.getElementById('feed'))return;const f=fw();f.askedAt=now();save();talk(fwPickDone('ask_ready'),600000);
+  choices([['🌲',fwUI('ui_choice_ask',0),null],['🤗',fwUI('ui_choice_ask',1),null]],i=>{
+    if(i===0)return fwCeremony('echo_asked_go');
+    f.state='grace';f.askedDay=fwToday();f.graceDays=[];f.answer='not_yet';save();talk(B('stay_more'))})}
+function fwTimeToGo(){if(!document.getElementById('feed'))return;const f=fw();talk(B('time_to_go'),600000);
+  const opts=[['🌲',fwUI('ui_choice_time',0),null],['🤗',fwUI('ui_choice_time',1),null]];if(f.oneMoreGameUsed!==fwToday())opts.push(['🎲',fwUI('ui_choice_time',2),null]);
+  choices(opts,i=>{if(i===0)return fwCeremony('grace_ended');
+    if(i===1){hop();talk(B('hug_more'),2600);return setTimeout(fwTimeToGo,2700)}
+    f.oneMoreGameUsed=fwToday();sess.afterOneMore=1;save();talk(B('one_more_game'),2400);setTimeout(play,1200)})}
+function fwStartByChild(){const f=fw();
+  if(f.state==='almost_ready'&&f.almostDays.length<=1&&!sess.tapEarly){sess.tapEarly=1;talk(B('path_tap_early'),3000)}
+  setTimeout(()=>choices([['🌲',fwUI('ui_choice_ask',0),null],['🤗',fwUI('ui_choice_ask',1),null]],i=>{if(i===0)fwCeremony('child')}),sess.tapEarly===1?1500:0);if(sess.tapEarly===1)sess.tapEarly=2}
+// ---- the ceremony: Slyte walks to the meadow's edge; Whimber sits on the twilight branch, then flies as light to its star ----
+function fwSay(l){return new Promise(res=>{if(!$('#b'))return res();if(typeof l==='string')l={text:l};talk(l,600000);const ms=FWC().lineMs||Math.max(2600,l.text.length*62);
+  const sc=$('#sc');let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sc&&sc.removeEventListener('click',fin);res()};const t=setTimeout(fin,ms);setTimeout(()=>sc&&sc.addEventListener('click',fin),350)})}
+function fwChoose(list){return new Promise(res=>choices(list.map(x=>[x[0],x[1],null]),res))}
+const fwWait=ms=>new Promise(r=>setTimeout(r,ms));
+function fwBg(id,v){const sc=$('#sc');if(sc)sc.style.background=`url(px/scenes/${id}_${v}.png) center bottom/180px 320px no-repeat`}
+function fwMoveTo(x,y,ms){const c=$('#cr');if(!c)return fwWait(0);return new Promise(res=>{const L0=parseFloat(c.style.left)||90,B0=parseFloat(c.style.bottom)||64,n=Math.max(1,Math.round(ms/83));let i=0;
+  const t=setInterval(()=>{i++;const k=i/n;c.style.left=Math.round(L0+(x-L0)*k)+'px';c.style.bottom=Math.round(B0+(y-B0)*k)+'px';if(i>=n){clearInterval(t);res()}},83)})}
+function fwSparkles(){const sc=$('#sc'),c=$('#cr .px-echo');if(!sc||!c)return;const R=sc.getBoundingClientRect(),z=R.width/180||1,r=c.getBoundingClientRect(),[sx,sy]=fwStarXY();
+  const x0=(r.left-R.left)/z+24,y0=(r.top-R.top)/z+20,n=lowFx()?8:14;
+  for(let i=0;i<n;i++){const s=document.createElement('i');s.className='fwspark';s.style.left=Math.round(x0+(Math.random()*16-8))+'px';s.style.top=Math.round(y0+(Math.random()*16-8))+'px';sc.appendChild(s);
+    setTimeout(()=>{s.style.left=sx+'px';s.style.top=sy+'px';s.style.opacity=0},60+i*70);setTimeout(()=>s.remove(),2400+i*70)}}
+function fwStep(n){const f=fw();f.step=n;save()}
+async function fwCeremony(path,resume){
+  const f=fw(),fox=S.kind==='fox',e=E();if(!resume){f.path=path;f.step=0;f.gift=null}f.state='ceremony';S.releasePath=f.path;save();
+  try{lvStop();clearTimeout(LIVE.noticeT);clearInterval(LIVE.timer)}catch(x){}clearTimeout(ambT);if(window.Music)Music.home(S.kind);
+  ov.innerHTML='';document.querySelectorAll('.full').forEach(x=>x.remove());
+  h(`<div class="scene fwscene ${fox?'fox':'owl'}" id="sc"><div class="fwsky"></div>${fwStarHTML(fox?2:2,'fwstar')}<div class="fwtrail" id="fwtrail"></div>
+    <div class="creature" id="cr" style="left:90px;bottom:64px">${svg(S.kind,S.g,'happy')}</div>${fox?'<div class="fwgrass"></div>':''}<div class="fwglow" id="fwglow"></div><div class="bubble" id="b" style="display:none"></div></div>`);
+  const px=$('#cr .px-echo');if(px)px.dataset.stage=4;   // bonded until the departure; stage 5 plays as the release event
+  const star=l=>{const s=$('#fwstar');if(s){s.className='fwstar l'+l;s.style.backgroundImage=`url(px/fw/star_${l}.png)`}};
+  const mems=Postcards.memories(S.memories).slice(-3);
+  if(fox)fwBg(resume?'meadow':scHome().id,resume?'twi':'day');else fwBg('branch','twi');   // Whimber: the branch's warm twilight, whatever the clock says
+  if(resume&&f.step>=1){if(!fox)await fwMoveTo(58,64,400);await fwSay(B('resume_edge'))}
+  else{
+    // C0 start
+    await fwSay(B('walk_start'));fwStep(1);
+    // C1 walk (Slyte: three cuts home -> meadow -> edge, trotting) / along the branch (Whimber: each memory lights a star)
+    if(fox){const c=$('#cr');c.classList.add('pxwalk');await fwSay(fwPickDone('walk_list'));const sc=$('#sc');sc.classList.add('fwcut');fwBg('meadow','day');await fwWait(350);sc.classList.remove('fwcut');
+      for(const m of mems.slice(0,2))await fwSay(B('walk_memory',{memory:m}));sc.classList.add('fwcut');fwBg('meadow','twi');await fwWait(350);sc.classList.remove('fwcut');c.classList.remove('pxwalk')}
+    else{await fwMoveTo(74,64,700);await fwSay(fwPickDone('walk_list'));let k=0;
+      for(const m of mems){k++;$('#fwtrail').innerHTML=fwTrailHTML(k*2);await fwSay(B('walk_memory',{memory:m}))}await fwMoveTo(58,64,600)}
+    fwStep(2);
+    // C2 arrive
+    star(3);await fwSay(B('edge_arrive'));fwStep(3)}
+  // C3 setup callback, chest glow x3
+  const gl=$('#fwglow');if(gl){gl.classList.add('on');setTimeout(()=>gl.classList.remove('on'),1600)}
+  star(3);await fwSay(fwLine('edge_explain',0));await fwSay(fwLine('edge_explain',1));fwStep(4);
+  // C4 gift: the child gives
+  if(!f.gift){await fwSay(B('gift_ask'));const fav=S.g.fav.split(' ');
+    const opts=[['💎',S.treasures[0]||e.treasure],[fav[0],fav.slice(1).join(' ')],fox?['🌸','a flower']:['🪨','a smooth pebble']];
+    const i=await fwChoose(opts);f.gift=opts[i][1];S.gift=f.gift;save();hop()}
+  await fwSay(B('gift_got',{gift:f.gift}));fwStep(5);
+  // C5 gift: the Echo gives its keepsake (tap to keep)
+  await fwSay(fwLine('keepsake_give',0));
+  await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');b.className='fwkeep glim';b.id='fwkeep';b.setAttribute('aria-label',fwUI('ui_keepsake',fox?0:1));
+    b.style.backgroundImage=`url(px/fw/${fox?'glowleaf':'starfeather'}.png)`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${fox?'glow-leaf':'starlight feather'} to keep it</div></div>`;
+    b.onclick=()=>{ov.innerHTML='';S.keepsake={type:fox?'glowleaf':'starfeather',name:fwUI('ui_keepsake',fox?0:1),day:S.days};SFX('care_pet_sparkle');save();b.classList.add('kept');res()}});
+  await fwSay(fwLine('keepsake_give',1));fwStep(6);
+  // C6 thank-you, both ways (a second, different goodbye within 5 s plays two_goodbyes)
+  await fwSay(fwLine('thanks',0));await fwSay(fwLine('thanks',1));
+  const TH=[['🤗',fwUI('ui_choice_thanks',0),'thanks_hug'],['👋',fwUI('ui_choice_thanks',1),'thanks_wave'],['👃',fwUI('ui_choice_thanks',2),'thanks_nose'],['❤️',fwUI('ui_choice_thanks',3),'thanks_words']];
+  const t1=await fwChoose(TH);hop();await fwSay(B(TH[t1][2]));
+  const rest=TH.filter((_,i)=>i!==t1);const t2=await Promise.race([fwChoose(rest),fwWait(FWC().thanksWindowMs).then(()=>-1)]);ov.innerHTML='';
+  if(t2>=0){hop();await fwSay(B(rest[t2][2]));await fwSay(B('two_goodbyes'))}fwStep(7);
+  // C7 what comes next: postcards explained before leaving
+  const pv=document.createElement('div');pv.className='fwpost';pv.innerHTML=`<i style="background-image:url(px/i_postcard.png)"></i><i style="background-image:url(px/i_mail_closed.png)"></i>`;$('#sc').appendChild(pv);
+  for(let i=0;i<4;i++)await fwSay(fwLine('next_postcards',i));
+  const n=await fwChoose([['✨',fwUI('ui_choice_next',0)],['✉️',fwUI('ui_choice_next',1)],['🤗',fwUI('ui_choice_next',2)]]);
+  if(n===1)await fwSay(B('write_a_lot'));if(n===2){hop();await fwSay(B('hug_more'))}pv.remove();fwStep(8);
+  // C8 farewell + trust gesture
+  react('pet');await fwSay(B('farewell'));
+  // C9 departure: counts as done from here (S.released), so a closed app shows the closure next time
+  fwStep(9);fwRelease();
+  const c=$('#cr'),pxe=$('#cr .px-echo');
+  if(fox){c.classList.add('pxwalk');await fwMoveTo(150,58,1600);c.classList.remove('pxwalk');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
+  else{react('excited');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
+  $('#b').style.display='none';SFX(fox?'slyte_release':'whimber_release');
+  await new Promise(res=>{if(!pxe)return res();PIXEL.event(pxe,'release',res);setTimeout(fwSparkles,900);
+    if(!fox){const [sx,sy]=fwStarXY();const x0=parseFloat(c.style.left)||58,b0=parseFloat(c.style.bottom)||64,tx=sx,tb=263-sy-24,n=26;let i=0;   // forward glide arc toward its star, never straight up
+      const t=setInterval(()=>{i++;const k=i/n;c.style.left=Math.round(x0+(tx-x0)*k)+'px';c.style.bottom=Math.round(b0+(tb-b0)*k+10*Math.sin(Math.PI*k))+'px';if(i>=n)clearInterval(t)},83)}});
+  const s=$('#fwstar');if(s)s.classList.add('answer');await fwSay(B('last_call'));closure()}
+function fwRelease(){const f=fw();S.released=now();f.state='released';S.postcards=[];S.checkins=buildCheckins();S.pcv=Postcards.VERSION;save()}
+function fwResumeCheck(){const f=S.fw;if(!f||S.released)return false;   // closed mid-ceremony before C9: resume at the edge / on the branch
+  if(f.state==='ceremony'){fwCeremony(f.path,true);return true}return false}
 function closure(){
-  const g=S.g;S.released=now();S.postcards=[];S.checkins=buildCheckins();S.pcv=Postcards.VERSION;save();
-  const d=full(`<div class="mcard closure"><div class="mtop">${PI('⭐')}<span class="mt">${g.name} is home</span>${PI('⭐')}</div><div class="cstar"><i></i></div><p class="mline">${g.name} is home, off to live its wild life.</p><p class="mline">You helped it grow strong and brave.</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
-  setTimeout(()=>{d.querySelector('#cont').innerHTML='<button class="btn">Continue</button>';d.querySelector('button').onclick=()=>{d.remove();feelings()}},5000);
+  const g=S.g,f=fw();if(!S.released)fwRelease();f.step=9;save();ov.innerHTML='';
+  const d=full(`<div class="mcard closure"><div class="mtop">${PI('⭐')}<span class="mt">${g.name} is home</span>${PI('⭐')}</div><div class="cstar"><i></i></div><p class="mline">${fwUI('ui_closure',0)}</p><p class="mline">${fwUI('ui_closure',1)}</p><p class="mline">${PI('✉️')} ${fwUI('ui_closure',2)}</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
+  setTimeout(()=>{d.querySelector('#cont').innerHTML='<button class="btn">Continue</button>';d.querySelector('button').onclick=()=>{d.remove();f.closed=1;save();feelings()}},FWC().lineMs?600:5000);
 }
 function feelings(){
   const f=[['😊','Happy'],['😌','Proud'],['😢','Sad'],['😮','Surprised'],['🙂','Okay']],sel=new Set();
@@ -742,7 +859,8 @@ function migrateCheckins(){if(!S||!S.released||S.pcv===Postcards.VERSION)return;
   const upTo=Math.max(0,...old.filter(k=>k.delivered).map(k=>k.day));S.checkins=buildCheckins();S.checkins.forEach(k=>{if(k.day<=upTo)k.delivered=true});
   S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · postcard</b><br>${k.text}`);S.pcv=Postcards.VERSION;save()}
 function deliverCheckins(){
-  const due=(S.checkins||[]).filter(k=>!k.delivered&&S.released+k.day*864e5<=now());
+  const sleep1=(()=>{const d=new Date(S.released);d.setDate(d.getDate()+1);d.setHours(4,0,0,0);return d.getTime()})();   // farewell arc §7: postcard 1 after one sleep (next day, after 04:00)
+  const due=(S.checkins||[]).filter(k=>!k.delivered&&(k.day===1?sleep1<=now():S.released+k.day*864e5<=now()));
   if(!due.length||S.lastCheckinDate===new Date(now()).toDateString())return null;
   due.forEach(k=>k.delivered=true);S.lastCheckinDate=new Date(now()).toDateString();
   S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><br>${k.text}`);save();return due[due.length-1];
@@ -755,8 +873,9 @@ function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=e.token
   return `<div class="pcard${mini?' mini':''}">${front}<div class="pcback"><b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><p>${k.text}</p></div></div>`}
 function afterHome(){
   const e=E(),g=S.g;ov.innerHTML='';const fresh=deliverCheckins(),sign=fresh&&fresh.type==='sign',days=Math.floor((now()-S.released)/864e5),ic=e.sign.split(' ')[0];
-  h(`<div class="top"><b>The meadow · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after"><div class="bubble">${g.name} is home in ${e.release}.${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):' Letters from the wild arrive now and then.'}</div>
-  <div class="farstar"><i></i></div>
+  const fox=S.kind==='fox',ks=S.keepsake,cap=fwUI(days<1&&!(S.checkins||[]).some(k=>k.delivered)?'ui_after_day0':'ui_after_later');
+  h(`<div class="top"><b>${fox?'The meadow':'Our branch'} · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after pxscene" style="background:url(px/scenes/${fox?'meadow_day':'branch_twi'}.png) center bottom/180px 320px no-repeat !important"><div class="bubble">${cap}${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):''}</div>
+  ${fwStarHTML(3,'fwstar')}${ks?`<div class="fwkeep after${fresh?' glim':''}" aria-label="${ks.name}" style="background-image:url(px/fw/${ks.type}.png)"></div>`:''}
   <button class="spot mailbox${fresh&&!sign?' full':''}" id="mail" aria-label="Mailbox">${PI(fresh&&!sign?'📬':'📪')}</button>
   ${sign?`<button class="spot signspot" id="sign" aria-label="Something left for you">${PI(ic)}</button>`:''}</div>
   <div class="dock two"><button class="btn" id="pc">${PI('⏩')}<span class="lbl">Skip a day (demo)</span></button><button class="btn" id="again">${PI('🌿')}<span class="lbl">New Echo</span></button></div>`);

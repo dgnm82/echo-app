@@ -84,11 +84,11 @@
   ],
   "grace_hello": [
    {
-    "text": "Remember the first time we met in the dusk meadow? I think about it a lot. Want to play my favorite game?",
-    "expr": "love"
+    "text": "Psst. Extra day! Extra days are the best kind of days.",
+    "expr": "excited"
    },
    {
-    "text": "Psst. Let's make today a leaf-pile kind of day. The best kind.",
+    "text": "Oh hi! Let's make today a leaf-pile kind of day.",
     "expr": "happy"
    }
   ],
@@ -100,7 +100,16 @@
   ],
   "ask_ready": [
    {
-    "text": "Psst, guess what. I think I'm ready for the flower meadow. Will you walk me there?",
+    "text": "Psst. I think I'm ready now. Will you walk me to the meadow's edge?",
+    "expr": "love",
+    "cond": {
+     "var": {
+      "listDone": true
+     }
+    }
+   },
+   {
+    "text": "Psst. I feel ready now. We can finish the list on the way. Walk with me?",
     "expr": "love"
    }
   ],
@@ -1656,6 +1665,375 @@
     "text": "A butterfly sat on my nose! I didn't sneeze. Okay, I sneezed.",
     "expr": "giggling",
     "react": "happy"
+   }
+  ],
+  "wild_glance": [
+   {
+    "text": "Ooh. The wind smells like far-away flowers. Sniff sniff.",
+    "expr": "curious",
+    "cond": {
+     "bondMin": 140
+    },
+    "gesture": "nose up toward the meadow edge"
+   },
+   {
+    "text": "Psst. Something yipped way out there. It sounded friendly.",
+    "expr": "curious",
+    "cond": {
+     "bondMin": 140
+    },
+    "gesture": "one ear swivels to the horizon"
+   },
+   {
+    "text": "That bright spot past the meadow? I think it winked at me.",
+    "expr": "surprised",
+    "cond": {
+     "bondMin": 210
+    },
+    "gesture": "squints at the home star"
+   },
+   {
+    "text": "My ears keep turning that way. They're very nosy ears.",
+    "expr": "giggling",
+    "cond": {
+     "bondMin": 210
+    },
+    "gesture": "ears flick to the edge and back"
+   },
+   {
+    "text": "The wild hums out there. Do you hear it? No? Just my ears, then.",
+    "expr": "curious",
+    "cond": {
+     "bondMin": 290
+    }
+   },
+   {
+    "text": "I'm learning SO much here. My tail feels sparklier. Probably.",
+    "expr": "proud",
+    "cond": {
+     "bondMin": 290
+    },
+    "gesture": "tail sparkle swish"
+   }
+  ],
+  "bondup_after_3": [
+   {
+    "text": "Ooh. Something way out there twinkled. At me? Probably at me.",
+    "expr": "curious",
+    "gesture": "glances at the faint home star"
+   }
+  ],
+  "bondup_after_4": [
+   {
+    "text": "All this light is from your world. I'm already carrying tiny bits.",
+    "expr": "love",
+    "gesture": "pats its chest glow"
+   }
+  ],
+  "bondup_after_5": [
+   {
+    "text": "I'm packed with your world now. Like a pocket of shiny things.",
+    "expr": "proud",
+    "gesture": "looks at the bright home star, then back at you"
+   }
+  ],
+  "restless": [
+   {
+    "text": "My paws did a little wiggle toward the meadow's edge. Just a wiggle!",
+    "expr": "giggling",
+    "gesture": "paws patter toward the edge, then hop back"
+   },
+   {
+    "text": "Psst. I dreamed about the wild. Then I woke up here. Both nice!",
+    "expr": "happy"
+   },
+   {
+    "text": "The meadow's edge smells extra flowery today. Hm. Sniff.",
+    "expr": "curious"
+   }
+  ],
+  "almost_hello": [
+   {
+    "text": "Hi hi! The path got another flower. Sneaky path.",
+    "expr": "excited",
+    "gesture": "hops beside the glowing path"
+   },
+   {
+    "text": "Psst. List day! Or snack day. Or both!",
+    "expr": "happy"
+   },
+   {
+    "text": "Oh hi! I was practicing my walking-day walk. Fancy, right?",
+    "expr": "proud"
+   }
+  ],
+  "list_nudge": [
+   {
+    "text": "Today's pick? Any one. Or none! Hanging out counts too.",
+    "expr": "happy"
+   }
+  ],
+  "list_play_done": [
+   {
+    "text": "{var:listGame}, check! I'm putting that round in my pocket.",
+    "expr": "proud"
+   }
+  ],
+  "list_food_done": [
+   {
+    "text": "Yum, check! I'm saving that taste. Right in my memory pocket.",
+    "expr": "delighted"
+   }
+  ],
+  "list_place_done": [
+   {
+    "text": "Fort floor, check! Tallest fort in the meadow. Probably.",
+    "expr": "proud"
+   }
+  ],
+  "list_trail_done": [
+   {
+    "text": "Leaf Trail, check! My paws will remember that one.",
+    "expr": "happy"
+   }
+  ],
+  "list_memory_done": [
+   {
+    "text": "That story, check! It's packed. Right next to the snacks.",
+    "expr": "giggling"
+   }
+  ],
+  "list_cozy_done": [
+   {
+    "text": "Cozy sit, check. Mrrp. That one was extra warm.",
+    "expr": "love"
+   }
+  ],
+  "list_complete": [
+   {
+    "text": "Whole list done! Every single thing. We're a sneaky-good team.",
+    "expr": "excited",
+    "react": "happy"
+   }
+  ],
+  "stay_more": [
+   {
+    "text": "Not yet? Okay! A few more days, then. More list, more snacks!",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "Okay! I'll stay a few more days. Then off I go to my wild life.",
+    "expr": "love"
+   }
+  ],
+  "last_day": [
+   {
+    "text": "Psst. Our next day together is walking day. So today gets to be extra good.",
+    "expr": "love"
+   }
+  ],
+  "time_to_go": [
+   {
+    "text": "Psst. Today's walking day! My paws are wiggly. Will you walk with me?",
+    "expr": "love",
+    "gesture": "trots to the path, looks back, waits"
+   }
+  ],
+  "one_more_game": [
+   {
+    "text": "One more game! Then we walk. Deal? Deal.",
+    "expr": "excited"
+   }
+  ],
+  "after_one_more": [
+   {
+    "text": "Good game! Okay. Walking day. Ready when you are.",
+    "expr": "happy"
+   }
+  ],
+  "hug_more": [
+   {
+    "text": "Mrrp. Okay, one more is allowed. Two is also allowed.",
+    "expr": "love",
+    "gesture": "big squeeze"
+   },
+   {
+    "text": "That one was the best one yet. I'm keeping it.",
+    "expr": "love",
+    "gesture": "tail-scarf hug"
+   }
+  ],
+  "walk_start": [
+   {
+    "text": "Okay okay okay. Here we go! Stay close. Okay, closer.",
+    "expr": "excited",
+    "gesture": "trots onto the path"
+   }
+  ],
+  "walk_memory": [
+   {
+    "text": "Psst. Remember? {memory}. I still giggle about that one.",
+    "expr": "giggling"
+   },
+   {
+    "text": "Ooh, this spot! {memory}. Still my favorite.",
+    "expr": "happy"
+   }
+  ],
+  "walk_list": [
+   {
+    "text": "We did my whole list! Every bit. Basically perfect.",
+    "expr": "proud",
+    "cond": {
+     "var": {
+      "listDone": true
+     }
+    }
+   },
+   {
+    "text": "We did so much of my list! The rest I'll do in my head.",
+    "expr": "happy"
+   }
+  ],
+  "edge_arrive": [
+   {
+    "text": "The meadow's edge! Look how far the flowers go.",
+    "expr": "surprised",
+    "gesture": "stops, ears up, tail high"
+   }
+  ],
+  "edge_explain": [
+   {
+    "text": "Remember? I came to learn your world. Now I carry it home.",
+    "expr": "love"
+   },
+   {
+    "text": "It's all in here. Every snack. Every giggle. You.",
+    "expr": "love",
+    "gesture": "chest glow pulses three times"
+   }
+  ],
+  "gift_ask": [
+   {
+    "text": "Before I go… can I take something of yours? To remember you by.",
+    "expr": "curious"
+   }
+  ],
+  "gift_got": [
+   {
+    "text": "The {gift}! I'll hide it somewhere super safe. Then check on it. A lot.",
+    "expr": "excited",
+    "react": "happy"
+   }
+  ],
+  "keepsake_give": [
+   {
+    "text": "My turn! This is a glow-leaf. It has a bit of my light in it.",
+    "expr": "proud",
+    "gesture": "sets a glowing leaf down at your side"
+   },
+   {
+    "text": "When it glimmers, a postcard is here. Sneaky, right?",
+    "expr": "giggling"
+   }
+  ],
+  "thanks": [
+   {
+    "text": "Thank you, {child}. For snacks. For games. For finding me every time.",
+    "expr": "love"
+   },
+   {
+    "text": "You helped me grow SO bright. Best friend in any world.",
+    "expr": "love"
+   }
+  ],
+  "next_postcards": [
+   {
+    "text": "Here's the plan. I turn into light, like when I arrived. Zoom!",
+    "expr": "excited"
+   },
+   {
+    "text": "Then I'm home in the wild. Running. Pouncing. Telling everyone about you.",
+    "expr": "happy"
+   },
+   {
+    "text": "And I'll send postcards! The first one comes after one sleep.",
+    "expr": "excited"
+   },
+   {
+    "text": "Watch your glow-leaf. When it glimmers, check the mailbox!",
+    "expr": "happy"
+   }
+  ],
+  "farewell": [
+   {
+    "text": "I'm excited AND a little wiggly-sad. Can you be both? I'm both.",
+    "expr": "love",
+    "gesture": "{trust}"
+   }
+  ],
+  "two_goodbyes": [
+   {
+    "text": "Ooh, two goodbyes! Double lucky.",
+    "expr": "delighted"
+   }
+  ],
+  "resume_edge": [
+   {
+    "text": "Oh hi! We made it to the meadow's edge. Shall we keep going?",
+    "expr": "happy"
+   }
+  ],
+  "path_tap_early": [
+   {
+    "text": "Today? Ooh. We can do my list on the way!",
+    "expr": "surprised"
+   }
+  ],
+  "look_back": [
+   {
+    "text": "Bye, {child}! Postcard soon!",
+    "expr": "happy",
+    "gesture": "stops in the tall grass, looks back once, tail wave"
+   }
+  ],
+  "last_call": [
+   {
+    "text": "…yip! …yip… …yip…",
+    "expr": "happy"
+   }
+  ],
+  "thanks_hug": [
+   {
+    "text": "Mrrp. That one goes right in my pocket.",
+    "expr": "love",
+    "gesture": "tail-scarf squeeze"
+   }
+  ],
+  "thanks_wave": [
+   {
+    "text": "Double wave! Paw AND tail.",
+    "expr": "excited",
+    "gesture": "waves a paw, then the tail"
+   }
+  ],
+  "thanks_nose": [
+   {
+    "text": "Boop! Nose-tap. Very official.",
+    "expr": "giggling"
+   }
+  ],
+  "thanks_words": [
+   {
+    "text": "And thank YOU. We're a thank-you team.",
+    "expr": "love"
+   }
+  ],
+  "write_a_lot": [
+   {
+    "text": "Lots at first! Then now and then. Squirrels keep me busy.",
+    "expr": "giggling"
    }
   ]
  },
@@ -15184,6 +15562,340 @@
       }
      ],
      "bond": 1
+    }
+   }
+  },
+  {
+   "id": "slyte_where_from",
+   "trigger": "first_home",
+   "once": true,
+   "cond": {
+    "bondMax": 24
+   },
+   "topic": "wild",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. Want to know where I came from?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌟",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      },
+      {
+       "icon": "🤔",
+       "label": "Is it far?",
+       "goto": "b2"
+      }
+     ]
+    },
+    "b": {
+     "say": "The wild! Way past the meadow's edge. I came on a falling star.",
+     "expr": "excited",
+     "next": "c",
+     "wait": 3000
+    },
+    "b2": {
+     "say": "Kind of far! Past the meadow's edge. I came on a falling star.",
+     "expr": "excited",
+     "next": "c",
+     "wait": 3000
+    },
+    "c": {
+     "say": "I came to learn YOUR world. Every little bit.",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🍎",
+       "label": "Like snacks?",
+       "goto": "d1"
+      },
+      {
+       "icon": "🌳",
+       "label": "Like trees?",
+       "goto": "d2"
+      },
+      {
+       "icon": "🤗",
+       "label": "Like me?",
+       "goto": "d3"
+      }
+     ]
+    },
+    "d1": {
+     "say": "Snacks! Yes. Snacks are top of the list.",
+     "expr": "giggling",
+     "next": "e",
+     "wait": 2500
+    },
+    "d2": {
+     "say": "Trees, yes! And what's behind them. Sneaky trees.",
+     "expr": "curious",
+     "next": "e",
+     "wait": 2500
+    },
+    "d3": {
+     "say": "Especially you. You're the biggest part.",
+     "expr": "love",
+     "next": "e",
+     "wait": 2500
+    },
+    "e": {
+     "say": "Someday I'll carry it all back to the wild. Not soon. Way later.",
+     "expr": "happy",
+     "next": "f",
+     "wait": 3000
+    },
+    "f": {
+     "say": "So first I learn SO much. Starting now!",
+     "expr": "excited",
+     "react": "happy",
+     "memory": "I came from the wild to learn your world",
+     "memoryTag": "from_wild",
+     "bond": 2
+    }
+   }
+  },
+  {
+   "id": "slyte_wild_what",
+   "trigger": "idle",
+   "once": true,
+   "cond": {
+    "bondMin": 210
+   },
+   "topic": "wild",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. Guess what's in the wild. No, don't guess. I'll tell you!",
+     "expr": "excited",
+     "next": "b",
+     "wait": 2500
+    },
+    "b": {
+     "say": "Meadows that go on and on. And Slytes! Lots of Slytes.",
+     "expr": "delighted",
+     "choices": [
+      {
+       "icon": "❓",
+       "label": "What do they do?",
+       "intent": "ask_more",
+       "goto": "c1"
+      },
+      {
+       "icon": "🦊",
+       "label": "Like you?",
+       "goto": "c2"
+      },
+      {
+       "icon": "😮",
+       "label": "Wow!",
+       "intent": "wow",
+       "goto": "c3"
+      }
+     ]
+    },
+    "c1": {
+     "say": "They play. They nap. They tell stories about faraway worlds.",
+     "expr": "curious",
+     "next": "d",
+     "wait": 2500
+    },
+    "c2": {
+     "say": "Kind of like me! But none of them know you. Yet.",
+     "expr": "giggling",
+     "next": "d",
+     "wait": 2500
+    },
+    "c3": {
+     "say": "I know! Wow is exactly the right word.",
+     "expr": "excited",
+     "next": "d",
+     "wait": 2500
+    },
+    "d": {
+     "say": "Someday I'll tell them about your world. Snacks first. Probably.",
+     "expr": "happy",
+     "bond": 2
+    }
+   }
+  },
+  {
+   "id": "slyte_carry_back",
+   "trigger": "idle",
+   "once": true,
+   "cond": {
+    "bondMin": 370
+   },
+   "topic": "wild",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Okay okay okay. I'm practicing something. Can I show you?",
+     "expr": "excited",
+     "choices": [
+      {
+       "icon": "👍",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "🤔",
+       "label": "Practicing what?",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "Carrying! I carry your world in here. Look, it glows more.",
+     "expr": "proud",
+     "gesture": "chest glow brightens",
+     "next": "c",
+     "wait": 2800
+    },
+    "c": {
+     "say": "I packed the day we met. And snacks. Mostly snacks.",
+     "expr": "giggling",
+     "choices": [
+      {
+       "icon": "🍎",
+       "label": "Pack more snacks!",
+       "goto": "d1"
+      },
+      {
+       "icon": "🤗",
+       "label": "Pack a hug!",
+       "goto": "d2"
+      },
+      {
+       "icon": "😂",
+       "label": "(giggle)",
+       "intent": "giggle",
+       "goto": "d3"
+      }
+     ]
+    },
+    "d1": {
+     "say": "More snacks. Got it. Very important packing.",
+     "expr": "concentrating",
+     "next": "e",
+     "wait": 2500
+    },
+    "d2": {
+     "say": "A hug! It fits. Hugs fold up small.",
+     "expr": "love",
+     "next": "e",
+     "wait": 2500
+    },
+    "d3": {
+     "say": "Ha! See? That giggle goes in too.",
+     "expr": "giggling",
+     "next": "e",
+     "wait": 2500
+    },
+    "e": {
+     "say": "Not going yet! Just practicing. Practice is fun.",
+     "expr": "happy",
+     "react": "happy",
+     "bond": 2
+    }
+   }
+  },
+  {
+   "id": "slyte_almost_ready",
+   "trigger": "ready",
+   "once": true,
+   "topic": "farewell",
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. Guess what. No, don't guess. Big news!",
+     "expr": "excited",
+     "next": "b",
+     "wait": 2500
+    },
+    "b": {
+     "say": "I feel almost ready. Ready to carry your world back to the wild.",
+     "expr": "love",
+     "choices": [
+      {
+       "icon": "😮",
+       "label": "Already?",
+       "goto": "c1"
+      },
+      {
+       "icon": "🤗",
+       "label": "Hug",
+       "goto": "c2"
+      },
+      {
+       "icon": "❓",
+       "label": "What does that mean?",
+       "intent": "ask_more",
+       "goto": "c3"
+      }
+     ]
+    },
+    "c1": {
+     "say": "I know! My light filled up fast. You're good at friend stuff.",
+     "expr": "surprised",
+     "next": "d",
+     "wait": 2800
+    },
+    "c2": {
+     "say": "Mrrp. I'm excited AND a little wiggly-sad. Both!",
+     "expr": "love",
+     "gesture": "tail-scarf hug",
+     "next": "d",
+     "wait": 2800
+    },
+    "c3": {
+     "say": "It means soon I go home. Not today! First, my list.",
+     "expr": "happy",
+     "next": "d",
+     "wait": 2800
+    },
+    "d": {
+     "say": "I made a farewell list. Our favorite things. Want to see?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "📜",
+       "label": "Show me!",
+       "intent": "yes",
+       "goto": "e"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "e"
+      }
+     ]
+    },
+    "e": {
+     "say": "Three things. We do them together. Any order. No rush.",
+     "expr": "happy",
+     "gesture": "farewell list panel opens",
+     "next": "f",
+     "wait": 3200
+    },
+    "f": {
+     "say": "When it's time, we walk to the meadow's edge. Together.",
+     "expr": "love",
+     "set": {
+      "listStarted": true
+     }
     }
    }
   }

@@ -70,12 +70,6 @@
     "react": "happy"
    }
   ],
-  "goodbye_ask": [
-   {
-    "text": "How do you want to say goodbye?",
-    "expr": "love"
-   }
-  ],
   "farewell": [
    {
     "text": "({name} {trust}.) I'm so excited and a tiny bit sad, both at once. You helped me grow strong. Thank you, {child}.",
@@ -100,28 +94,6 @@
    {
     "text": "I still think about it: {memory}.",
     "expr": "love"
-   }
-  ],
-  "walk_end": [
-   {
-    "text": "I'll remember all of it.",
-    "expr": "love"
-   },
-   {
-    "text": "This is the spot. It feels just right.",
-    "expr": "love"
-   }
-  ],
-  "release_invite": [
-   {
-    "text": "{name} walks toward {release} and looks back at you.",
-    "expr": "curious"
-   }
-  ],
-  "release_forced": [
-   {
-    "text": "It's time. {name} walks toward {release} and looks back at you, happy.",
-    "expr": "happy"
    }
   ],
   "first_gift": [
@@ -175,6 +147,154 @@
    },
    {
     "text": "Good answer. A very good one.",
+    "expr": "happy"
+   }
+  ],
+  "ui_list_title": [
+   {
+    "text": "{name}'s farewell list",
+    "expr": "happy"
+   }
+  ],
+  "ui_list_items": [
+   {
+    "text": "Play {var:listGame} together",
+    "expr": "happy"
+   },
+   {
+    "text": "Share {fav}",
+    "expr": "happy"
+   },
+   {
+    "text": "Build one more floor",
+    "expr": "happy"
+   },
+   {
+    "text": "Leaf Trail or Firefly Parade",
+    "expr": "happy"
+   },
+   {
+    "text": "Tell our favorite story",
+    "expr": "happy"
+   },
+   {
+    "text": "A cozy sit together",
+    "expr": "happy"
+   }
+  ],
+  "ui_path_button": [
+   {
+    "text": "Walk to the meadow's edge",
+    "expr": "happy"
+   },
+   {
+    "text": "Sit on the twilight branch",
+    "expr": "happy"
+   }
+  ],
+  "ui_choice_ask": [
+   {
+    "text": "Let's go together",
+    "expr": "happy"
+   },
+   {
+    "text": "Not yet",
+    "expr": "happy"
+   }
+  ],
+  "ui_choice_time": [
+   {
+    "text": "Let's go",
+    "expr": "happy"
+   },
+   {
+    "text": "One more hug",
+    "expr": "happy"
+   },
+   {
+    "text": "One more game first",
+    "expr": "happy"
+   }
+  ],
+  "ui_choice_thanks": [
+   {
+    "text": "Hug",
+    "expr": "happy"
+   },
+   {
+    "text": "Wave",
+    "expr": "happy"
+   },
+   {
+    "text": "Nose-tap",
+    "expr": "happy"
+   },
+   {
+    "text": "Thank you too!",
+    "expr": "happy"
+   }
+  ],
+  "ui_choice_next": [
+   {
+    "text": "Okay!",
+    "expr": "happy"
+   },
+   {
+    "text": "Will you write a lot?",
+    "expr": "happy"
+   },
+   {
+    "text": "Hug first",
+    "expr": "happy"
+   }
+  ],
+  "ui_sibling_card": [
+   {
+    "text": "This walk is for {child} and {name}. Is {child} here?",
+    "expr": "happy"
+   },
+   {
+    "text": "Yes, I'm here!",
+    "expr": "happy"
+   },
+   {
+    "text": "I'll go get {child}",
+    "expr": "happy"
+   }
+  ],
+  "ui_closure": [
+   {
+    "text": "{name} is home in the wild, carrying your world.",
+    "expr": "happy"
+   },
+   {
+    "text": "You helped it grow bright and brave.",
+    "expr": "happy"
+   },
+   {
+    "text": "First postcard: after one sleep.",
+    "expr": "happy"
+   }
+  ],
+  "ui_after_day0": [
+   {
+    "text": "{name} is home in the wild. The first postcard comes after one sleep.",
+    "expr": "happy"
+   }
+  ],
+  "ui_after_later": [
+   {
+    "text": "{name} is home in the wild. Postcards arrive now and then.",
+    "expr": "happy"
+   }
+  ],
+  "ui_keepsake": [
+   {
+    "text": "Glow-leaf from {name}",
+    "expr": "happy"
+   },
+   {
+    "text": "Starlight feather from {name}",
     "expr": "happy"
    }
   ]

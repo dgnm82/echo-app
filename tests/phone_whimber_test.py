@@ -12,7 +12,7 @@ async def main():
     async def pick(t):
       c=pg.locator('.choices button',has_text=t).first;await c.wait_for(timeout=40000);await c.click();await c.click()
     novec="!document.querySelector('#app svg')"
-    await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600)
+    await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(600)
     assert await pg.locator('.tslot.owl .px-echo.owl').count()==1 and await pg.evaluate(novec),'setup card owl is pixel';await shot('setup')
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(400);await pg.click('#tree')
     seen=set()
