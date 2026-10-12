@@ -34,7 +34,7 @@ function chirp(text,kind,expr){
   if(!m)m=/\?/.test(t)?'curious':/(sleep|nap|yawn|rest|…$|zz)/i.test(t)?'sleepy':/!/.test(t)?'happy':'curious';
   const pet=W.Dialogue&&Dialogue.persona&&Dialogue.persona.petPhrase&&t.startsWith(Dialogue.persona.petPhrase);
   let i=1+Math.floor(Math.random()*3);if(i===lastVar[m])i=i%3+1;lastVar[m]=i;
-  const ok=play(pet?sp+'_pet_motif':sp+'_'+m+'_'+i,{voice:true,vol:.7,gap:120});if(ok&&W.Music)Music.talk();return ok}
+  const nm=pet?sp+'_pet_motif':sp+'_'+m+'_'+i,ok=play(nm,{voice:true,vol:.7,gap:120});if(ok&&W.Music)Music.talk(buf[nm]?buf[nm].duration:.6);return ok}
 W.Sound={get ctx(){return ctx},play,chirp,preload,unlock,get unlocked(){return unlocked},get loaded(){return Object.keys(buf)},MOOD};
 // ---- Music v2 (sound_design/v2): gapless loops (OGG Vorbis, sample-exact; 8-bit WAV fallback if OGG can't be decoded), never MP3.
 // Home: bg_<echo>_day / _twilight (evening + night), 4 s crossfade on change; games: their own theme. Ducks -6 dB under Echo voices.
@@ -55,7 +55,8 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
   return {
     home(kind){const sp=kind==='owl'?'whimber':'slyte';set(`bg_${sp}_${band()}_loop`)},
     game(name){set(`game_${name}_loop`)},
-    talk(){if(!master||out)return;level(.5,.08);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.4)},1400)},   // -6 dB under the voice
+    talk(sec){sec=sec||.6;(this.ducks=this.ducks||[]).push({to:.65,ms:Math.round(sec*1000)});if(!master||out)return;level(.65,.06);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.2)},sec*1000)},   // ~35% duck for the chirp's length, short fades (both Echoes)
+    get level(){return master?master.gain.value:1},
     duck(v){out=!!v;level(v?0:1,v?.5:1.5)},   // bond-up: fade out, come back after
     refresh(){if(!enabled())stopAll();else if(want)set(want)},
     stop(){want=null;stopAll()},

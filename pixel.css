@@ -31,7 +31,7 @@ html,body{background:#2E2452}
 #screen .full>div:first-child[style*="font-size"]{font-size:16px!important;line-height:18px}
 #screen .btn .ic{font-size:10px}
 .full [style*="width:1"]{width:64px!important}
-#toast{font-size:8px;line-height:10px;padding:3px 5px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C;top:40px;bottom:auto;width:max-content;max-width:160px;font-weight:normal}
+#toast{z-index:4;font-size:8px;line-height:10px;padding:3px 5px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C;top:40px;bottom:auto;width:max-content;max-width:160px;font-weight:normal}
 input{font-size:8px!important;padding:3px;border:1px solid #3B2A5C;background:#fff;color:#3B2A5C}
 input[type=checkbox]{width:8px;height:8px}
 .panel,.book,.postcard{font-size:8px;line-height:10px;padding:4px;border:1px solid #3B2A5C;background:#FFF6E6;color:#3B2A5C}

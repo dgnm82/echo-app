@@ -38,6 +38,17 @@ async def main():
         if top!='modal':bad.append((kind,name,top))
         if STRICT and name!='toast' and name!='game picker' and st=='wander':bad.append((kind,name,'still wandering'))
         await pg.evaluate("CONFIG.livingSpeed=1;document.getElementById('toast').classList.remove('on')")
+      # first-visit tip under every modal/card: show the tip, open the modal, the tip must be hidden or covered
+      for name,open_js,msel in cases[:-1]:
+        await pg.evaluate(CLEAN+";(()=>{const t=document.getElementById('toast');t.textContent='Tip: tap the buttons below to care for '+__echo.state.g.name;t.style.pointerEvents='auto';t.classList.add('on')})()")
+        await pg.evaluate(open_js);await pg.wait_for_timeout(700)
+        r=await pg.evaluate("(()=>{const t=document.getElementById('toast');const o=+getComputedStyle(t).opacity;if(o<0.05)return 'hidden';const b=t.getBoundingClientRect();const e=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);return e&&e.closest('#toast')?'TIP ON TOP':'covered'})()")
+        await pg.screenshot(path=f'{OUT}/{TAG}-{kind}-tip-{name.replace(" ","-").lower()}.png')
+        print(kind,'tip +',name,r)
+        if r=='TIP ON TOP' and msel.startswith('#overlay'):   # choice bar sits at the bottom, no overlap: check stacking order instead
+          r='under (z)' if await pg.evaluate("+getComputedStyle(document.getElementById('toast')).zIndex<+getComputedStyle(document.getElementById('overlay')).zIndex") else r
+        if r=='TIP ON TOP':bad.append((kind,'tip',name))
+        await pg.evaluate("document.getElementById('toast').classList.remove('on')")
       await pg.close()
     print('ERR',errs,'BAD',bad);await b.close()
     if STRICT:assert not errs and not bad,(errs,bad);print('modal test OK')
