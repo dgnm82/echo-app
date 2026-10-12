@@ -7,8 +7,8 @@ const CORE=['ui_tap','ui_back','ui_panel_open','bond_meter_tick','care_feed_eat'
 const V2MOODS=['happy','curious','sleepy','shy','silly','excited','sad_gentle'];
 const SPECIES=k=>{const s=k==='owl'||k==='whimber'?'whimber':'slyte';const v=[];V2MOODS.forEach(m=>[1,2,3].forEach(i=>v.push(s+'_'+m+'_'+i)));return [...v,s+'_pet_motif',s+'_arrival',s+'_release']};
 // sound v2: Whimber's own takes of a few shared sounds (Slyte uses the plain name)
-const OWLVAR=new Set(['memory_card_flip','memory_card_flip_2nd','memory_flip_back','memory_card_flip_whimber','memory_pair_found_whimber','ui_tap_whimber','trail_pickup_1_whimber','trail_finale','connect_link_step_0','whimber_night_vision_glint','ui_panel_close','memory_pair_found','ui_tap','trail_pickup_1']);
-const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','bondup_sting_slyte','bondup_sting_whimber','trail_pickup_1','trail_pickup_5','trail_bump_boop','connect_group_3','connect_big_group','connect_special_trinket','memory_pair_found','memory_all_cleared','slyte_radar_ears_twinkle',];
+const OWLVAR=new Set(['memory_card_flip','memory_card_flip_2nd','memory_flip_back','memory_card_flip_whimber','memory_pair_found_whimber','ui_tap_whimber','run_treasure_1_whimber','whimber_night_vision_glint','ui_panel_close','memory_pair_found','ui_tap','run_treasure_1']);
+const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','bondup_sting_slyte','bondup_sting_whimber','run_treasure_1','run_treasure_5','run_tumble_boop','run_gold','run_finale','memory_pair_found','memory_all_cleared','slyte_radar_ears_twinkle',];
 // expression -> chirp mood (happy / curious / sleepy); sad and wistful use the soft sleepy chirp
 const MOOD={happy:'happy',delighted:'happy',proud:'happy',love:'happy',eating:'happy',excited:'excited',giggling:'silly',
   curious:'curious',thinking:'curious',surprised:'curious',concentrating:'curious',neutral:'curious',shy:'shy',

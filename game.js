@@ -217,7 +217,7 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
   const fox=S.kind==='fox',[x,y]=LIVE.pos,top=y-48;LIVE.act=name;LIVE.log.push(name);const fx=lowFx()?0:1;
   const z=()=>{if(fx)lvFx('px/living/z.png',x+12,top-4,'rise',1500)};
   const A={
-    leaf_pounce:()=>{react('excited');for(let k=0;k<(fx?4:1);k++)lvFx(`px/trail/f_slyte_${k%3}.png`,x-20+k*10,y-14,'scatter s'+k,900);LIVE.actT=setTimeout(()=>{react('excited');for(let k=0;k<(fx?3:0);k++)lvFx(`px/trail/f_slyte_${k%3}.png`,x-14+k*10,y-14,'scatter s'+k,900)},1500)},
+    leaf_pounce:()=>{react('excited');for(let k=0;k<(fx?4:1);k++)lvFx(`px/living/leaf_${k%3}.png`,x-20+k*10,y-14,'scatter s'+k,900);LIVE.actT=setTimeout(()=>{react('excited');for(let k=0;k<(fx?3:0);k++)lvFx(`px/living/leaf_${k%3}.png`,x-14+k*10,y-14,'scatter s'+k,900)},1500)},
     sniff:()=>setExpr('curious'),
     trinket:()=>{setExpr('giggling');lvFx('px/living/trinket.png',x+18,y-16,'roll',dur)},
     curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},

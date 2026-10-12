@@ -30,3 +30,11 @@ for L in (120,160,200,240):sv(M.branch_top(L,True),ht,f'branch{L}')
 for h in (40,60,80):sv(M.bush_up(h,True),ht,f'bush{h}')
 sv(p_cloud(44,14),ht,'cloud');sv(p_sign(),ht,'sign_twi');b=p_bench();sv(b,ht,'bench');sv(p_moss(),ht,'moss')
 print(sorted(os.listdir(O)))
+# golden treasure: gold ramp tint of the trinket / feather (ink outline kept)
+from PIL import Image
+import numpy as np
+for n in ('trinket','feather'):
+    a=np.array(Image.open(f'px/items/{n}.png').convert('RGBA')).astype(float);m=a[...,3]>0;l=a[...,:3].mean(-1)
+    ink=l<70;ramp=np.array([[176,96,40],[242,166,90],[255,210,122],[255,246,214]])
+    idx=np.clip((l/255*4).astype(int),0,3);g=ramp[idx];a[...,:3]=np.where((m&~ink)[...,None],g,a[...,:3])
+    Image.fromarray(a.astype('uint8')).save(f'px/run/{n}_gold.png')
