@@ -283,3 +283,4 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .top #rm.gold{color:#C9781E}.top b .pxi{width:8px;height:8px;background-size:8px 8px;vertical-align:-1px}
 .rungame .fbdone{position:absolute;left:30px;top:90px;width:112px;padding:5px 4px;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #EBD7BC,0 2px 0 #1f1838;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:3px;text-align:center;z-index:4}
 .rungame .fbdone .rb{width:100%;color:#C9781E}
+.pxscene.sc-branch .creature{bottom:130px}   /* Whimber home v2: the default perch is on the limb (y 190), not the grass */

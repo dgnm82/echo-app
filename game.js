@@ -128,8 +128,8 @@ function home(greet){
   ov.innerHTML='';
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
-   <div class="scene ${e.bg} pxscene" id="sc" style="${scStyle()}">${fwHomeBits()}
-   ${curScene()===scHome()?fortProp():''}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
+   <div class="scene ${e.bg} pxscene sc-${curScene().id}" id="sc" style="${scStyle()}">${fwHomeBits()}
+   ${curScene()===scHome()&&curScene().id!=='branch'?fortProp():''}   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">${fwUI('ui_path_button',S.kind==='fox'?0:1)}</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
@@ -752,20 +752,20 @@ async function fwCeremony0(path,resume){
   try{lvStop();clearTimeout(LIVE.noticeT);clearInterval(LIVE.timer)}catch(x){}clearTimeout(ambT);if(window.Music)Music.home(S.kind);
   ov.innerHTML='';document.querySelectorAll('.full').forEach(x=>x.remove());
   h(`<div class="scene fwscene ${fox?'fox':'owl'}" id="sc"><div class="fwsky"></div>${fwStarHTML(fox?2:2,'fwstar')}<div class="fwtrail" id="fwtrail"></div>
-    <div class="creature" id="cr" style="left:90px;bottom:64px">${svg(S.kind,S.g,'happy')}</div>${fox?'<div class="fwgrass"></div>':''}<div class="fwglow" id="fwglow"></div><div class="bubble" id="b" style="display:none"></div></div>`);
+    <div class="creature" id="cr" style="left:90px;bottom:${fox?64:130}px">${svg(S.kind,S.g,'happy')}</div>${fox?'<div class="fwgrass"></div>':''}<div class="fwglow" id="fwglow"></div><div class="bubble" id="b" style="display:none"></div></div>`);
   const px=$('#cr .px-echo');if(px)px.dataset.stage=4;   // bonded until the departure; stage 5 plays as the release event
   const star=l=>{const s=$('#fwstar');if(s){s.className='fwstar l'+l;s.style.backgroundImage=`url(px/fw/star_${l}.png)`}};
   const mems=Postcards.memories(S.memories).slice(-3);
   if(fox)fwBg(resume?'meadow':scHome().id,resume?'twi':'day');else fwBg('branch','twi');   // Whimber: the branch's warm twilight, whatever the clock says
-  if(resume&&f.step>=1){if(!fox)await fwMoveTo(58,64,400);await fwSay(B('resume_edge'))}
+  if(resume&&f.step>=1){if(!fox)await fwMoveTo(58,130,400);await fwSay(B('resume_edge'))}
   else{
     // C0 start
     await fwSay(B('walk_start'));fwStep(1);
     // C1 walk (Slyte: three cuts home -> meadow -> edge, trotting) / along the branch (Whimber: each memory lights a star)
     if(fox){const c=$('#cr');c.classList.add('pxwalk');await fwSay(fwPickDone('walk_list'));const sc=$('#sc');sc.classList.add('fwcut');fwBg('meadow','day');await fwWait(350);sc.classList.remove('fwcut');
       for(const m of mems.slice(0,2))await fwSay(B('walk_memory',{memory:m}));sc.classList.add('fwcut');fwBg('meadow','twi');await fwWait(350);sc.classList.remove('fwcut');c.classList.remove('pxwalk')}
-    else{await fwMoveTo(74,64,700);await fwSay(fwPickDone('walk_list'));let k=0;
-      for(const m of mems){k++;$('#fwtrail').innerHTML=fwTrailHTML(k*2);await fwSay(B('walk_memory',{memory:m}))}await fwMoveTo(58,64,600)}
+    else{await fwMoveTo(74,130,700);await fwSay(fwPickDone('walk_list'));let k=0;
+      for(const m of mems){k++;$('#fwtrail').innerHTML=fwTrailHTML(k*2);await fwSay(B('walk_memory',{memory:m}))}await fwMoveTo(58,130,600)}
     fwStep(2);
     // C2 arrive
     star(3);await fwSay(B('edge_arrive'));fwStep(3)}
