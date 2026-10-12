@@ -91,3 +91,13 @@ Post-M6 round
    outside-in silhouette glow, squash + stage swap with one ramped warm flash, inside-out reveal, burst + hearts + hop, BOND UP! banner + bond_up_N line.
    Skippable after 1 s. Saved as "Bond moments" in the Memory Book with Replay. Calm effects (dev menu / prefers-reduced-motion) = 2.5 s dither cross-fade.
    Short bond-ups toggle in the dev menu. Sting: bondup_sting_slyte / _whimber (sound v2 cues).
+2) Living Echo (living_echo.md v0.1): Present (comes to the stage spot within 2 s on any care/talk tap, stays 3 s), Wander (idle 8-20 s Slyte /
+   10-25 s Whimber: trots / flies an arc to a waypoint and does that spot's behaviour), Routine (band change: sunset curl-up, moon yip, stargaze,
+   sunrise greet...), Found (opening after >= 20 min away: mid-activity at a waypoint, notices after 1.5 s or the first tap, says a found_* line,
+   comes over). Never "waits for you"; the test lints found_/routine_ lines for waiting/missing wording. Reuses existing frames (no new trot/hoo art).
+3) Music v2: music/*.ogg (Vorbis, sample-exact loops) with 8-bit WAV fallback, never MP3; Home day/twilight loops per Echo, 8 game themes,
+   4 s crossfade, -6 dB duck under voices, fades for bond-up. Music toggle in the dev menu (the Sound toggle silences everything).
+   Sound v2: Whimber v2 and Slyte v2.1 (calm) voice moods (happy/curious/sleepy/shy/silly/excited/sad_gentle x3), SFX, arrival cues, bond-up stings.
+   Release cues are unchanged (release flow is being redesigned).
+4) Spec v0.4: Memory is the signature game for both Echoes (daily +3); Super Radar Hearing (panned chime after a miss) and a Night Vision glint added to Starlight Pairs.
+5) Whimber barks pasted from whimber_barks.md (12 keys) + Whimber's "Two {items}… hoo." line.

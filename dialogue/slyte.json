@@ -1490,6 +1490,54 @@
     "text": "Look how bright I shine! We grew all this light together.",
     "expr": "proud"
    }
+  ],
+  "found_leaves": [
+   {
+    "text": "Oh hi! I was pouncing leaves. Watch this one!",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_trinket": [
+   {
+    "text": "Hi hi! My trinket rolled under a daisy. Got it!",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_moon": [
+   {
+    "text": "Yip! Oh, hi! I was saying hello to the moon.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_sunrise": [
+   {
+    "text": "Good morning! The sun and I both woke up shiny.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_curl": [
+   {
+    "text": "Mmm, hi. The tree is warm. Sit with me?",
+    "expr": "sleepy",
+    "react": "happy"
+   }
+  ],
+  "found_fort": [
+   {
+    "text": "Hi! I was fixing the fort flag. It's perfect now.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "routine_sunset": [
+   {
+    "text": "Sun's going down. Time for my comfy tree spot.",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [

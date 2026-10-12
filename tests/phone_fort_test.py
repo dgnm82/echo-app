@@ -30,7 +30,7 @@ async def run(b,dev,vp,errs,q=''):
   if dev=='phone':
     for _ in range(3):
       if await pg.locator('.book #x').count():await pg.click('.book #x')
-    await pg.evaluate("__echo.state.fort.stage=2;__echo.state.napUntil=0;__echo.state.badges.push('place');__echo.state.bond=150;document.querySelectorAll('.book,.full').forEach(e=>e.remove())")
+    await pg.evaluate("__echo.state.fort.stage=2;__echo.state.napUntil=0;__echo.state.badges.push('place');__echo.state.bondShown=5;__echo.state.bond=150;document.querySelectorAll('.book,.full').forEach(e=>e.remove())")
     await pg.evaluate("__echo.fortBuilder(2)");await pg.wait_for_timeout(600);await pg.evaluate(PLAY,80);await pg.wait_for_timeout(700)
     await pg.screenshot(path=f'{OUT}reward-roof.png');await pg.wait_for_timeout(2600)
     for _ in range(5):

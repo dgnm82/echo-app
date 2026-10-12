@@ -85,7 +85,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}window.__awayMin=S.last?(now()-S.last)/6e4:0;simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
@@ -140,18 +140,111 @@ function home(greet){
   if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now())home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet&&S.graceUntil&&graceDay>=C.graceDays&&S.lastDayLine!==graceDay){S.lastDayLine=graceDay;save();talk(B('last_day'))}
   else if(greet&&S.graceUntil){talk(B('grace_hello'))}
+  else if(greet&&window.__awayMin>=(C.foundMinAwayMinutes||20)&&!ready){window.__awayMin=0;lvStart(true)}
   else if(greet){talk(B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   else if(ready&&!sess.readyLine){sess.readyLine=1;talk(B('ready_hint'))}
+  if(LIVE.st!=='found')lvStart(false);
+  if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
 }
 
 // ---------- Bond-up scene (bond_up.md v0.1): plays on the next Home, before any milestone card; once per transition per Echo ----------
+// ---------- Living Echo (living_echo/living_echo.md v0.1): Present / Wander / Routine / Found on Home ----------
+// Guardrail: the Echo never "waits for you". Every return opens on a happy activity already in progress; no lines about time away.
+const LV={
+  fox:{wp:{stage:[90,199],tree_base:[136,180],leaf_pile:[36,214],moon_rock:[24,190],path:[96,234],fort:[154,150]},
+    acts:{leaf_pounce:{at:'leaf_pile',bands:['morning','evening','day'],found:'found_leaves',w:3},sniff:{at:'tree_base',bands:['morning','day'],w:2},
+      trinket:{at:'path',bands:['day','morning'],found:'found_trinket',w:2},curl_nap:{at:'tree_base',bands:['evening'],found:'found_curl',w:3},
+      moon_yip:{at:'moon_rock',bands:['night'],found:'found_moon',w:3},fort_flag:{at:'fort',bands:['day','morning'],found:'found_fort',w:1,need:()=>fortState().homes>0||fortLevel()>0},
+      sunrise:{at:'moon_rock',bands:[],found:'found_sunrise'}}},
+  owl:{wp:{stage:[90,199],hollow:[154,146],branch_hi:[146,98],branch_lo:[122,130],meadow:[40,210]},
+    acts:{lullaby:{at:'branch_lo',bands:['evening','night'],found:'found_lullaby',w:3},stargaze:{at:'branch_hi',bands:['night'],found:'found_stars',w:3},
+      nap:{at:'hollow',bands:['day'],found:'found_nap',w:3},read:{at:'hollow',bands:['morning'],found:'found_book',w:2},lantern:{at:'branch_lo',bands:['evening'],found:'found_lantern',w:2},
+      preen:{at:'branch_hi',bands:['morning','day'],w:1},hop:{at:'meadow',bands:['morning','day','evening'],w:1},sunrise:{at:'branch_hi',bands:[],found:'found_sunrise'}}}};
+const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
+function lvDef(){return LV[S.kind==='fox'?'fox':'owl']}
+function lvEl(){return document.getElementById('cr')}
+function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
+  c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));
+  const px=c.querySelector('.px-echo');if(px&&face!=null)px.classList.toggle('lvflip',face<0)}
+function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
+function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');const c=lvEl();if(c)c.classList.remove('lvmoving')}
+function lvMove(to,done,fast){   // Slyte trots on the ground (2 px/tick, 3 when called over); Whimber flies a quadratic arc (3 px/tick, apex 12-20 px)
+  lvClear();const [x0,y0]=LIVE.pos||lvDef().wp.stage,[x1,y1]=to,fox=S.kind==='fox',d=Math.hypot(x1-x0,y1-y0);
+  if(d<1){done&&done();return}
+  const sp=fast?Math.max(3,d/22):(fox?2:3),n=Math.max(1,Math.ceil(d/sp)),apex=fox?0:Math.min(24,12+d/12),hopUp=fox&&y1<y0-20,step=lowFx()?2:1;let i=0;
+  const c=lvEl();if(c)c.classList.add('lvmoving');if(!fox)setExpr('excited');
+  LIVE.timer=setInterval(()=>{i=Math.min(n,i+step);const t=i/n;let x=x0+(x1-x0)*t,y=y0+(y1-y0)*t;
+    if(!fox||hopUp)y-=4*(hopUp?10:apex)*t*(1-t);                 // flight arc / the fort hop chain
+    else if(!lowFx()&&i<n)y-=(i>>1)%2;                                   // 1 px trot bob
+    lvPlace(Math.round(x),Math.round(y),x1<x0?-1:1);
+    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');if(!fox)setExpr(baseExpr());done&&done()}},83)}
+function lvFx(src,x,y,cls,ms){const sc=$('#sc');if(!sc)return;const e=document.createElement('i');e.className='lvfx '+(cls||'');e.style.cssText=`left:${x}px;top:${y}px;background-image:url(${src})`;sc.appendChild(e);setTimeout(()=>e.remove(),ms||1500)}
+function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
+  const fox=S.kind==='fox',[x,y]=LIVE.pos,top=y-48;LIVE.act=name;LIVE.log.push(name);const fx=lowFx()?0:1;
+  const z=()=>{if(fx)lvFx('px/living/z.png',x+12,top-4,'rise',1500)};
+  const A={
+    leaf_pounce:()=>{react('excited');for(let k=0;k<(fx?4:1);k++)lvFx(`px/trail/f_slyte_${k%3}.png`,x-20+k*10,y-14,'scatter s'+k,900);LIVE.actT=setTimeout(()=>{react('excited');for(let k=0;k<(fx?3:0);k++)lvFx(`px/trail/f_slyte_${k%3}.png`,x-14+k*10,y-14,'scatter s'+k,900)},1500)},
+    sniff:()=>setExpr('curious'),
+    trinket:()=>{setExpr('giggling');lvFx('px/living/trinket.png',x+18,y-16,'roll',dur)},
+    curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
+    moon_yip:()=>{setExpr('excited');say('Yip!','excited');LIVE.actT=setTimeout(()=>say('Yip!','excited'),1000)},
+    fort_flag:()=>setExpr('proud'),
+    sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
+    lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
+    stargaze:()=>{setExpr('thinking');const px=document.querySelector('#cr .px-echo');if(px)px.classList.add('lvtilt')},
+    nap:()=>{setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
+    read:()=>{setExpr('thinking');lvFx('px/i_book.png',x+14,y-18,'',dur)},
+    lantern:()=>setExpr('curious'),preen:()=>setExpr('shy'),hop:()=>react('happy')};
+  clearInterval(LIVE.zT);(A[name]||(()=>{}))()}
+function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null}
+function lvPick(band,found){const D=lvDef();const last=(S.lvLast||[]).slice(-2);const opts=[];
+  for(const [k,a] of Object.entries(D.acts)){if(!a.bands.includes(band))continue;if(a.need&&!a.need())continue;if(found&&!a.found)continue;if(last.includes(k))continue;
+    let w=a.w||1;const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();if(k==='fort_flag'&&/fort|hollow/.test(mem))w+=3;if(k==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;if(k==='lullaby'&&/lullab|night|star/.test(mem))w+=1;
+    for(let i=0;i<w;i++)opts.push(k)}
+  if(!opts.length)return found?(S.kind==='fox'?'leaf_pounce':'lullaby'):null;return opts[Math.floor(Math.random()*opts.length)]}
+function lvRemember(k){S.lvLast=[...(S.lvLast||[]),k].slice(-4)}
+function lvCanWander(){const b=$('#b');return document.getElementById('feed')&&!document.querySelector('.full,.book,.bondup')&&!ov.innerHTML.trim()&&!(b&&b.style.display!=='none')&&!((S.napUntil||0)>now())&&!window.__bondup&&!S.released}
+function lvWander(){const band=tod();const k=lvPick(band);if(!k){LIVE.nextIdle=now()+lvIdleDelay();return}
+  const a=lvDef().acts[k];LIVE.st='wander';lvRemember(k);$('#sc')&&$('#sc').classList.add('lvaway');
+  lvMove(lvDef().wp[a.at],()=>{lvDo(k,4000+Math.random()*8000);LIVE.actT2=setTimeout(()=>{if(LIVE.st!=='wander')return;lvStop();LIVE.nextIdle=now()+lvIdleDelay();
+    if(Math.random()<.4)lvHome()},4000+Math.random()*8000)})}
+function lvHome(fast,done){LIVE.st='present';lvStop();lvMove(lvDef().wp.stage,()=>{$('#sc')&&$('#sc').classList.remove('lvaway');setExpr(baseExpr());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvflip');done&&done()},fast)}
+function lvPresent(){   // the child is interacting: come to the stage spot (<= 2 s) and stay
+  LIVE.lastTouch=now();LIVE.nextIdle=now()+3000+lvIdleDelay();clearTimeout(LIVE.actT2);
+  if(LIVE.st!=='present'||(LIVE.pos&&Math.hypot(LIVE.pos[0]-90,LIVE.pos[1]-199)>1)){if(LIVE.st==='found')return lvNotice();lvHome(true)}}
+function lvFound(){   // opens mid-activity at a waypoint; notices the child after 1.5 s or the first tap
+  const band=tod();let k=(band==='morning'&&S.sunriseDay!==new Date(now()).toDateString())?'sunrise':lvPick(band,true);
+  if(k==='sunrise')S.sunriseDay=new Date(now()).toDateString();lvRemember(k);
+  const a=lvDef().acts[k];LIVE.st='found';LIVE.foundAct=k;$('#sc')&&$('#sc').classList.add('lvaway');lvPlace(...lvDef().wp[a.at],1);lvDo(k,60000);
+  LIVE.noticeT=setTimeout(lvNotice,1500)}
+function lvNotice(){if(LIVE.st!=='found')return;clearTimeout(LIVE.noticeT);const k=LIVE.foundAct,a=lvDef().acts[k];lvStop();LIVE.st='noticed';
+  setExpr('happy');react('happy');const [x,y]=LIVE.pos;if(!lowFx())for(let i=0;i<3;i++)lvFx('px/heart_full.png',x-8+i*8,y-56,'rise',1200);
+  talk(B(a.found)||B('hello'),3200);
+  setTimeout(()=>{if(LIVE.st==='noticed')lvHome(false)},1600)}
+function lvRoutine(band){   // band changed while open (or first morning open): play that band's routine
+  if(!lvCanWander())return;const fox=S.kind==='fox';let k=null,line=null;const hm=new Date(now());const mins=hm.getHours()*60+hm.getMinutes();
+  if(band==='evening'){k=fox?(mins>=18*60+30?'curl_nap':'leaf_pounce'):'lantern';if(fox?k==='curl_nap':true)line='routine_sunset'}
+  else if(band==='night')k=fox?'moon_yip':'stargaze';else if(band==='morning')k='sunrise';else k=fox?'trinket':'nap';
+  const a=lvDef().acts[k];LIVE.st='wander';lvRemember(k);$('#sc')&&$('#sc').classList.add('lvaway');lvMove(lvDef().wp[a.at],()=>{lvDo(k,8000);if(line)talk(B(line),3000);LIVE.actT2=setTimeout(()=>{if(LIVE.st==='wander'){lvStop();LIVE.nextIdle=now()+lvIdleDelay()}},8000)})}
+function lvTick(){if(!S||!S.kind||!document.getElementById('cr')||!document.getElementById('feed'))return;
+  if(!LIVE.pos)lvPlace(...lvDef().wp.stage);
+  const band=tod();if(LIVE.band&&band!==LIVE.band){LIVE.band=band;lvRoutine(band);return}LIVE.band=band;
+  if(ov.innerHTML.trim()&&LIVE.st!=='present'&&LIVE.st!=='found')return lvPresent();   // a conversation started: come over
+  if((LIVE.st==='present')&&!LIVE.timer&&now()>LIVE.nextIdle&&now()-LIVE.lastTouch>3000&&lvCanWander())lvWander()}
+function lvStart(found){LIVE.pos=null;LIVE.st='present';LIVE.band=tod();LIVE.lastTouch=now();LIVE.nextIdle=now()+lvIdleDelay();lvStop();
+  const sc=$('#sc');if(sc&&S.kind==='fox')sc.insertAdjacentHTML('beforeend','<i class="lvprop" style="left:20px;top:206px;background-image:url(px/living/leafpile.png);width:32px;height:16px"></i><i class="lvprop" style="left:16px;top:186px;background-image:url(px/living/moonrock.png);width:16px;height:8px"></i>');
+  lvPlace(...lvDef().wp.stage,1);
+  if(found)lvFound();
+  clearInterval(LIVE.tickT);LIVE.tickT=setInterval(lvTick,500);
+  const scr=SCR();if(!scr._lv){scr._lv=1;scr.addEventListener('pointerdown',e=>{if(!S||!document.getElementById('feed'))return;if(e.target.closest('.dock,#cr,.choices,#b,.thought'))lvPresent();else if(LIVE.st==='found')lvNotice()},true)}}
+
 function lowFx(){return !!(S&&S.lowfx)||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
 function bondTarget(){return S.bond>=500?5:PIXEL.stageFromBond(S.bond)}
 function maybeBondUp(){
   if(!S||!S.kind||S.released||S.releasePath||!window.BondUp||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup')||ov.innerHTML.trim())return false;
   if(S.bondShown==null)S.bondShown=PIXEL.stageFromBond(S.bond);
-  if(S.napUntil>now()||bondTarget()<=S.bondShown)return false;
+  if((S.napUntil||0)>now()||bondTarget()<=S.bondShown)return false;
   playBondUp(S.bondShown,S.bondShown+1,true);return true}
 function bondBg(){   // freeze the Home scene (background layers + props, without the Echo) onto a 180x320 canvas
   const c=document.createElement('canvas');c.width=180;c.height=320;const k=c.getContext('2d');k.imageSmoothingEnabled=false;
@@ -241,13 +334,14 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
+  d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
   d.querySelector('#b1').onclick=()=>{cl();addBond(60/C.demoSpeed);home()};
   d.querySelector('#b2').onclick=()=>{cl();addBond(500);S.bondShown=Math.max(S.bondShown||1,4);home()};
   d.querySelector('#b3').onclick=()=>{cl();sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;S.last=now()-6*36e5;simulate();save();home(true)};
-  d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();cl()};
+  d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();if(window.Music)Music.refresh();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
   d.querySelector('#b6').onclick=cl;
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
@@ -281,7 +375,7 @@ let GT=0;   // game token: a pending next-round timer is dropped if the child le
 function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
   if(S.bond>=C.unlock.trail)L.push([fox?'🍂':'✨',fox?'Leaf Trail':'Firefly Parade',trailGame]);
   if(S.bond>=C.unlock.connect&&window.connectGame)L.push([fox?'🫐':'🌙',fox?'Berry Connect':'Moonlight Connect',window.connectGame]);return L}
-function gameShell(title){GT++;const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/trail|parade/.test(t)?(fox?'leaf_trail':'firefly_parade'):(fox?'berry_connect':'moonlight_connect'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 function endGame(finished){GT++;if(finished){S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
@@ -383,14 +477,16 @@ function memoryGame(){
   function handle(){for(const e of MemoryEngine.take(g)){
     if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(g.cards[e.i].item==='slyte_token'){react('excited');talk(B('pairs_disguise'),1800)}
       // Night Vision (spec v0.3 §1): the partner of the first flipped card shimmers faintly once (once per board, default)
-      if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
+      if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){SFX('whimber_night_vision_glint',{vol:.5});B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
     if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
     if(e.type==='pair'){SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
-      if(pairsSaid%2===0)talk(Math.random()<.5?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:B('pairs_pair'),1800);else say('*')}
+      if(pairsSaid%2===0)talk(Math.random()<.5?(S.kind==='fox'?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:{text:`Two ${PAIR_NAMES[e.item]||e.item}… hoo.`,expr:'happy'}):B('pairs_pair'),1800);else say('*')}
     if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
       if(misses%3===0)talk(B('pairs_miss'),1800);
       // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
-      if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('slyte_radar_ears_twinkle',{pan:(col/(g.cols-1))*2-1,vol:.6})}}
+      if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('slyte_radar_ears_twinkle',{pan:(col/(g.cols-1))*2-1,vol:.6})}
+      // Super Radar Hearing (spec v0.4 §1, Whimber): after a miss, a soft B♭ chime from the side where the partner card lies
+      if(S.kind!=='fox'&&S.talents.includes('Super Radar Hearing')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('trail_pickup_1',{pan:(col/(g.cols-1))*2-1,vol:.5})}}
     if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
     if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,NEXT)}
     if(e.type==='done')finish()}
@@ -632,6 +728,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

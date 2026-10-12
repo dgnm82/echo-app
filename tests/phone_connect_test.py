@@ -9,8 +9,8 @@ async def run(b,p,kind,errs):
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
   c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
-  await pg.evaluate("__echo.state.bond=100");assert len(await pg.evaluate("__echo.gamesFor()"))==3,'trail only at 100'
-  await pg.evaluate("__echo.state.bond=150");await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
+  await pg.evaluate("__echo.state.bondShown=5;__echo.state.bond=100");assert len(await pg.evaluate("__echo.gamesFor()"))==3,'trail only at 100'
+  await pg.evaluate("__echo.state.bondShown=5;__echo.state.bond=150");await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
   title='Berry Connect' if kind=='fox' else 'Moonlight Connect';labels=await pg.locator('.choices button').all_inner_texts();assert any(title in l for l in labels) and len(labels)==4,labels
   c=pg.locator('.choices button',has_text=title).first;await c.click();await c.click();await pg.wait_for_timeout(600);await shot('start')
   g=await pg.evaluate("({lv:__con.level,n:__con.cells.length})");assert g=={'lv':'easy','n':30},g

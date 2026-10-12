@@ -1157,98 +1157,131 @@
   ],
   "pairs_start": [
    {
-    "text": "hoo… let's find the stars that belong together.",
-    "expr": "happy"
+    "text": "Hoo… the stars are sleeping face down. Shall we wake two?",
+    "expr": "curious"
    },
    {
-    "text": "cards… face down, like sleepy stars. let's wake two.",
-    "expr": "curious"
+    "text": "Hm. Every card has a twin somewhere… I wonder which.",
+    "expr": "happy"
    }
   ],
   "pairs_pair": [
    {
-    "text": "two moons… side by side now.",
-    "expr": "happy"
+    "text": "Oh… those two found each other.",
+    "expr": "happy",
+    "react": "happy"
    },
    {
-    "text": "those two belong together… hoo.",
-    "expr": "happy"
+    "text": "A pair… they look happier side by side.",
+    "expr": "delighted"
    },
    {
-    "text": "a pair… how lovely.",
-    "expr": "happy"
+    "text": "Hoo-hoo. Two of the same. How lovely.",
+    "expr": "delighted"
    }
   ],
   "pairs_miss": [
    {
-    "text": "not quite… i'll remember that one too.",
+    "text": "Not that one… but now we know where it sleeps.",
     "expr": "thinking"
    },
    {
-    "text": "hmm… that one is hiding. we'll find it.",
+    "text": "Hm. That card was shy. I'll remember it.",
     "expr": "curious"
    }
   ],
   "pairs_hint": [
    {
-    "text": "hoo? …over there, maybe.",
+    "text": "Hoo? …I think I heard that one rustle.",
     "expr": "curious"
    }
   ],
   "pairs_done": [
    {
-    "text": "every pair is together… how lovely.",
-    "expr": "proud"
+    "text": "Every card has its twin now… Hoo. I like that.",
+    "expr": "proud",
+    "react": "happy"
    },
    {
-    "text": "all of them… found. you have a gentle memory.",
-    "expr": "happy"
+    "text": "All the pairs are home… we did that quietly, together.",
+    "expr": "love",
+    "react": "happy"
    }
   ],
   "stack_start": [
    {
-    "text": "let's make the hollow cozy… one piece at a time.",
-    "expr": "happy"
+    "text": "Hoo… let's build the hollow. One soft piece at a time.",
+    "expr": "happy",
+    "react": "happy"
+   },
+   {
+    "text": "Bark, moss, a moon window… I wonder how it all fits.",
+    "expr": "curious"
    }
   ],
   "stack_floor_next": [
    {
-    "text": "another floor… slowly, slowly.",
+    "text": "Another floor… slowly, slowly. The tree doesn't mind.",
     "expr": "happy"
+   },
+   {
+    "text": "Up a little higher… I rather like it up here.",
+    "expr": "curious"
    }
   ],
   "stack_row": [
    {
-    "text": "a row… soft and snug.",
-    "expr": "happy"
+    "text": "A whole row… snug as a feather.",
+    "expr": "happy",
+    "react": "happy"
    },
    {
-    "text": "hoo… that fits.",
-    "expr": "happy"
+    "text": "Hoo. That fits just right.",
+    "expr": "delighted"
+   },
+   {
+    "text": "A gap? …That can be a little window for the moon.",
+    "expr": "giggling"
    }
   ],
   "stack_floor": [
    {
-    "text": "hoo… i can already hear how quiet it is in there.",
+    "text": "Hoo… a whole floor. I can already hear how quiet it is.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Floor done… I shall nap on this one first.",
     "expr": "happy"
    }
   ],
   "stack_high": [
    {
-    "text": "the sky is getting closer…",
+    "text": "The sky is getting closer… hello, sky.",
+    "expr": "curious"
+   },
+   {
+    "text": "Higher… soon the stars can peek inside.",
     "expr": "curious"
    }
   ],
   "stack_disguise": [
    {
-    "text": "hoo… a little surprise.",
-    "expr": "giggling"
+    "text": "Hoo… that piece had feathers. Was it… me?",
+    "expr": "giggling",
+    "react": "excited"
    }
   ],
   "stack_done": [
    {
-    "text": "the hollow is ready… it smells like moss and moonlight.",
-    "expr": "proud"
+    "text": "The hollow is ready… it smells like moss and moonlight.",
+    "expr": "proud",
+    "react": "happy"
+   },
+   {
+    "text": "Roof on… three floors of quiet. Shall we sit inside a while?",
+    "expr": "love",
+    "react": "happy"
    }
   ],
   "trail_start": [
@@ -1333,6 +1366,54 @@
    {
     "text": "So much light… we made all of it together. Hoo.",
     "expr": "proud"
+   }
+  ],
+  "found_lullaby": [
+   {
+    "text": "Hoo… hello. I made up a new lullaby. Want to hear?",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_stars": [
+   {
+    "text": "Oh… hello. I counted eleven stars. Twelve now.",
+    "expr": "curious",
+    "react": "happy"
+   }
+  ],
+  "found_book": [
+   {
+    "text": "Hoo… hi. I was reading about clouds. Shall I tell you?",
+    "expr": "curious",
+    "react": "happy"
+   }
+  ],
+  "found_sunrise": [
+   {
+    "text": "Good morning… the sky just turned peach. Hoo.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_nap": [
+   {
+    "text": "Hoo… mm, hello. I had a cozy nap in the hollow.",
+    "expr": "sleepy",
+    "react": "happy"
+   }
+  ],
+  "found_lantern": [
+   {
+    "text": "Oh… hello. The fireflies and I were sharing the lantern.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "routine_sunset": [
+   {
+    "text": "The sky is going purple… my favorite part. Hoo.",
+    "expr": "happy"
    }
   ]
  },

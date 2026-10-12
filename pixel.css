@@ -230,3 +230,18 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .bondup-ui .bubanner b{font-size:16px;color:#E0457B;font-weight:normal}
 .bondup-ui .buline{display:block!important;position:absolute;left:8px;right:8px;top:auto;bottom:74px;width:auto!important;transform:none;max-width:none;white-space:normal!important}
 .book .bmom{display:flex;align-items:center;justify-content:space-between;gap:4px}
+/* ===== Living Echo (living_echo.md) ===== */
+#sc .creature{transform:translateX(-50%)}
+.px-echo.lvflip{transform:scaleX(-1)}
+.px-echo.lvtilt{transform:rotate(-8deg)}
+.lvprop,.lvfx{position:absolute;background:no-repeat;image-rendering:pixelated;pointer-events:none}
+.lvprop{z-index:5}
+.lvfx{width:16px;height:16px;z-index:40}
+.lvfx.rise{animation:lvrise 1.5s steps(18) forwards}
+@keyframes lvrise{to{transform:translateY(-18px);opacity:0}}
+.lvfx.scatter{animation:lvsc .9s steps(11) forwards}
+.lvfx.s0{--dx:-14px}.lvfx.s1{--dx:-5px}.lvfx.s2{--dx:6px}.lvfx.s3{--dx:14px}
+@keyframes lvsc{40%{transform:translate(calc(var(--dx)*.6),-14px)}100%{transform:translate(var(--dx),4px);opacity:0}}
+.lvfx.roll{animation:lvroll 1s steps(4) infinite alternate}
+@keyframes lvroll{to{transform:translateX(6px)}}
+#sc.lvaway .thought{display:none}

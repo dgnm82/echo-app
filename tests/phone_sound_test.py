@@ -17,7 +17,7 @@ async def main():
     r=await pg.evaluate("[Sound.chirp('Hi there!','fox','happy'),Sound.chirp('Hmm?','fox','curious'),Sound.play('care_feed_eat'),Sound.play('care_nap_tuck')]")
     await pg.evaluate("__echo.state.voice=false");off=await pg.evaluate("[Sound.chirp('Hi!','fox','happy'),Sound.play('ui_tap',{gap:0})]")
     files=sorted(set(re.findall(r"'([a-z_0-9]+)'",open('sound.js').read())+re.findall(r"SFX\('([a-z_0-9]+)'",open('game.js').read())))
-    need=[f for f in files if os.path.exists('sfx/'+f+'.mp3')];missing=[f for f in re.findall(r"SFX\('([a-z_0-9]+)'",open('game.js').read()) if not os.path.exists('sfx/'+f+'.mp3')]
+    need=[f for f in files if os.path.exists('sfx/'+f+'.mp3')];missing=[f for f in re.findall(r"SFX\('([a-z_0-9]+)'",open('game.js').read()) if not f.endswith('_') and not os.path.exists('sfx/'+f+'.mp3')]
     print('unlocked',st,'decoded',loaded,'fetched ok',len(ok),'bad',bad,'plays',r,'when off',off,'missing files',missing,'ERR',errs)
     assert st and loaded>=13 and not bad and all(r) and not any(off) and not missing and not errs
     await b.close();print('sound test OK')

@@ -15,7 +15,7 @@ async def run(b,dev,vp,errs,full=True):
   await pick();await pg.wait_for_timeout(3000)
   if not full:await pg.close();return
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
-  await pg.click('#dbg');await pg.click('#b2');await pg.wait_for_timeout(800)
+  await pg.evaluate("__echo.state.bondShown=5");await pg.click('#dbg');await pg.click('#b2');await pg.wait_for_timeout(800)   # bond-ups are covered by phone_bondup_test
   for _ in range(12):
     if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(500)
     else:break

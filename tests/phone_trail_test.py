@@ -10,7 +10,7 @@ async def run(b,p,kind,errs):
   c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
   locked=await pg.evaluate("__echo.gamesFor()");assert len(locked)==2,('locked before bond 70',locked)
-  await pg.evaluate("__echo.state.bond=80");await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
+  await pg.evaluate("__echo.state.bondShown=5;__echo.state.bond=80");await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
   title='Leaf Trail' if kind=='fox' else 'Firefly Parade';labels=await pg.locator('.choices button').all_inner_texts();assert any(title in l for l in labels),labels
   c=pg.locator('.choices button',has_text=title).first;await c.click();await c.click();await pg.wait_for_timeout(600);await shot('start')
   assert await pg.evaluate("__trail.level")=='easy'   # first game ever: step mode
