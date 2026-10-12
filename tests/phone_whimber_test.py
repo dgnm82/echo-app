@@ -25,7 +25,7 @@ async def main():
     await pg.wait_for_timeout(1500);await shot('arrival-end')
     c=pg.locator('.choices button').first;await c.wait_for(timeout=40000);await c.click();await c.click();await pg.wait_for_timeout(3000)
     await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
-    assert await pg.locator('#sc .px-echo.owl').count()==1 and await pg.locator('.fortprop.hollow').count()==1 and await pg.evaluate(novec),'home pixel owl + hollow';await shot('home')
+    assert await pg.locator('#sc .px-echo.owl').count()==1 and await pg.locator('.fortprop.hollow').count()==1 and await pg.evaluate(novec),('home pixel owl + hollow',await pg.locator('#sc .px-echo.owl').count(),await pg.locator('.fortprop.hollow').count(),await pg.evaluate(novec),await pg.evaluate('__echo.state.scene'));await shot('home')
     # care frames: feed -> eat columns, hug -> pet columns
     await pg.click('#feed');await pg.locator('.choices button').first.click();await pg.wait_for_timeout(150)
     await pg.wait_for_timeout(1200);await pg.evaluate("document.getElementById('overlay').innerHTML='';PIXEL.react(document.querySelector('#cr .px-echo'),'eat')")
@@ -55,7 +55,7 @@ async def main():
     for _ in range(6):
       if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(300)
     # Hollow Builder: one floor using the engine directly, hollow tiles
-    await pg.evaluate("document.getElementById('overlay').innerHTML='';__echo.fortBuilder(0)");await pg.wait_for_timeout(500)
+    await pg.evaluate("document.querySelectorAll('.bondup').forEach(x=>x.remove());__echo.state.bondShown=5;document.getElementById('overlay').innerHTML='';__echo.fortBuilder(0)");await pg.wait_for_timeout(500)
     assert 'Hollow' in await pg.inner_text('.top b')
     for _ in range(40):
       if await pg.evaluate("__fort.done"):break

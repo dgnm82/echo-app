@@ -22,7 +22,9 @@ async def main():
       if await pg.evaluate('window.__d===1'):break
       bt=pg.locator('.choices button')
       if await bt.count():
-        await bt.first.click();await bt.first.click()
+        for _k in range(2):
+          try: await bt.first.click(timeout=1500)
+          except Exception: pass   # the choice row can close between taps
       await pg.wait_for_timeout(700)
     said=await pg.evaluate('window.__said');st=await pg.evaluate('window.__echo.state')
     carry=[l['text'] for l in json.load(open('dialogue/slyte.json'))['barks']['carry_on']];bridge=[l['text'] for l in json.load(open('dialogue/slyte.json'))['barks']['drift_bridge']]

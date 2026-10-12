@@ -245,3 +245,12 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .lvfx.roll{animation:lvroll 1s steps(4) infinite alternate}
 @keyframes lvroll{to{transform:translateX(6px)}}
 #sc.lvaway .thought{display:none}
+/* ===== Per-Echo scenes (scenes.md v0.2) ===== */
+.pxscene>.bg{display:none}
+.pxscene .fortprop{left:128px;right:auto;top:133px;bottom:auto}
+.scwipe{position:absolute;inset:0;z-index:70;background:#7A5592;animation:scw .7s steps(6) forwards;pointer-events:none}
+@keyframes scw{0%{clip-path:inset(0 100% 0 0)}50%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 0 100%)}}
+.mcard.places .plist{display:flex;flex-direction:column;gap:3px;margin:4px 0}
+.mcard.places .place{display:flex;align-items:center;gap:4px;text-align:left;font-size:8px;min-height:30px}
+.mcard.places .place i{width:24px;height:24px;background-size:180px 320px;background-position:-78px -230px;image-rendering:pixelated;border:1px solid #3B2A5C;flex:none}
+.mcard.places .place.on{outline:1px solid #FFD27A}

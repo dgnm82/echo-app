@@ -1604,6 +1604,59 @@
     "expr": "delighted",
     "react": "happy"
    }
+  ],
+  "found_clearing_door": [
+   {
+    "text": "Our fort has a real door now. Fwip! I tried it twice.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_clearing_moon": [
+   {
+    "text": "Yip! The moon came up. I said hi first.",
+    "expr": "proud"
+   }
+  ],
+  "found_grove_first": [
+   {
+    "text": "Psst! I found a new spot. It's all crunchy leaves!",
+    "expr": "excited",
+    "react": "excited"
+   }
+  ],
+  "found_grove_log": [
+   {
+    "text": "You found me! I was a log. A very fluffy log.",
+    "expr": "giggling",
+    "react": "happy"
+   }
+  ],
+  "found_grove_pile": [
+   {
+    "text": "Leaf pile report: excellent. Very bouncy. Ten out of ten!",
+    "expr": "delighted"
+   }
+  ],
+  "found_meadow_first": [
+   {
+    "text": "So many flowers! They smell like warm honey cakes.",
+    "expr": "excited",
+    "react": "excited"
+   }
+  ],
+  "found_meadow_rock": [
+   {
+    "text": "The sun rock is warm. My tail is soaking up sunshine.",
+    "expr": "happy"
+   }
+  ],
+  "found_meadow_butterfly": [
+   {
+    "text": "A butterfly sat on my nose! I didn't sneeze. Okay, I sneezed.",
+    "expr": "giggling",
+    "react": "happy"
+   }
   ]
  },
  "conversations": [

@@ -85,7 +85,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}window.__awayMin=S.last?(now()-S.last)/6e4:0;simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();if(S.released){migrateCheckins();return afterHome()}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 function setup(){
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
@@ -125,8 +125,8 @@ function home(greet){
   if(S.graceUntil&&now()>=S.graceUntil)return release(true);
   const graceDay=S.graceUntil?Math.floor((now()-(S.graceUntil-C.graceDays*864e5))/864e5)+1:0;
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row"><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
-   <div class="scene ${e.bg}" id="sc">${ready?`<button class="pxpath" id="path" aria-label="Glowing path home" style="background-image:url(px/path_${Math.min(3,Math.max(1,graceDay))}.png)"></button>`:''}
-   ${fortProp()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
+   <div class="scene ${e.bg} pxscene" id="sc" style="${scStyle()}">${ready?`<button class="pxpath" id="path" aria-label="Glowing path home" style="background-image:url(px/path_${Math.min(3,Math.max(1,graceDay))}.png)"></button>`:''}
+   ${curScene()===scHome()?fortProp():''}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">Take home…</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
@@ -140,7 +140,7 @@ function home(greet){
   if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now())home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet&&S.graceUntil&&graceDay>=C.graceDays&&S.lastDayLine!==graceDay){S.lastDayLine=graceDay;save();talk(B('last_day'))}
   else if(greet&&S.graceUntil){talk(B('grace_hello'))}
-  else if(greet&&window.__awayMin>=(C.foundMinAwayMinutes||20)&&!ready){window.__awayMin=0;lvStart(true)}
+  else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs)}
   else if(greet){talk(B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   else if(ready&&!sess.readyLine){sess.readyLine=1;talk(B('ready_hint'))}
   if(LIVE.st!=='found')lvStart(false);
@@ -149,20 +149,50 @@ function home(greet){
 }
 
 // ---------- Bond-up scene (bond_up.md v0.1): plays on the next Home, before any milestone card; once per transition per Echo ----------
+// ---------- Per-Echo scenes (echo/scenes/scenes.md v0.2) ----------
+const SC_OY=57;   // phone bg (180x320) is bottom-anchored in the 263 px scene: scene y = bg y - 57
+function scList(){return SCENES[S.kind==='fox'?'slyte':'whimber']}
+function scHome(){return scList()[0]}
+function scUnlocked(){return scList().filter((s,i)=>S.bond>=SCENES.unlock[i])}
+function curScene(){const L=scList();return L.find(s=>s.id===S.scene)||L[0]}
+function scVariant(){return ['evening','night'].includes(tod())?'twi':'day'}
+function scBand(){return ['morning','day','evening','night'].indexOf(tod())}
+function scReq(r){if(!r)return true;const f=fortState();let m;
+  if(r==='badge:place')return S.badges.includes('place');
+  if((m=r.match(/^talent:(.+)$/)))return S.talents.includes(m[1]);
+  if((m=r.match(/^(fort|hollow)_(stage|decor)>=(\d+)$/)))return (m[2]==='stage'?f.stage:f.decor)>=+m[3];return false}
+// pick the scene for a new session (>= 20 min away): a newly unlocked scene first (as a found-moment), else by time-of-day weight, last scene halved
+function scPickSession(){const L=scUnlocked(),seen=S.scenesSeen=S.scenesSeen||[scHome().id];let first=null;
+  const bondPending=S.bondShown!=null&&bondTarget()>S.bondShown;
+  const fresh=L.find(s=>!seen.includes(s.id));
+  if(fresh&&!bondPending){first=fresh.id;seen.push(fresh.id);S.scene=fresh.id;remember(`We found the ${fresh.title.toLowerCase()}`,'scene_'+fresh.id);return first}
+  const W=SCENES.weights[S.kind==='fox'?'slyte':'whimber'],b=scBand();let opts=[];
+  L.forEach(s=>{let w=W[s.id][b];if(s.id===S.scene)w*=.5;if(w>0)opts.push([s.id,w])});
+  if(!opts.length){S.scene=scHome().id;return null}
+  let t=Math.random()*opts.reduce((a,o)=>a+o[1],0);for(const [id,w] of opts){t-=w;if(t<=0){S.scene=id;break}}if(t>0)S.scene=opts[0][0];return null}
+function scWp(id){const w=curScene().wp.find(x=>x.id===id);return w?[w.xy[0],Math.max(52,w.xy[1]-SC_OY)]:null}
+function scStyle(){const s=curScene();return `background:url(px/scenes/${s.id}_${scVariant()}.png) center bottom/180px 320px no-repeat !important`}
+function scPicker(){   // 'Our places' (bond 140, the place badge): thumbnails of unlocked scenes; picking one travels there
+  const L=scUnlocked();const d=full(`<div class="mcard places"><div class="mtop">${PI('🌲')}<span class="mt">Our places</span></div><div class="plist">${L.map((s,i)=>`<button class="btn place${s.id===curScene().id?' on':''}" data-i="${i}"><i style="background-image:url(px/scenes/${s.id}_${scVariant()}.png)"></i><span>${s.title}</span></button>`).join('')}</div><button class="btn small" id="pclose">Close</button></div>`);
+  d.style.zIndex=95;d.querySelector('#pclose').onclick=()=>d.remove();
+  d.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const s=L[+b.dataset.i];d.remove();document.querySelectorAll('.book').forEach(x=>x.remove());if(s.id===curScene().id)return;
+    S.scene=s.id;(S.scenesSeen=S.scenesSeen||[]).includes(s.id)||S.scenesSeen.push(s.id);save();const scr=SCR(),w=document.createElement('div');w.className='scwipe';scr.appendChild(w);setTimeout(()=>{home();setTimeout(()=>w.remove(),400)},300)})}
+
 // ---------- Living Echo (living_echo/living_echo.md v0.1): Present / Wander / Routine / Found on Home ----------
 // Guardrail: the Echo never "waits for you". Every return opens on a happy activity already in progress; no lines about time away.
-const LV={
-  fox:{wp:{stage:[90,199],tree_base:[136,180],leaf_pile:[36,214],moon_rock:[24,190],path:[96,234],fort:[154,150]},
-    acts:{leaf_pounce:{at:'leaf_pile',bands:['morning','evening','day'],found:'found_leaves',w:3},sniff:{at:'tree_base',bands:['morning','day'],w:2},
-      trinket:{at:'path',bands:['day','morning'],found:'found_trinket',w:2},curl_nap:{at:'tree_base',bands:['evening'],found:'found_curl',w:3},
-      moon_yip:{at:'moon_rock',bands:['night'],found:'found_moon',w:3},fort_flag:{at:'fort',bands:['day','morning'],found:'found_fort',w:1,need:()=>fortState().homes>0||fortLevel()>0},
-      sunrise:{at:'moon_rock',bands:[],found:'found_sunrise'}}},
-  owl:{wp:{stage:[90,199],hollow:[154,146],branch_hi:[146,98],branch_lo:[122,130],meadow:[40,210]},
-    acts:{lullaby:{at:'branch_lo',bands:['evening','night'],found:'found_lullaby',w:3},stargaze:{at:'branch_hi',bands:['night'],found:'found_stars',w:3},
-      nap:{at:'hollow',bands:['day'],found:'found_nap',w:3},read:{at:'hollow',bands:['morning'],found:'found_book',w:2},lantern:{at:'branch_lo',bands:['evening'],found:'found_lantern',w:2},
-      preen:{at:'branch_hi',bands:['morning','day'],w:1},hop:{at:'meadow',bands:['morning','day','evening'],w:1},sunrise:{at:'branch_hi',bands:[],found:'found_sunrise'}}}};
+// behaviour names in scenes.json -> the P0 behaviours below (reusing existing frames)
+const LV_IMPL={leaf_pounce:'leaf_pounce',leaf_toss:'leaf_pounce',sniff:'sniff',sniff_flowers:'sniff',sneeze:'giggle',trinket_play:'trinket',curl_nap:'curl_nap',nap_inside:'nap',go_inside:'nap',midday_nap:'nap',
+  moon_yip:'moon_yip',fort_flag:'fort_flag',flag_wave:'fort_flag',fort_peek:'peek',peek_from_log:'peek',peek_from_grass:'peek',disguise_hide:'peek',stack_peek:'peek',sunrise_greet:'sunrise',good_morning_sun:'sunrise',
+  riddle_think:'think',read_sign:'think',read_book:'read',page_turn:'read',jump_up:'hop',tail_dangle:'giggle',warm_paws:'warm',sunbathe:'warm',butterfly_chase:'excited',preen:'preen',feather_tidy:'preen',
+  head_tilt:'tilt',listen:'tilt',stargaze:'stargaze',stargaze_lie_back:'stargaze',moon_watch:'stargaze',lantern_share:'lantern',story_hum:'lullaby',lullaby_hum:'lullaby',sit_and_sway:'warm',cloud_shapes:'think',silent_flight_loop:'hop'};
+const LV_BAND={moon_yip:['night'],stargaze:['evening','night'],stargaze_lie_back:['evening','night'],moon_watch:['evening','night'],sunrise_greet:['morning'],good_morning_sun:['morning'],curl_nap:['evening'],midday_nap:['day'],nap_inside:['evening','night'],butterfly_chase:['morning','day'],sunbathe:['morning','day']};
+const LV_FOUND={leaf_pounce:'found_leaves',trinket:'found_trinket',moon_yip:'found_moon',sunrise:'found_sunrise',curl_nap:'found_curl',fort_flag:'found_fort',lullaby:'found_lullaby',stargaze:'found_stars',read:'found_book',nap:'found_nap',lantern:'found_lantern'};
+const SC_FOUND={clearing:{fort_door:'found_clearing_door','moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
+  branch:{hollow_door:'found_branch_door',branch_tip:'found_branch_tip'},library:{reading_nook:'found_library_nook',window_sill:'found_library_sill'},hilltop:{tree_branch:'found_hilltop_branch',blanket:'found_hilltop_blanket'}};
+function lvDef(){const sc=curScene(),wp={};sc.wp.forEach(w=>{wp[w.id]=scWp(w.id)});return {wp,scene:sc}}
+function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].includes(w.id)||/exit/.test(w.kind)||!scReq(w.requires))return;
+    w.acts.forEach(a=>{if(!LV_IMPL[a])return;if(LV_BAND[a]&&!LV_BAND[a].includes(band))return;if(band==='night'&&S.kind==='fox'&&!LV_BAND[a])return;out.push({wp:w.id,act:a,impl:LV_IMPL[a]})})});return out}
 const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
-function lvDef(){return LV[S.kind==='fox'?'fox':'owl']}
 function lvEl(){return document.getElementById('cr')}
 function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
   c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));
@@ -194,48 +224,52 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
     stargaze:()=>{setExpr('thinking');const px=document.querySelector('#cr .px-echo');if(px)px.classList.add('lvtilt')},
     nap:()=>{setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
-    read:()=>{setExpr('thinking');lvFx('px/i_book.png',x+14,y-18,'',dur)},
-    lantern:()=>setExpr('curious'),preen:()=>setExpr('shy'),hop:()=>react('happy')};
+    read:()=>{setExpr('thinking');if(S.kind!=='fox')lvFx('px/i_book.png',x+14,y-18,'',dur)},
+    lantern:()=>setExpr('curious'),preen:()=>setExpr('shy'),hop:()=>react('happy'),
+    giggle:()=>{setExpr('giggling');react('happy')},peek:()=>setExpr('shy'),think:()=>setExpr('thinking'),warm:()=>setExpr('happy'),excited:()=>{setExpr('excited');react('excited')},
+    tilt:()=>{setExpr('curious');const px=document.querySelector('#cr .px-echo');if(px)px.classList.add('lvtilt')}};
   clearInterval(LIVE.zT);(A[name]||(()=>{}))()}
 function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null}
-function lvPick(band,found){const D=lvDef();const last=(S.lvLast||[]).slice(-2);const opts=[];
-  for(const [k,a] of Object.entries(D.acts)){if(!a.bands.includes(band))continue;if(a.need&&!a.need())continue;if(found&&!a.found)continue;if(last.includes(k))continue;
-    let w=a.w||1;const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();if(k==='fort_flag'&&/fort|hollow/.test(mem))w+=3;if(k==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;if(k==='lullaby'&&/lullab|night|star/.test(mem))w+=1;
-    for(let i=0;i<w;i++)opts.push(k)}
-  if(!opts.length)return found?(S.kind==='fox'?'leaf_pounce':'lullaby'):null;return opts[Math.floor(Math.random()*opts.length)]}
+function lvPick(band,found){const last=(S.lvLast||[]).slice(-2);let opts=lvOptions(band).filter(o=>!last.includes(o.wp+':'+o.act));
+  if(found)opts=opts.filter(o=>LV_FOUND[o.impl]||(SC_FOUND[curScene().id]||{})[o.wp]);
+  if(!opts.length)opts=lvOptions(band);if(!opts.length)return null;
+  const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();const W=opts.flatMap(o=>{let w=1;if(o.impl==='fort_flag'&&/fort|hollow/.test(mem))w+=3;if(o.impl==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;return Array(w).fill(o)});
+  return W[Math.floor(Math.random()*W.length)]}
 function lvRemember(k){S.lvLast=[...(S.lvLast||[]),k].slice(-4)}
 function lvCanWander(){const b=$('#b');return document.getElementById('feed')&&!document.querySelector('.full,.book,.bondup')&&!ov.innerHTML.trim()&&!(b&&b.style.display!=='none')&&!((S.napUntil||0)>now())&&!window.__bondup&&!S.released}
-function lvWander(){const band=tod();const k=lvPick(band);if(!k){LIVE.nextIdle=now()+lvIdleDelay();return}
-  const a=lvDef().acts[k];LIVE.st='wander';lvRemember(k);$('#sc')&&$('#sc').classList.add('lvaway');
-  lvMove(lvDef().wp[a.at],()=>{lvDo(k,4000+Math.random()*8000);LIVE.actT2=setTimeout(()=>{if(LIVE.st!=='wander')return;lvStop();LIVE.nextIdle=now()+lvIdleDelay();
+function lvWander(){const band=tod();const o=lvPick(band);if(!o){LIVE.nextIdle=now()+lvIdleDelay();return}
+  const k=o.impl;LIVE.st='wander';lvRemember(o.wp+':'+o.act);$('#sc')&&$('#sc').classList.add('lvaway');
+  lvMove(scWp(o.wp),()=>{lvDo(k,4000+Math.random()*8000);LIVE.actT2=setTimeout(()=>{if(LIVE.st!=='wander')return;lvStop();LIVE.nextIdle=now()+lvIdleDelay();
     if(Math.random()<.4)lvHome()},4000+Math.random()*8000)})}
 function lvHome(fast,done){LIVE.st='present';lvStop();lvMove(lvDef().wp.stage,()=>{$('#sc')&&$('#sc').classList.remove('lvaway');setExpr(baseExpr());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvflip');done&&done()},fast)}
 function lvPresent(){   // the child is interacting: come to the stage spot (<= 2 s) and stay
   LIVE.lastTouch=now();LIVE.nextIdle=now()+3000+lvIdleDelay();clearTimeout(LIVE.actT2);
-  if(LIVE.st!=='present'||(LIVE.pos&&Math.hypot(LIVE.pos[0]-90,LIVE.pos[1]-199)>1)){if(LIVE.st==='found')return lvNotice();lvHome(true)}}
-function lvFound(){   // opens mid-activity at a waypoint; notices the child after 1.5 s or the first tap
-  const band=tod();let k=(band==='morning'&&S.sunriseDay!==new Date(now()).toDateString())?'sunrise':lvPick(band,true);
-  if(k==='sunrise')S.sunriseDay=new Date(now()).toDateString();lvRemember(k);
-  const a=lvDef().acts[k];LIVE.st='found';LIVE.foundAct=k;$('#sc')&&$('#sc').classList.add('lvaway');lvPlace(...lvDef().wp[a.at],1);lvDo(k,60000);
+  if(LIVE.st!=='present'||(LIVE.pos&&Math.hypot(LIVE.pos[0]-scWp('stage')[0],LIVE.pos[1]-scWp('stage')[1])>1)){if(LIVE.st==='found')return lvNotice();lvHome(true)}}
+function lvFound(firstScene){   // opens mid-activity at a waypoint; notices the child after 1.5 s or the first tap
+  const band=tod();let o=null;
+  if(band==='morning'&&S.sunriseDay!==new Date(now()).toDateString()){o=lvOptions(band).find(x=>x.impl==='sunrise');if(o)S.sunriseDay=new Date(now()).toDateString()}
+  if(!o)o=lvPick(band,true);if(!o){lvPresent();return}
+  lvRemember(o.wp+':'+o.act);const sf=SC_FOUND[curScene().id]||{};
+  LIVE.foundKey=firstScene?`found_${curScene().id}_first`:(sf[o.wp+':'+o.act]||(o.wp!=='moon_rock'&&sf[o.wp])||LV_FOUND[o.impl]||'hello');
+  LIVE.st='found';LIVE.foundAct=o.impl;$('#sc')&&$('#sc').classList.add('lvaway');lvPlace(...scWp(o.wp),1);lvDo(o.impl,60000);
   LIVE.noticeT=setTimeout(lvNotice,1500)}
-function lvNotice(){if(LIVE.st!=='found')return;clearTimeout(LIVE.noticeT);const k=LIVE.foundAct,a=lvDef().acts[k];lvStop();LIVE.st='noticed';
+function lvNotice(){if(LIVE.st!=='found')return;clearTimeout(LIVE.noticeT);lvStop();LIVE.st='noticed';
   setExpr('happy');react('happy');const [x,y]=LIVE.pos;if(!lowFx())for(let i=0;i<3;i++)lvFx('px/heart_full.png',x-8+i*8,y-56,'rise',1200);
-  talk(B(a.found)||B('hello'),3200);
+  talk(B(LIVE.foundKey)||B('hello'),3200);
   setTimeout(()=>{if(LIVE.st==='noticed')lvHome(false)},1600)}
-function lvRoutine(band){   // band changed while open (or first morning open): play that band's routine
-  if(!lvCanWander())return;const fox=S.kind==='fox';let k=null,line=null;const hm=new Date(now());const mins=hm.getHours()*60+hm.getMinutes();
-  if(band==='evening'){k=fox?(mins>=18*60+30?'curl_nap':'leaf_pounce'):'lantern';if(fox?k==='curl_nap':true)line='routine_sunset'}
-  else if(band==='night')k=fox?'moon_yip':'stargaze';else if(band==='morning')k='sunrise';else k=fox?'trinket':'nap';
-  const a=lvDef().acts[k];LIVE.st='wander';lvRemember(k);$('#sc')&&$('#sc').classList.add('lvaway');lvMove(lvDef().wp[a.at],()=>{lvDo(k,8000);if(line)talk(B(line),3000);LIVE.actT2=setTimeout(()=>{if(LIVE.st==='wander'){lvStop();LIVE.nextIdle=now()+lvIdleDelay()}},8000)})}
+function lvRoutine(band){   // band changed while open: play that band's routine where this scene allows it
+  if(!lvCanWander())return;const fox=S.kind==='fox';const hm=new Date(now());const mins=hm.getHours()*60+hm.getMinutes();
+  const want=band==='evening'?(fox?(mins>=18*60+30?['curl_nap']:['leaf_pounce']):['lantern','stargaze']):band==='night'?(fox?['moon_yip']:['stargaze','lullaby']):band==='morning'?['sunrise']:(fox?['trinket','leaf_pounce']:['nap','preen']);
+  const opts=lvOptions(band);const o=opts.find(x=>want.includes(x.impl))||opts[0];if(!o)return;const line=(band==='evening'&&(o.impl==='curl_nap'||!fox))?'routine_sunset':null;
+  LIVE.st='wander';lvRemember(o.wp+':'+o.act);$('#sc')&&$('#sc').classList.add('lvaway');lvMove(scWp(o.wp),()=>{lvDo(o.impl,8000);if(line)talk(B(line),3000);LIVE.actT2=setTimeout(()=>{if(LIVE.st==='wander'){lvStop();LIVE.nextIdle=now()+lvIdleDelay()}},8000)})}
 function lvTick(){if(!S||!S.kind||!document.getElementById('cr')||!document.getElementById('feed'))return;
   if(!LIVE.pos)lvPlace(...lvDef().wp.stage);
   const band=tod();if(LIVE.band&&band!==LIVE.band){LIVE.band=band;lvRoutine(band);return}LIVE.band=band;
   if(ov.innerHTML.trim()&&LIVE.st!=='present'&&LIVE.st!=='found')return lvPresent();   // a conversation started: come over
-  if((LIVE.st==='present')&&!LIVE.timer&&now()>LIVE.nextIdle&&now()-LIVE.lastTouch>3000&&lvCanWander())lvWander()}
-function lvStart(found){LIVE.pos=null;LIVE.st='present';LIVE.band=tod();LIVE.lastTouch=now();LIVE.nextIdle=now()+lvIdleDelay();lvStop();
-  const sc=$('#sc');if(sc&&S.kind==='fox')sc.insertAdjacentHTML('beforeend','<i class="lvprop" style="left:20px;top:206px;background-image:url(px/living/leafpile.png);width:32px;height:16px"></i><i class="lvprop" style="left:16px;top:186px;background-image:url(px/living/moonrock.png);width:16px;height:8px"></i>');
+  if(LIVE.st==='present'&&!LIVE.timer&&now()>LIVE.nextIdle&&now()-LIVE.lastTouch>3000&&lvCanWander())lvWander()}
+function lvStart(found,firstScene){LIVE.pos=null;LIVE.st='present';LIVE.band=tod();LIVE.lastTouch=now();LIVE.nextIdle=now()+lvIdleDelay();lvStop();
   lvPlace(...lvDef().wp.stage,1);
-  if(found)lvFound();
+  if(found)lvFound(firstScene);
   clearInterval(LIVE.tickT);LIVE.tickT=setInterval(lvTick,500);
   const scr=SCR();if(!scr._lv){scr._lv=1;scr.addEventListener('pointerdown',e=>{if(!S||!document.getElementById('feed'))return;if(e.target.closest('.dock,#cr,.choices,#b,.thought'))lvPresent();else if(LIVE.st==='found')lvNotice()},true)}}
 
@@ -250,7 +284,8 @@ function bondBg(){   // freeze the Home scene (background layers + props, withou
   const c=document.createElement('canvas');c.width=180;c.height=320;const k=c.getContext('2d');k.imageSmoothingEnabled=false;
   const scr=SCR(),R=scr.getBoundingClientRect(),z=R.width/180;
   const els=[scr.querySelector('#sc'),...scr.querySelectorAll('#sc .bg,#sc .fortprop,#sc .pxpath')].filter(Boolean);
-  const jobs=[];els.forEach(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);if(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'){k.fillStyle=cs.backgroundColor;k.fillRect((r.left-R.left)/z,(r.top-R.top)/z,r.width/z,r.height/z)}
+  const jobs=[];els.forEach(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);if(!r.width||!r.height)return;   // hidden layers (scene art replaces .bg)
+    if(el.id==='sc'&&el.classList.contains('pxscene')){const u=(cs.backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1];if(u)jobs.push({u,x:(r.left-R.left)/z,y:(r.bottom-R.top)/z-320,w:180,h:320});return}if(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'){k.fillStyle=cs.backgroundColor;k.fillRect((r.left-R.left)/z,(r.top-R.top)/z,r.width/z,r.height/z)}
     const urls=[...cs.backgroundImage.matchAll(/url\("?([^")]+)"?\)/g)].map(m=>m[1]).reverse();urls.forEach(u=>jobs.push({u,x:(r.left-R.left)/z,y:(r.top-R.top)/z,w:r.width/z,h:r.height/z}))});
   return Promise.all(jobs.map(j=>new Promise(res=>{const im=new Image();im.onload=()=>res([j,im]);im.onerror=()=>res(null);im.src=j.u}))).then(L=>{
     L.forEach(x=>{if(!x)return;const [j,im]=x;k.drawImage(im,Math.round(j.x),Math.round(j.y),Math.min(im.width,Math.round(j.w))||im.width,Math.min(im.height,Math.round(j.h))||im.height)});return c})}
@@ -321,7 +356,8 @@ function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});S.needs.comf
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
   sess.naps++;const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
-  S.napUntil=now()+C.napSeconds*1000;addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));setTimeout(home,1500);
+  S.napUntil=now()+C.napSeconds*1000;S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6)
+addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));setTimeout(home,1500);
 }
 function how(){
   const p=document.querySelector('.panel');if(p)return p.remove();const n=S.needs;
@@ -350,7 +386,7 @@ function dev(){
 }
 function book(){
   const e=E(),d=document.createElement('div');d.className='book';
-  d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>
+  d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
@@ -361,6 +397,7 @@ function book(){
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
   SFX('ui_panel_open');SCR().appendChild(d);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove()};
+  const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
 }
 
@@ -730,6 +767,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

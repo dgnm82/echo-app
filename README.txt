@@ -101,3 +101,9 @@ Post-M6 round
    Release cues are unchanged (release flow is being redesigned).
 4) Spec v0.4: Memory is the signature game for both Echoes (daily +3); Super Radar Hearing (panned chime after a miss) and a Night Vision glint added to Starlight Pairs.
 5) Whimber barks pasted from whimber_barks.md (12 keys) + Whimber's "Two {items}… hoo." line.
+6) Per-Echo scenes (echo/scenes v0.2, Cole's baked phone + 60x80 handheld art in px/scenes/): Slyte clearing / grove (bond 70) / meadow (bond 290);
+   Whimber branch / library (70) / hilltop (290). Day = morning+day, twilight = evening+night. New session (>= 20 min away) picks by time-of-day
+   weight (last scene halved, Slyte's night is home); a newly unlocked scene arrives as a found-moment with its found_*_first line + Memory Book entry
+   (waits if a bond-up is queued). No mid-session scene change. Rest/bedtime goes home. 'Our places' picker in the Memory Book from the place
+   badge (bond 140). Living Echo wanders the scene's waypoints (requires: fort/hollow stage+decor, badge:place, talents). Release flow untouched.
+7) Trail/Connect barks from trail_connect_barks.md; S.vars.connect5; connect_round {goal}; trail_rare; no pet phrase on in-game barks.

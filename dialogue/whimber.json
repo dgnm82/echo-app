@@ -1486,6 +1486,57 @@
     "text": "Oh… a little moon. That one counts three.",
     "expr": "delighted"
    }
+  ],
+  "found_branch_door": [
+   {
+    "text": "Hoo… the hollow door is open now. It's softly glowing inside.",
+    "expr": "happy",
+    "react": "happy"
+   }
+  ],
+  "found_branch_tip": [
+   {
+    "text": "Mm… I was tidying a feather. It wanted to be just so.",
+    "expr": "happy"
+   }
+  ],
+  "found_library_first": [
+   {
+    "text": "Hoo… I found a room full of stories. Shall we listen a while?",
+    "expr": "curious",
+    "react": "happy"
+   }
+  ],
+  "found_library_nook": [
+   {
+    "text": "Oh… I was reading. This page has a moon in it.",
+    "expr": "curious"
+   }
+  ],
+  "found_library_sill": [
+   {
+    "text": "Hm. The window holds the sky… one little piece at a time.",
+    "expr": "thinking"
+   }
+  ],
+  "found_hilltop_first": [
+   {
+    "text": "Hoo… up here the sky is so big. I like that.",
+    "expr": "love",
+    "react": "happy"
+   }
+  ],
+  "found_hilltop_branch": [
+   {
+    "text": "Oh, hello… I was counting stars. I lost count at lovely.",
+    "expr": "giggling"
+   }
+  ],
+  "found_hilltop_blanket": [
+   {
+    "text": "Hm… that cloud looks like a teacup. Or a sleepy sheep… maybe both.",
+    "expr": "curious"
+   }
   ]
  },
  "conversations": [
