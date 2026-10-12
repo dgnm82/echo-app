@@ -284,3 +284,6 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .mcard.fwlist .fwrow.done span{color:#86573F}
 .mcard.fwlist .fwstamp{position:absolute;right:0;top:1px;width:16px;height:16px;background-size:16px 16px;image-rendering:pixelated}
 .after.pxscene .mailbox{top:auto;left:118px;bottom:30px}
+/* Living Echo stays under every overlay: the scene is its own stacking context; while a modal is open the away sprite hides */
+#sc{isolation:isolate;z-index:0}
+#sc.lvmodal.lvaway #cr,#sc.lvmodal #cr.lvmoving{visibility:hidden}

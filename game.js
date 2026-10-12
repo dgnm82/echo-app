@@ -42,7 +42,7 @@ Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.mem
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
 const SCR=()=>document.getElementById('screen')||document.body;
 const PI=(e,intent)=>window.PIXEL?PIXEL.icon(PIXEL.iconName(e,intent)):e;
-function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;SCR().appendChild(d);return d}
+function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;SCR().appendChild(d);try{lvModal()}catch(e){}return d}
 const now=()=>Date.now()+((S&&S.clockOffset)||0);
 const clamp=v=>Math.max(0,Math.min(100,v));
 
@@ -264,7 +264,12 @@ function lvRoutine(band){   // band changed while open: play that band's routine
   const want=band==='evening'?(fox?(mins>=18*60+30?['curl_nap']:['leaf_pounce']):['lantern','stargaze']):band==='night'?(fox?['moon_yip']:['stargaze','lullaby']):band==='morning'?['sunrise']:(fox?['trinket','leaf_pounce']:['nap','preen']);
   const opts=lvOptions(band);const o=opts.find(x=>want.includes(x.impl))||opts[0];if(!o)return;const line=(band==='evening'&&(o.impl==='curl_nap'||!fox))?'routine_sunset':null;
   LIVE.st='wander';lvRemember(o.wp+':'+o.act);$('#sc')&&$('#sc').classList.add('lvaway');lvMove(scWp(o.wp),()=>{lvDo(o.impl,8000);if(line)talk(B(line),3000);LIVE.actT2=setTimeout(()=>{if(LIVE.st==='wander'){lvStop();LIVE.nextIdle=now()+lvIdleDelay()}},8000)})}
+// any modal (cards, bond-up, postcards, Memory Book, How am I?, picker, Our places, list): pause wandering and hide the away sprite
+function lvModal(){const sc=document.getElementById('sc');if(!sc)return false;const m=!!document.querySelector('.full,.book,.panel,.bondup');
+  if(m){if(LIVE.timer){clearInterval(LIVE.timer);LIVE.timer=null}if(LIVE.st==='wander'){lvStop();LIVE.st='paused'}sc.classList.add('lvmodal');return true}
+  sc.classList.remove('lvmodal');if(LIVE.st==='paused'){LIVE.st='present';lvHome()}return false}
 function lvTick(){if(!S||!S.kind||!document.getElementById('cr')||!document.getElementById('feed'))return;
+  if(lvModal())return;
   if(!LIVE.pos)lvPlace(...lvDef().wp.stage);
   const band=tod();if(LIVE.band&&band!==LIVE.band){LIVE.band=band;lvRoutine(band);return}LIVE.band=band;
   if(ov.innerHTML.trim()&&LIVE.st!=='present'&&LIVE.st!=='found')return lvPresent();   // a conversation started: come over
@@ -396,7 +401,7 @@ function book(){
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
-  SFX('ui_panel_open');SCR().appendChild(d);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove()};
+  SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
 }
@@ -886,6 +891,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();
