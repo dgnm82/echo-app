@@ -1392,77 +1392,126 @@
   ],
   "trail_start": [
    {
-    "text": "Follow-the-leaf! I lead. Okay, you lead.",
-    "expr": "excited"
+    "text": "Leaf trail! You steer, I follow. Probably.",
+    "expr": "excited",
+    "react": "excited"
+   },
+   {
+    "text": "Ooh, crunchy leaves! Let's grow a leaf tail.",
+    "expr": "curious"
    }
   ],
   "trail_pickup": [
    {
-    "text": "Another leaf! Crunchy.",
+    "text": "Crunch! Got one.",
     "expr": "happy"
    },
    {
-    "text": "Got one! It swirls behind me.",
+    "text": "Another leaf! It's following me.",
     "expr": "delighted"
+   },
+   {
+    "text": "Fwip! Leaf collected.",
+    "expr": "happy"
    }
   ],
   "trail_long": [
    {
-    "text": "Look at my tail of leaves!",
-    "expr": "proud"
+    "text": "Look! My leaf tail is SO long.",
+    "expr": "proud",
+    "react": "happy"
+   },
+   {
+    "text": "Two tails now. Leafy one wins.",
+    "expr": "giggling"
    }
   ],
   "trail_bump": [
    {
-    "text": "Boop! Hee hee. Turning!",
+    "text": "Boop! Nose is fine. Turning!",
     "expr": "giggling"
    },
    {
-    "text": "Oops, a bump. My nose is fine.",
+    "text": "Oops. That bump was on purpose.",
     "expr": "giggling"
    }
   ],
   "trail_done": [
    {
-    "text": "Leaf pile! POUNCE!",
-    "expr": "excited"
+    "text": "Leaf pile! Ready… POUNCE!",
+    "expr": "excited",
+    "react": "excited"
    },
    {
-    "text": "All the leaves! Best pile ever.",
-    "expr": "delighted"
+    "text": "Best leaf pile ever. Crunch!",
+    "expr": "delighted",
+    "react": "happy"
    }
   ],
   "connect_start": [
    {
-    "text": "Berries! Link up the bunch. Ready? Go!",
-    "expr": "excited"
+    "text": "Berry time! Link the touching ones.",
+    "expr": "excited",
+    "react": "excited"
    },
    {
-    "text": "New round! Find the touching ones.",
+    "text": "New round! Find a bunch that touch.",
     "expr": "curious"
+   },
+   {
+    "text": "Berries, nuts… and apples! Link a bunch.",
+    "expr": "excited",
+    "cond": {
+     "var": {
+      "connect5": true
+     }
+    }
    }
   ],
   "connect_big": [
    {
-    "text": "A big bunch! My tail is doing loops.",
-    "expr": "delighted"
+    "text": "A huge bunch! My tail did a loop.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Whoa. That's a treasure-sized bunch!",
+    "expr": "excited"
    }
   ],
   "connect_special": [
    {
-    "text": "A shiny trinket! For ME? Fwip!",
-    "expr": "delighted"
+    "text": "Ooh, a shiny trinket! Mine? Ours!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "A trinket! Shiny things find me.",
+    "expr": "proud"
    }
   ],
   "connect_shuffle": [
    {
-    "text": "Hmm. Shake-shake! New berries.",
+    "text": "Shake-shake! Fresh berries.",
     "expr": "giggling"
+   },
+   {
+    "text": "Mix-mix! Even the apples moved.",
+    "expr": "giggling",
+    "cond": {
+     "var": {
+      "connect5": true
+     }
+    }
    }
   ],
   "connect_hint": [
    {
-    "text": "Psst. Those ones touch.",
+    "text": "Psst. Those ones are touching.",
+    "expr": "curious"
+   },
+   {
+    "text": "Ooh, a sneaky bunch. Right there!",
     "expr": "curious"
    }
   ],
@@ -1537,6 +1586,23 @@
    {
     "text": "Sun's going down. Time for my comfy tree spot.",
     "expr": "happy"
+   }
+  ],
+  "connect_round": [
+   {
+    "text": "New round! Now find the {goal}.",
+    "expr": "curious"
+   },
+   {
+    "text": "Ooh, {goal} next. Link a bunch!",
+    "expr": "excited"
+   }
+  ],
+  "trail_rare": [
+   {
+    "text": "Ooh, shiny! That one counts three.",
+    "expr": "delighted",
+    "react": "happy"
    }
   ]
  },

@@ -1286,62 +1286,121 @@
   ],
   "trail_start": [
    {
-    "text": "hoo… the little lights want to come along.",
+    "text": "Hoo… the little lights want to come along.",
     "expr": "happy"
+   },
+   {
+    "text": "Fireflies… shall we make a slow parade?",
+    "expr": "curious"
    }
   ],
   "trail_pickup": [
    {
-    "text": "another little light… welcome.",
+    "text": "Another little light… welcome.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hoo. One more glow.",
     "expr": "happy"
    }
   ],
   "trail_long": [
    {
-    "text": "such a long parade… they're humming.",
-    "expr": "proud"
+    "text": "A long parade… all humming.",
+    "expr": "proud",
+    "react": "happy"
+   },
+   {
+    "text": "Look… a little river of glow.",
+    "expr": "delighted"
    }
   ],
   "trail_bump": [
    {
-    "text": "oh… a soft bump. hoo hoo.",
+    "text": "Oh… a soft bump. Hoo-hoo.",
     "expr": "giggling"
+   },
+   {
+    "text": "Hm. The edge says turn around.",
+    "expr": "curious"
    }
   ],
   "trail_done": [
    {
-    "text": "look… the parade made a little constellation.",
-    "expr": "delighted"
+    "text": "Look… a little constellation.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "All the lights… together now.",
+    "expr": "proud",
+    "react": "happy"
    }
   ],
   "connect_start": [
    {
-    "text": "hoo… let's gather some moonlight.",
+    "text": "Hoo… let's gather some moonlight.",
     "expr": "happy"
+   },
+   {
+    "text": "A new round… which ones are neighbours?",
+    "expr": "curious"
+   },
+   {
+    "text": "Stars, moons… even fireflies. Let's gather.",
+    "expr": "happy",
+    "cond": {
+     "var": {
+      "connect5": true
+     }
+    }
    }
   ],
   "connect_big": [
    {
-    "text": "oh… a whole little family of moons.",
+    "text": "Oh… a whole little family.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Hoo-hoo. A big bunch… how bright.",
     "expr": "delighted"
    }
   ],
   "connect_special": [
    {
-    "text": "a feather… soft as a cloud.",
-    "expr": "delighted"
+    "text": "A feather… soft as a cloud.",
+    "expr": "delighted",
+    "react": "happy"
+   },
+   {
+    "text": "Oh. A soft feather… for us.",
+    "expr": "love"
    }
   ],
   "connect_shuffle": [
    {
-    "text": "let's stir the sky a little…",
+    "text": "Let's stir the sky a little…",
     "expr": "curious"
+   },
+   {
+    "text": "Hm. Fireflies like new seats…",
+    "expr": "giggling",
+    "cond": {
+     "var": {
+      "connect5": true
+     }
+    }
    }
   ],
   "connect_hint": [
    {
-    "text": "hoo? …those ones are neighbours.",
+    "text": "Hoo? …those ones are neighbours.",
     "expr": "curious"
+   },
+   {
+    "text": "Hm… those belong together.",
+    "expr": "thinking"
    }
   ],
   "bond_up_2": [
@@ -1414,6 +1473,18 @@
    {
     "text": "The sky is going purple… my favorite part. Hoo.",
     "expr": "happy"
+   }
+  ],
+  "connect_round": [
+   {
+    "text": "Hoo… now the {goal}, I think.",
+    "expr": "curious"
+   }
+  ],
+  "trail_rare": [
+   {
+    "text": "Oh… a little moon. That one counts three.",
+    "expr": "delighted"
    }
   ]
  },

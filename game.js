@@ -20,7 +20,7 @@ function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}c
 const SFX=(n,o)=>{try{window.Sound&&Sound.play(n,o)}catch(e){}};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
-const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','trail_done','connect_special','gift_got','reveal_reply']);
+const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','gift_got','reveal_reply']);
 const B=(k,x)=>{const l=Dialogue.bark(k,x);return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
@@ -539,6 +539,7 @@ function trailGame(){
   const loop=setInterval(draw,83);
   const mover=setInterval(()=>{if(!alive||paused||g.done)return;if(stepMode&&!held)return;TrailEngine.step(g);after()},ms);
   function after(){for(const e of TrailEngine.take(g)){
+      if(e.type==='pickup'&&e.rare)talk(B('trail_rare'),1500);
       if(e.type==='pickup'){pickups++;happyT=8;SFX(pickups%5===0?'trail_pickup_5':'trail_pickup_1',{vol:.6});if(pickups%4===0)talk(B('trail_pickup'),1500);else say('*')}
       if(e.type==='bump'){if(!silent)SFX('trail_bump_boop',{gap:400,vol:.5});if(Math.random()<.35)talk(B('trail_bump'),1500)}
       if(e.type==='hop')happyT=6;
@@ -580,6 +581,7 @@ function connectGame(){
   const fox=S.kind==='fox',SP=fox?'slyte':'whimber',cs=conState(),level=conLevel(),TITLE=fox?'Berry Connect':'Moonlight Connect';
   const nv=!fox&&S.talents.includes('Night Vision'),jumper=fox&&S.talents.includes('Super Jumper'),lull=!fox&&S.talents.includes('Sweet-Dream Lullaby')&&['evening','night'].includes(tod());
   const g=ConnectEngine.create({species:SP,level,seed:(S.g.seed||1)*29+cs.games*3+1,shapes:fox&&S.talents.includes('Riddle Solver')});
+  (S.vars=S.vars||{}).connect5=g.kinds.length>=5;   // gates the apple/firefly lines (trail_connect_barks.md §6.1)
   const Z=24,W=g.w*Z,H=g.h*Z,NAME={blackberry:'blackberries',honey_cake:'honey cakes',nut:'nuts',leaf:'leaves',apple:'apples',star:'stars',moon:'moons',dewdrop:'dewdrops',comet:'comets',firefly:'fireflies'};
   gameShell(`${TITLE} · round 1/3`);const gs=$('#gs');gs.classList.add('congame');if(!fox)gs.classList.add('night');
   gs.insertAdjacentHTML('beforeend',`<div class="cgoal" id="cgoal"></div><canvas id="cc" class="cc" width="${W}" height="${H}" style="width:${W}px;height:${H}px;left:${(180-W)/2}px" aria-label="Connect board"></canvas>
@@ -612,7 +614,7 @@ function connectGame(){
       if(e.type==='special'&&e.special==='!'){SFX('connect_special_trinket');setExpr('delighted');talk(B('connect_special'),2000)}
       if(e.type==='shape')toast('Shape goal! +2');
       if(e.type==='shuffle'){react('excited');talk(B('connect_shuffle'),1800)}
-      if(e.type==='goal'&&e.round>0)talk(B('connect_start'),1800);
+      if(e.type==='goal'&&e.round>0)talk(B('connect_round',{goal:NAME[e.kind]||e.kind}),1800);
       if(e.type==='round'&&e.round<2)roundDone(e.round,CN_NEXT);
       if(e.type==='done')finish()}
     goalBar()}

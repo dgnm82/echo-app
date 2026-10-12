@@ -17,7 +17,7 @@ COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","h
 NODE_KEYS = {"lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
 CHOICE_KEYS = {"intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
-TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation"}
+TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal"}
 
 BANNED = [r"traitor", r"cheat\w*", r"rude", r"liars?", r"stupid", r"dumb", r"fat", r"skinny", r"thin", r"diet\w*",
   r"don'?t tell", r"our secret", r"keep a secret", r"secrets?", r"I watched you", r"I saw you", r"watching you", r"watch(ed|ing)? you",
