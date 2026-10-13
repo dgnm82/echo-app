@@ -33,7 +33,6 @@ async def main():
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];bad=[]
     for kind,sp in (('fox','slyte'),('owl','whimber')):
       for low in (False,True):
-        if low and kind=='owl':continue
         pg=await newecho(b,p,kind,errs);pg.on('response',lambda r:r.status>=400 and bad.append(r.url))
         home=await pg.evaluate("__echo.scene.home?__echo.scene.home().id:(SCENES[__echo.state.kind==='fox'?'slyte':'whimber'].find(s=>s.home)||SCENES[__echo.state.kind==='fox'?'slyte':'whimber'][0]).id")
         away=await pg.evaluate("SCENES[__echo.state.kind==='fox'?'slyte':'whimber'].map(s=>s.id).find(id=>id!=='%s')"%home)
