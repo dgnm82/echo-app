@@ -109,7 +109,7 @@ function discover(){
 }
 async function reveal(kind){
   Object.assign(S,{kind,g:genEcho(kind),needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],vars:{},seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString()});
-  S.g.name=E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
+  S.g.name=(window.FAMILIES&&FAMILIES.byKind[kind].default_name)||E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
   const e=E();
   const px=!!window.PIXEL;
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
@@ -148,7 +148,7 @@ function obNameCheck(raw){const t=String(raw||'').trim().replace(/\s+/g,' ');if(
 function obHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
 function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&o.src!=='borrowed'&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
 function obSprite(fid,seed,pal,stage){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal},stage||1):''}
-function obScene(cls,inner){h(`<div class="scene ob ${cls||''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
+function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
 function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
   const down=e=>{e.preventDefault();e.stopPropagation();t0=Date.now();b.classList.add('hold');t=setTimeout(()=>{b.classList.remove('hold');pcGate(back)},OBC.gate.holdMs)};
@@ -202,17 +202,18 @@ function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const 
 // not built yet (Cat, Bunny, Other): song stamp + borrow colours with one of the v1 families. Never declined.
 function orBorrow(){const F=FAM(),A=F.animals[S.origin.animal];obSong();
   obScene('orborrow meadow',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div>
-   <div class="obpanel">${U('ui_or_other_family',0,{family_list:F.list()})}</div>
+   <div class="obpanel">${U('ui_or_other_family',0,{family_list:F.list().replace(/^a/,'A')})}</div>
    <div class="orfams">${F.order.map(f=>`<button class="orfam" data-f="${f}"><span class="orlight">${obSprite(f,S.oseed,null,1)}</span><span class="lbl">${F[f].label}</span></button>`).join('')}</div>`);
   app.querySelectorAll('.orfam').forEach(b=>b.onclick=()=>{SFX('ui_tap');orColours(b.dataset.f,true)})}
 function obSong(){const a=S.origin.animal;S.songs=S.songs||[];if(!S.songs.includes(a))S.songs.push(a);save()}   // song stamps: kind words only, no counts shown
 // P2 colours: one chip in v1 (decision 6). "I'm not sure" = seeded pick.
-function orColours(fid,borrowed){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;
+function orColours(fid,borrowed){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;S.vars.family_plural=f.plural;
+  const chipB=c=>`<button class="orchip" data-c="${c.id}" aria-label="${c.label}"><i style="background:${c.hex}"></i><span>${c.label}</span></button>`;
   obScene('orcolours',`<div class="obpanel"><b>${U('ui_or_colours_ask')}</b></div>
-   <div class="orchips">${f.chips.map(c=>`<button class="orchip" data-c="${c.id}" aria-label="${c.label}"><i style="background:${c.hex}"></i><span>${c.label}</span></button>`).join('')}</div>
+   <div class="orchips">${f.chips.filter(c=>c.real).map(chipB).join('')}</div><div class="obsmall ortoy">${U('ui_or_colours_toy')}</div><div class="orchips">${f.chips.filter(c=>!c.real).map(chipB).join('')}</div>
    <button class="btn" id="orunsure">${U('ui_or_not_sure')}</button>`);
   app.querySelectorAll('.orchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');const c=f.chips.find(x=>x.id===b.dataset.c);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'chips'});save();orInvite()});
-  $('#orunsure').onclick=()=>{SFX('ui_tap');Object.assign(S.origin,{ramp:null,chip:null,src:borrowed?'borrowed':'unsure'});save();orInvite()}}
+  $('#orunsure').onclick=()=>{SFX('ui_tap');const real=f.chips.filter(c=>c.real).slice(0,6),c=real[Math.floor(rnd((S.oseed+S.origin.idx*31)>>>0||1)()*real.length)];Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'unsure'});save();orInvite()}}   // seeded from the 6 real colours
 // P3 hum + invite (tap to hear, tap again; never timed)
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
@@ -231,7 +232,7 @@ function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=documen
   const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
   $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
   setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
-  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obpanel small orfamline">${U('ui_or_family',FAM().order.indexOf(fid),{family:f.label,family_plural:f.plural})}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
     $('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
 // P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
 function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
@@ -243,15 +244,15 @@ function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+
   app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div><button class="btn obnextbtn" id="orff">${U('ui_or_find_friend')}</button>`);
   $('#orff').onclick=()=>{SFX('ui_tap');orSeen()}}
 // P5 naming: 6 names (seeded order), More, Type it (onboarding filter), Just "{family}"
-function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
+function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const dn=F.animals[o.animal].default_name||f.default_name;S.vars.default_name=dn;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
   const six=L.slice((page*6)%L.length,(page*6)%L.length+6);let sel=null;
   obScene('orname meadow',`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="orlightform small">${obSprite(o.family,o.seed,o.ramp,1)}</div>
    <div class="ornames">${six.map(n=>`<button class="btn small ornm" data-n="${n}">${n}</button>`).join('')}</div>
    <div class="row obrow"><button class="btn small" id="ormore">${U('ui_or_name_more')}</button><button class="btn small" id="ortype">${U('ui_or_name_type')}</button></div>
-   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{family:f.label})}</button><div class="hint">Tap to hear · tap again to choose</div>`);
+   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{default_name:dn})}</button><div class="hint">Tap to hear · tap again to choose</div>`);
   app.querySelectorAll('.ornm').forEach(b=>b.onclick=()=>{SFX('ui_tap');if(sel===b.dataset.n)return orFinish(sel,false);sel=b.dataset.n;app.querySelectorAll('.ornm').forEach(x=>x.classList.toggle('sel',x===b));say(sel)});
   $('#ormore').onclick=()=>{SFX('ui_tap');orName(page+1)};
-  $('#orkeep').onclick=()=>{SFX('ui_tap');if(sel==='__keep')return orFinish(f.label,true);sel='__keep';app.querySelectorAll('.ornm').forEach(x=>x.classList.remove('sel'));$('#orkeep').classList.add('sel');say(f.label)};
+  $('#orkeep').onclick=()=>{SFX('ui_tap');if(sel==='__keep')return orFinish(dn,true);sel='__keep';app.querySelectorAll('.ornm').forEach(x=>x.classList.remove('sel'));$('#orkeep').classList.add('sel');say(dn)};
   $('#ortype').onclick=()=>{SFX('ui_tap');const d=full(`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="obfield"><input id="ortn" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" aria-label="Echo's name"></div><p class="obsmall" id="orth"></p><div class="row"><button class="btn" id="ortok">Next &gt;</button><button class="btn" id="ortx">${U('ui_ob_yes_change',1)}</button></div>`);
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
@@ -260,7 +261,7 @@ function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
-  S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.originIdx=(o.idx||0)+1;
+  S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
   initDialogue();save();remember('The day we met in the meadow','met');
   home();if(window.Music)Music.home(kind);const l=B(kept?'named_kept':'named_reply');talk(l,3200);
   sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)}
@@ -306,8 +307,8 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
     p.querySelector('#pcnok').onclick=()=>{const c=obNameCheck(p.querySelector('#pcnm').value);if(!c.ok){p.querySelector('#pcnm').value='';p.querySelector('#pcnh').textContent=U('ui_ob_name_again');return}if(c.name!==S.child)S.nameChanged=1;S.child=c.name;S.vars.child_named=1;delete S.childHidden;save();p.remove();re()};
     p.querySelector('#pcnno').onclick=()=>{if(S.vars.child_named)S.childHidden=S.child;S.child='friend';delete S.vars.child_named;save();p.remove();re()};   // keeps it on the device, unused
     p.querySelector('#pcnfg').onclick=()=>{delete S.childHidden;S.child='friend';delete S.vars.child_named;save();p.remove();re()}};   // erased
-  if(has)d.querySelector('#pcecho').onclick=()=>{const p=full(`<div class="obpanel"><b>Echo's name</b></div><div class="obfield"><input id="pcen" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.g.name}" aria-label="Echo's name"></div><p class="obsmall" id="pceh"></p><div class="row"><button class="btn small" id="pceok">Save</button><button class="btn small" id="pcekp">Just "${F.byKind[S.kind].label}"</button><button class="btn small" id="pcex">${U('ui_pc_done')}</button></div>`);
-    p.classList.add('pcset','pcsub');p.querySelector('#pcex').onclick=()=>p.remove();p.querySelector('#pcekp').onclick=()=>{S.g.name=F.byKind[S.kind].label;save();p.remove();re()};
+  if(has)d.querySelector('#pcecho').onclick=()=>{const p=full(`<div class="obpanel"><b>Echo's name</b></div><div class="obfield"><input id="pcen" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.g.name}" aria-label="Echo's name"></div><p class="obsmall" id="pceh"></p><div class="row"><button class="btn small" id="pceok">Save</button><button class="btn small" id="pcekp">Just "${(S.vars&&S.vars.default_name)||F.byKind[S.kind].default_name}"</button><button class="btn small" id="pcex">${U('ui_pc_done')}</button></div>`);
+    p.classList.add('pcset','pcsub');p.querySelector('#pcex').onclick=()=>p.remove();p.querySelector('#pcekp').onclick=()=>{S.g.name=(S.vars&&S.vars.default_name)||F.byKind[S.kind].default_name;save();p.remove();re()};
     p.querySelector('#pceok').onclick=()=>{const c=obNameCheck(p.querySelector('#pcen').value);if(!c.ok){p.querySelector('#pcen').value='';p.querySelector('#pceh').textContent=U('ui_ob_name_again');return}S.g.name=c.name;save();p.remove();re()}};
   d.querySelector('#pcreset').onclick=()=>pcReset(d);
   d.querySelector('#pcdone').onclick=()=>{SFX('ui_panel_close');d.remove();if(S&&S.kind&&document.getElementById('sc'))home();else if(back)back()}}

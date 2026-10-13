@@ -2556,9 +2556,9 @@
   ],
   "invite_borrow": [
    {
-    "text": "Hoo… a {var:origin_animal}. I could borrow its colours, if you like.",
+    "text": "Hoo… a {var:origin_animal}. I could borrow its colour, if you like.",
     "expr": "curious",
-    "short": "Hoo… borrow its colours?"
+    "short": "Hoo… borrow its colour?"
    }
   ],
   "named_reply": [
@@ -2597,9 +2597,9 @@
   ],
   "named_kept": [
    {
-    "text": "Hoo… just {var:family}. That suits me fine.",
+    "text": "Hoo… just {name}. That suits me fine.",
     "expr": "happy",
-    "short": "Hoo… just {var:family}."
+    "short": "Hoo… just {name}."
    }
   ]
  },
@@ -15519,7 +15519,7 @@
      "wait": 2600
     },
     "c": {
-     "say": "Every animal hums one… I'm made of that song, and a little light.",
+     "say": "I'm a {var:family}… we're made of bird songs, and a little light.",
      "expr": "curious",
      "choices": [
       {

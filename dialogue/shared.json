@@ -590,13 +590,19 @@
   ],
   "ui_or_colours_ask": [
    {
-    "text": "What colours was your {var:origin_animal}?",
+    "text": "What colour was your {var:origin_animal}?",
     "expr": "happy"
    }
   ],
   "ui_or_colours_hint": [
    {
-    "text": "Pick one or two.",
+    "text": "Pick one.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_colours_toy": [
+   {
+    "text": "Toy colours",
     "expr": "happy"
    }
   ],
@@ -626,7 +632,17 @@
   ],
   "ui_or_keep_colours": [
    {
-    "text": "It's keeping your {var:origin_animal}'s colours. They glow brighter as you get to know each other.",
+    "text": "It's keeping your {var:origin_animal}'s colour. It glows brighter as you get to know each other.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_family": [
+   {
+    "text": "A {var:family}! {var:family_plural} are Echoes of dog, fox and wolf songs.",
+    "expr": "happy"
+   },
+   {
+    "text": "A {var:family}! {var:family_plural} are Echoes of bird songs.",
     "expr": "happy"
    }
   ],
@@ -644,7 +660,7 @@
   ],
   "ui_or_other_family": [
    {
-    "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colours.",
+    "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colour.",
     "expr": "happy"
    }
   ],
@@ -668,43 +684,7 @@
   ],
   "ui_or_name_keep": [
    {
-    "text": "Just \"{var:family}\"",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_point": [
-   {
-    "text": "Point at an animal. Look from far away, and never touch an animal you don't know.",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_listen": [
-   {
-    "text": "Listening...",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_person": [
-   {
-    "text": "That looks like a person! Echoes come from animals. Try an animal friend.",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_no_song": [
-   {
-    "text": "Hmm, no song yet. Try holding very still, or find another animal!",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_not_sure": [
-   {
-    "text": "Is it one of these? Tap the one you think!",
-    "expr": "happy"
-   }
-  ],
-  "ui_cam_privacy": [
-   {
-    "text": "The picture is never saved. Echo only keeps the kind of animal and a colour.",
+    "text": "Just \"{var:default_name}\"",
     "expr": "happy"
    }
   ]

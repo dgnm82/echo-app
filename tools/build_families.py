@@ -4,32 +4,34 @@
 import json, os
 SRC = '/workspace/echo/origin_v2/data'
 names = json.load(open(os.path.join(SRC, 'names.json')))['names'] if os.path.exists(SRC) else None
-LABELS = {  # family id -> shown label. Current names kept as data for now.
-  'slyte':   {'label': 'Slyte',   'plural': 'Slytes',   'kind': 'fox', 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
-  'whimber': {'label': 'Whimber', 'plural': 'Whimbers', 'kind': 'owl', 'dialogue': 'whimber', 'sprite': 'whimber', 'look': 'birds (owl-like)'},
+LABELS = {  # family id -> shown family word (decided Oct 12 6:50 PM). Internal ids stay slyte / whimber. Looks are PLACEHOLDER (today's sheets).
+  'slyte':   {'label': 'Howling', 'plural': 'Howlings', 'default_name': 'Slyte',   'kind': 'fox', 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
+  'whimber': {'label': 'Wingsong', 'plural': 'Wingsongs', 'default_name': 'Whimber', 'kind': 'owl', 'dialogue': 'whimber', 'sprite': 'whimber', 'look': 'birds (owl-like)'},
 }
-# Phone v1: one chip -> one EXISTING baked ramp. The 10 proposed new ramps (dusk-plum, ...) are not baked yet, so each
-# chip points at the nearest approved existing ramp; when they are baked this table is the only change.
-CHIPS = {
- 'slyte': [['black','Black','#3B2A5C','violet-rose'],['brown','Brown','#8A5A3C','sunset-gold'],['ginger','Ginger','#E8772E','sunset-gold'],
-           ['golden','Golden','#E8B860','sunset-gold'],['white','White','#FFF6E6','rose-sapphire'],['grey','Grey','#B8B4C8','sky-periwinkle']],
- 'whimber': [['black','Black','#3B2A5C','lilac-night'],['brown','Brown','#8A5A3C','peach-dusk'],['ginger','Ginger','#E8772E','peach-dusk'],
-           ['golden','Golden','#E8B860','peach-dusk'],['white','White','#FFF6E6','sky-teal'],['grey','Grey','#B8B4C8','lilac-night'],
-           ['red','Red','#D9503A','plum-blush'],['blue','Blue','#5A8AD8','sky-teal'],['yellow','Yellow','#FFD84A','peach-dusk'],['green','Green','#6BBF6A','mint-aurora']],
-}
-ANIMALS = [  # P1 cards. family None = not built yet -> song stamp + borrow colours
- ['dog','Dog','dog','slyte'],['fox','Fox','fox','slyte'],['wolf','Wolf','wolf','slyte'],
- ['owl','Owl','owl','whimber'],['bird','Bird','bird','whimber'],['duck','Duck','duck','whimber'],
- ['cat','Cat','cat',None],['bunny','Bunny','bunny',None],['other','Other','new friend',None]]
+# origin v0.3 (origin_config.json colour.chips): ONE solid colour per Echo. real=False -> under "Toy colours".
+CFG = '/workspace/echo/origin_v2/data/origin_config.json'
+HEX = {'black':'#3B2A5C','brown':'#8A5A3C','ginger':'#E8772E','golden':'#E8B860','white':'#FFF6E6','grey':'#B8B4C8','red':'#D9503A','blue':'#5A8AD8',
+       'yellow':'#FFD84A','green':'#6BBF6A','tan':'#D8A880','mint':'#7FE0C8','sky':'#8CC8FF','purple':'#A884E0','pink':'#F4A0C8'}
+FALLBACK_CHIPS = {'slyte': [['black','dusk-plum',1],['brown','cocoa-cream',1],['ginger','ember-russet',1],['golden','sunset-gold-solid',1],['white','snow-blush',1],['grey','moon-lilac',1],
+  ['mint','mint-teal-solid',0],['sky','sky-periwinkle-solid',0],['purple','violet-rose-solid',0],['pink','rose-sapphire-solid',0]],
+  'whimber': [['black','crow-dusk',1],['brown','wren-cocoa',1],['red','robin-ember',1],['grey','dove-mist',1],['white','dove-mist',1],['yellow','sun-finch',1],['blue','sky-teal',1],
+  ['green','mint-aurora-solid',1],['tan','peach-dusk-solid',1],['pink','plum-blush',0],['purple','lilac-night',0]]}
+try: CH = {f: [[c['word'], c['colour'], c['real']] for c in v] for f, v in json.load(open(CFG))['colour']['chips'].items()}
+except Exception: CH = FALLBACK_CHIPS
+CHIPS = {f: [[w, w.capitalize(), HEX[w], r, bool(real)] for w, r, real in CH[f]] for f in LABELS}
+ANIMALS = [  # P1 cards. family None = not built yet -> song stamp + borrow colours. default_name: names.json defaults members (None = borrowing family's default)
+ ['dog','Dog','dog','slyte','Thrumble'],['fox','Fox','fox','slyte','Slyte'],['wolf','Wolf','wolf','slyte','Ramble'],
+ ['owl','Owl','owl','whimber','Whimber'],['bird','Bird','bird','whimber','Trilli'],['duck','Duck','duck','whimber','Whimber'],
+ ['cat','Cat','cat',None,None],['bunny','Bunny','bunny',None,None],['other','Other','new friend',None,None]]
 FALLBACK = {'slyte': ['Biscuit','Pounce','Maple','Ziggy','Clover','Waffle'], 'whimber': ['Willow','Nimbus','Dewdrop','Pippin','Marigold','Cocoa']}
-out = {'order': list(LABELS), 'animals': {a: {'label': l, 'word': w, 'family': f} for a, l, w, f in ANIMALS}, 'animalOrder': [a[0] for a in ANIMALS]}
+out = {'order': list(LABELS), 'animals': {a: {'label': l, 'word': w, 'family': f, 'default_name': dn} for a, l, w, f, dn in ANIMALS}, 'animalOrder': [a[0] for a in ANIMALS]}
 for fid, d in LABELS.items():
   out[fid] = dict(d, id=fid, names=(names or {}).get(fid) or FALLBACK[fid],
-                  chips=[{'id': i, 'label': l, 'hex': h, 'ramp': r} for i, l, h, r in CHIPS[fid]])
+                  chips=[{'id': i, 'label': l, 'hex': h, 'ramp': r, 'real': real} for i, l, h, r, real in CHIPS[fid]])
 js = ('// GENERATED by tools/build_families.py. The ONE place family names/labels live (origin_v2.md §2/§5/§6).\n'
-      '// A family rename (e.g. Slyte -> Howlings, Whimber -> Wingsongs) is a data-only change here.\n'
+      '// A family rename is a data-only change here (ids stay slyte / whimber).\n'
       'window.FAMILIES=' + json.dumps(out, ensure_ascii=False) + ';\n'
       'FAMILIES.byKind={};for(const f of FAMILIES.order)FAMILIES.byKind[FAMILIES[f].kind]=FAMILIES[f];\n'
-      'FAMILIES.list=(sep)=>FAMILIES.order.map(f=>FAMILIES[f].label).join(sep||" or ");\n')
+      'FAMILIES.list=(sep)=>FAMILIES.order.map(f=>(/^[aeiou]/i.test(FAMILIES[f].label)?"an ":"a ")+FAMILIES[f].label).join(sep||" or ");   // "a Howling or a Wingsong"\n')
 open(os.path.join(os.path.dirname(__file__), '..', 'families.js'), 'w').write(js)
 print('families.js', len(js), 'bytes;', {f: len(out[f]['names']) for f in LABELS})

@@ -2799,9 +2799,9 @@
   ],
   "invite_borrow": [
    {
-    "text": "A {var:origin_animal}! Pretty. I can borrow its colours, if you like.",
+    "text": "A {var:origin_animal}! Pretty. I can borrow its colour, if you like.",
     "expr": "curious",
-    "short": "Pretty! Borrow its colours?"
+    "short": "Pretty! Borrow its colour?"
    }
   ],
   "named_reply": [
@@ -2841,9 +2841,9 @@
   ],
   "named_kept": [
    {
-    "text": "Just {var:family}? Okay! Plain {var:family}. Still counts.",
+    "text": "Just {name}? Okay! Plain {name}. Still counts.",
     "expr": "happy",
-    "short": "Just {var:family}! Okay!"
+    "short": "Just {name}! Okay!"
    }
   ]
  },
@@ -16744,7 +16744,7 @@
      "wait": 2600
     },
     "c": {
-     "say": "I'm made of that song. And light. And a bit of its colours.",
+     "say": "I'm a {var:family}! {var:family_plural} are made of dog and fox and wolf songs. And light.",
      "expr": "proud",
      "choices": [
       {

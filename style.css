@@ -227,7 +227,8 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 @keyframes ormote{0%{transform:rotate(0) translateX(40px)}80%{transform:rotate(540deg) translateX(10px);opacity:1}100%{transform:rotate(720deg) translateX(0);opacity:0}}
 .orstrip{display:flex;gap:0;justify-content:center;margin-top:3px;height:30px;overflow:hidden}.orstrip span{zoom:.33;display:block}
 .orinvite .bubble,.orname .bubble{position:relative!important;top:auto!important;left:auto!important;max-width:168px}
-@media (prefers-reduced-motion:reduce){.ornote,.ormote,.obtap,.orlightform{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.ornote,.ormote,.obtap,.orlightform{animation:none!important;transition:none!important}.ormote{display:none}.ornote.b{display:none}.orlightform.drift{transition:opacity 1.2s steps(4)!important;transform:none}}
+.ortoy{margin-top:2px}
 .full.pcset,.full.pcgate,.full.pcreset{background:#3b2a5c;display:flex;flex-direction:column;gap:3px;align-items:stretch;justify-content:flex-start;padding:5px;overflow-y:auto;z-index:70}
 .pchead{background:#fff6e6;color:#3b2a5c;padding:4px;display:flex;gap:4px;align-items:center}.pchead i{width:10px;height:12px;background-size:100% 100%;image-rendering:pixelated}
 .pcrow{background:#fff6e6;color:#3b2a5c;border:0;box-shadow:0 2px 0 #23183a;display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:8px;padding:2px 5px;min-height:18px;flex:none}
@@ -238,3 +239,4 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .pchold{position:relative;overflow:hidden}.pcbar{position:absolute;left:0;bottom:0;height:4px;width:0;background:#ffc870}.pchold.hold .pcbar{width:100%;transition:width 3s linear}
 .full.pcsub{z-index:80;justify-content:center}
 .obbub{background:#fff6e6;color:#3b2a5c;border:1px solid #3b2a5c;box-shadow:0 2px 0 #23183a;padding:4px 5px;max-width:164px;text-align:left;line-height:10px;border-radius:2px}
+.scene.ob.calm .ormote,.scene.ob.calm .ornote.b{display:none}.scene.ob.calm .ornote,.scene.ob.calm .obtap{animation:none}.scene.ob.calm .orlightform{transition:opacity 1.2s steps(4)}.scene.ob.calm .orlightform.drift{transform:none}
