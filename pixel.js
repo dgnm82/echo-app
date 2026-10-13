@@ -2,8 +2,10 @@
 // 12 fps sprite clock (1 tick = 83 ms), Slyte sprite sheets baked by tools/bake_pixel.py, chirp hook.
 (function(){
 const W=window, TICK=83, N=48;
-const PAL=['mint-teal','violet-rose','sunset-gold','rose-sapphire','teal-gold','sky-periwinkle'];
-const POWL=['lilac-night','sky-teal','plum-blush','mint-aurora','peach-dusk'];   // Whimber: the 5 POWL ramps (guide §6)
+const PAL0=['mint-teal','violet-rose','sunset-gold','rose-sapphire','teal-gold','sky-periwinkle'];   // seeded pick (existing saves keep their colour)
+const PAL=PAL0.concat(['dusk-plum','cocoa-cream','ember-russet','snow-blush','moon-lilac','sunset-gold-solid','mint-teal-solid','sky-periwinkle-solid','violet-rose-solid','rose-sapphire-solid']);   // + origin v0.3 colours (tools/bake_origin_palettes.py)
+const POWL0=['lilac-night','sky-teal','plum-blush','mint-aurora','peach-dusk'];
+const POWL=POWL0.concat(['crow-dusk','wren-cocoa','robin-ember','dove-mist','sun-finch','mint-aurora-solid','peach-dusk-solid']);   // Whimber: the 5 POWL ramps (guide §6)
 const FR={idle:[0,1,2,3,4,5],blink:6,ear1:7,ear2:8,tail1:9,tail2:10,happy:11,eat1:12,eat2:13,pet1:14,pet2:15,cur1:16,cur2:17,shy1:18,shy2:19,sl1:20,sl2:21,nap1:22,nap2:23,sad:24,sur:25,think:26,gig:27};
 // expression -> looping frame sequence [[column, ticks],...]; loop = index the loop restarts from (guide 9.2 timings)
 const F_=FR,SEQ={happy:[[F_.happy,8],[F_.gig,4]],delighted:[[F_.gig,3],[F_.happy,5]],love:[[F_.pet2,6],[F_.pet1,6]],excited:[[F_.gig,2],[F_.happy,2]],
@@ -17,7 +19,7 @@ const REACT={eat:[[F_.eat1,2],[F_.eat2,2],[F_.eat1,2],[F_.eat2,2],[F_.happy,4]],
 const IDLE_T=[3,2,2,2,2,2];               // guide §9.2 idle loop ticks
 function rng(s){let a=s>>>0||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 // seeded variation within the guide: palette (6 ramps) + fluff preset (0-3); ear/tail/eye fixed (open decision)
-function variant(seed,sp,pal){const r=rng((seed||1)^0x9e37),P=sp==='whimber'?POWL:PAL,p=P[Math.floor(r()*P.length)],f=Math.floor(r()*4);return {pal:pal&&P.includes(pal)?pal:p,fluff:f}}   // pal: S.g.pal from origin colour chips (origin_v2 §4); fluff stays seeded
+function variant(seed,sp,pal){const r=rng((seed||1)^0x9e37),P=sp==='whimber'?POWL:PAL,P0=sp==='whimber'?POWL0:PAL0,p=P0[Math.floor(r()*P0.length)],f=Math.floor(r()*4);return {pal:pal&&P.includes(pal)?pal:p,fluff:f}}   // pal: S.g.pal from origin colour chips (origin_v2 §4); fluff stays seeded
 function stageFromBond(bond){const f=Math.max(0,Math.min(1,(bond||0)/500));return f<.25?1:f<.5?2:f<.75?3:4}
 function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.released)return 4;if(S.releasePath)return 5;return stageFromBond(S.bond)}catch(e){return 1}}
 function whimber(g,stage){const v=variant(g&&g.seed,'whimber',g&&g.pal);stage=stage||stageNow();
@@ -79,5 +81,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={queue,blink,fly,whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp,g&&g.pal);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp,g&&g.pal);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();
