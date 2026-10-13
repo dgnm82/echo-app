@@ -51,13 +51,14 @@ const KNOWN_SLOTS=new Set(['name','child','fav','treasure','place','release','tr
 function walk(file,obj,where,allow,species){
   if(Array.isArray(obj)){obj.forEach((x,i)=>walk(file,x,`${where}[${i}]`,allow,species));return}
   if(obj&&typeof obj==='object'){const al=(allow||[]).concat(obj.lintAllow||[]);
-    for(const k in obj){if(['id','goto','next','start','trigger','expr','react','icon','memoryTag','lintAllow','species','privacy','topic','intent','gesture'].includes(k))continue;
+    for(const k in obj){if(['id','goto','next','start','trigger','expr','react','icon','memoryTag','lintAllow','species','privacy','topic','intent','gesture','voice'].includes(k))continue;   // caption is still scanned (P5)
       if(k==='cond'||k==='context'||k==='set')continue;walk(file,obj[k],where+'.'+k,al,species)}return}
   scanText(file,where,obj,allow,species);
 }
 function structure(file,d){
   for(const [key,pool] of Object.entries(d.barks||{})){if(!Array.isArray(pool)||!pool.length)rep('error',file,`barks.${key}`,'empty pool');
-    (pool||[]).forEach((l,i)=>{if(!l.text)rep('error',file,`barks.${key}[${i}]`,'missing text');if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);if(l.react&&!REACT.has(l.react))rep('error',file,`barks.${key}[${i}]`,'unknown react '+l.react)})}
+    (pool||[]).forEach((l,i)=>{if(!l.text&&!(l.text===''&&l.gesture))rep('error',file,`barks.${key}[${i}]`,'missing text');   // P5: text "" + gesture = act-out only
+      if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);if(l.react&&!REACT.has(l.react))rep('error',file,`barks.${key}[${i}]`,'unknown react '+l.react)})}
   const ids=new Set();
   for(const c of d.conversations||[]){const w=`conv ${c.id}`;if(!c.id)rep('error',file,'conversation','missing id');if(ids.has(c.id))rep('error',file,w,'duplicate id');ids.add(c.id);
     const nodes=c.nodes||{};const start=c.start||Object.keys(nodes)[0];if(!nodes[start])rep('error',file,w,'start node missing');

@@ -19,8 +19,8 @@ ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
 KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
-NODE_KEYS = {"gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
-CHOICE_KEYS = {"gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
+NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
+CHOICE_KEYS = {"caption","voice","gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal","dist","rows","n"}  # games v2: dist/rows/n
 
@@ -84,7 +84,8 @@ def lint_file(path, seen_ids, dup_pool):
     for k in ("vars","barks","conversations"):
         if k not in d: err(fn, f"missing top-level {k}")
     stats = {"lines": 0, "excl": 0}
-    def echo_line(text, where):
+    def echo_line(text, where, act=False):
+        if act and text == "": return  # P5 act-out only: nothing spoken, the gesture plays
         if not isinstance(text, str) or not text.strip(): return err(where, "empty text")
         check_tokens(text, where); check_banned(text, where); voice(sp, text, where, stats)
         if not words(text): return  # pure beats like "…" are not lines
@@ -95,12 +96,14 @@ def lint_file(path, seen_ids, dup_pool):
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
-            extra = set(b) - {"text","expr","react","cond","weight","gesture","short"}
+            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice"}
+            if "caption" in b: check_banned(b["caption"], w)
+            if b.get("voice", "soft") != "soft": err(fn, f"{w} voice must be 'soft'")
             if extra: err(fn, f"{w} unknown fields {extra}")
             if b.get("expr") not in EXPR: err(fn, f"{w} bad expr {b.get('expr')!r}")
             if "react" in b and b["react"] not in REACT: err(fn, f"{w} bad react {b['react']!r}")
             if "cond" in b: check_cond(b["cond"], f"{fn} {w}")
-            echo_line(b.get("text"), w)
+            echo_line(b.get("text"), w, bool(b.get("gesture")))
     for c in d.get("conversations", []):
         cid = c.get("id", "?"); w0 = f"conv {cid}"
         if cid in seen_ids: err(fn, f"duplicate conversation id {cid}")
@@ -114,7 +117,7 @@ def lint_file(path, seen_ids, dup_pool):
         for nid, n in nodes.items():
             w = f"{w0}.{nid}"
             if set(n) - NODE_KEYS: err(fn, f"{w} unknown fields {set(n)-NODE_KEYS}")
-            if "say" in n: echo_line(n["say"], w)
+            if "say" in n: echo_line(n["say"], w, bool(n.get("gesture")))
             elif "branch" not in n: err(fn, f"{w} has neither say nor branch")
             if n.get("expr", "neutral") not in EXPR: err(fn, f"{w} bad expr")
             if "react" in n and n["react"] not in REACT: err(fn, f"{w} bad react")
@@ -127,7 +130,7 @@ def lint_file(path, seen_ids, dup_pool):
                     if set(ch) - CHOICE_KEYS: err(fn, f"{cw} unknown fields {set(ch)-CHOICE_KEYS}")
                     if not ch.get("icon") or not ch.get("label"): err(fn, f"{cw} needs icon and label")
                     check_banned(ch.get("label", ""), cw)
-                    if "reply" in ch: echo_line(ch["reply"], cw)
+                    if "reply" in ch: echo_line(ch["reply"], cw, bool(ch.get("gesture")))
                     if ch.get("expr", "neutral") not in EXPR: err(fn, f"{cw} bad expr")
                     if "react" in ch and ch["react"] not in REACT: err(fn, f"{cw} bad react")
                     if "cond" in ch: check_cond(ch["cond"], cw)

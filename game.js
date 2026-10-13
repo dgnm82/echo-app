@@ -33,7 +33,7 @@ function thoughtRefresh(){meterRefresh();const sc=document.getElementById('sc'),
   if(t&&t.dataset.w===w)return;if(t){t.dataset.w=w;t.innerHTML=thoughtIcon(w)}else{c.insertAdjacentHTML('afterend',thoughtHTML(w));thoughtSync()}}
 function E(){return CR[S.kind]}
 // Echoes have no voices: they speak in musical chirps (sound comes later). Text-to-speech is off.
-function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}catch(e){}}
+function say(t,expr,soft){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr,soft?{vol:.5}:undefined)}catch(e){}}
 const SFX=(n,o)=>{try{window.Sound&&Sound.play(n,o)}catch(e){}};
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
@@ -530,8 +530,10 @@ function playBondUp(from,to,live,done){
     window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,line:lineObj,lowfx:lowFx(),short:!!S.shortBondUp,
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
-function talk(t,ms){const b=$('#b');if(!b)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
-  b.style.display='block';b.textContent=o.text;b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr);clearTimeout(talk.t);
+function talk(t,ms){const b=$('#b');if(!b||!t)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
+  if(!o.text){if(o.gesture&&window.Alive)Alive.act(o.gesture);return}   // P5 act-out only: no bubble, the gesture plays
+  if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
+  b.style.display='block';b.textContent=o.text;b.classList.toggle('soft',o.voice==='soft');if(o.caption){const c=document.createElement('small');c.className='cap';c.textContent=o.caption;b.appendChild(c)}b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr,o.voice==='soft');clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
 function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
 function hop(){react('happy')}
@@ -693,6 +695,7 @@ function book(){
   ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Bond up! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
+  ${(S.wild||[]).length?`<h2>${PI('🍃')} Friends in the wild</h2>`+S.wild.map(w=>`<p class="mline">${w.name} · ${w.family||''} · ${'★'.repeat(Math.max(1,Math.min(9,w.stage||1)))}</p>`).join(''):''}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
   SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}obWireLock(null);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;

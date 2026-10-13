@@ -42,6 +42,9 @@ async def main():
     r=await pg.evaluate("""(()=>{const s=__echo.state;s.needs.food=95;s.needs.comfort=95;const b=s.bond,f=s.needs.food;__echo.feed();const t1=document.getElementById('b').textContent,b1=s.bond;
       __echo.hug();const t2=document.getElementById('b').textContent;return [b1===b,s.needs.food===f,t1,t2]})()""")
     print('declines',r);assert r[0] and r[1] and r[2] and r[3]
+    # P5: act-out only lines play a gesture with no bubble; caption + soft voice render
+    r=await pg.evaluate("(()=>{const b=document.getElementById('b');b.style.display='none';__echo.talk({text:'',gesture:'tap'});const hid=b.style.display==='none';__echo.talk({text:'Hi.',caption:'(soft)',voice:'soft'},1500);return [hid,b.classList.contains('soft'),!!b.querySelector('.cap'),Alive.log.includes('act:tap')]})()")
+    print('act-out',r);assert r==[True,True,True,True],r
     # holiday freezes, then ends on open; leave screen after 72 h
     r=await pg.evaluate("""(()=>{
       __echo.holiday(true);const h=__echo.state.holiday;__echo.state.last=Date.now()-80*36e5;__echo.state.left=null;
