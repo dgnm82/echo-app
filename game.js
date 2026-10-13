@@ -13,7 +13,18 @@ function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=
   if(Array.isArray(s.checkins))s.checkins.forEach(k=>{if(bad.test(k.text)){k.text=k.text.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.');ch=true}});
   if(Array.isArray(s.postcards)){const p=s.postcards.map(x=>bad.test(x)?x.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.'):x);if(p.join()!==s.postcards.join()){s.postcards=p;ch=true}}
   if(ch)try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
-function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}}
+function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}if(S&&S.needs&&document.getElementById('sc'))thoughtRefresh()}
+// need thought bubble (playtest fix): re-picked whenever a need changes (every save), hidden when nothing is pressing; follows the Echo as it moves
+const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w;
+function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}
+let THO=null;   // the bubble's offset from the sprite, taken before the Echo first moves
+function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;
+  const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
+  if(!c.style.left){const tr=t.getBoundingClientRect();THO=[(tr.left-cr.left)/k,(tr.top-cr.top)/k];return}if(!THO)return;
+  t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto'}
+function thoughtRefresh(){const sc=document.getElementById('sc'),c=document.getElementById('cr');if(!sc||!c)return;let t=sc.querySelector('.thought');const w=want(),show=w&&mood()!=='sleep';
+  if(!show){if(t)t.remove();return}
+  if(t&&t.dataset.w===w)return;if(t){t.dataset.w=w;t.innerHTML=thoughtIcon(w)}else{c.insertAdjacentHTML('afterend',thoughtHTML(w));thoughtSync()}}
 function E(){return CR[S.kind]}
 // Echoes have no voices: they speak in musical chirps (sound comes later). Text-to-speech is off.
 function say(t,expr){try{if(S&&S.voice&&window.Chirp)Chirp.play(t,S.kind,expr)}catch(e){}}
@@ -323,7 +334,7 @@ function home(greet){
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg} pxscene sc-${curScene().id}" id="sc" style="${scStyle()}">${fwHomeBits()}
-   ${curScene()===scHome()&&curScene().id!=='branch'?fortProp():''}   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?`<div class="thought">${window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w}</div>`:''}
+   ${curScene()===scHome()&&curScene().id!=='branch'?fortProp():''}   <div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?thoughtHTML(w):''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">${fwUI('ui_path_button',S.kind==='fox'?0:1)}</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
@@ -341,7 +352,7 @@ function home(greet){
   if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
   else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
-  if(LIVE.st!=='found')lvStart(false);
+  thoughtSync();if(LIVE.st!=='found')lvStart(false);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
 }
@@ -393,7 +404,7 @@ function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].inc
 const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
 function lvEl(){return document.getElementById('cr')}
 function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
-  c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));
+  c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));thoughtSync();
   const px=c.querySelector('.px-echo');if(px&&face!=null&&px.classList.contains('lvflip')!==(face<0)){px.classList.toggle('lvflip',face<0);PIXEL.blink(px)}}   // blink on turn (B1)
 function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
 function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');if(px&&window.PIXEL&&PIXEL.fly)PIXEL.fly(px,false);const c=lvEl();if(c)c.classList.remove('lvmoving')}
@@ -1223,6 +1234,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

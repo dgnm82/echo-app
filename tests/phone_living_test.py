@@ -45,5 +45,20 @@ async def main():
       await pg.screenshot(path=f'{OUT}/living-{nm}-found-noticed.png')
       assert await until(pg,L+".st==='present'&&JSON.stringify("+L+".pos)==="+repr(str(HP).replace(' ','')),8000),'came over after noticing'
       await pg.close()
+    # playtest fixes: the need bubble is re-picked when a need is met, and follows the Echo while it moves
+    pg=await newecho(b,p,'owl',errs)
+    await pg.evaluate("const s=__echo.state;s.needs.food=10;s.needs.play=s.needs.rest=s.needs.comfort=90;s.napUntil=0;__echo.home()");await pg.wait_for_timeout(400)
+    assert await pg.evaluate("(document.querySelector('#sc .thought')||{}).dataset?.w")=='🍎'
+    await pg.evaluate("__echo.state.needs.food=100;__echo.hug()");await pg.wait_for_timeout(200)
+    assert not await pg.evaluate("!!document.querySelector('#sc .thought')"),'bubble hides once fed'
+    await pg.evaluate("__echo.state.needs.play=10;__echo.hug()");await pg.wait_for_timeout(200)
+    assert await pg.evaluate("document.querySelector('#sc .thought').dataset.w")=='⚽','bubble re-picks the top need'
+    off=lambda:pg.evaluate("(()=>{const t=document.querySelector('#sc .thought').getBoundingClientRect(),c=document.getElementById('cr').getBoundingClientRect();if(!t.width)return null;return [Math.round(t.left-c.left),Math.round(t.top-c.top)]})()")
+    o0=await off();await pg.evaluate("__echo.living.move([40,200])");drift=0;seen=0
+    for i in range(20):
+      await pg.wait_for_timeout(120);o=await off()
+      if o:seen+=1;drift=max(drift,abs(o[0]-o0[0]),abs(o[1]-o0[1]))
+    print('bubble drift px',drift,'moved',await pg.evaluate("__echo.living.pos"));assert seen>3 and drift<=24,(seen,drift)   # screen px (~2x UI); unfixed it was ~240
+    await pg.close()
     print('ERR',errs);assert not errs;await b.close();print('living test OK')
 asyncio.run(main())
