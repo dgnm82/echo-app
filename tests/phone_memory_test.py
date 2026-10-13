@@ -37,7 +37,7 @@ async def main():
       if not await pg.evaluate(f"__mem.cards[{i}].paired"):await pair(i)
     await pg.wait_for_timeout(500);await shot('memory-board-cleared')
     st=await pg.evaluate("({done:__mem.done,games:__echo.state.pairs.games,mem:__echo.state.memories.slice(-1)[0],sig:__echo.state.sigDay})");print('board',st)
-    assert st['done'] and st['games']==1 and 'pairs' in st['mem'] and st['sig']
+    assert st['done'] and st['games']==1 and 'pairs' in st['mem']   # needs v2: signature-daily bond removed
     await pg.wait_for_timeout(3500)
     # handheld keys on a second board (standard after the first game)
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());__echo.memoryGame()");await pg.wait_for_timeout(400)

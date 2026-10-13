@@ -21,7 +21,7 @@ let THO=null;   // the bubble's offset from the sprite, taken before the Echo fi
 function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;if(c.classList.contains('lvmoving')){t.style.visibility='hidden';clearTimeout(thoughtSync._t);return}   // needs v2 P2: hide in flight, show 1 s after landing
   const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
   if(!c.style.left){const tr=t.getBoundingClientRect();THO=[(tr.left-cr.left)/k,(tr.top-cr.top)/k];return}if(!THO)return;
-  t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto';if(t.style.visibility==='hidden'){clearTimeout(thoughtSync._t);thoughtSync._t=setTimeout(()=>{const u=document.querySelector('#sc .thought');if(u)u.style.visibility=''},1000)}}
+  t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto';if(t.style.visibility==='hidden'){clearTimeout(thoughtSync._t);thoughtSync._t=setTimeout(()=>{const u=document.querySelector('#sc .thought');if(u){u.style.visibility='';thoughtSync()}},1000)}}
 // needs v2 §6: corner glows inside #sc (bottom pair sits above the dock); step rises one level per 166 ms, at once under lowFx
 const MT_IC={food:'feed',play:'play',comfort:'pet',rest:'sleep'};
 function meterHTML(){const m=NeedsV2.meter(S.needs),sl=mood()==='sleep';return `<div class="meters${sl?' off':''}" aria-hidden="true">${Object.keys(MT_IC).map(k=>`<i class="mt mt-${k}" data-s="${m[k].step}" style="background-image:url(px/meter/${k}_s${m[k].step}.png)"></i><b class="mti mti-${k}" style="background-image:url(px/icon_${MT_IC[k]}.png)"></b>`).join('')}</div>`}
@@ -432,7 +432,7 @@ function lvMove(to,done,fast){   // Slyte trots on the ground (2 px/tick, 3 when
     if(!fox||hopUp)y-=4*(hopUp?10:apex)*t*(1-t);                 // flight arc / the fort hop chain
     else if(!lowFx()&&i<n)y-=(i>>1)%2;                                   // 1 px trot bob
     lvPlace(Math.round(x),Math.round(y),x1<x0?-1:1);
-    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');thoughtSync();if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,false);setExpr(baseExpr())}done&&done()}},83)}
+    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,false);setExpr(baseExpr())}thoughtSync();done&&done()}},83)}
 function lvFx(src,x,y,cls,ms){const sc=$('#sc');if(!sc)return;const e=document.createElement('i');e.className='lvfx '+(cls||'');e.style.cssText=`left:${x}px;top:${y}px;background-image:url(${src})`;sc.appendChild(e);setTimeout(()=>e.remove(),ms||1500)}
 function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
   const fox=S.kind==='fox',[x,y]=LIVE.pos,top=y-48;LIVE.act=name;LIVE.log.push(name);const fx=lowFx()?0:1;
