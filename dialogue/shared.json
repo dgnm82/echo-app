@@ -1,2047 +1,2053 @@
 {
- "version": 2,
- "species": "shared",
- "vars": {},
- "barks": {
-  "napping": [
-   {
-    "text": "Zzz… ({name} is napping. It will wake soon.)",
-    "expr": "sleepy"
-   },
-   {
-    "text": "Zzz… ({name} is curled up, dreaming something nice.)",
-    "expr": "sleepy"
-   },
-   {
-    "text": "({name} twitches in its sleep. A happy dream, probably.)",
-    "expr": "sleepy"
-   }
-  ],
-  "last_day": [
-   {
-    "text": "Tomorrow I'll go home. Let's make today a really good one.",
-    "expr": "love"
-   }
-  ],
-  "stay_more": [
-   {
-    "text": "I can stay a little longer. A few more days. Then I really should go live my wild life.",
-    "expr": "love",
-    "react": "happy"
-   },
-   {
-    "text": "A few more days together. Then home, to my wild life.",
-    "expr": "love",
-    "react": "happy"
-   }
-  ],
-  "hug_more": [
-   {
-    "text": "(A big, warm hug.) Mmm. Okay, one more is allowed.",
-    "expr": "love",
-    "react": "pet"
-   },
-   {
-    "text": "(Squeeze!) That one was the best one yet.",
-    "expr": "love",
-    "react": "pet"
-   },
-   {
-    "text": "(A long, soft hug.) That one was extra warm.",
-    "expr": "love",
-    "react": "pet"
-   }
-  ],
-  "gift_ask": [
-   {
-    "text": "Before I go… can I take something with me? Something to remember you by.",
-    "expr": "curious"
-   }
-  ],
-  "gift_got": [
-   {
-    "text": "The {gift}! I'll keep it always. Always always.",
-    "expr": "excited",
-    "react": "excited"
-   },
-   {
-    "text": "I'll keep the {gift} somewhere safe. Somewhere special.",
-    "expr": "love",
-    "react": "happy"
-   }
-  ],
-  "farewell": [
-   {
-    "text": "({name} {trust}.) I'm so excited and a tiny bit sad, both at once. You helped me grow strong. Thank you, {child}.",
-    "expr": "love"
-   }
-  ],
-  "look_back": [
-   {
-    "text": "(It stops… and looks back once.)",
-    "expr": "happy"
-   },
-   {
-    "text": "(It turns, just for a moment, and looks happy.)",
-    "expr": "happy"
-   }
-  ],
-  "walk_memory": [
-   {
-    "text": "Remember? {memory}.",
-    "expr": "happy"
-   },
-   {
-    "text": "I still think about it: {memory}.",
-    "expr": "love"
-   }
-  ],
-  "first_gift": [
-   {
-    "text": "{name} gives you a {treasure} it was saving. \"For you. Keep it safe.\"",
-    "expr": "love"
-   }
-  ],
-  "favplace": [
-   {
-    "text": "{name} shows you its {place}. Naps there are extra cozy now.",
-    "expr": "happy"
-   }
-  ],
-  "trust": [
-   {
-    "text": "{name} {trust}.",
-    "expr": "love"
-   }
-  ],
-  "time_morning": [
-   {
-    "text": "Good morning. The day is brand new.",
-    "expr": "happy",
-    "cond": {
-     "time": [
-      "morning"
-     ]
-    }
-   }
-  ],
-  "time_evening": [
-   {
-    "text": "The day is winding down. Cozy time.",
-    "expr": "love",
-    "cond": {
-     "time": [
-      "evening"
-     ]
-    }
-   }
-  ],
-  "fallback_any": [
-   {
-    "text": "Oh! I like that answer.",
-    "expr": "happy"
-   },
-   {
-    "text": "Hm. That made me smile.",
-    "expr": "happy"
-   },
-   {
-    "text": "Good answer. A very good one.",
-    "expr": "happy"
-   }
-  ],
-  "ui_list_title": [
-   {
-    "text": "{name}'s farewell list",
-    "expr": "happy"
-   }
-  ],
-  "ui_list_items": [
-   {
-    "text": "Play {var:listGame} together",
-    "expr": "happy"
-   },
-   {
-    "text": "Share {fav}",
-    "expr": "happy"
-   },
-   {
-    "text": "Build one more floor",
-    "expr": "happy"
-   },
-   {
-    "text": "Leaf Trail or Firefly Parade",
-    "expr": "happy"
-   },
-   {
-    "text": "Tell our favorite story",
-    "expr": "happy"
-   },
-   {
-    "text": "A cozy sit together",
-    "expr": "happy"
-   }
-  ],
-  "ui_path_button": [
-   {
-    "text": "Walk to the meadow's edge",
-    "expr": "happy"
-   },
-   {
-    "text": "Sit on the twilight branch",
-    "expr": "happy"
-   }
-  ],
-  "ui_choice_ask": [
-   {
-    "text": "Let's go together",
-    "expr": "happy"
-   },
-   {
-    "text": "Not yet",
-    "expr": "happy"
-   }
-  ],
-  "ui_choice_time": [
-   {
-    "text": "Let's go",
-    "expr": "happy"
-   },
-   {
-    "text": "One more hug",
-    "expr": "happy"
-   },
-   {
-    "text": "One more game first",
-    "expr": "happy"
-   }
-  ],
-  "ui_choice_thanks": [
-   {
-    "text": "Hug",
-    "expr": "happy"
-   },
-   {
-    "text": "Wave",
-    "expr": "happy"
-   },
-   {
-    "text": "Nose-tap",
-    "expr": "happy"
-   },
-   {
-    "text": "Thank you too!",
-    "expr": "happy"
-   }
-  ],
-  "ui_choice_next": [
-   {
-    "text": "Okay!",
-    "expr": "happy"
-   },
-   {
-    "text": "Will you write a lot?",
-    "expr": "happy"
-   },
-   {
-    "text": "Hug first",
-    "expr": "happy"
-   }
-  ],
-  "ui_sibling_card": [
-   {
-    "text": "This walk is for {child} and {name}. Is {child} here?",
-    "expr": "happy"
-   },
-   {
-    "text": "Yes, I'm here!",
-    "expr": "happy"
-   },
-   {
-    "text": "I'll go get {child}",
-    "expr": "happy"
-   }
-  ],
-  "ui_closure": [
-   {
-    "text": "{name} is home in the wild, carrying your world.",
-    "expr": "happy"
-   },
-   {
-    "text": "You helped it grow bright and brave.",
-    "expr": "happy"
-   },
-   {
-    "text": "First postcard: after one sleep.",
-    "expr": "happy"
-   }
-  ],
-  "ui_after_day0": [
-   {
-    "text": "{name} is home in the wild. The first postcard comes after one sleep.",
-    "expr": "happy"
-   }
-  ],
-  "ui_after_later": [
-   {
-    "text": "{name} is home in the wild. Postcards arrive now and then.",
-    "expr": "happy"
-   }
-  ],
-  "ui_keepsake": [
-   {
-    "text": "Glow-leaf from {name}",
-    "expr": "happy"
-   },
-   {
-    "text": "Starlight feather from {name}",
-    "expr": "happy"
-   }
-  ],
-  "ui_tagline": [
-   {
-    "text": "ECHO: Every creature has a story to share. Can you hear it?",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_tap_start": [
-   {
-    "text": "Tap to start",
-    "expr": "happy"
-   },
-   {
-    "text": "A: start",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_welcome": [
-   {
-    "text": "Look! A falling star.",
-    "expr": "happy"
-   },
-   {
-    "text": "It's a listening star. It carries names to new friends.",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_ask": [
-   {
-    "text": "What should your new friend call you?",
-    "expr": "happy"
-   },
-   {
-    "text": "What should your friend call you?",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_hint": [
-   {
-    "text": "A first name or a nickname. A grown-up can help!",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_presets": [
-   {
-    "text": "Or pick a nickname:",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_presets": [
-   {
-    "text": "Star",
-    "expr": "happy"
-   },
-   {
-    "text": "Sunny",
-    "expr": "happy"
-   },
-   {
-    "text": "Pip",
-    "expr": "happy"
-   },
-   {
-    "text": "Bean",
-    "expr": "happy"
-   },
-   {
-    "text": "Comet",
-    "expr": "happy"
-   },
-   {
-    "text": "Pebble",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_skip": [
-   {
-    "text": "Skip",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_confirm": [
-   {
-    "text": "{child}? Is that right?",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_yes_change": [
-   {
-    "text": "Yes!",
-    "expr": "happy"
-   },
-   {
-    "text": "Change",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_again": [
-   {
-    "text": "Hmm, let's pick a different name.",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_name_short": [
-   {
-    "text": "Just a first name is plenty!",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_age_ask": [
-   {
-    "text": "How old are you?",
-    "expr": "happy"
-   },
-   {
-    "text": "It helps your friend pick games and words.",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_age_bands": [
-   {
-    "text": "5-6",
-    "expr": "happy"
-   },
-   {
-    "text": "7-8",
-    "expr": "happy"
-   },
-   {
-    "text": "9-10",
-    "expr": "happy"
-   }
-  ],
-  "ui_ob_star_go": [
-   {
-    "text": "The star is carrying your name to the meadow…",
-    "expr": "happy",
-    "cond": {
-     "varSet": "child_named"
-    }
-   },
-   {
-    "text": "The star is flying down to the meadow…",
-    "expr": "happy",
-    "cond": {
-     "varUnset": "child_named"
-    }
-   }
-  ],
-  "ui_ob_discover": [
-   {
-    "text": "The star landed in the meadow. Something is moving… Tap one!",
-    "expr": "happy"
-   },
-   {
-    "text": "Something is moving… Pick one!",
-    "expr": "happy"
-   }
-  ],
-  "ui_title_hint": [
-   {
-    "text": "{name} is playing nearby!",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_hold": [
-   {
-    "text": "Grown-ups: press and hold",
-    "expr": "happy"
-   },
-   {
-    "text": "Grown-ups: hold A and B",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_question": [
-   {
-    "text": "Grown-ups only. What is {var:gateA} x {var:gateB}?",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_wrong": [
-   {
-    "text": "That one's for grown-ups. Back to play!",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_title": [
-   {
-    "text": "Grown-ups corner",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_privacy": [
-   {
-    "text": "The name and age range stay on this device. Nothing is sent anywhere. No accounts, no ads, no birthdays.",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_items": [
-   {
-    "text": "Name or nickname",
-    "expr": "happy"
-   },
-   {
-    "text": "Age range",
-    "expr": "happy"
-   },
-   {
-    "text": "Words on screen",
-    "expr": "happy"
-   },
-   {
-    "text": "Game level",
-    "expr": "happy"
-   },
-   {
-    "text": "Music",
-    "expr": "happy"
-   },
-   {
-    "text": "Chirp sounds",
-    "expr": "happy"
-   },
-   {
-    "text": "Calm effects",
-    "expr": "happy"
-   },
-   {
-    "text": "Quiet hours",
-    "expr": "happy"
-   },
-   {
-    "text": "Let {name} stay a while",
-    "expr": "happy"
-   },
-   {
-    "text": "Shared device",
-    "expr": "happy"
-   },
-   {
-    "text": "Clock",
-    "expr": "happy"
-   },
-   {
-    "text": "Start over",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_reset": [
-   {
-    "text": "This erases the name, the age range, {name} and every memory on this device. It can't be undone.",
-    "expr": "happy"
-   },
-   {
-    "text": "Hold to erase",
-    "expr": "happy"
-   },
-   {
-    "text": "Erased. A new friend is on its way.",
-    "expr": "happy"
-   }
-  ],
-  "ui_pc_done": [
-   {
-    "text": "Back to play",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_welcome": [
-   {
-    "text": "Every animal hums a little song. Echoes are made of those songs, and light.",
-    "expr": "happy"
-   },
-   {
-    "text": "When you find an animal, you can invite its Echo to come along.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_seen_ask": [
-   {
-    "text": "Who did you see today?",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_seen_hint": [
-   {
-    "text": "A pet, a park bird, a book or a toy all count!",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_colours_ask": [
-   {
-    "text": "What colour was your {var:origin_animal}?",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_colours_hint": [
-   {
-    "text": "Pick one.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_colours_toy": [
-   {
-    "text": "Toy colours",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_not_sure": [
-   {
-    "text": "I'm not sure",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_hum": [
-   {
-    "text": "Shh... listen. Something is humming the song of the {var:origin_animal} you saw.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_invite_ask": [
-   {
-    "text": "It might like to come along with you. Ask it!",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_invite_btn": [
-   {
-    "text": "Come along?",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_keep_colours": [
-   {
-    "text": "It's keeping your {var:origin_animal}'s colour. It glows brighter as you get to know each other.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_family": [
-   {
-    "text": "A {var:family}! {var:family_plural} are Echoes of dog, fox and wolf songs.",
-    "expr": "happy"
-   },
-   {
-    "text": "A {var:family}! {var:family_plural} are Echoes of bird songs.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_song_heard": [
-   {
-    "text": "Song heard:",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_find_friend": [
-   {
-    "text": "Find a friend",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_other_family": [
-   {
-    "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colour.",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_name_ask": [
-   {
-    "text": "What will you call your new friend?",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_name_more": [
-   {
-    "text": "More",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_name_type": [
-   {
-    "text": "Type it",
-    "expr": "happy"
-   }
-  ],
-  "ui_or_name_keep": [
-   {
-    "text": "Just \"{var:default_name}\"",
-    "expr": "happy"
-   }
-  ]
- },
- "conversations": [
-  {
-   "id": "shared_feelings_check",
-   "trigger": "idle",
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "My day was full of little things. Was yours a sunny one?",
-     "expr": "curious",
-     "choices": [
+  "version": 2,
+  "species": "shared",
+  "vars": {},
+  "barks": {
+    "napping": [
       {
-       "icon": "😊",
-       "label": "Good!",
-       "goto": "good",
-       "reply": "Good days are the best kind. Yay! (a happy little wiggle)",
-       "expr": "happy"
+        "text": "Zzz… ({name} is napping. It will wake soon.)",
+        "expr": "sleepy"
       },
       {
-       "icon": "😐",
-       "label": "Okay",
-       "goto": "okay",
-       "reply": "Okay days are allowed. They're like plain toast. Still toast."
+        "text": "Zzz… ({name} is curled up, dreaming something nice.)",
+        "expr": "sleepy"
       },
       {
-       "icon": "😢",
-       "label": "Not great",
-       "goto": "hard",
-       "reply": "Oh. Then I'll sit right here with you. You don't have to say anything.",
-       "expr": "sad"
-      },
-      {
-       "icon": "🤫",
-       "label": "Just sit",
-       "goto": "sit",
-       "reply": "(It settles in beside you, warm and quiet.)",
-       "expr": "love"
+        "text": "({name} twitches in its sleep. A happy dream, probably.)",
+        "expr": "sleepy"
       }
-     ]
-    },
-    "good": {
-     "say": "Sunny days are good for playing. Want to play something?",
-     "expr": "happy",
-     "choices": [
+    ],
+    "last_day": [
       {
-       "icon": "🎲",
-       "label": "Let's play!",
-       "reply": "Yes! Tap Play whenever you like.",
-       "expr": "excited",
-       "react": "happy"
+        "text": "Tomorrow I'll go home. Let's make today a really good one.",
+        "expr": "love"
+      }
+    ],
+    "stay_more": [
+      {
+        "text": "I can stay a little longer. A few more days. Then I really should go live my wild life.",
+        "expr": "love",
+        "react": "happy"
       },
       {
-       "icon": "🙂",
-       "label": "Maybe later",
-       "reply": "Okay! Later is good too."
+        "text": "A few more days together. Then home, to my wild life.",
+        "expr": "love",
+        "react": "happy"
       }
-     ]
-    },
-    "okay": {
-     "say": "Want to do something fun together after this?",
-     "expr": "curious",
-     "choices": [
+    ],
+    "hug_more": [
       {
-       "icon": "🎲",
-       "label": "Play",
-       "reply": "Yes! Tap Play whenever you want."
+        "text": "Mmm. Okay, one more is allowed.",
+        "expr": "love",
+        "react": "pet"
       },
       {
-       "icon": "💗",
-       "label": "Cuddle",
-       "reply": "Cuddles it is.",
-       "expr": "love",
-       "react": "pet"
+        "text": "That one was the best one yet.",
+        "expr": "love",
+        "react": "pet"
+      },
+      {
+        "text": "That one was extra warm.",
+        "expr": "love",
+        "react": "pet"
       }
-     ]
-    },
-    "hard": {
-     "say": "…",
-     "expr": "love",
-     "next": "hard2",
-     "wait": 2200
-    },
-    "hard2": {
-     "say": "I'm really glad you're here with me.",
-     "expr": "love"
-    },
-    "sit": {
-     "say": "…",
-     "expr": "love"
-    }
-   },
-   "weight": 1,
-   "cond": {
-    "bondMin": 140
-   },
-   "privacy": "feelings: respond in the moment, never store"
+    ],
+    "gift_ask": [
+      {
+        "text": "Before I go… can I take something with me? Something to remember you by.",
+        "expr": "curious"
+      }
+    ],
+    "gift_got": [
+      {
+        "text": "The {gift}! I'll keep it always. Always always.",
+        "expr": "excited",
+        "react": "excited"
+      },
+      {
+        "text": "I'll keep the {gift} somewhere safe. Somewhere special.",
+        "expr": "love",
+        "react": "happy"
+      }
+    ],
+    "farewell": [
+      {
+        "text": "I'm so excited and a tiny bit sad, both at once. You helped me grow strong. Thank you, {child}.",
+        "expr": "love",
+        "caption": "{name} {trust}."
+      }
+    ],
+    "look_back": [
+      {
+        "text": "",
+        "expr": "happy",
+        "gesture": "curious"
+      },
+      {
+        "text": "",
+        "expr": "happy",
+        "gesture": "curious"
+      }
+    ],
+    "walk_memory": [
+      {
+        "text": "Remember? {memory}.",
+        "expr": "happy"
+      },
+      {
+        "text": "I still think about it: {memory}.",
+        "expr": "love"
+      }
+    ],
+    "first_gift": [
+      {
+        "text": "{name} gives you a {treasure} it was saving. \"For you. Keep it safe.\"",
+        "expr": "love"
+      }
+    ],
+    "favplace": [
+      {
+        "text": "{name} shows you its {place}. Naps there are extra cozy now.",
+        "expr": "happy"
+      }
+    ],
+    "trust": [
+      {
+        "text": "{name} {trust}.",
+        "expr": "love"
+      }
+    ],
+    "time_morning": [
+      {
+        "text": "Good morning. The day is brand new.",
+        "expr": "happy",
+        "cond": {
+          "time": [
+            "morning"
+          ]
+        }
+      }
+    ],
+    "time_evening": [
+      {
+        "text": "The day is winding down. Cozy time.",
+        "expr": "love",
+        "cond": {
+          "time": [
+            "evening"
+          ]
+        }
+      }
+    ],
+    "fallback_any": [
+      {
+        "text": "I like that answer.",
+        "expr": "happy"
+      },
+      {
+        "text": "That made me smile.",
+        "expr": "happy"
+      },
+      {
+        "text": "Good answer. A very good one.",
+        "expr": "happy"
+      }
+    ],
+    "ui_list_title": [
+      {
+        "text": "{name}'s farewell list",
+        "expr": "happy"
+      }
+    ],
+    "ui_list_items": [
+      {
+        "text": "Play {var:listGame} together",
+        "expr": "happy"
+      },
+      {
+        "text": "Share {fav}",
+        "expr": "happy"
+      },
+      {
+        "text": "Build one more floor",
+        "expr": "happy"
+      },
+      {
+        "text": "Leaf Trail or Firefly Parade",
+        "expr": "happy"
+      },
+      {
+        "text": "Tell our favorite story",
+        "expr": "happy"
+      },
+      {
+        "text": "A cozy sit together",
+        "expr": "happy"
+      }
+    ],
+    "ui_path_button": [
+      {
+        "text": "Walk to the meadow's edge",
+        "expr": "happy"
+      },
+      {
+        "text": "Sit on the twilight branch",
+        "expr": "happy"
+      }
+    ],
+    "ui_choice_ask": [
+      {
+        "text": "Let's go together",
+        "expr": "happy"
+      },
+      {
+        "text": "Not yet",
+        "expr": "happy"
+      }
+    ],
+    "ui_choice_time": [
+      {
+        "text": "Let's go",
+        "expr": "happy"
+      },
+      {
+        "text": "One more hug",
+        "expr": "happy"
+      },
+      {
+        "text": "One more game first",
+        "expr": "happy"
+      }
+    ],
+    "ui_choice_thanks": [
+      {
+        "text": "Hug",
+        "expr": "happy"
+      },
+      {
+        "text": "Wave",
+        "expr": "happy"
+      },
+      {
+        "text": "Nose-tap",
+        "expr": "happy"
+      },
+      {
+        "text": "Thank you too!",
+        "expr": "happy"
+      }
+    ],
+    "ui_choice_next": [
+      {
+        "text": "Okay!",
+        "expr": "happy"
+      },
+      {
+        "text": "Will you write a lot?",
+        "expr": "happy"
+      },
+      {
+        "text": "Hug first",
+        "expr": "happy"
+      }
+    ],
+    "ui_sibling_card": [
+      {
+        "text": "This walk is for {child} and {name}. Is {child} here?",
+        "expr": "happy"
+      },
+      {
+        "text": "Yes, I'm here!",
+        "expr": "happy"
+      },
+      {
+        "text": "I'll go get {child}",
+        "expr": "happy"
+      }
+    ],
+    "ui_closure": [
+      {
+        "text": "{name} is home in the wild, carrying your world.",
+        "expr": "happy"
+      },
+      {
+        "text": "You helped it grow bright and brave.",
+        "expr": "happy"
+      },
+      {
+        "text": "First postcard: after one sleep.",
+        "expr": "happy"
+      }
+    ],
+    "ui_after_day0": [
+      {
+        "text": "{name} is home in the wild. The first postcard comes after one sleep.",
+        "expr": "happy"
+      }
+    ],
+    "ui_after_later": [
+      {
+        "text": "{name} is home in the wild. Postcards arrive now and then.",
+        "expr": "happy"
+      }
+    ],
+    "ui_keepsake": [
+      {
+        "text": "Glow-leaf from {name}",
+        "expr": "happy"
+      },
+      {
+        "text": "Starlight feather from {name}",
+        "expr": "happy"
+      }
+    ],
+    "ui_tagline": [
+      {
+        "text": "ECHO: Every creature has a story to share. Can you hear it?",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_tap_start": [
+      {
+        "text": "Tap to start",
+        "expr": "happy"
+      },
+      {
+        "text": "A: start",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_welcome": [
+      {
+        "text": "Look! A falling star.",
+        "expr": "happy"
+      },
+      {
+        "text": "It's a listening star. It carries names to new friends.",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_ask": [
+      {
+        "text": "What should your new friend call you?",
+        "expr": "happy"
+      },
+      {
+        "text": "What should your friend call you?",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_hint": [
+      {
+        "text": "A first name or a nickname. A grown-up can help!",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_presets": [
+      {
+        "text": "Or pick a nickname:",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_presets": [
+      {
+        "text": "Star",
+        "expr": "happy"
+      },
+      {
+        "text": "Sunny",
+        "expr": "happy"
+      },
+      {
+        "text": "Pip",
+        "expr": "happy"
+      },
+      {
+        "text": "Bean",
+        "expr": "happy"
+      },
+      {
+        "text": "Comet",
+        "expr": "happy"
+      },
+      {
+        "text": "Pebble",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_skip": [
+      {
+        "text": "Skip",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_confirm": [
+      {
+        "text": "{child}? Is that right?",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_yes_change": [
+      {
+        "text": "Yes!",
+        "expr": "happy"
+      },
+      {
+        "text": "Change",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_again": [
+      {
+        "text": "Hmm, let's pick a different name.",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_name_short": [
+      {
+        "text": "Just a first name is plenty!",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_age_ask": [
+      {
+        "text": "How old are you?",
+        "expr": "happy"
+      },
+      {
+        "text": "It helps your friend pick games and words.",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_age_bands": [
+      {
+        "text": "5-6",
+        "expr": "happy"
+      },
+      {
+        "text": "7-8",
+        "expr": "happy"
+      },
+      {
+        "text": "9-10",
+        "expr": "happy"
+      }
+    ],
+    "ui_ob_star_go": [
+      {
+        "text": "The star is carrying your name to the meadow…",
+        "expr": "happy",
+        "cond": {
+          "varSet": "child_named"
+        }
+      },
+      {
+        "text": "The star is flying down to the meadow…",
+        "expr": "happy",
+        "cond": {
+          "varUnset": "child_named"
+        }
+      }
+    ],
+    "ui_ob_discover": [
+      {
+        "text": "The star landed in the meadow. Something is moving… Tap one!",
+        "expr": "happy"
+      },
+      {
+        "text": "Something is moving… Pick one!",
+        "expr": "happy"
+      }
+    ],
+    "ui_title_hint": [
+      {
+        "text": "{name} is playing nearby!",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_hold": [
+      {
+        "text": "Grown-ups: press and hold",
+        "expr": "happy"
+      },
+      {
+        "text": "Grown-ups: hold A and B",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_question": [
+      {
+        "text": "Grown-ups only. What is {var:gateA} x {var:gateB}?",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_wrong": [
+      {
+        "text": "That one's for grown-ups. Back to play!",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_title": [
+      {
+        "text": "Grown-ups corner",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_privacy": [
+      {
+        "text": "The name and age range stay on this device. Nothing is sent anywhere. No accounts, no ads, no birthdays.",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_items": [
+      {
+        "text": "Name or nickname",
+        "expr": "happy"
+      },
+      {
+        "text": "Age range",
+        "expr": "happy"
+      },
+      {
+        "text": "Words on screen",
+        "expr": "happy"
+      },
+      {
+        "text": "Game level",
+        "expr": "happy"
+      },
+      {
+        "text": "Music",
+        "expr": "happy"
+      },
+      {
+        "text": "Chirp sounds",
+        "expr": "happy"
+      },
+      {
+        "text": "Calm effects",
+        "expr": "happy"
+      },
+      {
+        "text": "Quiet hours",
+        "expr": "happy"
+      },
+      {
+        "text": "Let {name} stay a while",
+        "expr": "happy"
+      },
+      {
+        "text": "Shared device",
+        "expr": "happy"
+      },
+      {
+        "text": "Clock",
+        "expr": "happy"
+      },
+      {
+        "text": "Start over",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_reset": [
+      {
+        "text": "This erases the name, the age range, {name} and every memory on this device. It can't be undone.",
+        "expr": "happy"
+      },
+      {
+        "text": "Hold to erase",
+        "expr": "happy"
+      },
+      {
+        "text": "Erased. A new friend is on its way.",
+        "expr": "happy"
+      }
+    ],
+    "ui_pc_done": [
+      {
+        "text": "Back to play",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_welcome": [
+      {
+        "text": "Every animal hums a little song. Echoes are made of those songs, and light.",
+        "expr": "happy"
+      },
+      {
+        "text": "When you find an animal, you can invite its Echo to come along.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_seen_ask": [
+      {
+        "text": "Who did you see today?",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_seen_hint": [
+      {
+        "text": "A pet, a park bird, a book or a toy all count!",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_colours_ask": [
+      {
+        "text": "What colour was your {var:origin_animal}?",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_colours_hint": [
+      {
+        "text": "Pick one.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_colours_toy": [
+      {
+        "text": "Toy colours",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_not_sure": [
+      {
+        "text": "I'm not sure",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_hum": [
+      {
+        "text": "Shh... listen. Something is humming the song of the {var:origin_animal} you saw.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_invite_ask": [
+      {
+        "text": "It might like to come along with you. Ask it!",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_invite_btn": [
+      {
+        "text": "Come along?",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_keep_colours": [
+      {
+        "text": "It's keeping your {var:origin_animal}'s colour. It glows brighter as you get to know each other.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_family": [
+      {
+        "text": "A {var:family}! {var:family_plural} are Echoes of dog, fox and wolf songs.",
+        "expr": "happy"
+      },
+      {
+        "text": "A {var:family}! {var:family_plural} are Echoes of bird songs.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_song_heard": [
+      {
+        "text": "Song heard:",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_find_friend": [
+      {
+        "text": "Find a friend",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_other_family": [
+      {
+        "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colour.",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_name_ask": [
+      {
+        "text": "What will you call your new friend?",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_name_more": [
+      {
+        "text": "More",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_name_type": [
+      {
+        "text": "Type it",
+        "expr": "happy"
+      }
+    ],
+    "ui_or_name_keep": [
+      {
+        "text": "Just \"{var:default_name}\"",
+        "expr": "happy"
+      }
+    ]
   },
-  {
-   "id": "shared_rock",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Look… a smooth rock. It fits in a paw perfectly.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
+  "conversations": [
+    {
+      "id": "shared_feelings_check",
+      "trigger": "idle",
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "My day was full of little things. Was yours a sunny one?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "😊",
+              "label": "Good!",
+              "goto": "good",
+              "reply": "Good days are the best kind. Yay!",
+              "expr": "happy",
+              "gesture": "pounce"
+            },
+            {
+              "icon": "😐",
+              "label": "Okay",
+              "goto": "okay",
+              "reply": "Okay days are allowed. They're like plain toast. Still toast."
+            },
+            {
+              "icon": "😢",
+              "label": "Not great",
+              "goto": "hard",
+              "reply": "Then I'll sit right here with you. You don't have to say anything.",
+              "expr": "sad"
+            },
+            {
+              "icon": "🤫",
+              "label": "Just sit",
+              "goto": "sit",
+              "reply": "",
+              "expr": "love",
+              "gesture": "settle"
+            }
+          ]
+        },
+        "good": {
+          "say": "Sunny days are good for playing. Want to play something?",
+          "expr": "happy",
+          "choices": [
+            {
+              "icon": "🎲",
+              "label": "Let's play!",
+              "reply": "Yes! Tap Play whenever you like.",
+              "expr": "excited",
+              "react": "happy"
+            },
+            {
+              "icon": "🙂",
+              "label": "Maybe later",
+              "reply": "Okay! Later is good too."
+            }
+          ]
+        },
+        "okay": {
+          "say": "Want to do something fun together after this?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🎲",
+              "label": "Play",
+              "reply": "Yes! Tap Play whenever you want."
+            },
+            {
+              "icon": "💗",
+              "label": "Cuddle",
+              "reply": "Cuddles it is.",
+              "expr": "love",
+              "react": "pet"
+            }
+          ]
+        },
+        "hard": {
+          "say": "…",
+          "expr": "love",
+          "next": "hard2",
+          "wait": 2200
+        },
+        "hard2": {
+          "say": "I'm really glad you're here with me.",
+          "expr": "love"
+        },
+        "sit": {
+          "say": "…",
+          "expr": "love"
+        }
+      },
+      "weight": 1,
+      "cond": {
+        "bondMin": 140
+      },
+      "privacy": "feelings: respond in the moment, never store"
     },
-    "b": {
-     "say": "Where do smooth rocks get smooth?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌊",
-       "label": "The river",
-       "reply": "The river polished it. For a long, long time.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_rock": "The river"
-       },
-       "memory": "You picked: The river (rock)",
-       "memoryTag": "shared_rock"
-      },
-      {
-       "icon": "🤲",
-       "label": "Lots of holding",
-       "reply": "Lots of holding. Maybe someone held it a lot.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_rock": "Lots of holding"
-       },
-       "memory": "You picked: Lots of holding (rock)",
-       "memoryTag": "shared_rock"
-      },
-      {
-       "icon": "✨",
-       "label": "Magic",
-       "reply": "Magic smoothing. A gentle kind.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_rock": "Magic"
-       },
-       "memory": "You picked: Magic (rock)",
-       "memoryTag": "shared_rock"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "I'll keep turning that one over. Like the rock.",
-       "goto": "c"
+    {
+      "id": "shared_rock",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Look… a smooth rock. It fits in a paw perfectly.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Where do smooth rocks get smooth?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🌊",
+              "label": "The river",
+              "reply": "The river polished it. For a long, long time.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_rock": "The river"
+              },
+              "memory": "You picked: The river (rock)",
+              "memoryTag": "shared_rock"
+            },
+            {
+              "icon": "🤲",
+              "label": "Lots of holding",
+              "reply": "Lots of holding. Maybe someone held it a lot.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_rock": "Lots of holding"
+              },
+              "memory": "You picked: Lots of holding (rock)",
+              "memoryTag": "shared_rock"
+            },
+            {
+              "icon": "✨",
+              "label": "Magic",
+              "reply": "Magic smoothing. A gentle kind.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_rock": "Magic"
+              },
+              "memory": "You picked: Magic (rock)",
+              "memoryTag": "shared_rock"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "I'll keep turning that one over. Like the rock.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Smooth thoughts. Smooth rock. Good pair.",
+          "expr": "love",
+          "bond": 1
+        }
       }
-     ]
     },
-    "c": {
-     "say": "Smooth thoughts. Smooth rock. Good pair.",
-     "expr": "love",
-     "bond": 1
+    {
+      "id": "shared_sky",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "The sky is a different color than yesterday. I think.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What color is the sky right now?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "💙",
+              "label": "Blue",
+              "reply": "Blue. The most sky color of all.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sky": "Blue"
+              },
+              "memory": "You picked: Blue (sky)",
+              "memoryTag": "shared_sky"
+            },
+            {
+              "icon": "🩷",
+              "label": "Pink",
+              "reply": "Pink! The sky is blushing a little.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sky": "Pink"
+              },
+              "memory": "You picked: Pink (sky)",
+              "memoryTag": "shared_sky"
+            },
+            {
+              "icon": "🩶",
+              "label": "Grey",
+              "reply": "Grey. A cozy-blanket kind of sky.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sky": "Grey"
+              },
+              "memory": "You picked: Grey (sky)",
+              "memoryTag": "shared_sky"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "The sky will keep changing while we wonder.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Tomorrow's sky will be a different one. That's the fun of it.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_sound",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Listen… do you hear that little sound?",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What do you think it is?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🐦",
+              "label": "A bird",
+              "reply": "A bird! Saying something. Probably hello.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sound": "A bird"
+              },
+              "memory": "You picked: A bird (sound)",
+              "memoryTag": "shared_sound"
+            },
+            {
+              "icon": "🍃",
+              "label": "The leaves",
+              "reply": "The leaves are whispering to each other.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sound": "The leaves"
+              },
+              "memory": "You picked: The leaves (sound)",
+              "memoryTag": "shared_sound"
+            },
+            {
+              "icon": "🤷",
+              "label": "No idea",
+              "reply": "No idea. A mystery sound. I like it.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_sound": "No idea"
+              },
+              "memory": "You picked: No idea (sound)",
+              "memoryTag": "shared_sound"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Let's both listen for it again.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Sounds come and go. That one was a nice visitor.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_gift",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "I found a tiny thing today. For the memory book.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What should we call it?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "💎",
+              "label": "A treasure",
+              "reply": "A treasure. Yes. That's what it is.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_gift": "A treasure"
+              },
+              "memory": "You picked: A treasure (gift)",
+              "memoryTag": "shared_gift"
+            },
+            {
+              "icon": "🎁",
+              "label": "A present",
+              "reply": "A present. From the day, to us.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_gift": "A present"
+              },
+              "memory": "You picked: A present (gift)",
+              "memoryTag": "shared_gift"
+            },
+            {
+              "icon": "🙂",
+              "label": "Just a thing",
+              "reply": "Just a thing. A good thing.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_gift": "Just a thing"
+              },
+              "memory": "You picked: Just a thing (gift)",
+              "memoryTag": "shared_gift"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Some little things don't need a name.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "It goes in the memory book. Right in the middle.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_color",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "If I could be any color for a day…",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Which color should I be?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🟣",
+              "label": "Purple",
+              "reply": "Purple! Like a berry. Like dusk.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_color": "Purple"
+              },
+              "memory": "You picked: Purple (color)",
+              "memoryTag": "shared_color"
+            },
+            {
+              "icon": "🟢",
+              "label": "Green",
+              "reply": "Green, like the grass. I'd hide so well.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_color": "Green"
+              },
+              "memory": "You picked: Green (color)",
+              "memoryTag": "shared_color"
+            },
+            {
+              "icon": "🌈",
+              "label": "All of them",
+              "reply": "All of them? A rainbow me. Wow.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_color": "All of them"
+              },
+              "memory": "You picked: All of them (color)",
+              "memoryTag": "shared_color"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "I'll try all the colors in my head.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "For now I'll stay my own color. It suits me.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_weekend",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Some days feel long and slow, like a stretch.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Do you like slow days or busy days?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🐢",
+              "label": "Slow days",
+              "reply": "Slow days. Me too. Lots of time to notice things.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_weekend": "Slow days"
+              },
+              "memory": "You picked: Slow days (weekend)",
+              "memoryTag": "shared_weekend"
+            },
+            {
+              "icon": "🏃",
+              "label": "Busy days",
+              "reply": "Busy days! So much happens. Whoosh.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_weekend": "Busy days"
+              },
+              "memory": "You picked: Busy days (weekend)",
+              "memoryTag": "shared_weekend"
+            },
+            {
+              "icon": "🔀",
+              "label": "Both",
+              "reply": "Both. Some of each. That's a good answer.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_weekend": "Both"
+              },
+              "memory": "You picked: Both (weekend)",
+              "memoryTag": "shared_weekend"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Slow or busy. Both have good parts.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Whatever kind of day it is, this part is nice.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_song",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "I made up a song. It only has one word.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Want to hear it?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "👍",
+              "label": "Yes!",
+              "reply": "La. …That was it. La.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_song": "Yes!"
+              },
+              "memory": "You picked: Yes (song)",
+              "memoryTag": "shared_song"
+            },
+            {
+              "icon": "🎤",
+              "label": "Sing it louder!",
+              "reply": "LA! …Okay, a little louder. La.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_song": "Sing it louder!"
+              },
+              "memory": "You picked: Sing it louder (song)",
+              "memoryTag": "shared_song"
+            },
+            {
+              "icon": "🎶",
+              "label": "Add a word!",
+              "reply": "La-dee! Now it has two. You helped.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_song": "Add a word!"
+              },
+              "memory": "You picked: Add a word (song)",
+              "memoryTag": "shared_song"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "La. …That was my whole song.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "One word, two words. Still a song.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_seasons",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "The leaves outside are changing. A little every day.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What's your favorite season?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🌸",
+              "label": "Spring",
+              "reply": "Spring. When everything wakes up.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_seasons": "Spring"
+              },
+              "memory": "You picked: Spring (seasons)",
+              "memoryTag": "shared_seasons"
+            },
+            {
+              "icon": "☀️",
+              "label": "Summer",
+              "reply": "Summer. Long warm evenings.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_seasons": "Summer"
+              },
+              "memory": "You picked: Summer (seasons)",
+              "memoryTag": "shared_seasons"
+            },
+            {
+              "icon": "❄️",
+              "label": "Winter",
+              "reply": "Winter. Snow and cozy blankets.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_seasons": "Winter"
+              },
+              "memory": "You picked: Winter (seasons)",
+              "memoryTag": "shared_seasons"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Every season has something to notice.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "The leaves will tell us when it changes.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_pretend_boat",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "What if we had a boat? A tiny one?",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Where would our boat go?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🏝️",
+              "label": "An island",
+              "reply": "An island! With one palm tree. And us.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_pretend_boat": "An island"
+              },
+              "memory": "You picked: An island (pretend boat)",
+              "memoryTag": "shared_pretend_boat"
+            },
+            {
+              "icon": "🌙",
+              "label": "The moon",
+              "reply": "A moon boat! Floating up. Very slowly.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_pretend_boat": "The moon"
+              },
+              "memory": "You picked: The moon (pretend boat)",
+              "memoryTag": "shared_pretend_boat"
+            },
+            {
+              "icon": "🛁",
+              "label": "The bathtub",
+              "reply": "The bathtub. Very brave boat.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_pretend_boat": "The bathtub"
+              },
+              "memory": "You picked: The bathtub (pretend boat)",
+              "memoryTag": "shared_pretend_boat"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Our pretend boat can go anywhere.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Pretend boats never get wet socks. Good boats.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_drawing",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "If I could draw, I'd draw something round.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What should I draw?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "The sun",
+              "reply": "The sun. A round, happy one.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_drawing": "The sun"
+              },
+              "memory": "You picked: The sun (drawing)",
+              "memoryTag": "shared_drawing"
+            },
+            {
+              "icon": "🍪",
+              "label": "A cookie",
+              "reply": "A cookie. Then I'd want a cookie.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_drawing": "A cookie"
+              },
+              "memory": "You picked: A cookie (drawing)",
+              "memoryTag": "shared_drawing"
+            },
+            {
+              "icon": "🙂",
+              "label": "A face",
+              "reply": "A face. Smiling. Like that.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_drawing": "A face"
+              },
+              "memory": "You picked: A face (drawing)",
+              "memoryTag": "shared_drawing"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "A round thing. Maybe a pebble. Maybe a moon.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "I'll draw it in the air. There.",
+          "expr": "love",
+          "bond": 1,
+          "gesture": "wave"
+        }
+      }
+    },
+    {
+      "id": "shared_hug",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Do you know what's nice? A hug that lasts a little long.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Big hug or small hug?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🤗",
+              "label": "Big hug",
+              "reply": "A big one. Mmm.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_hug": "Big hug"
+              },
+              "memory": "You picked: Big hug (hug)",
+              "memoryTag": "shared_hug"
+            },
+            {
+              "icon": "🤏",
+              "label": "Small hug",
+              "reply": "A small one. Still counts.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_hug": "Small hug"
+              },
+              "memory": "You picked: Small hug (hug)",
+              "memoryTag": "shared_hug"
+            },
+            {
+              "icon": "🙅",
+              "label": "No hug now",
+              "reply": "That's okay. We can just sit.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_hug": "No hug now"
+              },
+              "memory": "You picked: No hug now (hug)",
+              "memoryTag": "shared_hug"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "We can just sit. That's nice too.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Hugs and sitting. Both are good.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_dream_shared",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "I had a dream I was a cloud. A very soft one.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "Do you think clouds dream?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "💭",
+              "label": "Yes!",
+              "reply": "Cloud dreams. Floaty ones.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_dream_shared": "Yes!"
+              },
+              "memory": "You picked: Yes (dream shared)",
+              "memoryTag": "shared_dream_shared"
+            },
+            {
+              "icon": "🙅",
+              "label": "No",
+              "reply": "No dreams? Then they just float. That's nice too.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_dream_shared": "No"
+              },
+              "memory": "You picked: No (dream shared)",
+              "memoryTag": "shared_dream_shared"
+            },
+            {
+              "icon": "🤷",
+              "label": "Maybe",
+              "reply": "Maybe. Maybe they dream about rain.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_dream_shared": "Maybe"
+              },
+              "memory": "You picked: Maybe (dream shared)",
+              "memoryTag": "shared_dream_shared"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Maybe dreams are clouds for sleeping.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Floaty thoughts. I like those.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_number",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Three is a good number. It has a nice shape.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What's your favorite number?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "1️⃣",
+              "label": "One",
+              "reply": "One. Just one. Simple and brave.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_number": "One"
+              },
+              "memory": "You picked: One (number)",
+              "memoryTag": "shared_number"
+            },
+            {
+              "icon": "7️⃣",
+              "label": "Seven",
+              "reply": "Seven. That one sounds lucky.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_number": "Seven"
+              },
+              "memory": "You picked: Seven (number)",
+              "memoryTag": "shared_number"
+            },
+            {
+              "icon": "💯",
+              "label": "A hundred",
+              "reply": "A hundred! That's a whole lot of ones.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_number": "A hundred"
+              },
+              "memory": "You picked: A hundred (number)",
+              "memoryTag": "shared_number"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "All the numbers are good at something.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "I'll count the stars to that number later.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_smell",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "The air smells different today. Like rain, maybe.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What's the best smell?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🌧️",
+              "label": "Rain",
+              "reply": "Rain. The ground smells fresh.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_smell": "Rain"
+              },
+              "memory": "You picked: Rain (smell)",
+              "memoryTag": "shared_smell"
+            },
+            {
+              "icon": "🍪",
+              "label": "Cookies",
+              "reply": "Cookies. Warm ones.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_smell": "Cookies"
+              },
+              "memory": "You picked: Cookies (smell)",
+              "memoryTag": "shared_smell"
+            },
+            {
+              "icon": "🌸",
+              "label": "Flowers",
+              "reply": "Flowers. Of course. The flowers would agree.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_smell": "Flowers"
+              },
+              "memory": "You picked: Flowers (smell)",
+              "memoryTag": "shared_smell"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "Sniff. I'll keep sniffing until I decide.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Smells are like little memories in the air.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
+    },
+    {
+      "id": "shared_walk",
+      "trigger": "idle",
+      "weight": 1,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "If we went on a walk, I'd want to see everything.",
+          "expr": "curious",
+          "next": "b",
+          "wait": 2200
+        },
+        "b": {
+          "say": "What should we find on our walk?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🐌",
+              "label": "A snail",
+              "reply": "A snail. We'd walk very slowly together.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_walk": "A snail"
+              },
+              "memory": "You picked: A snail (walk)",
+              "memoryTag": "shared_walk"
+            },
+            {
+              "icon": "🪨",
+              "label": "A cool rock",
+              "reply": "A cool rock. One for the memory book.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_walk": "A cool rock"
+              },
+              "memory": "You picked: A cool rock (walk)",
+              "memoryTag": "shared_walk"
+            },
+            {
+              "icon": "🌈",
+              "label": "A rainbow",
+              "reply": "A rainbow. We'd have to be lucky.",
+              "expr": "happy",
+              "goto": "c",
+              "set": {
+                "sh_walk": "A rainbow"
+              },
+              "memory": "You picked: A rainbow (walk)",
+              "memoryTag": "shared_walk"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "We'd find something good. We always do.",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "A pretend walk still counts as a walk.",
+          "expr": "love",
+          "bond": 1
+        }
+      }
     }
-   }
+  ],
+  "replyPools": {
+    "yes": {
+      "icon": "👍",
+      "phrases": [
+        {
+          "text": "Yes!"
+        },
+        {
+          "text": "Yep!"
+        },
+        {
+          "text": "Totally!"
+        },
+        {
+          "text": "Uh-huh!"
+        },
+        {
+          "text": "Obviously!"
+        },
+        {
+          "text": "Always!"
+        },
+        {
+          "text": "Of course!"
+        },
+        {
+          "text": "Yes yes yes!"
+        }
+      ]
+    },
+    "no": {
+      "icon": "🙅",
+      "phrases": [
+        {
+          "text": "Nope!"
+        },
+        {
+          "text": "Nuh-uh!"
+        },
+        {
+          "text": "Not really"
+        },
+        {
+          "text": "No way!"
+        },
+        {
+          "text": "Nah!"
+        },
+        {
+          "text": "Not today!"
+        }
+      ]
+    },
+    "unsure": {
+      "icon": "🤔",
+      "phrases": [
+        {
+          "text": "Maybe?"
+        },
+        {
+          "text": "Hmm…"
+        },
+        {
+          "text": "I don't know!"
+        },
+        {
+          "text": "No idea!"
+        },
+        {
+          "text": "Kind of?"
+        },
+        {
+          "text": "Who knows!"
+        }
+      ]
+    },
+    "listen": {
+      "icon": "👂",
+      "phrases": [
+        {
+          "text": "(just listen)"
+        },
+        {
+          "text": "(lean in)"
+        },
+        {
+          "text": "(listen quietly)"
+        },
+        {
+          "text": "(snuggle in and listen)"
+        }
+      ]
+    },
+    "nod": {
+      "icon": "🙂",
+      "phrases": [
+        {
+          "text": "(nod)"
+        },
+        {
+          "text": "(nod nod)"
+        },
+        {
+          "text": "(smile)"
+        },
+        {
+          "text": "(thumbs up)"
+        }
+      ]
+    },
+    "giggle": {
+      "icon": "😆",
+      "phrases": [
+        {
+          "text": "(giggle)"
+        },
+        {
+          "text": "(laugh)"
+        },
+        {
+          "text": "Ha ha!"
+        },
+        {
+          "text": "Hee hee!"
+        },
+        {
+          "text": "(snort-laugh)"
+        },
+        {
+          "text": "Ha!"
+        }
+      ]
+    },
+    "ask_more": {
+      "icon": "🗣️",
+      "phrases": [
+        {
+          "text": "Tell me!"
+        },
+        {
+          "text": "Then what?"
+        },
+        {
+          "text": "What was it?"
+        },
+        {
+          "text": "Tell me more!"
+        },
+        {
+          "text": "And then?"
+        }
+      ]
+    },
+    "later": {
+      "icon": "⏳",
+      "phrases": [
+        {
+          "text": "Later"
+        },
+        {
+          "text": "Maybe later"
+        },
+        {
+          "text": "Another time"
+        },
+        {
+          "text": "Not right now"
+        }
+      ]
+    },
+    "wow": {
+      "icon": "🤩",
+      "phrases": [
+        {
+          "text": "Wow!"
+        },
+        {
+          "text": "Whoa!"
+        },
+        {
+          "text": "Cool!"
+        },
+        {
+          "text": "No way!"
+        },
+        {
+          "text": "Amazing!"
+        }
+      ]
+    },
+    "silly": {
+      "icon": "🤪",
+      "phrases": [
+        {
+          "text": "Something silly!"
+        },
+        {
+          "text": "Banana!"
+        },
+        {
+          "text": "A giant sock!"
+        },
+        {
+          "text": "Wiggly noodles!"
+        }
+      ]
+    }
   },
-  {
-   "id": "shared_sky",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "The sky is a different color than yesterday. I think.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What color is the sky right now?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "💙",
-       "label": "Blue",
-       "reply": "Blue. The most sky color of all.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sky": "Blue"
-       },
-       "memory": "You picked: Blue (sky)",
-       "memoryTag": "shared_sky"
-      },
-      {
-       "icon": "🩷",
-       "label": "Pink",
-       "reply": "Pink! The sky is blushing a little.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sky": "Pink"
-       },
-       "memory": "You picked: Pink (sky)",
-       "memoryTag": "shared_sky"
-      },
-      {
-       "icon": "🩶",
-       "label": "Grey",
-       "reply": "Grey. A cozy-blanket kind of sky.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sky": "Grey"
-       },
-       "memory": "You picked: Grey (sky)",
-       "memoryTag": "shared_sky"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "The sky will keep changing while we wonder.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Tomorrow's sky will be a different one. That's the fun of it.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_sound",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Listen… do you hear that little sound?",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What do you think it is?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🐦",
-       "label": "A bird",
-       "reply": "A bird! Saying something. Probably hello.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sound": "A bird"
-       },
-       "memory": "You picked: A bird (sound)",
-       "memoryTag": "shared_sound"
-      },
-      {
-       "icon": "🍃",
-       "label": "The leaves",
-       "reply": "The leaves are whispering to each other.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sound": "The leaves"
-       },
-       "memory": "You picked: The leaves (sound)",
-       "memoryTag": "shared_sound"
-      },
-      {
-       "icon": "🤷",
-       "label": "No idea",
-       "reply": "No idea. A mystery sound. I like it.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_sound": "No idea"
-       },
-       "memory": "You picked: No idea (sound)",
-       "memoryTag": "shared_sound"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Let's both listen for it again.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Sounds come and go. That one was a nice visitor.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_gift",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "I found a tiny thing today. For the memory book.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What should we call it?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "💎",
-       "label": "A treasure",
-       "reply": "A treasure. Yes. That's what it is.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_gift": "A treasure"
-       },
-       "memory": "You picked: A treasure (gift)",
-       "memoryTag": "shared_gift"
-      },
-      {
-       "icon": "🎁",
-       "label": "A present",
-       "reply": "A present. From the day, to us.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_gift": "A present"
-       },
-       "memory": "You picked: A present (gift)",
-       "memoryTag": "shared_gift"
-      },
-      {
-       "icon": "🙂",
-       "label": "Just a thing",
-       "reply": "Just a thing. A good thing.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_gift": "Just a thing"
-       },
-       "memory": "You picked: Just a thing (gift)",
-       "memoryTag": "shared_gift"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Some little things don't need a name.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "It goes in the memory book. Right in the middle.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_color",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "If I could be any color for a day…",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Which color should I be?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🟣",
-       "label": "Purple",
-       "reply": "Purple! Like a berry. Like dusk.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_color": "Purple"
-       },
-       "memory": "You picked: Purple (color)",
-       "memoryTag": "shared_color"
-      },
-      {
-       "icon": "🟢",
-       "label": "Green",
-       "reply": "Green, like the grass. I'd hide so well.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_color": "Green"
-       },
-       "memory": "You picked: Green (color)",
-       "memoryTag": "shared_color"
-      },
-      {
-       "icon": "🌈",
-       "label": "All of them",
-       "reply": "All of them? A rainbow me. Wow.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_color": "All of them"
-       },
-       "memory": "You picked: All of them (color)",
-       "memoryTag": "shared_color"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "I'll try all the colors in my head.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "For now I'll stay my own color. It suits me.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_weekend",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Some days feel long and slow, like a stretch.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Do you like slow days or busy days?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🐢",
-       "label": "Slow days",
-       "reply": "Slow days. Me too. Lots of time to notice things.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_weekend": "Slow days"
-       },
-       "memory": "You picked: Slow days (weekend)",
-       "memoryTag": "shared_weekend"
-      },
-      {
-       "icon": "🏃",
-       "label": "Busy days",
-       "reply": "Busy days! So much happens. Whoosh.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_weekend": "Busy days"
-       },
-       "memory": "You picked: Busy days (weekend)",
-       "memoryTag": "shared_weekend"
-      },
-      {
-       "icon": "🔀",
-       "label": "Both",
-       "reply": "Both. Some of each. That's a good answer.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_weekend": "Both"
-       },
-       "memory": "You picked: Both (weekend)",
-       "memoryTag": "shared_weekend"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Slow or busy. Both have good parts.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Whatever kind of day it is, this part is nice.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_song",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "I made up a song. It only has one word.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Want to hear it?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "👍",
-       "label": "Yes!",
-       "reply": "La. …That was it. La.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_song": "Yes!"
-       },
-       "memory": "You picked: Yes (song)",
-       "memoryTag": "shared_song"
-      },
-      {
-       "icon": "🎤",
-       "label": "Sing it louder!",
-       "reply": "LA! …Okay, a little louder. La.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_song": "Sing it louder!"
-       },
-       "memory": "You picked: Sing it louder (song)",
-       "memoryTag": "shared_song"
-      },
-      {
-       "icon": "🎶",
-       "label": "Add a word!",
-       "reply": "La-dee! Now it has two. You helped.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_song": "Add a word!"
-       },
-       "memory": "You picked: Add a word (song)",
-       "memoryTag": "shared_song"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "La. …That was my whole song.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "One word, two words. Still a song.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_seasons",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "The leaves outside are changing. A little every day.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What's your favorite season?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌸",
-       "label": "Spring",
-       "reply": "Spring. When everything wakes up.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_seasons": "Spring"
-       },
-       "memory": "You picked: Spring (seasons)",
-       "memoryTag": "shared_seasons"
-      },
-      {
-       "icon": "☀️",
-       "label": "Summer",
-       "reply": "Summer. Long warm evenings.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_seasons": "Summer"
-       },
-       "memory": "You picked: Summer (seasons)",
-       "memoryTag": "shared_seasons"
-      },
-      {
-       "icon": "❄️",
-       "label": "Winter",
-       "reply": "Winter. Snow and cozy blankets.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_seasons": "Winter"
-       },
-       "memory": "You picked: Winter (seasons)",
-       "memoryTag": "shared_seasons"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Every season has something to notice.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "The leaves will tell us when it changes.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_pretend_boat",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "What if we had a boat? A tiny one?",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Where would our boat go?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🏝️",
-       "label": "An island",
-       "reply": "An island! With one palm tree. And us.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_pretend_boat": "An island"
-       },
-       "memory": "You picked: An island (pretend boat)",
-       "memoryTag": "shared_pretend_boat"
-      },
-      {
-       "icon": "🌙",
-       "label": "The moon",
-       "reply": "A moon boat! Floating up. Very slowly.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_pretend_boat": "The moon"
-       },
-       "memory": "You picked: The moon (pretend boat)",
-       "memoryTag": "shared_pretend_boat"
-      },
-      {
-       "icon": "🛁",
-       "label": "The bathtub",
-       "reply": "The bathtub. Very brave boat.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_pretend_boat": "The bathtub"
-       },
-       "memory": "You picked: The bathtub (pretend boat)",
-       "memoryTag": "shared_pretend_boat"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Our pretend boat can go anywhere.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Pretend boats never get wet socks. Good boats.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_drawing",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "If I could draw, I'd draw something round.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What should I draw?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "☀️",
-       "label": "The sun",
-       "reply": "The sun. A round, happy one.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_drawing": "The sun"
-       },
-       "memory": "You picked: The sun (drawing)",
-       "memoryTag": "shared_drawing"
-      },
-      {
-       "icon": "🍪",
-       "label": "A cookie",
-       "reply": "A cookie. Then I'd want a cookie.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_drawing": "A cookie"
-       },
-       "memory": "You picked: A cookie (drawing)",
-       "memoryTag": "shared_drawing"
-      },
-      {
-       "icon": "🙂",
-       "label": "A face",
-       "reply": "A face. Smiling. Like that.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_drawing": "A face"
-       },
-       "memory": "You picked: A face (drawing)",
-       "memoryTag": "shared_drawing"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "A round thing. Maybe a pebble. Maybe a moon.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "I'll draw it in the air. (Swirl.) There.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_hug",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Do you know what's nice? A hug that lasts a little long.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Big hug or small hug?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🤗",
-       "label": "Big hug",
-       "reply": "A big one. (Squeeze.) Mmm.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_hug": "Big hug"
-       },
-       "memory": "You picked: Big hug (hug)",
-       "memoryTag": "shared_hug"
-      },
-      {
-       "icon": "🤏",
-       "label": "Small hug",
-       "reply": "A small one. (A tiny squeeze.) Still counts.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_hug": "Small hug"
-       },
-       "memory": "You picked: Small hug (hug)",
-       "memoryTag": "shared_hug"
-      },
-      {
-       "icon": "🙅",
-       "label": "No hug now",
-       "reply": "That's okay. We can just sit.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_hug": "No hug now"
-       },
-       "memory": "You picked: No hug now (hug)",
-       "memoryTag": "shared_hug"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "We can just sit. That's nice too.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Hugs and sitting. Both are good.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_dream_shared",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "I had a dream I was a cloud. A very soft one.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "Do you think clouds dream?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "💭",
-       "label": "Yes!",
-       "reply": "Cloud dreams. Floaty ones.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_dream_shared": "Yes!"
-       },
-       "memory": "You picked: Yes (dream shared)",
-       "memoryTag": "shared_dream_shared"
-      },
-      {
-       "icon": "🙅",
-       "label": "No",
-       "reply": "No dreams? Then they just float. That's nice too.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_dream_shared": "No"
-       },
-       "memory": "You picked: No (dream shared)",
-       "memoryTag": "shared_dream_shared"
-      },
-      {
-       "icon": "🤷",
-       "label": "Maybe",
-       "reply": "Maybe. Maybe they dream about rain.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_dream_shared": "Maybe"
-       },
-       "memory": "You picked: Maybe (dream shared)",
-       "memoryTag": "shared_dream_shared"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Maybe dreams are clouds for sleeping.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Floaty thoughts. I like those.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_number",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Three is a good number. It has a nice shape.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What's your favorite number?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "1️⃣",
-       "label": "One",
-       "reply": "One. Just one. Simple and brave.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_number": "One"
-       },
-       "memory": "You picked: One (number)",
-       "memoryTag": "shared_number"
-      },
-      {
-       "icon": "7️⃣",
-       "label": "Seven",
-       "reply": "Seven. That one sounds lucky.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_number": "Seven"
-       },
-       "memory": "You picked: Seven (number)",
-       "memoryTag": "shared_number"
-      },
-      {
-       "icon": "💯",
-       "label": "A hundred",
-       "reply": "A hundred! That's a whole lot of ones.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_number": "A hundred"
-       },
-       "memory": "You picked: A hundred (number)",
-       "memoryTag": "shared_number"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "All the numbers are good at something.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "I'll count the stars to that number later.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_smell",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "The air smells different today. Like rain, maybe.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What's the best smell?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌧️",
-       "label": "Rain",
-       "reply": "Rain. The ground smells fresh.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_smell": "Rain"
-       },
-       "memory": "You picked: Rain (smell)",
-       "memoryTag": "shared_smell"
-      },
-      {
-       "icon": "🍪",
-       "label": "Cookies",
-       "reply": "Cookies. Warm ones.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_smell": "Cookies"
-       },
-       "memory": "You picked: Cookies (smell)",
-       "memoryTag": "shared_smell"
-      },
-      {
-       "icon": "🌸",
-       "label": "Flowers",
-       "reply": "Flowers. Of course. The flowers would agree.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_smell": "Flowers"
-       },
-       "memory": "You picked: Flowers (smell)",
-       "memoryTag": "shared_smell"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "Sniff. I'll keep sniffing until I decide.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "Smells are like little memories in the air.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
-  },
-  {
-   "id": "shared_walk",
-   "trigger": "idle",
-   "weight": 1,
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "If we went on a walk, I'd want to see everything.",
-     "expr": "curious",
-     "next": "b",
-     "wait": 2200
-    },
-    "b": {
-     "say": "What should we find on our walk?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🐌",
-       "label": "A snail",
-       "reply": "A snail. We'd walk very slowly together.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_walk": "A snail"
-       },
-       "memory": "You picked: A snail (walk)",
-       "memoryTag": "shared_walk"
-      },
-      {
-       "icon": "🪨",
-       "label": "A cool rock",
-       "reply": "A cool rock. One for the memory book.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_walk": "A cool rock"
-       },
-       "memory": "You picked: A cool rock (walk)",
-       "memoryTag": "shared_walk"
-      },
-      {
-       "icon": "🌈",
-       "label": "A rainbow",
-       "reply": "A rainbow. We'd have to be lucky.",
-       "expr": "happy",
-       "goto": "c",
-       "set": {
-        "sh_walk": "A rainbow"
-       },
-       "memory": "You picked: A rainbow (walk)",
-       "memoryTag": "shared_walk"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "reply": "We'd find something good. We always do.",
-       "goto": "c"
-      }
-     ]
-    },
-    "c": {
-     "say": "A pretend walk still counts as a walk.",
-     "expr": "love",
-     "bond": 1
-    }
-   }
+  "intentMap": {
+    "yes": [
+      "Yes!",
+      "Yep!",
+      "Totally!",
+      "Uh-huh!",
+      "Obviously!",
+      "Always!"
+    ],
+    "no": [
+      "Nope!",
+      "Nuh-uh!",
+      "Not really"
+    ],
+    "unsure": [
+      "I don't know",
+      "No idea",
+      "Maybe?"
+    ],
+    "listen": [
+      "(just listen)"
+    ],
+    "nod": [
+      "(nod)"
+    ],
+    "giggle": [
+      "(giggle)",
+      "(laugh)",
+      "Ha ha!",
+      "Hee hee!"
+    ],
+    "ask_more": [
+      "Tell me!",
+      "What was it?"
+    ],
+    "later": [
+      "Later"
+    ],
+    "wow": [
+      "No way!"
+    ],
+    "silly": [
+      "Something silly!"
+    ]
   }
- ],
- "replyPools": {
-  "yes": {
-   "icon": "👍",
-   "phrases": [
-    {
-     "text": "Yes!"
-    },
-    {
-     "text": "Yep!"
-    },
-    {
-     "text": "Totally!"
-    },
-    {
-     "text": "Uh-huh!"
-    },
-    {
-     "text": "Obviously!"
-    },
-    {
-     "text": "Always!"
-    },
-    {
-     "text": "Of course!"
-    },
-    {
-     "text": "Yes yes yes!"
-    }
-   ]
-  },
-  "no": {
-   "icon": "🙅",
-   "phrases": [
-    {
-     "text": "Nope!"
-    },
-    {
-     "text": "Nuh-uh!"
-    },
-    {
-     "text": "Not really"
-    },
-    {
-     "text": "No way!"
-    },
-    {
-     "text": "Nah!"
-    },
-    {
-     "text": "Not today!"
-    }
-   ]
-  },
-  "unsure": {
-   "icon": "🤔",
-   "phrases": [
-    {
-     "text": "Maybe?"
-    },
-    {
-     "text": "Hmm…"
-    },
-    {
-     "text": "I don't know!"
-    },
-    {
-     "text": "No idea!"
-    },
-    {
-     "text": "Kind of?"
-    },
-    {
-     "text": "Who knows!"
-    }
-   ]
-  },
-  "listen": {
-   "icon": "👂",
-   "phrases": [
-    {
-     "text": "(just listen)"
-    },
-    {
-     "text": "(lean in)"
-    },
-    {
-     "text": "(listen quietly)"
-    },
-    {
-     "text": "(snuggle in and listen)"
-    }
-   ]
-  },
-  "nod": {
-   "icon": "🙂",
-   "phrases": [
-    {
-     "text": "(nod)"
-    },
-    {
-     "text": "(nod nod)"
-    },
-    {
-     "text": "(smile)"
-    },
-    {
-     "text": "(thumbs up)"
-    }
-   ]
-  },
-  "giggle": {
-   "icon": "😆",
-   "phrases": [
-    {
-     "text": "(giggle)"
-    },
-    {
-     "text": "(laugh)"
-    },
-    {
-     "text": "Ha ha!"
-    },
-    {
-     "text": "Hee hee!"
-    },
-    {
-     "text": "(snort-laugh)"
-    },
-    {
-     "text": "Ha!"
-    }
-   ]
-  },
-  "ask_more": {
-   "icon": "🗣️",
-   "phrases": [
-    {
-     "text": "Tell me!"
-    },
-    {
-     "text": "Then what?"
-    },
-    {
-     "text": "What was it?"
-    },
-    {
-     "text": "Tell me more!"
-    },
-    {
-     "text": "And then?"
-    }
-   ]
-  },
-  "later": {
-   "icon": "⏳",
-   "phrases": [
-    {
-     "text": "Later"
-    },
-    {
-     "text": "Maybe later"
-    },
-    {
-     "text": "Another time"
-    },
-    {
-     "text": "Not right now"
-    }
-   ]
-  },
-  "wow": {
-   "icon": "🤩",
-   "phrases": [
-    {
-     "text": "Wow!"
-    },
-    {
-     "text": "Whoa!"
-    },
-    {
-     "text": "Cool!"
-    },
-    {
-     "text": "No way!"
-    },
-    {
-     "text": "Amazing!"
-    }
-   ]
-  },
-  "silly": {
-   "icon": "🤪",
-   "phrases": [
-    {
-     "text": "Something silly!"
-    },
-    {
-     "text": "Banana!"
-    },
-    {
-     "text": "A giant sock!"
-    },
-    {
-     "text": "Wiggly noodles!"
-    }
-   ]
-  }
- },
- "intentMap": {
-  "yes": [
-   "Yes!",
-   "Yep!",
-   "Totally!",
-   "Uh-huh!",
-   "Obviously!",
-   "Always!"
-  ],
-  "no": [
-   "Nope!",
-   "Nuh-uh!",
-   "Not really"
-  ],
-  "unsure": [
-   "I don't know",
-   "No idea",
-   "Maybe?"
-  ],
-  "listen": [
-   "(just listen)"
-  ],
-  "nod": [
-   "(nod)"
-  ],
-  "giggle": [
-   "(giggle)",
-   "(laugh)",
-   "Ha ha!",
-   "Hee hee!"
-  ],
-  "ask_more": [
-   "Tell me!",
-   "What was it?"
-  ],
-  "later": [
-   "Later"
-  ],
-  "wow": [
-   "No way!"
-  ],
-  "silly": [
-   "Something silly!"
-  ]
- }
 }

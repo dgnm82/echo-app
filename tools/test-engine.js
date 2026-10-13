@@ -35,10 +35,10 @@ T('b) drift follows a linked topic (0.6 → 0.3 → 0); ~1 in 8 lose the thought
   D.rand=()=>0.5;assert.equal(D.afterConversation(conv,1),null,'0.3 at depth 1');D.rand=()=>0.2;k=0;D.rand=()=>[0.5,0.2][k++%2];assert(D.afterConversation(conv,1));
   D.rand=()=>0.15;assert.equal(D.afterConversation(conv,2),null,'no drift at depth 2');});
 T('c) no-repeat: a line is not reused within 7 days (core reactions 24 h)',()=>{fresh('slyte');const n=J('slyte').barks.ambient.length;const got=new Set();
-  for(let i=0;i<n;i++)got.add(D.bark('ambient').src.text);assert.equal(got.size,n,'all distinct before any repeat');
-  const again=D.bark('ambient');assert(again.text);clock+=7*864e5+1;const g2=new Set();for(let i=0;i<n;i++)g2.add(D.bark('ambient').src.text);assert.equal(g2.size,n);
-  fresh('slyte');const pn=J('slyte').barks.pet.length;const a=new Set();for(let i=0;i<pn;i++)a.add(D.bark('pet').src.text);assert.equal(a.size,pn);
-  clock+=25*36e5;const b=new Set();for(let i=0;i<pn;i++)b.add(D.bark('pet').src.text);assert.equal(b.size,pn,'core lines free again after 24 h');});
+  for(let i=0;i<n;i++)got.add(D.bark('ambient').src);assert.equal(got.size,n,'all distinct before any repeat');
+  const again=D.bark('ambient');assert(again.src);clock+=7*864e5+1;const g2=new Set();for(let i=0;i<n;i++)g2.add(D.bark('ambient').src);assert.equal(g2.size,n);
+  fresh('slyte');const pn=J('slyte').barks.pet.length;const a=new Set();for(let i=0;i<pn;i++)a.add(D.bark('pet').src);assert.equal(a.size,pn);
+  clock+=25*36e5;const b=new Set();for(let i=0;i<pn;i++)b.add(D.bark('pet').src);assert.equal(b.size,pn,'core lines free again after 24 h');});
 T('c) no-repeat: a topic is not offered again within 5 days',()=>{fresh('slyte');ctx.memTags=[];
   const c=D.pickConversation('idle',v=>!v.once);const topic=D.topic(c);D.run(c,ui([]),()=>{});q=[];
   for(let i=0;i<200;i++){const x=D.pickConversation('idle');if(x)assert.notEqual(D.topic(x),topic)}

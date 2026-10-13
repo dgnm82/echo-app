@@ -77,7 +77,7 @@ D.fill=function(t,extra){const ctx={...D.ctx(),...(extra||{})};
   return D.personalize(out)};
 
 // ---- no-repeat rules (Overhaul B10): exact line 7 days (core reactions 24 h); least-recently-used fallback
-function lineKey(key,l){return key+':'+hash(l.text)}
+function lineKey(key,l){return key+':'+(l.text?hash(l.text):'act'+(((D.lib&&D.lib.barks[key])||[]).indexOf(l)))}
 function recentWindow(key){return CORE.test(key)?D.cfg.coreLineHours*36e5:D.cfg.lineDays*DAY}
 D.bark=function(key,extra,filter){
   const ctx={...D.ctx(),...(extra||{})};const all=((D.lib&&D.lib.barks[key])||[]).filter(l=>check(l.cond,ctx)&&(!filter||filter(l)));
@@ -87,7 +87,7 @@ D.bark=function(key,extra,filter){
   if(!pool.length){const oldest=Math.min(...all.map(l=>at[lineKey(key,l)]||0));pool=all.filter(l=>(at[lineKey(key,l)]||0)===oldest)}
   const tot=pool.reduce((s,l)=>s+(l.weight||1),0);let r=D.rand()*tot,l=pool[0];for(const x of pool){r-=(x.weight||1);if(r<=0){l=x;break}}
   at[lineKey(key,l)]=now;D.countLine();
-  return {text:D.fill(l.text,extra),expr:l.expr||'neutral',react:l.react,key,src:l};
+  return {text:D.fill(l.text,extra),expr:l.expr||'neutral',react:l.react,key,src:l,gesture:l.gesture,caption:l.caption&&D.fill(l.caption,extra),voice:l.voice};
 };
 D.prune=function(){const now=D.now();for(const m of ['lineAt','topicAt','phraseAt']){const o=D.mem[m]||{};for(const k in o)if(o[k]<now-8*DAY)delete o[k]}};
 
@@ -134,12 +134,12 @@ D.run=function(conv,ui,done){
     const ctx=D.ctx();
     if(n.branch){const b=n.branch.find(x=>check(x.cond,ctx));return go(b?b.goto:n.next)}
     apply(n);
-    const line={text:D.fill(n.say||''),expr:n.expr||'neutral',react:n.react};D.countLine();
+    const line={text:D.fill(n.say||''),expr:n.expr||'neutral',react:n.react,gesture:n.gesture,caption:n.caption&&D.fill(n.caption),voice:n.voice};D.countLine();
     const ch=(n.choices||[]).filter(c=>check(c.cond,ctx)).slice(0,4);
     if(ch.length){
       ui.say(line,600000);const shown=D.present(ch);let carry=null,answered=false;
       const pickChoice=(i,auto)=>{if(answered)return;answered=true;T.clear(carry);const c=ch[i];apply(c);
-        let reply=c.reply?{text:D.fill(c.reply),expr:c.expr||'happy',react:c.react}:null;
+        let reply=c.reply!=null&&(c.reply||c.gesture)?{text:D.fill(c.reply||''),expr:c.expr||'happy',react:c.react,gesture:c.gesture,caption:c.caption&&D.fill(c.caption),voice:c.voice}:null;
         if(!reply&&!c.goto)reply=D.fallback(shown[i].intent);
         if(reply){ui.say(reply);D.countLine();T.set(()=>go(c.goto),Math.max(1800,reply.text.length*55))}else go(c.goto)};
       const arm=()=>{T.clear(carry);carry=T.set(()=>{if(answered)return;ui.cancelChoices&&ui.cancelChoices();
