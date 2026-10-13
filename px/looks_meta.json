@@ -1,0 +1,43 @@
+{
+ "frames": 35200,
+ "max": 16,
+ "over16": 0,
+ "black": 0,
+ "looks": {
+  "slyte": [
+   "dog",
+   "wolf",
+   "howling"
+  ],
+  "whimber": [
+   "wingsong",
+   "duck"
+  ]
+ },
+ "palettes": {
+  "slyte": [
+   "dusk-plum",
+   "cocoa-cream",
+   "ember-russet",
+   "sunset-gold-solid",
+   "snow-blush",
+   "moon-lilac",
+   "mint-teal-solid",
+   "sky-periwinkle-solid",
+   "violet-rose-solid",
+   "rose-sapphire-solid"
+  ],
+  "whimber": [
+   "crow-dusk",
+   "wren-cocoa",
+   "robin-ember",
+   "dove-mist",
+   "sun-finch",
+   "sky-teal",
+   "mint-aurora-solid",
+   "peach-dusk-solid",
+   "plum-blush",
+   "lilac-night"
+  ]
+ }
+}

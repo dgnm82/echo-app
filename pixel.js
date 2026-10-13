@@ -24,10 +24,10 @@ function stageFromBond(bond){const f=Math.max(0,Math.min(1,(bond||0)/500));retur
 function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.released)return 4;if(S.releasePath)return 5;return stageFromBond(S.bond)}catch(e){return 1}}
 // Families v1 looks: g.look picks px/<sprite>_<look>_<pal>_f<fl>.png when it is a BUILT look (FAMILIES[f].looks) other than
 // the family's base look (fox / owl = today's sheets). Unknown / missing look -> today's sheet (old saves have no g.look).
-function lookOf(sp,g){const F=W.FAMILIES,f=F&&F[sp],l=g&&g.look;return f&&l&&l!==f.look_base&&(f.looks||[]).includes(l)?l:null}
-const MISS={};function probe(url,fb){if(url===fb||MISS[url]===0)return;if(MISS[url])return;MISS[url]=1;const im=new Image();im.onload=()=>{MISS[url]=0};
-  im.onerror=()=>{try{document.querySelectorAll('.px-echo').forEach(el=>{for(const k of ['_base']){if(el[k]&&el[k].includes(url))el[k]=el[k].split(url).join(fb)}if(el.style.backgroundImage.includes(url))el.style.backgroundImage=el.style.backgroundImage.split(url).join(fb)})}catch(e){}};im.src=url+'.png'}   // missing look sheet: fall back to the family sheet
-function sheetBase(sp,g){const v=variant(g&&g.seed,sp,g&&g.pal),l=lookOf(sp,g),fb=`px/${sp}_${v.pal}_f${v.fluff}`,u=l?`px/${sp}_${l}_${v.pal}_f${v.fluff}`:fb;if(l)probe(u,fb);return {v,u}}
+function lookOf(sp,g,pal){const F=W.FAMILIES,f=F&&F[sp],l=g&&g.look;return f&&l&&l!==f.look_base&&(f.looks||[]).includes(l)&&(!pal||(f.chips||[]).some(c=>c.ramp===pal))?l:null}   // looks are baked in the chip colours only
+const MISS={};function probe(url,fb){if(url===fb||MISS[url]!=null)return;MISS[url]=1;const im=new Image();im.onload=()=>{MISS[url]=0};
+  im.onerror=()=>{MISS[url]=2;try{document.querySelectorAll('.px-echo').forEach(el=>{for(const k of ['_base']){if(el[k]&&el[k].includes(url))el[k]=el[k].split(url).join(fb)}if(el.style.backgroundImage.includes(url))el.style.backgroundImage=el.style.backgroundImage.split(url).join(fb)})}catch(e){}};im.src=url+'.png'}   // missing look sheet: fall back to the family sheet
+function sheetBase(sp,g){const v=variant(g&&g.seed,sp,g&&g.pal),l=lookOf(sp,g,v.pal),fb=`px/${sp}_${v.pal}_f${v.fluff}`,u=l&&MISS[`px/${sp}_${l}_${v.pal}_f${v.fluff}`]!==2?`px/${sp}_${l}_${v.pal}_f${v.fluff}`:fb;if(l)probe(u,fb);return {v,u}}
 function label(sp,g){const F=W.FAMILIES;return String((g&&g.name)||(F&&F[sp]&&F[sp].label)||'').replace(/"/g,'')}   // screen-reader name: the Echo's own name, else the family word
 function whimber(g,stage){const {u}=sheetBase('whimber',g);stage=stage||stageNow();
   {const pre=new Image();pre.src=`${u}_fly.png`}   // v1.1: no flash on the first take-off
