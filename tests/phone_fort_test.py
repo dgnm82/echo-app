@@ -17,9 +17,13 @@ async def run(b,dev,vp,errs,q=''):
   # touch: tap the board to rotate, buttons to move, keyboard handheld keys
   await pg.click('#kL');await pg.click('#kA');await pg.keyboard.press('ArrowRight');await pg.keyboard.press('a');await pg.keyboard.press('b');await pg.wait_for_timeout(200)
   await pg.evaluate(PLAY,5);await pg.wait_for_timeout(300);await pg.screenshot(path=f'{OUT}{dev}-midgame.png')
-  for r in range(3):
-    await pg.evaluate(PLAY,80);await pg.wait_for_timeout(500)
-    await pg.screenshot(path=f'{OUT}{dev}-round{r+1}-done.png');await pg.wait_for_timeout(2400)
+  assert await pg.evaluate("__fort.fallMs")==0,'easy hovers'
+  await pg.evaluate("(()=>{const g=__fort;for(let y=1;y<g.h;y++)g.grid[y]=['plank',null,'plank',null,'plank',null,'plank','plank'].slice(0,g.w);for(let i=0;i<60&&!g.done;i++){if(g.piece)FortEngine.drop(g);else break}__fortAfter()})()");await pg.wait_for_timeout(1500);print('dbg',await pg.evaluate("[__fort.done,!!document.querySelector('.g2card'),!!document.getElementById('gs'),document.querySelector('.full')?.className]"));await pg.wait_for_selector('.g2card',timeout=8000)
+  await pg.wait_for_timeout(1400);card=await pg.inner_text('.g2card');res['card']=card.replace('\n',' ')
+  assert 'WHAT A FORT' in card and 'rows' in card and 'Again' in card,card
+  assert not await pg.locator('text=build higher').count()
+  if dev=='phone':await pg.screenshot(path='/workspace/shots/games-v2/fort-roof-card.png')
+  await pg.click('#g2done')
   await pg.wait_for_timeout(1500);await pg.screenshot(path=f'{OUT}{dev}-home-after-game.png')
   if await pg.locator('.full.milestone').count():await pg.screenshot(path=f'{OUT}{dev}-milestone-after-game.png')
   for _ in range(5):
@@ -31,7 +35,7 @@ async def run(b,dev,vp,errs,q=''):
     for _ in range(3):
       if await pg.locator('.book #x').count():await pg.click('.book #x')
     await pg.evaluate("__echo.state.fort.stage=2;__echo.state.napUntil=0;__echo.state.badges.push('place');__echo.state.bondShown=5;__echo.state.bond=150;document.querySelectorAll('.book,.full').forEach(e=>e.remove())")
-    await pg.evaluate("__echo.fortBuilder(2)");await pg.wait_for_timeout(600);await pg.evaluate(PLAY,80);await pg.wait_for_timeout(700)
+    await pg.evaluate("__echo.fortBuilder(0)");await pg.wait_for_timeout(600);await pg.evaluate("(()=>{const g=__fort;for(let y=1;y<g.h;y++)g.grid[y]=['plank',null,'plank',null,'plank',null,'plank','plank'].slice(0,g.w);for(let i=0;i<60&&!g.done;i++){if(g.piece)FortEngine.drop(g);else break}__fortAfter()})()");await pg.wait_for_timeout(1500);print('dbg',await pg.evaluate("[__fort.done,!!document.querySelector('.g2card'),!!document.getElementById('gs'),document.querySelector('.full')?.className]"));await pg.wait_for_selector('.g2card',timeout=8000);await pg.wait_for_timeout(700);await pg.click('#g2done')
     await pg.screenshot(path=f'{OUT}reward-roof.png');await pg.wait_for_timeout(2600)
     for _ in range(5):
       if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(500)
@@ -41,7 +45,7 @@ async def run(b,dev,vp,errs,q=''):
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]
-    r=await run(b,'phone',p.devices['iPhone 13'],errs);print('phone',r);assert r['state']['fort']['stage']==1 and r['after_roof']['fort']['stage']==3 and r['state']['fort']['rounds']==3
+    r=await run(b,'phone',p.devices['iPhone 13'],errs);print('phone',r);assert r['state']['fort']['stage']==1 and r['after_roof']['fort']['stage']==3 and r['state']['fort']['rounds']==1 and 'rows high' in str(r['state']['mem'])
     print('desktop',await run(b,'desktop',{'viewport':{'width':1280,'height':900}},errs))
     print('handheld-board',await run(b,'handheld',{'viewport':{'width':480,'height':860}},errs,'?board=hh'))
     print('ERR',errs);await b.close()

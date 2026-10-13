@@ -717,21 +717,21 @@ function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.ki
 // ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
 function fortState(){return S.fort=S.fort||{stage:0,decor:0,homes:0,rounds:0,slow:0,best:0}}
 function fortLevel(){const f=fortState(),set=S.fortLevel||'auto';
-  if(f.rounds<2)return 'easy';                 // the first 2 rounds ever are forced to Easy
+  if((f.games||0)<2)return 'easy';             // the first 2 builds ever are Easy
   if(set!=='auto')return set;                  // grown-up toggle (dev tools)
-  return f.slow>=2?'easy':'standard'}          // automatic Easy after 2 slow rounds; drops back after a quick one
+  return v2State('builder').easy?'easy':'standard'}   // quiet auto-Easy after 2 short builds (AUTO_EASY.build)
 function fortProp(){const f=fortState(),open=S.badges.includes('place')?'_open':'',fox=S.kind==='fox',b=fox?'fort':'hollow';
   const nm=f.stage>=3&&f.decor?`${b}_3_d${f.decor}`:`${b}_${f.stage}`;
   return `<div class="fortprop ${b}${open?' open':''}" aria-label="${fox?'Treehouse fort':'Tree hollow'}" style="background-image:url(px/${b}/${nm}${open}.png)"></div>`}
-function fortBuilder(round){
-  const f=fortState(),level=fortLevel(),hh=/[?&]board=hh/.test(location.search),t0=now();
+function fortBuilder(round){round=0;
+  const f=fortState(),level=fortLevel(),hh=/[?&]board=hh/.test(location.search),t0=now(),best0=bestGet('builder',level),firstEver=!(f.games||0)&&!best0;let ended=false;
   const fox=S.kind==='fox',DIR=fox?'fort':'hollow',HOME=fox?'treehouse fort':'tree hollow',quiet=!fox&&S.talents.includes('Silent Flight');
-  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+f.rounds*7+round,w:hh?5:8,h:hh?6:12,disguise:fox&&S.talents.includes('Master of Disguise'),round});
+  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7+(f.rounds||0),w:hh?5:8,h:hh?6:12,disguise:fox&&S.talents.includes('Master of Disguise'),round});
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
-  gameShell(`${fox?'Fort':'Hollow'} · floor ${round+1}/3`);const gs=$('#gs');gs.classList.add('fortgame');
+  gameShell(`${fox?'Fort':'Hollow'} build`);const gs=$('#gs');gs.classList.add('fortgame');
   gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Fort board"></canvas>
     <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
-      <div class="fbrows" id="fbrows"></div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
+      <div class="fbmeter" id="fbmeter" aria-label="Height"></div><div class="fbh" id="fbh">0</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
     <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
     <canvas id="fbs" class="fbstrip" width="${W}" height="24" style="width:${W}px" aria-label="Home so far"></canvas>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
@@ -742,36 +742,33 @@ function fortBuilder(round){
   function draw(){if(!alive)return;cx.fillStyle='#2E2452';cx.fillRect(0,0,W,H);cx.fillStyle='#3B2A5C';
     for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)if((x+y)%2)cx.fillRect(x*16,y*16,16,16);
     for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){const c=g.grid[y][x];if(c)cx.drawImage(IM[c],x*16,y*16)}
-    const p=g.piece;if(p){const gy=FortEngine.ghostY(g);if(gy!==p.y)p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
+    const p=g.piece;if(p){const gy=FortEngine.ghostY(g);if(gy!==p.y&&FortEngine.ghostOn(g))p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
       p.cells.forEach(([a,b],i)=>{if(p.y+b>=0)cx.drawImage(IM[p.mats[i]],(p.x+a)*16,(p.y+b)*16)})}
     nx.clearRect(0,0,32,32);const q=g.next;if(q){const s=q.cells.length>3||Math.max(...q.cells.map(c=>c[0]))>1?8:16;q.cells.forEach(([a,b],i)=>nx.drawImage(IM[q.mats[i]],a*s,b*s,s,s))}
     sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);const rows=g.strip.slice(-3);
     rows.forEach((r,j)=>r.forEach((c,x)=>sx.drawImage(IM['m_'+(c==='slyte'?'plank':c)],x*8+(W-g.w*8)/2,24-8*(rows.length-j))));
     if(glowRows>0){sx.drawImage(IM['glow'+(glowT%3)],0,24-8*Math.min(3,glowRows),W,8*Math.min(3,glowRows));glowT++;if(glowT>8){glowRows=0;glowT=0}}
-    $('#fbrows').innerHTML=Array.from({length:g.goal},(_,i)=>`<i class="${i<g.rows?'on':''}"></i>`).join('');
-    if(g.L.stars)$('#fbstars').innerHTML=Array.from({length:3},(_,i)=>window.PIXEL?PIXEL.icon(i<FortEngine.stars(g)?'sticker':'talk').replace('class="pxi"',`class="pxi${i<FortEngine.stars(g)?'':' dim'}"`):'').join('');}
+    const h0=FortEngine.height(g);$('#fbmeter').innerHTML=Array.from({length:24},(_,i)=>`<i class="${i<h0?'on':''}${best0&&i===best0-1&&h0<=best0?' best':''}"></i>`).join('');$('#fbh').textContent=h0;$('#fbh').className='fbh'+(best0&&h0>best0?' gold':'');
+    cx.fillStyle='#FFD27A';for(let x=0;x<W;x+=4)cx.fillRect(x,16,2,1);
+    if($('#fbstars'))$('#fbstars').innerHTML=Array.from({length:3},(_,i)=>window.PIXEL?PIXEL.icon(i<FortEngine.stars(g)?'sticker':'talk').replace('class="pxi"',`class="pxi${i<FortEngine.stars(g)?'':' dim'}"`):'').join('');}
   const loop=setInterval(draw,83);   // 12 fps
-  const fall=g.L.fallMs?setInterval(()=>{FortEngine.tick(g);after()},g.L.fallMs):0; // Easy: the piece hovers until B
-  function stop(){alive=false;clearInterval(loop);if(fall)clearInterval(fall);document.removeEventListener('keydown',key)}
+  let fall=0;const sched=()=>{clearTimeout(fall);if(alive&&!g.done&&g.fallMs)fall=setTimeout(()=>{FortEngine.tick(g);after();sched()},g.fallMs)};sched();   // re-reads g.fallMs after every settle (0 = hover until B)
+  function stop(){alive=false;clearInterval(loop);clearTimeout(fall);document.removeEventListener('keydown',key)}
   function after(){for(const e of FortEngine.take(g)){
       if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});if(e.type==='floor')SFX('blocks_floor_done');if(e.type==='row'||e.type==='row-auto'){SFX('blocks_row_glow');glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
-      if(e.type==='high'){talk(B('stack_high'),1800)}
+      if(e.type==='settle'&&!fall)sched();
       if(e.type==='disguise'){react('excited');talk(B('stack_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
   function chirp(){try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}}
-  function finish(){draw();stop();const secs=(now()-t0)/1000;f.rounds++;
-    if(level!=='bigkid'){if(secs>60)f.slow++;else if(secs<35&&f.slow)f.slow=0}
+  function finish(){if(ended)return;ended=true;draw();stop();f.rounds=(f.rounds||0)+1;f.games=(f.games||0)+1;const rows=FortEngine.height(g);v2Count('build',rows);
+    const r=bestPut('builder',level,rows),fl=Math.floor(rows/3),rr=rows%3;
     if(S.talents.includes('Super Jumper'))react('happy');
-    if(round<2){banner(`Floor ${round+1} done!`,'');talk(B('stack_floor'),2000);roundDone(round,fortBuilder);save();return}
-    // round 3: Slyte places the roof itself and hops; the Home prop grows one step (frame -> 1 -> 2 floors -> roof, then decorations)
-    sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);for(let x=0;x<g.w;x++)sx.drawImage(IM.m_leafroof,x*8+(W-g.w*8)/2,16);
-    setExpr('happy');react('happy');talk(B('stack_done'),2200);
-    const roofBefore=f.stage>=3;if(f.stage<3)f.stage++;else f.decor=Math.min(3,f.decor+1);
-    if(f.stage>=3&&!roofBefore){f.homes++;remember(fox?'We built the fort three floors high':'We made the tree hollow cozy, three floors high','fort_home')}
-    else remember(f.stage<3?`We built floor ${f.stage} of the ${HOME}`:`We added a decoration to the ${HOME}`,'fort_'+f.stage+'_'+f.decor);
+    SFX('blocks_land');for(let x=0;x<g.w;x++)cx.drawImage(IM.leafroof,x*16,Math.max(0,FortEngine.stackTop(g)-1)*16);setTimeout(()=>SFX('blocks_floor_done'),300);setTimeout(()=>SFX('blocks_row_glow'),700);
+    const roofBefore=f.stage>=3;if(f.stage<3)f.stage++;else f.decor=Math.min(3,f.decor+1);if(f.stage>=3&&!roofBefore)f.homes++;   // the Home prop grows one step per finished build
     if(f.stage>=3)(S.homesBuilt=S.homesBuilt||[]).push({day:S.days,decor:f.decor});
-    banner(f.stage>=3&&!roofBefore?(fox?'Fort built!':'Hollow built!'):roofBefore?'New decoration!':`${fox?'Fort':'Hollow'} floor ${f.stage} built!`,fortProp());
-    save();roundDone(round,fortBuilder);lullaby()}
+    remember(fox?`We built the fort ${rows} rows high`:`We built the hollow ${rows} rows high`,'fort_rows_'+rows);
+    setExpr('happy');react('happy');talk(B(r.isBest&&!firstEver?'stack_roof_best':'stack_roof',{rows}),2200);save();lullaby();
+    setTimeout(()=>endCard({game:'builder',unit:'rows',score:rows,was:r.was,best:Math.max(rows,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[fl?(rr?`${fl} floors + ${rr}`:`= ${fl} floors!`):`${rows} rows`,`${'★'.repeat(FortEngine.stars(g))||'tidy rows: 0'}`],onAgain:()=>fortBuilder(0)}),900)}
   function banner(t,img){gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${t}</span>${PI('✨')}${img?`<div class="fbdprop">${img}</div>`:''}${g.L.stars?`<div>${Array.from({length:FortEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`)}
   // touch: drag the piece sideways, tap it to turn, swipe down to drop
   let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
@@ -785,9 +782,9 @@ function fortBuilder(round){
     else if(k==='b'||k==='x'||k==='enter'){if(e.repeat){FortEngine.soft(g)}else FortEngine.drop(g)}
     else if(k==='arrowdown'){FortEngine.soft(g)}else return;e.preventDefault();after()}
   document.addEventListener('keydown',key);
-  $('#quit').onclick=()=>{stop();endGame(false)};
+  $('#quit').onclick=()=>{if(ended)return endGame(true);g.done=true;finish()};
   window.__fort=g;window.__fortAfter=after;
-  talk(round===0?B('stack_start'):B('stack_floor_next'),2400);draw();
+  talk(B('stack_start'),2400);draw();
 }
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
 function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
