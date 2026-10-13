@@ -37,7 +37,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
     const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
-  scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000)}
+  scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
 const SCR=()=>document.getElementById('screen')||document.body;
@@ -87,11 +87,11 @@ function flushMilestones(){
 }
 function talentLine(t){return B('talent_'+t).text}
 function start(){
-  if(!S)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  if(!S||S.setupDone===0)return setup();
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 const TAGLINE="ECHO: Every creature has a story to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
-function setup(){
+function legacySetup(){   // test/playtest harness only (localStorage echo-nosetup)
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
   h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo">${PI('✨')}<span>${TAGLINE}</span>${PI('✨')}</div>
      <div class="tpair"><div class="tslot">${fox}</div><div class="tslot owl">${owl}</div></div>
@@ -120,9 +120,201 @@ async function reveal(kind){
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
         save();talk(B('reveal_reply'));remember('The day we met in the dusk meadow','met');
         setTimeout(()=>{home();const tip=()=>toast('Tip: tap the buttons below to care for '+S.g.name);
-          if(localStorage.getItem('echo-nosetup'))return tip();sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from':'whimber_where_from',()=>{sess.fwBusy=0;tip()}),600)},2400);
+          if(localStorage.getItem('echo-nosetup'))return tip();sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;tip()}),600)},2400);
       })},1800)},1700);
 }
+// ---------- Onboarding v1 (onboarding.md v0.2) + Origin v2 phone v1 (origin_v2.md v0.2) + grown-ups corner (§5) ----------
+// Family names/labels come only from families.js (FAMILIES). The legacy quick setup stays behind 'echo-nosetup' for the test harness.
+const FAM=()=>window.FAMILIES, OBC={maxLen:10,presets:['Star','Sunny','Pip','Bean','Comet','Pebble'],
+  bands:{'5-6':{icon:'sprout',typeCps:14,maxConv:1,ambientScale:1.5,level:'easy'},'7-8':{icon:'flower',typeCps:20,maxConv:2,ambientScale:1,level:'auto'},'9-10':{icon:'tree',typeCps:28,maxConv:2,ambientScale:1,level:'auto'}},
+  decline:{rate:.12},gate:{holdMs:3000,tries:3,cooldownMs:60000,idleMs:60000}};   // onboarding_config.json / origin_config.json
+let OBL=null;   // shared UI copy (dialogue/shared.json) for screens shown before an Echo exists
+async function obLib(){if(!OBL)OBL=(await Dialogue.loader('shared')).barks;return OBL}
+function obFill(t,x){x=x||{};const v=Object.assign({},(S&&S.vars)||{},x);const child=S&&S.vars&&('child_named' in S.vars)?S.child:'friend';
+  return String(t).replace(/\{var:(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:'').replace(/\{child\}/g,child).replace(/\{name\}/g,(S&&S.g&&S.g.name)||(x.name||''))}
+function U(k,i,x){const L=(OBL&&OBL[k])||(Dialogue.lib&&Dialogue.lib.barks[k])||[];const l=L[i||0];return l?obFill(l.text,x):''}
+function UA(k,x){const L=(OBL&&OBL[k])||[];return L.map(l=>obFill(l.text,x))}
+function obMaxConv(){return S&&S.ageBand?Math.min(C.maxConversationsPerSession,obBand().maxConv):C.maxConversationsPerSession}   // 5-6: 1 per session
+function obBand(){return OBC.bands[(S&&S.ageBand)||'7-8']||OBC.bands['7-8']}
+// --- name filter (§2.2): 1-10 letters, letters/space/hyphen/apostrophe, <= 2 words, no digits, local blocklist on a folded form
+const OB_BLOCK_STRONG=['fuck','shit','cunt','bitch','nigg','fag','whore','slut','penis','vagina','rape','nazi','porn','dick','pussy','cock','twat','wank'],OB_BLOCK_MILD=['ass','poo','poop','pee','butt','fart','crap','damn','hell','sex','boob','willy','idiot','loser','ugly','fatty'];
+function obFold(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[013457@$]/g,c=>({0:'o',1:'i',3:'e',4:'a',5:'s',7:'t','@':'a','$':'s'})[c]).replace(/(.)\1+/g,'$1').replace(/[^a-z]/g,'')}
+function obNameCheck(raw){const t=String(raw||'').trim().replace(/\s+/g,' ');if(!t)return {ok:false,why:'empty'};
+  if(t.length>OBC.maxLen||/\d/.test(t)||!/^[\p{L} '\-]+$/u.test(t)||t.split(' ').length>2)return {ok:false,why:'chars'};
+  const f=obFold(t),fw=obFold(t.replace(/\s+/g,''));if(OB_BLOCK_STRONG.some(w=>f.includes(obFold(w))))return {ok:false,why:'block'};
+  if(OB_BLOCK_MILD.some(w=>obFold(w)===fw))return {ok:false,why:'block'};
+  return {ok:true,name:t.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}}
+// --- decline (origin §3): deterministic hash; never first Echo, never for borrowed colours, at most once per origin, always-yes setting
+function obHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
+function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&o.src!=='borrowed'&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
+function obSprite(fid,seed,pal,stage){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal},stage||1):''}
+function obScene(cls,inner){h(`<div class="scene ob ${cls||''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
+function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
+function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
+  const down=e=>{e.preventDefault();e.stopPropagation();t0=Date.now();b.classList.add('hold');t=setTimeout(()=>{b.classList.remove('hold');pcGate(back)},OBC.gate.holdMs)};
+  const up=e=>{e&&e.stopPropagation();clearTimeout(t);b.classList.remove('hold')};
+  b.addEventListener('pointerdown',down);b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up);b.onclick=e=>e.stopPropagation()}
+// P1 first-run title
+async function setup(){
+  if(localStorage.getItem('echo-nosetup'))return legacySetup();
+  await obLib();
+  if(S&&S.setupDone===0&&S.child!==undefined)return orSeen();   // closed mid-origin: restart at P1 (a decline already saved stays saved)
+  const tg=U('ui_tagline').replace(/^ECHO:\s*/,'');
+  obScene('obtitle',`<div class="oblogo">ECHO</div><div class="obtag" aria-label="${U('ui_tagline')}">${tg}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('br')}`);
+  obWireLock(setup);
+  $('#obgo').onclick=()=>{SFX('ui_tap');if(window.Music)Music.title();obWelcome()};
+}
+// welcome: tagline reveal word by word (4 ticks/word), then the origin welcome beat (replaces the listening star)
+function obWelcome(){const words=U('ui_tagline').split(' '),beats=UA('ui_or_welcome');
+  obScene('obwelcome',`<div class="obpanel big" id="obw"></div><div class="obhint">Tap to go on</div>`);
+  const el=$('#obw');let i=0,step=0,tm=null;
+  const tick=()=>{el.textContent=words.slice(0,++i).join(' ');if(i<words.length)tm=setTimeout(tick,lowFx()?0:333)};tick();
+  $('.scene.ob').onclick=()=>{if(i<words.length){clearTimeout(tm);i=words.length;el.textContent=words.join(' ');return}
+    if(step<beats.length){el.textContent=beats[step++];return}obName()}}
+function obName(val){
+  obScene('obname',`<div class="obpanel"><b>${U('ui_ob_name_ask')}</b><br><small id="obnh">${U('ui_ob_name_hint')}</small></div>
+   <div class="obfield"><input id="obnm" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="next" aria-label="Name or nickname" value="${(val||'').replace(/"/g,'')}"><span id="obct">0/10</span></div>
+   <div class="obsmall">${U('ui_ob_name_presets')}</div><div class="obchips">${UA('ui_ob_presets').map(p=>`<button class="btn small obchip" data-n="${p}">${p}</button>`).join('')}</div>
+   <div class="row obrow"><button class="btn" id="obskip">${U('ui_ob_skip')}</button><button class="btn" id="obnext">Next &gt;</button></div>`);
+  const inp=$('#obnm'),ct=()=>{$('#obct').textContent=inp.value.length+'/10';$('#obnh').textContent=/\s/.test(inp.value.trim())?U('ui_ob_name_short'):U('ui_ob_name_hint')};inp.oninput=ct;ct();
+  app.querySelectorAll('.obchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');inp.value=b.dataset.n;ct()});
+  $('#obskip').onclick=()=>{SFX('ui_tap');obSetChild(null);obAge()};
+  $('#obnext').onclick=()=>{const r=obNameCheck(inp.value);if(!inp.value.trim())return obSetChild(null),obAge();
+    if(!r.ok){SFX('ui_back');inp.value='';ct();$('#obnh').textContent=U('ui_ob_name_again');return}obConfirm(r.name)}}
+function obConfirm(n){
+  obScene('obconfirm',`<div class="obpanel big">${((OBL.ui_ob_name_confirm||[])[0]||{text:'{child}?'}).text.replace('{child}',n)}</div><div class="row obrow"><button class="btn" id="obyes">${U('ui_ob_yes_change',0)}</button><button class="btn" id="obch">${U('ui_ob_yes_change',1)}</button></div>`);
+  $('#obyes').onclick=()=>{SFX('bond_meter_tick');obSetChild(n);obAge()};$('#obch').onclick=()=>{SFX('ui_back');obName(n)}}
+function obSetChild(n){S=S&&S.setupDone===0?S:{voice:true,music:true,vars:{},setupDone:0,oseed:Math.floor(Math.random()*2e9)+1,originIdx:0,songs:[]};
+  if(n){S.child=n;S.vars.child_named=1}else{S.child='friend';delete S.vars.child_named}save()}
+function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
+  obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
+  app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
+function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.fortLevel=S.fortLevel==null||S.fortLevel==='auto'?'easy':S.fortLevel}}
+// ---- Origin v2. P1 who did you see?
+function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
+function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
+  obScene('orseen',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div><div class="obpanel small">${U('ui_or_seen_hint')}</div>
+   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
+   <button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button>`);
+  app.querySelectorAll('.orcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.a;app.querySelectorAll('.orcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F.animals[sel].label)});
+  $('#ornext').onclick=()=>{if(!sel)return;if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const A=F.animals[sel];S.origin.animal=sel;S.vars.origin_animal=A.word;save();
+    if(A.family)orColours(A.family,false);else orBorrow()}}
+// not built yet (Cat, Bunny, Other): song stamp + borrow colours with one of the v1 families. Never declined.
+function orBorrow(){const F=FAM(),A=F.animals[S.origin.animal];obSong();
+  obScene('orborrow meadow',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div>
+   <div class="obpanel">${U('ui_or_other_family',0,{family_list:F.list()})}</div>
+   <div class="orfams">${F.order.map(f=>`<button class="orfam" data-f="${f}"><span class="orlight">${obSprite(f,S.oseed,null,1)}</span><span class="lbl">${F[f].label}</span></button>`).join('')}</div>`);
+  app.querySelectorAll('.orfam').forEach(b=>b.onclick=()=>{SFX('ui_tap');orColours(b.dataset.f,true)})}
+function obSong(){const a=S.origin.animal;S.songs=S.songs||[];if(!S.songs.includes(a))S.songs.push(a);save()}   // song stamps: kind words only, no counts shown
+// P2 colours: one chip in v1 (decision 6). "I'm not sure" = seeded pick.
+function orColours(fid,borrowed){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;
+  obScene('orcolours',`<div class="obpanel"><b>${U('ui_or_colours_ask')}</b></div>
+   <div class="orchips">${f.chips.map(c=>`<button class="orchip" data-c="${c.id}" aria-label="${c.label}"><i style="background:${c.hex}"></i><span>${c.label}</span></button>`).join('')}</div>
+   <button class="btn" id="orunsure">${U('ui_or_not_sure')}</button>`);
+  app.querySelectorAll('.orchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');const c=f.chips.find(x=>x.id===b.dataset.c);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'chips'});save();orInvite()});
+  $('#orunsure').onclick=()=>{SFX('ui_tap');Object.assign(S.origin,{ramp:null,chip:null,src:borrowed?'borrowed':'unsure'});save();orInvite()}}
+// P3 hum + invite (tap to hear, tap again; never timed)
+async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);
+  const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
+  obScene('orinvite meadow',`<div class="obpanel small">${U('ui_or_hum')}</div><div class="orlightform" id="orlf">${obSprite(fid,seed,o.ramp,1)}<i class="ornote a">♪</i><i class="ornote b">♫</i></div>
+   <div class="obbub" id="obb" style="display:none"></div><div class="obpanel small orask">${U('ui_or_invite_ask')}</div><button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
+  setTimeout(()=>{const l=orLine('invite_hum');if(l)obTalk(l)},700);
+  let armed=false;$('#orinv').onclick=()=>{SFX('ui_tap');if(!armed){armed=true;$('#orinv').classList.add('sel');say(U('ui_or_invite_btn'));return}
+    if(orDeclines())orNotToday();else orYes()}}
+function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
+  if(!l)return null;const short=obBand()===OBC.bands['5-6']&&l.short;return {text:obFill(short||l.text),expr:l.expr||'happy',react:l.react}}
+function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
+// P4a yes: arrival event, colour motes, keep-colours line, growth strip
+function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=document.querySelector('#orlf .px-echo');
+  $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();
+  SFX(f.kind==='fox'?'slyte_arrival':'whimber_arrival');if(el&&window.PIXEL){el.dataset.stage=1;PIXEL.event(el,'arrival')}
+  const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
+  $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
+  setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
+  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+    $('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
+// P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
+function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
+  $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();const hum=document.querySelector('.orinvite .obpanel');if(hum)hum.remove();
+  const el=document.querySelector('#orlf .px-echo');if(el&&window.PIXEL){try{PIXEL.react(el,'happy')}catch(e){}}
+  $('#orlf').classList.add('bow');setTimeout(()=>$('#orlf').classList.add('drift'),1400);
+  const l=orLine('invite_not_today');if(l)obTalk(l);
+  const A=FAM().animals[o.animal];
+  app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div><button class="btn obnextbtn" id="orff">${U('ui_or_find_friend')}</button>`);
+  $('#orff').onclick=()=>{SFX('ui_tap');orSeen()}}
+// P5 naming: 6 names (seeded order), More, Type it (onboarding filter), Just "{family}"
+function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
+  const six=L.slice((page*6)%L.length,(page*6)%L.length+6);let sel=null;
+  obScene('orname meadow',`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="orlightform small">${obSprite(o.family,o.seed,o.ramp,1)}</div>
+   <div class="ornames">${six.map(n=>`<button class="btn small ornm" data-n="${n}">${n}</button>`).join('')}</div>
+   <div class="row obrow"><button class="btn small" id="ormore">${U('ui_or_name_more')}</button><button class="btn small" id="ortype">${U('ui_or_name_type')}</button></div>
+   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{family:f.label})}</button><div class="hint">Tap to hear · tap again to choose</div>`);
+  app.querySelectorAll('.ornm').forEach(b=>b.onclick=()=>{SFX('ui_tap');if(sel===b.dataset.n)return orFinish(sel,false);sel=b.dataset.n;app.querySelectorAll('.ornm').forEach(x=>x.classList.toggle('sel',x===b));say(sel)});
+  $('#ormore').onclick=()=>{SFX('ui_tap');orName(page+1)};
+  $('#orkeep').onclick=()=>{SFX('ui_tap');if(sel==='__keep')return orFinish(f.label,true);sel='__keep';app.querySelectorAll('.ornm').forEach(x=>x.classList.remove('sel'));$('#orkeep').classList.add('sel');say(f.label)};
+  $('#ortype').onclick=()=>{SFX('ui_tap');const d=full(`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="obfield"><input id="ortn" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" aria-label="Echo's name"></div><p class="obsmall" id="orth"></p><div class="row"><button class="btn" id="ortok">Next &gt;</button><button class="btn" id="ortx">${U('ui_ob_yes_change',1)}</button></div>`);
+    d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
+// P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
+function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
+  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,fwShared:S.fwShared,lowfx:S.lowfx};
+  const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.name=name;g.family=f.label;
+  S=Object.assign(keep,{kind,g,needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
+    origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
+  S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.originIdx=(o.idx||0)+1;
+  initDialogue();save();remember('The day we met in the meadow','met');
+  home();if(window.Music)Music.home(kind);const l=B(kept?'named_kept':'named_reply');talk(l,3200);
+  sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)}
+// P7 every-session title: logo + tagline + "{name} is playing nearby!", Tap to start, lock top right. Auto-advance after 3 s.
+async function obReturnTitle(go){await obLib();const e=E();
+  h(`<div class="scene ${e.bg} ob obreturn"><div class="oblogo">ECHO</div><div class="obtag">${U('ui_tagline').replace(/^ECHO:\s*/,'')}</div><div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
+  if(window.Music)Music.home(S.kind);obWireLock(()=>obReturnTitle(go));let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sess.nameCall=1;go()};
+  const t=setTimeout(()=>{if(!document.querySelector('.full'))fin()},3000);$('.scene.ob').onclick=fin}
+function nameCallLine(){if(S.nameChanged&&S.vars&&S.vars.child_named){S.nameChanged=0;save();return B('name_changed')}return B('name_call')}
+// ---- Grown-ups corner (§5): hold the lock 3 s -> a x b question -> settings
+function pcGate(back){let tries=0;const cool=+(localStorage.getItem('echo-pc-cool')||0);
+  const q=()=>{const a=6+Math.floor(Math.random()*4);let b;do{b=13+Math.floor(Math.random()*17)}while(b%5===0||b===20);return [a,b]};
+  SFX('ui_panel_open');
+  const d=full('');d.classList.add('pcgate');let idle=null;const bump=()=>{clearTimeout(idle);idle=setTimeout(()=>{d.remove()},OBC.gate.idleMs)};
+  const show=()=>{bump();if(Date.now()<+(localStorage.getItem('echo-pc-cool')||0)){d.innerHTML=`<div class="obpanel">${U('ui_pc_wrong')}</div><button class="btn" id="pcx">${U('ui_pc_done')}</button>`;d.querySelector('#pcx').onclick=()=>d.remove();return}
+    const [a,b]=q();let ent='';d.dataset.a=a;d.dataset.b=b;
+    d.innerHTML=`<div class="obpanel">${U('ui_pc_question',0,{gateA:a,gateB:b}).replace(' x ',' × ')}</div><div class="pcent" id="pcent">&nbsp;</div><div class="pcpad">${[1,2,3,4,5,6,7,8,9,'⌫',0,'✓'].map(k=>`<button class="btn pck" data-k="${k}" aria-label="${k==='⌫'?'Delete':k==='✓'?'OK':k}">${k==='⌫'?'Del':k==='✓'?'OK':k}</button>`).join('')}</div><button class="btn small" id="pcx">${U('ui_pc_done')}</button>`;
+    d.querySelector('#pcx').onclick=()=>{clearTimeout(idle);SFX('ui_back');d.remove()};
+    d.querySelectorAll('.pck').forEach(k=>k.onclick=()=>{bump();const v=k.dataset.k;SFX('ui_tap');if(v==='⌫')ent=ent.slice(0,-1);else if(v==='✓'){if(+ent===a*b){clearTimeout(idle);d.remove();return pcSettings(back)}SFX('ui_back');if(++tries>=OBC.gate.tries){localStorage.setItem('echo-pc-cool',Date.now()+OBC.gate.cooldownMs)}return show()}else if(ent.length<3)ent+=v;d.querySelector('#pcent').textContent=ent||'\u00a0'})};
+  if(Date.now()<cool)tries=OBC.gate.tries;show()}
+function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',has=S&&S.kind,F=FAM();
+  const tog=(id,lb,on)=>`<button class="pcrow" id="${id}" role="switch" aria-checked="${on?'true':'false'}"><span>${lb}</span><i class="pctog${on?' on':''}"></i></button>`;
+  const d=full(`<div class="pchead"><i style="background-image:url(px/origin/lock.png)"></i>${U('ui_pc_title')}</div>
+   <button class="pcrow" id="pcname"><span>Name</span><b>${nm}</b></button>
+   ${has?`<button class="pcrow" id="pcecho"><span>Echo's name</span><b>${S.g.name}</b></button>`:''}
+   <button class="pcrow" id="pcage"><span>Age range</span><b>${(S&&S.ageBand)||'7-8'}</b></button>
+   ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
+   ${tog('pcyes','Echoes always say yes',!!(S&&S.alwaysYes))}
+   ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}
+   <button class="pcrow" id="pcreset"><span>Start over</span><b>›</b></button>
+   <div class="pcnote">${U('ui_pc_privacy')} No camera on this version. Echo only remembers the kind of animal and a colour.</div>
+   <button class="btn" id="pcdone">${U('ui_pc_done')}</button>`);d.classList.add('pcset');
+  const re=()=>{d.remove();pcSettings(back)};const need=()=>{if(!S){S={voice:true,music:true,vars:{},setupDone:0,oseed:Math.floor(Math.random()*2e9)+1,originIdx:0,songs:[]}}};
+  d.querySelector('#pcmusic').onclick=()=>{need();S.music=S.music===false;save();if(window.Music)Music.refresh();re()};
+  d.querySelector('#pcvoice').onclick=()=>{need();S.voice=S.voice===false;save();re()};
+  d.querySelector('#pcyes').onclick=()=>{need();S.alwaysYes=!S.alwaysYes;save();re()};
+  d.querySelector('#pcshared').onclick=()=>{need();S.fwShared=!S.fwShared;save();re()};
+  if(has)d.querySelector('#pcstay').onclick=()=>{const f=fw();f.paused=!f.paused;save();re()};
+  d.querySelector('#pcage').onclick=()=>{need();const L=Object.keys(OBC.bands);obSetBand(L[(L.indexOf(S.ageBand||'7-8')+1)%L.length]);save();re()};
+  d.querySelector('#pcname').onclick=()=>{need();const p=full(`<div class="obpanel"><b>Name or nickname</b></div><div class="obfield"><input id="pcnm" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.vars.child_named?S.child:''}" aria-label="Name or nickname"></div><p class="obsmall" id="pcnh"></p>
+      <div class="row"><button class="btn small" id="pcnok">Save</button><button class="btn small" id="pcnno">Use no name</button><button class="btn small" id="pcnfg">Forget name</button><button class="btn small" id="pcnx">${U('ui_pc_done')}</button></div>`);
+    p.classList.add('pcset','pcsub');p.querySelector('#pcnx').onclick=()=>p.remove();
+    p.querySelector('#pcnok').onclick=()=>{const c=obNameCheck(p.querySelector('#pcnm').value);if(!c.ok){p.querySelector('#pcnm').value='';p.querySelector('#pcnh').textContent=U('ui_ob_name_again');return}if(c.name!==S.child)S.nameChanged=1;S.child=c.name;S.vars.child_named=1;delete S.childHidden;save();p.remove();re()};
+    p.querySelector('#pcnno').onclick=()=>{if(S.vars.child_named)S.childHidden=S.child;S.child='friend';delete S.vars.child_named;save();p.remove();re()};   // keeps it on the device, unused
+    p.querySelector('#pcnfg').onclick=()=>{delete S.childHidden;S.child='friend';delete S.vars.child_named;save();p.remove();re()}};   // erased
+  if(has)d.querySelector('#pcecho').onclick=()=>{const p=full(`<div class="obpanel"><b>Echo's name</b></div><div class="obfield"><input id="pcen" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.g.name}" aria-label="Echo's name"></div><p class="obsmall" id="pceh"></p><div class="row"><button class="btn small" id="pceok">Save</button><button class="btn small" id="pcekp">Just "${F.byKind[S.kind].label}"</button><button class="btn small" id="pcex">${U('ui_pc_done')}</button></div>`);
+    p.classList.add('pcset','pcsub');p.querySelector('#pcex').onclick=()=>p.remove();p.querySelector('#pcekp').onclick=()=>{S.g.name=F.byKind[S.kind].label;save();p.remove();re()};
+    p.querySelector('#pceok').onclick=()=>{const c=obNameCheck(p.querySelector('#pcen').value);if(!c.ok){p.querySelector('#pcen').value='';p.querySelector('#pceh').textContent=U('ui_ob_name_again');return}S.g.name=c.name;save();p.remove();re()}};
+  d.querySelector('#pcreset').onclick=()=>pcReset(d);
+  d.querySelector('#pcdone').onclick=()=>{SFX('ui_panel_close');d.remove();if(S&&S.kind&&document.getElementById('sc'))home();else if(back)back()}}
+function pcReset(set){const R=UA('ui_pc_reset');const d=full(`<div class="obpanel">${R[0]}</div><button class="btn pchold" id="pchold"><span>${R[1]}</span><i class="pcbar"></i></button><button class="btn small" id="pcrx">${U('ui_pc_done')}</button>`);d.classList.add('pcreset','pcsub');
+  d.querySelector('#pcrx').onclick=()=>d.remove();const b=d.querySelector('#pchold');let t=null;
+  b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('hold');t=setTimeout(()=>{window.__wiped=1;localStorage.removeItem(KEY);localStorage.removeItem('echo-pc-cool');d.innerHTML=`<div class="obpanel">${R[2]}</div>`;setTimeout(()=>location.reload(),1600)},OBC.gate.holdMs)});
+  const up=()=>{clearTimeout(t);b.classList.remove('hold')};b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up)}
 function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){
   ov.innerHTML='';
@@ -145,8 +337,8 @@ function home(greet){
   if(m==='sleep'){{const b=napBed();if(b&&LIVE.st!=='napgo')lvPlace(b[0],b[1])}talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene'))home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet)fwSession();
   if(greet&&fwGreet()){}
-  else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs)}
-  else if(greet){talk(B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
+  else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
+  else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   if(LIVE.st!=='found')lvStart(false);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
@@ -334,7 +526,7 @@ function needInit(){if(!window.NeedSelect)return;const sp=S.kind==='fox'?'slyte'
 function maybeChat(){
   const n=S.needs;
   if(fwCalm())return;
-  if(sess.chats>=C.maxConversationsPerSession||Math.random()<.35)return;
+  if(sess.chats>=obMaxConv()||Math.random()<.35)return;
   if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;fwTick('memory');sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
   const conv=window.NeedSelect?NeedSelect.pickConversation(needCtx()):Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
@@ -348,7 +540,7 @@ function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=
     const onHome=()=>document.getElementById('feed')&&!document.querySelector('.full');
     const nx=info&&info.carriedOn?null:Dialogue.afterConversation(conv,depth);
     if(nx&&nx.type==='lost'&&onHome()){talk(nx.line);sess.lost=(sess.lost||0)+1}
-    else if(nx&&nx.type==='drift'&&sess.chats<C.maxConversationsPerSession&&onHome()){sess.chats++;sess.drift=(sess.drift||0)+1;talk(nx.line);
+    else if(nx&&nx.type==='drift'&&sess.chats<obMaxConv()&&onHome()){sess.chats++;sess.drift=(sess.drift||0)+1;talk(nx.line);
       return setTimeout(()=>{if(onHome())runConv(nx.conv,done,depth+1)},2600)}
     done&&done()},depth);
 }
@@ -444,7 +636,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b12">Shared device ${S.fwShared?'on':'off'}</button><button class="btn" id="b13">Let ${S.g&&S.g.name||'it'} stay a while ${fw().paused?'on':'off'}</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
@@ -454,14 +646,14 @@ function dev(){
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();if(window.Music)Music.refresh();cl()};
   d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
   d.querySelector('#b6').onclick=cl;
-  d.querySelector('#b12').onclick=()=>{S.fwShared=!S.fwShared;save();cl();dev()};d.querySelector('#b13').onclick=()=>{const f=fw();f.paused=!f.paused;save();cl();dev()};
+  d.querySelector('#b14').onclick=()=>{cl();pcSettings()};   // shared device + stay a while moved to the grown-ups corner (onboarding §5)
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
   d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
 }
 function book(){
   const e=E(),d=document.createElement('div');d.className='book';
-  d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
+  d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${obLock('bk')}${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(S.keepsake.type==='glowleaf'?'🍂':'💫')}${S.keepsake.name}</span>`:''}
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
@@ -473,7 +665,7 @@ function book(){
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
-  SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
+  SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}obWireLock(null);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
 }
@@ -644,7 +836,7 @@ function runGame(){
   const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
-  const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
+  const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const pd=`run/${pal}/${PIXEL.stageNow()>=4?'':'s'+Math.min(Math.max(PIXEL.stageNow(),1),3)+'/'}`;   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
@@ -923,9 +1115,9 @@ function afterHome(){
   const show=()=>{const d=full(`<div class="pcwrap">${postcardHTML(fresh,i)}<button class="btn">${PI('📖')}<span class="lbl">Keep it in my Memory Book</span></button></div>`);d.classList.add('milestone');say(fresh.text);d.querySelector('button').onclick=()=>{d.remove();const m=$('#mail');m.classList.remove('full');m.innerHTML=PI('📪')}};
   $('#book').onclick=book;$('#mail').onclick=()=>fresh&&!sign?show():book();if(sign)$('#sign').onclick=()=>{$('#sign').remove();show()};
   $('#pc').onclick=()=>{S.clockOffset=(S.clockOffset||0)+864e5;save();afterHome();const nx=(S.checkins||[]).find(k=>!k.delivered);if(nx)toast('Next letter around day +'+nx.day)};
-  $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
+  $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

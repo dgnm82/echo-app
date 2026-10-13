@@ -1,0 +1,139 @@
+# Onboarding v1 + Origin v2 phone v1 + grown-ups corner. Usage: [base-url] [shot-dir]
+import asyncio,sys,os,json
+from playwright.async_api import async_playwright
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/obtest';os.makedirs(OUT,exist_ok=True)
+ok=0;bad=[]
+def check(c,m):
+  global ok
+  if c:ok+=1
+  else:bad.append(m);print('FAIL',m)
+async def shot(pg,n):
+  await pg.locator('#screen').screenshot(path=f'{OUT}/{n}.png')
+async def fresh(b,p,errs,reqs,route=None):
+  ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+  pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(m.text));pg.on('request',lambda r:reqs.append(r.url))
+  if route:await pg.route('**/families.js',route)
+  await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(700);return pg
+async def T(pg,sel,ms=250):
+  await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
+async def run_to_seen(pg,name='Mia',sh=False):
+  if sh:await shot(pg,'ob01_title_first')
+  await T(pg,'#obgo',500)
+  if sh:await pg.wait_for_timeout(4400);await shot(pg,'ob02_welcome_tagline')
+  for i in range(6):
+    if await pg.locator('#obnm').count():break
+    await T(pg,'.scene.ob',300)
+  if sh:await shot(pg,'ob03_name')
+  if name:
+    await pg.fill('#obnm',name);await T(pg,'#obnext')
+    if sh:await shot(pg,'ob04_confirm')
+    await T(pg,'#obyes')
+  else:await T(pg,'#obskip')
+  if sh:await shot(pg,'ob05_age')
+  await T(pg,'.obagebtn >> nth=1')
+async def main():
+  async with async_playwright() as p:
+    b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
+    errs=[];reqs=[]
+    pg=await fresh(b,p,errs,reqs)
+    check(await pg.locator('.oblogo').inner_text()=='ECHO','logo')
+    check('Every creature has a story to share' in await pg.locator('.obtag').inner_text(),'tagline')
+    await run_to_seen(pg,'Mia',True)
+    S=await pg.evaluate("window.__echo.state")
+    check(S['child']=='Mia' and S['vars'].get('child_named')==1 and S['ageBand']=='7-8' and S['setupDone']==0,'name+age saved '+json.dumps({k:S.get(k) for k in ['child','ageBand','setupDone']}))
+    check(await pg.locator('.orcard').count()==9,'9 animal cards')
+    await shot(pg,'ob06_seen')
+    await T(pg,'.orcard[data-a=dog]');await T(pg,'#ornext')
+    check(await pg.locator('.orchip').count()==6,'6 dog chips')
+    await shot(pg,'ob07_colours')
+    await T(pg,'.orchip[data-c=golden]',1200)
+    await shot(pg,'ob08_invite')
+    await T(pg,'#orinv');await T(pg,'#orinv',3200)
+    check(await pg.locator('#ornm').count()==1,'first Echo says yes')
+    await shot(pg,'ob09_yes')
+    await T(pg,'#ornm',400)
+    check(await pg.locator('.ornm').count()==6,'6 names')
+    keep=await pg.locator('#orkeep').inner_text();check(keep=='Just "Slyte"','keep label from data: '+keep)
+    await shot(pg,'ob10_naming')
+    n=await pg.locator('.ornm').first.get_attribute('data-n');await T(pg,'.ornm >> nth=0');await T(pg,'.ornm >> nth=0',1500)
+    S=await pg.evaluate("window.__echo.state")
+    check(S['kind']=='fox' and S['g']['name']==n and S['g']['pal']=='sunset-gold' and S['setupDone']==1,'echo made '+json.dumps([S.get('kind'),S['g'].get('name'),S['g'].get('pal')]))
+    check(S['origin']['animal']=='dog' and S['origin']['src']=='chips' and not S['origin']['declined'] and S['vars']['origin_animal']=='dog','origin saved')
+    check(await pg.locator('#feed').count()==1,'home after naming')
+    check(await pg.evaluate("document.querySelector('.top b').textContent")==n,'top bar shows given name')
+    sheet=await pg.evaluate("(document.querySelector('#cr .px-echo')||{}).outerHTML||''");check('sunset-gold' in sheet,'sprite uses chip ramp')
+    await shot(pg,'ob11_named_home')
+    raw=await pg.evaluate("localStorage.getItem('echo-proto-v1')");check('data:image' not in raw and 'photo' not in raw,'no photo data in save')
+    # returning title + name call
+    await pg.evaluate("window.__echo.state.last=Date.now()-60*60e3;localStorage.setItem('echo-proto-v1',JSON.stringify(window.__echo.state))");await pg.reload();await pg.wait_for_timeout(900)
+    check(await pg.locator('.obreturn').count()==1,'every-session title');hint=await pg.locator('.obreturn .obpanel').inner_text();check(n in hint and 'playing nearby' in hint,'title hint '+hint)
+    await shot(pg,'ob12_title_returning')
+    await pg.wait_for_timeout(3300);check(await pg.locator('#feed').count()==1,'auto-advance 3 s')
+    # grown-ups corner: hold 3 s
+    await pg.reload();await pg.wait_for_timeout(800)
+    lk=pg.locator('#oblock');bb=await lk.bounding_box();await pg.mouse.move(bb['x']+bb['width']/2,bb['y']+bb['height']/2);await pg.mouse.down();await pg.wait_for_timeout(1200);await pg.mouse.up();await pg.wait_for_timeout(200)
+    check(await pg.locator('.pcgate').count()==0,'short hold does not open')
+    await pg.mouse.move(bb['x']+bb['width']/2,bb['y']+bb['height']/2);await pg.mouse.down();await pg.wait_for_timeout(1500);await shot(pg,'ob13_gate_hold');await pg.wait_for_timeout(1700);await pg.mouse.up();await pg.wait_for_timeout(300)
+    check(await pg.locator('.pcgate').count()==1,'3 s hold opens gate')
+    a,bq=await pg.evaluate("[+document.querySelector('.pcgate').dataset.a,+document.querySelector('.pcgate').dataset.b]")
+    check(6<=a<=9 and 13<=bq<=29 and bq%5,'question range')
+    for ch in str(a*bq):await T(pg,f'.pck[data-k="{ch}"]',60)
+    await shot(pg,'ob14_gate_question');await T(pg,'.pck[data-k="✓"]',300)
+    check(await pg.locator('.pcset').count()==1,'settings open')
+    await shot(pg,'ob15_grownups_corner')
+    await T(pg,'#pcyes');check((await pg.evaluate("window.__echo.state.alwaysYes"))==True,'always-yes toggle')
+    await T(pg,'#pcstay');check(await pg.evaluate("window.__echo.state.fw.paused")==True,'stay a while moved here')
+    await T(pg,'#pcvoice');check(await pg.evaluate("window.__echo.state.voice")==False,'chirp toggle')
+    await T(pg,'#pcage');check(await pg.evaluate("window.__echo.state.ageBand")=='9-10','age range cycles')
+    await T(pg,'#pcname');await pg.fill('#pcnm','Ma7');await T(pg,'#pcnok');check(await pg.locator('#pcnm').input_value()=='','digits rejected')
+    await pg.fill('#pcnm','Ana');await T(pg,'#pcnok');S=await pg.evaluate("window.__echo.state");check(S['child']=='Ana' and S['nameChanged']==1,'rename child')
+    await T(pg,'#pcreset');await shot(pg,'ob16_start_over');await T(pg,'#pcrx');await T(pg,'#pcdone',300)
+    check(await pg.locator('.pcset').count()==0,'back to play')
+    # wrong answers -> cooldown
+    pg2=await fresh(b,p,errs,reqs);lk=pg2.locator('#oblock');bb=await lk.bounding_box()
+    await pg2.mouse.move(bb['x']+5,bb['y']+5);await pg2.mouse.down();await pg2.wait_for_timeout(3200);await pg2.mouse.up();await pg2.wait_for_timeout(200)
+    for i in range(3):await T(pg2,'.pck[data-k="1"]',30);await T(pg2,'.pck[data-k="✓"]',100)
+    check('grown-ups' in (await pg2.locator('.pcgate').inner_text()),'3 wrong -> cooldown copy')
+    # decline: never on first; on a later origin the hash may decline once, then next invite always yes
+    res=await pg2.evaluate("""(()=>{const E=window.__echo,S=E.state;const r={first:0,dbl:0,ay:0,n:0,dec:0};
+      for(let s=1;s<=4000;s++){const st={oseed:s,origin:{idx:0,attempt:0,declined:false,src:'chips'}};E.setState(st);if(E.orDeclines())r.first++;
+        st.origin={idx:1+(s%3),attempt:0,declined:false,src:'chips'};r.n++;if(E.orDeclines()){r.dec++;st.origin.declined=true;st.origin.attempt=1;if(E.orDeclines())r.dbl++}
+        st.origin={idx:2,attempt:0,declined:false,src:'chips'};st.alwaysYes=true;if(E.orDeclines())r.ay++;st.origin.src='borrowed';st.alwaysYes=false;if(E.orDeclines())r.ay++}
+      return r})()""")
+    rate=res['dec']/res['n'];check(res['first']==0 and res['dbl']==0 and res['ay']==0 and .09<rate<.15,'decline rules '+json.dumps(res)+f' rate {rate:.3f}')
+    # decline screen (forced), then Find a friend -> P1 at once, next yes
+    pg3=await fresh(b,p,errs,reqs);await run_to_seen(pg3,None)
+    check(await pg3.evaluate("window.__echo.state.child")=='friend','skip name')
+    await pg3.evaluate("window.__echo.state.originIdx=1;window.__echo.state.origin=null")
+    s=await pg3.evaluate("(()=>{for(let s=1;s<9999;s++){if(window.__echo.hash(s+'|1|0')<.12)return s}})()");await pg3.evaluate(f"window.__echo.state.oseed={s}")
+    await T(pg3,'.orcard[data-a=owl]');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',1600)
+    check(await pg3.locator('#orff').count()==1,'not today shows Find a friend')
+    txt=await pg3.locator('.scene.ob').inner_text();check('Song heard' in txt,'song stamp')
+    check(await pg3.evaluate("JSON.parse(localStorage.getItem('echo-proto-v1')).origin.declined")==True,'declined saved at once')
+    check(await pg3.locator('.scene.ob .obpanel').count()==0,'decline: one bubble, no UI box')
+    await shot(pg3,'ob17_not_today')
+    await T(pg3,'#orff');check(await pg3.locator('.orcard').count()==9,'Find a friend -> P1')
+    await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orcard').count()==9,'reopen mid-origin -> P1')
+    await T(pg3,'.orcard[data-a=owl]');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',3000)
+    check(await pg3.locator('#ornm').count()==1,'next invite after a decline says yes')
+    # borrowed colours (cat) + data-only rename
+    async def rename(route):
+      r=await route.fetch();t=(await r.text()).replace('"label": "Slyte"','"label": "Howlings"').replace('"label":"Slyte"','"label":"Howlings"').replace('"label": "Whimber"','"label": "Wingsongs"').replace('"label":"Whimber"','"label":"Wingsongs"')
+      await route.fulfill(response=r,body=t)
+    pg4=await fresh(b,p,errs,reqs,rename);await run_to_seen(pg4,'Leo')
+    await T(pg4,'.orcard[data-a=cat]');await T(pg4,'#ornext',400)
+    t=await pg4.locator('.scene.ob').inner_text();check('Song heard: a cat' in t and 'Howlings or Wingsongs' in t,'borrow screen uses data labels: '+t.replace('\n',' | ')[:160])
+    await shot(pg4,'ob18_borrow_cat_renamed')
+    await T(pg4,'.orfam[data-f=whimber]');check(await pg4.locator('.orchip').count()==10,'whimber 10 chips');await T(pg4,'.orchip[data-c=green]',1000)
+    await T(pg4,'#orinv');await T(pg4,'#orinv',3000);await T(pg4,'#ornm',400)
+    check(await pg4.locator('#orkeep').inner_text()=='Just "Wingsongs"','rename reaches naming');await T(pg4,'#orkeep');await T(pg4,'#orkeep',1500)
+    S=await pg4.evaluate("window.__echo.state");check(S['g']['name']=='Wingsongs' and S['origin']['src']=='borrowed' and S['g']['pal']=='mint-aurora' and S['kind']=='owl','borrowed origin '+json.dumps([S['g'].get('name'),S['g'].get('pal')]))
+    check(await pg4.evaluate("CREATURES.owl.name")=='Wingsongs','config family label from data')
+    # privacy: only same-origin requests
+    from urllib.parse import urlparse
+    host=urlparse(URL).netloc;ext=[u for u in reqs if urlparse(u).netloc not in (host,'') and not u.startswith('data:')]
+    check(not ext,'no off-site requests '+str(ext[:3]))
+    check(not errs,'no page errors '+str(errs[:3]))
+    await b.close()
+  print(f'{ok}/{ok+len(bad)} onboarding checks passed');sys.exit(1 if bad else 0)
+asyncio.run(main())

@@ -303,6 +303,410 @@
     "text": "ECHO: Every creature has a story to share. Can you hear it?",
     "expr": "happy"
    }
+  ],
+  "ui_ob_tap_start": [
+   {
+    "text": "Tap to start",
+    "expr": "happy"
+   },
+   {
+    "text": "A: start",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_welcome": [
+   {
+    "text": "Look! A falling star.",
+    "expr": "happy"
+   },
+   {
+    "text": "It's a listening star. It carries names to new friends.",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_ask": [
+   {
+    "text": "What should your new friend call you?",
+    "expr": "happy"
+   },
+   {
+    "text": "What should your friend call you?",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_hint": [
+   {
+    "text": "A first name or a nickname. A grown-up can help!",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_presets": [
+   {
+    "text": "Or pick a nickname:",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_presets": [
+   {
+    "text": "Star",
+    "expr": "happy"
+   },
+   {
+    "text": "Sunny",
+    "expr": "happy"
+   },
+   {
+    "text": "Pip",
+    "expr": "happy"
+   },
+   {
+    "text": "Bean",
+    "expr": "happy"
+   },
+   {
+    "text": "Comet",
+    "expr": "happy"
+   },
+   {
+    "text": "Pebble",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_skip": [
+   {
+    "text": "Skip",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_confirm": [
+   {
+    "text": "{child}? Is that right?",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_yes_change": [
+   {
+    "text": "Yes!",
+    "expr": "happy"
+   },
+   {
+    "text": "Change",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_again": [
+   {
+    "text": "Hmm, let's pick a different name.",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_name_short": [
+   {
+    "text": "Just a first name is plenty!",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_age_ask": [
+   {
+    "text": "How old are you?",
+    "expr": "happy"
+   },
+   {
+    "text": "It helps your friend pick games and words.",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_age_bands": [
+   {
+    "text": "5-6",
+    "expr": "happy"
+   },
+   {
+    "text": "7-8",
+    "expr": "happy"
+   },
+   {
+    "text": "9-10",
+    "expr": "happy"
+   }
+  ],
+  "ui_ob_star_go": [
+   {
+    "text": "The star is carrying your name to the meadow…",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named"
+    }
+   },
+   {
+    "text": "The star is flying down to the meadow…",
+    "expr": "happy",
+    "cond": {
+     "varUnset": "child_named"
+    }
+   }
+  ],
+  "ui_ob_discover": [
+   {
+    "text": "The star landed in the meadow. Something is moving… Tap one!",
+    "expr": "happy"
+   },
+   {
+    "text": "Something is moving… Pick one!",
+    "expr": "happy"
+   }
+  ],
+  "ui_title_hint": [
+   {
+    "text": "{name} is playing nearby!",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_hold": [
+   {
+    "text": "Grown-ups: press and hold",
+    "expr": "happy"
+   },
+   {
+    "text": "Grown-ups: hold A and B",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_question": [
+   {
+    "text": "Grown-ups only. What is {var:gateA} x {var:gateB}?",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_wrong": [
+   {
+    "text": "That one's for grown-ups. Back to play!",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_title": [
+   {
+    "text": "Grown-ups corner",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_privacy": [
+   {
+    "text": "The name and age range stay on this device. Nothing is sent anywhere. No accounts, no ads, no birthdays.",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_items": [
+   {
+    "text": "Name or nickname",
+    "expr": "happy"
+   },
+   {
+    "text": "Age range",
+    "expr": "happy"
+   },
+   {
+    "text": "Words on screen",
+    "expr": "happy"
+   },
+   {
+    "text": "Game level",
+    "expr": "happy"
+   },
+   {
+    "text": "Music",
+    "expr": "happy"
+   },
+   {
+    "text": "Chirp sounds",
+    "expr": "happy"
+   },
+   {
+    "text": "Calm effects",
+    "expr": "happy"
+   },
+   {
+    "text": "Quiet hours",
+    "expr": "happy"
+   },
+   {
+    "text": "Let {name} stay a while",
+    "expr": "happy"
+   },
+   {
+    "text": "Shared device",
+    "expr": "happy"
+   },
+   {
+    "text": "Clock",
+    "expr": "happy"
+   },
+   {
+    "text": "Start over",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_reset": [
+   {
+    "text": "This erases the name, the age range, {name} and every memory on this device. It can't be undone.",
+    "expr": "happy"
+   },
+   {
+    "text": "Hold to erase",
+    "expr": "happy"
+   },
+   {
+    "text": "Erased. A new friend is on its way.",
+    "expr": "happy"
+   }
+  ],
+  "ui_pc_done": [
+   {
+    "text": "Back to play",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_welcome": [
+   {
+    "text": "Every animal hums a little song. Echoes are made of those songs, and light.",
+    "expr": "happy"
+   },
+   {
+    "text": "When you find an animal, you can invite its Echo to come along.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_seen_ask": [
+   {
+    "text": "Who did you see today?",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_seen_hint": [
+   {
+    "text": "A pet, a park bird, a book or a toy all count!",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_colours_ask": [
+   {
+    "text": "What colours was your {var:origin_animal}?",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_colours_hint": [
+   {
+    "text": "Pick one or two.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_not_sure": [
+   {
+    "text": "I'm not sure",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_hum": [
+   {
+    "text": "Shh... listen. Something is humming the song of the {var:origin_animal} you saw.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_invite_ask": [
+   {
+    "text": "It might like to come along with you. Ask it!",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_invite_btn": [
+   {
+    "text": "Come along?",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_keep_colours": [
+   {
+    "text": "It's keeping your {var:origin_animal}'s colours. They glow brighter as you get to know each other.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_song_heard": [
+   {
+    "text": "Song heard:",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_find_friend": [
+   {
+    "text": "Find a friend",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_other_family": [
+   {
+    "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colours.",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_name_ask": [
+   {
+    "text": "What will you call your new friend?",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_name_more": [
+   {
+    "text": "More",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_name_type": [
+   {
+    "text": "Type it",
+    "expr": "happy"
+   }
+  ],
+  "ui_or_name_keep": [
+   {
+    "text": "Just \"{var:family}\"",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_point": [
+   {
+    "text": "Point at an animal. Look from far away, and never touch an animal you don't know.",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_listen": [
+   {
+    "text": "Listening...",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_person": [
+   {
+    "text": "That looks like a person! Echoes come from animals. Try an animal friend.",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_no_song": [
+   {
+    "text": "Hmm, no song yet. Try holding very still, or find another animal!",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_not_sure": [
+   {
+    "text": "Is it one of these? Tap the one you think!",
+    "expr": "happy"
+   }
+  ],
+  "ui_cam_privacy": [
+   {
+    "text": "The picture is never saved. Echo only keeps the kind of animal and a colour.",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [

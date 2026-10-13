@@ -23,7 +23,7 @@ window.CONFIG = {
 // Creature profiles (spec v0.3). All spoken text lives in dialogue/*.json.
 window.CREATURES = {
   "fox": {
-    "name": "Slyte",
+    "name": (typeof window!=="undefined"&&window.FAMILIES)?FAMILIES.slyte.label:"Slyte",   // label lives in families.js
     "title": "The Clever Trickster",
     "badge": "🍃",
     "bg": "fox-bg",
@@ -58,7 +58,7 @@ window.CREATURES = {
     "game": "Shiny Pairs"
   },
   "owl": {
-    "name": "Whimber",
+    "name": (typeof window!=="undefined"&&window.FAMILIES)?FAMILIES.whimber.label:"Whimber",   // label lives in families.js
     "title": "The Starlight Listener",
     "badge": "🪶",
     "bg": "owl-bg",

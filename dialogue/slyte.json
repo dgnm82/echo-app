@@ -1812,16 +1812,12 @@
     "expr": "excited"
    },
    {
-    "text": "Then I'm home in the wild. Running. Pouncing. Telling everyone about you.",
+    "text": "Then I'm home in the wild, where all the songs live. I'll hum yours.",
     "expr": "happy"
    },
    {
     "text": "And I'll send postcards! The first one comes after one sleep.",
     "expr": "excited"
-   },
-   {
-    "text": "Watch your glow-leaf. When it glimmers, check the mailbox!",
-    "expr": "happy"
    }
   ],
   "farewell": [
@@ -1854,6 +1850,15 @@
     "text": "Bye, {child}! Postcard soon!",
     "expr": "happy",
     "gesture": "stops in the tall grass, looks back once, tail wave"
+   },
+   {
+    "text": "Psst. Every {var:origin_animal} you see? Say hi. It knows my song.",
+    "expr": "happy",
+    "short": "Say hi to them for me!",
+    "gesture": "looks back once, tail wave",
+    "cond": {
+     "varSet": "origin_animal"
+    }
    }
   ],
   "last_call": [
@@ -2632,6 +2637,213 @@
       "riddle": "ball"
      }
     }
+   }
+  ],
+  "name_call": [
+   {
+    "text": "Oh! {child}! Hi hi!",
+    "expr": "excited",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "{child}! Hi hi!",
+    "gesture": "ears up, happy hop"
+   },
+   {
+    "text": "Psst! {child}! Over here!",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Psst! {child}!",
+    "gesture": "tail wave"
+   },
+   {
+    "text": "{child}! Perfect timing. Probably.",
+    "expr": "giggling",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "{child}! Hi!",
+    "gesture": "happy hop"
+   },
+   {
+    "text": "Yip! Hi, {child}! Guess what I'm doing.",
+    "expr": "excited",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Yip! Hi, {child}!",
+    "gesture": "ears up, turns to you"
+   },
+   {
+    "text": "Morning, {child}! The sun is extra shiny.",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named",
+     "time": [
+      "morning"
+     ]
+    },
+    "short": "Morning, {child}!",
+    "gesture": "stretch, tail wag"
+   },
+   {
+    "text": "Oh, hi, {child}. Cozy evening, right?",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named",
+     "time": [
+      "evening",
+      "night"
+     ]
+    },
+    "short": "Hi, {child}!",
+    "gesture": "slow tail wag"
+   },
+   {
+    "text": "Oh! Hi hi! You found me. Sneaky you.",
+    "expr": "excited",
+    "cond": {
+     "varUnset": "child_named"
+    },
+    "short": "Hi hi!",
+    "gesture": "ears up, happy hop"
+   },
+   {
+    "text": "Psst! Over here! Okay, hi!",
+    "expr": "happy",
+    "cond": {
+     "varUnset": "child_named"
+    },
+    "short": "Psst! Hi!",
+    "gesture": "tail wave"
+   },
+   {
+    "text": "Morning! The sun and my tail both say hi.",
+    "expr": "happy",
+    "cond": {
+     "varUnset": "child_named",
+     "time": [
+      "morning"
+     ]
+    },
+    "short": "Morning! Hi!",
+    "gesture": "tail wag"
+   }
+  ],
+  "name_changed": [
+   {
+    "text": "Ooh, {child}! A new name? I like it. Very shiny.",
+    "expr": "delighted",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Ooh, {child}! Shiny!"
+   }
+  ],
+  "invite_hum": [
+   {
+    "text": "Psst, hi! You saw a {var:origin_animal}? I'm its song!",
+    "expr": "curious",
+    "short": "Psst. Hi! Hello!",
+    "gesture": "light-form, ears up, 2 notes"
+   },
+   {
+    "text": "Ooh. That {var:origin_animal} hummed so loud, I woke up. Hi!",
+    "expr": "surprised",
+    "short": "Ooh. Hi!",
+    "gesture": "light-form shimmer"
+   }
+  ],
+  "invite_yes": [
+   {
+    "text": "Yes! Okay okay okay. I am SO coming. Hi!",
+    "expr": "excited",
+    "short": "Yes! I'm coming!",
+    "gesture": "arrival event, colour motes sink in",
+    "react": "happy"
+   },
+   {
+    "text": "Come along? With you? Yes yes yes. Let's go!",
+    "expr": "excited",
+    "short": "Yes yes yes!",
+    "react": "excited"
+   },
+   {
+    "text": "Ooh, an invitation! For me! Yes. Obviously yes.",
+    "expr": "delighted",
+    "short": "Ooh! Yes!",
+    "react": "happy"
+   }
+  ],
+  "invite_not_today": [
+   {
+    "text": "Psst. Not today, I think. Maybe another time! Thanks for asking.",
+    "expr": "shy",
+    "short": "Not today! Thanks!",
+    "gesture": "little bow, happy eyes, light drifts back"
+   },
+   {
+    "text": "Ooh, so kind! Not today. My song wants to roam a bit more.",
+    "expr": "happy",
+    "short": "So kind! Not today.",
+    "gesture": "happy hop, then drifts off"
+   },
+   {
+    "text": "Not today! Maybe another time. Another Echo is humming nearby, I bet.",
+    "expr": "giggling",
+    "short": "Not today! Maybe later.",
+    "gesture": "tail swish toward the meadow"
+   }
+  ],
+  "invite_borrow": [
+   {
+    "text": "A {var:origin_animal}! Pretty. I can borrow its colours, if you like.",
+    "expr": "curious",
+    "short": "Pretty! Borrow its colours?"
+   }
+  ],
+  "named_reply": [
+   {
+    "text": "{name}! That is ME. Hi, {child}! You asked so nicely.",
+    "expr": "excited",
+    "short": "{name}! That's me!",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "react": "happy"
+   },
+   {
+    "text": "{name}? I love it. Very {word:shiny}. Hi, {child}!",
+    "expr": "delighted",
+    "short": "{name}? I love it!",
+    "cond": {
+     "varSet": "child_named"
+    }
+   },
+   {
+    "text": "{name}! That is me now. Best name. Probably.",
+    "expr": "proud",
+    "short": "{name}! That's me!",
+    "cond": {
+     "varUnset": "child_named"
+    }
+   },
+   {
+    "text": "Ooh, {name}. Say it again? Yes, still great.",
+    "expr": "giggling",
+    "short": "{name}! Yes!",
+    "cond": {
+     "varUnset": "child_named"
+    }
+   }
+  ],
+  "named_kept": [
+   {
+    "text": "Just {var:family}? Okay! Plain {var:family}. Still counts.",
+    "expr": "happy",
+    "short": "Just {var:family}! Okay!"
    }
   ]
  },
@@ -16164,106 +16376,6 @@
    }
   },
   {
-   "id": "slyte_where_from",
-   "trigger": "first_home",
-   "once": true,
-   "cond": {
-    "bondMax": 24
-   },
-   "topic": "wild",
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Psst. Want to know where I came from?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌟",
-       "label": "Yes!",
-       "intent": "yes",
-       "goto": "b"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "intent": "listen",
-       "goto": "b"
-      },
-      {
-       "icon": "🤔",
-       "label": "Is it far?",
-       "goto": "b2"
-      }
-     ]
-    },
-    "b": {
-     "say": "The wild! Way past the meadow's edge. I came on a falling star.",
-     "expr": "excited",
-     "next": "c",
-     "wait": 3000
-    },
-    "b2": {
-     "say": "Kind of far! Past the meadow's edge. I came on a falling star.",
-     "expr": "excited",
-     "next": "c",
-     "wait": 3000
-    },
-    "c": {
-     "say": "I came to learn YOUR world. Every little bit.",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🍎",
-       "label": "Like snacks?",
-       "goto": "d1"
-      },
-      {
-       "icon": "🌳",
-       "label": "Like trees?",
-       "goto": "d2"
-      },
-      {
-       "icon": "🤗",
-       "label": "Like me?",
-       "goto": "d3"
-      }
-     ]
-    },
-    "d1": {
-     "say": "Snacks! Yes. Snacks are top of the list.",
-     "expr": "giggling",
-     "next": "e",
-     "wait": 2500
-    },
-    "d2": {
-     "say": "Trees, yes! And what's behind them. Sneaky trees.",
-     "expr": "curious",
-     "next": "e",
-     "wait": 2500
-    },
-    "d3": {
-     "say": "Especially you. You're the biggest part.",
-     "expr": "love",
-     "next": "e",
-     "wait": 2500
-    },
-    "e": {
-     "say": "Someday I'll carry it all back to the wild. Not soon. Way later.",
-     "expr": "happy",
-     "next": "f",
-     "wait": 3000
-    },
-    "f": {
-     "say": "So first I learn SO much. Starting now!",
-     "expr": "excited",
-     "react": "happy",
-     "memory": "I came from the wild to learn your world",
-     "memoryTag": "from_wild",
-     "bond": 2
-    }
-   }
-  },
-  {
    "id": "slyte_wild_what",
    "trigger": "idle",
    "once": true,
@@ -16595,6 +16707,92 @@
        "expr": "happy"
       }
      ]
+    }
+   }
+  },
+  {
+   "id": "slyte_where_from_v2",
+   "trigger": "first_home",
+   "once": true,
+   "cond": {
+    "bondMax": 24
+   },
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Psst. Want to know where I came from?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌟",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "From your {var:origin_animal}! Well, from its song. Every animal has one.",
+     "expr": "excited",
+     "next": "c",
+     "wait": 2600
+    },
+    "c": {
+     "say": "I'm made of that song. And light. And a bit of its colours.",
+     "expr": "proud",
+     "choices": [
+      {
+       "icon": "🐾",
+       "label": "Is it okay?",
+       "goto": "d1"
+      },
+      {
+       "icon": "🎵",
+       "label": "A song?",
+       "goto": "d2"
+      },
+      {
+       "icon": "🤗",
+       "label": "You came for me?",
+       "goto": "d3"
+      }
+     ]
+    },
+    "d1": {
+     "say": "Yep! It still has all its song. Songs share. That's the trick.",
+     "expr": "happy",
+     "next": "e",
+     "wait": 2600
+    },
+    "d2": {
+     "say": "A humming one! Only Echoes can hear it. And now you, a bit.",
+     "expr": "giggling",
+     "next": "e",
+     "wait": 2600
+    },
+    "d3": {
+     "say": "You asked me! So I came. To learn YOUR world.",
+     "expr": "love",
+     "next": "e",
+     "wait": 2600
+    },
+    "e": {
+     "say": "Someday I'll carry it all to the wild, where the songs live. Not soon. Way later.",
+     "expr": "happy",
+     "next": "f",
+     "wait": 2800
+    },
+    "f": {
+     "say": "So first I learn SO much. Starting now!",
+     "expr": "excited",
+     "memory": "I came from a song, to learn your world",
+     "memoryTag": "from_wild"
     }
    }
   }

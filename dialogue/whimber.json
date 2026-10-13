@@ -1707,16 +1707,12 @@
     "expr": "curious"
    },
    {
-    "text": "My wild hollow is right under that star… I'll tell the owls all about you.",
+    "text": "My wild hollow is under that star… where the bird songs live.",
     "expr": "happy"
    },
    {
     "text": "And I'll write to you… the first postcard comes after one sleep.",
     "expr": "love"
-   },
-   {
-    "text": "When your feather glows… a postcard is waiting. Hoo.",
-    "expr": "happy"
    }
   ],
   "farewell": [
@@ -1749,6 +1745,12 @@
     "text": "Goodbye, {child}… postcard soon.",
     "expr": "happy",
     "gesture": "wings up at the branch tip, looks back once, slow blink"
+   },
+   {
+    "text": "Hoo… when you hear a bird sing… that's a little hello from me.",
+    "expr": "love",
+    "short": "Hoo… bird songs say hello.",
+    "gesture": "looks back once, slow blink"
    }
   ],
   "last_call": [
@@ -2406,6 +2408,198 @@
    {
     "text": "…fizzy. It tickles my beak. Plain water, perhaps?",
     "expr": "shy"
+   }
+  ],
+  "name_call": [
+   {
+    "text": "Hoo… {child}. Hello, hello.",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Hoo… {child}. Hello.",
+    "gesture": "tilts its head back, happy eyes"
+   },
+   {
+    "text": "Oh… {child}. How lovely.",
+    "expr": "love",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Oh… {child}.",
+    "gesture": "slow blink, little bob"
+   },
+   {
+    "text": "Hoo… there's {child}. Come and see.",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Hoo… {child}.",
+    "gesture": "one wing lifts"
+   },
+   {
+    "text": "Good morning, {child}… hoo.",
+    "expr": "sleepy",
+    "cond": {
+     "varSet": "child_named",
+     "time": [
+      "morning"
+     ]
+    },
+    "short": "Morning, {child}…",
+    "gesture": "sleepy-happy stretch"
+   },
+   {
+    "text": "Hoo… {child}. The sky is getting pretty.",
+    "expr": "happy",
+    "cond": {
+     "varSet": "child_named",
+     "time": [
+      "evening",
+      "night"
+     ]
+    },
+    "short": "Hoo… {child}.",
+    "gesture": "looks up, then at you"
+   },
+   {
+    "text": "Hoo… hello, hello. How lovely.",
+    "expr": "happy",
+    "cond": {
+     "varUnset": "child_named"
+    },
+    "short": "Hoo… hello.",
+    "gesture": "tilts its head back, happy eyes"
+   },
+   {
+    "text": "Oh… there you are. Come and see.",
+    "expr": "love",
+    "cond": {
+     "varUnset": "child_named"
+    },
+    "short": "Oh… hello.",
+    "gesture": "slow blink"
+   },
+   {
+    "text": "Good morning… hoo. The sky is peach.",
+    "expr": "sleepy",
+    "cond": {
+     "varUnset": "child_named",
+     "time": [
+      "morning"
+     ]
+    },
+    "short": "Good morning… hoo.",
+    "gesture": "sleepy-happy stretch"
+   }
+  ],
+  "name_changed": [
+   {
+    "text": "Hoo… {child}. A new name… it sounds lovely.",
+    "expr": "delighted",
+    "cond": {
+     "varSet": "child_named"
+    },
+    "short": "Hoo… {child}. Lovely."
+   }
+  ],
+  "invite_hum": [
+   {
+    "text": "Hoo… you saw a {var:origin_animal}. I'm the little song it hums.",
+    "expr": "curious",
+    "short": "Hoo… hello.",
+    "gesture": "light-form, slow blink, 2 notes"
+   },
+   {
+    "text": "Oh… a {var:origin_animal} sang, and here I am. Hello…",
+    "expr": "shy",
+    "short": "Oh… hello…"
+   }
+  ],
+  "invite_yes": [
+   {
+    "text": "Hoo… yes. I'd love to come along. How lovely.",
+    "expr": "delighted",
+    "short": "Hoo… yes, please.",
+    "gesture": "arrival event, colour motes sink in",
+    "react": "happy"
+   },
+   {
+    "text": "Oh… you asked me. Yes, please.",
+    "expr": "love",
+    "short": "Oh… yes, please."
+   },
+   {
+    "text": "Hoo… yes. Let's go together, slowly.",
+    "expr": "happy",
+    "short": "Hoo… yes."
+   }
+  ],
+  "invite_not_today": [
+   {
+    "text": "Hoo… not today, I think. Maybe another time. Thank you for asking.",
+    "expr": "shy",
+    "short": "Hoo… not today.",
+    "gesture": "head tilt, happy eyes, light drifts up and away"
+   },
+   {
+    "text": "Oh… what a kind ask. Not today… maybe another time.",
+    "expr": "happy",
+    "short": "Oh… not today."
+   },
+   {
+    "text": "Hoo… not today. But I'm so glad you heard me.",
+    "expr": "happy",
+    "short": "Hoo… not today."
+   }
+  ],
+  "invite_borrow": [
+   {
+    "text": "Hoo… a {var:origin_animal}. I could borrow its colours, if you like.",
+    "expr": "curious",
+    "short": "Hoo… borrow its colours?"
+   }
+  ],
+  "named_reply": [
+   {
+    "text": "Hoo… {name}. What a lovely name to carry. Hello, {child}.",
+    "expr": "love",
+    "short": "Hoo… {name}. Lovely.",
+    "cond": {
+     "varSet": "child_named"
+    }
+   },
+   {
+    "text": "{name}… oh, I like that. It hums nicely, {child}.",
+    "expr": "delighted",
+    "short": "{name}… I like that.",
+    "cond": {
+     "varSet": "child_named"
+    }
+   },
+   {
+    "text": "Hoo… {name}. I'll keep it close.",
+    "expr": "happy",
+    "short": "Hoo… {name}.",
+    "cond": {
+     "varUnset": "child_named"
+    }
+   },
+   {
+    "text": "{name}… oh. That suits me. How lovely.",
+    "expr": "delighted",
+    "short": "{name}… lovely.",
+    "cond": {
+     "varUnset": "child_named"
+    }
+   }
+  ],
+  "named_kept": [
+   {
+    "text": "Hoo… just {var:family}. That suits me fine.",
+    "expr": "happy",
+    "short": "Hoo… just {var:family}."
    }
   ]
  },
@@ -14963,105 +15157,6 @@
    }
   },
   {
-   "id": "whimber_where_from",
-   "trigger": "first_home",
-   "once": true,
-   "cond": {
-    "bondMax": 24
-   },
-   "topic": "wild",
-   "start": "a",
-   "nodes": {
-    "a": {
-     "say": "Hoo… may I tell you where I'm from?",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌟",
-       "label": "Yes!",
-       "intent": "yes",
-       "goto": "b"
-      },
-      {
-       "icon": "👂",
-       "label": "(just listen)",
-       "intent": "listen",
-       "goto": "b"
-      },
-      {
-       "icon": "🤔",
-       "label": "Is it far?",
-       "goto": "b2"
-      }
-     ]
-    },
-    "b": {
-     "say": "From the wild… far past the branches, under a little star.",
-     "expr": "happy",
-     "next": "c",
-     "wait": 3200
-    },
-    "b2": {
-     "say": "Far, but not too far… under a little star of my own.",
-     "expr": "happy",
-     "next": "c",
-     "wait": 3200
-    },
-    "c": {
-     "say": "I came on a falling star… to learn your world. Slowly. Gently.",
-     "expr": "curious",
-     "choices": [
-      {
-       "icon": "🌙",
-       "label": "The moon?",
-       "goto": "d1"
-      },
-      {
-       "icon": "🎵",
-       "label": "Sounds?",
-       "goto": "d2"
-      },
-      {
-       "icon": "🤗",
-       "label": "Me?",
-       "goto": "d3"
-      }
-     ]
-    },
-    "d1": {
-     "say": "The moon, yes… I'd like to know how it looks from here.",
-     "expr": "thinking",
-     "next": "e",
-     "wait": 3000
-    },
-    "d2": {
-     "say": "Sounds, yes… your world is full of lovely little noises.",
-     "expr": "delighted",
-     "next": "e",
-     "wait": 3000
-    },
-    "d3": {
-     "say": "You most of all… you're the best part to learn.",
-     "expr": "love",
-     "next": "e",
-     "wait": 3000
-    },
-    "e": {
-     "say": "One day, a long while from now… I'll carry it all back to the wild.",
-     "expr": "happy",
-     "next": "f",
-     "wait": 3200
-    },
-    "f": {
-     "say": "But first… so much listening to do. I like that.",
-     "expr": "happy",
-     "memory": "I came from the wild to learn your world",
-     "memoryTag": "from_wild",
-     "bond": 2
-    }
-   }
-  },
-  {
    "id": "whimber_wild_what",
    "trigger": "idle",
    "once": true,
@@ -15387,6 +15482,92 @@
        "expr": "delighted"
       }
      ]
+    }
+   }
+  },
+  {
+   "id": "whimber_where_from_v2",
+   "trigger": "first_home",
+   "once": true,
+   "cond": {
+    "bondMax": 24
+   },
+   "start": "a",
+   "nodes": {
+    "a": {
+     "say": "Hoo… may I tell you where I'm from?",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🌟",
+       "label": "Yes!",
+       "intent": "yes",
+       "goto": "b"
+      },
+      {
+       "icon": "👂",
+       "label": "(just listen)",
+       "intent": "listen",
+       "goto": "b"
+      }
+     ]
+    },
+    "b": {
+     "say": "From the {var:origin_animal} you saw… from its song.",
+     "expr": "happy",
+     "next": "c",
+     "wait": 2600
+    },
+    "c": {
+     "say": "Every animal hums one… I'm made of that song, and a little light.",
+     "expr": "curious",
+     "choices": [
+      {
+       "icon": "🪶",
+       "label": "Is it okay?",
+       "goto": "d1"
+      },
+      {
+       "icon": "🎵",
+       "label": "A song?",
+       "goto": "d2"
+      },
+      {
+       "icon": "🤗",
+       "label": "You came for me?",
+       "goto": "d3"
+      }
+     ]
+    },
+    "d1": {
+     "say": "Oh yes… songs can be shared. It still has every note.",
+     "expr": "happy",
+     "next": "e",
+     "wait": 2600
+    },
+    "d2": {
+     "say": "A quiet one… you have to be very still to hear it.",
+     "expr": "thinking",
+     "next": "e",
+     "wait": 2600
+    },
+    "d3": {
+     "say": "You asked so kindly… so I came, to learn your world.",
+     "expr": "love",
+     "next": "e",
+     "wait": 2600
+    },
+    "e": {
+     "say": "One day, a long while from now… I'll carry it all to the wild, where the songs live.",
+     "expr": "happy",
+     "next": "f",
+     "wait": 2800
+    },
+    "f": {
+     "say": "But first… so much listening to do. I like that.",
+     "expr": "happy",
+     "memory": "I came from a song, to learn your world",
+     "memoryTag": "from_wild"
     }
    }
   }

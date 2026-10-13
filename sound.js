@@ -55,6 +55,7 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
   return {
     home(kind){const sp=kind==='owl'?'whimber':'slyte';set(`bg_${sp}_${band()}_loop`)},
     game(name){set(`game_${name}_loop`)},
+    title(){set('title_welcome_loop')},   // onboarding §4: first-run title -> welcome -> name -> age (C major, neutral)
     talk(sec){sec=sec||.6;(this.ducks=this.ducks||[]).push({to:.65,ms:Math.round(sec*1000)});if(!master||out)return;level(.65,.06);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.2)},sec*1000)},   // ~35% duck for the chirp's length, short fades (both Echoes)
     get level(){return master?master.gain.value:1},
     duck(v){out=!!v;level(v?0:1,v?.5:1.5)},   // bond-up: fade out, come back after
