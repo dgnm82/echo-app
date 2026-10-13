@@ -8,7 +8,7 @@
 const W=typeof window!=='undefined'?window:globalThis;
 const NS={};
 NS.cfg={
-  enter:35, exit:50, contentMin:60,          // hysteresis: a need turns "on" below 35 and "off" above 50 (no flicker)
+  enter:50, exit:60, contentMin:60,   // needs v2: asks below 50, stops at 60          // hysteresis: a need turns "on" below 35 and "off" above 50 (no flicker)
   gain:3.0, general:1.0, content:0.6,        // slot weights: need state = gain × pressure × tod; general chatter stays in the mix
   newShare:0.6,                              // when a state wins: 60% from need_<state>, 40% from tagged existing lines
   sameStateMs:120e3, anyNeedMs:60e3,         // cooldowns: same state ≥ 2 min apart, any need cue ≥ 1 min apart
@@ -25,7 +25,7 @@ NS.now=()=>Date.now(); NS.rand=Math.random;
 NS.session=function(){NS.mem.start=NS.now();NS.mem.n={};NS.mem.queue=[]};
 // ---- pressures 0..1 per state, with hysteresis
 NS.pressures=function(needs,species,band){const c=NS.cfg,p={};
-  for(const st in NEED){const v=needs[NEED[st]];const on=NS.mem.on[st]=NS.mem.on[st]?v<c.exit:v<c.enter;
+  for(const st in NEED){const v=needs[NEED[st]];(NS.mem.lv=NS.mem.lv||{})[st]=v;const on=NS.mem.on[st]=NS.mem.on[st]?v<c.exit:v<c.enter;
     p[st]=on?Math.max(0,Math.min(1,(c.exit-v)/c.exit)):0}
   if(needs.rest>=c.energetic.restMin&&needs.play<=c.energetic.playMax)p.playful=Math.max(p.playful,c.energetic.p);
   const t=(c.tod[species]||{})[band]||{};for(const st in p)if(p[st]>0)p[st]*=(t[st]||1);
@@ -33,7 +33,8 @@ NS.pressures=function(needs,species,band){const c=NS.cfg,p={};
 NS.content=needs=>Object.values(NEED).every(k=>needs[k]>=NS.cfg.contentMin);
 NS.top=p=>{let b=null;for(const st in p)if(p[st]>0&&(!b||p[st]>p[b]))b=st;return b};   // what the thought icon shows
 NS.blocked=function(st){const m=NS.mem,c=NS.cfg,t=NS.now();
-  return t-m.start<c.graceMs||t-(m.at[st]||-1e15)<c.sameStateMs||t-m.any<c.anyNeedMs||(m.mute[st]||0)>t||(m.n[st]||0)>=c.perSession};
+  const V=W.NeedsV2,lv=(m.lv||{})[st],gap=V&&lv!=null?V.reqGapMs(lv):c.sameStateMs,cap=V&&lv!=null?V.reqCap(lv):c.perSession;   // needs v2: 2 a session (25-49) / 3 (1-24), gap 2-5 min
+  return t-m.start<c.graceMs||t-(m.at[st]||-1e15)<gap||t-m.any<c.anyNeedMs||(m.mute[st]||0)>t||(m.n[st]||0)>=cap};
 // ---- one ambient / opener slot: returns {state, key, line}
 NS.slot=function(ctx){   // ctx: {needs, species, band, weather}
   const c=NS.cfg,m=NS.mem,D=W.Dialogue;

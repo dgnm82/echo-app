@@ -18,10 +18,10 @@ function save(){if(S&&S.needs){const m=S.metAt=S.metAt||{},p=sess._nv||{};for(co
 const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w;
 function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}
 let THO=null;   // the bubble's offset from the sprite, taken before the Echo first moves
-function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;
+function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;if(c.classList.contains('lvmoving')){t.style.visibility='hidden';clearTimeout(thoughtSync._t);return}   // needs v2 P2: hide in flight, show 1 s after landing
   const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
   if(!c.style.left){const tr=t.getBoundingClientRect();THO=[(tr.left-cr.left)/k,(tr.top-cr.top)/k];return}if(!THO)return;
-  t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto'}
+  t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto';if(t.style.visibility==='hidden'){clearTimeout(thoughtSync._t);thoughtSync._t=setTimeout(()=>{const u=document.querySelector('#sc .thought');if(u)u.style.visibility=''},1000)}}
 function thoughtRefresh(){const sc=document.getElementById('sc'),c=document.getElementById('cr');if(!sc||!c)return;let t=sc.querySelector('.thought');const w=want(),show=w&&mood()!=='sleep';
   if(!show){if(t)t.remove();return}
   if(t&&t.dataset.w===w)return;if(t){t.dataset.w=w;t.innerHTML=thoughtIcon(w)}else{c.insertAdjacentHTML('afterend',thoughtHTML(w));thoughtSync()}}
@@ -276,9 +276,9 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx};
+  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
-  S=Object.assign(keep,{kind,g,needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
+  S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
   S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
   initDialogue();save();remember('The day we met in the meadow','met');
@@ -309,7 +309,7 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
    <button class="pcrow" id="pcage"><span>Age range</span><b>${(S&&S.ageBand)||'7-8'}</b></button>
    ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
    ${tog('pcyes','Echoes always say yes',!!(S&&S.alwaysYes))}
-   ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}
+   ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}${has?tog('pcholiday','Holiday mode',!!(S.holiday&&S.holiday.on))+`<div class="pcnote">Going away? Turn this on and ${S.g.name} takes a little holiday too. Needs and the 3-day goodbye timer pause. It ends when ${S.child||'your child'} next opens Echo.</div>`:''}
    <button class="pcrow" id="pcreset"><span>Start over</span><b>›</b></button>
    <div class="pcnote">${U('ui_pc_privacy')} No camera on this version. Echo only remembers the kind of animal and a colour.</div>
    <button class="btn" id="pcdone">${U('ui_pc_done')}</button>`);d.classList.add('pcset');
@@ -318,6 +318,7 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
   d.querySelector('#pcvoice').onclick=()=>{need();S.voice=S.voice===false;save();re()};
   d.querySelector('#pcyes').onclick=()=>{need();S.alwaysYes=!S.alwaysYes;save();re()};
   d.querySelector('#pcshared').onclick=()=>{need();S.fwShared=!S.fwShared;save();re()};
+  const hb=d.querySelector('#pcholiday');if(hb)hb.onclick=()=>{const on=!(S.holiday&&S.holiday.on);holidaySet(on);if(on)sess.holidayStart=1;re()};
   if(has)d.querySelector('#pcstay').onclick=()=>{const f=fw();f.paused=!f.paused;save();re()};
   d.querySelector('#pcage').onclick=()=>{need();const L=Object.keys(OBC.bands);obSetBand(L[(L.indexOf(S.ageBand||'7-8')+1)%L.length]);save();re()};
   d.querySelector('#pcname').onclick=()=>{need();const p=full(`<div class="obpanel"><b>Name or nickname</b></div><div class="obfield"><input id="pcnm" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.vars.child_named?S.child:''}" aria-label="Name or nickname"></div><p class="obsmall" id="pcnh"></p>
@@ -337,7 +338,7 @@ function pcReset(set){const R=UA('ui_pc_reset');const d=full(`<div class="obpane
   const up=()=>{clearTimeout(t);b.classList.remove('hold')};b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up)}
 function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){
-  ov.innerHTML='';
+  ov.innerHTML='';if(S.left)return leaveScreen();
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg} pxscene sc-${curScene().id}" id="sc" style="${scStyle()}">${fwHomeBits()}
@@ -360,6 +361,7 @@ function home(greet){
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
   else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   thoughtSync();if(LIVE.st!=='found')lvStart(false);
+  if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk({text:nvLine('holidayStart'),expr:'excited'},3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
 }
@@ -424,7 +426,7 @@ function lvMove(to,done,fast){   // Slyte trots on the ground (2 px/tick, 3 when
     if(!fox||hopUp)y-=4*(hopUp?10:apex)*t*(1-t);                 // flight arc / the fort hop chain
     else if(!lowFx()&&i<n)y-=(i>>1)%2;                                   // 1 px trot bob
     lvPlace(Math.round(x),Math.round(y),x1<x0?-1:1);
-    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,false);setExpr(baseExpr())}done&&done()}},83)}
+    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');thoughtSync();if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,false);setExpr(baseExpr())}done&&done()}},83)}
 function lvFx(src,x,y,cls,ms){const sc=$('#sc');if(!sc)return;const e=document.createElement('i');e.className='lvfx '+(cls||'');e.style.cssText=`left:${x}px;top:${y}px;background-image:url(${src})`;sc.appendChild(e);setTimeout(()=>e.remove(),ms||1500)}
 function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
   const fox=S.kind==='fox',[x,y]=LIVE.pos,top=y-48;LIVE.act=name;LIVE.log.push(name);const fx=lowFx()?0:1;
@@ -711,6 +713,23 @@ function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);i
   
   const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
 
+
+// ---------- needs v2 §4: away timeline (note, kind leave) and holiday mode. Bond is frozen, never lowered; nothing guilt-y ----------
+const nvSp=()=>S.kind==='fox'?'slyte':'whimber',nvVars=()=>({child:S.child||'friend',name:S.g.name,fav:S.g.fav||''});
+const nvLine=k=>NeedsV2.fill(NeedsV2.L[k][nvSp()],nvVars());
+function awayOnHome(){   // called from home(true): one gentle beat per open, no counting of days out loud
+  if(sess.holidayBack){sess.holidayBack=0;return talk({text:nvLine('holidayBack'),expr:'delighted'},3200),true}
+  if(sess.awayNote){sess.awayNote=0;remember(nvLine('note'),'note_'+new Date(now()).toDateString());talk({text:nvLine('note'),expr:'happy'},5200);return true}
+  if(sess.awayTreasure){sess.awayTreasure=0;S.treasures=S.treasures||[];S.treasures.push(E().treasure);remember(S.kind==='fox'?'I found you a shiny treasure while exploring':'I found you a glowing treasure while exploring','away_treasure');talk({text:nvLine('treasure'),expr:'excited'},2600);return true}
+  return false}
+function leaveScreen(){const L=S.left,canVisit=!L.revisited&&now()-L.at<14*864e5;if(now()>=L.card2&&!L.card2Shown){L.card2Shown=1;remember(nvLine('leave2'),'leave2')}
+  if(!(S.memTags||[]).includes('leave'))remember(nvLine('leave'),'leave');save();
+  h(`<div class="top"><b>${S.g.name}</b></div><div class="scene ${E().bg} pxscene" id="lv"><div class="mcard leavecard"><div class="mtop">${PI('✉️')}<span class="mt">A postcard</span></div><p class="mline">${nvLine('leave')}</p>${L.card2Shown?`<p class="mline">${nvLine('leave2')}</p>`:''}
+    <div class="row">${canVisit?`<button class="btn" id="lvvisit">Visit ${S.g.name} again</button>`:''}<button class="btn" id="lvnew">Find a new friend</button><button class="btn small" id="lvbook">${PI('📖')}</button></div></div></div>`);
+  if(canVisit)$('#lvvisit').onclick=()=>{L.revisited=1;delete S.left;S.leftBefore=L;for(const k in S.needs)S.needs[k]=70;S.last=now();save();home(true)};   // D4: once, same Echo, needs 70
+  $('#lvnew').onclick=()=>{(S.wild=S.wild||[]).push({name:S.g.name,kind:S.kind,family:S.g.family,bond:S.bond,stage:stage(),memories:S.memories.slice(),left:L.at});S.setupDone=0;S.origin={};save();orSeen()};
+  $('#lvbook').onclick=()=>{try{book()}catch(e){}}}
+function holidaySet(on,until){S.holiday=on?{on:true,since:now(),until:until||null}:{on:false};save()}
 // ---------- Games v2 shared kit (games_v2.md §3.0): flat rewards, best store, end card, HUD best, bonus glow, quiet auto-Easy ----------
 const GTU=()=>window.GAMES_TUNING;
 function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++)S.needs.play=clamp(S.needs.play+C.restore.play);if(n===R.roundsPerGame)addBond(0,true,'game');else addBond(0,true,'care');return n}   // needs v2 §2: +4 per finished game (6 a day); an early Done still counts as a visit
@@ -1241,6 +1260,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},meters:()=>NeedsV2.meter(S.needs),simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

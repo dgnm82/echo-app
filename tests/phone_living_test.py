@@ -53,12 +53,15 @@ async def main():
     assert not await pg.evaluate("!!document.querySelector('#sc .thought')"),'bubble hides once fed'
     await pg.evaluate("__echo.state.needs.play=10;__echo.hug()");await pg.wait_for_timeout(200)
     assert await pg.evaluate("document.querySelector('#sc .thought').dataset.w")=='⚽','bubble re-picks the top need'
-    off=lambda:pg.evaluate("(()=>{const t=document.querySelector('#sc .thought').getBoundingClientRect(),c=document.getElementById('cr').getBoundingClientRect();if(!t.width)return null;return [Math.round(t.left-c.left),Math.round(t.top-c.top)]})()")
-    o0=await off();await pg.evaluate("__echo.living.move([40,200])");drift=0;seen=0
-    for i in range(20):
-      await pg.wait_for_timeout(120);o=await off()
-      if o:seen+=1;drift=max(drift,abs(o[0]-o0[0]),abs(o[1]-o0[1]))
-    print('bubble drift px',drift,'moved',await pg.evaluate("__echo.living.pos"));assert seen>3 and drift<=24,(seen,drift)   # screen px (~2x UI); unfixed it was ~240
+    off=lambda:pg.evaluate("(()=>{const t=document.querySelector('#sc .thought'),c=document.getElementById('cr').getBoundingClientRect(),r=t.getBoundingClientRect();return [Math.round(r.left-c.left),Math.round(r.top-c.top),getComputedStyle(t).visibility]})()")
+    o0=await off();await pg.evaluate("__echo.living.move([40,200])");hid=0
+    for i in range(8):
+      await pg.wait_for_timeout(120);o=await off();hid+=o[2]=='hidden'
+    for i in range(40):
+      await pg.wait_for_timeout(150)
+      if not await pg.evaluate("document.getElementById('cr').classList.contains('lvmoving')"):break
+    await pg.wait_for_timeout(1300);o=await off();print('bubble in flight hidden',hid,'landed',o,o0)
+    assert hid>=6 and o[2]=='visible' and abs(o[0]-o0[0])<=24 and abs(o[1]-o0[1])<=24,(hid,o,o0)   # needs v2 P2: hidden while moving, back beside the sprite 1 s after landing
     await pg.close()
     print('ERR',errs);assert not errs;await b.close();print('living test OK')
 asyncio.run(main())
