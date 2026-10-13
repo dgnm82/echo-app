@@ -601,7 +601,7 @@ function memoryGame(){
       if(S.talents.includes('Radar Ears')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('slyte_radar_ears_twinkle',{pan:(col/(g.cols-1))*2-1,vol:.6})}
       // Super Radar Hearing (spec v0.4 §1, Whimber): after a miss, a soft B♭ chime from the side where the partner card lies
       if(S.kind!=='fox'&&S.talents.includes('Super Radar Hearing')&&e.partnerOfFirst>=0){const col=e.partnerOfFirst%g.cols;SFX('run_treasure_1',{pan:(col/(g.cols-1))*2-1,vol:.5})}}
-    if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');talk(B('pairs_hint'),1600)}
+    if(e.type==='hint'){const el=B_[e.i];el.classList.remove('wiggle');void el.offsetWidth;el.classList.add('wiggle');react('curious');let rl=null;if(fox&&S.talents.includes('Riddle Solver')){(S.vars=S.vars||{}).riddle=g.cards[e.i].item;rl=Dialogue.bark('pairs_riddle');delete S.vars.riddle}talk(rl||B('pairs_hint'),rl?2600:1600)}   // Riddle Solver: the hint is a riddle about the partner card
     if(e.type==='round'&&e.round<2){react('happy');roundDone(e.round,NEXT)}
     if(e.type==='done')finish()}
     $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.pairs}/${total}`;

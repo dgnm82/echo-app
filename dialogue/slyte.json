@@ -2531,6 +2531,108 @@
     "text": "Tiny cabbages! My nose is still deciding. Maybe later.",
     "expr": "shy"
    }
+  ],
+  "pairs_riddle": [
+   {
+    "text": "Riddle! Red and crunchy. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "apple"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Sticky and sweet. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "honey_cake"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Shiny, like me. Where?",
+    "expr": "proud",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "trinket"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Purple and bumpy. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "blackberry"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Green and floaty. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "leaf"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Hard shell, crunchy inside. Where?",
+    "expr": "thinking",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "nut"
+     }
+    }
+   },
+   {
+    "text": "Riddle! White petals, sunny middle. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "daisy"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Scaly, from a pine. Where?",
+    "expr": "thinking",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "pinecone"
+     }
+    }
+   },
+   {
+    "text": "Riddle! A tiny umbrella. Where?",
+    "expr": "curious",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "mushroom"
+     }
+    }
+   },
+   {
+    "text": "Riddle! Round and bouncy. Where?",
+    "expr": "excited",
+    "cond": {
+     "talent": "Riddle Solver",
+     "var": {
+      "riddle": "ball"
+     }
+    }
+   }
   ]
  },
  "conversations": [
