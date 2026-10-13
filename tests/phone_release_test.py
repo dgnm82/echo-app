@@ -32,7 +32,7 @@ async def run(b,dev,vp,errs,full=True):
     await clean();await pg.evaluate("Object.assign(__echo.state.needs,{food:50,play:80,rest:80,comfort:80});__echo.state.napUntil=0");await pg.click('#feed');await pg.locator('.choices button').first.click();await pg.wait_for_timeout(300)
   async def newday():
     await clean();await pg.click('#dbg');await pg.click('#b7');await pg.wait_for_timeout(500);await pg.evaluate(FAST)
-  await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(700)
+  await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(700)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(500);await pg.click(SEL);await pg.wait_for_timeout(3600)
   await pick();await pg.wait_for_timeout(3200)
   if not full:await pg.close();return
