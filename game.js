@@ -109,7 +109,7 @@ function discover(){
 }
 async function reveal(kind){
   Object.assign(S,{kind,g:genEcho(kind),needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],vars:{},seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString()});
-  S.g.name=(window.FAMILIES&&FAMILIES.byKind[kind].default_name)||E().name; await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
+  S.g.name=(window.FAMILIES&&FAMILIES.byKind[kind].default_name)||E().name;if(window.FAMILIES){const f=FAMILIES.byKind[kind];Object.assign(S.vars,{origin_animal:kind,family:f.label,family_plural:f.plural,default_name:f.default_name})} await Dialogue.load(kind==='fox'?'slyte':'whimber');initDialogue();
   const e=E();
   const px=!!window.PIXEL;
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
@@ -120,7 +120,7 @@ async function reveal(kind){
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
         save();talk(B('reveal_reply'));remember('The day we met in the dusk meadow','met');
         setTimeout(()=>{home();const tip=()=>toast('Tip: tap the buttons below to care for '+S.g.name);
-          if(localStorage.getItem('echo-nosetup'))return tip();sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;tip()}),600)},2400);
+          const ns=localStorage.getItem('echo-nosetup');if(ns&&ns!=='talk')return tip();sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;tip()}),600)},2400);
       })},1800)},1700);
 }
 // ---------- Onboarding v1 (onboarding.md v0.2) + Origin v2 phone v1 (origin_v2.md v0.2) + grown-ups corner (§5) ----------
