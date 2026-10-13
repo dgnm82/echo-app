@@ -13,4 +13,8 @@ A([1,2,3].map(()=>g('reply')).join()==='3,3,0','2 replies a session');
 for(let i=0;i<9;i++)g('game');A(se.bond===30,'30 a session '+se.bond);se={};for(let i=0;i<9;i++)g('visit');g('pet');g('pet');g('pet');g('sit');A(st.bondDay.n<=60,'60 a day');
 se={};A(g('hello')>=0&&N.bondGrant({},{},'nap','d')===0,'no nap bond');
 A([10,30,50,80].map(N.awayStage).join()==='0,1,2,3','away stages');
+st={};se={};A([1,2,3,4].map((_,i)=>N.bondGrant(st,se,i%2?'feedFav':'feed','d2')).join()==='3,6,3,0','3 snacks a day in total');
+st={};se={bond:28};A(N.bondGrant(st,se,'choice','d3',5)===2,'choice counts toward caps');
+A(N.led({food:10,play:80,comfort:80,rest:80}).hex==='#FFB070'&&N.led({food:10,play:80,comfort:80,rest:80}).level===.2&&N.led({food:30,play:80,comfort:80,rest:80}).level===.4&&N.led({food:60,play:80,comfort:80,rest:80}).level===.7&&N.led({food:80,play:80,comfort:80,rest:80}).hex==='#FFF6E6','led');
+A([24,25,49,50,74,75].map(N.step).join()==='1,2,2,3,3,4','step boundaries');
 console.log(`${ok}/${n} needs tests passed`);if(ok<n)process.exit(1)

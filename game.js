@@ -78,12 +78,12 @@ function simulate(){
   const hrs=Math.max(0,(now()-S.last)/36e5);NeedsV2.drain(S.needs,S.last,now(),S.quietHours,C.maxDecayHours);
   const st=NeedsV2.awayStage(hrs),fl=NeedsV2.awayFloor[st];if(fl)for(const k in S.needs)S.needs[k]=Math.max(S.needs[k],fl);
   if(st===1)sess.awayTreasure=1;else if(st===2)sess.awayNote=1;
-  else if(st===3&&!S.released&&!S.left&&!(S.badges||[]).includes('ready'))S.left={at:now(),card2:now()+7*864e5};   // kind leave: gone home for the next adventure (no dying, bond frozen)
+  else if(st===3&&!S.released&&!S.left&&!(fwReady()||fw().state!=='active'))S.left={at:now(),card2:now()+7*864e5};   // kind leave: gone home for the next adventure (no dying, bond frozen)
   const today=new Date(now()).toDateString(); if(S.lastHello!==today&&!S.left){S.lastHello=today;addBond(C.bond.hello,true,'hello');S.days=(S.days||0)+1}
 }
 function addBond(n,silent,src){   // needs v2 §2: tagged sources go through the day/session caps; a visit = the first care action of a session
   if(S.left||(S.holiday&&S.holiday.on))return;const day=new Date(now()).toDateString();
-  if(src){if(NeedsV2.care.includes(src)&&!sess.visited){sess.visited=1;n=NeedsV2.bondGrant(S,sess,'visit',day)}else n=0;n+=NeedsV2.bondGrant(S,sess,src,day)}
+  const n0=n;if(src){if(NeedsV2.care.includes(src)&&!sess.visited){sess.visited=1;n=NeedsV2.bondGrant(S,sess,'visit',day)}else n=0;n+=NeedsV2.bondGrant(S,sess,src,day,n0)}
   const before=S.bond; S.bond=Math.min(500,S.bond+Math.round(n*C.demoSpeed));
   if(S.badges===undefined)S.badges=[];
   for(const m of C.milestones){ if(before<m.bond&&S.bond>=m.bond&&!S.badges.includes(m.id)){S.badges.push(m.id);queueMilestone(m)} }
@@ -557,7 +557,7 @@ function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
   Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
-    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(0,false,'reply');save();
+    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n,false,'choice'),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(0,false,'reply');save();
     // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
     const onHome=()=>document.getElementById('feed')&&!document.querySelector('.full');
     const nx=info&&info.carriedOn?null:Dialogue.afterConversation(conv,depth);
@@ -594,7 +594,7 @@ function feed(){
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],tier=foodTaste(f),T=FOODS.tiers[tier],lbl=foodLabel(f),fav=tier==='favorite',first=!S.foods.includes(lbl);sess.feeds++;
     if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('hungry')}
     S.needs.food=clamp(S.needs.food+T.food);if(first)S.foods.push(lbl);(S.foodTiers=S.foodTiers||{})[lbl]=tier;   // a disliked food still restores +15
-    addBond(T.bond,false,fav?'feedFav':'feed');SFX('care_feed_eat');if(fav)fwTick('food');save();
+    addBond(0,false,fav?'feedFav':'feed');SFX('care_feed_eat');if(fav)fwTick('food');save();
     if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${lbl}`,'favfood');
     if(tier==='not_for_me'&&first)remember(FOODS.tiers.not_for_me.memory.replace('{food}',f.name),'food_'+f.id);
     const line=()=>{const own=Dialogue.bark('food_'+f.id);talk(fav?B('fed_fav'):tier==='not_for_me'?(own||B('fed')):(Math.random()<.6&&own)||B('fed'))};
