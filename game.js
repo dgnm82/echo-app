@@ -839,7 +839,7 @@ function runGame(){
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const pd=`run/${pal}/${PIXEL.stageNow()>=4?'':'s'+Math.min(Math.max(PIXEL.stageNow(),1),3)+'/'}`;   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
-  if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
+  window.__runHome=null;if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].forEach(k=>ld(k,pd+'slyte_'+k))}
   else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}

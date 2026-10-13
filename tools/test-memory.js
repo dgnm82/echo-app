@@ -21,4 +21,6 @@ T('h) Master of Disguise hides a Slyte pair only in big-kid, board stays 20',()=
 T('i) handheld cursor: ◀ ▶ wrap in reading order and skip paired cards; B jumps down a row and wraps',()=>{const g=M.create({seed:6});g.cards[1].paired=true;g.cursor=0;assert.equal(M.cursorMove(g,1),2);g.cursor=0;assert.equal(M.cursorMove(g,-1),19);
   g.cursor=17;assert.equal(M.cursorDown(g),5,'17 down wraps to 1 (paired) so it lands on 5');g.cursor=3;assert.equal(M.cursorDown(g),7)});
 T('j) slow board = more than 2x as many turns as pairs (auto Easy rule)',()=>{const g=M.create({seed:7});solve(g);assert(!M.slow(g));g.turns=21;assert(M.slow(g))});
+T('riddle) every DECK.slyte item has one pairs_riddle line keyed by cond.var.riddle (Riddle Solver hints)',()=>{const L=require('../dialogue/slyte.json').barks.pairs_riddle;
+  for(const it of M.DECK.slyte){const ls=L.filter(l=>l.cond&&l.cond.var&&l.cond.var.riddle===it);assert.ok(ls.length>=1,it);for(const l of ls)assert.ok(l.text.length<=42,'fits 3 rows: '+l.text)}});
 console.log(ok+'/'+n+' memory tests passed');if(ok!==n)process.exit(1);

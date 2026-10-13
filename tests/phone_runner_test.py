@@ -22,6 +22,7 @@ async def main():
       b0=await pg.evaluate("__echo.state.bond")
       cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
       await pg.wait_for_selector('#rc',state='attached',timeout=5000);await pg.evaluate("__run.L=Object.assign({},__run.L,{stretch:6})")
+      assert await pg.evaluate("!window.__runHome"),"no home rest stop before the place badge"
       await pg.wait_for_timeout(1200);await pg.screenshot(path=f'{OUT}/{sp}-start.png')
       assert await pg.evaluate("Music.playing||'nomusic'") in ('nomusic',f"game_{'meadow_dash' if kind=='fox' else 'moonlight_glide'}_loop")
       # play: tap / hold on the play area
