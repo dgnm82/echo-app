@@ -4,11 +4,12 @@
 #   --phone: also runs the headless phone-viewport playthrough (/workspace/echo-test.py, needs a server on :8765)
 set -euo pipefail
 cd "$(dirname "$0")/.."
-echo "== JS syntax"; for f in families.js config.js games_tuning.js catch.js stack.js art.js dialogue.js game.js fort.js memory.js runner.js bondup.js scenes.js postcards.js pixel.js sound.js alive.js need_select.js foods.js need_tags.js; do node -e "new (require('vm').Script)(require('fs').readFileSync('$f','utf8'),{filename:'$f'})"; done; echo ok
+echo "== JS syntax"; for f in families.js config.js games_tuning.js needs.js catch.js stack.js art.js dialogue.js game.js fort.js memory.js runner.js bondup.js scenes.js postcards.js pixel.js sound.js alive.js need_select.js foods.js need_tags.js; do node -e "new (require('vm').Script)(require('fs').readFileSync('$f','utf8'),{filename:'$f'})"; done; echo ok
 echo "== lint_dialogue.py"; python3 tools/lint_dialogue.py dialogue | tail -4
 echo "== guardrail lint"; node tools/lint-dialogue.js dialogue --js game.js --js config.js --js postcards.js | tail -1
 echo "== engine unit tests"; node tools/test-engine.js | tail -1
 echo "== fort builder tests"; node tools/test-fort.js | tail -1
+echo "== needs v2 tests"; node tools/test-needs.js | tail -1
 echo "== catch / stack tests"; node tools/test-catch.js | tail -1; node tools/test-stack.js | tail -1
 echo "== shiny pairs tests"; node tools/test-memory.js | tail -1
 echo "== postcard tests"; node tools/test-postcards.js | tail -1
