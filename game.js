@@ -148,7 +148,7 @@ function obNameCheck(raw){const t=String(raw||'').trim().replace(/\s+/g,' ');if(
 // --- decline (origin §3): deterministic hash; never first Echo, never for borrowed colours, at most once per origin, always-yes setting
 function obHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
 function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&o.src!=='borrowed'&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
-function obSprite(fid,seed,pal,stage){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal},stage||1):''}
+function obSprite(fid,seed,pal,stage,look){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal,look:look||(S&&S.origin&&S.origin.animal&&S.origin.family===fid?(FAM().animals[S.origin.animal].look||f.look_default):f.look_default)},stage||1):''}
 function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
 function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
@@ -259,7 +259,7 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
   const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,fwShared:S.fwShared,lowfx:S.lowfx};
-  const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.name=name;g.family=f.label;
+  const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
   S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
