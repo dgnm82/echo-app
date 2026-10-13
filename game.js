@@ -202,17 +202,17 @@ function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$
   c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));
   const px=c.querySelector('.px-echo');if(px&&face!=null&&px.classList.contains('lvflip')!==(face<0)){px.classList.toggle('lvflip',face<0);PIXEL.blink(px)}}   // blink on turn (B1)
 function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
-function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');const c=lvEl();if(c)c.classList.remove('lvmoving')}
+function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');if(px&&window.PIXEL&&PIXEL.fly)PIXEL.fly(px,false);const c=lvEl();if(c)c.classList.remove('lvmoving')}
 function lvMove(to,done,fast){   // Slyte trots on the ground (2 px/tick, 3 when called over); Whimber flies a quadratic arc (3 px/tick, apex 12-20 px)
   lvClear();const [x0,y0]=LIVE.pos||lvDef().wp.stage,[x1,y1]=to,fox=S.kind==='fox',d=Math.hypot(x1-x0,y1-y0);
   if(d<1){done&&done();return}
   const sp=fast?Math.max(3,d/22):(fox?2:3),n=Math.max(1,Math.ceil(d/sp)),apex=fox?0:Math.min(24,12+d/12),hopUp=fox&&y1<y0-20,step=lowFx()?2:1;let i=0;
-  const c=lvEl();if(c)c.classList.add('lvmoving');if(!fox)setExpr('excited');
+  const c=lvEl();if(c)c.classList.add('lvmoving');if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,true);else setExpr('excited')}
   LIVE.timer=setInterval(()=>{i=Math.min(n,i+step);const t=i/n;let x=x0+(x1-x0)*t,y=y0+(y1-y0)*t;
     if(!fox||hopUp)y-=4*(hopUp?10:apex)*t*(1-t);                 // flight arc / the fort hop chain
     else if(!lowFx()&&i<n)y-=(i>>1)%2;                                   // 1 px trot bob
     lvPlace(Math.round(x),Math.round(y),x1<x0?-1:1);
-    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');if(!fox)setExpr(baseExpr());done&&done()}},83)}
+    if(i>=n){clearInterval(LIVE.timer);LIVE.timer=null;if(c)c.classList.remove('lvmoving');if(!fox){const p=c&&c.querySelector('.px-echo');if(p&&PIXEL.fly)PIXEL.fly(p,false);setExpr(baseExpr())}done&&done()}},83)}
 function lvFx(src,x,y,cls,ms){const sc=$('#sc');if(!sc)return;const e=document.createElement('i');e.className='lvfx '+(cls||'');e.style.cssText=`left:${x}px;top:${y}px;background-image:url(${src})`;sc.appendChild(e);setTimeout(()=>e.remove(),ms||1500)}
 function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
   const fox=S.kind==='fox',[x,y]=LIVE.pos,top=y-48;LIVE.act=name;LIVE.log.push(name);const fx=lowFx()?0:1;

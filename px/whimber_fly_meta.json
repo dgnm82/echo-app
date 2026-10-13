@@ -1,0 +1,31 @@
+{
+ "frames": [
+  "fly0",
+  "fly1",
+  "fly2",
+  "fly3"
+ ],
+ "ticks": [
+  2,
+  2,
+  2,
+  2
+ ],
+ "size": 48,
+ "rows": "stages 1..5 (same as whimber_<pal>_f<fl>.png)",
+ "palettes": [
+  "lilac-night",
+  "sky-teal",
+  "plum-blush",
+  "mint-aurora",
+  "peach-dusk"
+ ],
+ "fluffs": [
+  0,
+  1,
+  2,
+  3
+ ],
+ "maxColours": 15,
+ "source": "tools/bake_whimber_fly.py (same engine + presets as tools/bake_whimber.py)"
+}

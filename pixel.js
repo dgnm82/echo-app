@@ -21,6 +21,7 @@ function variant(seed,sp){const r=rng((seed||1)^0x9e37),P=sp==='whimber'?POWL:PA
 function stageFromBond(bond){const f=Math.max(0,Math.min(1,(bond||0)/500));return f<.25?1:f<.5?2:f<.75?3:4}
 function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.released)return 4;if(S.releasePath)return 5;return stageFromBond(S.bond)}catch(e){return 1}}
 function whimber(g,stage){const v=variant(g&&g.seed,'whimber');stage=stage||stageNow();
+  {const pre=new Image();pre.src=`px/whimber_${v.pal}_f${v.fluff}_fly.png`}   // v1.1: no flash on the first take-off
   return `<div class="echo-svg px-echo owl" role="img" aria-label="Whimber" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/whimber_${v.pal}_f${v.fluff}.png)"></div>`}
 function slyte(g,stage){const v=variant(g&&g.seed);stage=stage||stageNow();
   return `<div class="echo-svg px-echo fox" role="img" aria-label="Slyte" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/slyte_${v.pal}_f${v.fluff}.png)"></div>`}
@@ -32,7 +33,7 @@ function event(el,kind,cb){if(!el)return;const e=EV[kind];if(!el._base)el._base=
 function evStep(el){const v=el._ev;el.style.backgroundPosition=`${-v.i*N}px ${-v.row*N}px`;el._col='ev'+v.row+':'+v.i;
   if(++v.k>=v.t[v.i]){v.k=0;v.i++;if(v.i>=v.t.length){el._ev=null;if(v.kind==='release'){el.style.visibility='hidden'}else{el.style.backgroundImage=el._base}
     try{v.cb&&v.cb()}catch(e){console.error(e)}}}}
-function step(el){if(el._ev)return evStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
+function step(el){if(el._ev)return evStep(el);if(el._fly)return flyStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
   if(!s){s=el._s={i:0,hold:0,q:[],nb:rand(24,72),ne:rand(48,108),nt:rand(60,120),t:0}}
   s.t++;let col;
   if(s.ex!==ex){s.ex=ex;s.si=0;s.sh=0}
@@ -64,6 +65,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 W.Chirp={enabled:true,last:null,play(text,kind){this.last={text:String(text),kind,at:Date.now()};
   try{W.dispatchEvent(new CustomEvent('echo-chirp',{detail:this.last}))}catch(e){}}};
 function queue(el,seq,add){if(!el||el._ev)return;if(!el._s)step(el);const q=seq.map(x=>x.slice());el._s.q=add?el._s.q.concat(q):q}   // play raw frames once
+// v1.1 F1: Whimber flap cycle, px/whimber_<pal>_f<fl>_fly.png (rows = stages like the home sheet, cols = fly0..fly3, 2 ticks each)
+function fly(el,on){if(!el||el._ev||!el.classList.contains('owl'))return;if(!el._base)el._base=el.style.backgroundImage;
+  if(on&&!el._fly){el._fly={i:0,k:0};el.style.backgroundImage=el._base.replace('.png','_fly.png');flyStep(el)}
+  else if(!on&&el._fly){el._fly=null;el.style.backgroundImage=el._base;if(el._s)el._s.q=[]}}
+function flyStep(el){const f=el._fly,st=+el.dataset.stage||1;el.style.backgroundPosition=`${-f.i*N}px ${-(st-1)*N}px`;el._col='fly'+f.i;if(++f.k>=2){f.k=0;f.i=(f.i+1)%4}}
 function blink(el,slow){queue(el,[[FR.blink,slow?5:2]],true)}   // slow blink on pet / love lines; a blink on every turn
 function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
@@ -73,5 +79,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={queue,blink,whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={queue,blink,fly,whimber,POWL,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();
