@@ -685,7 +685,7 @@ function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starl
   if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
   if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch|tower|steps/.test(t)?(fox?'game_leaf_trail':'game_firefly_parade'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
@@ -796,8 +796,8 @@ function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">
 function catchGame(){
   const fox=S.kind==='fox',level=v2Level('catch','catchLevel'),st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=fox?'Berry Catch':'Starfall Catch';
   const g=CatchEngine.create({level,seed:(S.g.seed||1)*37+st.games*11+1,fam:fox?'slyte':'whimber',lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
-  gameShell(TITLE);const gs=$('#gs');gs.classList.add('g2game','catchgame');
-  gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" style="width:100%" aria-label="${TITLE}"></canvas>`);
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
   const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(fox)g2Img(IM,'canopy','px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
@@ -839,14 +839,14 @@ function catchGame(){
 function stackGame(){
   const fox=S.kind==='fox',level=v2Level('stack','stackLevel'),st=v2State('stack'),t0=now(),best0=bestGet('stack',level),firstEver=!st.games&&!best0,TITLE=fox?'Pancake Tower':'Cloud Steps',M=fox?'pancake':'cloud',LH=8,BASE=268;
   const g=StackEngine.create({level,seed:(S.g.seed||1)*41+st.games*13+1}),FR=g2Frames(fox);
-  gameShell(TITLE);const gs=$('#gs');gs.classList.add('g2game','stackgame');
-  gs.insertAdjacentHTML('beforeend',`<canvas id="sc" width="180" height="300" style="width:100%" aria-label="${TITLE}"></canvas>`);
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','stackgame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="stc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/stack/${M}_60.png);width:12px;height:8px"></i><span id="sh">0</span> ${hudBest('stack',level)} <span id="sp"></span>`;
   const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);g2Img(IM,'base',fox?'px/stack/plate.png':'px/run/bench.png');
   ['','_perfect'].forEach(p=>['l','m','r'].forEach(s=>g2Img(IM,p+s,`px/stack/${M}${p}_${s}.png`)));[0,1,2,3].forEach(i=>g2Img(IM,'burst'+i,`px/items/burst${i}.png`));
   if(fox)g2Img(IM,'home',PIXEL.sheet('slyte',S.g));else g2Img(IM,'fly',FR.fly);
   let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0;const perf=new Set();
-  const cv=$('#sc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+  const cv=$('#stc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
   function layer(x,y,w,p){x=Math.round(x);w=Math.max(6,Math.round(w));const P=p?'_perfect':'';if(!g2ok(IM[P+'m']))return;cx.drawImage(IM[P+'l'],x,y);let i=x+3;while(i<x+w-3){const c=Math.min(6,x+w-3-i);cx.drawImage(IM[P+'m'],0,0,c,8,i,y,c,8);i+=c}cx.drawImage(IM[P+'r'],x+w-3,y)}
   const yOf=h=>BASE-LH*(h+1)+cam;
   function step(dt){if(ended)return;StackEngine.step(g,dt);F++;const want=Math.max(0,132-(BASE-LH*(g.h+2)));if(cam<want)cam=lowFx()?Math.ceil(want/8)*8:Math.min(want,cam+2);
@@ -857,7 +857,7 @@ function stackGame(){
       if(e.type==='place'){SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,y:yOf(g.h),vy:0,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,y:yOf(g.h),vy:0,t:8})}
       if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
     if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
-  function draw(){if(!document.getElementById('sc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);
+  function draw(){if(!document.getElementById('stc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);
     if(g2ok(IM.base))fox?cx.drawImage(IM.base,47,BASE+cam):cx.drawImage(IM.base,79,BASE+cam,22,8);
     g.layers.forEach((l,i)=>{if(i>0)layer(l.x,yOf(i-1),l.w,perf.has(i))});
     if(!ended)layer(g.sx,yOf(g.h)-LH-2,g.w,false);
@@ -872,7 +872,7 @@ function stackGame(){
     if(n>=5)remember(fox?`We stacked ${n} pancakes`:`We stacked ${n} clouds`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'stack',unit:fox?'pancakes':'clouds',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${g.perfects}`],onAgain:stackGame})},900)}
   cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
-  function key(e){if(!document.getElementById('sc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
+  function key(e){if(!document.getElementById('stc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
   document.addEventListener('keydown',key);
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
   window.__stack=g;window.__stackPress=press;talk(B('tower_start'),2000)}

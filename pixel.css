@@ -310,4 +310,4 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 @keyframes g2drop{from{transform:translateY(-40px)}to{transform:none}}@keyframes g2dith{from{opacity:0}to{opacity:1}}
 .g2hud{display:inline-flex;align-items:center;gap:2px;color:#FFF6E6}.g2hud i{width:6px;height:8px;background:#FFD27A;clip-path:polygon(0 0,100% 50%,0 100%)}.g2hud.gold,.gold{color:#FFD27A}
 .fbmeter{display:flex;flex-direction:column-reverse;gap:1px;width:10px}.fbmeter i{height:4px;background:#3B2A5C}.fbmeter i.on{background:#FFD27A}.fbmeter i.best{box-shadow:0 -1px 0 #F2A65A}
-.g2game canvas{display:block;image-rendering:pixelated;touch-action:none}
+.g2game #cc,.g2game #stc{position:absolute;left:0;top:0;width:180px;height:300px;image-rendering:pixelated;touch-action:none;z-index:0}
