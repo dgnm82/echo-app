@@ -190,7 +190,7 @@ function obSetChild(n){S=S&&S.setupDone===0?S:{voice:true,music:true,vars:{},set
 function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
   obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
   app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
-function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.fortLevel=S.fortLevel==null||S.fortLevel==='auto'?'easy':S.fortLevel}}
+function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.fortLevel=S.fortLevel==null||S.fortLevel==='auto'?'easy':S.fortLevel;['runLevel','catchLevel','stackLevel'].forEach(k=>{if(S[k]==null||S[k]==='auto')S[k]='easy'})}}
 // ---- Origin v2. P1 who did you see?
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
 function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
@@ -258,7 +258,7 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,fwShared:S.fwShared,lowfx:S.lowfx};
+  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
@@ -638,7 +638,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button><button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button>${['run','catch','stack'].map(k=>`<button class="btn" id="bl_${k}">${k} level: ${S[k+'Level']||'auto'}</button>`).join('')}<button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
@@ -651,6 +651,7 @@ function dev(){
   d.querySelector('#b14').onclick=()=>{cl();pcSettings()};   // shared device + stay a while moved to the grown-ups corner (onboarding §5)
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
   d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
+  ['run','catch','stack'].forEach(k=>{const b=d.querySelector('#bl_'+k);if(b)b.onclick=()=>{const L=['auto','easy','standard','bigkid'],K=k+'Level';S[K]=L[(L.indexOf(S[K]||'auto')+1)%4];save();b.textContent=k+' level: '+S[K]}});
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
 }
 function book(){
@@ -681,14 +682,37 @@ function play(){
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
 function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
-  if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+  if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
+  if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
+  if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch|tower|steps/.test(t)?(fox?'game_leaf_trail':'game_firefly_parade'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
   // signature-only daily bonus (spec §0/§4): first signature round of the day
   if(next&&next.signature&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
   const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
+
+// ---------- Games v2 shared kit (games_v2.md §3.0): flat rewards, best store, end card, HUD best, bonus glow, quiet auto-Easy ----------
+const GTU=()=>window.GAMES_TUNING;
+function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true)}return n}
+function bestStore(){S.best=S.best||{};['run','builder','catch','stack'].forEach(k=>S.best[k]=S.best[k]||{});return S.best}
+function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
+function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}
+function v2State(gm){S.v2=S.v2||{};return S.v2[gm]=S.v2[gm]||{games:0,short:0,easy:false}}
+function v2Level(gm,key){const st=v2State(gm),set=S[key]||'auto';if(set!=='auto')return set;if(st.games<2)return 'easy';return st.easy?'easy':'standard'}   // never announced to the child
+function v2Count(gm,score){const A=GTU().AUTO_EASY,th=A[gm],st=v2State(gm);st.games++;if(score<th)st.short++;else st.short=0;if(st.short>=A.shortInARow)st.easy=true;if(score>=A.backUpAt*th){st.easy=false;st.short=0}}
+const GLOW=[0,1].map(i=>{const im=new Image();im.src=`px/fx/glow${i}.png`;return im});
+function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&&im.naturalWidth)cx.drawImage(im,Math.round(x-20),Math.round(y-20))}
+function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g2best"><i></i>${b}</span>`:''}
+const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],builder:['WHAT A FORT!','WHAT A HOLLOW!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
+function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.kind==='fox',low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
+  const bl=o.firstEver?'Our first best!':o.isBest?`NEW BEST! <small>was ${o.was}</small>`:`Best ${o.best}`;
+  gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${low?o.score:0}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
+  if(!low){let i=0;const st=20,iv=setInterval(()=>{i++;const el=$('#g2n');if(!el){clearInterval(iv);return}el.textContent=Math.round(o.score*Math.min(1,i/st));if(i>=st)clearInterval(iv)},60)}
+  SFX('run_finale',{vol:.7});save();
+  $('#g2done').onclick=()=>endGame(true);
+  $('#g2again').onclick=()=>{if(sess.games>=C.sessionLimits.games){endGame(true);return setTimeout(()=>talk(B('game_tired')),400)}fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
 
 // ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
 function fortState(){return S.fort=S.fort||{stage:0,decor:0,homes:0,rounds:0,slow:0,best:0}}
@@ -765,6 +789,96 @@ function fortBuilder(round){
   window.__fort=g;window.__fortAfter=after;
   talk(round===0?B('stack_start'):B('stack_floor_next'),2400);draw();
 }
+// ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
+function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
+  return {pd:`run/${pal}/${st>=4?'':'s'+Math.min(Math.max(st,1),3)+'/'}`,sk:'stage'+Math.min(Math.max(st,1),4),row:Math.min(4,Math.max(0,st)),fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
+function g2Img(IM,k,src){const im=IM[k]=new Image();im.src=src;return im}
+const g2ok=im=>im&&im.complete&&im.naturalWidth;
+function g2Loop(step,draw){let acc=0,last=performance.now(),alive=true;function tick(t){if(!alive)return;acc+=Math.min(.1,(t-last)/1000);last=t;while(acc>=1/60&&alive){step(1/60);acc-=1/60}if(alive)draw();requestAnimationFrame(tick)}requestAnimationFrame(t=>{last=t;tick(t)});return ()=>{alive=false}}
+function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>${t}</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2000)}
+function catchGame(){
+  const fox=S.kind==='fox',level=v2Level('catch','catchLevel'),st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=fox?'Berry Catch':'Starfall Catch';
+  const g=CatchEngine.create({level,seed:(S.g.seed||1)*37+st.games*11+1,fam:fox?'slyte':'whimber',lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('g2game','catchgame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" style="width:100%" aria-label="${TITLE}"></canvas>`);
+  const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
+  $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
+  const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(fox)g2Img(IM,'canopy','px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
+  g2Img(IM,'gold',`px/catch/${fox?'apple_gold':'feather_gold_inked'}.png`);ITEMS.forEach(k=>g2Img(IM,k,`px/i_${k}.png`));
+  if(fox)['run0','run1','run2','run3','run4','run5','run_happy'].forEach(k=>g2Img(IM,k,`px/${FR.pd}slyte_${k}.png`));else g2Img(IM,'fly',FR.fly);
+  let ended=false,cheered=false,lastLine=-9,happy=0,face=1,F=0,pops=[];const AN=fetch('px/catch/anchors.json').then(r=>r.json()).then(j=>IM.anch=j).catch(()=>{});
+  const cv=$('#cc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+  const line=(k,ex)=>{if(g.t-lastLine<6)return false;lastLine=g.t;talk(B(k,ex),1800);return true};
+  function step(dt){if(ended)return;CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
+    for(const e of CatchEngine.take(g)){
+      if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});if(e.gold){SFX('run_gold',{vol:.8});line('catch_gold')}else{SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});say('*')}}
+      if(e.type==='streak'){SFX('run_treasure_5',{vol:.7});line('catch_streak')}
+      if(e.type==='land')SFX('run_tumble_boop',{vol:.5,gap:200});
+      if(e.type==='end')finish()}
+    if(!cheered&&!firstEver&&best0>0&&g.n>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
+  function draw(){if(!document.getElementById('cc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);if(g2ok(IM.canopy))cx.drawImage(IM.canopy,-8,6);const low=lowFx();
+    for(const it of g.items){const im=it.gold?IM.gold:IM[ITEMS[it.id%4]],x=Math.round(it.x-8),y=Math.round(it.y-8);if(it.gold)drawGlow(cx,x+8,y+8,performance.now());if(g2ok(im))cx.drawImage(im,x,y,16,16)}
+    g.lands.forEach((x,i)=>{const im=IM[ITEMS[i%4]];if(g2ok(im))cx.drawImage(im,Math.round(x-6),A.LINE+34,12,12)});
+    const dx=g.tx-g.x;if(Math.abs(dx)>1)face=dx>0?1:-1;const moving=Math.abs(dx)>1,an=IM.anch;
+    if(fox){const k=happy>0?'run_happy':moving?'run'+((F/5|0)%6):'run0',im=IM[k],a=(an&&an.slyte_basket[FR.sk]&&an.slyte_basket[FR.sk][k])||[22,22],top=A.LINE+4-a[1];
+      if(g2ok(im)){cx.save();if(face<0){cx.translate(Math.round(g.x)*2,0);cx.scale(-1,1)}cx.drawImage(im,Math.round(g.x-a[0]),top);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-a[0])+a[0]-11,top+a[1]+2-10);cx.restore()}}
+    else{const fi=(F/6|0)%4,a=(an&&an.whimber_nest[FR.sk]&&an.whimber_nest[FR.sk]['fly'+fi])||[24,44],top=A.LINE-2-(a[1]-3);
+      if(g2ok(IM.fly))cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,Math.round(g.x-a[0]),top,48,48);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-11),A.LINE-2)}
+    cx.fillStyle='#FFD27A';cx.font='8px PS2P';for(const p of pops)cx.fillText(p.s,Math.round(p.x-6),Math.round(A.LINE-20-(low?0:(1-p.t)*14)));
+    $('#cn').textContent=g.n;$('#cs').textContent=g.streak>=5?'×'+g.streak:'';$('#cs').className=g.streak>=10?'gold':'';
+    $('#cg').innerHTML=Array.from({length:g.L.grass},(_,i)=>`<i class="pxi" style="background-image:url(px/catch/grass_spot${i<g.landed?1:0}.png);width:9px;height:4px"></i>`).join('')}
+  const stopLoop=g2Loop(step,draw);
+  function stop(){stopLoop();document.removeEventListener('keydown',key)}
+  function finish(){if(ended)return;ended=true;const n=g.n;v2Count('catch',n);const r=bestPut('catch',level,n);
+    if(n>=5)remember(fox?`We caught ${n} berries`:`We caught ${n} stars`,'catch_'+n);react('happy');setExpr('happy');
+    g2Banner(gs,fox?'PICNIC TIME!':'STARGAZE TIME!');talk(B(r.isBest&&!firstEver?'catch_best':'catch_end',{n}),2400);
+    setTimeout(()=>{draw();stop();endCard({game:'catch',unit:fox?'berries':'stars',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`longest streak ${g.longest}`,`goldens ${g.golds}`],onAgain:catchGame})},900)}
+  const xOf=e=>{const r=cv.getBoundingClientRect();return (e.clientX-r.left)*180/r.width};
+  cv.addEventListener('pointerdown',e=>{CatchEngine.moveTo(g,xOf(e));cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});cv.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')CatchEngine.moveTo(g,xOf(e))});
+  function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')CatchEngine.nudge(g,-1);else if(k==='arrowright'||k==='d')CatchEngine.nudge(g,1);else return;e.preventDefault()}
+  document.addEventListener('keydown',key);
+  $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
+  window.__catch=g;window.__catchFinish=finish;talk(B('catch_start'),2000)}
+function stackGame(){
+  const fox=S.kind==='fox',level=v2Level('stack','stackLevel'),st=v2State('stack'),t0=now(),best0=bestGet('stack',level),firstEver=!st.games&&!best0,TITLE=fox?'Pancake Tower':'Cloud Steps',M=fox?'pancake':'cloud',LH=8,BASE=268;
+  const g=StackEngine.create({level,seed:(S.g.seed||1)*41+st.games*13+1}),FR=g2Frames(fox);
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('g2game','stackgame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="sc" width="180" height="300" style="width:100%" aria-label="${TITLE}"></canvas>`);
+  $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/stack/${M}_60.png);width:12px;height:8px"></i><span id="sh">0</span> ${hudBest('stack',level)} <span id="sp"></span>`;
+  const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);g2Img(IM,'base',fox?'px/stack/plate.png':'px/run/bench.png');
+  ['','_perfect'].forEach(p=>['l','m','r'].forEach(s=>g2Img(IM,p+s,`px/stack/${M}${p}_${s}.png`)));[0,1,2,3].forEach(i=>g2Img(IM,'burst'+i,`px/items/burst${i}.png`));
+  if(fox)g2Img(IM,'home',PIXEL.sheet('slyte',S.g));else g2Img(IM,'fly',FR.fly);
+  let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0;const perf=new Set();
+  const cv=$('#sc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+  function layer(x,y,w,p){x=Math.round(x);w=Math.max(6,Math.round(w));const P=p?'_perfect':'';if(!g2ok(IM[P+'m']))return;cx.drawImage(IM[P+'l'],x,y);let i=x+3;while(i<x+w-3){const c=Math.min(6,x+w-3-i);cx.drawImage(IM[P+'m'],0,0,c,8,i,y,c,8);i+=c}cx.drawImage(IM[P+'r'],x+w-3,y)}
+  const yOf=h=>BASE-LH*(h+1)+cam;
+  function step(dt){if(ended)return;StackEngine.step(g,dt);F++;const want=Math.max(0,132-(BASE-LH*(g.h+2)));if(cam<want)cam=lowFx()?Math.ceil(want/8)*8:Math.min(want,cam+2);
+    for(const b of bits){if(fox&&!lowFx()){b.vy=Math.min(7,b.vy+1/6);b.y=Math.min(BASE+18-cam,b.y+b.vy)}else b.t--}bits=bits.filter(b=>fox&&!lowFx()?true:b.t>0)}
+  function press(){if(ended)return;const top=g.layers[g.layers.length-1],w0=g.w,sx=g.sx;StackEngine.press(g);
+    for(const e of StackEngine.take(g)){
+      if(e.type==='perfect'){perf.add(g.h+1);SFX('blocks_row_glow',{vol:.6});perfN++;if(perfN%3===1)talk(B('tower_perfect'),1600)}
+      if(e.type==='place'){SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,y:yOf(g.h),vy:0,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,y:yOf(g.h),vy:0,t:8})}
+      if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
+    if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
+  function draw(){if(!document.getElementById('sc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);
+    if(g2ok(IM.base))fox?cx.drawImage(IM.base,47,BASE+cam):cx.drawImage(IM.base,79,BASE+cam,22,8);
+    g.layers.forEach((l,i)=>{if(i>0)layer(l.x,yOf(i-1),l.w,perf.has(i))});
+    if(!ended)layer(g.sx,yOf(g.h)-LH-2,g.w,false);
+    for(const b of bits)if(fox||b.t%2)layer(b.x,Math.round(b.y),b.w,false);
+    if(plop&&plop.t<16){const im=IM['burst'+Math.min(3,lowFx()?0:plop.t>>2)];if(g2ok(im))cx.drawImage(im,Math.round(plop.x+plop.w/2-12),BASE+4,24,24);plop.t++}
+    if(best0>0){const y=yOf(best0-1);cx.fillStyle='#FFD27A';for(let x=0;x<180;x+=4)cx.fillRect(x,y,2,1);cx.beginPath();cx.moveTo(170,y-6);cx.lineTo(178,y-3);cx.lineTo(170,y);cx.fill()}
+    if(fox){if(g2ok(IM.home))cx.drawImage(IM.home,0,0,48,48,2,248,48,48)}else if(g2ok(IM.fly)){const fi=lowFx()?0:(F/6|0)%4;cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,132,Math.max(40,yOf(g.h)-40),48,48)}
+    $('#sh').textContent=g.h;$('#sp').textContent='•'.repeat(g.run%((g.L.regrowAfter)||3))}
+  const stopLoop=g2Loop(step,draw);
+  function stop(){stopLoop();document.removeEventListener('keydown',key)}
+  function finish(){if(ended)return;ended=true;const n=g.h;v2Count('stack',n);const r=bestPut('stack',level,n);
+    if(n>=5)remember(fox?`We stacked ${n} pancakes`:`We stacked ${n} clouds`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
+    setTimeout(()=>{draw();stop();endCard({game:'stack',unit:fox?'pancakes':'clouds',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${g.perfects}`],onAgain:stackGame})},900)}
+  cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
+  function key(e){if(!document.getElementById('sc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
+  document.addEventListener('keydown',key);
+  $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
+  window.__stack=g;window.__stackPress=press;talk(B('tower_start'),2000)}
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
 const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'comets',feather:'feathers',dewdrop:'dewdrops',firefly:'fireflies',lantern:'lanterns',cloud:'clouds',book:'books',whimber_token:'Whimbers',blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Slytes'};
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
@@ -821,31 +935,32 @@ const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Ni
 function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
 // ---- runners (spec v0.6 §3): Meadow Dash (Slyte, tap = jump) / Moonlight Glide (Whimber, hold = rise). No fail state. ----
 // saves from before v0.6: the Sparkle trail and Connect are gone. Their memories stay in the Memory Book (read-only facts); their state goes.
-function gamesMigrate(){if(!S||S.gv===6)return;delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5;S.gv=6}   // saved with the next save (no save here: it would reset S.last)
+function gamesMigrate(){if(!S||S.gv===7)return;if((S.gv||0)<6){delete S.trail;delete S.connect;delete S.trailLevel;delete S.connectLevel;if(S.vars)delete S.vars.connect5}
+  const B=bestStore();if(S.run&&S.run.best)for(const l in S.run.best){if(typeof S.run.best[l]==='number'){B.run[l]={score:0,legacy:S.run.best[l]}}}if(S.run)S.run.best={};if(S.fort&&S.fort.best&&!B.builder.standard)B.builder.standard={score:S.fort.best};S.gv=7}   // games v2: old run best (m + 10×treasure) can't be split, the first v2 run sets the new best   // saved with the next save (no save here: it would reset S.last)
 const RUN_BUSH=[40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400];
 function runState(){S.run=S.run||{best:{},runs:0,hard:0,auto:null};S.run.best=S.run.best||{};return S.run}
-function runLevel(){const rs=runState();const set=S.runLevel||'auto';if(set!=='auto')return set;if(rs.runs<2)return 'easy';return rs.auto||'standard'}
+function runLevel(){return v2Level('run','runLevel')}
 function runGame(){
   const fox=S.kind==='fox',SP=fox?'slyte':'whimber',rs=runState(),level=runLevel(),TITLE=fox?'Meadow Dash':'Moonlight Glide';
   const T=n=>S.talents.includes(n),silent=!fox&&T('Silent Flight'),nv=!fox&&T('Night Vision');
   const evening=tod()==='evening'||tod()==='night';
   const g=RunnerEngine.create({kind:fox?'jump':'glide',level,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
-  const best0=rs.best[level]||0,firstEver=!rs.runs;let cheered=false,lastLine=-9,lastFlap=-9,treN=0,bumpN=0,lastTre=0;
+  const t0=now(),best0=bestGet('run',level),firstEver=!rs.runs&&!best0;let cheered=false,ended=false,lastLine=-9,lastFlap=-9,treN=0,bumpN=0,lastTre=0;
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame');
   const tre=fox?'trinket':'feather';
   gs.insertAdjacentHTML('beforeend',`<canvas id="rc" width="360" height="640" aria-label="${TITLE}"></canvas>
     <div class="runhint" id="rhint">${rs.runs?'':(fox?'tap = jump':'hold = rise, let go = glide')}</div><div class="runcue" id="rcue" style="background-image:url(px/${fox?'i_stamp_paw':'i_feather'}.png)"></div>`);
-  const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
+  const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${hudBest('run',level)}${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const pd=`run/${pal}/${PIXEL.stageNow()>=4?'':'s'+Math.min(Math.max(PIXEL.stageNow(),1),3)+'/'}`;   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   window.__runHome=null;if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
-    ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].forEach(k=>ld(k,pd+'slyte_'+k))}
+    ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
   else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
-  ld('tre','items/'+tre);ld('gold','run/'+tre+'_gold');
-  let alive=true,acc=0,last=performance.now(),happy=0,signs=[],restProp=null,pops=[],frame=0;
+  ld('tre','items/'+tre);if(!fox)['best_star0','best_star1'].forEach(k=>ld(k,'run/'+k));ld('gold','run/'+tre+'_gold');
+  let alive=true,acc=0,last=performance.now(),happy=0,pops=[],frame=0;
   const lineOK=()=>g.t-lastLine>=6;const line=(k,ms)=>{if(!lineOK())return false;lastLine=g.t;talk(B(k),ms||1800);return true};
   const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
   function bg(){const d=g.dist;
@@ -860,62 +975,53 @@ function runGame(){
       else if(o.type==='cloud')cx.drawImage(IM.cloud,x+wob,o.y);
       else if(o.type==='branch'){const L=[120,160,200,240].find(v=>v>=o.h)||240,im=IM['branch'+L];cx.drawImage(im,x-1+wob,o.h-im.height+2)}
       else if(o.type==='bush'){const h=RUN_BUSH.filter(v=>v<=o.h).pop()||40;cx.drawImage(IM['bush'+h],x+wob,531-h)}}   // flat-base bushes stand on the grass (runner_polish.md §4)
-    for(const t of g.tre){const x=Math.round(t.x-d)-8;if(x>370||x<-20)continue;cx.drawImage(t.gold?IM.gold:IM.tre,x,Math.round(t.y-8+(Math.sin(g.t*4+t.id)>0?-1:0)))}
-    for(const s of signs){const x=Math.round(s-d);if(x>-20&&x<370)cx.drawImage(fox?IM.sign:IM.sign_twi,x,(fox?470:528)-13)}
-    if(restProp!==null){const x=Math.round(restProp-d);if(IM.homeRest&&IM.homeRest.complete&&IM.homeRest.naturalWidth)cx.drawImage(IM.homeRest,x-10,(fox?470:531)-48);   // bond 140: the rest stop is the Echo's own open home (spec v0.6 §0)
-      else if(fox)cx.drawImage(IM.sunrock,x,470-21);else{cx.drawImage(IM.bench,x,528-8);cx.drawImage(IM.moss,x+1,528-14)}}}
+    if(best0>0){const bx=Math.round(best0*16-d+40),f=lowFx()?0:(performance.now()/250|0)%2;window.__runBestX=bx;if(bx>-20&&bx<370){if(fox){cx.fillStyle='#FFD27A';for(let y=468;y<480;y+=3)cx.fillRect(bx,y,2,2);if(IM['best_flag'+f])cx.drawImage(IM['best_flag'+f],bx,470-47)}else for(let y=52;y<=528;y+=18)if(IM['best_star'+f])cx.drawImage(IM['best_star'+((y/18+f)%2|0)]||IM.best_star0,bx-2,y)}}
+    for(const t of g.tre){const x=Math.round(t.x-d)-8,ty=Math.round(t.y-8+(!lowFx()&&Math.sin(g.t*4+t.id)>0?-1:0));if(x>370||x<-20)continue;if(t.gold)drawGlow(cx,x+8,ty+8,performance.now());cx.drawImage(t.gold?IM.gold:IM.tre,x,ty)}
+    if(g.phase==='done'&&IM.homeRest&&IM.homeRest.complete&&IM.homeRest.naturalWidth)cx.drawImage(IM.homeRest,10,(fox?470:531)-48)}   // home backdrop at the end (place badge only)
   function echo(){let k;const F=Math.floor(g.t*12);
     if(fox){k=g.tumble>0?'tumble':g.phase!=='run'&&g.mult<.05?'tumble':happy>0?'run_happy':g.air?(g.vy<0?'jump':'fall'):'run'+(F%6)}
     else{k=g.tumble>0?'tumble':happy>0||(g.phase!=='run'&&g.mult<.05)?'glide_happy':g.held?'flap'+(F%4):'glide'}
     if(fox&&g.disguised>0)k=g.disguised<.2?'reveal':'disguise'+(Math.floor(g.t*4)%2);   // Master of Disguise: the secretly-Slyte bush, then the pop-out
     const im=IM[k];if(!im)return;const x=fox?16:20,y=Math.round(g.y-48+(fox?0:6));
-    if(g.tumble>0){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
+    if(g.tumble>0&&!lowFx()){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
     else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;cx.drawImage(im,x,y)}cx.globalAlpha=1;
     for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
-  function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+(g.treasures+g.gold);if(cheered)$('#rm').classList.add('gold')}
+  function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+RunnerEngine.haul(g);if(cheered)$('#rm').classList.add('gold')}
   function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
     acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=1/60){RunnerEngine.step(g,1/60);acc-=1/60;if(happy>0)happy-=1/60;pops.forEach(p=>p.t-=1/60);pops=pops.filter(p=>p.t>0);
-      if(g.phase==='run'&&g.stretchT>g.L.stretch-2.5&&signs.length<=g.stretch)signs.push(g.dist+40+g.speed*2.5);handle()}
+handle()}
     bg();drawObs();echo();hud();requestAnimationFrame(tick)}
   function handle(){for(const e of RunnerEngine.take(g)){
       if(e.type==='jump'||e.type==='hop2'){SFX('run_hop_'+(1+Math.floor(Math.random()*3)),{vol:.6,gap:100})}
       if(e.type==='flap'&&g.t-lastFlap>=.25){lastFlap=g.t;SFX('run_flap_'+(1+Math.floor(Math.random()*3)),{vol:.5})}   // one shared 0.25 s throttle for the 3 variants
-      if(e.type==='treasure'||e.type==='gold'){treN++;happy=.3;pops.push({s:e.type==='gold'?'+30':'+10',x:60,y:g.y-50,t:1,c:'#FFD27A'});
-        if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');line('run_gold',1800)}
+      if(e.type==='treasure'||e.type==='gold'){treN++;happy=.3;pops.push({s:e.type==='gold'?'+3':'+1',x:60,y:g.y-50,t:1,c:'#FFD27A'});
+        if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');lastLine=-9;if(!line('run_glow',1800))line('run_gold',1800)}
         else{lastTre=(g.t-lastTre>8)?1:lastTre+1;SFX(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
       if(e.type==='bump'){bumpN++;if(!silent)SFX('run_tumble_boop',{gap:400,vol:.5})}
-      if(e.type==='giggle'){if(!(bumpN%3===0&&line('run_bump',1800)))giggle()}
+      if(e.type==='giggle')giggle();
       if(e.type==='disguise'){giggle();react('excited')}
       if(e.type==='radar')SFX('slyte_radar_ears_twinkle',{pan:1,vol:.5,gap:300});
       if(e.type==='chime')SFX('whimber_radar_hearing_chime',{pan:0,vol:.4,rate:1+(320-e.y)/900,gap:300});
       if(e.type==='cue'){const c=$('#rcue');if(c){c.classList.remove('on');void c.offsetWidth;c.classList.add('on')}}
-      if(e.type==='stretch'){SFX('blocks_row_glow',{vol:.6});const b=g.stretchBumps[e.n]||0;
-        if(b>=5)rs.hard=(rs.hard||0)+1;else rs.hard=0;if(rs.hard>=2)rs.auto='easy';if(b<=1&&rs.auto==='easy')rs.auto=null;
-        if(e.n<2){lastLine=-9;line('run_stretch',1800);roundDone(e.n,RUN_NEXT)}}
-      if(e.type==='rest')restProp=g.dist+40+g.base*1.05;
-      if(e.type==='done')finish()}
-    if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;happy=1.2;SFX('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
+      if(e.type==='end')finish()}
+    if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');happy=1.2;SFX('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
       gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>NEW BEST!</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2200);
       if(!fox)S.hillStars=Math.min(12,(S.hillStars||0)+1)}}
-  function finish(){const m=Math.floor(g.dist/16),n=g.treasures+g.gold,sc=RunnerEngine.score(g);rs.runs++;
-    const isBest=sc>(rs.best[level]||0);if(isBest)rs.best[level]=sc;
-    if(isBest&&m>=50)remember(`Our longest run was ${m} m`,'run_best');if(n>=5)remember(`We found ${n} ${tre}s in one run`,'run_haul');
-    SFX('run_finale',{vol:.7});react('happy');setExpr('happy');
-    if(!fox&&T('Sweet-Dream Lullaby')&&evening)setTimeout(()=>{setExpr('sleepy');talk(B('yawn'),1800)},1500);
-    gs.insertAdjacentHTML('beforeend',`<div class="fbdone runcard"><span>${m} m + ${n}×</span><i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span>= ${sc}</span><span class="rb">${firstEver?'Our best!':isBest?'New best!':'Best: '+rs.best[level]}</span></div>`);
-    lastLine=-9;line('run_done',2400);save();if(window.Music)setTimeout(()=>Music.duck(false),10);
-    setTimeout(()=>{stop();roundDone(2,RUN_NEXT)},1400)}
+  function finish(){if(ended)return;ended=true;const m=RunnerEngine.score(g),n=RunnerEngine.haul(g);rs.runs++;v2Count('run',m);
+    const r=bestPut('run',level,m,n);if(r.isBest&&m>=50)remember(`Our longest run was ${m} m`,'run_best');if(n>=5)remember(`We found ${n} ${tre}s in one run`,'run_haul');
+    react('happy');setExpr('happy');if(!fox&&T('Sweet-Dream Lullaby')&&evening)setTimeout(()=>{setExpr('sleepy');talk(B('yawn'),1800)},1500);
+    talk(B(r.isBest&&!firstEver?'run_end_best':'run_end',{dist:m}),2400);if(window.Music)setTimeout(()=>Music.duck(false),10);
+    setTimeout(()=>{stop();endCard({game:'run',unit:'m',score:m,was:r.was,best:Math.max(m,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`×${n} ${r.haulBest&&!firstEver?'NEW best haul!':'best haul '+r.haul}`,'gold counts 3'],onAgain:runGame})},700)}
   function stop(){alive=false;document.removeEventListener('keydown',key);document.removeEventListener('keyup',keyup)}
   const down=e=>{if(e.target.closest&&e.target.closest('.top'))return;RunnerEngine.press(g);const h=$('#rhint');if(h&&rs.runs===0)h.classList.add('off')},up=()=>RunnerEngine.release(g);
   gs.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(n=>gs.addEventListener(n,up));
   function key(e){if(!document.getElementById('rc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='enter'||k==='a'||k==='z')&&!e.repeat){RunnerEngine.press(g);e.preventDefault()}}
   function keyup(e){const k=e.key.toLowerCase();if(k===' '||k==='enter'||k==='a'||k==='z')RunnerEngine.release(g)}
   document.addEventListener('keydown',key);document.addEventListener('keyup',keyup);
-  $('#quit').onclick=()=>{stop();endGame(false)};
-  window.__run=g;window.__runHandle=handle;
+  $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};   // Done mid-run: the same happy end, never a quit screen
+  window.__run=g;window.__runFinish=finish;window.__runHandle=handle;
   lastLine=-9;line('run_start',2400);requestAnimationFrame(t=>{last=t;tick(t)});
 }
-const RUN_NEXT=()=>{};   // one run spans the 3 rounds (a signpost ends each stretch; the rest stop ends the run)
 // ---------- Farewell arc (echo/farewell/farewell_arc.md v0.2, Cole's defaults) ----------
 // active -> almost_ready (Ready rule, spec §5.7) -> [grace: 3 session-days] -> walking -> ceremony (C0-C10, step saved) -> released
 const FWC=()=>Object.assign({glanceFromBond:140,restlessBond:440,readyBond:500,readyDays:7,readySessionDays:6,altDay:14,altBond:350,almostMin:2,almostMax:3,
@@ -945,8 +1051,8 @@ function fwGreet(){const f=fw(),t=fwToday();
   if(f.state==='almost_ready'){talk(B('almost_hello'));return true}
   if(f.state==='grace'){if(f.graceDays.length===FWC().graceDays&&f.lastDay!==t){f.lastDay=t;save();talk(B('last_day'))}else talk(B('grace_hello'));return true}
   return false}
-function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).filter(k=>['pairs','builder','run'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
-  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',run:fox?'Meadow Dash':'Moonlight Glide'};
+function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).filter(k=>['pairs','builder','run','catch','stack'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
+  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',run:fox?'Meadow Dash':'Moonlight Glide',catch:fox?'Berry Catch':'Starfall Catch',stack:fox?'Pancake Tower':'Cloud Steps'};
   (S.vars=S.vars||{}).listGame=GN[top];const cb=Object.values(S.cbCount||{}).reduce((a,b)=>a+b,0);
   return [{id:top==='builder'?'place':top==='run'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
 const FW_ITEM={play:0,food:1,place:2,trail:3,memory:4,cozy:5};

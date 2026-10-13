@@ -2601,6 +2601,150 @@
     "expr": "happy",
     "short": "Hoo… just {name}."
    }
+  ],
+  "run_end": [
+   {
+    "text": "Oh… a soft bump. {dist} metres… what a glide.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Hoo… {dist} metres under the stars. Lovely.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Well… we drifted {dist} metres. My wings are humming.",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "run_end_best": [
+   {
+    "text": "Hoo… {dist} metres. Our farthest yet… quietly wonderful.",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Oh… a new best. {dist} metres. I like that.",
+    "expr": "delighted",
+    "react": "excited"
+   }
+  ],
+  "run_glow": [
+   {
+    "text": "Mm… a moon feather. It glows.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Hoo… that one is shining for us.",
+    "expr": "delighted"
+   }
+  ],
+  "stack_roof": [
+   {
+    "text": "Hoo… the roof is on. {rows} rows of cozy.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Oh… {rows} rows tall. So snug up here.",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "stack_roof_best": [
+   {
+    "text": "Hoo… {rows} rows. Our tallest hollow yet.",
+    "expr": "delighted",
+    "react": "excited"
+   }
+  ],
+  "catch_start": [
+   {
+    "text": "Hoo… stars are falling. Shall we catch a few?",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "My nest is ready… you guide me.",
+    "expr": "happy"
+   }
+  ],
+  "catch_gold": [
+   {
+    "text": "Oh… a golden feather. That one counts five.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Mm… it glows like the moon.",
+    "expr": "delighted"
+   }
+  ],
+  "catch_streak": [
+   {
+    "text": "Hoo… ten in a row. The nest is shining.",
+    "expr": "delighted"
+   }
+  ],
+  "catch_end": [
+   {
+    "text": "Hoo… stargazing time. {n} stars in the nest.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Oh… {n} stars. The nest is glowing.",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "catch_best": [
+   {
+    "text": "Hoo… {n} stars. Our fullest nest yet.",
+    "expr": "delighted",
+    "react": "excited"
+   }
+  ],
+  "tower_start": [
+   {
+    "text": "Cloud steps… let's climb toward the moon.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Hm. Tap when the cloud lines up… gently.",
+    "expr": "happy"
+   }
+  ],
+  "tower_perfect": [
+   {
+    "text": "Oh… perfectly soft.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Hoo… just right.",
+    "expr": "delighted"
+   }
+  ],
+  "tower_end": [
+   {
+    "text": "Hoo… {n} clouds tall. The moon looks closer.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Well… {n} cloud steps. What a climb.",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "tower_best": [
+   {
+    "text": "Oh… {n} clouds. Our highest stair yet.",
+    "expr": "delighted",
+    "react": "excited"
+   }
   ]
  },
  "conversations": [

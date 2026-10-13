@@ -9,7 +9,7 @@ from collections import defaultdict
 EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad","delighted","thinking","giggling","proud","shy","wistful","concentrating"}
 REACT = {"happy","excited","pet","eat","sad","sleepy"}
 KNOWN_KEYS = {"hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
-  "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust",
+  "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_roof","stack_roof_best","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust",
   "hug_more","walk_memory","gift_ask","gift_got","farewell","look_back"}
 FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5","restless","almost_hello","list_nudge","list_play_done","list_food_done",
   "list_place_done","list_trail_done","list_memory_done","list_cozy_done","list_complete","time_to_go","one_more_game","after_one_more","walk_start","walk_list",
@@ -17,12 +17,12 @@ FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5
   "thanks_nose","thanks_words","write_a_lot"}   # farewell_arc.md v0.2 (release_invite / release_forced / goodbye_ask / walk_end retired)
 ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_today","invite_borrow","named_reply","named_kept","next_postcards_v2"}   # onboarding v1 + origin_v2.md v0.2
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_"), "shared": ("talent_","fallback_","ui_")}
+KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
 NODE_KEYS = {"gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
 CHOICE_KEYS = {"gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
-TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal"}
+TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal","dist","rows","n"}  # games v2: dist/rows/n
 
 BANNED = [r"traitor", r"cheat\w*", r"rude", r"liars?", r"stupid", r"dumb", r"fat", r"skinny", r"thin", r"diet\w*",
   r"don'?t tell", r"our secret", r"keep a secret", r"secrets?", r"I watched you", r"I saw you", r"watching you", r"watch(ed|ing)? you",

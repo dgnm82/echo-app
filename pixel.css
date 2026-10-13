@@ -302,3 +302,12 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 
 .scdusk{position:absolute;inset:0;z-index:70;pointer-events:none;background-repeat:repeat;image-rendering:pixelated}
 .scduskstar{position:absolute;left:120px;top:60px;width:1px;height:1px;background:#fff;box-shadow:1px 0 0 #FFD27A,-1px 0 0 #FFD27A,0 1px 0 #FFD27A,0 -1px 0 #FFD27A;animation:twinkle .5s steps(1,end) infinite}
+/* games v2 (games_v2.md §3.0): end card, HUD best pennant, builder meter */
+.g2card{position:absolute;left:24px;right:24px;top:70px;padding:8px;background:#FFF6E6;color:#3B2A5C;border:2px solid #3B2A5C;box-shadow:0 3px 0 #1f1838;text-align:center;z-index:5;display:flex;flex-direction:column;gap:5px;animation:g2drop .5s steps(5) both}
+.g2card.low{animation:g2dith .25s steps(3) both}
+.g2card b{color:#C9773A}.g2num{font-size:16px}.g2bl.gold{color:#C9773A}.g2x{font-size:8px}
+.g2btns{display:flex;gap:6px;justify-content:center}.g2btns .btn{flex:1}
+@keyframes g2drop{from{transform:translateY(-40px)}to{transform:none}}@keyframes g2dith{from{opacity:0}to{opacity:1}}
+.g2hud{display:inline-flex;align-items:center;gap:2px;color:#FFF6E6}.g2hud i{width:6px;height:8px;background:#FFD27A;clip-path:polygon(0 0,100% 50%,0 100%)}.g2hud.gold,.gold{color:#FFD27A}
+.fbmeter{display:flex;flex-direction:column-reverse;gap:1px;width:10px}.fbmeter i{height:4px;background:#3B2A5C}.fbmeter i.on{background:#FFD27A}.fbmeter i.best{box-shadow:0 -1px 0 #F2A65A}
+.g2game canvas{display:block;image-rendering:pixelated;touch-action:none}

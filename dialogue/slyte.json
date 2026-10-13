@@ -2845,6 +2845,156 @@
     "expr": "happy",
     "short": "Just {name}! Okay!"
    }
+  ],
+  "run_end": [
+   {
+    "text": "Boop! {dist} metres. My paws are still zooming!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Whee, a tumble! {dist} metres. SO speedy.",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Ta-da! {dist} metres of bounding. Tail high!",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "run_end_best": [
+   {
+    "text": "{dist} metres! Our farthest EVER. Tail up!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "New best! {dist} metres. I'm basically a comet.",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "run_glow": [
+   {
+    "text": "Ooh, it's glowing! Gimme gimme.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Golden and sparkly! Into my pocket.",
+    "expr": "delighted"
+   }
+  ],
+  "stack_roof": [
+   {
+    "text": "Roof on! The fort is {rows} rows tall!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "Ta-da! {rows} rows high. I'm moving in.",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "stack_roof_best": [
+   {
+    "text": "{rows} rows! Our tallest fort EVER.",
+    "expr": "delighted",
+    "react": "excited"
+   }
+  ],
+  "catch_start": [
+   {
+    "text": "Berries falling! I wiggle, you steer.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Basket on my back. Ready, set, catch!",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "catch_gold": [
+   {
+    "text": "A golden apple! That counts five!",
+    "expr": "delighted"
+   },
+   {
+    "text": "Glowy apple! My nose knew.",
+    "expr": "delighted"
+   }
+  ],
+  "catch_streak": [
+   {
+    "text": "Ten in a row! Basket is glowing.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Streak! My tail can't stop wagging.",
+    "expr": "delighted"
+   }
+  ],
+  "catch_end": [
+   {
+    "text": "Picnic time! {n} berries in my basket.",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "{n} berries! Some for the grass, most for us.",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "catch_best": [
+   {
+    "text": "{n} berries! Our biggest basket EVER.",
+    "expr": "delighted",
+    "react": "excited"
+   }
+  ],
+  "tower_start": [
+   {
+    "text": "Pancake tower! Tap when it lines up.",
+    "expr": "happy",
+    "react": "excited"
+   },
+   {
+    "text": "Stack them high. I'll guard the syrup.",
+    "expr": "happy",
+    "react": "excited"
+   }
+  ],
+  "tower_perfect": [
+   {
+    "text": "Perfect! Not one crumb wobbled.",
+    "expr": "delighted"
+   },
+   {
+    "text": "Spot on! Syrup drip!",
+    "expr": "delighted"
+   }
+  ],
+  "tower_end": [
+   {
+    "text": "Plop! {n} pancakes tall. Snack break!",
+    "expr": "delighted",
+    "react": "excited"
+   },
+   {
+    "text": "{n} pancakes! That's a tower for a fox.",
+    "expr": "proud",
+    "react": "excited"
+   }
+  ],
+  "tower_best": [
+   {
+    "text": "{n} pancakes! Our tallest tower EVER.",
+    "expr": "delighted",
+    "react": "excited"
+   }
   ]
  },
  "conversations": [

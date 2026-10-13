@@ -47,7 +47,7 @@ function scanText(file,where,text,allow,species){
   if(species==='slyte'){if(sentences.some(x=>x.split(/\s+/).length>12))rep('warn',file,where,'Slyte: sentence over 12 words',text);if(sentences.length>4)rep('warn',file,where,'Slyte: more than 4 sentences',text);if((text.match(/\b[A-Z]{2,}\b/g)||[]).filter(w=>!['OK','TV'].includes(w)).length>1)rep('warn',file,where,'Slyte: more than 1 CAPS word',text)}
   if(species==='whimber'){if((text.match(/\b[A-Z]{3,}\b/g)||[]).length)rep('warn',file,where,'Whimber: no CAPS',text);if(text.split(/\s+/).length>10&&!/…|\.\.\.|—|Hoo/.test(text))rep('warn',file,where,'Whimber: >10 words without a pause',text)}
 }
-const KNOWN_SLOTS=new Set(['name','child','fav','treasure','place','release','trust','quirk','token','gift','memory','spot','hint','guess','constellation','pet_phrase','word','goal']);
+const KNOWN_SLOTS=new Set(['name','child','fav','treasure','place','release','trust','quirk','token','gift','memory','spot','hint','guess','constellation','pet_phrase','word','goal','dist','rows','n']);   // games v2: numbers the Echo says at the end card (B(key,{dist,rows,n}))
 function walk(file,obj,where,allow,species){
   if(Array.isArray(obj)){obj.forEach((x,i)=>walk(file,x,`${where}[${i}]`,allow,species));return}
   if(obj&&typeof obj==='object'){const al=(allow||[]).concat(obj.lintAllow||[]);

@@ -16,7 +16,7 @@ window.CONFIG = {
     {bond:500, id:'ready',   label:'Ready for the wild'}],
   maxDecayHours: 48, callbackMinAgeHours: 24, carryOnSeconds: 45, maxConversationsPerSession: 2, ambientMin: 25, ambientMax: 60, graceDays: 3,
   foundMinAwayMinutes: 20, livingSpeed: 1,   // living_echo.md: Found vignette after >= 20 min away; wander idle 8-20 s (Slyte) / 10-25 s (Whimber) x livingSpeed
-  unlock: {run:70}, // game spec v0.6 §0: the runner (Meadow Dash / Moonlight Glide) at Talent 1 (bond 70); bond 140 = the home milestone only
+  unlock: {run:70, catch:20, stack:210}, // game spec v0.6 §0: the runner (Meadow Dash / Moonlight Glide) at Talent 1 (bond 70); bond 140 = the home milestone only
   checkins: [[1,'postcard'],[3,'postcard'],[7,'postcard'],[14,'postcard'],[30,'postcard'],[60,'postcard']], // Echo_Postcards.docx v0.5 (postcards.js builds the text)
   napSeconds: 20, sitSeconds: 8, // nap/sit shortened from 120s/20s for demo
 };
