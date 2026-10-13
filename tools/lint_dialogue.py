@@ -8,7 +8,7 @@ from collections import defaultdict
 
 EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad","delighted","thinking","giggling","proud","shy","wistful","concentrating"}
 REACT = {"happy","excited","pet","eat","sad","sleepy"}
-KNOWN_KEYS = {"hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
+KNOWN_KEYS = {"food_decline","hug_full","play_full","away_note","leave_postcard","away_postcard_day7","holiday_start","holiday_end","hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
   "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_roof","stack_roof_best","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust",
   "hug_more","walk_memory","gift_ask","gift_got","farewell","look_back"}
 FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5","restless","almost_hello","list_nudge","list_play_done","list_food_done",

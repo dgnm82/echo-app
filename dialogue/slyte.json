@@ -2995,6 +2995,58 @@
     "expr": "delighted",
     "react": "excited"
    }
+  ],
+  "food_decline": [
+   {
+    "text": "No thank you! My tummy is full right up to my ears.",
+    "expr": "happy"
+   },
+   {
+    "text": "Ooh, smells good. Can we save it for later?",
+    "expr": "happy"
+   }
+  ],
+  "hug_full": [
+   {
+    "text": "Full of hugs! …One more fits.",
+    "expr": "love"
+   }
+  ],
+  "play_full": [
+   {
+    "text": "More? Okay! Then a cozy break.",
+    "expr": "excited"
+   }
+  ],
+  "away_note": [
+   {
+    "text": "Dear {child}, I saved you the shiniest pebble. Also, I learned to hop backwards! Want to see? — {name}",
+    "expr": "happy"
+   }
+  ],
+  "leave_postcard": [
+   {
+    "text": "Dear {child}, I went home to the meadow for my next adventure! The Howlings say hi. Thank you for being my friend, always. — {name}",
+    "expr": "happy"
+   }
+  ],
+  "holiday_start": [
+   {
+    "text": "A trip? Fun! I'll go exploring with the other Howlings. Tell me everything after!",
+    "expr": "happy"
+   }
+  ],
+  "holiday_end": [
+   {
+    "text": "You're here! I have SO many stories. First: a beetle with stripes.",
+    "expr": "excited"
+   }
+  ],
+  "away_postcard_day7": [
+   {
+    "text": "Dear {child}, I found a new favourite rock! It is round and sparkly. — {name}",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [

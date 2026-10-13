@@ -361,7 +361,7 @@ function home(greet){
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
   else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   thoughtSync();if(LIVE.st!=='found')lvStart(false);
-  if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk({text:nvLine('holidayStart'),expr:'excited'},3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
+  if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk(nvB('holidayStart'),3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
 }
@@ -587,7 +587,7 @@ function foodMenu(){const L=foodList(),tried=new Set(S.foods),pick=a=>a.length?a
 function foodIcon(f){return `<i class="pxi" data-icon="${f.icon.slice(2)}" style="background-image:url(px/${f.icon}.png)"></i>`}
 function feed(){
   if(asleep())return;
-  if(sess.feeds>=C.sessionLimits.feeds||S.needs.food>=NeedsV2.full)return talk(B('full'));   // needs v2: full (>= 90) politely declines, no bond
+  if(S.needs.food>=NeedsV2.full)return talk(B('food_decline'));if(sess.feeds>=C.sessionLimits.feeds)return talk(B('full'));   // needs v2: full (>= 90) politely declines, no bond
   if(!foodList().length)return feedOld();
   const pool=foodMenu();
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${foodIcon(f)}<span class="lbl">${f.name}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
@@ -616,10 +616,10 @@ function comfort(){
   });
 }
 function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
-function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');hop();if(window.Alive)Alive.petFx();talk(B('pet'),1800)}
+function pet(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');hop();if(window.Alive)Alive.petFx();talk(B(hf?'hug_full':'pet'),1800)}
 function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('cuddly')}}
-function hug(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // E1 press-and-hold hug
-  const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}
+function hug(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // E1 press-and-hold hug
+  const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(hf)talk(B('hug_full'),1800);else if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}   // hugs are never refused
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
   sess.naps++;if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('sleepy')}const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
@@ -696,6 +696,7 @@ function book(){
 // ---------- mini-games (§6.3) ----------
 function play(){
   if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
+  if(S.needs.play>=NeedsV2.full)talk(B('play_full'),1800);   // games are never refused
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
   // Play picker (spec v0.3 §0; Night Sky cut): signature Pairs game (daily +3) + Builder on day 1, the runner at bond 70 (spec v0.6; bond 140 unlocks no game)
   const G=gamesFor();choices(G.map(x=>[x[0],x[1],null]),i=>start(G[i][2]));
@@ -715,12 +716,13 @@ function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);i
 
 
 // ---------- needs v2 §4: away timeline (note, kind leave) and holiday mode. Bond is frozen, never lowered; nothing guilt-y ----------
-const nvSp=()=>S.kind==='fox'?'slyte':'whimber',nvVars=()=>({child:S.child||'friend',name:S.g.name,fav:S.g.fav||''});
-const nvLine=k=>NeedsV2.fill(NeedsV2.L[k][nvSp()],nvVars());
+const nvVars=()=>({child:S.child||'friend',name:S.g.name,fav:S.g.fav||''});
+const NVK={note:'away_note',leave:'leave_postcard',leave2:'away_postcard_day7',holidayStart:'holiday_start',holidayBack:'holiday_end'};
+const nvB=k=>B(NVK[k],nvVars()),nvLine=k=>(nvB(k)||{}).text||'';
 function awayOnHome(){   // called from home(true): one gentle beat per open, no counting of days out loud
-  if(sess.holidayBack){sess.holidayBack=0;return talk({text:nvLine('holidayBack'),expr:'delighted'},3200),true}
-  if(sess.awayNote){sess.awayNote=0;remember(nvLine('note'),'note_'+new Date(now()).toDateString());talk({text:nvLine('note'),expr:'happy'},5200);return true}
-  if(sess.awayTreasure){sess.awayTreasure=0;S.treasures=S.treasures||[];S.treasures.push(E().treasure);remember(S.kind==='fox'?'I found you a shiny treasure while exploring':'I found you a glowing treasure while exploring','away_treasure');talk({text:nvLine('treasure'),expr:'excited'},2600);return true}
+  if(sess.holidayBack){sess.holidayBack=0;return talk(nvB('holidayBack'),3200),true}
+  if(sess.awayNote){sess.awayNote=0;remember(nvLine('note'),'note_'+new Date(now()).toDateString());talk(nvB('note'),5200);return true}
+  if(sess.awayTreasure){sess.awayTreasure=0;S.treasures=S.treasures||[];S.treasures.push(E().treasure);remember(S.kind==='fox'?'I found you a shiny treasure while exploring':'I found you a glowing treasure while exploring','away_treasure');try{lvFound()}catch(e){}return true}
   return false}
 function leaveScreen(){const L=S.left,canVisit=!L.revisited&&now()-L.at<14*864e5;if(now()>=L.card2&&!L.card2Shown){L.card2Shown=1;remember(nvLine('leave2'),'leave2')}
   if(!(S.memTags||[]).includes('leave'))remember(nvLine('leave'),'leave');save();

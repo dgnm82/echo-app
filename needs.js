@@ -29,13 +29,5 @@ function bondGrant(st,sess,src,day,amt){const b=st.bondDay=st.bondDay&&st.bondDa
 // away timeline (clock frozen during holiday): 0 normal, 1 treasure, 2 note, 3 kind leave
 function awayStage(h){return h>=72?3:h>=48?2:h>=24?1:0}
 const awayFloor=[0,50,60,0];
-// placeholder text from the spec (§4) until the dialogue pass moves it into dialogue/*.json
-const L={note:{slyte:"Dear {child}, I saved you the shiniest pebble. Also, I learned to hop backwards! Want to see? — {name}",whimber:"Dear {child}, hoo! I counted the stars for you last night. There were lots. I saved you the brightest one. — {name}"},
-  leave:{slyte:"Dear {child}, I went home to the meadow for my next adventure! The Howlings say hi. Thank you for being my friend. — {name}",whimber:"Dear {child}, I flew home to the old oak for my next adventure. The stars are bright here. Thank you for being my friend. — {name}"},
-  leave2:{slyte:"Dear {child}, I found a new favourite rock! It is round and sparkly. — {name}",whimber:"Dear {child}, I found a new favourite rock in the old oak. Hoo, so smooth. — {name}"},
-  holidayStart:{slyte:"A trip? Fun! I'll go exploring with the other Howlings. Tell me everything after!",whimber:"Hoo, a journey! I'll visit my Wingsong cousins in the old oak. Save me a story?"},
-  holidayBack:{slyte:"You're here! I have SO many stories. First: a beetle with stripes.",whimber:"You're here! I have SO many stories. First: a beetle with stripes."},
-  treasure:{slyte:"Look what I found while exploring!",whimber:"Hoo! I found something while exploring."}};
-const fill=(t,v)=>t.replace(/\{(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:m);
-W.NeedsV2=Object.assign(N,{led,L,fill,awakeHours,drain,want,meter,step,reqCap,reqGapMs,bondGrant,awayStage,awayFloor});
+W.NeedsV2=Object.assign(N,{led,awakeHours,drain,want,meter,step,reqCap,reqGapMs,bondGrant,awayStage,awayFloor});
 if(typeof module!=='undefined')module.exports=W.NeedsV2})(typeof window!=='undefined'?window:globalThis);

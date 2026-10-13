@@ -2745,6 +2745,58 @@
     "expr": "delighted",
     "react": "excited"
    }
+  ],
+  "food_decline": [
+   {
+    "text": "Hoo… no thank you. I'm cozy and full.",
+    "expr": "happy"
+   },
+   {
+    "text": "That's kind. My tummy says later, please.",
+    "expr": "happy"
+   }
+  ],
+  "hug_full": [
+   {
+    "text": "Full of hugs… one more fits.",
+    "expr": "love"
+   }
+  ],
+  "play_full": [
+   {
+    "text": "More? Hoo, all right. Then a cozy rest.",
+    "expr": "happy"
+   }
+  ],
+  "away_note": [
+   {
+    "text": "Dear {child}… I counted the stars for you last night. There were lots. I saved you the brightest one. — {name}",
+    "expr": "happy"
+   }
+  ],
+  "leave_postcard": [
+   {
+    "text": "Dear {child}… I flew home to the old oak for my next adventure. The stars are bright here. Thank you for being my friend. — {name}",
+    "expr": "happy"
+   }
+  ],
+  "holiday_start": [
+   {
+    "text": "Hoo… a journey. I'll visit my Wingsong cousins in the old oak. Save me a story?",
+    "expr": "happy"
+   }
+  ],
+  "holiday_end": [
+   {
+    "text": "Hoo… you're here. I have so many stories. First: a beetle with stripes.",
+    "expr": "delighted"
+   }
+  ],
+  "away_postcard_day7": [
+   {
+    "text": "Dear {child}… I found a new favourite stone in the old oak. So smooth. — {name}",
+    "expr": "happy"
+   }
   ]
  },
  "conversations": [
