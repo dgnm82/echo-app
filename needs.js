@@ -5,7 +5,7 @@ const N={rate:{food:5,play:4,comfort:3,rest:3},quiet:[20,7],floor:1,show:50,hide
   hue:{food:'#FFB070',play:'#7EC8FF',comfort:'#FF8FB8',rest:'#B49CFF'},
   bond:{hello:5,visit:5,feed:3,feedFav:6,pet:1,sit:3,game:4,reply:3},
   perDay:{visit:3,feed:3,feedFav:3,pet:3,sit:1,game:6},perSess:{reply:2},capSess:30,capDay:60,
-  care:['feed','feedFav','pet','sit','game','nap']};
+  care:['feed','feedFav','pet','sit','game','nap','care']};
 // hours of the span [t0,t1] that fall outside quiet hours (local clock); drain only runs while the child would be awake
 function awakeHours(t0,t1,q){q=q||N.quiet;if(t1<=t0)return 0;let h=0,t=t0;const quiet=d=>{const x=d.getHours();return q[0]>q[1]?(x>=q[0]||x<q[1]):(x>=q[0]&&x<q[1])};
   while(t<t1){const d=new Date(t),nx=Math.min(t1,new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()+1).getTime());if(!quiet(d))h+=(nx-t)/36e5;t=nx}return h}

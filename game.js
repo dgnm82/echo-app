@@ -13,7 +13,7 @@ function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=
   if(Array.isArray(s.checkins))s.checkins.forEach(k=>{if(bad.test(k.text)){k.text=k.text.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.');ch=true}});
   if(Array.isArray(s.postcards)){const p=s.postcards.map(x=>bad.test(x)?x.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.'):x);if(p.join()!==s.postcards.join()){s.postcards=p;ch=true}}
   if(ch)try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
-function save(){if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}if(S&&S.needs&&document.getElementById('sc'))thoughtRefresh()}
+function save(){if(S&&S.needs){const m=S.metAt=S.metAt||{},p=sess._nv||{};for(const k in S.needs)if(p[k]!=null&&S.needs[k]>p[k])m[k]=now();sess._nv=Object.assign({},S.needs)}if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}if(S&&S.needs&&document.getElementById('sc'))thoughtRefresh()}
 // need thought bubble (playtest fix): re-picked whenever a need changes (every save), hidden when nothing is pressing; follows the Echo as it moves
 const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w;
 function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}
@@ -68,15 +68,22 @@ function genEcho(kind){
 }
 function svg(kind,g,m){const ex=m==='sleep'?'sleepy':m==='sad'?'neutral':m==='happy'?'happy':(m||'neutral');return ART.creature(kind,g).replace('data-expr="neutral"',`data-expr="${ex}"`)}
 function mood(){const n=S.needs;const m=Math.min(n.food,n.play,n.rest,n.comfort);return S.napUntil>now()?'sleep':m>60?'happy':m<25?'sad':'ok'}
-function want(){const n=S.needs;const e=[['food','🍎'],['play','⚽'],['rest','🛏️'],['comfort','💗']].sort((a,b)=>n[a[0]]-n[b[0]])[0];return n[e[0]]<60?e[1]:null}
+const WANT_IC={food:'🍎',play:'⚽',rest:'🛏️',comfort:'💗'};
+function want(){const k=NeedsV2.want(S.needs,S.metAt,sess.wantShown);sess.wantShown=k;return k?WANT_IC[k]:null}   // needs v2 §1: < 50, off at 60, tie = met longest ago
 
 // ---------- time model (§5.1) ----------
 function simulate(){
-  if(!S||!S.last)return; let hrs=(now()-S.last)/36e5; if(hrs<0)hrs=0; hrs=Math.min(hrs,C.maxDecayHours);
-  for(const k in C.decayPerHour)S.needs[k]=clamp(S.needs[k]-C.decayPerHour[k]*hrs);
-  const today=new Date(now()).toDateString(); if(S.lastHello!==today){S.lastHello=today;addBond(C.bond.hello,true);S.days=(S.days||0)+1}
+  if(!S||!S.last)return;
+  if(S.holiday&&S.holiday.on){S.holiday={on:false,was:S.holiday.since||null};sess.holidayBack=1;S.last=now();}   // holiday (D5): needs, away clock and bond were frozen; it ends on this open
+  const hrs=Math.max(0,(now()-S.last)/36e5);NeedsV2.drain(S.needs,S.last,now(),S.quietHours,C.maxDecayHours);
+  const st=NeedsV2.awayStage(hrs),fl=NeedsV2.awayFloor[st];if(fl)for(const k in S.needs)S.needs[k]=Math.max(S.needs[k],fl);
+  if(st===1)sess.awayTreasure=1;else if(st===2)sess.awayNote=1;
+  else if(st===3&&!S.released&&!S.left&&!(S.badges||[]).includes('ready'))S.left={at:now(),card2:now()+7*864e5};   // kind leave: gone home for the next adventure (no dying, bond frozen)
+  const today=new Date(now()).toDateString(); if(S.lastHello!==today&&!S.left){S.lastHello=today;addBond(C.bond.hello,true,'hello');S.days=(S.days||0)+1}
 }
-function addBond(n,silent){
+function addBond(n,silent,src){   // needs v2 §2: tagged sources go through the day/session caps; a visit = the first care action of a session
+  if(S.left||(S.holiday&&S.holiday.on))return;const day=new Date(now()).toDateString();
+  if(src){if(NeedsV2.care.includes(src)&&!sess.visited){sess.visited=1;n=NeedsV2.bondGrant(S,sess,'visit',day)}else n=0;n+=NeedsV2.bondGrant(S,sess,src,day)}
   const before=S.bond; S.bond=Math.min(500,S.bond+Math.round(n*C.demoSpeed));
   if(S.badges===undefined)S.badges=[];
   for(const m of C.milestones){ if(before<m.bond&&S.bond>=m.bond&&!S.badges.includes(m.id)){S.badges.push(m.id);queueMilestone(m)} }
@@ -548,7 +555,7 @@ function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
   Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
-    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(C.bond.reply);save();
+    remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(0,false,'reply');save();
     // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
     const onHome=()=>document.getElementById('feed')&&!document.querySelector('.full');
     const nx=info&&info.carriedOn?null:Dialogue.afterConversation(conv,depth);
@@ -578,14 +585,14 @@ function foodMenu(){const L=foodList(),tried=new Set(S.foods),pick=a=>a.length?a
 function foodIcon(f){return `<i class="pxi" data-icon="${f.icon.slice(2)}" style="background-image:url(px/${f.icon}.png)"></i>`}
 function feed(){
   if(asleep())return;
-  if(sess.feeds>=C.sessionLimits.feeds||S.needs.food>=95)return talk(B('full'));
+  if(sess.feeds>=C.sessionLimits.feeds||S.needs.food>=NeedsV2.full)return talk(B('full'));   // needs v2: full (>= 90) politely declines, no bond
   if(!foodList().length)return feedOld();
   const pool=foodMenu();
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${foodIcon(f)}<span class="lbl">${f.name}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],tier=foodTaste(f),T=FOODS.tiers[tier],lbl=foodLabel(f),fav=tier==='favorite',first=!S.foods.includes(lbl);sess.feeds++;
     if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('hungry')}
     S.needs.food=clamp(S.needs.food+T.food);if(first)S.foods.push(lbl);(S.foodTiers=S.foodTiers||{})[lbl]=tier;   // a disliked food still restores +15
-    addBond(T.bond);SFX('care_feed_eat');if(fav)fwTick('food');save();
+    addBond(T.bond,false,fav?'feedFav':'feed');SFX('care_feed_eat');if(fav)fwTick('food');save();
     if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${lbl}`,'favfood');
     if(tier==='not_for_me'&&first)remember(FOODS.tiers.not_for_me.memory.replace('{food}',f.name),'food_'+f.id);
     const line=()=>{const own=Dialogue.bark('food_'+f.id);talk(fav?B('fed_fav'):tier==='not_for_me'?(own||B('fed')):(Math.random()<.6&&own)||B('fed'))};
@@ -596,26 +603,26 @@ function feedOld(){const e=E();
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
     S.needs.food=clamp(S.needs.food+(fav?C.restore.foodFav:C.restore.food));if(!S.foods.includes(f))S.foods.push(f);
-    addBond(fav?C.bond.feedFav:C.bond.feed);SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav)fwTick('food');if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
+    addBond(0,false,fav?'feedFav':'feed');SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav)fwTick('food');if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
 }
 function comfort(){
   if(asleep())return; const e=E();
   choices([['✋','Pet',null],['🌙','Sit together',null]],i=>{
     if(i===0){pet();return}
     const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';if(window.Alive)Alive.sit(true);talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
-    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';if(window.Alive)Alive.sit(false);needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(C.bond.sit);S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
+    setTimeout(()=>{ov.innerHTML='';sc.style.filter='';if(window.Alive)Alive.sit(false);needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(0,false,'sit');S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000);
   });
 }
 function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
-function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);hop();if(window.Alive)Alive.petFx();talk(B('pet'),1800)}
+function pet(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');hop();if(window.Alive)Alive.petFx();talk(B('pet'),1800)}
 function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('cuddly')}}
-function hug(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(C.bond.pet);save();   // E1 press-and-hold hug
+function hug(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // E1 press-and-hold hug
   const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
   sess.naps++;if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('sleepy')}const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
   S.napUntil=now()+C.napSeconds*1000;const from=curScene();S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6); saved at once, shown after the wipe
-addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
+addBond(0,true,'nap');SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
 }
 // v1.1 nap option A (aliveness/v1_1_motion): yawn, trot / fly off the right-most exit, 6-step curtain wipe, enter home from the
 // opposite edge and settle on the bed waypoint (Slyte: tree_base curl, Whimber: hollow_door). Reduced motion keeps the old cut.
@@ -699,14 +706,14 @@ function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starl
 function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
-function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true);
+function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
   // signature-only daily bonus (spec §0/§4): first signature round of the day
-  if(next&&next.signature&&S.sigDay!==new Date(now()).toDateString()){S.sigDay=new Date(now()).toDateString();addBond(C.bond.signatureDaily,true)}
+  
   const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
 
 // ---------- Games v2 shared kit (games_v2.md §3.0): flat rewards, best store, end card, HUD best, bonus glow, quiet auto-Easy ----------
 const GTU=()=>window.GAMES_TUNING;
-function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++){S.needs.play=clamp(S.needs.play+C.restore.play);addBond(C.bond.round,true)}return n}
+function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++)S.needs.play=clamp(S.needs.play+C.restore.play);if(n===R.roundsPerGame)addBond(0,true,'game');else addBond(0,true,'care');return n}   // needs v2 §2: +4 per finished game (6 a day); an early Done still counts as a visit
 function bestStore(){S.best=S.best||{};['run','builder','catch','stack'].forEach(k=>S.best[k]=S.best[k]||{});return S.best}
 function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
 function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}

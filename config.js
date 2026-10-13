@@ -1,7 +1,7 @@
 // All tunables in one place (spec §5 / Appendix A). First guesses — change freely.
 window.CONFIG = {
-  demoSpeed: 6,            // bond multiplier so the full arc is reachable in one sitting (1 = spec values)
-  decayPerHour: {food:8, play:6, rest:5, comfort:4},
+  demoSpeed: 1,            // bond multiplier so the full arc is reachable in one sitting (1 = spec values)
+  decayPerHour: {food:5, play:4, rest:3, comfort:3},   // needs v2 (NeedsV2.rate is what drains; awake hours only)
   restore: {food:30, foodFav:40, play:15, playFinish:15, rest:50, restFav:60, pet:5, sit:15},
   sessionLimits: {feeds:3, games:2, naps:1},
   bond: {feed:3, feedFav:6, round:4, signatureDaily:3, pet:1, sit:5, nap:3, reply:3, hello:5},
