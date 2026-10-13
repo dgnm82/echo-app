@@ -646,6 +646,7 @@ function runGame(){
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const pd=`run/${pal}/${PIXEL.stageNow()>=4?'':'s'+Math.min(Math.max(PIXEL.stageNow(),1),3)+'/'}`;   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
+  if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].forEach(k=>ld(k,pd+'slyte_'+k))}
   else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
@@ -667,7 +668,8 @@ function runGame(){
       else if(o.type==='bush'){const h=RUN_BUSH.filter(v=>v<=o.h).pop()||40;cx.drawImage(IM['bush'+h],x+wob,531-h)}}   // flat-base bushes stand on the grass (runner_polish.md §4)
     for(const t of g.tre){const x=Math.round(t.x-d)-8;if(x>370||x<-20)continue;cx.drawImage(t.gold?IM.gold:IM.tre,x,Math.round(t.y-8+(Math.sin(g.t*4+t.id)>0?-1:0)))}
     for(const s of signs){const x=Math.round(s-d);if(x>-20&&x<370)cx.drawImage(fox?IM.sign:IM.sign_twi,x,(fox?470:528)-13)}
-    if(restProp!==null){const x=Math.round(restProp-d);if(fox)cx.drawImage(IM.sunrock,x,470-21);else{cx.drawImage(IM.bench,x,528-8);cx.drawImage(IM.moss,x+1,528-14)}}}
+    if(restProp!==null){const x=Math.round(restProp-d);if(IM.homeRest&&IM.homeRest.complete&&IM.homeRest.naturalWidth)cx.drawImage(IM.homeRest,x-10,(fox?470:531)-48);   // bond 140: the rest stop is the Echo's own open home (spec v0.6 §0)
+      else if(fox)cx.drawImage(IM.sunrock,x,470-21);else{cx.drawImage(IM.bench,x,528-8);cx.drawImage(IM.moss,x+1,528-14)}}}
   function echo(){let k;const F=Math.floor(g.t*12);
     if(fox){k=g.tumble>0?'tumble':g.phase!=='run'&&g.mult<.05?'tumble':happy>0?'run_happy':g.air?(g.vy<0?'jump':'fall'):'run'+(F%6)}
     else{k=g.tumble>0?'tumble':happy>0||(g.phase!=='run'&&g.mult<.05)?'glide_happy':g.held?'flap'+(F%4):'glide'}
