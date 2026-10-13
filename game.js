@@ -88,7 +88,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S||S.setupDone===0)return setup();
-  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(S.kind==='fox'?'slyte':'whimber').then(()=>{initDialogue();famVars();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 const TAGLINE="ECHO: Every creature has a story to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
 function legacySetup(){   // test/playtest harness only (localStorage echo-nosetup)
@@ -134,6 +134,7 @@ function obFill(t,x){x=x||{};const v=Object.assign({},(S&&S.vars)||{},x);const c
   return String(t).replace(/\{var:(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:'').replace(/\{child\}/g,child).replace(/\{name\}/g,(S&&S.g&&S.g.name)||(x.name||''))}
 function U(k,i,x){const L=(OBL&&OBL[k])||(Dialogue.lib&&Dialogue.lib.barks[k])||[];const l=L[i||0];return l?obFill(l.text,x):''}
 function UA(k,x){const L=(OBL&&OBL[k])||[];return L.map(l=>obFill(l.text,x))}
+function famVars(){if(!window.FAMILIES||!S||!S.kind)return;const f=FAMILIES.byKind[S.kind];S.vars=S.vars||{};S.vars.family=f.label;S.vars.family_plural=f.plural;if(!S.vars.default_name)S.vars.default_name=f.default_name}   // family words come from families.js on every load (old saves too)
 function obMaxConv(){return S&&S.ageBand?Math.min(C.maxConversationsPerSession,obBand().maxConv):C.maxConversationsPerSession}   // 5-6: 1 per session
 function obBand(){return OBC.bands[(S&&S.ageBand)||'7-8']||OBC.bands['7-8']}
 // --- name filter (§2.2): 1-10 letters, letters/space/hyphen/apostrophe, <= 2 words, no digits, local blocklist on a folded form

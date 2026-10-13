@@ -104,7 +104,7 @@
   ],
   "reveal": [
    {
-    "text": "Hoo… hello. I'm Whimber, a starlight listener. I think I'm your Whimber. ({name} {quirk}.)",
+    "text": "Hoo… hello. I'm {name}, a starlight listener. I think I'm your {var:family}. ({name} {quirk}.)",
     "expr": "curious"
    }
   ],
@@ -224,7 +224,7 @@
   ],
   "not_sleepy": [
    {
-    "text": "Not quite sleepy yet… Whimbers nap on their own schedule. Hoo.",
+    "text": "Not quite sleepy yet… {var:family_plural} nap on their own schedule. Hoo.",
     "expr": "curious"
    },
    {
@@ -594,7 +594,7 @@
     "expr": "neutral"
    },
    {
-    "text": "(Peers at a spoon.) …Upside-down Whimber.",
+    "text": "(Peers at a spoon.) …Upside-down {name}.",
     "expr": "neutral"
    },
    {
@@ -2761,7 +2761,7 @@
        "icon": "🦉",
        "label": "You!",
        "goto": "b",
-       "reply": "Oh… (Whimber slowly blinks both eyes.) Me too. You, I mean.",
+       "reply": "Oh… ({name} slowly blinks both eyes.) Me too. You, I mean.",
        "expr": "love",
        "react": "pet",
        "bond": 2
@@ -2855,7 +2855,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "People say Whimbers are wise… I don't think I know very much. Is that okay?",
+     "say": "People say {var:family_plural} are wise… I don't think I know very much. Is that okay?",
      "expr": "curious",
      "choices": [
       {
@@ -2918,7 +2918,7 @@
        "icon": "🌳",
        "label": "What does it say?",
        "goto": "b",
-       "reply": "\"Whimber… whimber…\" Very softly."
+       "reply": "\"{name}… {name}…\" Very softly. Like a lullaby."
       },
       {
        "icon": "🤗",
@@ -7332,8 +7332,8 @@
       },
       {
        "icon": "🦉",
-       "label": "Whimber's Ears",
-       "reply": "Whimber's Ears… hoo-hoo. A very fluffy book.",
+       "label": "{name}'s Ears",
+       "reply": "{name}'s Ears… hoo-hoo. A very fluffy book.",
        "expr": "giggling",
        "goto": "c"
       },
@@ -7556,9 +7556,9 @@
        "goto": "b"
       },
       {
-       "icon": "🦉",
-       "label": "Little Whimber",
-       "reply": "Little Whimber… oh. A namesake. I'm honored.",
+       "icon": "🪶",
+       "label": "Little {name}",
+       "reply": "Little {name}… oh. A namesake. I'm honored.",
        "expr": "happy",
        "goto": "b"
       }
@@ -9373,9 +9373,9 @@
        "reply": "Me… yes. Owls wake when purple ends. Hoo.",
        "expr": "happy",
        "set": {
-        "sky_purple": "wakes Whimber"
+        "sky_purple": "wakes me"
        },
-       "memory": "You told me… the purple sky wakes Whimber",
+       "memory": "You told me… the purple sky wakes {name}",
        "memoryTag": "whimber_sky_purple",
        "goto": "c"
       },
@@ -10380,7 +10380,7 @@
        "set": {
         "teacup_w": "is still a good cup"
        },
-       "memory": "You told me… Whimber's chipped teacup is still a good cup",
+       "memory": "You told me… {name}'s chipped teacup is still a good cup",
        "memoryTag": "whimber_teacup_w",
        "goto": "c"
       },
@@ -10392,7 +10392,7 @@
        "set": {
         "teacup_w": "has a story in its chip"
        },
-       "memory": "You told me… Whimber's chipped teacup has a story in its chip",
+       "memory": "You told me… {name}'s chipped teacup has a story in its chip",
        "memoryTag": "whimber_teacup_w",
        "goto": "c"
       },
@@ -10404,7 +10404,7 @@
        "set": {
         "teacup_w": "is special with its chip"
        },
-       "memory": "You told me… Whimber's chipped teacup is special with its chip",
+       "memory": "You told me… {name}'s chipped teacup is special with its chip",
        "memoryTag": "whimber_teacup_w",
        "goto": "c"
       },
@@ -11618,13 +11618,13 @@
       },
       {
        "icon": "🦉",
-       "label": "Whimber's Star",
-       "reply": "Whimber's Star… oh. That's kind.",
+       "label": "{name}'s Star",
+       "reply": "{name}'s Star… oh. That's kind.",
        "expr": "happy",
        "set": {
-        "map_stars": "has a star called Whimber's Star"
+        "map_stars": "has a star named after me"
        },
-       "memory": "You told me… our star map has a star called Whimber's Star",
+       "memory": "You told me… our star map has a star called {name}'s Star",
        "memoryTag": "whimber_map_stars",
        "goto": "c"
       },
@@ -13664,7 +13664,7 @@
      ]
     },
     "c": {
-     "say": "Reading is slow for Whimbers. I like slow.",
+     "say": "Reading is slow for {var:family_plural}. I like slow.",
      "expr": "happy",
      "bond": 1
     }
@@ -13689,7 +13689,7 @@
       {
        "icon": "😆",
        "label": "Very!",
-       "reply": "Very ruffled… hoo-hoo. A windy Whimber.",
+       "reply": "Very ruffled… hoo-hoo. A windy {name}.",
        "expr": "giggling"
       },
       {
@@ -13965,7 +13965,7 @@
       {
        "icon": "✍️",
        "label": "Your name",
-       "reply": "(Draws a squiggle.) …That says \"Whimber.\" In Whimber.",
+       "reply": "(Draws a squiggle.) …That says \"{name}.\" In {var:family}.",
        "expr": "happy"
       },
       {
@@ -14064,7 +14064,7 @@
      "wait": 2400
     },
     "b": {
-     "say": "(Spreads wings.) …Look. A very large Whimber on the floor.",
+     "say": "(Spreads wings.) …Look. A very large {name} on the floor.",
      "expr": "happy",
      "next": "c",
      "wait": 2400
@@ -14976,7 +14976,7 @@
       },
       {
        "icon": "🦉",
-       "label": "Whimber",
+       "label": "{name}",
        "reply": "Me… hello, caterpillar. Through your window.",
        "expr": "happy"
       }

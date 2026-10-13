@@ -115,7 +115,7 @@
   ],
   "reveal": [
    {
-    "text": "Psst! I'm Slyte! Not just any Slyte— me! ({name} {quirk}.) Friends now?",
+    "text": "Psst! I'm {name}! Not just any {var:family}— me! ({name} {quirk}.) Friends now?",
     "expr": "excited",
     "react": "excited"
    }
@@ -156,7 +156,7 @@
   ],
   "fed_fav": [
    {
-    "text": "THAT one! How did you know?! Are you a Slyte too?",
+    "text": "THAT one! How did you know?! Are you a {var:family} too?",
     "expr": "excited",
     "react": "excited"
    },
@@ -223,7 +223,7 @@
   ],
   "sit": [
    {
-    "text": "…quiet is nice. Who knew? Not me, the bouncy Slyte.",
+    "text": "…quiet is nice. Who knew? Not me, the bouncy {name}.",
     "expr": "love"
    },
    {
@@ -2058,7 +2058,7 @@
   ],
   "need_cuddly": [
    {
-    "text": "Psst. In the wild, Slytes nap in one big fluffy pile.",
+    "text": "Psst. In the wild, {var:family_plural} nap in one big fluffy pile.",
     "expr": "happy"
    },
    {
@@ -2889,7 +2889,7 @@
        "icon": "🤫",
        "label": "Just sit",
        "goto": "sit",
-       "reply": "(Slyte sits beside you, ears twitching happily.)",
+       "reply": "({name} sits beside you, ears twitching happily.)",
        "expr": "love"
       }
      ]
@@ -2926,7 +2926,7 @@
      "memoryTag": "hide_spot"
     },
     "sit": {
-     "say": "(Slyte sits beside you. Ears twitch.) …Good spot.",
+     "say": "({name} sits beside you. Ears twitch.) …Good spot.",
      "expr": "love"
     }
    },
@@ -2989,7 +2989,7 @@
        "label": "Give to me",
        "reply": "For you? …Okay. Because you're my best person.",
        "expr": "love",
-       "memory": "Slyte gave you the shiny thing it found",
+       "memory": "{name} gave you the shiny thing it found",
        "memoryTag": "cap",
        "bond": 3
       }
@@ -3025,7 +3025,7 @@
        "icon": "🤫",
        "label": "Just sit",
        "goto": "b",
-       "reply": "(Slyte leans on you. Its tail goes swish… swish.)",
+       "reply": "({name} leans on you. Its tail goes swish… swish.)",
        "expr": "love"
       }
      ]
@@ -4605,7 +4605,7 @@
      ]
     },
     "b": {
-     "say": "Snowy paws. Snowy nose. Happy Slyte.",
+     "say": "Snowy paws. Snowy nose. Happy {name}.",
      "expr": "happy",
      "bond": 1
     }
@@ -6021,7 +6021,7 @@
      ]
     },
     "b": {
-     "say": "{pet_phrase} I didn't poke it. Polite Slyte.",
+     "say": "{pet_phrase} I didn't poke it. Polite {name}.",
      "expr": "happy",
      "bond": 2
     }
@@ -7065,7 +7065,7 @@
        "set": {
         "shadow": "stretches when the sun is low"
        },
-       "memory": "You said Slyte's shadow stretches when the sun is low",
+       "memory": "You said {name}'s shadow stretches when the sun is low",
        "memoryTag": "slyte_shadow",
        "goto": "c"
       },
@@ -7077,7 +7077,7 @@
        "set": {
         "shadow": "grows after a snack"
        },
-       "memory": "You said Slyte's shadow grows after a snack",
+       "memory": "You said {name}'s shadow grows after a snack",
        "memoryTag": "slyte_shadow",
        "goto": "c"
       },
@@ -7089,7 +7089,7 @@
        "set": {
         "shadow": "likes showing off"
        },
-       "memory": "You said Slyte's shadow likes showing off",
+       "memory": "You said {name}'s shadow likes showing off",
        "memoryTag": "slyte_shadow",
        "goto": "c"
       },
@@ -7596,7 +7596,7 @@
        "set": {
         "bottlecap": "kept juice safe before"
        },
-       "memory": "You said Slyte's bottle cap kept juice safe before",
+       "memory": "You said {name}'s bottle cap kept juice safe before",
        "memoryTag": "slyte_bottlecap",
        "goto": "c"
       },
@@ -7608,19 +7608,19 @@
        "set": {
         "bottlecap": "was an ant's hat"
        },
-       "memory": "You said Slyte's bottle cap was an ant's hat",
+       "memory": "You said {name}'s bottle cap was an ant's hat",
        "memoryTag": "slyte_bottlecap",
        "goto": "c"
       },
       {
        "icon": "🦊",
        "label": "Nobody, it's new",
-       "reply": "New! Brand new for me. Lucky Slyte.",
+       "reply": "New! Brand new for me. Lucky {name}.",
        "expr": "delighted",
        "set": {
         "bottlecap": "is brand new"
        },
-       "memory": "You said Slyte's bottle cap is brand new",
+       "memory": "You said {name}'s bottle cap is brand new",
        "memoryTag": "slyte_bottlecap",
        "goto": "c"
       },
@@ -7704,9 +7704,9 @@
        "reply": "Mine! (Fluffs it more.) Even fluffier now.",
        "expr": "delighted",
        "set": {
-        "squirrel": "has a less fluffy tail than Slyte"
+        "squirrel": "has a less fluffy tail than me"
        },
-       "memory": "You said the squirrel has a less fluffy tail than Slyte",
+       "memory": "You said the squirrel has a less fluffy tail than {name}",
        "memoryTag": "slyte_squirrel",
        "goto": "c"
       },
@@ -7728,9 +7728,9 @@
        "reply": "A tie! Fluffy twins. Tail friends.",
        "expr": "delighted",
        "set": {
-        "squirrel": "ties with Slyte for fluffiest tail"
+        "squirrel": "ties with me for fluffiest tail"
        },
-       "memory": "You said the squirrel ties with Slyte for fluffiest tail",
+       "memory": "You said the squirrel ties with {name} for fluffiest tail",
        "memoryTag": "slyte_squirrel",
        "goto": "c"
       },
@@ -7770,7 +7770,7 @@
       {
        "icon": "🗣️",
        "label": "Yes, help it",
-       "reply": "(Points.) There, squirrel! It looked. It found it! Hero Slyte.",
+       "reply": "(Points.) There, squirrel! It looked. It found it! Hero {name}.",
        "expr": "delighted"
       },
       {
@@ -7962,7 +7962,7 @@
      ]
     },
     "c": {
-     "say": "I'll polish my nose. (Licks nose.) Shiny Slyte. Done.",
+     "say": "I'll polish my nose. (Licks nose.) Shiny {name}. Done.",
      "expr": "happy",
      "bond": 1
     }
@@ -8198,7 +8198,7 @@
       {
        "icon": "🤏",
        "label": "We'd shrink",
-       "reply": "Shrink! (Scrunches up.) Tiny Slyte. Still too big. Oops.",
+       "reply": "Shrink! (Scrunches up.) Tiny {name}. Still too big. Oops.",
        "expr": "delighted",
        "goto": "b"
       },
@@ -8827,7 +8827,7 @@
        "set": {
         "tail": "was dipped in milk"
        },
-       "memory": "You said Slyte's tail was dipped in milk",
+       "memory": "You said {name}'s tail was dipped in milk",
        "memoryTag": "slyte_tail",
        "goto": "c"
       },
@@ -8839,7 +8839,7 @@
        "set": {
         "tail": "was dipped in a cloud"
        },
-       "memory": "You said Slyte's tail was dipped in a cloud",
+       "memory": "You said {name}'s tail was dipped in a cloud",
        "memoryTag": "slyte_tail",
        "goto": "c"
       },
@@ -8851,7 +8851,7 @@
        "set": {
         "tail": "was dipped in paint"
        },
-       "memory": "You said Slyte's tail was dipped in paint",
+       "memory": "You said {name}'s tail was dipped in paint",
        "memoryTag": "slyte_tail",
        "goto": "c"
       },
@@ -8963,13 +8963,13 @@
      "choices": [
       {
        "icon": "⛄",
-       "label": "A snow Slyte",
+       "label": "A snow {name}",
        "reply": "A snow me! With a big snow tail. Brr, but proud.",
        "expr": "delighted",
        "set": {
-        "snow": "can be a snow Slyte"
+        "snow": "can be a snow me"
        },
-       "memory": "You said the snow can be a snow Slyte",
+       "memory": "You said the snow can be a snow {name}",
        "memoryTag": "slyte_snow",
        "goto": "c"
       },
@@ -9066,7 +9066,7 @@
       {
        "icon": "👼",
        "label": "A snow angel",
-       "reply": "A snow angel? Mine has a tail. A snow Slyte-angel.",
+       "reply": "A snow angel? Mine has a tail. A snow {var:family}-angel.",
        "expr": "happy"
       },
       {
@@ -9225,9 +9225,9 @@
        "expr": "delighted"
       },
       {
-       "icon": "🦊",
-       "label": "Slyte Junior",
-       "reply": "Slyte Junior! Ha-HA! A flower cousin.",
+       "icon": "🐾",
+       "label": "After you!",
+       "reply": "After me?! {name} Junior! Ha-HA! A flower cousin.",
        "expr": "delighted"
       }
      ],
@@ -9509,8 +9509,8 @@
       },
       {
        "icon": "🦊",
-       "label": "A Slyte",
-       "reply": "A sky Slyte! With a very long tail. Fancy.",
+       "label": "A {name}",
+       "reply": "A sky {name}! With a very long tail. Fancy.",
        "expr": "delighted"
       },
       {
@@ -9543,12 +9543,12 @@
       {
        "icon": "🐱",
        "label": "Total copycat",
-       "reply": "A copycat! Not even a cat. A copy-Slyte.",
+       "reply": "A copycat! Not even a cat. A copy-{name}.",
        "expr": "delighted",
        "set": {
         "mirror": "is a total copycat"
        },
-       "memory": "You said Slyte's reflection is a total copycat",
+       "memory": "You said {name}'s reflection is a total copycat",
        "memoryTag": "slyte_mirror",
        "goto": "c"
       },
@@ -9560,7 +9560,7 @@
        "set": {
         "mirror": "is a friend who agrees"
        },
-       "memory": "You said Slyte's reflection is a friend who agrees",
+       "memory": "You said {name}'s reflection is a friend who agrees",
        "memoryTag": "slyte_mirror",
        "goto": "c"
       },
@@ -9570,9 +9570,9 @@
        "reply": "Practicing being me! It's getting good.",
        "expr": "delighted",
        "set": {
-        "mirror": "is practicing being Slyte"
+        "mirror": "is practicing being me"
        },
-       "memory": "You said Slyte's reflection is practicing being Slyte",
+       "memory": "You said {name}'s reflection is practicing being {name}",
        "memoryTag": "slyte_mirror",
        "goto": "c"
       },
@@ -9861,7 +9861,7 @@
        "set": {
         "map": "points up to the sky"
        },
-       "memory": "You said Slyte's map points up to the sky",
+       "memory": "You said {name}'s map points up to the sky",
        "memoryTag": "slyte_map",
        "goto": "c"
       },
@@ -9873,7 +9873,7 @@
        "set": {
         "map": "points snack-ward"
        },
-       "memory": "You said Slyte's map points snack-ward",
+       "memory": "You said {name}'s map points snack-ward",
        "memoryTag": "slyte_map",
        "goto": "c"
       },
@@ -9885,7 +9885,7 @@
        "set": {
         "map": "points toward home"
        },
-       "memory": "You said Slyte's map points toward home",
+       "memory": "You said {name}'s map points toward home",
        "memoryTag": "slyte_map",
        "goto": "c"
       },
@@ -9932,7 +9932,7 @@
       },
       {
        "icon": "🦊",
-       "label": "A curled-up Slyte",
+       "label": "A curled-up {name}",
        "reply": "A curled-up me. That's basically what a nap looks like.",
        "expr": "happy",
        "goto": "b"
@@ -10575,7 +10575,7 @@
       {
        "icon": "🦊",
        "label": "Yip-yip!",
-       "reply": "Yip-yip! A Slyte bell. Everyone will know it's my house.",
+       "reply": "Yip-yip! A {name} bell. Everyone will know it's my house.",
        "expr": "delighted",
        "goto": "b"
       },
@@ -10888,7 +10888,7 @@
       {
        "icon": "🐾",
        "label": "Front paws",
-       "reply": "(Stretches forward.) Ahhh. Long Slyte. Very long.",
+       "reply": "(Stretches forward.) Ahhh. Long {name}. Very long.",
        "expr": "happy",
        "goto": "b"
       },
@@ -10997,7 +10997,7 @@
       {
        "icon": "🦊",
        "label": "Yip!",
-       "reply": "Yip! A Slyte bless-you. I love it.",
+       "reply": "Yip! A {var:family} bless-you. I love it.",
        "expr": "delighted",
        "goto": "b"
       },
@@ -11063,9 +11063,9 @@
        "reply": "Me?! …Maybe. I dig when I'm excited. Oops.",
        "expr": "delighted",
        "set": {
-        "hole": "was dug by Slyte"
+        "hole": "was dug by me"
        },
-       "memory": "You said the hole was dug by Slyte",
+       "memory": "You said the hole was dug by {name}",
        "memoryTag": "slyte_hole",
        "goto": "c"
       },
@@ -11373,12 +11373,12 @@
       {
        "icon": "🦊",
        "label": "To be like you",
-       "reply": "Kites copying Slytes! I'm famous.",
+       "reply": "Kites copying {var:family_plural}! I'm famous.",
        "expr": "delighted",
        "set": {
-        "kite": "copies Slyte's tail"
+        "kite": "copies my tail"
        },
-       "memory": "You said a kite copies Slyte's tail",
+       "memory": "You said a kite copies {name}'s tail",
        "memoryTag": "slyte_kite",
        "goto": "c"
       },
@@ -11412,7 +11412,7 @@
       {
        "icon": "🦊",
        "label": "A fox face",
-       "reply": "A Slyte kite! My face in the sky. Big ears. Yes.",
+       "reply": "A {name} kite! My face in the sky. Big ears. Yes.",
        "expr": "delighted",
        "goto": "b"
       },
@@ -11685,13 +11685,13 @@
       },
       {
        "icon": "🦊",
-       "label": "A giant Slyte",
+       "label": "A giant {name}",
        "reply": "A giant me! Curled up. Napping. Good hill.",
        "expr": "delighted",
        "set": {
-        "hill": "looks like a giant Slyte"
+        "hill": "looks like a giant me"
        },
-       "memory": "You said the hill looks like a giant Slyte",
+       "memory": "You said the hill looks like a giant {name}",
        "memoryTag": "slyte_hill",
        "goto": "c"
       },
@@ -11794,13 +11794,13 @@
       },
       {
        "icon": "🦊",
-       "label": "A tiny Slyte",
-       "reply": "A tiny Slyte?! That would be the best surprise.",
+       "label": "A tiny {name}",
+       "reply": "A tiny {name}?! That would be the best surprise.",
        "expr": "delighted",
        "set": {
-        "cocoon": "will be a tiny Slyte"
+        "cocoon": "will be a tiny me"
        },
-       "memory": "You said the cocoon will be a tiny Slyte",
+       "memory": "You said the cocoon will be a tiny {name}",
        "memoryTag": "slyte_cocoon",
        "goto": "c"
       },
@@ -11949,8 +11949,8 @@
       },
       {
        "icon": "🦊",
-       "label": "A Slyte",
-       "reply": "A balloon Slyte! With a twisty tail.",
+       "label": "A {name}",
+       "reply": "A balloon {name}! With a twisty tail.",
        "expr": "delighted",
        "goto": "b"
       }
@@ -11987,7 +11987,7 @@
        "set": {
         "bed": "sounds best when it crunches"
        },
-       "memory": "You said Slyte's bed sounds best when it crunches",
+       "memory": "You said {name}'s bed sounds best when it crunches",
        "memoryTag": "slyte_bed",
        "goto": "c"
       },
@@ -11999,7 +11999,7 @@
        "set": {
         "bed": "is best when silent"
        },
-       "memory": "You said Slyte's bed is best when silent",
+       "memory": "You said {name}'s bed is best when silent",
        "memoryTag": "slyte_bed",
        "goto": "c"
       },
@@ -12011,7 +12011,7 @@
        "set": {
         "bed": "sounds best when it squeaks"
        },
-       "memory": "You said Slyte's bed sounds best when it squeaks",
+       "memory": "You said {name}'s bed sounds best when it squeaks",
        "memoryTag": "slyte_bed",
        "goto": "c"
       },
@@ -12079,7 +12079,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "Psst. Slytes talk in ear-flicks. One flick means \"ooh.\"",
+     "say": "Psst. {var:family_plural} talk in ear-flicks. One flick means \"ooh.\"",
      "expr": "happy",
      "next": "b",
      "wait": 2400
@@ -12135,7 +12135,7 @@
      ]
     },
     "c": {
-     "say": "(Flick flick.) There. You know Slyte now.",
+     "say": "(Flick flick.) There. You know {name} now.",
      "expr": "happy",
      "bond": 1
     }
@@ -12754,7 +12754,7 @@
       {
        "icon": "🤫",
        "label": "Say yours",
-       "reply": "Slyte! …Slyte. Hello, me.",
+       "reply": "{name}! …{name}. Hello, me. The echo says it back so nicely.",
        "expr": "delighted",
        "goto": "b"
       }
@@ -13199,7 +13199,7 @@
       {
        "icon": "🤪",
        "label": "Silly",
-       "reply": "(Tongue out, ears wiggling.) …Window Slyte is VERY silly.",
+       "reply": "(Tongue out, ears wiggling.) …Window {name} is VERY silly.",
        "expr": "happy",
        "goto": "b"
       },
@@ -13529,7 +13529,7 @@
      ]
     },
     "c": {
-     "say": "{pet_phrase} Ribbit. (Slyte joins in.) I'm in the band now.",
+     "say": "{pet_phrase} Ribbit. ({name} joins in.) I'm in the band now.",
      "expr": "happy",
      "bond": 1
     }
@@ -13546,9 +13546,9 @@
      "expr": "curious",
      "choices": [
       {
-       "icon": "🦊",
-       "label": "Slyte",
-       "reply": "Slyte who? …Slyte me in! Ha-HA!",
+       "icon": "🐾",
+       "label": "Howl",
+       "reply": "Howl who? …Howl I get in if you don't open? Ha-HA!",
        "expr": "delighted",
        "goto": "b"
       },
@@ -13864,7 +13864,7 @@
      ]
     },
     "b": {
-     "say": "{pet_phrase} Kite Slyte. Swish swish. Very tall.",
+     "say": "{pet_phrase} Kite {name}. Swish swish. Very tall.",
      "expr": "happy",
      "bond": 1
     }
@@ -14080,7 +14080,7 @@
      ]
     },
     "b": {
-     "say": "{pet_phrase} A good bed makes a happy Slyte.",
+     "say": "{pet_phrase} A good bed makes a happy {name}.",
      "expr": "happy",
      "bond": 1
     }
@@ -14562,7 +14562,7 @@
      ]
     },
     "c": {
-     "say": "Three on a log. Squirrel, squirrel, Slyte. Squished. Good.",
+     "say": "Three on a log. Squirrel, squirrel, {name}. Squished. Good.",
      "expr": "happy",
      "bond": 1
     }
@@ -14593,12 +14593,12 @@
       {
        "icon": "🦊",
        "label": "You!",
-       "reply": "Me?! A sky Slyte! My tail is even bigger up there.",
+       "reply": "Me?! A sky {name}! My tail is even bigger up there.",
        "expr": "delighted",
        "set": {
-        "cloudShape": "a sky Slyte"
+        "cloudShape": "a sky me"
        },
-       "memory": "We saw a cloud that looked like Slyte",
+       "memory": "We saw a cloud that looked like {name}",
        "memoryTag": "slyte_cloud_shape",
        "goto": "b"
       },
@@ -14684,7 +14684,7 @@
       {
        "icon": "👍",
        "label": "Try it!",
-       "reply": "Sly-y-yte! …Slyte! It said my name! It KNOWS me.",
+       "reply": "{name}! …{name}! It said my name back! It KNOWS me.",
        "expr": "delighted",
        "goto": "b"
       },
@@ -14785,7 +14785,7 @@
      "wait": 2400
     },
     "c": {
-     "say": "{pet_phrase} Slyte: one-seventh rainbow. Official.",
+     "say": "{pet_phrase} {name}: one-seventh rainbow. Official.",
      "expr": "happy",
      "bond": 1
     }
@@ -14979,13 +14979,13 @@
       },
       {
        "icon": "🦊",
-       "label": "Slyte's house",
-       "reply": "\"Slyte's house.\" So people know it's me.",
+       "label": "{name}'s house",
+       "reply": "\"{name}'s house.\" So people know it's me.",
        "expr": "happy",
        "set": {
-        "treeSign": "Slyte's house"
+        "treeSign": "my house"
        },
-       "memory": "We made a treehouse sign: Slyte's house",
+       "memory": "We made a treehouse sign: {name}'s house",
        "memoryTag": "slyte_treehouse_sign",
        "goto": "b"
       }
@@ -15102,7 +15102,7 @@
       {
        "icon": "😍",
        "label": "Pretty!",
-       "reply": "Pretty! I feel pretty. Fancy Slyte. Very {word:shiny}.",
+       "reply": "Pretty! I feel pretty. Fancy {name}. Very {word:shiny}.",
        "expr": "delighted"
       },
       {
@@ -15175,7 +15175,7 @@
      "wait": 2400
     },
     "b": {
-     "say": "What would a Slyte wish for?",
+     "say": "What would a {var:family} wish for?",
      "expr": "curious",
      "choices": [
       {
@@ -15554,8 +15554,8 @@
       },
       {
        "icon": "🦊",
-       "label": "A Slyte",
-       "reply": "It's just me. My shadow is a perfect Slyte. Obviously.",
+       "label": "A {name}",
+       "reply": "It's just me. My shadow is a perfect {name}. Obviously.",
        "expr": "happy"
       }
      ],
@@ -15622,7 +15622,7 @@
       {
        "icon": "🚪",
        "label": "Who's there?",
-       "reply": "Slyte! …Slyte who? …Just Slyte. I forgot the joke part.",
+       "reply": "{name}! …{name} who? …Just {name}. I forgot the joke part.",
        "expr": "delighted",
        "goto": "c"
       },
@@ -15713,7 +15713,7 @@
       {
        "icon": "🎤",
        "label": "Sing along",
-       "reply": "Pitter-patter, Slyte is… flatter? I need better words.",
+       "reply": "Pitter-patter, {name} is… flatter? I need better words.",
        "expr": "happy"
       }
      ],
@@ -16131,7 +16131,7 @@
       {
        "icon": "🦋",
        "label": "It'll be a butterfly",
-       "reply": "A butterfly. I'll try not to pounce. Gentle Slyte.",
+       "reply": "A butterfly. I'll try not to pounce. Gentle {name}.",
        "expr": "happy"
       }
      ],
@@ -16392,7 +16392,7 @@
      "wait": 2500
     },
     "b": {
-     "say": "Meadows that go on and on. And Slytes! Lots of Slytes.",
+     "say": "Meadows that go on and on. And {var:family_plural}! Lots of {var:family_plural}.",
      "expr": "delighted",
      "choices": [
       {
@@ -16664,7 +16664,7 @@
    "start": "a",
    "nodes": {
     "a": {
-     "say": "Psst. Want to know how Slytes stay cozy in the wild?",
+     "say": "Psst. Want to know how {var:family_plural} stay cozy in the wild?",
      "expr": "curious",
      "choices": [
       {
