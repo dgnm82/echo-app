@@ -417,14 +417,20 @@ addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
 const NAP_BED={fox:'tree_base',owl:'hollow_door'};
 function napBed(){return scWp(NAP_BED[S.kind]||'stage')||scWp('stage')}
 function napSettle(){LIVE.st='present';if(S.napUntil<=now())return;lvDo(S.kind==='fox'?'curl_nap':'nap',0)}
+// reduced motion (lowFx / prefers-reduced-motion): option B dusk fade. A 6-step ordered dither in warm plum (never black), the
+// scene swaps under full cover with the Echo already on its bed, one gold star twinkles, and the dither steps back out.
+function napDusk(){setTimeout(()=>{const s=SCR();if(!s||!document.getElementById('cr'))return;const d=document.createElement('div');d.className='scdusk';s.appendChild(d);let i=0;
+  const t=setInterval(()=>{i++;d.style.backgroundImage=`url(px/alive/dusk${Math.min(i,6)}.png)`;if(i===6){clearInterval(t);LIVE.st='present';home();
+    const st=document.createElement('i');st.className='scduskstar';d.appendChild(st);
+    setTimeout(()=>{st.remove();let k=6;const t2=setInterval(()=>{k--;d.style.backgroundImage=k?`url(px/alive/dusk${k}.png)`:'none';if(!k){clearInterval(t2);d.remove()}},166)},700)}},166)},900)}
 function napTravel(from){const hm=scHome(),fox=S.kind==='fox';lvStop();LIVE.st='napgo';$('#sc')&&$('#sc').classList.add('lvaway');
-  if(lowFx())return setTimeout(home,1500)
+  if(lowFx())return napDusk();
   const exits=w=>w.wp.filter(x=>/exit/.test(x.kind));
   setTimeout(()=>{if(!document.getElementById('cr'))return;
     if(from.id===hm.id){lvMove(napBed(),()=>{LIVE.st='present';home();napSettle()});return}
     const ex=exits(from).sort((a,b)=>b.xy[0]-a.xy[0])[0],right=ex.xy[0]>90,ent=exits(hm).find(x=>(x.xy[0]>90)!==right)||exits(hm)[0];
     lvMove([ex.xy[0],Math.max(52,ex.xy[1]-SC_OY)],()=>{
-      const w=document.createElement('div');w.className='scwipe';SCR().appendChild(w);
+      const w=document.createElement('div');w.className='scwipe';w.style.background=(SCENES.wipe||{})[from.id+'_'+scVariant()]||'';SCR().appendChild(w);   // the left scene's SKY1
       setTimeout(()=>{home();lvPlace(ent.xy[0],Math.max(52,ent.xy[1]-SC_OY),right?1:-1);
         setTimeout(()=>{w.remove();lvMove(napBed(),napSettle,true)},380)},330)},true)},900)}
 function how(){
@@ -918,6 +924,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){S={child:S.child,voice:S.voice};discover()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();
