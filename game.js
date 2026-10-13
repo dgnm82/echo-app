@@ -142,7 +142,7 @@ function home(greet){
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
   if(window.Alive)Alive.twinkle();
-  if(m==='sleep'){talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene'))home()},Math.max(500,S.napUntil-now()+200));return}
+  if(m==='sleep'){{const b=napBed();if(b&&LIVE.st!=='napgo')lvPlace(b[0],b[1])}talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene'))home()},Math.max(500,S.napUntil-now()+200));return}
   if(greet)fwSession();
   if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs)}
@@ -409,9 +409,24 @@ function hug(){if(asleep())return;SFX('care_pet_sparkle',{gap:400});needMetComfo
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
   sess.naps++;if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('sleepy')}const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
-  S.napUntil=now()+C.napSeconds*1000;S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6)
-addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));setTimeout(home,1500);
+  S.napUntil=now()+C.napSeconds*1000;const from=curScene();S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6); saved at once, shown after the wipe
+addBond(C.bond.nap);SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
 }
+// v1.1 nap option A (aliveness/v1_1_motion): yawn, trot / fly off the right-most exit, 6-step curtain wipe, enter home from the
+// opposite edge and settle on the bed waypoint (Slyte: tree_base curl, Whimber: hollow_door). Reduced motion keeps the old cut.
+const NAP_BED={fox:'tree_base',owl:'hollow_door'};
+function napBed(){return scWp(NAP_BED[S.kind]||'stage')||scWp('stage')}
+function napSettle(){LIVE.st='present';if(S.napUntil<=now())return;lvDo(S.kind==='fox'?'curl_nap':'nap',0)}
+function napTravel(from){const hm=scHome(),fox=S.kind==='fox';lvStop();LIVE.st='napgo';$('#sc')&&$('#sc').classList.add('lvaway');
+  if(lowFx())return setTimeout(home,1500)
+  const exits=w=>w.wp.filter(x=>/exit/.test(x.kind));
+  setTimeout(()=>{if(!document.getElementById('cr'))return;
+    if(from.id===hm.id){lvMove(napBed(),()=>{LIVE.st='present';home();napSettle()});return}
+    const ex=exits(from).sort((a,b)=>b.xy[0]-a.xy[0])[0],right=ex.xy[0]>90,ent=exits(hm).find(x=>(x.xy[0]>90)!==right)||exits(hm)[0];
+    lvMove([ex.xy[0],Math.max(52,ex.xy[1]-SC_OY)],()=>{
+      const w=document.createElement('div');w.className='scwipe';SCR().appendChild(w);
+      setTimeout(()=>{home();lvPlace(ent.xy[0],Math.max(52,ent.xy[1]-SC_OY),right?1:-1);
+        setTimeout(()=>{w.remove();lvMove(napBed(),napSettle,true)},380)},330)},true)},900)}
 function how(){
   const p=document.querySelector('.panel');if(p)return p.remove();const n=S.needs;
   const seg=v=>Array.from({length:10},(_,i)=>`<i class="hs${v>i*10+5?' on':''}"></i>`).join('');
