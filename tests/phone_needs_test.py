@@ -28,6 +28,20 @@ async def main():
       se.visited=0;se.bond=0;se.c={};s.bondDay={d:'x',n:0,c:{}};
       return [on,off,NeedsV2.want({food:90,play:30,comfort:80,rest:80}),NeedsV2.awayStage(50),NeedsV2.meter({food:12}).food]
     })()""");print('bubble+away',r);assert r[0] and r[1] and r[2]=='play' and r[3]==2 and r[4]['step']==1
+    # corner glows: 4 corners of #sc, bottom pair above the dock, PNG = step, lowFx steps at once
+    r=await pg.evaluate("""(()=>{const s=__echo.state;s.lowfx=true;s.napUntil=0;s.needs={food:10,play:30,comfort:60,rest:90};__echo.home();
+      const sc=document.getElementById('sc').getBoundingClientRect(),d=document.querySelector('.dock').getBoundingClientRect(),R=k=>document.querySelector('#sc .mt-'+k).getBoundingClientRect(),st=k=>document.querySelector('#sc .mt-'+k).dataset.s;
+      const f=R('food'),p=R('play'),c=R('comfort'),r=R('rest');
+      const corners=Math.abs(f.left-sc.left)<1&&Math.abs(f.top-sc.top)<1&&Math.abs(p.right-sc.right)<1&&Math.abs(c.bottom-sc.bottom)<1&&Math.abs(r.right-sc.right)<1;
+      const above=c.bottom<=d.top+0.5&&r.bottom<=d.top+0.5;const steps=['food','play','comfort','rest'].map(st).join();
+      s.needs.food=95;__echo.hug();const now1=st('food');return [corners,above,steps,now1,document.querySelector('#sc .mt-rest').style.backgroundImage]})()""")
+    print('meters',r);assert r[0] and r[1] and r[2]=='1,2,3,4' and r[3]=='4' and 'rest_s4' in r[4],r
+    await pg.evaluate("__echo.state.lowfx=false;__echo.state.needs={food:12,play:40,comfort:70,rest:90};__echo.home()");await pg.wait_for_timeout(600)
+    await pg.screenshot(path='/workspace/shots/needs-v2-meters.png')
+    # declines: full food -> food_decline, no bond; full hugs still hug
+    r=await pg.evaluate("""(()=>{const s=__echo.state;s.needs.food=95;s.needs.comfort=95;const b=s.bond,f=s.needs.food;__echo.feed();const t1=document.getElementById('b').textContent,b1=s.bond;
+      __echo.hug();const t2=document.getElementById('b').textContent;return [b1===b,s.needs.food===f,t1,t2]})()""")
+    print('declines',r);assert r[0] and r[1] and r[2] and r[3]
     # holiday freezes, then ends on open; leave screen after 72 h
     r=await pg.evaluate("""(()=>{
       __echo.holiday(true);const h=__echo.state.holiday;__echo.state.last=Date.now()-80*36e5;__echo.state.left=null;
