@@ -22,11 +22,18 @@ function rng(s){let a=s>>>0||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(
 function variant(seed,sp,pal){const r=rng((seed||1)^0x9e37),P=sp==='whimber'?POWL:PAL,P0=sp==='whimber'?POWL0:PAL0,p=P0[Math.floor(r()*P0.length)],f=Math.floor(r()*4);return {pal:pal&&P.includes(pal)?pal:p,fluff:f}}   // pal: S.g.pal from origin colour chips (origin_v2 §4); fluff stays seeded
 function stageFromBond(bond){const f=Math.max(0,Math.min(1,(bond||0)/500));return f<.25?1:f<.5?2:f<.75?3:4}
 function stageNow(){try{const S=W.__echo&&W.__echo.state;if(!S)return 1;if(S.released)return 4;if(S.releasePath)return 5;return stageFromBond(S.bond)}catch(e){return 1}}
-function whimber(g,stage){const v=variant(g&&g.seed,'whimber',g&&g.pal);stage=stage||stageNow();
-  {const pre=new Image();pre.src=`px/whimber_${v.pal}_f${v.fluff}_fly.png`}   // v1.1: no flash on the first take-off
-  return `<div class="echo-svg px-echo owl" role="img" aria-label="Whimber" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/whimber_${v.pal}_f${v.fluff}.png)"></div>`}
-function slyte(g,stage){const v=variant(g&&g.seed,'slyte',g&&g.pal);stage=stage||stageNow();
-  return `<div class="echo-svg px-echo fox" role="img" aria-label="Slyte" data-expr="neutral" data-stage="${stage}" style="background-image:url(px/slyte_${v.pal}_f${v.fluff}.png)"></div>`}
+// Families v1 looks: g.look picks px/<sprite>_<look>_<pal>_f<fl>.png when it is a BUILT look (FAMILIES[f].looks) other than
+// the family's base look (fox / owl = today's sheets). Unknown / missing look -> today's sheet (old saves have no g.look).
+function lookOf(sp,g){const F=W.FAMILIES,f=F&&F[sp],l=g&&g.look;return f&&l&&l!==f.look_base&&(f.looks||[]).includes(l)?l:null}
+const MISS={};function probe(url,fb){if(url===fb||MISS[url]===0)return;if(MISS[url])return;MISS[url]=1;const im=new Image();im.onload=()=>{MISS[url]=0};
+  im.onerror=()=>{try{document.querySelectorAll('.px-echo').forEach(el=>{for(const k of ['_base']){if(el[k]&&el[k].includes(url))el[k]=el[k].split(url).join(fb)}if(el.style.backgroundImage.includes(url))el.style.backgroundImage=el.style.backgroundImage.split(url).join(fb)})}catch(e){}};im.src=url+'.png'}   // missing look sheet: fall back to the family sheet
+function sheetBase(sp,g){const v=variant(g&&g.seed,sp,g&&g.pal),l=lookOf(sp,g),fb=`px/${sp}_${v.pal}_f${v.fluff}`,u=l?`px/${sp}_${l}_${v.pal}_f${v.fluff}`:fb;if(l)probe(u,fb);return {v,u}}
+function label(sp,g){const F=W.FAMILIES;return String((g&&g.name)||(F&&F[sp]&&F[sp].label)||'').replace(/"/g,'')}   // screen-reader name: the Echo's own name, else the family word
+function whimber(g,stage){const {u}=sheetBase('whimber',g);stage=stage||stageNow();
+  {const pre=new Image();pre.src=`${u}_fly.png`}   // v1.1: no flash on the first take-off
+  return `<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" style="background-image:url(${u}.png)"></div>`}
+function slyte(g,stage){const {u}=sheetBase('slyte',g);stage=stage||stageNow();
+  return `<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" style="background-image:url(${u}.png)"></div>`}
 // ---- 12 fps clock: idle loop + random blink / ear flick / tail flick, expression overrides
 // one-shot event animations from the _ev sheet (guide 9.2): arrival (P0) and release dissolve (P1, must ship)
 const EV={arrival:{row:0,t:[1,1,1,1,1,1,1,1,1,1,1,3,2,2,6]},release:{row:1,t:[3,2,1,1,1,1,1,2,1,1,2,3,3]}};
@@ -81,5 +88,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>{const v=variant(g&&g.seed,sp,g&&g.pal);return `px/${sp}_${v.pal}_f${v.fluff}.png`},event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();
