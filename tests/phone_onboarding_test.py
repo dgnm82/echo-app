@@ -53,7 +53,7 @@ async def main():
     await shot(pg,'ob08_invite')
     await T(pg,'#orinv');await T(pg,'#orinv',3200)
     check(await pg.locator('#ornm').count()==1,'first Echo says yes')
-    t=await pg.locator('.orfamline').inner_text();check(t.startswith('A Howling! Howlings are Echoes'),'ui_or_family '+t)
+    t=await pg.locator('.orfamline').inner_text();check(t=="I'm a Howling! The Echo of a dog, fox or wolf!" and await pg.locator('.orfamline.obbub').count()==1,'ui_or_family '+t)
     t=await pg.locator('.scene.ob').inner_text();check('Slyte' not in t and 'Whimber' not in t,'no old family word in origin UI')
     await shot(pg,'ob09_yes')
     await T(pg,'#ornm',400)

@@ -240,3 +240,8 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .full.pcsub{z-index:80;justify-content:center}
 .obbub{background:#fff6e6;color:#3b2a5c;border:1px solid #3b2a5c;box-shadow:0 2px 0 #23183a;padding:4px 5px;max-width:164px;text-align:left;line-height:10px;border-radius:2px}
 .scene.ob.calm .ormote,.scene.ob.calm .ornote.b{display:none}.scene.ob.calm .ornote,.scene.ob.calm .obtap{animation:none}.scene.ob.calm .orlightform{transition:opacity 1.2s steps(4)}.scene.ob.calm .orlightform.drift{transform:none}
+/* playtest: narration reads as narration (italic, plain strip, no tail); Echo speech is a bubble with a tail */
+.obpanel{background:#23183ad9;color:#fff6e6;border:0;box-shadow:none;font-style:italic;border-radius:0}
+.obbub{position:relative;margin-top:6px}
+.obbub::before{content:"";position:absolute;left:50%;top:-5px;margin-left:-4px;border:4px solid transparent;border-top:0;border-bottom:5px solid #3b2a5c}
+.obbub::after{content:"";position:absolute;left:50%;top:-3px;margin-left:-3px;border:3px solid transparent;border-top:0;border-bottom:4px solid #fff6e6}

@@ -2833,7 +2833,7 @@
     ],
     "invite_hum": [
       {
-        "text": "Hi! You saw a {var:origin_animal}? I'm its song!",
+        "text": "Hi! You saw a {var:origin_animal}? I'm the Echo of the {var:origin_animal} you saw!",
         "expr": "curious",
         "short": "Psst. Hi! Hello!",
         "gesture": "light-form, ears up, 2 notes"

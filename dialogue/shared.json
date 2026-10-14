@@ -641,11 +641,7 @@
     ],
     "ui_or_family": [
       {
-        "text": "A {var:family}! {var:family_plural} are Echoes of dog, fox and wolf songs.",
-        "expr": "happy"
-      },
-      {
-        "text": "A {var:family}! {var:family_plural} are Echoes of bird songs.",
+        "text": "I'm {var:family_a}! The Echo of {var:family_animals}!",
         "expr": "happy"
       }
     ],
