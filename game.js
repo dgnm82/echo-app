@@ -755,7 +755,7 @@ function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&
 function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g2best"><i></i>${b}</span>`:''}
 const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],builder:['WHAT A FORT!','WHAT A HOLLOW!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
 function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.kind==='fox',low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
-  const bl=o.firstEver?'Our first best!':o.isBest?`NEW BEST! <small>was ${o.was}</small>`:`Best ${o.best}`;
+  const bl=o.firstEver?'Our first best!':o.isBest?'NEW BEST!':`Best ${o.best}`;
   gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
   SFX('run_finale',{vol:.7});save();
   $('#g2done').onclick=()=>endGame(true);
@@ -1056,7 +1056,7 @@ handle()}
     const r=bestPut('run',level,m,n);if(r.isBest&&m>=50)remember(`Our longest run was ${m} m`,'run_best');if(n>=5)remember(`We found ${n} ${tre}s in one run`,'run_haul');
     react('happy');setExpr('happy');if(!fox&&T('Sweet-Dream Lullaby')&&evening)setTimeout(()=>{setExpr('sleepy');talk(B('yawn'),1800)},1500);
     talk(B(r.isBest&&!firstEver?'run_end_best':'run_end',{dist:m}),2400);if(window.Music)setTimeout(()=>Music.duck(false),10);
-    setTimeout(()=>{stop();endCard({game:'run',unit:'m',score:m,was:r.was,best:Math.max(m,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`×${n} ${r.haulBest&&!firstEver?'NEW best haul!':'best haul '+r.haul}`,'gold counts 3'],onAgain:runGame})},700)}
+    setTimeout(()=>{stop();endCard({game:'run',unit:'m',score:m,was:r.was,best:Math.max(m,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`${n} ${tre}${n===1?'':'s'}`],onAgain:runGame})},700)}
   function stop(){alive=false;document.removeEventListener('keydown',key);document.removeEventListener('keyup',keyup)}
   const down=e=>{if(e.target.closest&&e.target.closest('.top'))return;RunnerEngine.press(g);const h=$('#rhint');if(h&&rs.runs===0)h.classList.add('off')},up=()=>RunnerEngine.release(g);
   gs.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(n=>gs.addEventListener(n,up));
