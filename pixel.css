@@ -322,3 +322,4 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .bubble.soft{font-style:italic;opacity:.92}.bubble .cap{display:block;font-size:7px;opacity:.75;margin-top:2px}
 #sc .creature.altap{animation:altap 332ms steps(1,end) 2}@keyframes altap{50%{margin-bottom:1px}}
 #sc .alnote{position:absolute;color:#3B2A5C;font-size:8px;z-index:30;pointer-events:none}
+#sc>#b{top:60px!important}   /* playtest: the speech bubble sits below the top corner glows (57 px at step 4) */
