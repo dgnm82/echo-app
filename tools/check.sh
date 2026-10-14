@@ -10,6 +10,7 @@ echo "== guardrail lint"; node tools/lint-dialogue.js dialogue --js game.js --js
 echo "== engine unit tests"; node tools/test-engine.js | tail -1
 echo "== fort builder tests"; node tools/test-fort.js | tail -1
 echo "== needs v2 tests"; node tools/test-needs.js | tail -1
+echo "== affection v2 tests"; node tools/test-affection.js | tail -1
 echo "== catch / stack tests"; node tools/test-catch.js | tail -1; node tools/test-stack.js | tail -1
 echo "== shiny pairs tests"; node tools/test-memory.js | tail -1
 echo "== postcard tests"; node tools/test-postcards.js | tail -1
