@@ -16,7 +16,7 @@ def hour_offset(h):return "(()=>{const d=new Date();return (( %d - d.getHours()+
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]
-    for kind,sp,home,s2,s3,first2 in (('fox','slyte','clearing','grove','meadow','Psst! I found a new spot'),('owl','whimber','branch','library','hilltop','I found a room full of stories')):
+    for kind,sp,home,s2,s3,first2 in (('fox','slyte','clearing','grove','meadow','I found a new spot'),('owl','whimber','branch','library','hilltop','I found a room full of stories')):
       pg=await newecho(b,p,kind,errs)
       assert await pg.evaluate("__echo.scene.cur")==home and await pg.evaluate("__echo.scene.unlocked()")==[home]
       assert f'scenes/{home}_' in await pg.evaluate("document.getElementById('sc').getAttribute('style')")

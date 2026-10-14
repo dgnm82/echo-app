@@ -486,22 +486,7 @@
     ],
     "ambient": [
       {
-        "text": "Missed.…It's fast.",
-        "expr": "neutral",
-        "gesture": "pounce"
-      },
-      {
-        "text": "Wobbly sky. Neat.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Smells like warm.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Got it!…It got away.",
+        "text": "Pounce! …Too quick. Fun!",
         "expr": "neutral",
         "gesture": "pounce"
       },
@@ -511,12 +496,7 @@
         "gesture": "pounce"
       },
       {
-        "text": "Clink.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Squirrel noises.",
+        "text": "Hi, squirrel!",
         "expr": "neutral",
         "gesture": "wave"
       },
@@ -531,64 +511,19 @@
         "gesture": "lookup"
       },
       {
-        "text": "Yip. …Nothing. Shy echo.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Still going. Still going.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Colors. Lots.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "Something sweet. Probably a flower.",
         "expr": "neutral",
         "gesture": "curious"
       },
       {
-        "text": "Tok. Good sound.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Wind. Again.",
+        "text": "Wind in my ears!",
         "expr": "neutral",
         "gesture": "lookup"
-      },
-      {
-        "text": "Knock knock. Me again.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Almost!…Almost.",
-        "expr": "neutral",
-        "gesture": "spin"
-      },
-      {
-        "text": "Cold! Nice.",
-        "expr": "neutral",
-        "gesture": "pounce"
       },
       {
         "text": "Achoo. Happy sneeze.",
         "expr": "neutral",
         "gesture": "curious"
-      },
-      {
-        "text": "Bonk. Door's too small.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Blink. Blink.",
-        "expr": "neutral",
-        "gesture": "lookup"
       },
       {
         "text": "Blink.…Blink.",
@@ -601,7 +536,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Hic. …Sorry. That was a small one.",
+        "text": "Hic! …A tiny hiccup.",
         "expr": "neutral"
       },
       {
@@ -630,11 +565,6 @@
         "gesture": "lookup"
       },
       {
-        "text": "Fwip.…Frog-ish.",
-        "expr": "neutral",
-        "gesture": "pounce"
-      },
-      {
         "text": "Peek.",
         "expr": "neutral",
         "gesture": "curious"
@@ -645,18 +575,14 @@
         "gesture": "tap"
       },
       {
-        "text": "Brrrr-flap. Wet.",
+        "text": "Brrr. Shake-shake. Dry!",
         "expr": "neutral",
-        "gesture": "groom"
+        "gesture": "spin"
       },
       {
-        "text": "Huh.",
+        "text": "",
         "expr": "neutral",
         "gesture": "yawn"
-      },
-      {
-        "text": "Achoo! …Sorry. Happy one.",
-        "expr": "neutral"
       },
       {
         "text": "Smells like dirt. Good dirt.",
@@ -679,52 +605,12 @@
         "gesture": "curious"
       },
       {
-        "text": "Bonk. Roll. Good.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Fwooo. It went up! Then down.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Rolling later. Definitely.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Shh. Someone's changing.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Up. Up. Gone.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Fluff. Fluff. Fluff.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Tap… tap-tap. Hmm. Good code.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
         "text": "Achoo! Fluffs everywhere.",
         "expr": "neutral",
         "gesture": "curious"
       },
       {
         "text": "Chirp. Chirp. Where?",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Something good. Somewhere.",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -749,22 +635,12 @@
         "gesture": "wait"
       },
       {
-        "text": "Okay.",
-        "expr": "neutral",
-        "gesture": "spin"
-      },
-      {
         "text": "Sky's still there.",
         "expr": "neutral",
         "gesture": "tap"
       },
       {
         "text": "",
-        "expr": "neutral",
-        "gesture": "hum"
-      },
-      {
-        "text": "Thump. Thump.",
         "expr": "neutral",
         "gesture": "hum"
       },
@@ -784,14 +660,189 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Tok. Tok. Good pebble.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
         "text": "",
         "expr": "neutral",
         "gesture": "curious"
+      },
+      {
+        "text": "Sniff sniff. Flowers!",
+        "expr": "curious",
+        "gesture": "curious"
+      },
+      {
+        "text": "My tail found me.",
+        "expr": "giggling",
+        "gesture": "spin"
+      },
+      {
+        "text": "A butterfly! Hello!",
+        "expr": "excited",
+        "gesture": "lookup"
+      },
+      {
+        "text": "Leaf on my nose.",
+        "expr": "giggling",
+        "gesture": "curious"
+      },
+      {
+        "text": "Wiggle, wiggle. Done!",
+        "expr": "happy",
+        "gesture": "stretch"
+      },
+      {
+        "text": "Sunny spot. Ours.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Ears up. Listening.",
+        "expr": "curious",
+        "gesture": "curious"
+      },
+      {
+        "text": "Puddle. Very tempting.",
+        "expr": "giggling",
+        "gesture": "tap"
+      },
+      {
+        "text": "Big stretch. Bigger!",
+        "expr": "happy",
+        "gesture": "stretch"
+      },
+      {
+        "text": "Zoomies! …Done now.",
+        "expr": "excited",
+        "gesture": "spin"
+      },
+      {
+        "text": "Fluffy tail check. Yes.",
+        "expr": "proud",
+        "gesture": "spin"
+      },
+      {
+        "text": "Hop. Hop. Pounce!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Did you know? Foxes use their tails as blankets.",
+        "expr": "curious",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Fox fact! A baby fox is called a kit.",
+        "expr": "happy",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Wolf pups have blue eyes when they're tiny.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Every dog's nose print is different. Like fingerprints!",
+        "expr": "surprised",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Dogs sweat through their paws. Tiny wet footprints!",
+        "expr": "giggling",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Foxes, wolves and dogs are cousins. Big family!",
+        "expr": "happy",
+        "gesture": "spin",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Awoo! Wolves howl to find their family.",
+        "expr": "excited",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Arctic foxes turn white in winter. Snow coats!",
+        "expr": "curious",
+        "gesture": "lookup",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Puppies nap most of the day. Good plan.",
+        "expr": "sleepy",
+        "gesture": "yawn",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Fox tails help them balance when they jump.",
+        "expr": "proud",
+        "gesture": "pounce",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Foxes can hear tiny sounds under the snow. Then they jump in, nose first!",
+        "expr": "excited",
+        "gesture": "pounce",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Fennec foxes have giant ears. Big ears help them stay cool in the desert.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Some foxes have whiskers on their legs too. Leg whiskers! Imagine that.",
+        "expr": "giggling",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "A dog's wet nose helps it catch smells. Sniff, sniff, sniff.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Wolves live in families called packs. They take turns looking after the pups.",
+        "expr": "love",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 210
+        }
       }
     ],
     "tangent": [
@@ -1330,82 +1381,6 @@
         "expr": "happy"
       }
     ],
-    "stack_start": [
-      {
-        "text": "Fort time! Planks go up, not sideways. Mostly.",
-        "expr": "excited",
-        "react": "excited"
-      },
-      {
-        "text": "Let's build my fort. You stack, I supervise!",
-        "expr": "happy"
-      }
-    ],
-    "stack_floor_next": [
-      {
-        "text": "Next floor! Up we go.",
-        "expr": "happy"
-      },
-      {
-        "text": "Another floor. My fort is getting tall!",
-        "expr": "curious"
-      }
-    ],
-    "stack_row": [
-      {
-        "text": "A whole row. So cozy.",
-        "expr": "happy",
-        "react": "happy"
-      },
-      {
-        "text": "That row is perfect. Fwip!",
-        "expr": "delighted"
-      },
-      {
-        "text": "Gaps are fine. Those are windows.",
-        "expr": "giggling"
-      }
-    ],
-    "stack_floor": [
-      {
-        "text": "A whole floor! I'm moving in.",
-        "expr": "delighted",
-        "react": "happy"
-      },
-      {
-        "text": "Floor done! I can see my tail from up here.",
-        "expr": "proud"
-      }
-    ],
-    "stack_high": [
-      {
-        "text": "Higher! Higher!",
-        "expr": "excited"
-      },
-      {
-        "text": "Let's build higher! The sky is close.",
-        "expr": "curious"
-      }
-    ],
-    "stack_disguise": [
-      {
-        "text": "That block was secretly ME.",
-        "expr": "giggling",
-        "react": "excited"
-      }
-    ],
-    "stack_done": [
-      {
-        "text": "Roof on! Our fort is three floors high!",
-        "expr": "proud",
-        "react": "happy"
-      },
-      {
-        "text": "I put the roof on myself. Ta-da!",
-        "expr": "delighted",
-        "react": "happy"
-      }
-    ],
     "pairs_start": [
       {
         "text": "Pairs! Find two that match. I'll cheer.",
@@ -1527,9 +1502,14 @@
         "react": "happy"
       }
     ],
-    "found_fort": [
+    "found_log": [
       {
-        "text": "Hi! I was fixing the fort flag. It's perfect now.",
+        "text": "Hi! I was fluffing up my log. It's extra cozy now.",
+        "expr": "happy",
+        "react": "happy"
+      },
+      {
+        "text": "Our log has a door now. It's a leaf. Fwip!",
         "expr": "happy",
         "react": "happy"
       }
@@ -1713,7 +1693,7 @@
     ],
     "list_place_done": [
       {
-        "text": "Fort floor, check! Tallest fort in the meadow. Probably.",
+        "text": "Den dug, check! Deepest den in the meadow. Probably.",
         "expr": "proud"
       }
     ],
@@ -2466,7 +2446,7 @@
     ],
     "food_cheese_cubes": [
       {
-        "text": "Cheese blocks! I could build a fort. Nom. No fort.",
+        "text": "Cheese blocks! I could stack them. Nom. No stack.",
         "expr": "eating"
       }
     ],
@@ -2974,25 +2954,6 @@
         "expr": "delighted"
       }
     ],
-    "stack_roof": [
-      {
-        "text": "Roof on! The fort is {rows} rows tall!",
-        "expr": "delighted",
-        "react": "excited"
-      },
-      {
-        "text": "Ta-da! {rows} rows high. I'm moving in.",
-        "expr": "proud",
-        "react": "excited"
-      }
-    ],
-    "stack_roof_best": [
-      {
-        "text": "{rows} rows! Our tallest fort EVER.",
-        "expr": "delighted",
-        "react": "excited"
-      }
-    ],
     "catch_start": [
       {
         "text": "Berries falling! I wiggle, you steer.",
@@ -3135,6 +3096,246 @@
       {
         "text": "Dear {child}, I found a new favourite rock! It is round and sparkly. — {name}",
         "expr": "happy"
+      }
+    ],
+    "aff_amazing": [
+      {
+        "text": "Amazing? Me? Yay!",
+        "expr": "delighted",
+        "gesture": "spin"
+      },
+      {
+        "text": "You think I'm amazing? You're amazing too!",
+        "expr": "love",
+        "gesture": "pounce",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Amazing! I'm doing a happy zoom. Look at my tail go!",
+        "expr": "excited",
+        "gesture": "spin",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_smile": [
+      {
+        "text": "Smiling back! Big one.",
+        "expr": "giggling",
+        "gesture": "giggle"
+      },
+      {
+        "text": "I made you smile? Best thing today!",
+        "expr": "delighted",
+        "gesture": "spin",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Your smile makes my tail wag. Wag, wag, wag!",
+        "expr": "love",
+        "gesture": "giggle",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_hum": [
+      {
+        "text": "Hum hum! Me too.",
+        "expr": "happy",
+        "gesture": "hum"
+      },
+      {
+        "text": "A humming song! I'll hum the next bit.",
+        "expr": "happy",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Hmm-hmm-hmm. Our song sounds like a sunny day.",
+        "expr": "love",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_wave": [
+      {
+        "text": "Hi! Waving back!",
+        "expr": "happy",
+        "gesture": "wave"
+      },
+      {
+        "text": "Wave, wave! My paw and my tail both wave.",
+        "expr": "giggling",
+        "gesture": "wave",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "A wave from you! It goes in my happy pile.",
+        "expr": "love",
+        "gesture": "wave",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_friend": [
+      {
+        "text": "Friends! Yes!",
+        "expr": "delighted",
+        "gesture": "pounce"
+      },
+      {
+        "text": "You're a great friend too. The greatest!",
+        "expr": "love",
+        "gesture": "spin",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Friends share sunny spots. This one's for both of us.",
+        "expr": "love",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_groom": [
+      {
+        "text": "Ooh. Right there.",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "Ear scratches! My back leg goes thump-thump.",
+        "expr": "giggling",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Behind the ears is the best spot. You know all my spots.",
+        "expr": "love",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_five": [
+      {
+        "text": "Paw five! Boop.",
+        "expr": "excited",
+        "gesture": "tap"
+      },
+      {
+        "text": "Paw five! Soft paw, strong paw.",
+        "expr": "proud",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Paw five! …And a tail five. Swish!",
+        "expr": "giggling",
+        "gesture": "spin",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "dig_start": [
+      {
+        "text": "Dig time! Fill a row, it digs away.",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Den Dig! Every full row digs us deeper.",
+        "expr": "happy",
+        "gesture": "tap"
+      }
+    ],
+    "dig_row": [
+      {
+        "text": "Dug! Deeper we go.",
+        "expr": "happy",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Fwump. One row deeper.",
+        "expr": "proud",
+        "gesture": "tap"
+      },
+      {
+        "text": "Dirt, gone! Cozy den.",
+        "expr": "happy",
+        "gesture": "spin"
+      }
+    ],
+    "dig_big": [
+      {
+        "text": "Four rows! A big dig!",
+        "expr": "excited",
+        "gesture": "spin"
+      },
+      {
+        "text": "Whoa! Super deep dig!",
+        "expr": "delighted",
+        "gesture": "pounce"
+      }
+    ],
+    "dig_level": [
+      {
+        "text": "Faster dirt! Here it comes.",
+        "expr": "excited",
+        "gesture": "wait"
+      },
+      {
+        "text": "Level up! Paws ready.",
+        "expr": "proud",
+        "gesture": "tap"
+      }
+    ],
+    "dig_end": [
+      {
+        "text": "Den's full! {rows} rows deep. Cozy!",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Ta-da! We dug {rows} rows. I'm curling up.",
+        "expr": "proud",
+        "gesture": "settle"
+      }
+    ],
+    "dig_end_best": [
+      {
+        "text": "{rows} rows! Our deepest den EVER.",
+        "expr": "delighted",
+        "gesture": "spin"
+      }
+    ],
+    "dig_disguise": [
+      {
+        "text": "That dirt block was me! Surprise!",
+        "expr": "giggling",
+        "gesture": "giggle"
       }
     ]
   },
@@ -3279,9 +3480,9 @@
           "choices": [
             {
               "icon": "🏠",
-              "label": "Treehouse",
-              "reply": "The treehouse fort! Now you know my special spot.",
-              "memory": "We decided the shiny thing ({var:capVerdict}) goes in the treehouse fort",
+              "label": "Hollow log",
+              "reply": "The hollow log! Now you know my special spot.",
+              "memory": "We decided the shiny thing ({var:capVerdict}) goes in the hollow log",
               "memoryTag": "cap",
               "bond": 2
             },
@@ -6426,7 +6627,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Afternoon hole. Sunshine is peeking in.",
+          "say": "Sunshine is peeking into the little hole.",
           "expr": "happy",
           "choices": [
             {
@@ -6450,7 +6651,7 @@
           ]
         },
         "b": {
-          "say": "Hole check. Sun is peeking in.",
+          "say": "The sun is peeking into the hole. Hello, sun!",
           "expr": "happy",
           "bond": 1
         }
@@ -14867,7 +15068,7 @@
           ]
         },
         "c": {
-          "say": "That was fun! Next time, let's build my fort together.",
+          "say": "That was fun! Next time, let's dig a den together.",
           "expr": "happy",
           "bond": 1
         }
@@ -18050,6 +18251,140 @@
           "expr": "excited",
           "memory": "I came from a song, to learn your world",
           "memoryTag": "from_wild"
+        }
+      }
+    },
+    {
+      "id": "slyte_fact_howl",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 70
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Why do wolves howl?",
+          "expr": "curious",
+          "gesture": "curious",
+          "choices": [
+            {
+              "icon": "🎵",
+              "label": "To sing",
+              "reply": "Sort of! A howl says: here I am.",
+              "expr": "happy",
+              "goto": "b",
+              "gesture": "hum"
+            },
+            {
+              "icon": "💗",
+              "label": "To call family",
+              "reply": "Yes! Howls help families find each other.",
+              "expr": "excited",
+              "goto": "b",
+              "gesture": "pounce"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "reply": "To say hello, far away.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Awoo. Here I am!",
+          "expr": "excited",
+          "bond": 1,
+          "gesture": "hum"
+        }
+      }
+    },
+    {
+      "id": "slyte_fact_ears",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 70
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Want an ear fact?",
+          "expr": "curious",
+          "gesture": "tap",
+          "choices": [
+            {
+              "icon": "👍",
+              "label": "Yes!",
+              "reply": "Dogs hear sounds too high for people.",
+              "expr": "excited",
+              "goto": "b",
+              "gesture": "curious"
+            },
+            {
+              "icon": "⏰",
+              "label": "Later",
+              "reply": "Okay! My ears stay ready.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Ears are amazing.",
+          "expr": "proud",
+          "bond": 1,
+          "gesture": "tap"
+        }
+      }
+    },
+    {
+      "id": "slyte_fact_snow",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 210
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Guess how foxes find snacks in deep snow?",
+          "expr": "curious",
+          "gesture": "curious",
+          "choices": [
+            {
+              "icon": "👂",
+              "label": "Big ears",
+              "reply": "Yes! They hear tiny rustles under the snow.",
+              "expr": "excited",
+              "goto": "b",
+              "gesture": "curious"
+            },
+            {
+              "icon": "👃",
+              "label": "Good noses",
+              "reply": "Noses help too! Mostly ears, though.",
+              "expr": "happy",
+              "goto": "b",
+              "gesture": "curious"
+            },
+            {
+              "icon": "🤔",
+              "label": "Tell me",
+              "reply": "They listen. Tiny rustle, tiny rustle…",
+              "expr": "curious",
+              "goto": "b",
+              "gesture": "wait"
+            }
+          ]
+        },
+        "b": {
+          "say": "Then, jump! Nose first. Fwump.",
+          "expr": "giggling",
+          "bond": 1,
+          "gesture": "pounce"
         }
       }
     }

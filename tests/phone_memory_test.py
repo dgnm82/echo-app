@@ -16,7 +16,7 @@ async def main():
     c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
     await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
     await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
-    labels=await pg.locator('.choices button').all_inner_texts();assert any('Shiny Pairs' in l for l in labels) and any('Fort Builder' in l for l in labels) and not any('Shiny Search' in l for l in labels),labels
+    labels=await pg.locator('.choices button').all_inner_texts();assert any('Shiny Pairs' in l for l in labels) and any('Den Dig' in l for l in labels) and not any('Shiny Search' in l for l in labels),labels
     await pick('Shiny Pairs');await pg.wait_for_timeout(600)
     g=await pg.evaluate("({n:__mem.cards.length,level:__mem.level})");assert g['level']=='easy' and g['n']==12,g   # first game ever is Easy
     # a miss (two different cards), shown, then turned back by the next tap

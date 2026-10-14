@@ -37,7 +37,7 @@ async def main():
     await pg.evaluate("document.getElementById('overlay').innerHTML=''")
     # picker (Night Sky cut): Starlight Pairs (signature) + Hollow Builder on day 1
     await pg.click('#play');await pg.wait_for_timeout(300);labels=await pg.locator('.choices button').all_inner_texts();print('picker',labels);await shot('picker')
-    assert any('Starlight Pairs' in l for l in labels) and any('Hollow Builder' in l for l in labels) and not any('Night Sky' in l for l in labels)
+    assert any('Starlight Pairs' in l for l in labels) and any('Nest Weave' in l for l in labels) and not any('Night Sky' in l for l in labels)
     await pg.evaluate("document.getElementById('overlay').innerHTML=''")
     # Starlight Pairs (first game ever: easy 12, Whimber deck + back)
     await pg.evaluate("document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pick('Starlight Pairs');await pg.wait_for_timeout(500)

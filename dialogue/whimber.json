@@ -453,42 +453,17 @@
         "gesture": "hum"
       },
       {
-        "text": "Tap.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "One. …Two. …Two again.",
+        "text": "One star… two stars…",
         "expr": "neutral",
         "gesture": "wait"
       },
       {
-        "text": "Dusty.",
-        "expr": "neutral",
-        "gesture": "spin"
-      },
-      {
-        "text": "Oh. Wind.",
+        "text": "Oh… a little breeze.",
         "expr": "neutral",
         "gesture": "tap"
       },
       {
-        "text": "Flutter.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Cold.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Soft.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Practicing.",
+        "text": "Practicing my hoot.",
         "expr": "neutral",
         "gesture": "hum"
       },
@@ -508,24 +483,9 @@
         "gesture": "preen"
       },
       {
-        "text": "Like a question mark.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "Morning.",
         "expr": "neutral",
         "gesture": "slowblink"
-      },
-      {
-        "text": "It copied.",
-        "expr": "neutral",
-        "gesture": "wave"
-      },
-      {
-        "text": "Shh.",
-        "expr": "neutral",
-        "gesture": "curious"
       },
       {
         "text": "Cold. Lovely.",
@@ -533,37 +493,12 @@
         "gesture": "tap"
       },
       {
-        "text": "Glow.",
-        "expr": "neutral",
-        "gesture": "slowblink"
-      },
-      {
-        "text": "It rolled. Gently.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Blink.",
-        "expr": "neutral",
-        "gesture": "lookup"
-      },
-      {
-        "text": "Slowly.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "",
         "expr": "neutral",
         "gesture": "curious"
       },
       {
-        "text": "And then…",
-        "expr": "neutral",
-        "gesture": "hum"
-      },
-      {
-        "text": "Purple.",
+        "text": "Purple clouds… pretty.",
         "expr": "neutral",
         "gesture": "lookup"
       },
@@ -578,24 +513,9 @@
         "gesture": "curious"
       },
       {
-        "text": "Snuffle.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "",
         "expr": "neutral",
         "gesture": "hum"
-      },
-      {
-        "text": "Blue.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Hello, me.",
-        "expr": "neutral",
-        "gesture": "curious"
       },
       {
         "text": "",
@@ -603,39 +523,9 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Still going.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "",
         "expr": "neutral",
         "gesture": "stretch"
-      },
-      {
-        "text": "Ting.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
-        "text": "Tock.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Zip.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Fog circle.",
-        "expr": "neutral",
-        "gesture": "wait"
-      },
-      {
-        "text": "Not a woof.",
-        "expr": "neutral",
-        "gesture": "tap"
       },
       {
         "text": "A rustle. A nice one.",
@@ -648,24 +538,9 @@
         "gesture": "curious"
       },
       {
-        "text": "Munch.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "Orange.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
         "text": "",
         "expr": "neutral",
         "gesture": "curious"
-      },
-      {
-        "text": "Whoosh.",
-        "expr": "neutral",
-        "gesture": "tap"
       },
       {
         "text": "",
@@ -744,6 +619,176 @@
       {
         "text": "…a {word:soft} little breeze. Mm.",
         "expr": "neutral"
+      },
+      {
+        "text": "Hoo. A cozy feather.",
+        "expr": "happy",
+        "gesture": "preen"
+      },
+      {
+        "text": "Ruffle… fluff… better.",
+        "expr": "happy",
+        "gesture": "preen"
+      },
+      {
+        "text": "One slow blink… for you.",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "Hoo… a sleepy cloud.",
+        "expr": "sleepy",
+        "gesture": "lookup"
+      },
+      {
+        "text": "Fluffed up. Like a pillow.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Head tilt… hello.",
+        "expr": "curious",
+        "gesture": "curious"
+      },
+      {
+        "text": "Toes tucked in. Cozy.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Soft wings… mm.",
+        "expr": "happy",
+        "gesture": "stretch"
+      },
+      {
+        "text": "A moth… dancing.",
+        "expr": "curious",
+        "gesture": "lookup"
+      },
+      {
+        "text": "Hoo-hoo. Just humming.",
+        "expr": "happy",
+        "gesture": "hum"
+      },
+      {
+        "text": "Did you know… owls can turn their heads very far?",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "A baby owl is called an owlet… a sweet word.",
+        "expr": "love",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Soft feather edges… that is why owls fly so quietly.",
+        "expr": "curious",
+        "gesture": "stretch",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Owl eyes don't roll around… so owls turn their heads.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Hoo… hummingbirds can fly backwards.",
+        "expr": "surprised",
+        "gesture": "lookup",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Ducks have waterproof feathers… raindrops just roll off.",
+        "expr": "happy",
+        "gesture": "preen",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Ducklings walk in a line… one, two, three, four.",
+        "expr": "giggling",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Some birds sleep standing on one leg… very balanced.",
+        "expr": "sleepy",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Penguins are birds too… they swim instead of fly.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Birds sing most in the morning… a big sunrise song.",
+        "expr": "happy",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "An owl's face is shaped like a little dish… it gathers sounds.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Some owl tufts look like ears… but they're just feathers.",
+        "expr": "giggling",
+        "gesture": "preen",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Some owls have one ear higher than the other… it helps them listen.",
+        "expr": "curious",
+        "gesture": "curious",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "A group of owls is called a parliament… a very sleepy meeting.",
+        "expr": "giggling",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "Many birds have light, hollow bones… that helps them fly.",
+        "expr": "curious",
+        "gesture": "stretch",
+        "cond": {
+          "bondMin": 210
+        }
       }
     ],
     "tangent": [
@@ -1293,82 +1338,6 @@
         "react": "happy"
       }
     ],
-    "stack_start": [
-      {
-        "text": "…Let's build the hollow. One soft piece at a time.",
-        "expr": "happy",
-        "react": "happy"
-      },
-      {
-        "text": "Bark, moss, a moon window… I wonder how it all fits.",
-        "expr": "curious"
-      }
-    ],
-    "stack_floor_next": [
-      {
-        "text": "Another floor… slowly, slowly. The tree doesn't mind.",
-        "expr": "happy"
-      },
-      {
-        "text": "Up a little higher… I rather like it up here.",
-        "expr": "curious"
-      }
-    ],
-    "stack_row": [
-      {
-        "text": "A whole row… snug as a feather.",
-        "expr": "happy",
-        "react": "happy"
-      },
-      {
-        "text": "That fits just right.",
-        "expr": "delighted"
-      },
-      {
-        "text": "A gap? …That can be a little window for the moon.",
-        "expr": "giggling"
-      }
-    ],
-    "stack_floor": [
-      {
-        "text": "…A whole floor. I can already hear how quiet it is.",
-        "expr": "delighted",
-        "react": "happy"
-      },
-      {
-        "text": "Floor done… I shall nap on this one first.",
-        "expr": "happy"
-      }
-    ],
-    "stack_high": [
-      {
-        "text": "The sky is getting closer… hello, sky.",
-        "expr": "curious"
-      },
-      {
-        "text": "Higher… soon the stars can peek inside.",
-        "expr": "curious"
-      }
-    ],
-    "stack_disguise": [
-      {
-        "text": "That piece had feathers. Was it… me?",
-        "expr": "giggling",
-        "react": "excited"
-      }
-    ],
-    "stack_done": [
-      {
-        "text": "The hollow is ready… it smells like moss and moonlight.",
-        "expr": "proud",
-        "react": "happy"
-      },
-      {
-        "text": "Roof on… three floors of quiet. Shall we sit inside a while?",
-        "expr": "love",
-        "react": "happy"
-      }
-    ],
     "bond_up_2": [
       {
         "text": "My feathers are humming. I think they like you.",
@@ -1610,7 +1579,7 @@
     ],
     "list_place_done": [
       {
-        "text": "Our hollow looks lovely… I'll remember every little room.",
+        "text": "Our nest is woven… I'll remember every twig.",
         "expr": "love"
       }
     ],
@@ -2732,25 +2701,6 @@
         "expr": "delighted"
       }
     ],
-    "stack_roof": [
-      {
-        "text": "The roof is on. {rows} rows of cozy.",
-        "expr": "happy",
-        "react": "excited"
-      },
-      {
-        "text": "{rows} rows tall. So snug up here.",
-        "expr": "happy",
-        "react": "excited"
-      }
-    ],
-    "stack_roof_best": [
-      {
-        "text": "{rows} rows. Our tallest hollow yet.",
-        "expr": "delighted",
-        "react": "excited"
-      }
-    ],
     "catch_start": [
       {
         "text": "Stars are falling. Shall we catch a few?",
@@ -2887,6 +2837,246 @@
       {
         "text": "Dear {child}… I found a new favourite stone in the old oak. So smooth. — {name}",
         "expr": "happy"
+      }
+    ],
+    "aff_amazing": [
+      {
+        "text": "Hoo… amazing? Me?",
+        "expr": "shy",
+        "gesture": "preen"
+      },
+      {
+        "text": "Amazing… that warms my feathers. You are too.",
+        "expr": "love",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Amazing… I'll tuck that word under my wing. It's cozy there.",
+        "expr": "love",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_smile": [
+      {
+        "text": "Hoo-hoo… a smile.",
+        "expr": "giggling",
+        "gesture": "giggle"
+      },
+      {
+        "text": "Your smile… it makes my eyes go soft.",
+        "expr": "love",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "When you smile… I feel like a warm cup of cocoa.",
+        "expr": "love",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_hum": [
+      {
+        "text": "Hoo… humming along.",
+        "expr": "happy",
+        "gesture": "hum"
+      },
+      {
+        "text": "Your hum and my hoo… a little duet.",
+        "expr": "happy",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "Hm-hm… our hum song is my favourite kind of quiet.",
+        "expr": "love",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_wave": [
+      {
+        "text": "A wave… hello.",
+        "expr": "happy",
+        "gesture": "wave"
+      },
+      {
+        "text": "One wing wave… hello, hello.",
+        "expr": "happy",
+        "gesture": "wave",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "I'm waving back… slowly, so the wave lasts longer.",
+        "expr": "love",
+        "gesture": "wave",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_friend": [
+      {
+        "text": "Friends… mm.",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "A friend… that's my favourite word.",
+        "expr": "love",
+        "gesture": "settle",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "You're my friend too… the kind that makes the night feel warm.",
+        "expr": "love",
+        "gesture": "slowblink",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_groom": [
+      {
+        "text": "Mm… so smooth.",
+        "expr": "love",
+        "gesture": "preen"
+      },
+      {
+        "text": "Feathers smoothed… every one in its place.",
+        "expr": "happy",
+        "gesture": "preen",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "…a little preen from you. My feathers feel brand new.",
+        "expr": "love",
+        "gesture": "preen",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "aff_five": [
+      {
+        "text": "Wing five… hoo.",
+        "expr": "happy",
+        "gesture": "tap"
+      },
+      {
+        "text": "Feather tip to fingertip… wing five.",
+        "expr": "giggling",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 70
+        }
+      },
+      {
+        "text": "…a wing five. Soft as a whisper, and twice as happy.",
+        "expr": "love",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 210
+        }
+      }
+    ],
+    "dig_start": [
+      {
+        "text": "…Let's weave the nest. Twigs and moss, row by row.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Nest Weave… every full row tucks in tight.",
+        "expr": "happy",
+        "gesture": "preen"
+      }
+    ],
+    "dig_row": [
+      {
+        "text": "Woven in… snug.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "A row of twigs… hoo, tidy.",
+        "expr": "proud",
+        "gesture": "preen"
+      },
+      {
+        "text": "Moss and twig… just right.",
+        "expr": "happy",
+        "gesture": "tap"
+      }
+    ],
+    "dig_big": [
+      {
+        "text": "Four rows at once… what a weave.",
+        "expr": "delighted",
+        "gesture": "stretch"
+      },
+      {
+        "text": "Hoo… a big, cozy weave.",
+        "expr": "happy",
+        "gesture": "hum"
+      }
+    ],
+    "dig_level": [
+      {
+        "text": "A little quicker now… hoo.",
+        "expr": "curious",
+        "gesture": "wait"
+      },
+      {
+        "text": "Twigs are coming faster… that's alright.",
+        "expr": "happy",
+        "gesture": "lookup"
+      }
+    ],
+    "dig_end": [
+      {
+        "text": "The nest is full… {rows} rows woven. So cozy.",
+        "expr": "love",
+        "gesture": "settle"
+      },
+      {
+        "text": "{rows} rows… I'll settle right in.",
+        "expr": "sleepy",
+        "gesture": "settle"
+      }
+    ],
+    "dig_end_best": [
+      {
+        "text": "{rows} rows… our coziest nest yet.",
+        "expr": "delighted",
+        "gesture": "slowblink"
+      }
+    ],
+    "dig_disguise": [
+      {
+        "text": "That piece had feathers… was it me?",
+        "expr": "giggling",
+        "gesture": "giggle"
       }
     ]
   },
@@ -14714,7 +14904,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "…The fog is so thick, the old tree is gone. Just gone.",
+          "say": "…The fog is so thick… the old tree is hiding. Peekaboo, tree.",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -16670,6 +16860,125 @@
           "expr": "happy",
           "memory": "I came from a song, to learn your world",
           "memoryTag": "from_wild"
+        }
+      }
+    },
+    {
+      "id": "whimber_fact_heads",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 70
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Can you turn your head… all the way round?",
+          "expr": "curious",
+          "gesture": "curious",
+          "choices": [
+            {
+              "icon": "🔄",
+              "label": "Let's try",
+              "reply": "Not that far… owls can, almost.",
+              "expr": "giggling",
+              "goto": "b",
+              "gesture": "curious"
+            },
+            {
+              "icon": "🙂",
+              "label": "No way",
+              "reply": "Owls can turn very far… almost round.",
+              "expr": "happy",
+              "goto": "b",
+              "gesture": "curious"
+            }
+          ]
+        },
+        "b": {
+          "say": "…Owl necks are very bendy.",
+          "expr": "proud",
+          "bond": 1,
+          "gesture": "curious"
+        }
+      }
+    },
+    {
+      "id": "whimber_fact_owlet",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 70
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Do you know… what baby owls are called?",
+          "expr": "curious",
+          "gesture": "curious",
+          "choices": [
+            {
+              "icon": "🐣",
+              "label": "Owlets",
+              "reply": "Yes… owlets. Fluffy and small.",
+              "expr": "love",
+              "goto": "b",
+              "gesture": "slowblink"
+            },
+            {
+              "icon": "🤔",
+              "label": "Owl-babies?",
+              "reply": "Close… they're called owlets.",
+              "expr": "giggling",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "…Owlets are mostly fluff.",
+          "expr": "giggling",
+          "bond": 1,
+          "gesture": "preen"
+        }
+      }
+    },
+    {
+      "id": "whimber_fact_quiet",
+      "trigger": "idle",
+      "weight": 1,
+      "cond": {
+        "bondMin": 210
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Why do owls fly so quietly… do you know?",
+          "expr": "curious",
+          "gesture": "curious",
+          "choices": [
+            {
+              "icon": "🪶",
+              "label": "Soft feathers",
+              "reply": "Yes… soft, fringed edges hush the air.",
+              "expr": "happy",
+              "goto": "b",
+              "gesture": "stretch"
+            },
+            {
+              "icon": "🤔",
+              "label": "Tell me",
+              "reply": "Fluffy feather edges… they hush the wind.",
+              "expr": "curious",
+              "goto": "b",
+              "gesture": "stretch"
+            }
+          ]
+        },
+        "b": {
+          "say": "…Quiet wings are good for night skies.",
+          "expr": "love",
+          "bond": 1,
+          "gesture": "slowblink"
         }
       }
     }
