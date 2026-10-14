@@ -395,7 +395,7 @@ function home(greet){
   if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
   else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
-  thoughtSync();if(LIVE.st!=='found')lvStart(false);
+  thoughtSync();if(LIVE.st!=='found'){const keep=m==='sleep'&&LIVE.pos&&LIVE.pos.slice();lvStart(false);if(keep)lvPlace(keep[0],keep[1])}   // asleep: stay on the bed, never re-place on the stage
   if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk(nvB('holidayStart'),3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
   if(window.Music)Music.home(S.kind);
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
@@ -446,7 +446,8 @@ function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].inc
     w.acts.forEach(a=>{if(!LV_IMPL[a])return;if(LV_BAND[a]&&!LV_BAND[a].includes(band))return;if(band==='night'&&S.kind==='fox'&&!LV_BAND[a])return;out.push({wp:w.id,act:a,impl:LV_IMPL[a]})})});return out}
 const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
 function lvEl(){return document.getElementById('cr')}
-function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
+function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];c.style.transition='none';   // nap/wake fix: no .creature 0.6 s slide (it read as a snap + fly, and the thought bubble read the mid-slide spot)
+  const sc=$('#sc');const H=sc?sc.clientHeight:263;
   c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));thoughtSync();bubSync();
   const px=c.querySelector('.px-echo');if(px&&face!=null&&px.classList.contains('lvflip')!==(face<0)){px.classList.toggle('lvflip',face<0);PIXEL.blink(px)}}   // blink on turn (B1)
 function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
@@ -755,7 +756,7 @@ function gamesFor(){const fox=S.kind==='fox',L=[[fox?'⭐':'🌙',fox?'Shiny Pai
   if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
   if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder|den dig|nest weave/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch/.test(t)?(fox?'berry_catch':'starfall_catch'):/tower|steps/.test(t)?(fox?'pancake_tower':'cloud_steps'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');

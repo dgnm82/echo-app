@@ -95,7 +95,7 @@ Post-M6 round
    10-25 s Whimber: trots / flies an arc to a waypoint and does that spot's behaviour), Routine (band change: sunset curl-up, moon yip, stargaze,
    sunrise greet...), Found (opening after >= 20 min away: mid-activity at a waypoint, notices after 1.5 s or the first tap, says a found_* line,
    comes over). Never "waits for you"; the test lints found_/routine_ lines for waiting/missing wording. Reuses existing frames (no new trot/hoo art).
-3) Music v2: music/*.ogg (Vorbis, sample-exact loops) with 8-bit WAV fallback, never MP3; Home day/twilight loops per Echo, 8 game themes,
+3) Music v2: music/*.ogg (Vorbis, sample-exact loops) with 8-bit WAV fallback, never MP3; Home day/twilight loops per Echo, 10 game themes,
    4 s crossfade, -6 dB duck under voices, fades for bond-up. Music toggle in the dev menu (the Sound toggle silences everything).
    Sound v2: Whimber v2 and Slyte v2.1 (calm) voice moods (happy/curious/sleepy/shy/silly/excited/sad_gentle x3), SFX, arrival cues, bond-up stings.
    Release cues are unchanged (release flow is being redesigned).

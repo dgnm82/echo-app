@@ -19,6 +19,7 @@ async def main():
       await pg.evaluate("__echo.state.bond=20");assert name in await pg.evaluate("__echo.games()")
       await pg.click('#play');cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
       await pg.wait_for_selector('#cc',timeout=5000);b0=await pg.evaluate("__echo.state.bond")
+      await pg.wait_for_timeout(600);mu=await pg.evaluate("Music.playing||'nomusic'");print(kind,'music',mu);assert mu in ('nomusic',f"game_{'berry_catch' if kind=='fox' else 'starfall_catch'}_loop")
       v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x;CatchEngine.moveTo(g,170);setTimeout(()=>r([g.x-x0,g.L.echoV]),500)})")
       assert 0<v[0]<=v[1]*0.5+12,v
       # head-touch v1: caught the moment the item touches the head top (well above the ground/nest line), head-only

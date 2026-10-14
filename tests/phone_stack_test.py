@@ -17,6 +17,7 @@ async def main():
       assert name in await pg.evaluate("__echo.games()")
       await pg.click('#play');cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
       await pg.wait_for_selector('#stc',timeout=5000);b0=await pg.evaluate("__echo.state.bond")
+      await pg.wait_for_timeout(600);mu=await pg.evaluate("Music.playing||'nomusic'");print(kind,'music',mu);assert mu in ('nomusic',f"game_{'pancake_tower' if kind=='fox' else 'cloud_steps'}_loop")
       await pg.evaluate("__stack.w=50");
       for i in range(3):await pg.evaluate("__stack.sx=__stack.top+1;__stackPress()");await pg.wait_for_timeout(120)
       st=await pg.evaluate("[__stack.w,__stack.perfects,document.getElementById('sp').textContent]");assert st[0]==54 and st[1]==3,st
