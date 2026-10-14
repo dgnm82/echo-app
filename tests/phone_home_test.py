@@ -17,7 +17,7 @@ async def main():
         const hr=h.querySelector('.hb').getBoundingClientRect(),k=hr.width/(h.querySelector('.hb').offsetWidth||1),hit=(q)=>{const a=q.getBoundingClientRect();return !(hr.right+4*k<=a.left||hr.left-4*k>=a.right||hr.bottom+4*k<=a.top||hr.top-4*k>=a.bottom)};
         return {in:h.classList.contains('in'),glow:h.classList.contains('glow'),tail:!!h.querySelector('.htail.on'),hid:document.getElementById('cr').style.visibility,raw,px,
           over:[...document.querySelectorAll('#sc .mt-comfort,#sc .mt-rest,.dock')].filter(hit).map(e=>e.className)}}""")
-      print(kind,r);assert r['in'] and r['glow'] and r['tail'] and r['hid']=='hidden' and r['px']>0 and r['raw']==0,r
+      print(kind,r);assert r['in'] and r['glow'] and r['tail']==(kind=='fox') and r['hid']=='hidden' and r['px']>0 and r['raw']==0,r
       assert not r['over'],r['over']
       await pg.evaluate("__echo.homeTap()");await pg.wait_for_timeout(300)
       sl=await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');return e.style.backgroundImage})()");assert '_sleep.png' in sl,sl

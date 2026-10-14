@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Build/test gate for Project Echo. Run from anywhere: bash tools/check.sh [--phone]
+echo "== cache-bust stamps"; python3 tools/bust.py --check
 #   1. JS syntax check   2. Kai's lint (schema/graph/voice/banned)   3. guardrail lint (secrets, watching, put-downs, body, guilt, feelings memory)
 #   --phone: also runs the headless phone-viewport playthrough (/workspace/echo-test.py, needs a server on :8765)
 set -euo pipefail

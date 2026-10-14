@@ -340,3 +340,7 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 .diggame .dgprop{position:absolute;left:20px;top:80px;width:96px;height:64px;background-size:96px 64px;image-rendering:pixelated;z-index:4;animation:dgdrop .5s steps(5) 1}.diggame .dgprop.low{animation:none}
 @keyframes dgdrop{from{transform:translateY(-40px)}to{transform:none}}
 .diggame .dgspark{position:absolute;width:8px;height:8px;background:url(px/i_sparkle.png) 0 0/8px 8px;image-rendering:pixelated;z-index:5}.diggame .dgspark.tw{animation:obpulse 1.2s steps(2) infinite}
+/* Whimber hollow v1.1: only the rim + sill of the overlay draw; the painted trunk shows through (no second trunk stacked on the first) */
+.home.home-hollow{-webkit-mask:radial-gradient(ellipse 21px 24px at 32px 46px,#000 98%,transparent 100%),linear-gradient(#000,#000) 6px 63px/52px 8px no-repeat;mask:radial-gradient(ellipse 21px 24px at 32px 46px,#000 98%,transparent 100%),linear-gradient(#000,#000) 6px 63px/52px 8px no-repeat}
+/* Den Dig / Nest Weave results: nothing from the board (the woven nest / dug den blocks, HUD, Echo) shows behind or beside the card */
+.diggame:has(.g2card) .fb,.diggame:has(.g2card) .fbside,.diggame:has(.g2card) .fbecho,.diggame:has(.g2card) .dgspark{visibility:hidden}

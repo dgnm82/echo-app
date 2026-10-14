@@ -144,12 +144,12 @@ D.run=function(conv,ui,done){
         let reply=c.reply!=null&&(c.reply||c.gesture)?{text:D.fill(c.reply||''),expr:c.expr||'happy',react:c.react,gesture:c.gesture,caption:c.caption&&D.fill(c.caption),voice:c.voice}:null;
         if(!reply&&!c.goto)reply=D.fallback(shown[i].intent);
         if(reply){ui.say(reply);D.countLine();T.set(()=>go(c.goto),Math.max(1800,reply.text.length*55))}else go(c.goto)};
-      const arm=()=>{T.clear(carry);carry=T.set(()=>{if(answered)return;ui.cancelChoices&&ui.cancelChoices();
+      const arm=ms=>{T.clear(carry);carry=T.set(()=>{if(answered)return;ui.cancelChoices&&ui.cancelChoices();
         const cl=D.bark('carry_on');ui.say(cl);D.countLine();
         const li=shown.findIndex(s=>s.intent==='listen');
-        T.set(()=>{if(li>=0)pickChoice(li,true);else{answered=true;finish({carriedOn:true})}},Math.max(2000,cl.text.length*55))},D.cfg.carryOnMs)};
+        T.set(()=>{if(li>=0)pickChoice(li,true);else{answered=true;finish({carriedOn:true})}},Math.max(2000,cl.text.length*55))},ms==null?D.cfg.carryOnMs:ms)};
       arm();
-      ui.choose(shown.map(s=>[s.icon,s.label,s.intent]),i=>pickChoice(i),{onTap:arm});
+      ui.choose(shown.map(s=>[s.icon,s.label,s.intent]),i=>pickChoice(i),{onTap:()=>arm(),onDismiss:()=>arm(0)});   // tapped away = nobody answered: carry on now (the talk never breaks)
     }else{ui.say(line);const wait=n.wait||Math.max(1800,line.text.length*55);
       if(n.next&&!tangentUsed&&ui.tangent&&D.rand()<(ui.tangentRate||0.15)){tangentUsed=true;
         T.set(()=>{const t=ui.tangent();if(!t)return go(n.next);ui.say(t);T.set(()=>go(n.next),Math.max(2200,t.text.length*55))},wait)}

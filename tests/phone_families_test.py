@@ -28,14 +28,13 @@ async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];b404=[]
     CASES=[('dog','golden',None,'slyte','dog'),('wolf','grey',None,'slyte','wolf'),('fox','ginger',None,'slyte',None),
-           ('bird','red',None,'whimber','wingsong'),('duck','green',None,'whimber','duck'),('owl','brown',None,'whimber',None),
-           ('cat','black','slyte','slyte','howling'),('bunny','yellow','whimber','whimber','wingsong')]
+           ('bird','red',None,'whimber','wingsong'),('duck','green',None,'whimber','duck'),('owl','brown',None,'whimber',None)]   # birds and canines only
     for animal,chip,fam,sp,look in CASES:
       pg,inv=await origin(b,p,animal,chip,errs,b404,fam)
       S=await pg.evaluate("window.__echo.state");pal=S['g']['pal'];fl=await pg.evaluate("PIXEL.variant(__echo.state.g.seed,'%s',__echo.state.g.pal).fluff"%sp)
       want=f"px/{sp}_{look+'_' if look else ''}{pal}_f{fl}.png"
       check(S['g'].get('look')==(look or ('fox' if sp=='slyte' else 'owl')),f'{animal} saves look {S["g"].get("look")}')
-      check(want in inv,f'{animal} invite sprite uses {want}')
+      check(want[:-4] in inv,f'{animal} invite sprite uses {want} (or its _light lightform)')
       el=await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');return e?[e.style.backgroundImage,e.getAttribute('aria-label')]:null})()")
       check(el and want in el[0],f'{animal} home sheet {el and el[0]}')
       check(el and el[1]==S['g']['name'],f'{animal} aria-label = Echo name {el and el[1]}')

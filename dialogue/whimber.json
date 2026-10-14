@@ -2614,13 +2614,6 @@
         "short": "Hoo… not today."
       }
     ],
-    "invite_borrow": [
-      {
-        "text": "…A {var:origin_animal}. I could borrow its colour, if you like.",
-        "expr": "curious",
-        "short": "Hoo… borrow its colour?"
-      }
-    ],
     "named_reply": [
       {
         "text": "{name}. What a lovely name to carry. Hello, {child}.",

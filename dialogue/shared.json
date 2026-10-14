@@ -657,12 +657,6 @@
         "expr": "happy"
       }
     ],
-    "ui_or_other_family": [
-      {
-        "text": "A {var:origin_animal}! Its own Echoes are still on their way. {var:family_list} can borrow its colour.",
-        "expr": "happy"
-      }
-    ],
     "ui_or_name_ask": [
       {
         "text": "What will you call your new friend?",

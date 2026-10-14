@@ -15,7 +15,7 @@ FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5
   "list_place_done","list_trail_done","list_memory_done","list_cozy_done","list_complete","time_to_go","one_more_game","after_one_more","walk_start","walk_list",
   "edge_arrive","edge_explain","keepsake_give","thanks","next_postcards","two_goodbyes","resume_edge","path_tap_early","last_call","thanks_hug","thanks_wave",
   "thanks_nose","thanks_words","write_a_lot"}   # farewell_arc.md v0.2 (release_invite / release_forced / goodbye_ask / walk_end retired)
-ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_today","invite_borrow","named_reply","named_kept","next_postcards_v2"}   # onboarding v1 + origin_v2.md v0.2
+ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_today","named_reply","named_kept","next_postcards_v2"}   # onboarding v1 + origin_v2.md v0.2
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
 KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}

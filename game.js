@@ -4,7 +4,10 @@ const app=$('#app'), ov=$('#overlay');
 const KEY='echo-proto-v1';
 let S=load(), sess={feeds:0,games:0,naps:0,chats:0};
 const rnd=(seed)=>()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s)purgeFeelings(s);return s}catch(e){return null}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s)}return s}catch(e){return null}}
+// Oct 14: only birds and canines exist. Old saves that picked cat / bunny / other (borrowed colours) keep their Echo; the animal becomes its family's base animal
+function onlyBirdsCanines(s){const A=(window.FAMILIES||{}).animals||{},o=s.origin;if(o&&o.animal&&!A[o.animal]){const w=o.family==='whimber'||s.kind==='owl'?'owl':o.family==='slyte'||s.kind==='fox'?'fox':null;o.animal=w;if(s.vars&&w)s.vars.origin_animal=A[w].word}
+  if(o&&o.src==='borrowed')o.src='chips';if(Array.isArray(s.songs))s.songs=s.songs.filter(a=>A[a])}
 // Privacy: never persist the child's feelings. Remove any legacy data of that kind.
 function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=true}
   const bad=/you had a really good day|felt not great|bright thing for gray days|how you feel|you felt/i;
@@ -18,6 +21,14 @@ function save(){if(S&&S.needs){const m=S.metAt=S.metAt||{},p=sess._nv||{};for(co
 const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w;
 function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}
 let THO=null;   // the bubble's offset from the sprite, taken before the Echo first moves
+// speech bubble stays clear of the Echo at every perch: default top 60; if it would cover the Echo, flip below it, else above it, else beside it
+function bubSync(){const b=document.querySelector('#sc>#b'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!b||!c||!sc||b.style.display==='none')return;
+  b.style.removeProperty('top');b.style.removeProperty('left');b.style.removeProperty('transform');b.classList.remove('bubflip');
+  const R=sc.getBoundingClientRect(),z=R.width/180,H=R.height/z,q=e=>{const r=e.getBoundingClientRect();return {l:(r.left-R.left)/z,t:(r.top-R.top)/z,r:(r.right-R.left)/z,b:(r.bottom-R.top)/z,w:r.width/z,h:r.height/z}};
+  const cr=q(c.querySelector('.px-echo')||c),bb=q(b),hit=(t,l)=>!(l+bb.w<=cr.l||l>=cr.r||t+bb.h<=cr.t||t>=cr.b);if(!hit(bb.t,bb.l))return;
+  const set=(t,l)=>{b.style.setProperty('top',Math.round(t)+'px','important');if(l!=null){b.style.setProperty('left',Math.round(l)+'px','important');b.style.setProperty('transform','none','important')}b.classList.add('bubflip')};
+  const below=cr.b+3,above=cr.t-3-bb.h;if(below+bb.h<=H-2)return set(below);if(above>=2)return set(above);
+  const side=cr.l>=bb.w+4?cr.l-bb.w-3:Math.min(180-bb.w-2,cr.r+3);set(Math.max(2,Math.min(H-bb.h-2,cr.t)),side)}
 function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;if(c.classList.contains('lvmoving')){t.style.visibility='hidden';clearTimeout(thoughtSync._t);return}   // needs v2 P2: hide in flight, show 1 s after landing
   const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
   if(!c.style.left){const tr=t.getBoundingClientRect();THO=[(tr.left-cr.left)/k,(tr.top-cr.top)/k];return}if(!THO)return;
@@ -176,9 +187,9 @@ function obNameCheck(raw){const t=String(raw||'').trim().replace(/\s+/g,' ');if(
   const f=obFold(t),fw=obFold(t.replace(/\s+/g,''));if(OB_BLOCK_STRONG.some(w=>f.includes(obFold(w))))return {ok:false,why:'block'};
   if(OB_BLOCK_MILD.some(w=>obFold(w)===fw))return {ok:false,why:'block'};
   return {ok:true,name:t.split(' ').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}}
-// --- decline (origin §3): deterministic hash; never first Echo, never for borrowed colours, at most once per origin, always-yes setting
+// --- decline (origin §3): deterministic hash; never first Echo, at most once per origin, always-yes setting
 function obHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
-function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&o.src!=='borrowed'&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
+function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
 // glow v1 §5: origin strip cell = the chosen colour at G1/G2/G3/G5, 28 px sprite on a 42x38 cell, strip28 bands
 function obGlow(fid,seed,pal,l){return `<canvas class="obglow" width="42" height="38" data-l="${l}" data-fid="${fid}" data-seed="${seed}" data-pal="${pal||''}"></canvas>`}
 function obGlowPaint(){document.querySelectorAll('canvas.obglow:not([data-done])').forEach(c=>{const A=PIXEL.AURA,f=FAM()[c.dataset.fid],sp=f.sprite,g={seed:+c.dataset.seed,pal:c.dataset.pal||undefined},v=PIXEL.variant(g.seed,sp,g.pal);
@@ -241,22 +252,16 @@ function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const 
    <button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button>`);
   app.querySelectorAll('.orcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.a;app.querySelectorAll('.orcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F.animals[sel].label)});
   $('#ornext').onclick=()=>{if(!sel)return;if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const A=F.animals[sel];S.origin.animal=sel;S.vars.origin_animal=A.word;save();
-    if(A.family)orColours(A.family,false);else orBorrow()}}
-// not built yet (Cat, Bunny, Other): song stamp + borrow colours with one of the v1 families. Never declined.
-function orBorrow(){const F=FAM(),A=F.animals[S.origin.animal];obSong();
-  obScene('orborrow meadow',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div>
-   <div class="obpanel">${U('ui_or_other_family',0,{family_list:F.list().replace(/^a/,'A')})}</div>
-   <div class="orfams">${F.order.map(f=>`<button class="orfam" data-f="${f}"><span class="orlight">${obSprite(f,S.oseed,null,1)}</span><span class="lbl">${F[f].label}</span></button>`).join('')}</div>`);
-  app.querySelectorAll('.orfam').forEach(b=>b.onclick=()=>{SFX('ui_tap');orColours(b.dataset.f,true)})}
+    if(!A||!A.family)return orSeen();orColours(A.family)}}
 function obSong(){const a=S.origin.animal;S.songs=S.songs||[];if(!S.songs.includes(a))S.songs.push(a);save()}   // song stamps: kind words only, no counts shown
 // P2 colours: one chip in v1 (decision 6). "I'm not sure" = seeded pick.
-function orColours(fid,borrowed){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;S.vars.family_plural=f.plural;
+function orColours(fid){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;S.vars.family_plural=f.plural;
   const chipB=c=>`<button class="orchip" data-c="${c.id}" aria-label="${c.label}"><i style="background:${c.hex}"></i><span>${c.label}</span></button>`;
   obScene('orcolours',`<div class="obpanel"><b>${U('ui_or_colours_ask')}</b></div>
    <div class="orchips">${f.chips.filter(c=>c.real).map(chipB).join('')}</div><div class="obsmall ortoy">${U('ui_or_colours_toy')}</div><div class="orchips">${f.chips.filter(c=>!c.real).map(chipB).join('')}</div>
    <button class="btn" id="orunsure">${U('ui_or_not_sure')}</button>`);
-  app.querySelectorAll('.orchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');const c=f.chips.find(x=>x.id===b.dataset.c);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'chips'});save();orInvite()});
-  $('#orunsure').onclick=()=>{SFX('ui_tap');const real=f.chips.filter(c=>c.real).slice(0,6),c=real[Math.floor(rnd((S.oseed+S.origin.idx*31)>>>0||1)()*real.length)];Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'unsure'});save();orInvite()}}   // seeded from the 6 real colours
+  app.querySelectorAll('.orchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');const c=f.chips.find(x=>x.id===b.dataset.c);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:'chips'});save();orInvite()});
+  $('#orunsure').onclick=()=>{SFX('ui_tap');const real=f.chips.filter(c=>c.real).slice(0,6),c=real[Math.floor(rnd((S.oseed+S.origin.idx*31)>>>0||1)()*real.length)];Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:'unsure'});save();orInvite()}}   // seeded from the 6 real colours
 // playtest: origin copy is data-driven from FAMILIES ("I'm a Howling! The Echo of a dog, fox or wolf!")
 const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
 function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
@@ -279,7 +284,8 @@ function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=documen
   const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
   $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
   setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
-  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+  setTimeout(()=>{const hp=document.querySelector('.orinvite>.obpanel.small');if(hp)hp.remove();   // compact: the hum line has done its job
+    app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
     obGlowPaint();if(!PIXEL.AURA)setTimeout(obGlowPaint,600);$('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
 // P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
 function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
@@ -441,7 +447,7 @@ function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].inc
 const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
 function lvEl(){return document.getElementById('cr')}
 function lvPlace(x,y,face){const c=lvEl();if(!c)return;LIVE.pos=[x,y];const sc=$('#sc');const H=sc?sc.clientHeight:263;
-  c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));thoughtSync();
+  c.style.setProperty('left',x+'px','important');c.style.setProperty('bottom',(H-y)+'px','important');c.style.zIndex=String(10+Math.round(y/10));thoughtSync();bubSync();
   const px=c.querySelector('.px-echo');if(px&&face!=null&&px.classList.contains('lvflip')!==(face<0)){px.classList.toggle('lvflip',face<0);PIXEL.blink(px)}}   // blink on turn (B1)
 function lvIdleDelay(){const fox=S.kind==='fox';return ((fox?8:10)+Math.random()*(fox?12:15))*1000*(C.livingSpeed||1)}
 function lvClear(){clearInterval(LIVE.timer);LIVE.timer=null;clearTimeout(LIVE.actT);clearTimeout(LIVE.noticeT);document.querySelectorAll('#sc .lvfx').forEach(e=>e.remove());const px=document.querySelector('#cr .px-echo');if(px)px.classList.remove('lvtilt');if(px&&window.PIXEL&&PIXEL.fly)PIXEL.fly(px,false);const c=lvEl();if(c)c.classList.remove('lvmoving')}
@@ -559,7 +565,7 @@ function playBondUp(from,to,live,done){
 function talk(t,ms){const b=$('#b');if(!b||!t)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   if(!o.text){if(o.gesture&&window.Alive)Alive.act(o.gesture);return}   // P5 act-out only: no bubble, the gesture plays
   if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
-  b.style.display='block';b.textContent=o.text;b.classList.toggle('soft',o.voice==='soft');if(o.caption){const c=document.createElement('small');c.className='cap';c.textContent=o.caption;b.appendChild(c)}b.style.animation='none';void b.offsetWidth;b.style.animation='';say(o.text,o.expr,o.voice==='soft');clearTimeout(talk.t);
+  b.style.display='block';b.textContent=o.text;b.classList.toggle('soft',o.voice==='soft');if(o.caption){const c=document.createElement('small');c.className='cap';c.textContent=o.caption;b.appendChild(c)}b.style.animation='none';void b.offsetWidth;b.style.animation='';bubSync();say(o.text,o.expr,o.voice==='soft');clearTimeout(talk.t);
   talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
 function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
 function hop(){react('happy')}
@@ -568,7 +574,14 @@ function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
 function choices(list,cb,opts){
   let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
   ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;SFX('ui_tap');opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
+  chDismiss(ov.querySelector('.choices'),opts.onDismiss);
 }
+// a tap anywhere outside an open choice list closes it (play, feed, hug, talk ...); that tap does nothing else (no scene tap, no button)
+function chDismiss(el,onDismiss){if(!el)return;let swallow=false;
+  const down=e=>{if(!el.isConnected)return off();if(el.contains(e.target))return;e.stopPropagation();e.preventDefault();swallow=true;off();document.addEventListener('click',eat,true);setTimeout(()=>document.removeEventListener('click',eat,true),600);
+    if(ov.contains(el))ov.innerHTML='';onDismiss&&onDismiss()};
+  const eat=e=>{if(!swallow)return;swallow=false;e.stopPropagation();e.preventDefault();document.removeEventListener('click',eat,true)};
+  const off=()=>document.removeEventListener('pointerdown',down,true);setTimeout(()=>document.addEventListener('pointerdown',down,true),0)}
 // H1 need-aware selection (aliveness/selection/need_select.js). Weather: no weather system in v1, so lines tagged with
 // rain/wind/fog stay out; snow lines only in Dec-Feb by device month (Daniel's default).
 function snowSeason(){const m=new Date(now()).getMonth();return m===11||m<=1}
@@ -625,7 +638,7 @@ function feed(){
   if(!foodList().length)return feedOld();
   const pool=foodMenu();
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${foodIcon(f)}<span class="lbl">${f.name}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
-  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],tier=foodTaste(f),T=FOODS.tiers[tier],lbl=foodLabel(f),fav=tier==='favorite',first=!S.foods.includes(lbl);sess.feeds++;
+  chDismiss(ov.querySelector('.choices')); ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],tier=foodTaste(f),T=FOODS.tiers[tier],lbl=foodLabel(f),fav=tier==='favorite',first=!S.foods.includes(lbl);sess.feeds++;
     if(window.NeedSelect){NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());needMet('hungry')}
     S.needs.food=clamp(S.needs.food+T.food);if(first)S.foods.push(lbl);(S.foodTiers=S.foodTiers||{})[lbl]=tier;   // a disliked food still restores +15
     addBond(0,false,fav?'feedFav':'feed');SFX('care_feed_eat');if(fav)fwTick('food');save();
@@ -637,7 +650,7 @@ function feed(){
 function feedOld(){const e=E();
   const pool=[...e.foods].sort(()=>Math.random()-.5).slice(0,2); if(!pool.includes(S.g.fav))pool[0]=S.g.fav; pool.push(e.neutral[0]); pool.sort(()=>Math.random()-.5);
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${PI(f.split(' ')[0])}<span class="lbl">${f.split(' ').slice(1).join(' ')}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
-  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
+  chDismiss(ov.querySelector('.choices')); ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{ov.innerHTML='';const f=pool[+b.dataset.i],fav=f===S.g.fav;sess.feeds++;
     S.needs.food=clamp(S.needs.food+(fav?C.restore.foodFav:C.restore.food));if(!S.foods.includes(f))S.foods.push(f);
     addBond(0,false,fav?'feedFav':'feed');SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav)fwTick('food');if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
 }
@@ -796,7 +809,7 @@ function digLevel(){const f=digState(),set=S.digLevel||S.fortLevel||'auto';
   return v2State('dig').easy?'easy':'standard'}   // quiet auto-Easy after 2 short games (AUTO_EASY.dig)
 // home_log_hollow v1: Howling hollow log / Wingsong trunk hollow in the foreground (no fort home). Layers: back, glow_in,
 // [Echo], front, glow_out, tail. The glow masks are recoloured from px/aura.json roles at the current glow level.
-const HOMEPOS={fox:{k:'log',x:100,y:219},owl:{k:'hollow',x:112,y:116}};
+const HOMEPOS={fox:{k:'log',x:100,y:219},owl:{k:'hollow',x:116,y:89}};
 function homeKind(){return S.kind==='fox'?'log':'hollow'}
 function homeProp(cls){const h=HOMEPOS[S.kind==='fox'?'fox':'owl'],k=h.k,u=n=>`px/home/${k}_${n}.png`;
   return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${k==='log'?'Our hollow log':'Our hollow'}">
@@ -814,7 +827,7 @@ function homeGlow(on){const h=$('#home');if(!h)return;h.classList.toggle('glow',
 function homeIn(instant){const h=$('#home'),cr=$('#cr');if(!h||!cr||S.napUntil<=now())return lvDo(S.kind==='fox'?'curl_nap':'nap',0);LIVE.st='present';
   const fox=S.kind==='fox',J=HOMES_J,an=J&&J[homeKind()],P=HOMEPOS[fox?'fox':'owl'];h.classList.add('in');
   const done=()=>{cr.style.visibility='hidden';const t=h.querySelector('.htail'),v=PIXEL.variant(S.g.seed,fox?'slyte':'whimber',S.g.pal),lk=PIXEL.lookOf(fox?'slyte':'whimber',S.g,v.pal);
-    t.style.backgroundImage=`url(px/home/tail_${fox?'slyte':'whimber'}${lk?'_'+lk:''}_${v.pal}.png)`;if(an){t.style.left=(an.lip[0]-(fox?15:12))+'px';t.style.top=(an.lip[1]-(fox?13:10))+'px'}t.classList.add('on');homeGlow(true);
+    if(fox){t.style.backgroundImage=`url(px/home/tail_slyte${lk?'_'+lk:''}_${v.pal}.png)`;if(an){t.style.left=(an.lip[0]-15)+'px';t.style.top=(an.lip[1]-13)+'px'}t.classList.add('on')}else t.classList.remove('on');/* Wingsongs: no tail out of the hollow */homeGlow(true);
     clearInterval(LIVE.zT);const m=an?an.mouth:[14,26];const z=()=>{if(!$('#home.in'))return clearInterval(LIVE.zT);lvFx('px/living/z.png',P.x+m[0],P.y-SC_OY+m[1]-12,lowFx()?'':'rise',1500)};z();LIVE.zT=setInterval(z,1600)};
   if(instant||lowFx())return done();let k=0;const n=fox?6:7,t=setInterval(()=>{k++;cr.style.marginBottom=(-(fox?1:4)*k)+'px';if(k>=n){clearInterval(t);done()}},83)}
 let HOMES_J=null;fetch('px/home/homes.json').then(r=>r.json()).then(j=>HOMES_J=j).catch(()=>{});
@@ -1322,6 +1335,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

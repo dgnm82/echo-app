@@ -2859,13 +2859,6 @@
         "gesture": "tail swish toward the meadow"
       }
     ],
-    "invite_borrow": [
-      {
-        "text": "A {var:origin_animal}! Pretty. I can borrow its colour, if you like.",
-        "expr": "curious",
-        "short": "Pretty! Borrow its colour?"
-      }
-    ],
     "named_reply": [
       {
         "text": "{name}! That is ME. Hi, {child}! You asked so nicely.",

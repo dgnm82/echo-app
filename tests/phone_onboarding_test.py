@@ -12,7 +12,7 @@ async def shot(pg,n):
 async def fresh(b,p,errs,reqs,route=None):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
   pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(m.text));pg.on('request',lambda r:reqs.append(r.url))
-  if route:await pg.route('**/families.js',route)
+  if route:await pg.route('**/families.js*',route)
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(700);return pg
 async def T(pg,sel,ms=250):
   await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
@@ -41,7 +41,7 @@ async def main():
     await run_to_seen(pg,'Mia',True)
     S=await pg.evaluate("window.__echo.state")
     check(S['child']=='Mia' and S['vars'].get('child_named')==1 and S['ageBand']=='7-8' and S['setupDone']==0,'name+age saved '+json.dumps({k:S.get(k) for k in ['child','ageBand','setupDone']}))
-    check(await pg.locator('.orcard').count()==9,'9 animal cards')
+    check(await pg.locator('.orcard').count()==6,'6 animal cards (birds + canines only)');cards=await pg.evaluate("[...document.querySelectorAll('.orcard')].map(b=>b.dataset.a)");check(sorted(cards)==['bird','dog','duck','fox','owl','wolf'],'no cat/bunny/other '+str(cards))
     await shot(pg,'ob06_seen')
     await T(pg,'.orcard[data-a=dog]');await T(pg,'#ornext')
     check(await pg.locator('.orchip').count()==10,'10 Howling chips')
@@ -116,7 +116,7 @@ async def main():
     res=await pg2.evaluate("""(()=>{const E=window.__echo,S=E.state;const r={first:0,dbl:0,ay:0,n:0,dec:0};
       for(let s=1;s<=4000;s++){const st={oseed:s,origin:{idx:0,attempt:0,declined:false,src:'chips'}};E.setState(st);if(E.orDeclines())r.first++;
         st.origin={idx:1+(s%3),attempt:0,declined:false,src:'chips'};r.n++;if(E.orDeclines()){r.dec++;st.origin.declined=true;st.origin.attempt=1;if(E.orDeclines())r.dbl++}
-        st.origin={idx:2,attempt:0,declined:false,src:'chips'};st.alwaysYes=true;if(E.orDeclines())r.ay++;st.origin.src='borrowed';st.alwaysYes=false;if(E.orDeclines())r.ay++}
+        st.origin={idx:2,attempt:0,declined:false,src:'chips'};st.alwaysYes=true;if(E.orDeclines())r.ay++}
       return r})()""")
     rate=res['dec']/res['n'];check(res['first']==0 and res['dbl']==0 and res['ay']==0 and .09<rate<.15,'decline rules '+json.dumps(res)+f' rate {rate:.3f}')
     # decline screen (forced), then Find a friend -> P1 at once, next yes
@@ -130,23 +130,26 @@ async def main():
     check(await pg3.evaluate("JSON.parse(localStorage.getItem('echo-proto-v1')).origin.declined")==True,'declined saved at once')
     check(await pg3.locator('.scene.ob .obpanel').count()==0,'decline: one bubble, no UI box')
     await shot(pg3,'ob17_not_today')
-    await T(pg3,'#orff');check(await pg3.locator('.orcard').count()==9,'Find a friend -> P1')
-    await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orcard').count()==9,'reopen mid-origin -> P1')
+    await T(pg3,'#orff');check(await pg3.locator('.orcard').count()==6,'Find a friend -> P1')
+    await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orcard').count()==6,'reopen mid-origin -> P1')
     await T(pg3,'.orcard[data-a=owl]');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',3000)
     check(await pg3.locator('#ornm').count()==1,'next invite after a decline says yes')
-    # borrowed colours (cat) + data-only rename
+    # data-only rename (Wingsong via the duck card; no borrowed colours any more)
     async def rename(route):
       r=await route.fetch();t=(await r.text()).replace('"label": "Howling"','"label": "Barklet"').replace('"label": "Wingsong"','"label": "Skylark"')
       await route.fulfill(response=r,body=t)
     pg4=await fresh(b,p,errs,reqs,rename);await run_to_seen(pg4,'Leo')
-    await T(pg4,'.orcard[data-a=cat]');await T(pg4,'#ornext',400)
-    t=await pg4.locator('.scene.ob').inner_text();check('Song heard: a cat' in t and 'A Barklet or a Skylark can borrow its colour' in t,'borrow screen uses data labels: '+t.replace('\n',' | ')[:160])
-    await shot(pg4,'ob18_borrow_cat_renamed')
-    await T(pg4,'.orfam[data-f=whimber]');check(await pg4.locator('.orchip').count()==11,'Wingsong 11 chips (white+grey share dove-mist)');await T(pg4,'.orchip[data-c=green]',1000)
+    await T(pg4,'.orcard[data-a=duck]');await T(pg4,'#ornext',400)
+    check(await pg4.locator('.orborrow,.orfam').count()==0,'no borrow screen');check(await pg4.locator('.orchip').count()==11,'Wingsong 11 chips (white+grey share dove-mist)');await T(pg4,'.orchip[data-c=green]',1000)
     await T(pg4,'#orinv');await T(pg4,'#orinv',3000);await T(pg4,'#ornm',400)
-    check(await pg4.locator('#orkeep').inner_text()=='Just "Whimber"','borrowed default name');await T(pg4,'#orkeep');await T(pg4,'#orkeep',1500)
-    S=await pg4.evaluate("window.__echo.state");check(S['g']['name']=='Whimber' and S['g']['family']=='Skylark' and S['origin']['src']=='borrowed' and S['g']['pal']=='mint-aurora-solid' and S['kind']=='owl','borrowed origin '+json.dumps([S['g'].get('name'),S['g'].get('pal'),S['g'].get('family'),S['origin'],S['kind']]))
+    check(await pg4.locator('#orkeep').inner_text()=='Just "Whimber"','duck default name');await T(pg4,'#orkeep');await T(pg4,'#orkeep',1500)
+    S=await pg4.evaluate("window.__echo.state");check(S['g']['name']=='Whimber' and S['g']['family']=='Skylark' and S['origin']['src']=='chips' and S['origin']['animal']=='duck' and S['g']['pal']=='mint-aurora-solid' and S['kind']=='owl','renamed Wingsong origin '+json.dumps([S['g'].get('name'),S['g'].get('pal'),S['g'].get('family'),S['origin'],S['kind']]))
     check(await pg4.evaluate("CREATURES.owl.name")=='Skylark','config family label from data')
+    ctx4=pg4.context;await pg4.close()   # old save from a cat / bunny / other pick (edited before the app loads, so no save on unload can overwrite it)
+    pg5=await ctx4.new_page();await pg5.add_init_script("(()=>{if(sessionStorage.getItem('mig'))return;sessionStorage.setItem('mig','1');const k='echo-proto-v1',s=JSON.parse(localStorage.getItem(k));s.origin.animal='bunny';s.origin.src='borrowed';s.vars.origin_animal='bunny';s.songs=['bunny','owl'];localStorage.setItem(k,JSON.stringify(s))})()")
+    await pg5.goto(URL);await pg5.wait_for_timeout(1500)
+    m=await pg5.evaluate("(()=>{const s=__echo.state;return [s.origin.animal,s.origin.src,s.vars.origin_animal,s.songs]})()");check(m==['owl','chips','owl',['owl']],'old bunny save migrates to owl '+str(m))
+    pg4=pg5
     chk=await pg4.evaluate("(()=>{const F=FAMILIES,m=[];for(const f of F.order){const L=f==='slyte'?PIXEL.PAL:PIXEL.POWL;for(const c of F[f].chips)if(!L.includes(c.ramp))m.push(c.ramp)}return m})()")
     check(not chk,'every chip colour in PIXEL.PAL/POWL '+str(chk))
     # privacy: only same-origin requests
