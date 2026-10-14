@@ -241,7 +241,7 @@ function orColours(fid,borrowed){const F=FAM(),f=F[fid];S.origin.family=fid;S.va
   $('#orunsure').onclick=()=>{SFX('ui_tap');const real=f.chips.filter(c=>c.real).slice(0,6),c=real[Math.floor(rnd((S.oseed+S.origin.idx*31)>>>0||1)()*real.length)];Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:borrowed?'borrowed':'unsure'});save();orInvite()}}   // seeded from the 6 real colours
 // playtest: origin copy is data-driven from FAMILIES ("I'm a Howling! The Echo of a dog, fox or wolf!")
 const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
-function famVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
+function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
   const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):''}}
 // P3 hum + invite (tap to hear, tap again; never timed)
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);
@@ -261,7 +261,7 @@ function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=documen
   const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
   $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
   setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
-  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,famVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
     $('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
 // P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
 function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
