@@ -869,6 +869,7 @@ function catchGame(){
       if(g2ok(im)){cx.save();if(face<0){cx.translate(Math.round(g.x)*2,0);cx.scale(-1,1)}cx.drawImage(im,Math.round(g.x-a[0]),top);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-a[0])+a[0]-11,top+a[1]+2-10);cx.restore()}}
     else{const fi=(F/6|0)%4,a=(an&&an.whimber_nest[FR.sk]&&an.whimber_nest[FR.sk]['fly'+fi])||[24,44],top=A.LINE-2-(a[1]-3);
       if(g2ok(IM.fly))cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,Math.round(g.x-a[0]),top,48,48);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-11),A.LINE-2)}
+    {const hr=CatchEngine.headR(g);cx.save();cx.globalAlpha=low?.18:.14+.06*Math.sin(performance.now()/300);cx.fillStyle='#FFF4C8';cx.beginPath();cx.ellipse(Math.round(g.x),A.LINE,hr,3,0,0,6.283);cx.fill();cx.restore()}   // playtest: subtle head target
     cx.fillStyle='#FFD27A';cx.font='8px PS2P';for(const p of pops)cx.fillText(p.s,Math.round(p.x-6),Math.round(A.LINE-20-(low?0:(1-p.t)*14)));
     $('#cn').textContent=g.n;$('#cs').textContent=g.streak>=5?'×'+g.streak:'';$('#cs').className=g.streak>=10?'gold':'';
     $('#cg').innerHTML=Array.from({length:g.L.grass},(_,i)=>`<i class="pxi" style="background-image:url(px/catch/grass_spot${i<g.landed?1:0}.png);width:9px;height:4px"></i>`).join('')}
