@@ -366,12 +366,12 @@ function home(greet){
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg} pxscene sc-${curScene().id}" id="sc" style="${scStyle()}">${fwHomeBits()}
-   ${curScene()===scHome()&&curScene().id!=='branch'?fortProp():''}   ${meterHTML()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?thoughtHTML(w):''}
+   ${curScene()===scHome()?homeProp():''}   ${meterHTML()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?thoughtHTML(w):''}
    <div class="bubble" id="b" style="display:none"></div>
    ${ready?`<button class="btn rel" id="rel">${PI('🌲')}<span class="lbl">${fwUI('ui_path_button',S.kind==='fox'?0:1)}</span></button>`:''}</div>
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
-  renderBadge();
+  renderBadge();{const hm=$('#home');if(hm)hm.onclick=e=>{if(homeTap())e.stopPropagation()}}
   $('#feed').onclick=feed;$('#play').onclick=play;$('#comfort').onclick=comfort;$('#rest').onclick=rest;$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
   if(ready){$('#rel').onclick=fwStartByChild;if($('#path'))$('#path').onclick=fwStartByChild;$('#fwl').onclick=fwList}
   if($('#fwstar')&&S.kind!=='fox'&&ready)$('#fwstar').onclick=fwStartByChild;
@@ -459,19 +459,19 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     leaf_pounce:()=>{react('excited');for(let k=0;k<(fx?4:1);k++)lvFx(`px/living/leaf_${k%3}.png`,x-20+k*10,y-14,'scatter s'+k,900);LIVE.actT=setTimeout(()=>{react('excited');for(let k=0;k<(fx?3:0);k++)lvFx(`px/living/leaf_${k%3}.png`,x-14+k*10,y-14,'scatter s'+k,900)},1500)},
     sniff:()=>setExpr('curious'),
     trinket:()=>{setExpr('giggling');lvFx('px/living/trinket.png',x+18,y-16,'roll',dur)},
-    curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
+    curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
     moon_yip:()=>{setExpr('excited');say('Yip!','excited');LIVE.actT=setTimeout(()=>say('Yip!','excited'),1000)},
     fort_flag:()=>setExpr('proud'),
     sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
     lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
     stargaze:()=>{setExpr('thinking')},
-    nap:()=>{setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
+    nap:()=>{const px=document.querySelector('#cr .px-echo');if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
     read:()=>{setExpr('thinking');if(S.kind!=='fox')lvFx('px/i_book.png',x+14,y-18,'',dur)},
     lantern:()=>setExpr('curious'),preen:()=>setExpr('shy'),hop:()=>react('happy'),
     giggle:()=>{setExpr('giggling');react('happy')},peek:()=>setExpr('shy'),think:()=>setExpr('thinking'),warm:()=>setExpr('happy'),excited:()=>{setExpr('excited');react('excited')},
     tilt:()=>{setExpr('curious')}};
   clearInterval(LIVE.zT);(A[name]||(()=>{}))()}
-function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null}
+function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null;const px=document.querySelector('#cr .px-echo');if(px)PIXEL.sleep(px,false)}
 function lvPick(band,found){const last=(S.lvLast||[]).slice(-2);let opts=lvOptions(band).filter(o=>!last.includes(o.wp+':'+o.act));
   if(found)opts=opts.filter(o=>LV_FOUND[o.impl]||(SC_FOUND[curScene().id]||{})[o.wp]);
   if(!opts.length)opts=lvOptions(band);if(!opts.length)return null;
@@ -654,13 +654,13 @@ addBond(0,true,'nap');SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from)
 }
 // v1.1 nap option A (aliveness/v1_1_motion): yawn, trot / fly off the right-most exit, 6-step curtain wipe, enter home from the
 // opposite edge and settle on the bed waypoint (Slyte: tree_base curl, Whimber: hollow_door). Reduced motion keeps the old cut.
-const NAP_BED={fox:'tree_base',owl:'hollow_door'};
+const NAP_BED={fox:'log_mouth',owl:'hollow_sill'};
 function napBed(){return scWp(NAP_BED[S.kind]||'stage')||scWp('stage')}
-function napSettle(){LIVE.st='present';if(S.napUntil<=now())return;lvDo(S.kind==='fox'?'curl_nap':'nap',0)}
+function napSettle(){LIVE.st='present';if(S.napUntil<=now())return;homeIn()}
 // reduced motion (lowFx / prefers-reduced-motion): option B dusk fade. A 6-step ordered dither in warm plum (never black), the
 // scene swaps under full cover with the Echo already on its bed, one gold star twinkles, and the dither steps back out.
 function napDusk(){setTimeout(()=>{const s=SCR();if(!s||!document.getElementById('cr'))return;const d=document.createElement('div');d.className='scdusk';s.appendChild(d);let i=0;
-  const t=setInterval(()=>{i++;d.style.backgroundImage=`url(px/alive/dusk${Math.min(i,6)}.png)`;if(i===6){clearInterval(t);LIVE.st='present';home();
+  const t=setInterval(()=>{i++;d.style.backgroundImage=`url(px/alive/dusk${Math.min(i,6)}.png)`;if(i===6){clearInterval(t);LIVE.st='present';home();homeIn(true);
     const st=document.createElement('i');st.className='scduskstar';d.appendChild(st);
     setTimeout(()=>{st.remove();let k=6;const t2=setInterval(()=>{k--;d.style.backgroundImage=k?`url(px/alive/dusk${k}.png)`:'none';if(!k){clearInterval(t2);d.remove()}},166)},700)}},166)},900)}
 function napTravel(from){const hm=scHome(),fox=S.kind==='fox';lvStop();LIVE.st='napgo';$('#sc')&&$('#sc').classList.add('lvaway');
@@ -709,7 +709,7 @@ function book(){
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
-  ${S.kind?`<h2>Our ${S.kind==='fox'?'treehouse fort':'tree hollow'}</h2><div class="fortbook">${fortProp()}<span>Homes built: ${fortState().homes}${fortState().decor?' · decorations: '+fortState().decor:''}</span></div>`:''}
+  ${S.kind?`<h2>Our ${S.kind==='fox'?'hollow log':'hollow'}</h2><div class="homebook">${homeProp('book')}</div>`:''}
   ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Bond up! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
@@ -785,6 +785,32 @@ function fortLevel(){const f=fortState(),set=S.fortLevel||'auto';
   if((f.games||0)<2)return 'easy';             // the first 2 builds ever are Easy
   if(set!=='auto')return set;                  // grown-up toggle (dev tools)
   return v2State('builder').easy?'easy':'standard'}   // quiet auto-Easy after 2 short builds (AUTO_EASY.build)
+// home_log_hollow v1: Howling hollow log / Wingsong trunk hollow in the foreground (no fort home). Layers: back, glow_in,
+// [Echo], front, glow_out, tail. The glow masks are recoloured from px/aura.json roles at the current glow level.
+const HOMEPOS={fox:{k:'log',x:100,y:219},owl:{k:'hollow',x:112,y:116}};
+function homeKind(){return S.kind==='fox'?'log':'hollow'}
+function homeProp(cls){const h=HOMEPOS[S.kind==='fox'?'fox':'owl'],k=h.k,u=n=>`px/home/${k}_${n}.png`;
+  return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${k==='log'?'Our hollow log':'Our hollow'}">
+    <i class="hb" style="background-image:url(${u('back')})"></i><canvas class="hgl hgi" data-m="${u('glow_in')}"></canvas><i class="hf" style="background-image:url(${u('front')})"></i><canvas class="hgl hgo" data-m="${u('glow_out')}"></canvas><i class="htail"></i></div>`}
+const HMASK={};function homeMask(url,pal,lv,cb){const A=PIXEL.AURA,key=url+'|'+pal+'|'+lv;if(HMASK[key])return cb(HMASK[key]);if(!A)return;const ro=A.roles[pal]||Object.values(A.roles)[0];
+  const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(0,0,c.width,c.height),D=d.data;
+    const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),rim=hx(ro.rim[lv-1]),gl=hx(ro.glow);
+    for(let i=0;i<D.length;i+=4){if(!D[i+3])continue;const r=D[i],g=D[i+1],b=D[i+2];let c2=null;
+      if(r===0&&g===255&&b===255)c2=rim;else if(r===255&&g===0&&b===255)c2=gl;else if(r===255&&g===255&&b===0)c2=lv>=3?gl:null;else if(r===0&&g===255&&b===0)c2=lv>=5?gl:null;
+      if(c2){D[i]=c2[0];D[i+1]=c2[1];D[i+2]=c2[2]}else D[i+3]=0}   // never a raw key colour
+    x.putImageData(d,0,0);HMASK[key]=c;cb(c)};im.src=url}
+function homeGlow(on){const h=$('#home');if(!h)return;h.classList.toggle('glow',!!on);if(!on)return;const px=document.querySelector('#cr .px-echo'),pal=(px&&px.dataset.pal)||PIXEL.variant(S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g.pal).pal,lv=glowNow();
+  h.querySelectorAll('canvas.hgl').forEach(cv=>homeMask(cv.dataset.m,pal,lv,m=>{cv.width=m.width;cv.height=m.height;cv.getContext('2d').drawImage(m,0,0)}))}
+// nap end beat: walk/fly to the mouth/sill, sink in behind the front layer, then tail on the lip + Zzz + glow (reduced motion: already inside)
+function homeIn(instant){const h=$('#home'),cr=$('#cr');if(!h||!cr||S.napUntil<=now())return lvDo(S.kind==='fox'?'curl_nap':'nap',0);LIVE.st='present';
+  const fox=S.kind==='fox',J=HOMES_J,an=J&&J[homeKind()],P=HOMEPOS[fox?'fox':'owl'];h.classList.add('in');
+  const done=()=>{cr.style.visibility='hidden';const t=h.querySelector('.htail'),v=PIXEL.variant(S.g.seed,fox?'slyte':'whimber',S.g.pal),lk=PIXEL.lookOf(fox?'slyte':'whimber',S.g,v.pal);
+    t.style.backgroundImage=`url(px/home/tail_${fox?'slyte':'whimber'}${lk?'_'+lk:''}_${v.pal}.png)`;if(an){t.style.left=(an.lip[0]-(fox?15:12))+'px';t.style.top=(an.lip[1]-(fox?13:10))+'px'}t.classList.add('on');homeGlow(true);
+    clearInterval(LIVE.zT);const m=an?an.mouth:[14,26];const z=()=>{if(!$('#home.in'))return clearInterval(LIVE.zT);lvFx('px/living/z.png',P.x+m[0],P.y-SC_OY+m[1]-12,lowFx()?'':'rise',1500)};z();LIVE.zT=setInterval(z,1600)};
+  if(instant||lowFx())return done();let k=0;const n=fox?6:7,t=setInterval(()=>{k++;cr.style.marginBottom=(-(fox?1:4)*k)+'px';if(k>=n){clearInterval(t);done()}},83)}
+let HOMES_J=null;fetch('px/home/homes.json').then(r=>r.json()).then(j=>HOMES_J=j).catch(()=>{});
+function homeTap(){const h=$('#home');if(!h||!h.classList.contains('in'))return false;asleep();if(lowFx())return true;const cr=$('#cr'),px=cr&&cr.querySelector('.px-echo');
+  h.classList.add('peek');if(cr){cr.style.visibility='';if(px)PIXEL.sleep(px,true)}setTimeout(()=>{h.classList.remove('peek');if(cr&&$('#home.in'))cr.style.visibility='hidden'},1500);return true}
 function fortProp(){const f=fortState(),open=S.badges.includes('place')?'_open':'',fox=S.kind==='fox',b=fox?'fort':'hollow';
   const nm=f.stage>=3&&f.decor?`${b}_3_d${f.decor}`:`${b}_${f.stage}`;
   return `<div class="fortprop ${b}${open?' open':''}" aria-label="${fox?'Treehouse fort':'Tree hollow'}" style="background-image:url(px/${b}/${nm}${open}.png)"></div>`}
@@ -1014,7 +1040,7 @@ function runGame(){
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const pd=`run/${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
-  window.__runHome=null;if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
+  window.__runHome=null;if(S.badges.includes('place')){IM.homeRest=new Image();IM.homeRest.src=`px/home/${homeKind()}_front.png`;window.__runHome=IM.homeRest.src}   // home_log_hollow: the log / hollow at the rest stop
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
   else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
@@ -1289,6 +1315,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},homeIn:i=>homeIn(i),homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

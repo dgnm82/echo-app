@@ -82,7 +82,7 @@ function event(el,kind,cb){if(!el)return;const e=EV[kind];if(el.dataset.light){e
 function evStep(el){const v=el._ev;el.style.backgroundPosition=`${-v.i*N}px ${-v.row*N}px`;el._col='ev'+v.row+':'+v.i;auraDraw(el);
   if(++v.k>=v.t[v.i]){v.k=0;v.i++;if(v.i>=v.t.length){el._ev=null;if(v.kind==='release'){el.style.visibility='hidden'}else{el.style.backgroundImage=el._base}
     try{v.cb&&v.cb()}catch(e){console.error(e)}}}}
-function step(el){if(el._ev)return evStep(el);if(el._fly)return flyStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
+function step(el){if(el._ev)return evStep(el);if(el._sleep)return sleepStep(el);if(el._fly)return flyStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
   if(!s){s=el._s={i:0,hold:0,q:[],nb:rand(24,72),ne:rand(48,108),nt:rand(60,120),t:0}}
   s.t++;let col;
   if(s.ex!==ex){s.ex=ex;s.si=0;s.sh=0}
@@ -119,6 +119,13 @@ function fly(el,on){if(!el||el._ev||!el.classList.contains('owl'))return;if(!el.
   if(on&&!el._fly){el._fly={i:0,k:0};el.style.backgroundImage=el._base.replace('.png','_fly.png');flyStep(el)}
   else if(!on&&el._fly){el._fly=null;el.style.backgroundImage=el._base;if(el._s)el._s.q=[]}}
 function flyStep(el){const f=el._fly;el.style.backgroundPosition=`${-f.i*N}px 0px`;el._col='fly'+f.i;auraDraw(el);if(++f.k>=2){f.k=0;f.i=(f.i+1)%4}}
+// sleep_poses v1: side-on sleep sheet px/<sprite>[_<look>]_<pal>_sleep.png, 4 cols: breathe 0-1-2-1 at 600 ms, stir (col 3, 300 ms)
+// every 6-10 s; reduced motion holds col 0. The aura follows each column.
+function sleep(el,on){if(!el||el._ev)return;if(!el._base)el._base=el.style.backgroundImage;
+  if(on&&!el._sleep){if(el._fly)fly(el,false);el._sleep={i:0,k:0,st:rand(72,120)};el.style.backgroundImage=el._base.replace(/_f\d+(_light)?\.png/,'_sleep.png');sleepStep(el)}
+  else if(!on&&el._sleep){el._sleep=null;el.style.backgroundImage=el._base;if(el._s)el._s.q=[]}}
+const SLP=[0,1,2,1];function sleepStep(el){const z=el._sleep;let col=lowFxNow()?0:SLP[z.i];if(!lowFxNow()){if(--z.st<=0&&z.k===0){z.stir=4;z.st=rand(72,120)}if(z.stir>0){z.stir--;col=3}else if(++z.k>=7){z.k=0;z.i=(z.i+1)%4}}
+  el.style.backgroundPosition=`${-col*N}px 0px`;el._col='sl'+col;auraDraw(el)}
 function blink(el,slow){queue(el,[[FR.blink,slow?5:2]],true)}   // slow blink on pet / love lines; a blink on every turn
 function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
@@ -128,5 +135,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={glowLevel,aura,auraDraw,get AURA(){return AURA},queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={sleep,glowLevel,aura,auraDraw,get AURA(){return AURA},queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();

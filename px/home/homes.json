@@ -1,0 +1,41 @@
+{
+ "log": {
+  "mouth": [
+   14,
+   26
+  ],
+  "size": [
+   84,
+   46
+  ],
+  "lip": [
+   12,
+   41
+  ],
+  "baseline": 43
+ },
+ "hollow": {
+  "mouth": [
+   32,
+   46
+  ],
+  "size": [
+   64,
+   112
+  ],
+  "sill": [
+   32,
+   67
+  ],
+  "lip": [
+   38,
+   64
+  ]
+ },
+ "masks": {
+  "#00FFFF": "rim (all levels)",
+  "#FF00FF": "glow (all levels)",
+  "#FFFF00": "glow (G>=3)",
+  "#00FF00": "glow (G5)"
+ }
+}

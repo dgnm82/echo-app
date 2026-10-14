@@ -27,7 +27,7 @@ async def frames(pg,name,n,ms=83,crop=None):
   ims=[Image.open(f).convert('RGB') for f in fs];sz=ims[0].size;ims=[im.resize(sz) for im in ims]
   ims[0].save(f'{OUT}/{name}.gif',save_all=True,append_images=ims[1:],duration=ms+40,loop=0)
   for f in fs:os.remove(f)
-BED={'fox':'tree_base','owl':'hollow_door'}
+BED={'fox':'log_mouth','owl':'hollow_sill'}   # home_log_hollow v1
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];bad=[]
