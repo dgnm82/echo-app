@@ -793,7 +793,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Look… a smooth rock. It fits in a paw perfectly.",
+          "say": "Look… a smooth rock. It fits just right.",
           "expr": "curious",
           "next": "b",
           "wait": 2200
@@ -1713,7 +1713,7 @@
             {
               "icon": "👂",
               "label": "(just listen)",
-              "reply": "Sniff. I'll keep sniffing until I decide.",
+              "reply": "Hmm. I'll keep thinking until I decide.",
               "goto": "c"
             }
           ]

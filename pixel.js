@@ -31,12 +31,13 @@ function sheetBase(sp,g){const v=variant(g&&g.seed,sp,g&&g.pal),l=lookOf(sp,g,v.
 function label(sp,g){const F=W.FAMILIES;return String((g&&g.name)||(F&&F[sp]&&F[sp].label)||'').replace(/"/g,'')}   // screen-reader name: the Echo's own name, else the family word
 function whimber(g,stage){const {u,v}=sheetBase('whimber',g),lt=stage===1;stage=stage||stageNow();
   {const pre=new Image();pre.src=`${u}_fly.png`}   // v1.1: no flash on the first take-off
-  return `${lt?'':'<canvas class="aura" width="74" height="65" aria-hidden="true"></canvas>'}<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)"></div>`}
+  return `<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)">${lt?'':AURA_CV}</div>`}
 function slyte(g,stage){const {u,v}=sheetBase('slyte',g),lt=stage===1;stage=stage||stageNow();
-  return `${lt?'':'<canvas class="aura" width="74" height="65" aria-hidden="true"></canvas>'}<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)"></div>`}
+  return `<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)">${lt?'':AURA_CV}</div>`}
 // ---- glow v1.1 (handoff/glow_v1.md §2): the Echo keeps its origin colour; bond grows an aura in its OWN colour (G1..G5).
 // Runtime outline glow: octagonal dilation of the frame alpha -> dithered bands (rim, glow) + seeded white sparkles. Opaque px only.
-let AURA=null,LASTLV=0;try{fetch('px/aura.json').then(r=>r.json()).then(j=>{AURA=j;document.querySelectorAll('.px-echo').forEach(e=>{e._ak=null;auraDraw(e)})}).catch(()=>{})}catch(e){}
+let AURA=null,LASTLV=0;const AURA_CV='<canvas class="aura" width="74" height="65" aria-hidden="true"></canvas>';   // a CHILD of the sprite: it moves, flips and squishes with it in every state
+try{fetch('px/aura.json').then(r=>r.json()).then(j=>{AURA=j;document.querySelectorAll('.px-echo').forEach(e=>{e._ak=null;auraDraw(e)})}).catch(()=>{})}catch(e){}
 function glowLevel(bond,ready){if(ready)return 5;const b=bond||0;return b>=370?4:b>=210?3:b>=70?2:1}
 function lowFxNow(){try{const S=W.__echo&&W.__echo.state;return !!(S&&S.lowfx)||!!(W.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}}
 function curGlow(){try{return (W.__echo&&W.__echo.glow)?W.__echo.glow():1}catch(e){return 1}}
@@ -65,7 +66,7 @@ function aura(im,sx,sy,level,pal,o){o=o||{};if(!AURA||!im||!im.complete||!im.nat
       put(X,y,sp);if(L.cross&&i%2===0)for(const [u,v] of [[1,0],[-1,0],[0,1],[0,-1]])put(X+u,y+v,col.rim)}}
   x.putImageData(out,0,0);ACACHE[key]=c;return c}
 // paint the sibling canvas.aura of a home sprite; repaints only when frame / level / phase change. Step-up: one ring per 2 ticks.
-function auraDraw(el){const cv=el.previousElementSibling;if(!cv||!cv.classList||!cv.classList.contains('aura'))return;
+function auraDraw(el){const cv=el.querySelector(':scope>canvas.aura');if(!cv)return;
   const lv=+el.dataset.glow||0,lowfx=lowFxNow();if(el._ev&&el._ev.kind==='arrival'||el.dataset.light){if(el._ak!=='none'){cv.getContext('2d').clearRect(0,0,74,65);el._ak='none'}return}
   const R=AURA?AURA.radius[lv]||0:0;if(el._lv==null)el._lv=Math.min(lv,LASTLV||lv);LASTLV=Math.max(LASTLV||0,lv);if(lv>el._lv){el._ring=lowfx?R:(AURA?AURA.radius[el._lv]||0:0);el._lv=lv;el._rk=0}
   if(el._ring!=null&&++el._rk>=2){el._rk=0;el._ring++;if(el._ring>=R)el._ring=null}

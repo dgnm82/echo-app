@@ -21,6 +21,8 @@ D.load=async function(species){
   return D.use(species,sh,sp);
 };
 D.use=function(species,sh,sp){
+  // playtest (family leak): a shared line or conversation may carry family:"slyte"|"whimber"; the other family never gets it
+  const own=x=>!x||!x.family||x.family===species,shB={};for(const k in sh.barks||{})shB[k]=Array.isArray(sh.barks[k])?sh.barks[k].filter(own):sh.barks[k];sh={...sh,barks:shB,conversations:(sh.conversations||[]).filter(own)};
   const barks={...sh.barks,...sp.barks};
   for(const k of ['time_morning','time_day','time_evening','time_night'])if(sh.barks[k]&&sp.barks[k])barks[k]=sp.barks[k].concat(sh.barks[k]);
   const convs=[...(sh.conversations||[]),...(sp.conversations||[])];

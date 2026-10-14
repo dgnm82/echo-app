@@ -617,7 +617,7 @@
       {
         "text": "Fashion.",
         "expr": "neutral",
-        "gesture": "preen"
+        "gesture": "groom"
       },
       {
         "text": "Berry somewhere. Near. Very near.",
@@ -647,7 +647,7 @@
       {
         "text": "Brrrr-flap. Wet.",
         "expr": "neutral",
-        "gesture": "preen"
+        "gesture": "groom"
       },
       {
         "text": "Huh.",
@@ -741,7 +741,7 @@
       {
         "text": "",
         "expr": "neutral",
-        "gesture": "preen"
+        "gesture": "groom"
       },
       {
         "text": "",
@@ -1144,7 +1144,7 @@
         }
       },
       {
-        "text": "That feather {var:feather}. Floaty.",
+        "text": "That leaf {var:leaf}. Floaty.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_feather",
@@ -2253,7 +2253,7 @@
       {
         "text": "I'm extra fluffy now. Thanks to you.",
         "expr": "happy",
-        "gesture": "preen"
+        "gesture": "groom"
       }
     ],
     "after_play": [
@@ -3997,7 +3997,7 @@
           "say": "Fluffing for fairness.",
           "expr": "happy",
           "bond": 2,
-          "gesture": "preen"
+          "gesture": "groom"
         }
       }
     },
@@ -5995,7 +5995,7 @@
           "say": "Hello again, door.",
           "expr": "happy",
           "bond": 2,
-          "gesture": "preen"
+          "gesture": "groom"
         }
       }
     },
@@ -6802,7 +6802,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "The feather. You said it {var:feather}.",
+          "say": "The leaf. You said it {var:leaf}.",
           "expr": "proud",
           "choices": [
             {
@@ -6845,7 +6845,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "A feather landed in the sunbeam. Like it was planned.",
+          "say": "A leaf landed in the sunbeam. Like it was planned.",
           "expr": "happy",
           "choices": [
             {
@@ -6863,7 +6863,7 @@
           ]
         },
         "b": {
-          "say": "Feather in a sunbeam. Fancy.",
+          "say": "Leaf in a sunbeam. Fancy.",
           "expr": "happy",
           "bond": 1
         }
@@ -7880,7 +7880,7 @@
               "reply": "Fancy. It's crinkly. I love it.",
               "expr": "happy",
               "goto": "b",
-              "gesture": "preen"
+              "gesture": "groom"
             },
             {
               "icon": "🛏️",
@@ -7897,7 +7897,7 @@
               "reply": "Both! I'm a leaf now. Hello.",
               "expr": "delighted",
               "goto": "b",
-              "gesture": "preen"
+              "gesture": "groom"
             }
           ]
         },
@@ -8171,7 +8171,7 @@
               "memory": "You said the squirrel has a less fluffy tail than {name}",
               "memoryTag": "slyte_squirrel",
               "goto": "c",
-              "gesture": "preen"
+              "gesture": "groom"
             },
             {
               "icon": "🐿️",
@@ -9890,7 +9890,7 @@
           "say": "I'll draw with it. A circle. Again. My best shape.",
           "expr": "happy",
           "bond": 1,
-          "gesture": "preen"
+          "gesture": "groom"
         }
       },
       "cond": {
@@ -11231,7 +11231,7 @@
           "say": "Nice to meet you, door. Firm handshake.",
           "expr": "happy",
           "bond": 1,
-          "gesture": "preen"
+          "gesture": "groom"
         }
       },
       "cond": {
@@ -12303,13 +12303,13 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "This feather is so light. It floats like it's thinking.",
+          "say": "This leaf is so light. It floats like it's thinking.",
           "expr": "happy",
           "next": "b",
           "wait": 2400
         },
         "b": {
-          "say": "What does a feather think about?",
+          "say": "What does a leaf think about?",
           "expr": "curious",
           "choices": [
             {
@@ -12320,19 +12320,19 @@
               "set": {
                 "feather": "thinks about clouds"
               },
-              "memory": "You said the feather thinks about clouds",
+              "memory": "You said the leaf thinks about clouds",
               "memoryTag": "slyte_feather",
               "goto": "c"
             },
             {
               "icon": "🐦",
               "label": "Its bird",
-              "reply": "Its bird! Hello, bird. Your feather says hi.",
+              "reply": "Its tree! Hello, tree. Your leaf says hi.",
               "expr": "delighted",
               "set": {
-                "feather": "thinks about its bird"
+                "feather": "thinks about its tree"
               },
-              "memory": "You said the feather thinks about its bird",
+              "memory": "You said the leaf thinks about its tree",
               "memoryTag": "slyte_feather",
               "goto": "c"
             },
@@ -12344,7 +12344,7 @@
               "set": {
                 "feather": "thinks about nothing"
               },
-              "memory": "You said the feather thinks about nothing",
+              "memory": "You said the leaf thinks about nothing",
               "memoryTag": "slyte_feather",
               "goto": "c"
             },
@@ -12375,13 +12375,13 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Feather fan? Let's see.",
+          "say": "Leaf fan? Let's see.",
           "expr": "curious",
           "choices": [
             {
               "icon": "🌬️",
               "label": "Fan me!",
-              "reply": "Ahh. Feather wind.",
+              "reply": "Ahh. Leaf wind.",
               "expr": "happy",
               "goto": "b",
               "gesture": "pounce"
@@ -12389,7 +12389,7 @@
             {
               "icon": "✍️",
               "label": "It's a pen",
-              "reply": "A pen! Feather art.",
+              "reply": "A brush! Leaf art.",
               "expr": "delighted",
               "goto": "b",
               "gesture": "tap"
@@ -12397,7 +12397,7 @@
           ]
         },
         "b": {
-          "say": "Feathers do anything.",
+          "say": "Leaves do anything.",
           "expr": "happy",
           "bond": 1
         }
@@ -12674,7 +12674,7 @@
             {
               "icon": "🪶",
               "label": "They're light",
-              "reply": "Very light. Lighter than a feather? Maybe.",
+              "reply": "Very light. Lighter than a leaf? Maybe.",
               "expr": "happy",
               "set": {
                 "balloon": "is very light"
@@ -12960,14 +12960,14 @@
             {
               "icon": "🦊",
               "label": "Come here",
-              "reply": "Come here! Tweet. …I came to myself. Code works.",
+              "reply": "Come here! Beep. …I came to myself. Code works.",
               "expr": "delighted",
               "goto": "b"
             },
             {
               "icon": "🎉",
               "label": "Party",
-              "reply": "Party! Tweet! Pretend party started.",
+              "reply": "Party! Beep! Pretend party started.",
               "expr": "delighted",
               "goto": "b"
             }
@@ -13442,7 +13442,7 @@
               "reply": "Tiny hat. Very wobbly hat.",
               "expr": "happy",
               "goto": "b",
-              "gesture": "preen"
+              "gesture": "groom"
             }
           ]
         },
@@ -14647,8 +14647,8 @@
             },
             {
               "icon": "🪶",
-              "label": "A feather",
-              "reply": "A feather tickle! Achoo-hoo.",
+              "label": "A leaf",
+              "reply": "A leaf tickle! Achoo-hoo.",
               "expr": "delighted",
               "goto": "b"
             },
@@ -14905,7 +14905,7 @@
           ]
         },
         "b": {
-          "say": "Feathers are tiny tickle machines.",
+          "say": "Leaves are tiny tickle machines.",
           "expr": "happy",
           "bond": 1
         }
@@ -15054,7 +15054,7 @@
               "reply": "Crunchy and tall. Bouncy bed!",
               "expr": "delighted",
               "goto": "b",
-              "gesture": "preen"
+              "gesture": "groom"
             },
             {
               "icon": "🛏️",
@@ -15337,7 +15337,7 @@
           "say": "Best voyage ever.",
           "expr": "happy",
           "bond": 1,
-          "gesture": "preen"
+          "gesture": "groom"
         }
       },
       "cond": {
@@ -16078,7 +16078,7 @@
           "expr": "happy",
           "next": "c",
           "wait": 2400,
-          "gesture": "preen"
+          "gesture": "groom"
         },
         "c": {
           "say": "It says {var:treeSign}. If you read squiggle.",
@@ -17238,7 +17238,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "I have a feather. I'm going to tickle my own nose. Science.",
+          "say": "I have a leaf. I'm going to tickle my own nose. Science.",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -17266,7 +17266,7 @@
               "icon": "🙅",
               "label": "@pool:no",
               "intent": "no",
-              "reply": "Okay. Feather rests. Good feather.",
+              "reply": "Okay. Leaf rests. Good leaf.",
               "expr": "happy"
             }
           ],
@@ -17495,7 +17495,7 @@
           "expr": "happy",
           "next": "b",
           "wait": 2400,
-          "gesture": "preen"
+          "gesture": "groom"
         },
         "b": {
           "say": "Ready? You count.",
@@ -17572,7 +17572,7 @@
           "wait": 2400
         },
         "b": {
-          "say": "Look. A big beak. Clack clack.",
+          "say": "Look. A big nose. Sniff sniff.",
           "expr": "happy",
           "next": "c",
           "wait": 2400,

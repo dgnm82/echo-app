@@ -56,7 +56,7 @@ function play(o){
     else if(f<42){img=f<35?echoImg('sil',1,true):echoImg('reveal',Math.min(1,(f-35)/6));if(f===34||f===35){sx=f===34?1.08:.94;sy=f===34?.92:1.08}}
     else img=echoImg('new');
     if(!lowfx&&!short&&f>=42&&f<49)dy=-[1,3,5,6,5,3,1][f-42];   // 7-frame hop
-    const w=Math.round(48*sx),h=Math.round(48*sy);wx.drawImage(img,ex+(48-w)/2|0,ey+48-h+dy,w,h);
+    const w=Math.round(48*sx),h=Math.round(48*sy);{const au=o.aura&&o.aura(col);if(au)wx.drawImage(au,(ex+(48-w)/2|0)-Math.round(13*w/48),ey+48-h+dy-Math.round(13*h/48),Math.round(au.width*w/48),Math.round(au.height*h/48))}wx.drawImage(img,ex+(48-w)/2|0,ey+48-h+dy,w,h);   // glow v1: the aura rides on the same frame/transform
     if(!lowfx&&!short){
       if(f>=14&&f<26){const t=(f-14)/11,r=42-34*t;gather.forEach((s,i)=>sparkle(wx,fcx+Math.cos(s.a+t*3)*r,fcy+Math.sin(s.a+t*3)*r,(s.ph+(f>>1))%4))}
       if(f>=42&&f<52){const t=f-42;burst.forEach(s=>sparkle(wx,fcx+Math.cos(s.a)*t*s.s*3,fcy+Math.sin(s.a)*t*s.s*3,t<3?2:(t>>1)%4));hearts.forEach(hh=>{if(t>=hh.d)heart(wx,hh.x,ey-(t-hh.d)*3)})}
