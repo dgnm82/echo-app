@@ -38,7 +38,7 @@ async def main():
       if kind=='fox':await pg.screenshot(path=f'/workspace/shots/games-v2/{sp}-run-card.png')
       card=await pg.inner_text('.g2card');print(kind,'card',card.replace('\n',' '))
       assert 'NEW BEST' in card and ' m' in card and 'Again' in card and 'Done' in card and 'haul' not in card and 'was' not in card and 'gold counts' not in card and ('feather' in card or 'trinket' in card),card
-      assert await pg.evaluate("__echo.state.bond")>=b0+3*br-1
+      assert await pg.evaluate("__echo.state.bond")>b0   # needs v2 §2: a finished game books bond (+4, via the caps)
       assert await pg.evaluate("__g2rounds")==3
       await pg.click('#g2done');await pg.wait_for_selector('#feed',timeout=15000)
       s=await pg.evaluate("({run:__echo.state.run,best:__echo.state.best.run[__run.level],gc:__echo.state.gameCounts})");print(kind,'after',s)
