@@ -15,7 +15,10 @@ function want(needs,metAt,shown){metAt=metAt||{};const c=Object.keys(N.rate).fil
   c.sort((a,b)=>needs[a]-needs[b]||(metAt[a]||0)-(metAt[b]||0));return c[0]||null}
 const step=v=>v<25?1:v<50?2:v<75?3:4;
 // handheld light: the lowest need's hue at its step (PWM duty = level^2.2); cream at 100 % when all >= 75
-function led(needs){const ks=Object.keys(N.rate),lo=ks.reduce((a,b)=>needs[b]<needs[a]?b:a);if(ks.every(k=>needs[k]>=75))return {hex:'#FFF6E6',level:1,duty:1,breathe:false};
+// glow v1 §4: o={glow,echoHex,swell}. A one-time swell (level step-up) and the G5 Ready shimmer use the Echo's own glow colour
+function led(needs,o){o=o||{};const ks=Object.keys(N.rate),lo=ks.reduce((a,b)=>needs[b]<needs[a]?b:a);
+  if(o.swell&&o.echoHex)return {hex:o.echoHex,level:1,duty:1,breathe:false,swell:true,swellMs:2000};
+  if(ks.every(k=>needs[k]>=75))return o.glow>=5&&o.echoHex?{hex:o.echoHex,level:1,duty:1,breathe:false,shimmer:{min:.7,max:1,periodS:6}}:{hex:'#FFF6E6',level:1,duty:1,breathe:false};
   const s=step(needs[lo]),level=[0,.2,.4,.7,1][s];return {hex:N.hue[lo],level,duty:Math.pow(level,2.2),breathe:s<=2,need:lo}}
 function meter(needs){const o={};for(const k in N.rate)o[k]={v:Math.round(needs[k]),step:step(needs[k]),hue:N.hue[k]};return o}
 // request pacing by level: 25-49 at most 2 a session, 1-24 at most 3; gap 120 s + (level-1)/48 x 180 s

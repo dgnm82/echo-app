@@ -20,7 +20,7 @@ function play(o){
   const ui=document.createElement('div');ui.className='bondup-ui';scr.appendChild(ui);
   const ex=o.echo.x,ey=o.echo.y,fcx=ex+24,fcy=ey+18;   // the Echo's 48x48 box + face centre (reveal origin)
   const sheet=o.sheet,col=11;   // happy-eyes column
-  const frameData=st=>{const c=document.createElement('canvas');c.width=48;c.height=48;const k=c.getContext('2d');k.drawImage(sheet,col*48,(Math.min(5,st)-1)*48,48,48,0,0,48,48);return k.getImageData(0,0,48,48)};
+  const frameData=st=>{const c=document.createElement('canvas');c.width=48;c.height=48;const k=c.getContext('2d');k.drawImage(sheet,col*48,0,48,48,0,0,48,48);return k.getImageData(0,0,48,48)};
   const oldF=frameData(o.from),newF=frameData(o.to);
   const dist=(x,y)=>{const d=Math.hypot(x+ex-fcx,y+ey-fcy)/34;return Math.min(1,d)};
   const tmp=document.createElement('canvas');tmp.width=48;tmp.height=48;const tk=tmp.getContext('2d');

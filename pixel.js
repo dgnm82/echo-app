@@ -29,17 +29,56 @@ const MISS={};function probe(url,fb){if(url===fb||MISS[url]!=null)return;MISS[ur
   im.onerror=()=>{MISS[url]=2;try{document.querySelectorAll('.px-echo').forEach(el=>{for(const k of ['_base']){if(el[k]&&el[k].includes(url))el[k]=el[k].split(url).join(fb)}if(el.style.backgroundImage.includes(url))el.style.backgroundImage=el.style.backgroundImage.split(url).join(fb)})}catch(e){}};im.src=url+'.png'}   // missing look sheet: fall back to the family sheet
 function sheetBase(sp,g){const v=variant(g&&g.seed,sp,g&&g.pal),l=lookOf(sp,g,v.pal),fb=`px/${sp}_${v.pal}_f${v.fluff}`,u=l&&MISS[`px/${sp}_${l}_${v.pal}_f${v.fluff}`]!==2?`px/${sp}_${l}_${v.pal}_f${v.fluff}`:fb;if(l)probe(u,fb);return {v,u}}
 function label(sp,g){const F=W.FAMILIES;return String((g&&g.name)||(F&&F[sp]&&F[sp].label)||'').replace(/"/g,'')}   // screen-reader name: the Echo's own name, else the family word
-function whimber(g,stage){const {u}=sheetBase('whimber',g);stage=stage||stageNow();
+function whimber(g,stage){const {u,v}=sheetBase('whimber',g),lt=stage===1;stage=stage||stageNow();
   {const pre=new Image();pre.src=`${u}_fly.png`}   // v1.1: no flash on the first take-off
-  return `<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" style="background-image:url(${u}.png)"></div>`}
-function slyte(g,stage){const {u}=sheetBase('slyte',g);stage=stage||stageNow();
-  return `<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" style="background-image:url(${u}.png)"></div>`}
+  return `${lt?'':'<canvas class="aura" width="74" height="65" aria-hidden="true"></canvas>'}<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)"></div>`}
+function slyte(g,stage){const {u,v}=sheetBase('slyte',g),lt=stage===1;stage=stage||stageNow();
+  return `${lt?'':'<canvas class="aura" width="74" height="65" aria-hidden="true"></canvas>'}<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)"></div>`}
+// ---- glow v1.1 (handoff/glow_v1.md §2): the Echo keeps its origin colour; bond grows an aura in its OWN colour (G1..G5).
+// Runtime outline glow: octagonal dilation of the frame alpha -> dithered bands (rim, glow) + seeded white sparkles. Opaque px only.
+let AURA=null,LASTLV=0;try{fetch('px/aura.json').then(r=>r.json()).then(j=>{AURA=j;document.querySelectorAll('.px-echo').forEach(e=>{e._ak=null;auraDraw(e)})}).catch(()=>{})}catch(e){}
+function glowLevel(bond,ready){if(ready)return 5;const b=bond||0;return b>=370?4:b>=210?3:b>=70?2:1}
+function lowFxNow(){try{const S=W.__echo&&W.__echo.state;return !!(S&&S.lowfx)||!!(W.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}}
+function curGlow(){try{return (W.__echo&&W.__echo.glow)?W.__echo.glow():1}catch(e){return 1}}
+function gAttr(lt,v){return lt?'data-light="1" data-glow="0"':`data-glow="${curGlow()}" data-pal="${v.pal}"`}
+const IMG={};function img(u){let i=IMG[u];if(!i){i=IMG[u]=new Image();i.onload=()=>document.querySelectorAll('.px-echo').forEach(e=>{e._ak=null;auraDraw(e)});i.src=u}return i}
+function dilate(a,w,h,n){const dist=new Uint8Array(w*h).fill(99);let cur=new Uint8Array(w*h);for(let i=0;i<w*h;i++)if(a[i]){cur[i]=1;dist[i]=0}
+  for(let s=1;s<=n;s++){const nx=new Uint8Array(cur);for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(cur[y*w+x])continue;let on=0;
+      for(let b=-1;b<=1&&!on;b++)for(let c=-1;c<=1&&!on;c++){if(s%2===0&&b&&c)continue;const X=x+c,Y=y+b;if(X>=0&&Y>=0&&X<w&&Y<h&&cur[Y*w+X])on=1}
+      if(on){nx[y*w+x]=1;dist[y*w+x]=s}}cur=nx}return dist}
+const hex=c=>[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16),255];
+// img/sx/sy/sw/sh: the source frame; level 1..5; pal: the Echo palette. o.bands overrides (origin strip), o.ring limits the
+// painted distance (step-up), o.phase = G5 shimmer phase, o.seed = Echo seed. Returns a canvas padded 13 px (scaled) L/T/R, 4 px below.
+const ACACHE={};
+function aura(im,sx,sy,level,pal,o){o=o||{};if(!AURA||!im||!im.complete||!im.naturalWidth||!level)return null;const sw=o.sw||N,sh=o.sh||N,k=sh/48;
+  const L=AURA.levels[level],RO=AURA.roles[pal]||AURA.roles[Object.keys(AURA.roles)[0]],ph=o.phase||0;
+  const bands=o.bands||L.bands.map(([w,r,d],i,A)=>[Math.max(1,Math.round(w*k)),r,(level===5&&ph&&i===A.length-1)?6:d]);
+  const R=bands.reduce((a,b)=>a+b[0],0),P=o.bands?Math.max(R+1,7):Math.round(13*k),PB=o.bands?Math.max(2,Math.round(P/3)):Math.round(4*k),w=sw+2*P,h=sh+P+PB;
+  const key=[im.src,sx,sy,sw,sh,level,pal,ph,o.ring==null?'':o.ring,o.seed||0,o.bands?'s':''].join('|');if(ACACHE[key])return ACACHE[key];
+  const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(im,sx,sy,sw,sh,P,P,sw,sh);
+  const d0=x.getImageData(0,0,w,h),a=new Uint8Array(w*h);for(let i=0;i<w*h;i++)a[i]=d0.data[i*4+3]?1:0;
+  const dist=dilate(a,w,h,R),out=x.createImageData(w,h),D=out.data,col={rim:hex(RO.rim[level-1]),glow:hex(RO.glow)},B4=AURA.bayer4,lim=o.ring==null?R:o.ring;
+  for(let y=0;y<h;y++)for(let X=0;X<w;X++){const dd=dist[y*w+X];if(!dd||dd===99||dd>lim)continue;let acc=0;
+    for(const [bw,r,den] of bands){acc+=bw;if(dd<=acc){if(B4[y%4][X%4]<den){const q=(y*w+X)*4,cc=col[r];D[q]=cc[0];D[q+1]=cc[1];D[q+2]=cc[2];D[q+3]=255}break}}}
+  if(!o.bands&&(o.ring==null||o.ring>=R)){const r=rng((o.seed||1)+level+(ph?2:0)),sp=hex(AURA.spark);
+    for(let i=0;i<L.sparkles;i++){const X=2+Math.floor(r()*(w-4)),y=2+Math.floor(r()*(h*.75-2));if(a[y*w+X])continue;const put=(px,py,cc)=>{if(a[py*w+px])return;const q=(py*w+px)*4;D[q]=cc[0];D[q+1]=cc[1];D[q+2]=cc[2];D[q+3]=255};
+      put(X,y,sp);if(L.cross&&i%2===0)for(const [u,v] of [[1,0],[-1,0],[0,1],[0,-1]])put(X+u,y+v,col.rim)}}
+  x.putImageData(out,0,0);ACACHE[key]=c;return c}
+// paint the sibling canvas.aura of a home sprite; repaints only when frame / level / phase change. Step-up: one ring per 2 ticks.
+function auraDraw(el){const cv=el.previousElementSibling;if(!cv||!cv.classList||!cv.classList.contains('aura'))return;
+  const lv=+el.dataset.glow||0,lowfx=lowFxNow();if(el._ev&&el._ev.kind==='arrival'||el.dataset.light){if(el._ak!=='none'){cv.getContext('2d').clearRect(0,0,74,65);el._ak='none'}return}
+  const R=AURA?AURA.radius[lv]||0:0;if(el._lv==null)el._lv=Math.min(lv,LASTLV||lv);LASTLV=Math.max(LASTLV||0,lv);if(lv>el._lv){el._ring=lowfx?R:(AURA?AURA.radius[el._lv]||0:0);el._lv=lv;el._rk=0}
+  if(el._ring!=null&&++el._rk>=2){el._rk=0;el._ring++;if(el._ring>=R)el._ring=null}
+  const ph=lv===5&&!lowfx?((Date.now()/3000|0)%2):0,m=/url\("?([^")]+)"?\)/.exec(el.style.backgroundImage||'');if(!m)return;
+  const bp=(el.style.backgroundPosition||'0px 0px').split(' ').map(v=>-parseInt(v)||0),key=[m[1],bp,lv,ph,el._ring].join('|');if(key===el._ak)return;
+  const c=aura(img(m[1]),bp[0],bp[1],lv,el.dataset.pal,{phase:ph,ring:el._ring,seed:(W.__echo&&W.__echo.state&&W.__echo.state.g&&W.__echo.state.g.seed)||1});
+  const x=cv.getContext('2d');x.clearRect(0,0,74,65);if(c)x.drawImage(c,0,0);el._ak=c?key:null}
 // ---- 12 fps clock: idle loop + random blink / ear flick / tail flick, expression overrides
 // one-shot event animations from the _ev sheet (guide 9.2): arrival (P0) and release dissolve (P1, must ship)
 const EV={arrival:{row:0,t:[1,1,1,1,1,1,1,1,1,1,1,3,2,2,6]},release:{row:1,t:[3,2,1,1,1,1,1,2,1,1,2,3,3]}};
-function event(el,kind,cb){if(!el)return;const e=EV[kind];if(!el._base)el._base=el.style.backgroundImage;
+function event(el,kind,cb){if(!el)return;const e=EV[kind];if(el.dataset.light){el.style.backgroundImage=el.style.backgroundImage.replace('_light.png','.png');delete el.dataset.light;el._base=null}if(!el._base)el._base=el.style.backgroundImage;
   el._ev={kind,row:e.row,t:e.t,i:0,k:0,cb};el.style.backgroundImage=el._base.replace('.png','_ev.png');evStep(el)}
-function evStep(el){const v=el._ev;el.style.backgroundPosition=`${-v.i*N}px ${-v.row*N}px`;el._col='ev'+v.row+':'+v.i;
+function evStep(el){const v=el._ev;el.style.backgroundPosition=`${-v.i*N}px ${-v.row*N}px`;el._col='ev'+v.row+':'+v.i;auraDraw(el);
   if(++v.k>=v.t[v.i]){v.k=0;v.i++;if(v.i>=v.t.length){el._ev=null;if(v.kind==='release'){el.style.visibility='hidden'}else{el.style.backgroundImage=el._base}
     try{v.cb&&v.cb()}catch(e){console.error(e)}}}}
 function step(el){if(el._ev)return evStep(el);if(el._fly)return flyStep(el);const st=+el.dataset.stage||1,ex=el.getAttribute('data-expr')||'neutral';let s=el._s;
@@ -57,7 +96,7 @@ function step(el){if(el._ev)return evStep(el);if(el._fly)return flyStep(el);cons
         if(--s.ne<=0){s.q.push([FR.ear1,2],[FR.ear2,2]);s.ne=rand(48,108)} // ear flick
         if(--s.nt<=0){s.q.push([FR.tail1,2],[FR.tail2,2],[FR.tail1,1]);s.nt=rand(60,120)} // tail flick
         if(++s.hold>=IDLE_T[s.i]*(sleepy?1.4:1)){s.hold=0;s.i=(s.i+1)%6}col=FR.idle[s.i]}
-  el.style.backgroundPosition=`${-col*N}px ${-(st-1)*N}px`;el._col=col}
+  if(el.dataset.light)col=FR.idle[s.i];el.style.backgroundPosition=`${-col*N}px 0px`;el._col=col;auraDraw(el)}   // glow v1: one row, the aura carries the bond
 const rand=(a,b)=>a+Math.floor(Math.random()*(b-a));
 setInterval(()=>document.querySelectorAll('.px-echo').forEach(step),TICK);
 // ---- integer scaling: 180x320 virtual phone screen, largest whole device-pixel multiple, letterboxed
@@ -78,7 +117,7 @@ function queue(el,seq,add){if(!el||el._ev)return;if(!el._s)step(el);const q=seq.
 function fly(el,on){if(!el||el._ev||!el.classList.contains('owl'))return;if(!el._base)el._base=el.style.backgroundImage;
   if(on&&!el._fly){el._fly={i:0,k:0};el.style.backgroundImage=el._base.replace('.png','_fly.png');flyStep(el)}
   else if(!on&&el._fly){el._fly=null;el.style.backgroundImage=el._base;if(el._s)el._s.q=[]}}
-function flyStep(el){const f=el._fly,st=+el.dataset.stage||1;el.style.backgroundPosition=`${-f.i*N}px ${-(st-1)*N}px`;el._col='fly'+f.i;if(++f.k>=2){f.k=0;f.i=(f.i+1)%4}}
+function flyStep(el){const f=el._fly;el.style.backgroundPosition=`${-f.i*N}px 0px`;el._col='fly'+f.i;auraDraw(el);if(++f.k>=2){f.k=0;f.i=(f.i+1)%4}}
 function blink(el,slow){queue(el,[[FR.blink,slow?5:2]],true)}   // slow blink on pet / love lines; a blink on every turn
 function react(el,kind){if(!el||el._ev)return;const r=REACT[kind];if(!r)return;if(!el._s)step(el);el._s.q=r.map(x=>x.slice())}
 // pixel icons (16x16, guide 8). Emoji in care/dialogue data map to icons; dialogue choices fall back to their reply intent.
@@ -88,5 +127,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={fort:'fort/b_window',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={glowLevel,aura,auraDraw,get AURA(){return AURA},queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();

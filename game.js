@@ -25,7 +25,8 @@ function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document
 // needs v2 §6: corner glows inside #sc (bottom pair sits above the dock); step rises one level per 166 ms, at once under lowFx
 const MT_IC={food:'feed',play:'play',comfort:'pet',rest:'sleep'};
 function meterHTML(){const m=NeedsV2.meter(S.needs),sl=mood()==='sleep';return `<div class="meters${sl?' off':''}" aria-hidden="true">${Object.keys(MT_IC).map(k=>`<i class="mt mt-${k}" data-s="${m[k].step}" style="background-image:url(px/meter/${k}_s${m[k].step}.png)"></i><b class="mti mti-${k}" style="background-image:url(px/icon_${MT_IC[k]}.png)"></b>`).join('')}</div>`}
-function meterRefresh(){const box=document.querySelector('#sc .meters');if(!box)return;box.classList.toggle('off',mood()==='sleep');const m=NeedsV2.meter(S.needs);
+function meterRefresh(){const box=document.querySelector('#sc .meters');if(!box)return;glowSync();{const au=document.querySelector('#cr canvas.aura'),r=au&&au.getBoundingClientRect();   // glow v1 §6 keep-out: a corner the aura box touches goes under the Echo layer
+    box.querySelectorAll('.mt').forEach(e=>{const q=e.getBoundingClientRect();e.classList.toggle('under',!!r&&!(r.right<=q.left||r.left>=q.right||r.bottom<=q.top||r.top>=q.bottom))})}box.classList.toggle('off',mood()==='sleep');const m=NeedsV2.meter(S.needs);
   for(const k in MT_IC){const el=box.querySelector('.mt-'+k),to=m[k].step;if(!el)continue;clearInterval(el._t);const set=v=>{el.dataset.s=v;el.style.backgroundImage=`url(px/meter/${k}_s${v}.png)`};
     let cur=+el.dataset.s;if(lowFx()||to<=cur){set(to);continue}el._t=setInterval(()=>{cur++;set(cur);if(cur>=to)clearInterval(el._t)},166)}}
 function thoughtRefresh(){meterRefresh();const sc=document.getElementById('sc'),c=document.getElementById('cr');if(!sc||!c)return;let t=sc.querySelector('.thought');const w=want(),show=w&&mood()!=='sleep';
@@ -178,6 +179,13 @@ function obNameCheck(raw){const t=String(raw||'').trim().replace(/\s+/g,' ');if(
 // --- decline (origin §3): deterministic hash; never first Echo, never for borrowed colours, at most once per origin, always-yes setting
 function obHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)/4294967296}
 function orDeclines(){const o=S.origin;return !!(o&&o.idx>0&&!o.declined&&!S.alwaysYes&&o.src!=='borrowed'&&obHash(`${S.oseed}|${o.idx}|${o.attempt}`)<OBC.decline.rate)}
+// glow v1 §5: origin strip cell = the chosen colour at G1/G2/G3/G5, 28 px sprite on a 42x38 cell, strip28 bands
+function obGlow(fid,seed,pal,l){return `<canvas class="obglow" width="42" height="38" data-l="${l}" data-fid="${fid}" data-seed="${seed}" data-pal="${pal||''}"></canvas>`}
+function obGlowPaint(){document.querySelectorAll('canvas.obglow:not([data-done])').forEach(c=>{const A=PIXEL.AURA,f=FAM()[c.dataset.fid],sp=f.sprite,g={seed:+c.dataset.seed,pal:c.dataset.pal||undefined},v=PIXEL.variant(g.seed,sp,g.pal);
+  const im=new Image();im.onload=()=>{const t=document.createElement('canvas');t.width=28;t.height=28;const k=t.getContext('2d');k.imageSmoothingEnabled=false;k.drawImage(im,0,0,48,48,0,0,28,28);
+    const tim=new Image();tim.onload=()=>{const au=PIXEL.aura(tim,0,0,+c.dataset.l,v.pal,{sw:28,sh:28,bands:A&&A.strip28[c.dataset.l]}),x=c.getContext('2d');x.imageSmoothingEnabled=false;x.fillStyle='#2A1F45';x.fillRect(0,0,42,38);
+      if(au)x.drawImage(au,Math.round((42-au.width)/2),38-au.height);x.drawImage(tim,7,38-28-Math.max(2,Math.round((au?au.width-28:14)/6)));c.dataset.done=1};tim.src=t.toDataURL()};
+  im.src=PIXEL.sheet(sp,g)})}
 function obSprite(fid,seed,pal,stage,look){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal,look:look||(S&&S.origin&&S.origin.animal&&S.origin.family===fid?(FAM().animals[S.origin.animal].look||f.look_default):f.look_default)},stage||1):''}
 function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
@@ -267,8 +275,8 @@ function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=documen
   const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
   $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
   setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
-  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,4].map(s=>`<span>${obSprite(fid,o.seed,o.ramp,s)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
-    $('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
+  setTimeout(()=>{app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+    obGlowPaint();if(!PIXEL.AURA)setTimeout(obGlowPaint,600);$('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
 // P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
 function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
   $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();const hum=document.querySelector('.orinvite .obpanel');if(hum)hum.remove();
@@ -841,7 +849,7 @@ function fortBuilder(round){round=0;
 }
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
 function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
-  return {pd:`run/${pal}/${st>=4?'':'s'+Math.min(Math.max(st,1),3)+'/'}`,sk:'stage'+Math.min(Math.max(st,1),4),row:Math.min(4,Math.max(0,st)),fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
+  return {pal,pd:`run/${pal}/`,sk:'stage4',row:0,fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
 function g2Img(IM,k,src){const im=IM[k]=new Image();im.src=src;return im}
 const g2ok=im=>im&&im.complete&&im.naturalWidth;
 function g2Loop(step,draw){let acc=0,last=performance.now(),alive=true;function tick(t){if(!alive)return;acc+=Math.min(.1,(t-last)/1000);last=t;while(acc>=1/60&&alive){step(1/60);acc-=1/60}if(alive)draw();requestAnimationFrame(tick)}requestAnimationFrame(t=>{last=t;tick(t)});return ()=>{alive=false}}
@@ -1005,7 +1013,7 @@ function runGame(){
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
-  const pd=`run/${pal}/${PIXEL.stageNow()>=4?'':'s'+Math.min(Math.max(PIXEL.stageNow(),1),3)+'/'}`;   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
+  const pd=`run/${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   window.__runHome=null;if(S.badges.includes('place')){const m=/url\(([^)]*)\)/.exec(fortProp());if(m){IM.homeRest=new Image();IM.homeRest.src=m[1].replace(/["']/g,'');window.__runHome=IM.homeRest.src}}
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
@@ -1035,7 +1043,7 @@ function runGame(){
     if(fox&&g.disguised>0)k=g.disguised<.2?'reveal':'disguise'+(Math.floor(g.t*4)%2);   // Master of Disguise: the secretly-Slyte bush, then the pop-out
     const im=IM[k];if(!im)return;const x=fox?16:20,y=Math.round(g.y-48+(fox?0:6));
     if(g.tumble>0&&!lowFx()){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
-    else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;cx.drawImage(im,x,y)}cx.globalAlpha=1;
+    else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;const au=im.complete&&PIXEL.aura(im,0,0,GL,pal,{sw:im.naturalWidth,sh:im.naturalHeight,seed:S.g.seed});if(au){const P=Math.round(13*im.naturalHeight/48);cx.drawImage(au,x-P,y-P)}cx.drawImage(im,x,y)}cx.globalAlpha=1;
     for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
   function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+RunnerEngine.haul(g);if(cheered)$('#rm').classList.add('gold')}
   function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
@@ -1079,6 +1087,10 @@ const FWC=()=>Object.assign({glanceFromBond:140,restlessBond:440,readyBond:500,r
   graceDays:C.graceDays||3,longAbsenceDays:14,calmAfterMs:60000,lineMs:0,thanksWindowMs:5000},C.farewell||{});
 function fw(){return S.fw=S.fw||{state:'active',almostDays:[],graceDays:[],list:[],step:null}}
 function fwToday(){return new Date(now()).toDateString()}
+// glow v1.1 §3: bond -> aura level 1..4 (needs_v2 tiers), 5 only when Ready / release path. Never dims (S.glowMax).
+function glowLevel(){if(!S)return 1;let rd=false;try{rd=!!(S.released||S.releasePath||fwReady())}catch(e){}return PIXEL.glowLevel(S.bond,rd)}
+function glowNow(){if(!S)return 1;const l=glowLevel(),m=S.glowMax||0;if(l>m){if(m)sess.swell=now();S.glowMax=l}return S.glowMax}
+function glowSync(){const px=document.querySelector('#cr .px-echo');if(px&&!px.dataset.light)px.dataset.glow=glowNow()}
 function fwReady(){const c=FWC(),d=(now()-(S.met||now()))/864e5;if(fw().grandfather&&S.bond>=c.readyBond)return true;
   return (S.bond>=c.readyBond&&d>=c.readyDays&&(S.days||1)>=c.readySessionDays)||(d>=c.altDay&&S.bond>=c.altBond)}
 function fwShowPath(){return ['almost_ready','grace','walking'].includes(fw().state)}
@@ -1277,6 +1289,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>NeedsV2.led(S.needs),simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

@@ -41,7 +41,7 @@ function draw(){const v=PIXEL.variant(seed,SP),sh=img['s'+v.pal+v.fluff];x.fillS
   if(anim){const k=anim.n;if(anim.a==='sleep')col=k<6?PIXEL.FR.sl1:PIXEL.FR.nap1;else if(anim.a==='feed')col=k%4<2?PIXEL.FR.eat1:PIXEL.FR.eat2;else if(anim.a==='pet')col=k%6<3?PIXEL.FR.pet1:PIXEL.FR.pet2;else col=PIXEL.FR.happy;if(anim.a==='play')dy=-[0,3,6,8,8,6,3,0][Math.min(7,k%8)];}
   else if(t%40>=38)col=SP==='whimber'&&t%80>=40?PIXEL.FR.think:PIXEL.FR.blink;   // Whimber blinks one eye at a time
   else if(SP==='whimber'&&t%90>=84)col=PIXEL.FR.tail1;
-  x.drawImage(sh,col*48,(stage()-1)*48,48,48,6,10+dy,48,48);
+  x.drawImage(sh,col*48,0,48,48,6,10+dy,48,48);
   // choice bar (20 rows): four 15x20 cells
   x.fillStyle='#3B2A5C';x.fillRect(0,60,60,20);
   ACTS.forEach((a,i)=>{const cx=i*15,pr=sel===i;x.fillStyle='#1f1838';x.fillRect(cx,60,15,20);x.fillStyle=pr?'#F2A65A':'#FFD27A';x.fillRect(cx+1,61+(pr?2:0),13,pr?17:16);

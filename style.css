@@ -225,7 +225,7 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 @keyframes ornote{0%{transform:translateY(0);opacity:0}30%{opacity:1}100%{transform:translateY(-24px);opacity:0}}
 .ormote{position:absolute;width:6px;height:6px;left:50%;top:40%;animation:ormote 1.8s steps(12) forwards}.ormote.m1{animation-delay:.3s}.ormote.m2{animation-delay:.6s}
 @keyframes ormote{0%{transform:rotate(0) translateX(40px)}80%{transform:rotate(540deg) translateX(10px);opacity:1}100%{transform:rotate(720deg) translateX(0);opacity:0}}
-.orstrip{display:flex;gap:0;justify-content:center;margin-top:3px;height:30px;overflow:hidden}.orstrip span{zoom:.33;display:block}
+.orstrip{display:flex;gap:0;justify-content:center;margin:3px auto 0;height:38px;width:168px;overflow:hidden;background:#2A1F45}.orstrip span{display:block;width:42px;height:38px}.orstrip canvas{display:block;image-rendering:pixelated}
 .orinvite .bubble,.orname .bubble{position:relative!important;top:auto!important;left:auto!important;max-width:168px}
 @media (prefers-reduced-motion:reduce){.ornote,.ormote,.obtap,.orlightform{animation:none!important;transition:none!important}.ormote{display:none}.ornote.b{display:none}.orlightform.drift{transition:opacity 1.2s steps(4)!important;transform:none}}
 .ortoy{margin-top:2px}

@@ -635,7 +635,7 @@
     ],
     "ui_or_keep_colours": [
       {
-        "text": "It's keeping your {var:origin_animal}'s colour. It glows brighter as you get to know each other.",
+        "text": "It's keeping your {var:origin_animal}'s colour. The more you play together, the brighter it glows.",
         "expr": "happy"
       }
     ],
