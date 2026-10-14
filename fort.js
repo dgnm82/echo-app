@@ -1,6 +1,6 @@
 // Fort Builder engine (game spec v0.2 §3): a gentle falling-blocks game that builds Slyte's treehouse fort.
-// Pure logic (no DOM) so it can be unit-tested in node. Full rows never vanish: they become a finished floor
-// row and slide into the "home so far" strip; 3 rows make a floor. There is no game over.
+// Pure logic (no DOM) so it can be unit-tested in node. Rows never clear: the build grows
+// until it reaches the roof line, which ends the game.
 (function(root){
 const SHAPES={ // [cells] in a 4x4 box; rotation is computed
   domino:[[0,0],[1,0]], I3:[[0,0],[1,0],[2,0]], L3:[[0,0],[0,1],[1,1]],
@@ -51,12 +51,13 @@ function finishRow(g,y,auto){const row=g.grid[y];const gaps=row.filter(c=>!c).le
   g.strip.push(row.map(c=>c||'window'));if(!gaps)g.gapFree++; // gaps become windows and nooks
   g.grid.splice(y,1);g.grid.unshift(Array(g.w).fill(null));g.rows++;g.events.push({type:auto?'row-auto':'row',gaps})}
 function roof(g){if(g.done)return;g.done=true;g.piece=null;g.events.push({type:'roof',height:height(g),tidy:g.gapFree})}
-function height(g){return g.rows+(g.h-stackTop(g))}
+function height(g){return g.h-stackTop(g)}
 function stackTop(g){for(let y=0;y<g.h;y++)if(g.grid[y].some(c=>c))return y;return g.h}
 function settle(g){const p=g.piece;p.cells.forEach(([cx,cy],i)=>{const Y=p.y+cy;if(Y>=0)g.grid[Y][p.x+cx]=p.mats[i]});g.placed++;
   if(p.mats.includes('slyte'))g.events.push({type:'disguise'});
   g.events.push({type:'settle'});
-  const need=fillNeed(g);for(let y=g.h-1;y>=0;){if(g.grid[y].filter(c=>c).length>=need&&g.grid[y].some(c=>c)){finishRow(g,y,false)}else y--}
+  // playtest (games_v2 §3.2): rows never clear. The stack just grows; 'rows' is the height built, the roof ends the game
+  const top=stackTop(g),was=g.rows;g.rows=g.h-top;g.gapFree=g.grid.filter(r=>r.every(c=>c)).length;if(g.rows>was)g.events.push({type:'grow',rows:g.rows});
   g.fallMs=fallMs(g);
   if(stackTop(g)<BT(g).roofRows){roof(g);return 'roof'}
   spawn(g);return g.done?'roof':'settle'}

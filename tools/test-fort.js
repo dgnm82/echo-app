@@ -6,13 +6,13 @@ T('a) levels follow GAMES_TUNING.BUILD fall ms at h 0/12/24/30 and PIECE_STEPS',
   for(let s=1;s<200;s++){const g=F.create({level:'easy',seed:s});assert(g.piece.cells.length<=3)}
   assert.equal(F.fallMs(F.create({level:'easy'})),0)});
 T('b) phone board 8x12, handheld 5x6',()=>{let g=F.create({});assert.equal(g.w,8);assert.equal(g.h,12);g=F.create({w:5,h:6});assert.equal(g.grid.length,6);assert.equal(g.grid[0].length,5)});
-T('c) a row finishes at fill(h) cells; its gaps become windows in the strip',()=>{const g=F.create({level:'easy',seed:3});const need=F.fillNeed(g);
+T('c) playtest: a full row never clears; it stays on the board',()=>{const g=F.create({level:'easy',seed:3});const need=F.fillNeed(g);
   g.grid[11]=Array(8).fill(null).map((_,i)=>i<need-1?'plank':null);g.piece={name:'domino',cells:[[0,0],[0,1]],mats:['plank','plank'],x:7,y:0};
-  F.drop(g);assert.equal(g.rows,1);assert(g.strip[0].includes('window'))});
-T('d) random play always ends with a roof event within 2000 moves; height = rows + (h - stackTop)',()=>{
+  g.grid[11]=Array(8).fill('plank');g.grid[11][7]=null;F.drop(g);assert(g.grid[11].every(c=>c),'row kept');assert.equal(g.rows,2);assert(!F.take(g).some(e=>e.type==='row'||e.type==='row-auto'))});
+T('d) random play always ends with a roof event within 2000 moves; height = h - stackTop',()=>{
   for(const level of ['easy','standard','bigkid'])for(let s=1;s<=20;s++){const g=F.create({level,seed:s});let i=0,ev=[];
     while(!g.done&&i++<2000){if(g.piece){F.move(g,Math.floor(Math.random()*3)-1);if(Math.random()<.3)F.rotate(g);F.drop(g)}ev.push(...F.take(g))}
-    const r=ev.find(e=>e.type==='roof');assert(g.done&&r,level+' seed '+s);assert.equal(r.height,g.rows+(g.h-F.stackTop(g)))}});
+    const r=ev.find(e=>e.type==='roof');assert(g.done&&r,level+' seed '+s);assert.equal(r.height,g.h-F.stackTop(g))}});
 T('e) no high event ever (pan removed); stars = min(3, gapFree) at every level',()=>{for(let s=1;s<=10;s++){const g=F.create({level:'standard',seed:s});let ev=[];
   while(!g.done){F.drop(g);ev.push(...F.take(g))}assert(!ev.some(e=>e.type==='high'))}
   for(const level of ['easy','standard','bigkid']){const g=F.create({level});g.gapFree=5;assert.equal(F.stars(g),3)}});

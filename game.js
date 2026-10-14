@@ -780,9 +780,8 @@ function fortBuilder(round){round=0;
     <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
       <div class="fbmeter" id="fbmeter" aria-label="Height"></div><div class="fbh" id="fbh">0</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
     <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
-    <canvas id="fbs" class="fbstrip" width="${W}" height="24" style="width:${W}px" aria-label="Home so far"></canvas>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
-  const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d'),sx=$('#fbs').getContext('2d');
+  const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d');
   const IM={};['plank','window','leafroof','door','lantern','flag','slyte'].forEach(k=>{IM[k]=new Image();IM[k].src=`px/${DIR}/b_${k}.png`;IM['m_'+k]=new Image();IM['m_'+k].src=`px/${DIR}/m_${k==='slyte'?'plank':k}.png`});
   IM.ghost=new Image();IM.ghost.src='px/fort/ghost.png';[0,1,2].forEach(i=>{IM['glow'+i]=new Image();IM['glow'+i].src=`px/fort/glow${i}.png`});
   let glowRows=0,glowT=0,alive=true,rowsSaid=0;
@@ -792,9 +791,6 @@ function fortBuilder(round){round=0;
     const p=g.piece;if(p){const gy=FortEngine.ghostY(g);if(gy!==p.y&&FortEngine.ghostOn(g))p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
       p.cells.forEach(([a,b],i)=>{if(p.y+b>=0)cx.drawImage(IM[p.mats[i]],(p.x+a)*16,(p.y+b)*16)})}
     nx.clearRect(0,0,32,32);const q=g.next;if(q){const s=q.cells.length>3||Math.max(...q.cells.map(c=>c[0]))>1?8:16;q.cells.forEach(([a,b],i)=>nx.drawImage(IM[q.mats[i]],a*s,b*s,s,s))}
-    sx.fillStyle='#1f1838';sx.fillRect(0,0,W,24);const rows=g.strip.slice(-3);
-    rows.forEach((r,j)=>r.forEach((c,x)=>sx.drawImage(IM['m_'+(c==='slyte'?'plank':c)],x*8+(W-g.w*8)/2,24-8*(rows.length-j))));
-    if(glowRows>0){sx.drawImage(IM['glow'+(glowT%3)],0,24-8*Math.min(3,glowRows),W,8*Math.min(3,glowRows));glowT++;if(glowT>8){glowRows=0;glowT=0}}
     const h0=FortEngine.height(g);$('#fbmeter').innerHTML=Array.from({length:24},(_,i)=>`<i class="${i<h0?'on':''}${best0&&i===best0-1&&h0<=best0?' best':''}"></i>`).join('');$('#fbh').textContent=h0;$('#fbh').className='fbh'+(best0&&h0>best0?' gold':'');
     cx.fillStyle='#FFD27A';for(let x=0;x<W;x+=4)cx.fillRect(x,16,2,1);
     if($('#fbstars'))$('#fbstars').innerHTML=Array.from({length:3},(_,i)=>window.PIXEL?PIXEL.icon(i<FortEngine.stars(g)?'sticker':'talk').replace('class="pxi"',`class="pxi${i<FortEngine.stars(g)?'':' dim'}"`):'').join('');}
