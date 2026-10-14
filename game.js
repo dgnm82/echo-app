@@ -756,8 +756,7 @@ function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g
 const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],builder:['WHAT A FORT!','WHAT A HOLLOW!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
 function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.kind==='fox',low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
   const bl=o.firstEver?'Our first best!':o.isBest?`NEW BEST! <small>was ${o.was}</small>`:`Best ${o.best}`;
-  gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${low?o.score:0}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
-  if(!low){let i=0;const st=20,iv=setInterval(()=>{i++;const el=$('#g2n');if(!el){clearInterval(iv);return}el.textContent=Math.round(o.score*Math.min(1,i/st));if(i>=st)clearInterval(iv)},60)}
+  gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
   SFX('run_finale',{vol:.7});save();
   $('#g2done').onclick=()=>endGame(true);
   $('#g2again').onclick=()=>{if(sess.games>=C.sessionLimits.games){endGame(true);return setTimeout(()=>talk(B('game_tired')),400)}fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
@@ -914,12 +913,12 @@ function stackGame(){
     if(plop&&plop.t<16){const im=IM['burst'+Math.min(3,lowFx()?0:plop.t>>2)];if(g2ok(im))cx.drawImage(im,Math.round(plop.x+plop.w/2-12),BASE+4,24,24);plop.t++}
     if(best0>0){const y=yOf(best0-1);cx.fillStyle='#FFD27A';for(let x=0;x<180;x+=4)cx.fillRect(x,y,2,1);cx.beginPath();cx.moveTo(170,y-6);cx.lineTo(178,y-3);cx.lineTo(170,y);cx.fill()}
     if(fox){if(g2ok(IM.home))cx.drawImage(IM.home,0,0,48,48,2,248,48,48)}else if(g2ok(IM.fly)){const fi=lowFx()?0:(F/6|0)%4;cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,132,Math.max(40,yOf(g.h)-40),48,48)}
-    $('#sh').textContent=g.h;$('#sp').textContent='•'.repeat(g.run%((g.L.regrowAfter)||3))}
+    $('#sh').textContent=StackEngine.result(g).h;$('#sp').textContent='•'.repeat(g.run%((g.L.regrowAfter)||3))}
   const stopLoop=g2Loop(step,draw);
   function stop(){stopLoop();document.removeEventListener('keydown',key)}
-  function finish(){if(ended)return;ended=true;const n=g.h;v2Count('stack',n);const r=bestPut('stack',level,n);
+  function finish(){if(ended)return;ended=true;const R=StackEngine.result(g),n=R.h;v2Count('stack',n);const r=bestPut('stack',level,n);
     if(n>=5)remember(fox?`We stacked ${n} pancakes`:`We stacked ${n} clouds`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
-    setTimeout(()=>{draw();stop();endCard({game:'stack',unit:fox?'pancakes':'clouds',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${g.perfects}`],onAgain:stackGame})},900)}
+    setTimeout(()=>{draw();stop();endCard({game:'stack',unit:fox?'pancakes':'clouds',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${R.perfects}`],onAgain:stackGame})},900)}
   cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
   function key(e){if(!document.getElementById('stc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
   document.addEventListener('keydown',key);
