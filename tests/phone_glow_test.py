@@ -22,7 +22,7 @@ async def main():
         await pg.evaluate(f"(()=>{{const S=__echo.state;S.bond={bond};S.glowMax=0;S.needs.food=S.needs.play=S.needs.comfort=S.needs.rest=90;__echo.home()}})()");await pg.wait_for_timeout(700)
         r=await pg.evaluate("""()=>{const el=document.querySelector('#cr .px-echo'),cv=document.querySelector('#cr canvas.aura'),d=cv.getContext('2d').getImageData(0,0,74,65).data;
           let x0=99,x1=-1,y0=99,cols=new Set();for(let y=0;y<65;y++)for(let x=0;x<74;x++){const q=(y*74+x)*4;if(d[q+3]){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);cols.add('#'+[d[q],d[q+1],d[q+2]].map(v=>v.toString(16).padStart(2,'0').toUpperCase()).join(''))}}
-          const im=new Image();im.src=/url\("?([^")]+)/.exec(el.style.backgroundImage)[1];const bp=el.style.backgroundPosition.split(' ').map(v=>-parseInt(v));
+          const im=new Image();im.src=/url\\("?([^")]+)/.exec(el.style.backgroundImage)[1];const bp=el.style.backgroundPosition.split(' ').map(v=>-parseInt(v));
           const c=document.createElement('canvas');c.width=48;c.height=48;const k=c.getContext('2d');k.drawImage(im,bp[0],bp[1],48,48,0,0,48,48);const e=k.getImageData(0,0,48,48).data;
           let s0=99,s1=-1,t0=99;for(let y=0;y<48;y++)for(let x=0;x<48;x++)if(e[(y*48+x)*4+3]){s0=Math.min(s0,x);s1=Math.max(s1,x);t0=Math.min(t0,y)}
           return {g:+el.dataset.glow,pal:el.dataset.pal,bp:el.style.backgroundPosition,x0,x1,y0,s0:s0+13,s1:s1+13,t0:t0+13,cols:[...cols]}}""")
@@ -32,6 +32,15 @@ async def main():
         assert r['x0']<=r['s0']-(R-1) and r['x1']>=r['s1']+(R-1) and r['y0']<=r['t0']-(R-1),(kind,want,r)   # aura reaches >= R-1 past the 48 px frame box
         assert set(r['cols'])<={ro['glow'],ro['rim'][want-1],'#FFFFFF'},(kind,want,r['cols'])
         await pg.screenshot(path=f'{OUT}/{kind}-G{want}.png')
+      # the aura tracks the sprite in every motion: wander/fly, hug squish, scoot, tap look, nap trip (it is the sprite's child)
+      await pg.evaluate("(()=>{const S=__echo.state;S.lowfx=false;S.bond=210;S.needs.food=S.needs.play=S.needs.comfort=S.needs.rest=90;__echo.home()})()");await pg.wait_for_timeout(500)
+      off="(()=>{const e=document.querySelector('#cr .px-echo'),c=e&&e.querySelector('canvas.aura');if(!c)return null;const a=e.getBoundingClientRect(),b=c.getBoundingClientRect(),k=a.width/48;return [Math.round((a.left-b.left)/k*10)/10,Math.round((a.top-b.top)/k*10)/10]})()"
+      seen=set()
+      for act in ("__echo.living.move([40,200])","__echo.hug()","document.getElementById('cr').classList.add('alscoot')","document.querySelector('#cr').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))","__echo.living.move([120,190])"):
+        await pg.evaluate(act)
+        for i in range(10):
+          o=await pg.evaluate(off);assert o is not None,act;seen.add(tuple(o));await pg.wait_for_timeout(90)
+      assert all(abs(x-13)<=.6 and abs(y-13)<=.6 for x,y in seen),(kind,seen)
       # never dims: low needs, a long gap, a visit again
       await pg.evaluate("(()=>{const S=__echo.state;S.bond=210;S.glowMax=0;__echo.home();S.needs.food=S.needs.play=S.needs.comfort=S.needs.rest=0;S.last-=50*36e5;__echo.home()})()")
       assert await pg.evaluate("__echo.glow()")==3
@@ -41,7 +50,7 @@ async def main():
       assert led['low'].get('need')=='food' and led['g3']['hex']=='#FFF6E6' and led['sw'].get('swell') and led['g5'].get('shimmer') and led['g5']['hex']!='#FFF6E6',led
       # reduced motion: the step-up shows the full aura in one frame
       await pg.evaluate("(()=>{const S=__echo.state;S.lowfx=true;S.releasePath=0;S.bond=0;S.glowMax=0;__echo.home()})()");await pg.wait_for_timeout(300)
-      await pg.evaluate("(()=>{const S=__echo.state;S.bond=370;__echo.glowSync()})()");await pg.wait_for_timeout(200)
+      await pg.evaluate("(()=>{const S=__echo.state;S.bond=370;S.bondShown=9;__echo.glowSync()})()");await pg.wait_for_timeout(100);assert await pg.evaluate("document.querySelector('#cr .px-echo')._ring==null"),"reduced motion: no ring-by-ring growth";await pg.wait_for_timeout(300)
       ext=await pg.evaluate("(()=>{const d=document.querySelector('#cr canvas.aura').getContext('2d').getImageData(0,0,74,65).data;let x0=99;for(let y=0;y<65;y++)for(let x=0;x<74;x++)if(d[(y*74+x)*4+3])x0=Math.min(x0,x);return x0})()")
       assert ext<=13-5,ext
       await pg.close()

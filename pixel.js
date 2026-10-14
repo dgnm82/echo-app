@@ -68,7 +68,7 @@ function aura(im,sx,sy,level,pal,o){o=o||{};if(!AURA||!im||!im.complete||!im.nat
 // paint the sibling canvas.aura of a home sprite; repaints only when frame / level / phase change. Step-up: one ring per 2 ticks.
 function auraDraw(el){const cv=el.querySelector(':scope>canvas.aura');if(!cv)return;
   const lv=+el.dataset.glow||0,lowfx=lowFxNow();if(el._ev&&el._ev.kind==='arrival'||el.dataset.light){if(el._ak!=='none'){cv.getContext('2d').clearRect(0,0,74,65);el._ak='none'}return}
-  const R=AURA?AURA.radius[lv]||0:0;if(el._lv==null)el._lv=Math.min(lv,LASTLV||lv);LASTLV=Math.max(LASTLV||0,lv);if(lv>el._lv){el._ring=lowfx?R:(AURA?AURA.radius[el._lv]||0:0);el._lv=lv;el._rk=0}
+  const R=AURA?AURA.radius[lv]||0:0;if(el._lv==null)el._lv=Math.min(lv,LASTLV||lv);LASTLV=Math.max(LASTLV||0,lv);if(lv>el._lv){el._ring=lowfx?null:(AURA?AURA.radius[el._lv]||0:0);el._lv=lv;el._rk=0}
   if(el._ring!=null&&++el._rk>=2){el._rk=0;el._ring++;if(el._ring>=R)el._ring=null}
   const ph=lv===5&&!lowfx?((Date.now()/3000|0)%2):0,m=/url\("?([^")]+)"?\)/.exec(el.style.backgroundImage||'');if(!m)return;
   const bp=(el.style.backgroundPosition||'0px 0px').split(' ').map(v=>-parseInt(v)||0),key=[m[1],bp,lv,ph,el._ring].join('|');if(key===el._ak)return;
