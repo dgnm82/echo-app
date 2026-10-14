@@ -45,6 +45,15 @@ async def main():
       await pg.screenshot(path=f'{OUT}/living-{nm}-found-noticed.png')
       assert await until(pg,L+".st==='present'&&JSON.stringify("+L+".pos)==="+repr(str(HP).replace(' ','')),8000),'came over after noticing'
       await pg.close()
+    # playtest: the first-visit tip never overlaps the corner glows (any step), the dock, or a showing speech bubble
+    pg=await newecho(b,p,'owl',errs)
+    for st in (1,2,3,4):
+      for bub in (False,True):
+        ov=await pg.evaluate("""([st,bub])=>{document.querySelectorAll('#sc .mt').forEach(m=>m.dataset.s=st);const b=document.getElementById('b');b.style.display=bub?'block':'none';if(bub)b.textContent='If a duck tossed a leaf, where would it land first?';
+          window.__echo.toast('Tip: tap the buttons below to care for '+__echo.state.g.name);const t=document.getElementById('toast').getBoundingClientRect(),hit=r=>!(t.right<=r.left||t.left>=r.right||t.bottom<=r.top||t.top>=r.bottom);
+          const els=[...document.querySelectorAll('#sc .mt'),document.querySelector('.dock')].concat(bub?[b]:[]);return els.filter(e=>hit(e.getBoundingClientRect())).map(e=>e.className)}""",[st,bub])
+        assert ov==[],(st,bub,ov)
+    await pg.close()
     # playtest fixes: the need bubble is re-picked when a need is met, and follows the Echo while it moves
     pg=await newecho(b,p,'owl',errs)
     await pg.evaluate("const s=__echo.state;s.needs.food=10;s.needs.play=s.needs.rest=s.needs.comfort=90;s.napUntil=0;__echo.home()");await pg.wait_for_timeout(400)
