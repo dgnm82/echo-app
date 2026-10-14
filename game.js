@@ -878,8 +878,9 @@ function fortBuilder(round){round=0;
 }
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
 function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
-  return {pal,pd:`run/${pal}/`,sk:'stage4',row:0,fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
-function g2Img(IM,k,src){const im=IM[k]=new Image();im.src=src;return im}
+  const lk=fox&&PIXEL.lookOf('slyte',S.g,pal);   // catch ears v1: per-look runner folders, fox fallback
+  return {pal,pd:`run/${lk&&lk!=='fox'?lk+'/':''}${pal}/`,sk:'stage4',row:0,fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
+function g2Img(IM,k,src){const im=IM[k]=new Image();im.onerror=()=>{const f=src.replace(/run\/[a-z]+\/([a-z-]+\/)/,"run/$1");if(f!==src&&!im.src.endsWith(f))im.src=f};im.src=src;return im}   // catch ears v1: missing look frames fall back to fox
 const g2ok=im=>im&&im.complete&&im.naturalWidth;
 function g2Loop(step,draw){let acc=0,last=performance.now(),alive=true;function tick(t){if(!alive)return;acc+=Math.min(.1,(t-last)/1000);last=t;while(acc>=1/60&&alive){step(1/60);acc-=1/60}if(alive)draw();requestAnimationFrame(tick)}requestAnimationFrame(t=>{last=t;tick(t)});return ()=>{alive=false}}
 function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>${t}</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2000)}
@@ -1040,9 +1041,9 @@ function runGame(){
     <div class="runhint" id="rhint">${rs.runs?'':(fox?'tap = jump':'hold = rise, let go = glide')}</div><div class="runcue" id="rcue" style="background-image:url(px/${fox?'i_stamp_paw':'i_feather'}.png)"></div>`);
   const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${hudBest('run',level)}${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
-  const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const f='px/run/'+s.split('/').pop()+'.png';if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
+  const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const q=s.split('/'),f='px/run/'+q.pop()+'.png',g=q.length>2?'px/run/'+q[q.length-1]+'/'+s.split('/').pop()+'.png':f;if(!im.src.endsWith(g))im.src=g;else if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
-  const pd=`run/${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
+  const lk=PIXEL.lookOf('slyte',S.g,pal),pd=`run/${lk&&lk!=='fox'?lk+'/':''}${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   window.__runHome=null;if(S.badges.includes('place')){IM.homeRest=new Image();IM.homeRest.src=`px/home/${homeKind()}_front.png`;window.__runHome=IM.homeRest.src}   // home_log_hollow: the log / hollow at the rest stop
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
