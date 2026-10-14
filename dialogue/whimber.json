@@ -15937,8 +15937,8 @@
             },
             {
               "icon": "🏠",
-              "label": "The treehouse",
-              "reply": "The treehouse… so small from up here. Like a toy.",
+              "label": "The hollow log",
+              "reply": "The hollow log… so small from up here. Like a toy.",
               "expr": "happy"
             },
             {

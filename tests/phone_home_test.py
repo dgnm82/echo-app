@@ -21,6 +21,13 @@ async def main():
       assert not r['over'],r['over']
       await pg.evaluate("__echo.homeTap()");await pg.wait_for_timeout(300)
       sl=await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');return e.style.backgroundImage})()");assert '_sleep.png' in sl,sl
+      # wake: reverse of the sleep pose (sleep sheet cols 2,1,0,stir) then back to the home sheet
+      await pg.wait_for_timeout(1700);await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');document.getElementById('cr').style.visibility='';PIXEL.sleep(e,true);__echo.wakeUp()})()")
+      seq=[]
+      for _ in range(10):
+        seq.append(await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');return [e.style.backgroundImage.includes('_sleep'),e._col||'']})()"));await pg.wait_for_timeout(83)
+      cols=[c for sl,c in seq if sl];print(kind,'wake',cols[:6]);assert cols and cols[0]=='sl2' and 'sl0' in cols,seq
+      await pg.wait_for_timeout(1500);assert '_sleep' not in await pg.evaluate("document.querySelector('#cr .px-echo').style.backgroundImage")
       await pg.close()
     print('ERR',errs);assert not errs;await b.close();print('home test OK')
 asyncio.run(main())

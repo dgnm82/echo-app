@@ -42,7 +42,7 @@ window.CREATURES = {
     "treasure": "shiny trinket",
     "token": "leaf",
     "pathIcon": "🌼",
-    "sign": "🍂 a blackberry leaf and a shiny trinket by the treehouse",
+    "sign": "🍂 a blackberry leaf and a shiny trinket by the hollow log",
     "talents": [
       "Radar Ears",
       "Master of Disguise",

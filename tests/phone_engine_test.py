@@ -13,6 +13,8 @@ async def main():
     c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2600)
     await pg.evaluate("""window.__said=[];new MutationObserver(()=>{const b=document.getElementById('b');if(b&&b.style.display!=='none'&&window.__said[window.__said.length-1]!==b.textContent)window.__said.push(b.textContent)}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true});
       CONFIG.ambientMin=999;CONFIG.ambientMax=999;Dialogue.cfg.carryOnMs=1500;Dialogue.cfg.lostThoughtChance=0;Dialogue.cfg.driftChances=[1,0,0];window.__d=0""")
+    # dialogue_v3: weather idle (except puddle) needs bondMin ≥70; at bond 0 after nosetup there is nothing to drift to
+    await pg.evaluate("__echo.state.bond=400;__echo.state.bondShown=5")
     # 1) carry-on: nobody answers
     await pg.evaluate("window.__echo.runConv('slyte_puddle_wonder',()=>window.__d=1)")
     await pg.wait_for_function('window.__d===1',timeout=60000)

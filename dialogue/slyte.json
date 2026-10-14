@@ -437,7 +437,7 @@
         }
       },
       {
-        "text": "The lanterns are on. The treehouse looks {word:shiny}.",
+        "text": "The lanterns are on. The hollow log looks {word:shiny}.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -995,7 +995,7 @@
         }
       },
       {
-        "text": "My treehouse {var:treehouse}. Creak-creak.",
+        "text": "My hollow log {var:treehouse}. Creak-creak.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_treehouse",
@@ -1266,7 +1266,7 @@
         }
       },
       {
-        "text": "The treehouse sign says {var:treeSign}. In squiggle. Still true.",
+        "text": "The hollow-log sign says {var:treeSign}. In squiggle. Still true.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_treehouse_sign",
@@ -1518,13 +1518,6 @@
       {
         "text": "Sun's going down. Time for my comfy tree spot.",
         "expr": "happy"
-      }
-    ],
-    "found_clearing_door": [
-      {
-        "text": "Our fort has a real door now. Fwip! I tried it twice.",
-        "expr": "happy",
-        "react": "happy"
       }
     ],
     "found_clearing_moon": [
@@ -4918,7 +4911,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Creak! You said the treehouse {var:treehouse}.",
+          "say": "Creak! You said the hollow log {var:treehouse}.",
           "expr": "proud",
           "choices": [
             {
@@ -4961,7 +4954,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "The treehouse at night is the coziest. Lanterns and blankets.",
+          "say": "The hollow log at night is the coziest. Lanterns and blankets.",
           "expr": "happy",
           "choices": [
             {
@@ -4985,7 +4978,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Treehouse: cozy. Me: in it.",
+          "say": "{pet_phrase} Hollow log: cozy. Me: in it.",
           "expr": "happy",
           "bond": 1
         }
@@ -6045,7 +6038,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Lantern time! The treehouse is all orange and soft.",
+          "say": "Lantern time! The hollow log is all orange and soft.",
           "expr": "happy",
           "choices": [
             {
@@ -7713,7 +7706,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "Maybe it's racing me to the treehouse.",
+              "reply": "Maybe it's racing me to the hollow log.",
               "expr": "happy",
               "goto": "c"
             }
@@ -9408,24 +9401,24 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "My treehouse creaks when the wind blows. Creak. Creak.",
+          "say": "My hollow log creaks when the wind blows. Creak. Creak.",
           "expr": "happy",
           "next": "b",
           "wait": 2400
         },
         "b": {
-          "say": "What is the treehouse saying?",
+          "say": "What is the hollow log saying?",
           "expr": "curious",
           "choices": [
             {
               "icon": "👋",
               "label": "Hello!",
-              "reply": "Hello, treehouse! Creak means hi.",
+              "reply": "Hello, hollow log! Creak means hi.",
               "expr": "delighted",
               "set": {
                 "treehouse": "says hello when it creaks"
               },
-              "memory": "You said the treehouse says hello when it creaks",
+              "memory": "You said the hollow log says hello when it creaks",
               "memoryTag": "slyte_treehouse",
               "goto": "c",
               "gesture": "tap"
@@ -9433,12 +9426,12 @@
             {
               "icon": "🥱",
               "label": "It's yawning",
-              "reply": "A treehouse yawn. It's sleepy too. Shh, house.",
+              "reply": "A hollow-log yawn. It's sleepy too. Shh, log.",
               "expr": "happy",
               "set": {
                 "treehouse": "yawns when it creaks"
               },
-              "memory": "You said the treehouse yawns when it creaks",
+              "memory": "You said the hollow log yawns when it creaks",
               "memoryTag": "slyte_treehouse",
               "goto": "c"
             },
@@ -9450,7 +9443,7 @@
               "set": {
                 "treehouse": "sings when it creaks"
               },
-              "memory": "You said the treehouse sings when it creaks",
+              "memory": "You said the hollow log sings when it creaks",
               "memoryTag": "slyte_treehouse",
               "goto": "c"
             },
@@ -9482,7 +9475,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "If my treehouse got one new room, what should it be?",
+          "say": "If my hollow log got one new nook, what should it be?",
           "expr": "curious",
           "choices": [
             {
@@ -9502,7 +9495,7 @@
             {
               "icon": "🛝",
               "label": "A slide room",
-              "reply": "A slide! Out the window. Wheee! Front door is boring now.",
+              "reply": "A slide! Out the back end. Wheee! Front door is boring now.",
               "expr": "delighted",
               "goto": "b"
             }
@@ -9525,7 +9518,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "The ladder has seven steps. I counted. Twice. I got seven and nine.",
+          "say": "My log has seven knots. I counted. Twice. I got seven and nine.",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -9542,7 +9535,7 @@
             },
             {
               "icon": "🦘",
-              "label": "Skip steps",
+              "label": "Skip some",
               "reply": "Four jumps! Is that seven? Basically.",
               "expr": "delighted",
               "gesture": "pounce"
@@ -10716,7 +10709,7 @@
             {
               "icon": "🏠",
               "label": "Toward home",
-              "reply": "Toward home. The treehouse. Good direction.",
+              "reply": "Toward home. The hollow log. Good direction.",
               "expr": "happy",
               "set": {
                 "map": "points toward home"
@@ -10890,7 +10883,7 @@
             {
               "icon": "🦊",
               "label": "Bring me",
-              "reply": "We're riding together. Look, the treehouse!",
+              "reply": "We're riding together. Look, the hollow log!",
               "expr": "delighted",
               "goto": "b",
               "gesture": "pounce"
@@ -11237,7 +11230,7 @@
             },
             {
               "icon": "🏠",
-              "label": "Around the treehouse",
+              "label": "Around the hollow log",
               "reply": "Around and around. A tiny walk. Cozy walk.",
               "expr": "happy",
               "goto": "b"
@@ -11446,7 +11439,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "If my treehouse door had a bell, what sound?",
+          "say": "If my hollow log door had a bell, what sound?",
           "expr": "curious",
           "choices": [
             {
@@ -14045,7 +14038,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Should my treehouse have a flag?",
+          "say": "Should my hollow log have a flag?",
           "expr": "curious",
           "choices": [
             {
@@ -14058,14 +14051,14 @@
             {
               "icon": "🦊",
               "label": "A tail flag",
-              "reply": "A tail flag! My tail, waving out the window. Ha.",
+              "reply": "A tail flag! My tail, waving out the log. Ha.",
               "expr": "delighted",
               "goto": "b"
             }
           ]
         },
         "b": {
-          "say": "Every treehouse needs a flag. It's a rule. I just made it.",
+          "say": "Every hollow log needs a flag. It's a rule. I just made it.",
           "expr": "happy",
           "bond": 1
         }
@@ -14442,7 +14435,7 @@
             },
             {
               "icon": "🏠",
-              "label": "The treehouse",
+              "label": "The hollow log",
               "reply": "X at home. Home is a treasure. Aww.",
               "expr": "happy",
               "goto": "b"
@@ -15018,8 +15011,8 @@
             },
             {
               "icon": "🏠",
-              "label": "Over the treehouse",
-              "reply": "Over my treehouse. Waving at myself.",
+              "label": "Over the hollow log",
+              "reply": "Over my hollow log. Waving at myself.",
               "expr": "happy",
               "goto": "b"
             }
@@ -16106,7 +16099,7 @@
             {
               "icon": "😋",
               "label": "Yummy!",
-              "reply": "Yay! Best baker in the treehouse.",
+              "reply": "Yay! Best baker in the hollow log.",
               "expr": "delighted",
               "gesture": "pounce"
             },
@@ -16233,7 +16226,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "My treehouse needs a sign. What should it say?",
+          "say": "My hollow log needs a sign. What should it say?",
           "expr": "curious",
           "choices": [
             {
@@ -16244,7 +16237,7 @@
               "set": {
                 "treeSign": "Berries inside"
               },
-              "memory": "We made a treehouse sign: Berries inside",
+              "memory": "We made a hollow-log sign: Berries inside",
               "memoryTag": "slyte_treehouse_sign",
               "goto": "b"
             },
@@ -16256,7 +16249,7 @@
               "set": {
                 "treeSign": "Everyone welcome"
               },
-              "memory": "We made a treehouse sign: Everyone welcome",
+              "memory": "We made a hollow-log sign: Everyone welcome",
               "memoryTag": "slyte_treehouse_sign",
               "goto": "b"
             },
@@ -16268,7 +16261,7 @@
               "set": {
                 "treeSign": "my house"
               },
-              "memory": "We made a treehouse sign: {name}'s house",
+              "memory": "We made a hollow-log sign: {name}'s house",
               "memoryTag": "slyte_treehouse_sign",
               "goto": "b"
             }
@@ -17583,8 +17576,8 @@
             },
             {
               "icon": "🏠",
-              "label": "The treehouse",
-              "reply": "The treehouse balloon. Now it looks like a party.",
+              "label": "The hollow log",
+              "reply": "The hollow-log balloon. Now it looks like a party.",
               "expr": "happy"
             },
             {

@@ -29,7 +29,7 @@ PIXEL ART — MILESTONE 3 (Fort Builder, game spec v0.2 §3)
 - Play picker for Slyte: Shiny Pairs (Memory card game, signature, daily +3 bond; replaced Shiny Search per game spec v0.3) and Fort Builder (day 1). Whimber: Night Sky only.
 - Controls: phone drag / tap-to-turn / swipe-down + on-screen ◀ ▶ A B; keyboard ←/→, A/Z/↑/Space turn, B/X/Enter drop
   (hold = faster fall). ?board=hh plays the 5x6 handheld board.
-- Treehouse fort Home prop grows per finished game (frame → 1 → 2 floors → roof → decorations), opens at bond 140.
+- Home: Howlings sleep in a hollow log, Wingsongs in a trunk hollow (home_log_hollow v1). Den Dig / Nest Weave replaced the fort builder.
 - Assets: tools/bake_fort.py -> px/fort/. Phone playthrough: tests/phone_fort_test.py (in check.sh --phone).
 
 PIXEL ART — MILESTONE 4 (arrival, release, postcards)
