@@ -36,8 +36,8 @@ async def main():
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
     errs=[];reqs=[]
     pg=await fresh(b,p,errs,reqs)
-    check(await pg.locator('.oblogo').inner_text()=='ECHO','logo')
-    check('Every creature has a story to share' in await pg.locator('.obtag').inner_text(),'tagline')
+    check(await pg.locator('.oblogo').get_attribute('alt')=='ECHO','logo')
+    check('Every creature has a story to share' in (await pg.locator('.obtag').get_attribute('aria-label')),'tagline')
     await run_to_seen(pg,'Mia',True)
     S=await pg.evaluate("window.__echo.state")
     check(S['child']=='Mia' and S['vars'].get('child_named')==1 and S['ageBand']=='7-8' and S['setupDone']==0,'name+age saved '+json.dumps({k:S.get(k) for k in ['child','ageBand','setupDone']}))

@@ -124,7 +124,7 @@ function start(){
 const TAGLINE="ECHO: Every creature has a story to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
 function legacySetup(){   // test/playtest harness only (localStorage echo-nosetup)
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
-  h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo">${PI('✨')}<span>${TAGLINE}</span>${PI('✨')}</div>
+  h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo"><img class="oblogo" src="px/title/logo.png" alt="ECHO" style="position:static;transform:none"><span>${TAGLINE.replace(/^ECHO:\s*/,'')}</span></div>
      <div class="tpair"><div class="tslot">${fox}</div><div class="tslot owl">${owl}</div></div>
      <p>Prototype for playtesting. A grown-up sets this up.</p>
      <input id="nick" maxlength="12" placeholder="Child's nickname" aria-label="Child's nickname"><label class="tchk"><input type="checkbox" id="voice" checked> Chirp sounds</label>
@@ -187,6 +187,10 @@ function obGlowPaint(){document.querySelectorAll('canvas.obglow:not([data-done])
       if(au)x.drawImage(au,Math.round((42-au.width)/2),38-au.height);x.drawImage(tim,7,38-28-Math.max(2,Math.round((au?au.width-28:14)/6)));c.dataset.done=1};tim.src=t.toDataURL()};
   im.src=PIXEL.sheet(sp,g)})}
 function obSprite(fid,seed,pal,stage,look){const f=FAM()[fid];return window.PIXEL?PIXEL[f.sprite]({seed,pal,look:look||(S&&S.origin&&S.origin.animal&&S.origin.family===fid?(FAM().animals[S.origin.animal].look||f.look_default):f.look_default)},stage||1):''}
+function titleArt(ret){   // title v1: pixel logo + glow pulse, 3-line tagline (last in gold), moon, hill, Echoes on the hill, tap pill
+  const t=U('ui_tagline').replace(/^ECHO:\s*/,''),ss=t.match(/[^.!?]+[.!?]+/g)||[t],last=ss.length>1?ss.pop().trim():'',a=ss.join(' ').trim().split(' '),m=Math.floor(a.length/2),L=[a.slice(0,m).join(' '),a.slice(m).join(' '),last].filter(Boolean);
+  const eco=ret&&S&&S.g?`<div class="ttecho" style="left:${(180-76)/2}px">${svg(S.kind,S.g,'neutral')}</div>`:(window.PIXEL?`<div class="ttecho" style="left:22px">${PIXEL.slyte({seed:7},1)}</div><div class="ttecho" style="left:84px">${PIXEL.whimber({seed:4},1)}</div>`:'');
+  return `<i class="tthill"></i><i class="ttmoon"></i>${eco}<i class="oblogo-glow"></i><img class="oblogo" src="px/title/logo.png" alt="ECHO"><div class="obtag" aria-label="${t}">${L.map((l,i)=>`<span class="l${i}${i===2?' gold':''}">${l}</span>`).join('')}</div>`}
 function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
 function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
@@ -199,7 +203,7 @@ async function setup(){
   await obLib();
   if(S&&S.setupDone===0&&S.child!==undefined)return orSeen();   // closed mid-origin: restart at P1 (a decline already saved stays saved)
   const tg=U('ui_tagline').replace(/^ECHO:\s*/,'');
-  obScene('obtitle',`<div class="oblogo">ECHO</div><div class="obtag" aria-label="${U('ui_tagline')}">${tg}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('br')}`);
+  obScene('obtitle ttl',`${titleArt()}<button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}`);
   obWireLock(setup);
   $('#obgo').onclick=()=>{SFX('ui_tap');if(window.Music)Music.title();obWelcome()};
 }
@@ -310,7 +314,7 @@ function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
   sess.fwBusy=1;setTimeout(()=>runConv(kind==='fox'?'slyte_where_from_v2':'whimber_where_from_v2',()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)}
 // P7 every-session title: logo + tagline + "{name} is playing nearby!", Tap to start, lock top right. Auto-advance after 3 s.
 async function obReturnTitle(go){await obLib();const e=E();
-  h(`<div class="scene ${e.bg} ob obreturn"><div class="oblogo">ECHO</div><div class="obtag">${U('ui_tagline').replace(/^ECHO:\s*/,'')}</div><div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
+  h(`<div class="scene ${e.bg} ob obreturn ttl${lowFx()?' calm':''}"><div class="bg pxbg pxbg-night"></div>${titleArt(1)}<div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
   if(window.Music)Music.home(S.kind);obWireLock(()=>obReturnTitle(go));let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sess.nameCall=1;go()};
   const t=setTimeout(()=>{if(!document.querySelector('.full'))fin()},3000);$('.scene.ob').onclick=fin}
 function nameCallLine(){if(S.nameChanged&&S.vars&&S.vars.child_named){S.nameChanged=0;save();return B('name_changed')}return B('name_call')}
