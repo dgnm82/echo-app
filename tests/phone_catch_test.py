@@ -21,6 +21,14 @@ async def main():
       await pg.wait_for_selector('#cc',timeout=5000);b0=await pg.evaluate("__echo.state.bond")
       v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x;CatchEngine.moveTo(g,170);setTimeout(()=>r([g.x-x0,g.L.echoV]),500)})")
       assert 0<v[0]<=v[1]*0.5+12,v
+      # head-touch v1: caught the moment the item touches the head top (well above the ground/nest line), head-only
+      hv=await pg.evaluate("""new Promise(r=>{const g=__catch,A=CatchEngine.F;let it=null,last=0,n0=g.n;const iv=setInterval(()=>{if(g.headY==null)return;
+        if(!it){it=g.items.find(i=>!i.gold&&i.y<120);if(!it)return;n0=g.n;g.tx=g.x;it.sway=0}
+        it.x=it.x0=g.x+(g.headDX||0);g.tx=g.x;if(g.items.includes(it))last=it.y;else{clearInterval(iv);r({dx:g.headDX,headY:g.headY,LINE:A.LINE,last,caught:g.n>n0})}},5)})""")
+      bv=await pg.evaluate("""new Promise(r=>{const g=__catch;let it=null,n0=g.n;const iv=setInterval(()=>{if(!it){it=g.items.find(i=>!i.gold&&i.y<120);if(!it)return;n0=g.n;it.sway=0}
+        it.x=it.x0=g.x+(g.headDX||0)+(g.headDX>0?-1:1)*(CatchEngine.headR(g)+8);g.tx=g.x;if(!g.items.includes(it)){clearInterval(iv);r(g.n>n0)}},5)})""")
+      assert not bv,'body (not head) must not catch'
+      print(kind,'head-touch',hv);assert hv['caught'] and hv['headY']<hv['LINE']-10 and hv['headY']-12<=hv['last']+8<=hv['headY']+2,hv
       seen=False
       await pg.evaluate("setInterval(()=>{if(window.__catch&&!__catch.done){const it=__catch.items[0];CatchEngine.moveTo(__catch,it&&it.x<90?175:5)}},50)")   # dodge: let them land
       for _ in range(300):

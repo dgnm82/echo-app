@@ -92,6 +92,6 @@ window.CREATURES = {
       "blinks one eye at a time",
       "trills when sleepy"
     ],
-    "game": "Starlight Pairs"
+    "game": "Moonlight Pairs"
   }
 };

@@ -751,7 +751,7 @@ function play(){
   const G=gamesFor();choices(G.map(x=>[x[0],x[1],null]),i=>start(G[i][2]));
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
-function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🕳️':'🪺',fox?'Den Dig':'Nest Weave',linesGame]];
+function gamesFor(){const fox=S.kind==='fox',L=[[fox?'⭐':'🌙',fox?'Shiny Pairs':'Moonlight Pairs',memoryGame],[fox?'🕳️':'🪺',fox?'Den Dig':'Nest Weave',linesGame]];
   if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
   if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
@@ -797,6 +797,7 @@ const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],dig:['WHAT A DEN!','WHAT A NE
 function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.kind==='fox',low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
   const bl=o.firstEver?'Our first best!':o.isBest?'NEW BEST!':`Best ${o.best}`;
   gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
+  {const cd=gs.querySelector('.g2card'),iv=setInterval(()=>{if(!cd.isConnected)return clearInterval(iv);const b=gs.querySelector('.bubble');if(!b||b.style.display==='none'||!b.textContent.trim())return;const s=cd.getBoundingClientRect().height/cd.offsetHeight||1,ov=b.getBoundingClientRect().bottom+4*s-cd.getBoundingClientRect().top;if(ov>0)cd.style.top=Math.min(gs.offsetHeight-cd.offsetHeight-4,cd.offsetTop+ov/s)+'px'},150)}   // the closing line never covers the results card: a long line nudges the card down
   SFX('run_finale',{vol:.7});save();
   $('#g2done').onclick=()=>endGame(true);
   $('#g2again').onclick=()=>{if(sess.games>=C.sessionLimits.games){endGame(true);return setTimeout(()=>talk(B('game_tired')),400)}fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
@@ -892,6 +893,8 @@ function linesGame(){
   window.__dig=g;window.__digAfter=after;
   talk(B('dig_start'),2400);draw();
 }
+// head-touch v1: top opaque row of a sprite frame near its anchor x (±4 px), cached per image+rect
+function g2Top(im,sx,sy,sw,sh){const k=sx+','+sy;im._top=im._top||{};if(k in im._top)return im._top[k];const c=document.createElement('canvas');c.width=sw;c.height=sh;const x=c.getContext('2d');x.drawImage(im,sx,sy,sw,sh,0,0,sw,sh);let d;try{d=x.getImageData(0,0,sw,sh).data}catch(e){return null}let top=null,lo=sw,hi=-1;for(let y=0;y<sh;y++){for(let xx=0;xx<sw;xx++)if(d[(y*sw+xx)*4+3]>40){if(top==null)top=y;if(y<top+12){lo=Math.min(lo,xx);hi=Math.max(hi,xx)}}if(top!=null&&y>=top+12)break}return im._top[k]=top==null?null:{top,cx:(lo+hi)/2}}   // head = the frame's top 12 rows (the sit-engine head is the highest part)
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
 function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
   const lk=fox&&PIXEL.lookOf('slyte',S.g,pal);   // catch ears v1: per-look runner folders, fox fallback
@@ -925,10 +928,12 @@ function catchGame(){
     g.lands.forEach((x,i)=>{const im=IM[ITEMS[i%4]];if(g2ok(im))cx.drawImage(im,Math.round(x-6),A.LINE+34,12,12)});
     const dx=g.tx-g.x;if(Math.abs(dx)>1)face=dx>0?1:-1;const moving=Math.abs(dx)>1,an=IM.anch;
     if(fox){const k=happy>0?'run_happy':moving?'run'+((F/5|0)%6):'run0',im=IM[k],a=(an&&an.slyte_basket[FR.sk]&&an.slyte_basket[FR.sk][k])||[22,22],top=A.LINE+4-a[1];
+      if(g2ok(IM.run0)&&an){const h=g2Top(IM.run0,0,0,IM.run0.width,IM.run0.height);if(h){g.headY=A.LINE+4-a[1]+h.top;g.headDX=face*(h.cx-a[0])}}
       if(g2ok(im)){cx.save();if(face<0){cx.translate(Math.round(g.x)*2,0);cx.scale(-1,1)}cx.drawImage(im,Math.round(g.x-a[0]),top);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-a[0])+a[0]-11,top+a[1]+2-10);cx.restore()}}
     else{const fi=(F/6|0)%4,a=(an&&an.whimber_nest[FR.sk]&&an.whimber_nest[FR.sk]['fly'+fi])||[24,44],top=A.LINE-2-(a[1]-3);
+      if(g2ok(IM.fly)&&an){const h=g2Top(IM.fly,0,FR.row*48,48,48);if(h){g.headY=top+h.top;g.headDX=h.cx-a[0]}}
       if(g2ok(IM.fly))cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,Math.round(g.x-a[0]),top,48,48);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-11),A.LINE-2)}
-    {const hr=CatchEngine.headR(g);cx.save();cx.globalAlpha=low?.18:.14+.06*Math.sin(performance.now()/300);cx.fillStyle='#FFF4C8';cx.beginPath();cx.ellipse(Math.round(g.x),A.LINE,hr,3,0,0,6.283);cx.fill();cx.restore()}   // playtest: subtle head target
+    {const hr=CatchEngine.headR(g);cx.save();cx.globalAlpha=low?.18:.14+.06*Math.sin(performance.now()/300);cx.fillStyle='#FFF4C8';cx.beginPath();cx.ellipse(Math.round(g.x+(g.headDX||0)),g.headY==null?A.LINE:g.headY,hr,3,0,0,6.283);cx.fill();cx.restore()}   // playtest: subtle head target
     cx.fillStyle='#FFD27A';cx.font='8px PS2P';for(const p of pops)cx.fillText(p.s,Math.round(p.x-6),Math.round(A.LINE-20-(low?0:(1-p.t)*14)));
     $('#cn').textContent=g.n;$('#cs').textContent=g.streak>=5?'×'+g.streak:'';$('#cs').className=g.streak>=10?'gold':'';
     $('#cg').innerHTML=Array.from({length:g.L.grass},(_,i)=>`<i class="pxi" style="background-image:url(px/catch/grass_spot${i<g.landed?1:0}.png);width:9px;height:4px"></i>`).join('')}
@@ -939,7 +944,7 @@ function catchGame(){
     g2Banner(gs,fox?'PICNIC TIME!':'STARGAZE TIME!');talk(B(r.isBest&&!firstEver?'catch_best':'catch_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'catch',unit:fox?'berries':'stars',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`longest streak ${g.longest}`,`goldens ${g.golds}`],onAgain:catchGame})},900)}
   const xOf=e=>{const r=cv.getBoundingClientRect();return (e.clientX-r.left)*180/r.width};
-  cv.addEventListener('pointerdown',e=>{CatchEngine.moveTo(g,xOf(e));cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});cv.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')CatchEngine.moveTo(g,xOf(e))});
+  cv.addEventListener('pointerdown',e=>{CatchEngine.moveTo(g,xOf(e)-(g.headDX||0));cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});cv.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')CatchEngine.moveTo(g,xOf(e)-(g.headDX||0))});
   function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')CatchEngine.nudge(g,-1);else if(k==='arrowright'||k==='d')CatchEngine.nudge(g,1);else return;e.preventDefault()}
   document.addEventListener('keydown',key);
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
@@ -989,7 +994,7 @@ const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'com
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
 function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){
-  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',TITLE=fox?'Shiny Pairs':'Starlight Pairs',NEXT=MEM_NEXT;
+  const fox=S.kind==='fox',SP=fox?'slyte':'whimber',TITLE=fox?'Shiny Pairs':'Moonlight Pairs',NEXT=MEM_NEXT;
   const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({species:SP,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:fox&&S.talents.includes('Master of Disguise')});
   const total=g.L.pairs,img=it=>`px/mem/${SP}_${it}`;let nightVision=!fox&&S.talents.includes('Night Vision');let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
   gameShell(`${TITLE} · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
@@ -1035,7 +1040,7 @@ function memoryGame(){
   window.__mem=g;window.__memTap=i=>B_[i].click();
   talk(B('pairs_start'),2400);
 }
-const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Night Sky was cut: Starlight Pairs is now Whimber's signature too)
+const MEM_NEXT=Object.assign(()=>{},{signature:true}),MEM_PLAIN=()=>{};   // (Night Sky was cut: Moonlight Pairs is now Whimber's signature too)
 // Sweet-Dream Lullaby (spec v0.3 §1/§2): in the evening, a finished board/build ends with a yawn and leads into a nap
 function lullaby(){if(S.kind==='fox'||!S.talents.includes('Sweet-Dream Lullaby')||!['evening','night'].includes(tod()))return;setExpr('sleepy');react('sleepy');setTimeout(()=>{try{if(!asleep())rest()}catch(e){}},2600)}   // one board spans the 3 rounds; roundDone() only books each round
 // ---- runners (spec v0.6 §3): Meadow Dash (Slyte, tap = jump) / Moonlight Glide (Whimber, hold = rise). No fail state. ----
@@ -1161,7 +1166,7 @@ function fwGreet(){const f=fw(),t=fwToday();
   if(f.state==='grace'){if(f.graceDays.length===FWC().graceDays&&f.lastDay!==t){f.lastDay=t;save();talk(B('last_day'))}else talk(B('grace_hello'));return true}
   return false}
 function fwBuildList(){const fox=S.kind==='fox',gc=Object.assign({},S.gameCounts||{});if(gc.builder)gc.dig=(gc.dig||0)+gc.builder;const top=Object.keys(gc).filter(k=>['pairs','dig','run','catch','stack'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
-  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',dig:fox?'Den Dig':'Nest Weave',run:fox?'Meadow Dash':'Moonlight Glide',catch:fox?'Berry Catch':'Starfall Catch',stack:fox?'Pancake Tower':'Cloud Steps'};
+  const GN={pairs:fox?'Shiny Pairs':'Moonlight Pairs',dig:fox?'Den Dig':'Nest Weave',run:fox?'Meadow Dash':'Moonlight Glide',catch:fox?'Berry Catch':'Starfall Catch',stack:fox?'Pancake Tower':'Cloud Steps'};
   (S.vars=S.vars||{}).listGame=GN[top];const cb=Object.values(S.cbCount||{}).reduce((a,b)=>a+b,0);
   return [{id:top==='dig'?'place':top==='run'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
 const FW_ITEM={play:0,food:1,place:2,trail:3,memory:4,cozy:5};

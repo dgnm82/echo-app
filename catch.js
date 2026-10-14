@@ -28,10 +28,12 @@ function step(g,dt){if(g.done)return g;g.t+=dt;const L=g.L;
   for(const it of g.items.slice()){it.y+=it.v*dt;
     if(!it.gold&&it.sway)it.x=Math.max(8,Math.min(F.W-8,it.x0+it.sway*Math.sin(it.ph+g.t*6.28*.6)*Math.min(1,(F.LINE-it.y)/60)));
     if(it.gold&&!g.lowfx)it.x=it.x0+((Math.floor(g.t*12/4)%2)?g.P.goldZig/2:-g.P.goldZig/2)*Math.min(1,(F.LINE-it.y)/60);
-    if(it.y>=F.LINE){g.items.splice(g.items.indexOf(it),1);
-      if(Math.abs(it.x-g.x)<=headR(g)){g.n++;g.streak++;g.longest=Math.max(g.longest,g.streak);if(it.gold){g.golds++;g.bonus+=g.P.goldValue}
+    const hy=g.headY==null?F.LINE:g.headY,bot=it.y+(hy<F.LINE?8:0);   // head-touch v1: caught the moment the item's bottom reaches the head top (head-only: within headR, top band of 8 px)
+    if(!it.miss&&bot>=hy&&Math.abs(it.x-g.x-(g.headDX||0))<=headR(g)){g.items.splice(g.items.indexOf(it),1);{g.n++;g.streak++;g.longest=Math.max(g.longest,g.streak);if(it.gold){g.golds++;g.bonus+=g.P.goldValue}
         g.ev.push({type:'catch',gold:it.gold,n:g.n});if(g.streak%10===0){g.bonus+=5;g.ev.push({type:'streak',n:g.streak})}}
-      else{g.landed++;g.streak=0;g.lands.push(it.x);g.ev.push({type:'land',x:it.x});
+      continue}
+    if(bot>hy+8)it.miss=true;
+    if(it.y>=F.LINE){g.items.splice(g.items.indexOf(it),1);{g.landed++;g.streak=0;g.lands.push(it.x);g.ev.push({type:'land',x:it.x});
         if(g.landed>=L.grass){g.done=true;g.ev.push({type:'end',n:g.n,streak:g.longest,golds:g.golds});return g}}}}
   return g}
 // playtest: only a hit on the Echo's head counts (head ~ basket width minus the item overhang)

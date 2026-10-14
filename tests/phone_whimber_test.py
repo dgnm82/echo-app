@@ -1,5 +1,5 @@
 # Whimber pixel playthrough (milestone 5): setup card, arrival, home + hollow, care frames, picker, 
-# Starlight Pairs, Hollow Builder, handheld. Usage: python3 tests/phone_whimber_test.py [base-url] [screenshot-dir]
+# Moonlight Pairs, Hollow Builder, handheld. Usage: python3 tests/phone_whimber_test.py [base-url] [screenshot-dir]
 import asyncio,sys,os
 from playwright.async_api import async_playwright
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/whtest';os.makedirs(OUT,exist_ok=True)
@@ -35,12 +35,12 @@ async def main():
     for _ in range(6):
       if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(300)
     await pg.evaluate("document.getElementById('overlay').innerHTML=''")
-    # picker (Night Sky cut): Starlight Pairs (signature) + Hollow Builder on day 1
+    # picker (Night Sky cut): Moonlight Pairs (signature) + Hollow Builder on day 1
     await pg.click('#play');await pg.wait_for_timeout(300);labels=await pg.locator('.choices button').all_inner_texts();print('picker',labels);await shot('picker')
-    assert any('Starlight Pairs' in l for l in labels) and any('Nest Weave' in l for l in labels) and not any('Night Sky' in l for l in labels)
+    assert any('Moonlight Pairs' in l for l in labels) and any('Nest Weave' in l for l in labels) and not any('Night Sky' in l for l in labels)
     await pg.evaluate("document.getElementById('overlay').innerHTML=''")
-    # Starlight Pairs (first game ever: easy 12, Whimber deck + back)
-    await pg.evaluate("document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pick('Starlight Pairs');await pg.wait_for_timeout(500)
+    # Moonlight Pairs (first game ever: easy 12, Whimber deck + back)
+    await pg.evaluate("document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pick('Moonlight Pairs');await pg.wait_for_timeout(500)
     g=await pg.evaluate("({n:__mem.cards.length,items:[...new Set(__mem.cards.map(c=>c.item))]})");print('pairs',g)
     assert g['n']==12 and 'star' in g['items'] and 'moon' in g['items']
     assert 'whimber_back' in await pg.evaluate("document.querySelector('.mcardbtn').style.backgroundImage")
