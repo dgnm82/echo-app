@@ -19,7 +19,7 @@ A.hearts=function(n,big){const p=scenePos();if(!p)return;for(let k=0;k<n;k++)set
   const h=fx('alheart','alive/heart',x0,y0,7,7);if(!h)return;anim(h,big?14:10,i=>{h.style.top=(y0-i*2)+'px';h.style.left=(x0+(i%4<2?0:1))+'px';if(i>6)h.style.opacity=i%2?'.6':'1'},()=>h.remove())},k*160)};
 A.sparkle=function(){const p=scenePos();if(!p)return;const e=fx('alspark','i_sparkle',p.x-8,p.top-4,16,16);if(e)anim(e,6,i=>{e.style.opacity=i%2?'.5':'1'},()=>e.remove())};
 // ---- C1: look toward taps (ripple, mirror toward the tap, ear perk, curious tilt ~1.2 s; never leaves the stage spot)
-document.addEventListener('pointerdown',ev=>{const s=sc();if(!s||!s.contains(ev.target)||ev.target.closest('#cr,button,.bubble,.thought,.fortprop,.home,.fwstar,#fwstar,.lvfx'))return;
+document.addEventListener('pointerdown',ev=>{const s=sc();if(!s||!s.contains(ev.target)||ev.target.closest('#cr,button,.bubble,.thought,.home,.fwstar,#fwstar,.lvfx'))return;
   if(!onHome()||asleep()||(W.__echo&&W.__echo.living&&W.__echo.living.st!=='present'))return;   // a Found moment handles its own taps
   const now=Date.now();if(now-A.sess.lastTap<1500)return;A.sess.lastTap=now;
   const R=s.getBoundingClientRect(),z=R.width/180,x=Math.round((ev.clientX-R.left)/z),y=Math.round((ev.clientY-R.top)/z);

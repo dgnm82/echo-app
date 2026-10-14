@@ -232,7 +232,7 @@ function obSetChild(n){S=S&&S.setupDone===0?S:{voice:true,music:true,vars:{},set
 function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
   obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
   app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
-function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.fortLevel=S.fortLevel==null||S.fortLevel==='auto'?'easy':S.fortLevel;['runLevel','catchLevel','stackLevel'].forEach(k=>{if(S[k]==null||S[k]==='auto')S[k]='easy'})}}
+function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.digLevel=S.digLevel==null||S.digLevel==='auto'?'easy':S.digLevel;['runLevel','catchLevel','stackLevel'].forEach(k=>{if(S[k]==null||S[k]==='auto')S[k]='easy'})}}
 // ---- Origin v2. P1 who did you see?
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
 function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
@@ -304,7 +304,7 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,fortLevel:S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
+  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
@@ -403,10 +403,9 @@ function scUnlocked(){return scList().filter((s,i)=>S.bond>=SCENES.unlock[i])}
 function curScene(){const L=scList();return L.find(s=>s.id===S.scene)||L[0]}
 function scVariant(){return ['evening','night'].includes(tod())?'twi':'day'}
 function scBand(){return ['morning','day','evening','night'].indexOf(tod())}
-function scReq(r){if(!r)return true;const f=fortState();let m;
+function scReq(r){if(!r)return true;let m;
   if(r==='badge:place')return S.badges.includes('place');
-  if((m=r.match(/^talent:(.+)$/)))return S.talents.includes(m[1]);
-  if((m=r.match(/^(fort|hollow)_(stage|decor)>=(\d+)$/)))return (m[2]==='stage'?f.stage:f.decor)>=+m[3];return false}
+  if((m=r.match(/^talent:(.+)$/)))return S.talents.includes(m[1]);return false}
 // pick the scene for a new session (>= 20 min away): a newly unlocked scene first (as a found-moment), else by time-of-day weight, last scene halved
 function scPickSession(){const L=scUnlocked(),seen=S.scenesSeen=S.scenesSeen||[scHome().id];let first=null;
   const bondPending=S.bondShown!=null&&bondTarget()>S.bondShown;
@@ -428,12 +427,12 @@ function scPicker(){   // 'Our places' (bond 140, the place badge): thumbnails o
 // Guardrail: the Echo never "waits for you". Every return opens on a happy activity already in progress; no lines about time away.
 // behaviour names in scenes.json -> the P0 behaviours below (reusing existing frames)
 const LV_IMPL={leaf_pounce:'leaf_pounce',leaf_toss:'leaf_pounce',sniff:'sniff',sniff_flowers:'sniff',sneeze:'giggle',trinket_play:'trinket',curl_nap:'curl_nap',nap_inside:'nap',go_inside:'nap',midday_nap:'nap',
-  moon_yip:'moon_yip',fort_flag:'fort_flag',flag_wave:'fort_flag',fort_peek:'peek',peek_from_log:'peek',peek_from_grass:'peek',disguise_hide:'peek',stack_peek:'peek',sunrise_greet:'sunrise',good_morning_sun:'sunrise',
+  moon_yip:'moon_yip',peek_from_log:'peek',peek_from_grass:'peek',disguise_hide:'peek',stack_peek:'peek',sunrise_greet:'sunrise',good_morning_sun:'sunrise',
   riddle_think:'think',read_sign:'think',read_book:'read',page_turn:'read',jump_up:'hop',tail_dangle:'giggle',warm_paws:'warm',sunbathe:'warm',butterfly_chase:'excited',preen:'preen',feather_tidy:'preen',
   head_tilt:'tilt',listen:'tilt',stargaze:'stargaze',stargaze_lie_back:'stargaze',moon_watch:'stargaze',lantern_share:'lantern',story_hum:'lullaby',lullaby_hum:'lullaby',sit_and_sway:'warm',cloud_shapes:'think',silent_flight_loop:'hop'};
 const LV_BAND={moon_yip:['night'],stargaze:['evening','night'],stargaze_lie_back:['evening','night'],moon_watch:['evening','night'],sunrise_greet:['morning'],good_morning_sun:['morning'],curl_nap:['evening'],midday_nap:['day'],nap_inside:['evening','night'],butterfly_chase:['morning','day'],sunbathe:['morning','day']};
-const LV_FOUND={leaf_pounce:'found_leaves',trinket:'found_trinket',moon_yip:'found_moon',sunrise:'found_sunrise',curl_nap:'found_curl',fort_flag:'found_fort',lullaby:'found_lullaby',stargaze:'found_stars',read:'found_book',nap:'found_nap',lantern:'found_lantern'};
-const SC_FOUND={clearing:{fort_door:'found_clearing_door','moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
+const LV_FOUND={leaf_pounce:'found_leaves',trinket:'found_trinket',moon_yip:'found_moon',sunrise:'found_sunrise',curl_nap:'found_curl',lullaby:'found_lullaby',stargaze:'found_stars',read:'found_book',nap:'found_nap',lantern:'found_lantern'};
+const SC_FOUND={clearing:{'moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
   branch:{hollow_door:'found_branch_door',branch_tip:'found_branch_tip'},library:{reading_nook:'found_library_nook',window_sill:'found_library_sill'},hilltop:{tree_branch:'found_hilltop_branch',blanket:'found_hilltop_blanket'}};
 function lvDef(){const sc=curScene(),wp={};sc.wp.forEach(w=>{wp[w.id]=scWp(w.id)});return {wp,scene:sc}}
 function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].includes(w.id)||/exit/.test(w.kind)||!scReq(w.requires))return;
@@ -468,7 +467,6 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     trinket:()=>{setExpr('giggling');lvFx('px/living/trinket.png',x+18,y-16,'roll',dur)},
     curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
     moon_yip:()=>{setExpr('excited');say('Yip!','excited');LIVE.actT=setTimeout(()=>say('Yip!','excited'),1000)},
-    fort_flag:()=>setExpr('proud'),
     sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
     lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
     stargaze:()=>{setExpr('thinking')},
@@ -482,7 +480,7 @@ function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null;const px=docume
 function lvPick(band,found){const last=(S.lvLast||[]).slice(-2);let opts=lvOptions(band).filter(o=>!last.includes(o.wp+':'+o.act));
   if(found)opts=opts.filter(o=>LV_FOUND[o.impl]||(SC_FOUND[curScene().id]||{})[o.wp]);
   if(!opts.length)opts=lvOptions(band);if(!opts.length)return null;
-  const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();const W=opts.flatMap(o=>{let w=1;if(o.impl==='fort_flag'&&/fort|hollow/.test(mem))w+=3;if(o.impl==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;return Array(w).fill(o)});
+  const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();const W=opts.flatMap(o=>{let w=1;if(o.impl==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;return Array(w).fill(o)});
   return W[Math.floor(Math.random()*W.length)]}
 function lvRemember(k){S.lvLast=[...(S.lvLast||[]),k].slice(-4)}
 function lvCanWander(){const b=$('#b');return document.getElementById('feed')&&!document.querySelector('.full,.book,.bondup')&&!ov.innerHTML.trim()&&!(b&&b.style.display!=='none')&&!((S.napUntil||0)>now())&&!window.__bondup&&!S.released}
@@ -537,7 +535,7 @@ function maybeBondUp(){
 function bondBg(){   // freeze the Home scene (background layers + props, without the Echo) onto a 180x320 canvas
   const c=document.createElement('canvas');c.width=180;c.height=320;const k=c.getContext('2d');k.imageSmoothingEnabled=false;
   const scr=SCR(),R=scr.getBoundingClientRect(),z=R.width/180;
-  const els=[scr.querySelector('#sc'),...scr.querySelectorAll('#sc .bg,#sc .fortprop,#sc .pxpath')].filter(Boolean);
+  const els=[scr.querySelector('#sc'),...scr.querySelectorAll('#sc .bg,#sc .pxpath')].filter(Boolean);
   const jobs=[];els.forEach(el=>{const r=el.getBoundingClientRect(),cs=getComputedStyle(el);if(!r.width||!r.height)return;   // hidden layers (scene art replaces .bg)
     if(el.id==='sc'&&el.classList.contains('pxscene')){const u=(cs.backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1];if(u)jobs.push({u,x:(r.left-R.left)/z,y:(r.bottom-R.top)/z-320,w:180,h:320});return}if(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'){k.fillStyle=cs.backgroundColor;k.fillRect((r.left-R.left)/z,(r.top-R.top)/z,r.width/z,r.height/z)}
     const urls=[...cs.backgroundImage.matchAll(/url\("?([^")]+)"?\)/g)].map(m=>m[1]).reverse();urls.forEach(u=>jobs.push({u,x:(r.left-R.left)/z,y:(r.top-R.top)/z,w:r.width/z,h:r.height/z}))});
@@ -692,7 +690,7 @@ function how(){
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Fort level: ${S.fortLevel||'auto'}</button>${['run','catch','stack'].map(k=>`<button class="btn" id="bl_${k}">${k} level: ${S[k+'Level']||'auto'}</button>`).join('')}<button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Dig level: ${S.digLevel||'auto'}</button>${['run','catch','stack'].map(k=>`<button class="btn" id="bl_${k}">${k} level: ${S[k+'Level']||'auto'}</button>`).join('')}<button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
@@ -704,7 +702,7 @@ function dev(){
   d.querySelector('#b6').onclick=cl;
   d.querySelector('#b14').onclick=()=>{cl();pcSettings()};   // shared device + stay a while moved to the grown-ups corner (onboarding §5)
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
-  d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.fortLevel=L[(L.indexOf(S.fortLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Fort level: '+S.fortLevel};
+  d.querySelector('#b8').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.digLevel=L[(L.indexOf(S.digLevel||'auto')+1)%4];save();d.querySelector('#b8').textContent='Dig level: '+S.digLevel};
   ['run','catch','stack'].forEach(k=>{const b=d.querySelector('#bl_'+k);if(b)b.onclick=()=>{const L=['auto','easy','standard','bigkid'],K=k+'Level';S[K]=L[(L.indexOf(S[K]||'auto')+1)%4];save();b.textContent=k+' level: '+S[K]}});
   d.querySelector('#b7').onclick=()=>{cl();S.clockOffset=(S.clockOffset||0)+864e5;sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;simulate();save();home(true);toast('A day passes…')};
 }
@@ -717,7 +715,7 @@ function book(){
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
-  ${S.kind?`<h2>Our ${S.kind==='fox'?'hollow log':'hollow'}</h2><div class="homebook">${homeProp('book')}</div>`:''}
+  ${S.kind?`<h2>Our ${S.kind==='fox'?'hollow log':'hollow'}</h2><div class="homebook">${homeProp('book')}</div>${S.dig&&S.dig.games?`<p class="digline">${S.kind==='fox'?'Deepest dig':'Coziest nest'}: ${S.dig.best||0} rows · best ${Math.max(0,...Object.values((S.best&&S.best.dig)||{}).map(o=>o.score||0))} points</p>`:''}`:''}
   ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Bond up! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
@@ -737,11 +735,11 @@ function play(){
   const G=gamesFor();choices(G.map(x=>[x[0],x[1],null]),i=>start(G[i][2]));
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
-function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🏠':'🏡',fox?'Fort Builder':'Hollow Builder',fortBuilder]];
+function gamesFor(){const fox=S.kind==='fox',L=[[ '⭐',fox?'Shiny Pairs':'Starlight Pairs',memoryGame],[fox?'🕳️':'🪺',fox?'Den Dig':'Nest Weave',linesGame]];
   if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
   if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/builder|hollow|fort/.test(t)?'builder':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=S.kind==='fox';Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder/.test(t)?(fox?'fort_builder':'hollow_builder'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
@@ -770,7 +768,7 @@ function holidaySet(on,until){S.holiday=on?{on:true,since:now(),until:until||nul
 // ---------- Games v2 shared kit (games_v2.md §3.0): flat rewards, best store, end card, HUD best, bonus glow, quiet auto-Easy ----------
 const GTU=()=>window.GAMES_TUNING;
 function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++)S.needs.play=clamp(S.needs.play+C.restore.play);if(n===R.roundsPerGame)addBond(0,true,'game');else addBond(0,true,'care');return n}   // needs v2 §2: +4 per finished game (6 a day); an early Done still counts as a visit
-function bestStore(){S.best=S.best||{};['run','builder','catch','stack'].forEach(k=>S.best[k]=S.best[k]||{});return S.best}
+function bestStore(){S.best=S.best||{};['run','builder','dig','catch','stack'].forEach(k=>S.best[k]=S.best[k]||{});return S.best}
 function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
 function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}
 function v2State(gm){S.v2=S.v2||{};return S.v2[gm]=S.v2[gm]||{games:0,short:0,easy:false}}
@@ -779,7 +777,7 @@ function v2Count(gm,score){const A=GTU().AUTO_EASY,th=A[gm],st=v2State(gm);st.ga
 const GLOW=[0,1].map(i=>{const im=new Image();im.src=`px/fx/glow${i}.png`;return im});
 function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&&im.naturalWidth)cx.drawImage(im,Math.round(x-20),Math.round(y-20))}
 function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g2best"><i></i>${b}</span>`:''}
-const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],builder:['WHAT A FORT!','WHAT A HOLLOW!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
+const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],dig:['WHAT A DEN!','WHAT A NEST!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
 function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.kind==='fox',low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
   const bl=o.firstEver?'Our first best!':o.isBest?'NEW BEST!':`Best ${o.best}`;
   gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
@@ -787,12 +785,12 @@ function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=S.ki
   $('#g2done').onclick=()=>endGame(true);
   $('#g2again').onclick=()=>{if(sess.games>=C.sessionLimits.games){endGame(true);return setTimeout(()=>talk(B('game_tired')),400)}fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
 
-// ---------- Fort Builder (game spec v0.2 §3): falling blocks that build the treehouse fort ----------
-function fortState(){return S.fort=S.fort||{stage:0,decor:0,homes:0,rounds:0,slow:0,best:0}}
-function fortLevel(){const f=fortState(),set=S.fortLevel||'auto';
-  if((f.games||0)<2)return 'easy';             // the first 2 builds ever are Easy
+// ---------- Den Dig / Nest Weave state (den_dig.md) ----------
+function digState(){return S.dig=S.dig||{games:0,rows:0,best:0}}   // den_dig: replaces S.fort (old saves keep S.fort / S.homesBuilt, unused)
+function digLevel(){const f=digState(),set=S.digLevel||S.fortLevel||'auto';
+  if((f.games||0)<2)return 'easy';             // the first 2 games ever are Easy
   if(set!=='auto')return set;                  // grown-up toggle (dev tools)
-  return v2State('builder').easy?'easy':'standard'}   // quiet auto-Easy after 2 short builds (AUTO_EASY.build)
+  return v2State('dig').easy?'easy':'standard'}   // quiet auto-Easy after 2 short games (AUTO_EASY.dig)
 // home_log_hollow v1: Howling hollow log / Wingsong trunk hollow in the foreground (no fort home). Layers: back, glow_in,
 // [Echo], front, glow_out, tail. The glow masks are recoloured from px/aura.json roles at the current glow level.
 const HOMEPOS={fox:{k:'log',x:100,y:219},owl:{k:'hollow',x:112,y:116}};
@@ -819,67 +817,64 @@ function homeIn(instant){const h=$('#home'),cr=$('#cr');if(!h||!cr||S.napUntil<=
 let HOMES_J=null;fetch('px/home/homes.json').then(r=>r.json()).then(j=>HOMES_J=j).catch(()=>{});
 function homeTap(){const h=$('#home');if(!h||!h.classList.contains('in'))return false;asleep();if(lowFx())return true;const cr=$('#cr'),px=cr&&cr.querySelector('.px-echo');
   h.classList.add('peek');if(cr){cr.style.visibility='';if(px)PIXEL.sleep(px,true)}setTimeout(()=>{h.classList.remove('peek');if(cr&&$('#home.in'))cr.style.visibility='hidden'},1500);return true}
-function fortProp(){const f=fortState(),open=S.badges.includes('place')?'_open':'',fox=S.kind==='fox',b=fox?'fort':'hollow';
-  const nm=f.stage>=3&&f.decor?`${b}_3_d${f.decor}`:`${b}_${f.stage}`;
-  return `<div class="fortprop ${b}${open?' open':''}" aria-label="${fox?'Treehouse fort':'Tree hollow'}" style="background-image:url(px/${b}/${nm}${open}.png)"></div>`}
-function fortBuilder(round){round=0;
-  const f=fortState(),level=fortLevel(),hh=/[?&]board=hh/.test(location.search),t0=now(),best0=bestGet('builder',level),firstEver=!(f.games||0)&&!best0;let ended=false;
-  const fox=S.kind==='fox',DIR=fox?'fort':'hollow',HOME=fox?'treehouse fort':'tree hollow',quiet=!fox&&S.talents.includes('Silent Flight');
-  const g=FortEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7+(f.rounds||0),w:hh?5:8,h:hh?6:12,disguise:fox&&S.talents.includes('Master of Disguise'),round});
+// Den Dig (Howlings) / Nest Weave (Wingsongs): line-clear falling blocks, happy end when the den / nest is full (den_dig.md)
+function linesGame(){
+  const f=digState(),level=digLevel(),t0=now(),best0=bestGet('dig',level),firstEver=!(f.games||0)&&!best0;let ended=false;
+  const fox=S.kind==='fox',MODE=fox?'dig':'weave',quiet=!fox&&S.talents.includes('Silent Flight'),low=lowFx(),UI=GTU().LINES_UI||{bg:{},clearMs:250,bannerMs:1600,bigBannerMs:2000,bgBandEvery:2};
+  const g=LinesEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:fox&&S.talents.includes('Master of Disguise')});
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
-  gameShell(`${fox?'Fort':'Hollow'} build`);const gs=$('#gs');gs.classList.add('fortgame');
-  gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="Fort board"></canvas>
+  gameShell(fox?'Den Dig':'Nest Weave');const gs=$('#gs');gs.classList.add('fortgame','diggame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="${fox?'Den':'Nest'} board"></canvas>
     <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
-      <div class="fbmeter" id="fbmeter" aria-label="Height"></div><div class="fbh" id="fbh">0</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}<div class="fbstars" id="fbstars"></div></div>
+      <div class="dgstat"><span>score</span><b id="dgs">0</b><span>level</span><b id="dgl">1</b><span>rows</span><b id="dgr">0</b></div>
+      <div class="dgmeter" id="dgm" aria-label="${fox?'deeper':'woven'}"></div><div class="dgcap">${fox?'deeper':'woven'}</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}</div>
     <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
   const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d');
-  const IM={};['plank','window','leafroof','door','lantern','flag','slyte'].forEach(k=>{IM[k]=new Image();IM[k].src=`px/${DIR}/b_${k}.png`;IM['m_'+k]=new Image();IM['m_'+k].src=`px/${DIR}/m_${k==='slyte'?'plank':k}.png`});
-  IM.ghost=new Image();IM.ghost.src='px/fort/ghost.png';[0,1,2].forEach(i=>{IM['glow'+i]=new Image();IM['glow'+i].src=`px/fort/glow${i}.png`});
-  let glowRows=0,glowT=0,alive=true,rowsSaid=0;
-  function draw(){if(!alive)return;cx.fillStyle='#2E2452';cx.fillRect(0,0,W,H);cx.fillStyle='#3B2A5C';
+  const IM={};new Set(Object.values(LinesEngine.MAT[MODE]).concat(['echo','ghost','glow0','glow1','glow2'])).forEach(k=>{IM[k]=new Image();IM[k].src=`px/${MODE}/${/^(ghost|glow)/.test(k)?k:'b_'+k}.png`});
+  let alive=true,clears=0,glow=null,wrapT=0,tLast=now();
+  function draw(){if(!alive)return;const band=Math.min(2,Math.floor((g.lv-1)/(UI.bgBandEvery||2))),bg=(UI.bg[MODE]||[])[band]||['#2E2452','#3B2A5C'];cx.fillStyle=bg[0];cx.fillRect(0,0,W,H);cx.fillStyle=bg[1];
     for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)if((x+y)%2)cx.fillRect(x*16,y*16,16,16);
-    for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){const c=g.grid[y][x];if(c)cx.drawImage(IM[c],x*16,y*16)}
-    const p=g.piece;if(p){const gy=FortEngine.ghostY(g);if(gy!==p.y&&FortEngine.ghostOn(g))p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
-      p.cells.forEach(([a,b],i)=>{if(p.y+b>=0)cx.drawImage(IM[p.mats[i]],(p.x+a)*16,(p.y+b)*16)})}
-    nx.clearRect(0,0,32,32);const q=g.next;if(q){const s=q.cells.length>3||Math.max(...q.cells.map(c=>c[0]))>1?8:16;q.cells.forEach(([a,b],i)=>nx.drawImage(IM[q.mats[i]],a*s,b*s,s,s))}
-    const h0=FortEngine.height(g);$('#fbmeter').innerHTML=Array.from({length:24},(_,i)=>`<i class="${i<h0?'on':''}${best0&&i===best0-1&&h0<=best0?' best':''}"></i>`).join('');$('#fbh').textContent=h0;$('#fbh').className='fbh'+(best0&&h0>best0?' gold':'');
-    cx.fillStyle='#FFD27A';for(let x=0;x<W;x+=4)cx.fillRect(x,16,2,1);
-    if($('#fbstars'))$('#fbstars').innerHTML=Array.from({length:3},(_,i)=>window.PIXEL?PIXEL.icon(i<FortEngine.stars(g)?'sticker':'talk').replace('class="pxi"',`class="pxi${i<FortEngine.stars(g)?'':' dim'}"`):'').join('');}
+    for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){const c=g.grid[y][x];if(c&&IM[c])cx.drawImage(IM[c],x*16,y*16)}
+    if(glow){const k=low?1:Math.min(2,Math.floor((now()-glow.t)/(UI.clearMs/3)));glow.rows.forEach((y,i)=>{glow.cells[i].forEach((c,x)=>{if(IM[c])cx.drawImage(IM[c],x*16,y*16)});for(let x=0;x<g.w;x++)cx.drawImage(IM['glow'+k],x*16,y*16)});if(now()-glow.t>(low?83:UI.clearMs))glow=null}
+    const p=g.piece;if(p){const gy=LinesEngine.ghostY(g);if(gy!==p.y&&LinesEngine.ghostOn(g))p.cells.forEach(([a,b])=>cx.drawImage(IM.ghost,(p.x+a)*16,(gy+b)*16));
+      p.cells.forEach(([a,b],i)=>{if(p.y+b>=0&&IM[p.mats[i]])cx.drawImage(IM[p.mats[i]],(p.x+a)*16,(p.y+b)*16)})}
+    nx.clearRect(0,0,32,32);const q=g.next;if(q){const s=q.cells.length>3||Math.max(...q.cells.map(c=>c[0]))>1?8:16;q.cells.forEach(([a,b],i)=>IM[q.mats[i]]&&nx.drawImage(IM[q.mats[i]],a*s,b*s,s,s))}
+    const sc=$('#dgs');if(!sc)return;sc.textContent=g.score;sc.className=best0&&g.score>best0?'gold':'';$('#dgl').textContent=g.lv;$('#dgr').textContent=g.lines;
+    const pip=g.lines%12,wr=g.lines&&pip===0&&now()-wrapT<600;$('#dgm').innerHTML=Array.from({length:12},(_,i)=>`<i class="${i<pip||wr?'on':''}"></i>`).join('');}
   const loop=setInterval(draw,83);   // 12 fps
-  let fall=0;const sched=()=>{clearTimeout(fall);if(alive&&!g.done&&g.fallMs)fall=setTimeout(()=>{FortEngine.tick(g);after();sched()},g.fallMs)};sched();   // re-reads g.fallMs after every settle (0 = hover until B)
+  let fall=0;const sched=()=>{clearTimeout(fall);if(!alive||g.done)return;const t=now(),dt=document.hidden?0:(t-tLast)/1000;tLast=t;fall=setTimeout(()=>{LinesEngine.tick(g);after();sched()},LinesEngine.clock(g,dt))};sched();   // time creep counts only while on screen
   function stop(){alive=false;clearInterval(loop);clearTimeout(fall);document.removeEventListener('keydown',key)}
-  function after(){for(const e of FortEngine.take(g)){
-      if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});if(e.type==='floor')SFX('blocks_floor_done');if(e.type==='row'||e.type==='row-auto'){SFX('blocks_row_glow');glowRows=Math.min(3,(glowRows||0)+1);glowT=0;react('happy');rowsSaid++;if(rowsSaid%2===1)talk(B('stack_row'),1800);chirp()}
-      if(e.type==='settle'&&!fall)sched();
-      if(e.type==='disguise'){react('excited');talk(B('stack_disguise'),2000)}}
+  function after(){for(const e of LinesEngine.take(g)){
+      if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});
+      if(e.type==='clear'){SFX('blocks_row_glow');glow={rows:e.rows,cells:e.cells,t:now()};clears++;react('happy');if(!low)hop();if(g.lines%12===0||Math.floor(g.lines/12)>Math.floor((g.lines-e.n)/12))wrapT=now();
+        if(e.big){g2Banner(gs,fox?'Big dig!':'Big weave!');talk(B('dig_big'),UI.bigBannerMs);SFX('blocks_floor_done')}else if(clears%2===0)talk(B('dig_row'),1800);chirp()}
+      if(e.type==='level'){g2Banner(gs,'Level '+e.level);talk(B('dig_level'),UI.bannerMs)}
+      if(e.type==='disguise'){react('excited');talk(B('dig_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
   function chirp(){try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}}
-  function finish(){if(ended)return;ended=true;draw();stop();f.rounds=(f.rounds||0)+1;f.games=(f.games||0)+1;const rows=FortEngine.height(g);v2Count('build',rows);
-    const r=bestPut('builder',level,rows),fl=Math.floor(rows/3),rr=rows%3;
-    if(S.talents.includes('Super Jumper'))react('happy');
-    SFX('blocks_land');for(let x=0;x<g.w;x++)cx.drawImage(IM.leafroof,x*16,Math.max(0,FortEngine.stackTop(g)-1)*16);setTimeout(()=>SFX('blocks_floor_done'),300);setTimeout(()=>SFX('blocks_row_glow'),700);
-    const roofBefore=f.stage>=3;if(f.stage<3)f.stage++;else f.decor=Math.min(3,f.decor+1);if(f.stage>=3&&!roofBefore)f.homes++;   // the Home prop grows one step per finished build
-    if(f.stage>=3)(S.homesBuilt=S.homesBuilt||[]).push({day:S.days,decor:f.decor});
-    remember(fox?`We built the fort ${rows} rows high`:`We built the hollow ${rows} rows high`,'fort_rows_'+rows);
-    setExpr('happy');react('happy');talk(B(r.isBest&&!firstEver?'stack_roof_best':'stack_roof',{rows}),2200);save();lullaby();
-    setTimeout(()=>endCard({game:'builder',unit:'rows',score:rows,was:r.was,best:Math.max(rows,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[fl?(rr?`${fl} floors + ${rr}`:`= ${fl} floors!`):`${rows} rows`,`${'★'.repeat(FortEngine.stars(g))||'tidy rows: 0'}`],onAgain:()=>fortBuilder(0)}),900)}
-  function banner(t,img){gs.insertAdjacentHTML('beforeend',`<div class="fbdone">${PI('✨')}<span>${t}</span>${PI('✨')}${img?`<div class="fbdprop">${img}</div>`:''}${g.L.stars?`<div>${Array.from({length:FortEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`)}
+  function finish(){if(ended)return;ended=true;g.done=true;draw();stop();const R=LinesEngine.result(g),lines=R.lines;f.games=(f.games||0)+1;f.rows=(f.rows||0)+lines;f.best=Math.max(f.best||0,lines);v2Count('dig',lines);
+    const r=bestPut('dig',level,R.score);if(S.talents.includes('Super Jumper'))react('happy');
+    gs.classList.add('dgend');gs.insertAdjacentHTML('beforeend',`<i class="dgprop${low?' low':''}" style="background-image:url(px/${MODE}/${fox?'den':'nest'}_end.png)"></i>${Array.from({length:8},(_,i)=>`<i class="dgspark${low?'':' tw'}" style="left:${10+i*15}px;top:${60+(i%3)*14}px"></i>`).join('')}`);if(!low)hop();
+    SFX('blocks_floor_done');setTimeout(()=>SFX('blocks_row_glow'),400);
+    remember(fox?`We dug the den ${lines} rows deep`:`We wove the nest ${lines} rows`,'dig_rows_'+lines);
+    setExpr('happy');react('happy');talk(B(r.isBest&&!firstEver?'dig_end_best':'dig_end',{rows:lines}),2200);save();lullaby();
+    setTimeout(()=>endCard({game:'dig',unit:'points',score:R.score,was:r.was,best:Math.max(R.score,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`${lines} rows ${fox?'dug':'woven'}`,`level ${R.level}`],onAgain:()=>linesGame()}),900)}
   // touch: drag the piece sideways, tap it to turn, swipe down to drop
   let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
-  cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){FortEngine.moveTo(g,col);draw()}});
-  cv.addEventListener('pointerup',e=>{if(!pd)return;const dy=(e.clientY-pd.y)/pd.k,dt=Date.now()-pd.t;if(dy>36&&dt<600){FortEngine.drop(g);after()}else if(!pd.moved&&Math.abs(dy)<8){FortEngine.rotate(g);draw()}pd=null});
-  $('#kL').onclick=()=>{if(FortEngine.move(g,-1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kR').onclick=()=>{if(FortEngine.move(g,1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kA').onclick=()=>{if(FortEngine.rotate(g)&&!quiet)SFX('blocks_rotate',{vol:.6});draw()};$('#kB').onclick=()=>{FortEngine.drop(g);after()};
-  // handheld scheme (spec §0, confirmed): ◀ ▶ move, A turn, B drop (hold = faster fall)
+  cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){LinesEngine.moveTo(g,col);draw()}});
+  cv.addEventListener('pointerup',e=>{if(!pd)return;const dy=(e.clientY-pd.y)/pd.k,dt=Date.now()-pd.t;if(dy>36&&dt<600){LinesEngine.drop(g);after()}else if(!pd.moved&&Math.abs(dy)<8){LinesEngine.rotate(g);draw()}pd=null});
+  $('#kL').onclick=()=>{if(LinesEngine.move(g,-1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kR').onclick=()=>{if(LinesEngine.move(g,1)&&!quiet)SFX('blocks_move',{vol:.5});draw()};$('#kA').onclick=()=>{if(LinesEngine.rotate(g)&&!quiet)SFX('blocks_rotate',{vol:.6});draw()};$('#kB').onclick=()=>{LinesEngine.drop(g);after()};
+  // handheld scheme: ◀ ▶ move, A turn, B drop (hold = faster fall)
   function key(e){const k=e.key.toLowerCase();if(!document.getElementById('fb')){stop();return}
-    if(k==='arrowleft'){FortEngine.move(g,-1)}else if(k==='arrowright'){FortEngine.move(g,1)}
-    else if(k==='a'||k==='z'||k==='arrowup'||k===' '){FortEngine.rotate(g)}
-    else if(k==='b'||k==='x'||k==='enter'){if(e.repeat){FortEngine.soft(g)}else FortEngine.drop(g)}
-    else if(k==='arrowdown'){FortEngine.soft(g)}else return;e.preventDefault();after()}
+    if(k==='arrowleft'){LinesEngine.move(g,-1)}else if(k==='arrowright'){LinesEngine.move(g,1)}
+    else if(k==='a'||k==='z'||k==='arrowup'||k===' '){LinesEngine.rotate(g)}
+    else if(k==='b'||k==='x'||k==='enter'){if(e.repeat){LinesEngine.soft(g)}else LinesEngine.drop(g)}
+    else if(k==='arrowdown'){LinesEngine.soft(g)}else return;e.preventDefault();after()}
   document.addEventListener('keydown',key);
-  $('#quit').onclick=()=>{if(ended)return endGame(true);g.done=true;finish()};
-  window.__fort=g;window.__fortAfter=after;
-  talk(B('stack_start'),2400);draw();
+  $('#quit').onclick=()=>{if(ended)return endGame(true);finish()};
+  window.__dig=g;window.__digAfter=after;
+  talk(B('dig_start'),2400);draw();
 }
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
 function g2Frames(fox){const SP=fox?'slyte':'whimber',PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
@@ -1149,10 +1144,10 @@ function fwGreet(){const f=fw(),t=fwToday();
   if(f.state==='almost_ready'){talk(B('almost_hello'));return true}
   if(f.state==='grace'){if(f.graceDays.length===FWC().graceDays&&f.lastDay!==t){f.lastDay=t;save();talk(B('last_day'))}else talk(B('grace_hello'));return true}
   return false}
-function fwBuildList(){const fox=S.kind==='fox',gc=S.gameCounts||{};const top=Object.keys(gc).filter(k=>['pairs','builder','run','catch','stack'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
-  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',builder:fox?'Fort Builder':'Hollow Builder',run:fox?'Meadow Dash':'Moonlight Glide',catch:fox?'Berry Catch':'Starfall Catch',stack:fox?'Pancake Tower':'Cloud Steps'};
+function fwBuildList(){const fox=S.kind==='fox',gc=Object.assign({},S.gameCounts||{});if(gc.builder)gc.dig=(gc.dig||0)+gc.builder;const top=Object.keys(gc).filter(k=>['pairs','dig','run','catch','stack'].includes(k)).sort((a,b)=>gc[b]-gc[a])[0]||'pairs';
+  const GN={pairs:fox?'Shiny Pairs':'Starlight Pairs',dig:fox?'Den Dig':'Nest Weave',run:fox?'Meadow Dash':'Moonlight Glide',catch:fox?'Berry Catch':'Starfall Catch',stack:fox?'Pancake Tower':'Cloud Steps'};
   (S.vars=S.vars||{}).listGame=GN[top];const cb=Object.values(S.cbCount||{}).reduce((a,b)=>a+b,0);
-  return [{id:top==='builder'?'place':top==='run'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
+  return [{id:top==='dig'?'place':top==='run'?'trail':'play',game:top,done:false},{id:'food',done:false},{id:(S.sits||0)>cb?'cozy':'memory',done:false}]}
 const FW_ITEM={play:0,food:1,place:2,trail:3,memory:4,cozy:5};
 function fwTick(id,game){const f=fw();if(!fwShowPath())return;const it=f.list.find(x=>x.id===id||(game&&x.game===game&&['play','place','trail'].includes(x.id)));if(!it||it.done)return;
   it.done=true;save();const all=f.list.every(x=>x.done);
@@ -1324,6 +1319,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),fortBuilder:r=>fortBuilder(r||0),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,S.kind==='fox'?'slyte':'whimber',S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

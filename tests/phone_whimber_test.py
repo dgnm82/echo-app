@@ -54,14 +54,14 @@ async def main():
     await pg.wait_for_timeout(3500)
     for _ in range(6):
       if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(300)
-    # Hollow Builder: one floor using the engine directly, hollow tiles
-    await pg.evaluate("document.querySelectorAll('.bondup').forEach(x=>x.remove());__echo.state.bondShown=5;document.getElementById('overlay').innerHTML='';__echo.fortBuilder(0)");await pg.wait_for_timeout(500)
-    assert 'Hollow' in await pg.inner_text('.top b')
+    # Nest Weave: drop pieces until the nest is full, weave tiles
+    await pg.evaluate("document.querySelectorAll('.bondup').forEach(x=>x.remove());__echo.state.bondShown=5;document.getElementById('overlay').innerHTML='';__echo.linesGame()");await pg.wait_for_timeout(500)
+    assert 'Nest Weave' in await pg.inner_text('.top b')
     for _ in range(40):
-      if await pg.evaluate("__fort.done"):break
+      if await pg.evaluate("__dig.done"):break
       await pg.click('#kB');await pg.wait_for_timeout(90)
-      if _==6:await shot('hollow-builder')
-    srcs=await pg.evaluate("performance.getEntriesByType('resource').map(r=>r.name).filter(n=>n.includes('/px/hollow/'))");assert srcs,'hollow tiles loaded'
+      if _==6:await shot('nest-weave')
+    srcs=await pg.evaluate("performance.getEntriesByType('resource').map(r=>r.name).filter(n=>n.includes('/px/weave/'))");assert srcs,'weave tiles loaded'
     await pg.click('#quit');await pg.wait_for_timeout(500)
     # handheld view shows Whimber
     await pg.goto(URL+'handheld.html?echo=whimber&grid=1');await pg.wait_for_timeout(1200);await shot('handheld')

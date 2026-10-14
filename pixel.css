@@ -332,3 +332,11 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 .home .hgl{display:none}.home.glow .hgl{display:block}.home .htail{display:none;width:30px!important;height:26px!important}.home-hollow .htail{width:24px!important;height:20px!important}.home .htail.on{display:block}
 .home.peek .hf{opacity:.5}.home.book{position:relative;left:auto!important;top:auto!important}
 .px-echo.hopsq{transform:scaleY(.9);transform-origin:50% 100%}.px-echo.lvflip.hopsq{transform:scaleX(-1) scaleY(.9)}   /* wander v1 hop squash */
+/* Den Dig / Nest Weave HUD + happy end */
+.diggame .dgstat{display:grid;grid-template-columns:1fr;width:40px;text-align:center;color:#FFF6E6}.diggame .dgstat span{font-size:6px;line-height:7px;opacity:.8}.diggame .dgstat b{font-size:8px;line-height:10px;font-weight:normal}.diggame .dgstat b.gold{color:#FFD27A}
+.diggame .dgmeter{display:flex;flex-direction:column-reverse;gap:1px;width:10px}.diggame .dgmeter i{height:4px;background:#3B2A5C}.diggame .dgmeter i.on{background:#FFD27A}
+.diggame .dgcap{font-size:6px;color:#FFF6E6}
+.diggame.dgend .fb{filter:brightness(.6)}
+.diggame .dgprop{position:absolute;left:20px;top:80px;width:96px;height:64px;background-size:96px 64px;image-rendering:pixelated;z-index:4;animation:dgdrop .5s steps(5) 1}.diggame .dgprop.low{animation:none}
+@keyframes dgdrop{from{transform:translateY(-40px)}to{transform:none}}
+.diggame .dgspark{position:absolute;width:8px;height:8px;background:url(px/i_sparkle.png) 0 0/8px 8px;image-rendering:pixelated;z-index:5}.diggame .dgspark.tw{animation:obpulse 1.2s steps(2) infinite}
