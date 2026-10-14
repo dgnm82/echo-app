@@ -2,122 +2,182 @@
  "slyte_basket": {
   "stage1": {
    "run0": [
-    22,
-    22
+    11,
+    29
    ],
    "run1": [
-    22,
-    23
+    11,
+    29
    ],
    "run2": [
-    22,
-    24
+    11,
+    29
    ],
    "run3": [
-    22,
-    23
+    11,
+    29
    ],
    "run4": [
-    22,
-    23
+    11,
+    29
    ],
    "run5": [
-    22,
-    22
+    11,
+    29
    ],
    "run_happy": [
-    22,
-    24
+    11,
+    29
    ]
   },
   "stage2": {
    "run0": [
-    22,
-    22
+    11,
+    29
    ],
    "run1": [
-    22,
-    23
+    11,
+    29
    ],
    "run2": [
-    22,
-    24
+    11,
+    29
    ],
    "run3": [
-    22,
-    23
+    11,
+    29
    ],
    "run4": [
-    22,
-    23
+    11,
+    29
    ],
    "run5": [
-    22,
-    22
+    11,
+    29
    ],
    "run_happy": [
-    22,
-    24
+    11,
+    29
    ]
   },
   "stage3": {
    "run0": [
-    22,
-    22
+    11,
+    29
    ],
    "run1": [
-    22,
-    23
+    11,
+    29
    ],
    "run2": [
-    22,
-    24
+    11,
+    29
    ],
    "run3": [
-    22,
-    23
+    11,
+    29
    ],
    "run4": [
-    22,
-    23
+    11,
+    29
    ],
    "run5": [
-    22,
-    22
+    11,
+    29
    ],
    "run_happy": [
-    22,
-    24
+    11,
+    29
    ]
   },
   "stage4+": {
    "run0": [
-    22,
-    22
+    11,
+    29
    ],
    "run1": [
-    22,
-    23
+    11,
+    29
    ],
    "run2": [
-    22,
-    24
+    11,
+    29
    ],
    "run3": [
-    22,
-    23
+    11,
+    29
    ],
    "run4": [
-    22,
-    23
+    11,
+    29
    ],
    "run5": [
-    22,
-    22
+    11,
+    29
    ],
    "run_happy": [
-    22,
-    24
+    11,
+    29
+   ]
+  },
+  "stage4": {
+   "run0": [
+    11,
+    29
+   ],
+   "run1": [
+    11,
+    29
+   ],
+   "run2": [
+    11,
+    29
+   ],
+   "run3": [
+    11,
+    29
+   ],
+   "run4": [
+    11,
+    29
+   ],
+   "run5": [
+    11,
+    29
+   ],
+   "run_happy": [
+    11,
+    29
+   ]
+  },
+  "stage5": {
+   "run0": [
+    11,
+    29
+   ],
+   "run1": [
+    11,
+    29
+   ],
+   "run2": [
+    11,
+    29
+   ],
+   "run3": [
+    11,
+    29
+   ],
+   "run4": [
+    11,
+    29
+   ],
+   "run5": [
+    11,
+    29
+   ],
+   "run_happy": [
+    11,
+    29
    ]
   }
  },
@@ -213,5 +273,5 @@
    ]
   }
  },
- "note": "x,y in the 48 px frame: basket centre-bottom sits at (x, y+2); nest centre-top at (x, y-3). Same for every palette."
+ "note": "x,y in the 48 px frame: basket centre-bottom sits at (x, y+2); nest centre-top at (x, y-3). Same for every palette. motion_v2: one fox seat for every stage (glow v1 one-row sheets); stage4 key added because g2Frames asks for sk:\"stage4\"."
 }

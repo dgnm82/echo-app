@@ -127,7 +127,7 @@ function sleep(el,on){if(!el||el._ev)return;if(!el._base)el._base=el.style.backg
 // wander v1: side-on walk sheet ..._walk.png (13 cols): walk0-5 (2 ticks), trot0-3 (1 tick), crouch(6) leap(6) land(3)
 const WALK={walk:[[0,2],[1,2],[2,2],[3,2],[4,2],[5,2]],trot:[[6,1],[7,1],[8,1],[9,1]],pounce:[[10,6],[11,6],[12,3]]};
 function walk(el,mode){if(!el||el._ev)return;if(!el._base)el._base=el.style.backgroundImage;if(el._wake){el._wake=null;el.style.backgroundImage=el._base}
-  if(mode){if(el._sleep)sleep(el,false);const lo=lowFxNow()&&mode!=='pounce';el._walk={m:lo?'walk':mode,i:0,k:0,slow:lo};el.style.backgroundImage=el._base.replace(/_f\d+(_light)?\.png/,'_walk.png');walkStep(el)}
+  if(mode){if(el._sleep)sleep(el,false);const lo=lowFxNow()&&mode!=='pounce';el._walk={m:lo?'walk':mode,i:0,k:0,slow:lo};el.style.backgroundImage=el._base.replace(/(_f\d+)(_light)?\.png/,'$1_walk.png');walkStep(el)}
   else if(el._walk){el._walk=null;el.style.backgroundImage=el._base;if(el._s)el._s.q=[]}}
 function walkStep(el){const w=el._walk,L=WALK[w.m],[c,h]=L[Math.min(w.i,L.length-1)];el.style.backgroundPosition=`${-c*N}px 0px`;el._col='walk'+c;auraDraw(el);
   if(++w.k>=(w.slow?3:h)){w.k=0;w.i++;if(w.i>=L.length)w.i=w.m==='pounce'?L.length-1:0}}
