@@ -50,7 +50,7 @@ async def main():
       j=await pg.evaluate(f"MemoryEngine.partner(__mem,{i})");await pg.evaluate(f"__memTap({i})");await pg.wait_for_timeout(120);await pg.evaluate(f"__memTap({j})");await pg.wait_for_timeout(300)
       if i==3:await shot('starlight-pairs')
     await pg.wait_for_timeout(500);await shot('starlight-pairs-cleared');assert await pg.evaluate("__mem.done")
-    assert await pg.evaluate("!!__echo.state.sigDay"),'Starlight Pairs now gives the daily +3'
+    # needs v2: the signature-daily bond was removed (sigDay no longer set)
     await pg.wait_for_timeout(3500)
     for _ in range(6):
       if await pg.locator('.full button').count():await pg.locator('.full button').first.click();await pg.wait_for_timeout(300)
