@@ -20,7 +20,7 @@ async def run(b,p,kind,low):
     for _ in range(80):
       if await pg.evaluate("__dig.done"):break
       await pg.click('#kB');await pg.wait_for_timeout(40)
-    await pg.wait_for_timeout(300);assert await pg.locator('.dgprop').count()==1,'celebration'
+    await pg.wait_for_timeout(300);assert await pg.locator('.dgspark').count()==8 and await pg.locator('.dgprop').count()==0,'celebration (sparkles, no den/nest picture over the card)'
     await pg.wait_for_timeout(1500);card=await pg.inner_text('.g2card');print(kind,low,gi,card.replace('\n',' | '))
     assert ('DEN' if kind=='fox' else 'NEST') in card and 'rows' in card and 'level' in card,card
     if gi==1:assert 'NEW BEST' in card,card

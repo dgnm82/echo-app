@@ -76,8 +76,9 @@ setInterval(()=>{const e=px();const S=W.__echo&&W.__echo.state;if(e&&S&&S.needs)
 A.food=function(food,tier,done){const p=scenePos(),s=sc(),S=W.__echo.state;if(!p||!s){done&&done();return}A.busy=true;
   const fox=S.kind==='fox',side=fox?1:-1,fx0=p.x+side*16-8,fy=p.feet-16,how=food.delivery,e=px();
   const it=fx('alfood','',fx0,fy,16,16);it.style.backgroundImage=`url(px/${food.icon}.png)`;let plate=null,leaf=null;
+  const over=()=>{const c=cr(),z=(parseInt(c&&c.style.zIndex)||2)+1;it.style.zIndex=z+1;if(plate)plate.style.zIndex=z;if(leaf)leaf.style.zIndex=z+1};setTimeout(over,0);   // food draws in front of the Echo (lvPlace depth-sorts #cr to 10+y/10); #sc isolates it, so modals still cover it
   if(e)W.setExpr&&W.setExpr('curious');
-  const land=()=>{if(e){const want=fox?false:true;e.classList.toggle('lvflip',fox?false:true)}eat()};
+  const land=()=>{over();if(e){const want=fox?false:true;e.classList.toggle('lvflip',fox?false:true)}eat()};
   if(how==='plate'){plate=fx('alplate','alive/plate',fx0+side*60,fy+12,16,5);it.style.left=(fx0+side*60)+'px';
     anim(it,10,i=>{const x=fx0+side*(54-i*6);it.style.left=x+'px';plate.style.left=x+'px'},land)}
   else if(how==='float'){leaf=fx('alleaf','alive/leaf_parachute',fx0,fy-60,16,16);let y=fy-60;it.style.top=(y+10)+'px';

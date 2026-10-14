@@ -858,7 +858,7 @@ function linesGame(){
   function chirp(){try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}}
   function finish(){if(ended)return;ended=true;g.done=true;draw();stop();const R=LinesEngine.result(g),lines=R.lines;f.games=(f.games||0)+1;f.rows=(f.rows||0)+lines;f.best=Math.max(f.best||0,lines);v2Count('dig',lines);
     const r=bestPut('dig',level,R.score);if(S.talents.includes('Super Jumper'))react('happy');
-    gs.classList.add('dgend');gs.insertAdjacentHTML('beforeend',`<i class="dgprop${low?' low':''}" style="background-image:url(px/${MODE}/${fox?'den':'nest'}_end.png)"></i>${Array.from({length:8},(_,i)=>`<i class="dgspark${low?'':' tw'}" style="left:${10+i*15}px;top:${60+(i%3)*14}px"></i>`).join('')}`);if(!low)hop();
+    gs.classList.add('dgend');gs.insertAdjacentHTML('beforeend',`${Array.from({length:8},(_,i)=>`<i class="dgspark${low?'':' tw'}" style="left:${10+i*15}px;top:${60+(i%3)*14}px"></i>`).join('')}`);if(!low)hop();
     SFX('blocks_floor_done');setTimeout(()=>SFX('blocks_row_glow'),400);
     remember(fox?`We dug the den ${lines} rows deep`:`We wove the nest ${lines} rows`,'dig_rows_'+lines);
     setExpr('happy');react('happy');talk(B(r.isBest&&!firstEver?'dig_end_best':'dig_end',{rows:lines}),2200);save();lullaby();

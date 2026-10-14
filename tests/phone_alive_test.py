@@ -30,6 +30,7 @@ async def main():
       # 7: food drop/float/plate -> eat -> reaction
       await pg.locator('#overlay .choices button').first.click();await pg.wait_for_timeout(150);await frames(pg,sp+'-eat',30)
       assert await pg.evaluate("__echo.state.foods.length")>=1
+      zz=await pg.evaluate("(()=>{const f=document.querySelector('#sc .alfood');return f?[+getComputedStyle(f).zIndex,+getComputedStyle(document.getElementById('cr')).zIndex]:null})()");assert zz is None or zz[0]>zz[1],('food in front of the Echo',zz)
       assert await until(pg,"!document.querySelector('#sc .alfood')&&document.getElementById('b').style.display!=='none'",8000),'ate + line'
       await pg.evaluate(CL);await pg.wait_for_timeout(600)
       # gentle dislike: polite nibble, nudged aside, "That one's yours"
@@ -42,7 +43,8 @@ async def main():
       r=await pg.evaluate("(()=>{const s=document.getElementById('sc').getBoundingClientRect();return [s.x,s.y,s.width,s.height]})()")
       await pg.mouse.click(r[0]+r[2]*.12,r[1]+r[3]*.55);await pg.wait_for_timeout(120);await frames(pg,sp+'-look',14)
       assert 'look' in await pg.evaluate("Alive.log"),'look';assert await pg.evaluate("Alive.sess.tapText")==1
-      await pg.wait_for_timeout(1700);await pg.evaluate(CL);await pg.mouse.click(r[0]+r[2]*.88,r[1]+r[3]*.55);await pg.wait_for_timeout(200)
+      await pg.wait_for_timeout(1700);await pg.evaluate(CL);t2=await pg.evaluate("(()=>{const s=document.getElementById('sc').getBoundingClientRect(),x=s.x+s.width*.88;for(const f of [.55,.45,.62,.35,.7]){const y=s.y+s.height*f,e=document.elementFromPoint(x,y);if(e&&!e.closest('#cr,button,.bubble,.thought,.home,.fwstar,#fwstar,.lvfx,.dock'))return [x,y]}return [x,s.y+s.height*.55]})()")   # hollow log / hollow (home v1) sits on the right: tap clear of it
+      await pg.mouse.click(t2[0],t2[1]);await pg.wait_for_timeout(200)
       assert await pg.evaluate("Alive.log.filter(x=>x==='look').length")==2;assert await pg.evaluate("document.getElementById('b').style.display")=='none','2nd tap: chirp only'
       # 4: pet hearts, hold-to-hug, sit scoot
       await pg.wait_for_timeout(1300);await pg.evaluate(CL);await pg.click('#cr');await pg.wait_for_timeout(250);await frames(pg,sp+'-pet',10)
