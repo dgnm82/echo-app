@@ -3,8 +3,8 @@
 (function(W){
 const N={rate:{food:5,play:4,comfort:3,rest:3},quiet:[20,7],floor:1,show:50,hide:60,full:90,
   hue:{food:'#FFB070',play:'#7EC8FF',comfort:'#FF8FB8',rest:'#B49CFF'},
-  bond:{hello:5,visit:5,feed:3,feedFav:6,pet:1,sit:3,game:4,reply:3},
-  perDay:{visit:3,snack:3,pet:3,sit:1,game:6},group:{feed:'snack',feedFav:'snack'},perSess:{reply:2},capSess:30,capDay:60,
+  bond:{hello:5,visit:5,feed:3,feedFav:6,pet:1,sit:3,game:8,reply:3},
+  perDay:{visit:3,snack:3,pet:3,sit:1,game:6},group:{feed:'snack',feedFav:'snack'},perSess:{reply:2},capSess:30,capDay:80,
   care:['feed','feedFav','pet','sit','game','nap','care']};
 // hours of the span [t0,t1] that fall outside quiet hours (local clock); drain only runs while the child would be awake
 function awakeHours(t0,t1,q){q=q||N.quiet;if(t1<=t0)return 0;let h=0,t=t0;const quiet=d=>{const x=d.getHours();return q[0]>q[1]?(x>=q[0]||x<q[1]):(x>=q[0]&&x<q[1])};
@@ -24,7 +24,7 @@ function meter(needs){const o={};for(const k in N.rate)o[k]={v:Math.round(needs[
 // request pacing by level: 25-49 at most 2 a session, 1-24 at most 3; gap 120 s + (level-1)/48 x 180 s
 function reqCap(v){return v>=N.show?0:v<25?3:2}
 function reqGapMs(v){return (120+Math.max(0,v-1)/48*180)*1000}
-// bond: per-source daily counts, 2 replies a session, 30 a session and 60 a day; returns the points granted
+// bond: per-source daily counts, 2 replies a session, 30 a session and 80 a day; returns the points granted
 function bondGrant(st,sess,src,day,amt){const b=st.bondDay=st.bondDay&&st.bondDay.d===day?st.bondDay:{d:day,n:0,c:{}};sess.bond=sess.bond||0;sess.c=sess.c||{};
   let n=src==='choice'?(amt||0):(N.bond[src]||0);if(!n)return 0;const key=N.group[src]||src;
   if(N.perDay[key]!=null&&(b.c[key]||0)>=N.perDay[key])return 0;if(N.perSess[src]!=null&&(sess.c[src]||0)>=N.perSess[src])return 0;

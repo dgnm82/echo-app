@@ -10,7 +10,9 @@ A(N.meter({food:12,play:30,comfort:60,rest:90}).food.step===1&&N.meter({food:90,
 A(N.reqCap(10)===3&&N.reqCap(40)===2&&N.reqCap(60)===0&&N.reqGapMs(1)===120e3&&N.reqGapMs(49)===300e3,'request pacing');
 let st={},se={};const g=s=>N.bondGrant(st,se,s,'d1');A([1,2,3,4].map(()=>g('feed')).join()==='3,3,3,0','3 snacks a day');
 A([1,2,3].map(()=>g('reply')).join()==='3,3,0','2 replies a session');
-for(let i=0;i<9;i++)g('game');A(se.bond===30,'30 a session '+se.bond);se={};for(let i=0;i<9;i++)g('visit');g('pet');g('pet');g('pet');g('sit');A(st.bondDay.n<=60,'60 a day');
+for(let i=0;i<9;i++)g('game');A(se.bond===30,'30 a session '+se.bond);se={};for(let i=0;i<9;i++)g('visit');g('pet');g('pet');g('pet');g('sit');A(st.bondDay.n<=80,'80 a day');
+st={};{const r=[];for(let i=0;i<7;i++){se={};r.push(N.bondGrant(st,se,'game','d4'))}A(r.join()==='8,8,8,8,8,8,0','game +8, 6 a day '+r.join())}
+st={bondDay:{d:'d5',n:75,c:{}}};se={};A(N.bondGrant(st,se,'game','d5')===5&&N.bondGrant(st,{},'game','d5')===0,'day cap 80');
 se={};A(g('hello')>=0&&N.bondGrant({},{},'nap','d')===0,'no nap bond');
 A([10,30,50,80].map(N.awayStage).join()==='0,1,2,3','away stages');
 st={};se={};A([1,2,3,4].map((_,i)=>N.bondGrant(st,se,i%2?'feedFav':'feed','d2')).join()==='3,6,3,0','3 snacks a day in total');
