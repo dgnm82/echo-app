@@ -32,12 +32,20 @@ async def main():
       await pg.evaluate("__run.dist=Math.max(__run.dist,16*30)")
       assert seen and await pg.locator('#g2best.gold').count(),'NEW BEST banner after passing the best'
       bx=await pg.evaluate("window.__runBestX");assert bx is not None and abs(bx-(5*16-__import__('math').floor(0)) )<10000,bx
+      if kind=='owl':   # A5: a moon fragment catches one bump (the glide goes on), then the next bump ends it
+        await pg.evaluate("const g=__run;g.moon=1;g.grace=0;g.obs=[{type:'tree',x:g.dist+44,y:g.y-60,w:30,h:120}];g.nextObs=1e9")
+        for _ in range(40):
+          if await pg.evaluate("__run.saved>0"):break
+          await pg.wait_for_timeout(100)
+        sv=await pg.evaluate("[__run.saved,__run.phase,__run.moon,document.getElementById('rmoon').style.visibility]");print('moon save',sv)
+        assert sv[0]==1 and sv[1]=='run' and sv[2]==0,sv
+        await pg.wait_for_timeout(1700)
       # force a bump: the run ends (tumble, giggle, end card)
-      await pg.evaluate("const g=__run;g.obs=[{type:g.kind==='jump'?'log':'cloud',x:g.dist+44,y:g.kind==='jump'?456:g.y-20,w:30,h:g.kind==='jump'?14:30}];g.nextObs=1e9")
+      await pg.evaluate("const g=__run;g.moon=0;g.obs=[{type:g.kind==='jump'?'log':'cloud',x:g.dist+44,y:g.kind==='jump'?456:g.y-20,w:30,h:g.kind==='jump'?14:30}];g.nextObs=1e9")
       await pg.wait_for_selector('.g2card',timeout=8000);await pg.wait_for_timeout(1400)
       if kind=='fox':await pg.screenshot(path=f'/workspace/shots/games-v2/{sp}-run-card.png')
       card=await pg.inner_text('.g2card');print(kind,'card',card.replace('\n',' '))
-      assert 'NEW BEST' in card and ' m' in card and 'Again' in card and 'Done' in card and 'haul' not in card and 'was' not in card and 'gold counts' not in card and ('feather' in card or 'trinket' in card),card
+      assert 'NEW BEST' in card and ' m' in card and 'Again' in card and 'Done' in card and 'haul' not in card and 'was' not in card and 'gold counts' not in card and ('star' in card or 'trinket' in card),card
       assert await pg.evaluate("__echo.state.bond")>b0   # needs v2 §2: a finished game books bond (+8, via the caps)
       assert await pg.evaluate("__g2rounds")==3
       await pg.click('#g2done');await pg.wait_for_selector('#feed',timeout=15000)

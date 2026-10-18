@@ -1061,10 +1061,10 @@ function runGame(){
   const g=RunnerEngine.create({kind:fox?'jump':'glide',level,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
   const t0=now(),best0=bestGet('run',level),firstEver=!rs.runs&&!best0;let cheered=false,ended=false,lastLine=-9,lastFlap=-9,treN=0,bumpN=0,lastTre=0;
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame');
-  const tre=fox?'trinket':'feather';
+  const tre=fox?'trinket':'star';   // A5: Wingsong pickups are stars (extend the glide) + moon fragments (one free bump)
   gs.insertAdjacentHTML('beforeend',`<canvas id="rc" width="360" height="640" aria-label="${TITLE}"></canvas>
-    <div class="runhint" id="rhint">${rs.runs?'':(fox?'tap = jump':'hold = rise, let go = glide')}</div><div class="runcue" id="rcue" style="background-image:url(px/${fox?'i_stamp_paw':'i_feather'}.png)"></div>`);
-  const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/items/${tre}.png)"></i><span id="rt">×0</span>${hudBest('run',level)}${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
+    <div class="runhint" id="rhint">${rs.runs?'':(fox?'tap = jump':'hold = rise, let go = glide')}</div><div class="runcue" id="rcue" style="background-image:url(px/${fox?'i_stamp_paw':'i_star'}.png)"></div>`);
+  const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/${fox?'items/'+tre:'i_star'}.png)"></i><span id="rt">×0</span>${fox?'':'<i class="pxi rmoon" id="rmoon" style="background-image:url(px/i_moon.png);visibility:hidden" aria-label="moon piece"></i>'}${hudBest('run',level)}${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const q=s.split('/'),f='px/run/'+q.pop()+'.png',g=q.length>2?'px/run/'+q[q.length-1]+'/'+s.split('/').pop()+'.png':f;if(!im.src.endsWith(g))im.src=g;else if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
   const PL=fox?PIXEL.PAL:PIXEL.POWL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
@@ -1072,8 +1072,8 @@ function runGame(){
   window.__runHome=null;if(S.badges.includes('place')){IM.homeRest=new Image();IM.homeRest.src=`px/home/${homeKind()}_front.png`;window.__runHome=IM.homeRest.src}   // home_log_hollow: the log / hollow at the rest stop
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
     ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
-  else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
-  ld('tre','items/'+tre);if(!fox)['best_star0','best_star1'].forEach(k=>ld(k,'run/'+k));ld('gold','run/'+tre+'_gold');
+  else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240','branch280','branch320','branch360','branch400','cloud_far',...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
+  if(fox){ld('tre','items/'+tre);ld('gold','run/'+tre+'_gold')}else{ld('tre','i_star');ld('gold','i_moon');['best_star0','best_star1'].forEach(k=>ld(k,'run/'+k))}
   let alive=true,acc=0,last=performance.now(),happy=0,pops=[],frame=0;
   const lineOK=()=>g.t-lastLine>=6;const line=(k,ms)=>{if(!lineOK())return false;lastLine=g.t;talk(B(k),ms||1800);return true};
   const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
@@ -1081,13 +1081,15 @@ function runGame(){
     if(fox){cx.drawImage(IM.meadow_sky,0,0);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
       cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448)}
     else{cx.drawImage(IM.hill_sky,0,0);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
-      [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
+      [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud_far&&IM.cloud_far.naturalWidth?IM.cloud_far:IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
   function drawObs(){const d=g.dist;for(const o of g.obs){const x=Math.round(o.x-d);if(x>370||x<-60)continue;const wob=o.pushed?Math.round(Math.sin(g.t*30)*2):0;
       if(nv&&!o.pushed&&x<360+g.speed*.5){cx.fillStyle='rgba(255,227,154,.25)';cx.fillRect(x-2,o.y-2,o.w+4,Math.min(o.h+4,640))}
       if(o.type==='log')cx.drawImage(IM.log,x-1+wob,o.y-2);else if(o.type==='logs'){cx.drawImage(IM.log,x-1,o.y+12);cx.drawImage(IM.log,x-1,o.y-2)}
       else if(o.type==='rock')cx.drawImage(IM.rock,x-1+wob,o.y-2);else if(o.type==='puddle')cx.drawImage(IM.puddle,x-1,o.y-1-(o.pushed?1:0));
+      else if(o.type==='cloud'&&o.top){for(let y=o.h-14,i=0;y>-14;y-=10,i++)cx.drawImage(IM.cloud,x+wob+(i%2?3:-3)*(i>0?1:0),y)}   // A5: a cloud bank hanging from the top (stacked cloud puffs)
       else if(o.type==='cloud')cx.drawImage(IM.cloud,x+wob,o.y);
-      else if(o.type==='branch'){const L=[120,160,200,240].find(v=>v>=o.h)||240,im=IM['branch'+L];cx.drawImage(im,x-1+wob,o.h-im.height+2)}
+      else if(o.type==='tree'){const L=[120,160,200,240,280,320,360,400].find(v=>v>=o.h)||400,im=IM['branch'+L];cx.save();cx.beginPath();cx.rect(x-4,0,48,533);cx.clip();cx.translate(0,o.y+im.height-2);cx.scale(1,-1);cx.drawImage(im,x-3+wob,0);cx.restore()}   // A5: Cole's hanging limb flipped = a tree rising from the hill (leafy tip on top)
+      else if(o.type==='branch'){const L=[120,160,200,240,280,320,360,400].find(v=>v>=o.h)||400,im=IM['branch'+L];cx.drawImage(im,x-1+wob,o.h-im.height+2)}
       else if(o.type==='bush'){const h=RUN_BUSH.filter(v=>v<=o.h).pop()||40;cx.drawImage(IM['bush'+h],x+wob,531-h)}}   // flat-base bushes stand on the grass (runner_polish.md §4)
     if(best0>0){const bx=Math.round(best0*16-d+40),f=lowFx()?0:(performance.now()/250|0)%2;window.__runBestX=bx;if(bx>-20&&bx<370){if(fox){cx.fillStyle='#FFD27A';for(let y=468;y<480;y+=3)cx.fillRect(bx,y,2,2);if(IM['best_flag'+f])cx.drawImage(IM['best_flag'+f],bx,470-47)}else for(let y=52;y<=528;y+=18)if(IM['best_star'+f])cx.drawImage(IM['best_star'+((y/18+f)%2|0)]||IM.best_star0,bx-2,y)}}
     for(const t of g.tre){const x=Math.round(t.x-d)-8,ty=Math.round(t.y-8+(!lowFx()&&Math.sin(g.t*4+t.id)>0?-1:0));if(x>370||x<-20)continue;if(t.gold)drawGlow(cx,x+8,ty+8,performance.now());cx.drawImage(t.gold?IM.gold:IM.tre,x,ty)}
@@ -1100,7 +1102,7 @@ function runGame(){
     if(g.tumble>0&&!lowFx()){const st=Math.floor((0.5-g.tumble)/0.125)%4;cx.save();cx.translate(x+24,y+24);cx.rotate(st*Math.PI/2);cx.drawImage(im,-24,-24);cx.restore()}
     else{if(g.grace>0&&(F%2))cx.globalAlpha=.6;const au=im.complete&&PIXEL.aura(im,0,0,GL,pal,{sw:im.naturalWidth,sh:im.naturalHeight,seed:S.g.seed});if(au){const P=Math.round(13*im.naturalHeight/48);cx.drawImage(au,x-P,y-P)}cx.drawImage(im,x,y)}cx.globalAlpha=1;
     for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
-  function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+RunnerEngine.haul(g);if(cheered)$('#rm').classList.add('gold')}
+  function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+RunnerEngine.haul(g);{const mo=$('#rmoon');if(mo)mo.style.visibility=g.moon?'visible':'hidden'}if(cheered)$('#rm').classList.add('gold')}
   function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
     acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=1/60){RunnerEngine.step(g,1/60);acc-=1/60;if(happy>0)happy-=1/60;pops.forEach(p=>p.t-=1/60);pops=pops.filter(p=>p.t>0);
 handle()}
@@ -1112,6 +1114,7 @@ handle()}
         if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');lastLine=-9;if(!line('run_glow',1800))line('run_gold',1800)}
         else{lastTre=(g.t-lastTre>8)?1:lastTre+1;SFX(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
       if(e.type==='bump'){bumpN++;if(!silent)SFX('run_tumble_boop',{gap:400,vol:.5})}
+      if(e.type==='saved'){if(!silent)SFX('run_tumble_boop',{gap:400,vol:.4});happy=.4;lastLine=-9;line('run_saved',1800)}   // A5: the moon piece caught the bump
       if(e.type==='giggle')giggle();
       if(e.type==='disguise'){giggle();react('excited')}
       if(e.type==='radar')SFX('slyte_radar_ears_twinkle',{pan:1,vol:.5,gap:300});

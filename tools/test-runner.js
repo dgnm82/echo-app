@@ -20,6 +20,16 @@ const pilot=(g)=>{const c=R.core(g);for(const o of g.obs){const sx=o.x-g.dist;if
  const s=R.create({kind:'glide',seed:1,talents:['Silent Flight']});s.nextObs=1e9;const a=s.y;for(let i=0;i<60;i++)R.step(s,1/60);ok(Math.abs((s.y-a)-0.75*60)<2,'silent flight fall')}
 // glide gaps are wide enough
 {const g=R.create({kind:'glide',level:'bigkid',seed:9});for(let i=0;i<60*60;i++)R.step(g,1/60);ok(true,'')}
+// A5 Moonlight Glide: stars extend the glide, a moon fragment = one free bump, trees from below / clouds from above, denser with distance
+{const g=R.create({kind:'glide',seed:1});g.nextObs=1e9;g.nextTre=1e9;g.tre=[{x:g.dist+R.G.EX+12,y:g.y-14,gold:false,id:1}];R.step(g,1/60);ok(g.float>1,'star -> float');const a=g.y;for(let i=0;i<30;i++)R.step(g,1/60);const fa=g.y-a;
+ const h=R.create({kind:'glide',seed:1});h.nextObs=1e9;h.nextTre=1e9;const b=h.y;for(let i=0;i<31;i++)R.step(h,1/60);ok(fa<(h.y-b)*.6,'star glide falls slower '+fa.toFixed(1)+' vs '+(h.y-b).toFixed(1))}
+{const g=R.create({kind:'glide',seed:1});g.nextObs=1e9;g.nextTre=1e9;g.moon=1;const ev=[];const box=()=>({type:'tree',x:g.dist+R.G.EX,y:g.y-30,w:30,h:60});g.obs=[box()];for(let i=0;i<60;i++){R.step(g,1/60);ev.push(...R.take(g))}
+ ok(ev.some(e=>e.type==='saved')&&!ev.some(e=>e.type==='end')&&g.phase==='run'&&g.moon===0,'moon saves one bump');for(let i=0;i<60;i++)R.step(g,1/60);g.obs.push(box());for(let i=0;i<120;i++){R.step(g,1/60);ev.push(...R.take(g))}ok(ev.some(e=>e.type==='end'),'second bump ends')}
+{let mid=0,trees=0,clouds=0,ok2=true;const span=[[0,0],[0,0]];for(let s=1;s<=20;s++){const g=R.create({kind:'glide',level:'standard',seed:s});g.moon=0;let n0=0,n1=0,h0=0,h1=0;
+  for(let i=0;i<60*120;i++){R.step(g,1/60);g.phase='run';g.pending=null;for(const o of g.obs)if(!o.seen){o.seen=1;const far=g.dist/16>500;
+    if(o.type==='cloud'){clouds++;if(o.y!==0)mid++}else if(o.type==='tree'){trees++;if(o.y+o.h!==R.G.HILL)ok2=false;if(far){n1++;h1+=o.h}else{n0++;h0+=o.h}}else ok2=false}}
+  span[0][0]+=n0;span[0][1]+=h0;span[1][0]+=n1;span[1][1]+=h1}
+ ok(mid===0&&trees>0&&clouds>0&&ok2,'trees from below, clouds from above only '+[trees,clouds,mid]);ok(span[1][1]/span[1][0]>span[0][1]/span[0][0],'taller trees farther on')}
 // talents: Super Jumper double hop, Master of Disguise once per stretch, Radar Ears event
 {const g=R.create({kind:'jump',seed:1,talents:['Super Jumper']});g.nextObs=1e9;R.press(g);R.release(g);for(let i=0;i<10;i++)R.step(g,1/60);R.press(g);ok(g.hops===2,'double hop')}
 {const [g,ev]=run({kind:'jump',seed:4,talents:['Master of Disguise']},40);ok(ev.filter(e=>e.type==='disguise').length===1,'disguise once per 500 m')}

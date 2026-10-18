@@ -1847,7 +1847,7 @@
         "expr": "happy"
       },
       {
-        "text": "Branches and clouds… we'll drift past them.",
+        "text": "Trees and clouds… we'll drift past them.",
         "expr": "thinking"
       }
     ],
@@ -1871,11 +1871,11 @@
     ],
     "run_treasure": [
       {
-        "text": "A soft feather… for the nest.",
+        "text": "A little star… it lifts my wings.",
         "expr": "happy"
       },
       {
-        "text": "A feather. How lovely.",
+        "text": "A star. I can float longer now.",
         "expr": "happy"
       },
       {
@@ -1885,11 +1885,11 @@
     ],
     "run_gold": [
       {
-        "text": "A moon feather… it glows.",
+        "text": "A moon piece… it will catch me once.",
         "expr": "delighted"
       },
       {
-        "text": "The golden kind.",
+        "text": "A bit of moon. It glows.",
         "expr": "delighted"
       }
     ],
@@ -2686,7 +2686,7 @@
     ],
     "run_glow": [
       {
-        "text": "A moon feather. It glows.",
+        "text": "A moon piece. It glows.",
         "expr": "delighted"
       },
       {
@@ -3117,6 +3117,16 @@
         "text": "",
         "expr": "love",
         "gesture": "hum"
+      }
+    ],
+    "run_saved": [
+      {
+        "text": "Oops… the moon caught me. Still gliding.",
+        "expr": "happy"
+      },
+      {
+        "text": "A soft bump… the moon piece helped.",
+        "expr": "happy"
       }
     ]
   },
