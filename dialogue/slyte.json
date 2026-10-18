@@ -36,7 +36,7 @@
         }
       },
       {
-        "text": "I feel cozy-sleepy today. Want to just hang out?",
+        "text": "I feel cozy and sleepy today. Sit with me?",
         "expr": "curious",
         "cond": {
           "time": [
@@ -140,7 +140,7 @@
         "react": "eat"
       },
       {
-        "text": "Crunch! That's a good crunch. A tremendous-ish crunch.",
+        "text": "Crunch! Good crunch. My ears wiggle.",
         "expr": "eating",
         "react": "eat"
       },
@@ -226,7 +226,7 @@
     ],
     "sit": [
       {
-        "text": "…quiet is nice. Who knew? Not me, the bouncy {name}.",
+        "text": "…quiet is nice. I didn't know that.",
         "expr": "love"
       },
       {
@@ -251,7 +251,7 @@
         "react": "sleepy"
       },
       {
-        "text": "Okay. Four times. Okay. Nap.",
+        "text": "Turn, turn, turn, turn. Okay. Nap.",
         "expr": "sleepy",
         "react": "sleepy",
         "gesture": "spin"
@@ -316,19 +316,19 @@
     ],
     "talent_Super Jumper": [
       {
-        "text": "I just jumped SO high I touched a cloud. Almost. Basically.",
+        "text": "I jumped SO high! I almost touched a cloud.",
         "expr": "excited"
       }
     ],
     "talent_Riddle Solver": [
       {
-        "text": "Ding! My brain got sparkly. Now I make card riddles. Pairs, here I come!",
+        "text": "Ding! I can make card riddles now. Let's play Pairs!",
         "expr": "excited"
       }
     ],
     "trust": [
       {
-        "text": "You're my favorite discovery. Basically forever.",
+        "text": "You're my favorite. My best find.",
         "expr": "love"
       }
     ],
@@ -352,7 +352,7 @@
         }
       },
       {
-        "text": "Breakfast thoughts: berries. Also berries.",
+        "text": "Breakfast? Berries! More berries!",
         "expr": "happy",
         "cond": {
           "time": [
@@ -372,7 +372,7 @@
     ],
     "time_day": [
       {
-        "text": "Afternoon! Prime pouncing hours.",
+        "text": "Afternoon! Good time for pouncing.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -419,7 +419,7 @@
         }
       },
       {
-        "text": "The fireflies are coming. Pounce-worthy. Gently.",
+        "text": "The fireflies are coming. I'll pounce gently.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -531,7 +531,7 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Ant line. Very organized.",
+        "text": "Ant line. So neat.",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -540,7 +540,7 @@
         "expr": "neutral"
       },
       {
-        "text": "Hmm. North is… up. Probably.",
+        "text": "Hmm. Which way is up? That way!",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -550,7 +550,7 @@
         "gesture": "pounce"
       },
       {
-        "text": "Fashion.",
+        "text": "Fur fluffed. Pretty.",
         "expr": "neutral",
         "gesture": "groom"
       },
@@ -615,7 +615,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Practice.",
+        "text": "Pounce practice.",
         "expr": "neutral",
         "gesture": "pounce"
       },
@@ -635,7 +635,7 @@
         "gesture": "wait"
       },
       {
-        "text": "Sky's still there.",
+        "text": "Big sky. Still blue.",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -700,7 +700,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Puddle. Very tempting.",
+        "text": "Puddle! Jump? Jump!",
         "expr": "giggling",
         "gesture": "tap"
       },
@@ -875,7 +875,7 @@
     ],
     "callback": [
       {
-        "text": "Sun's low. My shadow {var:shadow}. Your idea.",
+        "text": "My shadow {var:shadow}. You said so!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_shadow",
@@ -883,7 +883,7 @@
         }
       },
       {
-        "text": "Puddle thought: it {var:puddle}. You said so.",
+        "text": "The puddle {var:puddle}. You said so!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_puddle",
@@ -891,7 +891,7 @@
         }
       },
       {
-        "text": "Teapot fact, by you: it {var:teapot}.",
+        "text": "The teapot {var:teapot}. You told me!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_teapot",
@@ -899,7 +899,7 @@
         }
       },
       {
-        "text": "Leaf lines. A leaf {var:leaf}. You knew.",
+        "text": "A leaf {var:leaf}. You said that!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_leaf",
@@ -915,7 +915,7 @@
         }
       },
       {
-        "text": "My bottle cap {var:bottlecap}. Treasure history!",
+        "text": "My bottle cap {var:bottlecap}. Still mine!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_bottlecap",
@@ -939,7 +939,7 @@
         }
       },
       {
-        "text": "Beetle fact, by you: it {var:beetle}.",
+        "text": "A beetle {var:beetle}. You told me!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_beetle",
@@ -947,7 +947,7 @@
         }
       },
       {
-        "text": "The echo {var:echo_sound}. Yip, it agrees.",
+        "text": "The echo {var:echo_sound}. Yip! Yip!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_echo_sound",
@@ -979,7 +979,7 @@
         }
       },
       {
-        "text": "My pebble {var:pebble}. Lumpy fact.",
+        "text": "My pebble {var:pebble}. Lumpy pebble!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_pebble",
@@ -1027,7 +1027,7 @@
         }
       },
       {
-        "text": "The bendy stick {var:stick}. Agreed.",
+        "text": "The bendy stick {var:stick}. Boing!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_stick",
@@ -1067,7 +1067,7 @@
         }
       },
       {
-        "text": "My map {var:map}. Your direction.",
+        "text": "My map {var:map}. You showed me!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_map",
@@ -1083,7 +1083,7 @@
         }
       },
       {
-        "text": "Socks. A sock {var:sock}. Noted.",
+        "text": "A sock {var:sock}. Silly sock!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_sock",
@@ -1147,7 +1147,7 @@
         }
       },
       {
-        "text": "A sneeze {var:sneeze}. Achoo-proof.",
+        "text": "A sneeze {var:sneeze}. Achoo!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_sneeze",
@@ -1211,7 +1211,7 @@
         }
       },
       {
-        "text": "The cocoon {var:cocoon}. Patience.",
+        "text": "The cocoon {var:cocoon}. Shh. Wait.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_cocoon",
@@ -1219,7 +1219,7 @@
         }
       },
       {
-        "text": "A balloon {var:balloon}. Float fact.",
+        "text": "A balloon {var:balloon}. Up, up!",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_balloon",
@@ -1259,14 +1259,14 @@
         }
       },
       {
-        "text": "Sir Floaty! Or Leafy. Our leaf boat. Still the best voyage.",
+        "text": "Our leaf boat! Sir Floaty. Or Leafy. Best boat.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_puddle_talk"
         }
       },
       {
-        "text": "The hollow-log sign says {var:treeSign}. In squiggle. Still true.",
+        "text": "The log sign says {var:treeSign}. I made the squiggles.",
         "expr": "happy",
         "cond": {
           "hasMemory": "slyte_treehouse_sign",
@@ -1309,19 +1309,19 @@
         "expr": "happy"
       },
       {
-        "text": "Thinking face? Same. So, anyway…",
+        "text": "Thinking face? Me too. Hmm…",
         "expr": "curious"
       }
     ],
     "fallback_silly": [
       {
-        "text": "That's so silly it might be true.",
+        "text": "Ha! Silly! I like silly.",
         "expr": "excited"
       }
     ],
     "fallback_unsure": [
       {
-        "text": "Not knowing is fun. Mysteries!",
+        "text": "I don't know either. Fun!",
         "expr": "curious"
       }
     ],
@@ -1333,7 +1333,7 @@
     ],
     "fallback_no": [
       {
-        "text": "No? Okay. Noted. Pouncing on.",
+        "text": "No? Okay! Next thing!",
         "expr": "happy"
       }
     ],
@@ -1349,7 +1349,7 @@
         "expr": "surprised"
       },
       {
-        "text": "Huh! New idea. Filing it in my ears.",
+        "text": "Huh! A new idea. Ooh.",
         "expr": "happy"
       }
     ],
@@ -1363,7 +1363,7 @@
         "expr": "curious"
       },
       {
-        "text": "Related thought. Ready?",
+        "text": "Ooh! Wait. I know!",
         "expr": "happy"
       }
     ],
@@ -1373,11 +1373,11 @@
         "expr": "curious"
       },
       {
-        "text": "I had a thought. It ran off. Fast thought.",
+        "text": "I had an idea. It ran away. Fast idea!",
         "expr": "happy"
       },
       {
-        "text": "Where was I? …Nowhere. Nice place.",
+        "text": "Where was I? …I forget. Hi!",
         "expr": "happy"
       }
     ],
@@ -1451,13 +1451,13 @@
     ],
     "bond_up_3": [
       {
-        "text": "Look at my tail! Fluffier AND sparklier. We did that.",
+        "text": "Look at my tail! Fluffy AND sparkly. We did that.",
         "expr": "proud"
       }
     ],
     "bond_up_4": [
       {
-        "text": "I'm all the way me now. Best team in the meadow!",
+        "text": "Look! I'm all grown. Best team in the meadow!",
         "expr": "delighted"
       }
     ],
@@ -1542,7 +1542,7 @@
     ],
     "found_grove_pile": [
       {
-        "text": "Leaf pile report: excellent. Very bouncy. Ten out of ten!",
+        "text": "The leaf pile is SO bouncy. Boing!",
         "expr": "delighted"
       }
     ],
@@ -1607,7 +1607,7 @@
         }
       },
       {
-        "text": "I'm learning SO much here. My tail feels sparklier. Probably.",
+        "text": "I'm learning SO much here. My tail feels sparkly!",
         "expr": "proud",
         "cond": {
           "bondMin": 290
@@ -1617,21 +1617,21 @@
     ],
     "bondup_after_3": [
       {
-        "text": "Something way out there twinkled. At me? Probably at me.",
+        "text": "Something far away twinkled. Was it at me?",
         "expr": "curious",
         "gesture": "glances at the faint home star"
       }
     ],
     "bondup_after_4": [
       {
-        "text": "All this light is from your world. I'm already carrying tiny bits.",
+        "text": "I'm glowing more. Is that from you? I think so.",
         "expr": "love",
         "gesture": "pats its chest glow"
       }
     ],
     "bondup_after_5": [
       {
-        "text": "I'm packed with your world now. Like a pocket of shiny things.",
+        "text": "I'm full of shiny things from here. Like a pocket!",
         "expr": "proud",
         "gesture": "looks at the bright home star, then back at you"
       }
@@ -1668,7 +1668,7 @@
     ],
     "list_nudge": [
       {
-        "text": "Today's pick? Any one. Or none! Hanging out counts too.",
+        "text": "Today's pick? Any one. Or just sit. That's good too.",
         "expr": "happy"
       }
     ],
@@ -1686,7 +1686,7 @@
     ],
     "list_place_done": [
       {
-        "text": "Den dug, check! Deepest den in the meadow. Probably.",
+        "text": "Den dug, check! Our den is SO deep!",
         "expr": "proud"
       }
     ],
@@ -1710,7 +1710,7 @@
     ],
     "list_complete": [
       {
-        "text": "Whole list done! Every single thing. We're a sneaky-good team.",
+        "text": "Whole list done! Every single thing. We're a good team!",
         "expr": "excited",
         "react": "happy"
       }
@@ -1782,7 +1782,7 @@
     ],
     "walk_list": [
       {
-        "text": "We did my whole list! Every bit. Basically perfect.",
+        "text": "We did my whole list! Every bit!",
         "expr": "proud",
         "cond": {
           "var": {
@@ -1804,7 +1804,7 @@
     ],
     "edge_explain": [
       {
-        "text": "Remember? I came to learn your world. Now I carry it home.",
+        "text": "Remember? I came to learn here. Now I take it home.",
         "expr": "love"
       },
       {
@@ -1924,7 +1924,7 @@
     ],
     "thanks_nose": [
       {
-        "text": "Nose-tap. Very official.",
+        "text": "Nose tap! Boop.",
         "expr": "giggling"
       }
     ],
@@ -1966,11 +1966,11 @@
         "expr": "giggling"
       },
       {
-        "text": "I meant that. Probably.",
+        "text": "Oops! I rolled. Fun!",
         "expr": "giggling"
       },
       {
-        "text": "Rolled right over it. Basically.",
+        "text": "Bump! Roll, roll. I'm okay!",
         "expr": "giggling"
       },
       {
@@ -1988,7 +1988,7 @@
         "expr": "happy"
       },
       {
-        "text": "Treasure! Sneaky-good grab.",
+        "text": "Treasure! Got it!",
         "expr": "proud"
       },
       {
@@ -2024,7 +2024,7 @@
         "react": "excited"
       },
       {
-        "text": "NEW best! I'm basically a comet.",
+        "text": "NEW best! I'm so fast!",
         "expr": "proud",
         "react": "excited"
       }
@@ -2040,7 +2040,7 @@
         "expr": "proud"
       },
       {
-        "text": "Logs jumped, treasure found. Basically heroes.",
+        "text": "We jumped logs! We found treasure!",
         "expr": "proud",
         "react": "happy"
       }
@@ -2082,7 +2082,7 @@
         "gesture": "curious"
       },
       {
-        "text": "My tummy just did a tiny yip. Snack o'clock, maybe?",
+        "text": "My tummy did a tiny yip. Snack time?",
         "expr": "giggling"
       },
       {
@@ -2106,7 +2106,7 @@
         "expr": "happy"
       },
       {
-        "text": "Back home, the stars hum at bedtime. Hugs sound like that.",
+        "text": "Hugs feel warm. Like a sunny spot.",
         "expr": "love"
       },
       {
@@ -2123,7 +2123,7 @@
         "expr": "happy"
       },
       {
-        "text": "Ear scratches are allowed. Just saying.",
+        "text": "Ear scratches? I like ear scratches.",
         "expr": "shy",
         "gesture": "pounce"
       }
@@ -2210,7 +2210,7 @@
         "gesture": "hum"
       },
       {
-        "text": "Right now is a really good now.",
+        "text": "Right now is really good.",
         "expr": "love"
       }
     ],
@@ -2239,7 +2239,7 @@
         "expr": "delighted"
       },
       {
-        "text": "Okay. Fun level: very.",
+        "text": "That was SO fun.",
         "expr": "giggling",
         "gesture": "settle"
       }
@@ -2257,7 +2257,7 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Morning-ish! Or nap-o'clock-later. Either way, hi!",
+        "text": "Hi! I napped. Is it morning? Hi!",
         "expr": "excited"
       }
     ],
@@ -2316,7 +2316,7 @@
     ],
     "weather_fog": [
       {
-        "text": "Fog! The trees are playing hide-and-peek.",
+        "text": "Fog! The trees are playing hide-and-seek.",
         "expr": "curious"
       },
       {
@@ -2367,7 +2367,7 @@
     ],
     "food_blueberries": [
       {
-        "text": "Tiny blue moons. I'm eating a whole sky.",
+        "text": "Blueberries! Tiny and round. Pop!",
         "expr": "eating"
       }
     ],
@@ -2385,7 +2385,7 @@
     ],
     "food_banana_coins": [
       {
-        "text": "Banana coins! I'm rich. Chomp. Less rich.",
+        "text": "Banana coins! Round and yummy. Chomp!",
         "expr": "eating"
       }
     ],
@@ -2397,7 +2397,7 @@
     ],
     "food_orange_segments": [
       {
-        "text": "Little sunshine boats. Sticky paws. Worth it.",
+        "text": "Orange boats! Sticky paws. Yum.",
         "expr": "neutral"
       }
     ],
@@ -2475,7 +2475,7 @@
     ],
     "food_honey_toast": [
       {
-        "text": "Crunchy toast, sticky honey. Crunch-sticky. My new word.",
+        "text": "Crunchy toast, sticky honey. Yum!",
         "expr": "eating"
       }
     ],
@@ -2493,7 +2493,7 @@
     ],
     "food_quesadilla": [
       {
-        "text": "Folded and melty! A cheese envelope. Delivery for me.",
+        "text": "Folded and melty! Cheese inside. Yum.",
         "expr": "eating"
       }
     ],
@@ -2523,7 +2523,7 @@
     ],
     "food_yogurt": [
       {
-        "text": "Cold and creamy. Yogurt whiskers. Worth it.",
+        "text": "Cold and creamy. Now I have yogurt whiskers.",
         "expr": "eating"
       }
     ],
@@ -2583,7 +2583,7 @@
     ],
     "food_olives": [
       {
-        "text": "Olives are very serious snacks. My tongue is giggly.",
+        "text": "Olives! Salty. My tongue went wiggly.",
         "expr": "shy"
       }
     ],
@@ -2721,7 +2721,7 @@
         "gesture": "tail wave"
       },
       {
-        "text": "{child}! Perfect timing. Probably.",
+        "text": "{child}! You're here!",
         "expr": "giggling",
         "cond": {
           "varSet": "child_named"
@@ -2833,7 +2833,7 @@
         "react": "excited"
       },
       {
-        "text": "An invitation! For me! Yes. Obviously yes.",
+        "text": "An invitation! For me! Yes, yes!",
         "expr": "delighted",
         "short": "Ooh! Yes!",
         "react": "happy"
@@ -2847,7 +2847,7 @@
         "gesture": "little bow, happy eyes, light drifts back"
       },
       {
-        "text": "So kind! Not today. My song wants to roam a bit more.",
+        "text": "So kind! Not today. I want to explore a bit more.",
         "expr": "happy",
         "short": "So kind! Not today.",
         "gesture": "happy hop, then drifts off"
@@ -2878,7 +2878,7 @@
         }
       },
       {
-        "text": "{name}! That is me now. Best name. Probably.",
+        "text": "{name}! That is me now. Best name!",
         "expr": "proud",
         "short": "{name}! That's me!",
         "cond": {
@@ -2925,7 +2925,7 @@
         "react": "excited"
       },
       {
-        "text": "New best! {dist} metres. I'm basically a comet.",
+        "text": "New best! {dist} metres. I'm so fast!",
         "expr": "proud",
         "react": "excited"
       }
@@ -3404,7 +3404,7 @@
               "icon": "🪣",
               "label": "In a bucket",
               "goto": "b",
-              "reply": "A bucket? That's so silly it would totally work.",
+              "reply": "A bucket? So silly! I love it.",
               "expr": "excited",
               "set": {
                 "hideSpot": "In a bucket"
@@ -3429,13 +3429,13 @@
             {
               "icon": "🍯",
               "label": "Honey cake",
-              "reply": "Correct answer. Sticky, but correct.",
+              "reply": "Yes! Sticky snacks. Yum.",
               "expr": "happy"
             },
             {
               "icon": "🫐",
               "label": "Blackberries",
-              "reply": "Purple fingers! That is how I would find you. Worth it.",
+              "reply": "Purple fingers! That's how I'd find you. Hee!",
               "expr": "happy"
             },
             {
@@ -3448,7 +3448,7 @@
           ]
         },
         "c": {
-          "say": "I'll remember that always. {var:hideSpot}, no snacks. Legendary.",
+          "say": "I'll remember that. {var:hideSpot}! Ooh.",
           "expr": "happy",
           "memory": "You told me your best hiding spot: {var:hideSpot}",
           "memoryTag": "hide_spot",
@@ -3810,7 +3810,7 @@
           ]
         },
         "b": {
-          "say": "Paw report: wet. Theory: still good.",
+          "say": "My paw is wet now. Still a good puddle!",
           "expr": "happy",
           "bond": 2
         }
@@ -3896,7 +3896,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Very proper teapot. I bowed to it.",
+          "say": "{pet_phrase} A fancy teapot. I bowed to it.",
           "expr": "happy",
           "bond": 2
         }
@@ -3933,7 +3933,7 @@
           ]
         },
         "b": {
-          "say": "Teapot time is cozy time. Agreed.",
+          "say": "Teapot time is cozy time.",
           "expr": "happy",
           "bond": 1
         }
@@ -4019,7 +4019,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Leaf report: crunchy. Excellent.",
+          "say": "{pet_phrase} Crunchy leaves. So crunchy!",
           "expr": "happy",
           "bond": 1
         }
@@ -4062,7 +4062,7 @@
           ]
         },
         "b": {
-          "say": "Still there. Moon spots, very loyal.",
+          "say": "Still there! The moon spots stay.",
           "expr": "happy",
           "bond": 2
         }
@@ -4081,7 +4081,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Night moon. It turned the dark into silver. Fancy.",
+          "say": "Night moon. It makes everything silver. Pretty!",
           "expr": "happy",
           "choices": [
             {
@@ -4142,7 +4142,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} It's mine now. Retired from juice. Happy cap.",
+          "say": "{pet_phrase} It's mine now. No more juice. Happy cap.",
           "expr": "happy",
           "bond": 2
         }
@@ -4185,7 +4185,7 @@
           ]
         },
         "b": {
-          "say": "Bottle cap: sparkly. Sun: helpful.",
+          "say": "Sparkly cap! Thank you, sun.",
           "expr": "happy",
           "bond": 1
         }
@@ -4228,7 +4228,7 @@
           ]
         },
         "b": {
-          "say": "Fluffing for fairness.",
+          "say": "I'm fluffing my tail. Just in case.",
           "expr": "happy",
           "bond": 2,
           "gesture": "groom"
@@ -4266,7 +4266,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Squirrel says morning. Probably.",
+          "say": "{pet_phrase} Morning, squirrel!",
           "expr": "happy",
           "bond": 1
         }
@@ -4328,7 +4328,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Big clouds today. Puffy ones. Pounce-worthy, if I could reach.",
+          "say": "Big puffy clouds today. I want to pounce one.",
           "expr": "happy",
           "choices": [
             {
@@ -4352,7 +4352,7 @@
           ]
         },
         "b": {
-          "say": "Cloud wondering: done!",
+          "say": "Clouds are so puffy. Like pillows!",
           "expr": "happy",
           "bond": 1
         }
@@ -4395,7 +4395,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} This one is very polished. Proof.",
+          "say": "{pet_phrase} This one is SO shiny. See?",
           "expr": "happy",
           "bond": 2
         }
@@ -4432,7 +4432,7 @@
           ]
         },
         "b": {
-          "say": "Beetles shine extra at this hour. Noted.",
+          "say": "Shiny beetles. Glow, glow.",
           "expr": "happy",
           "bond": 1
         }
@@ -4518,7 +4518,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Echo test passed. Yip.",
+          "say": "{pet_phrase} The echo said yip back!",
           "expr": "happy",
           "bond": 1
         }
@@ -4561,7 +4561,7 @@
           ]
         },
         "b": {
-          "say": "Whisker hello back.",
+          "say": "I wiggled my whiskers back. Hello!",
           "expr": "happy",
           "bond": 2,
           "gesture": "pounce"
@@ -4581,7 +4581,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Morning snail! It got up early. And it's still almost here.",
+          "say": "Morning snail! It's coming. Slowly, slowly.",
           "expr": "happy",
           "choices": [
             {
@@ -4642,7 +4642,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Wheee. In my head. Best slide.",
+          "say": "{pet_phrase} Wheee! A pretend slide!",
           "expr": "happy",
           "bond": 2
         }
@@ -4728,7 +4728,7 @@
           ]
         },
         "b": {
-          "say": "Honey cake respect. Big respect.",
+          "say": "Honey cake! Big yum.",
           "expr": "happy",
           "bond": 2
         }
@@ -4765,7 +4765,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Snack thoughts complete.",
+          "say": "{pet_phrase} Now I want a snack.",
           "expr": "happy",
           "bond": 1
         }
@@ -4851,7 +4851,7 @@
           ]
         },
         "b": {
-          "say": "Pebble check: still striped.",
+          "say": "My pebble still has stripes!",
           "expr": "happy",
           "bond": 1
         }
@@ -5018,7 +5018,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Hollow log: cozy. Me: in it.",
+          "say": "{pet_phrase} My log is cozy. I'm in it!",
           "expr": "happy",
           "bond": 1
         }
@@ -5142,7 +5142,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} My paws remember. Cold and proud.",
+          "say": "{pet_phrase} Cold paws! Happy paws.",
           "expr": "happy",
           "bond": 2
         }
@@ -5161,7 +5161,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Snowy morning! Everything is quiet and white. And pounce-worthy.",
+          "say": "Snowy morning! Everything is quiet and white. Pounce!",
           "expr": "happy",
           "choices": [
             {
@@ -5431,7 +5431,7 @@
           ]
         },
         "b": {
-          "say": "One star out. More coming. Probably.",
+          "say": "One star out. More are coming!",
           "expr": "happy",
           "bond": 1
         }
@@ -5475,7 +5475,7 @@
           "gesture": "slowblink"
         },
         "b": {
-          "say": "It winked too. Proof!",
+          "say": "It winked too! I saw!",
           "expr": "happy",
           "bond": 2
         }
@@ -5518,7 +5518,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Morning reflection: fluffy. Me: also fluffy.",
+          "say": "{pet_phrase} Fluffy reflection. Fluffy me!",
           "expr": "happy",
           "bond": 1
         }
@@ -5684,7 +5684,7 @@
           ]
         },
         "b": {
-          "say": "No hiccups today. So far. Hic— kidding.",
+          "say": "No hiccups today. Hic! …Oops.",
           "expr": "happy",
           "bond": 1
         }
@@ -5746,7 +5746,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Evening map plans. Tomorrow-ish exploring. Or tonight. Ha.",
+          "say": "Evening map time. Where should we explore?",
           "expr": "happy",
           "choices": [
             {
@@ -5807,7 +5807,7 @@
           ]
         },
         "b": {
-          "say": "Pop. Round to the end.",
+          "say": "Pop! Bye, bubble.",
           "expr": "happy",
           "bond": 2
         }
@@ -6183,7 +6183,7 @@
           ]
         },
         "b": {
-          "say": "Frog song tonight. Front row.",
+          "say": "Frog song tonight. I'm listening.",
           "expr": "happy",
           "bond": 1
         }
@@ -6560,7 +6560,7 @@
           ]
         },
         "b": {
-          "say": "Tiny flight. Confirmed.",
+          "say": "Achoo! It flew a tiny bit.",
           "expr": "happy",
           "bond": 2,
           "gesture": "pounce"
@@ -6598,7 +6598,7 @@
           ]
         },
         "b": {
-          "say": "Morning sneeze complete.",
+          "say": "Achoo! Good morning, nose.",
           "expr": "happy",
           "bond": 1
         }
@@ -6893,7 +6893,7 @@
           ]
         },
         "b": {
-          "say": "Kite tail practice.",
+          "say": "I'm waving my tail like a kite.",
           "expr": "happy",
           "bond": 2,
           "gesture": "wave"
@@ -7060,7 +7060,7 @@
           ]
         },
         "b": {
-          "say": "It's still thinking. Floaty thinking.",
+          "say": "It's still floating. Float, float.",
           "expr": "happy",
           "bond": 2
         }
@@ -7079,7 +7079,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "A leaf landed in the sunbeam. Like it was planned.",
+          "say": "A leaf landed in the sunbeam. It glows!",
           "expr": "happy",
           "choices": [
             {
@@ -7097,7 +7097,7 @@
           ]
         },
         "b": {
-          "say": "Leaf in a sunbeam. Fancy.",
+          "say": "Leaf in the sun. Pretty.",
           "expr": "happy",
           "bond": 1
         }
@@ -7202,7 +7202,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Cocoon update! You said the cocoon {var:cocoon}.",
+          "say": "The cocoon! You said the cocoon {var:cocoon}.",
           "expr": "proud",
           "choices": [
             {
@@ -7263,7 +7263,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Cocoon check: still cozy.",
+          "say": "{pet_phrase} The cocoon is still cozy.",
           "expr": "happy",
           "bond": 1
         }
@@ -7412,7 +7412,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Bedtime-ish. My leaf bed is calling. Very quietly.",
+          "say": "Almost bedtime. My leaf bed looks so cozy.",
           "expr": "happy",
           "choices": [
             {
@@ -7430,7 +7430,7 @@
           ]
         },
         "b": {
-          "say": "Leaf bed is calling. Softly.",
+          "say": "My leaf bed. Soft and cozy.",
           "expr": "happy",
           "bond": 1
         }
@@ -7683,7 +7683,7 @@
           ]
         },
         "b": {
-          "say": "Night choir. Front row seats.",
+          "say": "The crickets sing. I'm listening.",
           "expr": "happy",
           "bond": 1
         }
@@ -7709,7 +7709,7 @@
             {
               "icon": "🌅",
               "label": "The sun is low",
-              "reply": "The sun is lying down? Then shadows stretch out. Fair.",
+              "reply": "The sun is lying down? So shadows stretch out too!",
               "expr": "happy",
               "set": {
                 "shadow": "stretches when the sun is low"
@@ -7733,7 +7733,7 @@
             {
               "icon": "🦒",
               "label": "It's showing off",
-              "reply": "Showing off! Look at me, I'm tall. Classic shadow.",
+              "reply": "Showing off! Look at me, I'm tall! Silly shadow.",
               "expr": "delighted",
               "set": {
                 "shadow": "likes showing off"
@@ -7791,7 +7791,7 @@
               "icon": "🙅",
               "label": "@pool:no",
               "intent": "no",
-              "reply": "No? It's always right there though. Very good at not playing.",
+              "reply": "No? It's always right there though. It just copies me.",
               "expr": "happy",
               "goto": "b"
             },
@@ -7836,7 +7836,7 @@
             {
               "icon": "🪨",
               "label": "Yes, mud!",
-              "reply": "Mud! A squishy bottom. Squish-floor.",
+              "reply": "Mud! A squishy bottom. Squish!",
               "expr": "delighted",
               "set": {
                 "puddle": "has a squishy mud bottom"
@@ -7873,7 +7873,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "Maybe its bottom is a worm's ceiling.",
+              "reply": "Maybe a worm lives under it!",
               "expr": "happy",
               "goto": "c"
             }
@@ -7887,7 +7887,7 @@
           "gesture": "curious"
         },
         "d": {
-          "say": "I won't drink it. Sky tastes like mud. Probably.",
+          "say": "I won't drink it. It's muddy. Yuck!",
           "expr": "happy",
           "bond": 1
         }
@@ -8136,7 +8136,7 @@
           ]
         },
         "b": {
-          "say": "Leaf fashion. Very crunchy season.",
+          "say": "Leaf hat! Crunchy and cozy.",
           "expr": "happy",
           "bond": 1
         }
@@ -8244,7 +8244,7 @@
             {
               "icon": "🙅",
               "label": "It's too far",
-              "reply": "Too far? I'll jump halfway. Fwip! Halfway-ish.",
+              "reply": "Too far? I'll jump halfway. Fwip! Almost!",
               "expr": "delighted"
             },
             {
@@ -8325,7 +8325,7 @@
           ]
         },
         "c": {
-          "say": "Now it has a new life. Treasure life.",
+          "say": "Now it's my treasure.",
           "expr": "happy",
           "bond": 1
         }
@@ -8354,7 +8354,7 @@
             {
               "icon": "😬",
               "label": "Miss it on purpose",
-              "reply": "Tink-clatter! Missed. On purpose. Totally on purpose.",
+              "reply": "Tink-clatter! It bounced out. Hee!",
               "expr": "happy",
               "goto": "b"
             },
@@ -8369,7 +8369,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Best game. One cap. Endless tosses.",
+          "say": "{pet_phrase} Best game! Toss, toss, toss.",
           "expr": "happy",
           "bond": 1
         }
@@ -8655,7 +8655,7 @@
             {
               "icon": "👗",
               "label": "For a party",
-              "reply": "Always ready for a party. I respect that.",
+              "reply": "Always ready for a party. Me too!",
               "expr": "happy",
               "set": {
                 "beetle": "is always party-ready"
@@ -9215,7 +9215,7 @@
             {
               "icon": "🌊",
               "label": "Water made them",
-              "reply": "Water shaped them! Very slowly. Patient water.",
+              "reply": "Water shaped them! Very slowly.",
               "expr": "delighted",
               "set": {
                 "pebble": "was shaped by water"
@@ -9297,7 +9297,7 @@
             {
               "icon": "🦊",
               "label": "Put one on your nose",
-              "reply": "On my nose? …Plop. Nose tower: one second.",
+              "reply": "On my nose? …Plop! It fell off.",
               "expr": "happy",
               "goto": "b",
               "gesture": "pounce"
@@ -9478,7 +9478,7 @@
             {
               "icon": "🎵",
               "label": "It's singing",
-              "reply": "A creaky song! Badly. Beautifully. Both.",
+              "reply": "A creaky song! Creak, creak. I like it.",
               "expr": "delighted",
               "set": {
                 "treehouse": "sings when it creaks"
@@ -9491,7 +9491,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think it's stretching. Trees stretch. Houses in trees too.",
+              "reply": "I think it's stretching. Like me in the morning.",
               "expr": "happy",
               "goto": "c"
             }
@@ -9542,7 +9542,7 @@
           ]
         },
         "b": {
-          "say": "I'll draw it on my map. Next to the snack spot. Obviously.",
+          "say": "I'll draw it on my map. Next to the snack spot!",
           "expr": "happy",
           "bond": 1
         }
@@ -9576,7 +9576,7 @@
             {
               "icon": "🦘",
               "label": "Skip some",
-              "reply": "Four jumps! Is that seven? Basically.",
+              "reply": "Four jumps! Is that seven? Hee!",
               "expr": "delighted",
               "gesture": "pounce"
             }
@@ -9683,7 +9683,7 @@
             {
               "icon": "🔟",
               "label": "Ten!",
-              "reply": "Five spins! Five is basically ten. Dizzy.",
+              "reply": "Five spins! Whee! Dizzy.",
               "expr": "delighted",
               "goto": "b",
               "gesture": "spin"
@@ -9699,7 +9699,7 @@
           ]
         },
         "b": {
-          "say": "My tail is fast. Very loyal, though. Always comes along.",
+          "say": "My tail is fast. But it always comes with me.",
           "expr": "happy",
           "bond": 1
         }
@@ -9810,7 +9810,7 @@
           ]
         },
         "c": {
-          "say": "My paws are cold. Proud cold paws. Good building.",
+          "say": "My paws are cold. Happy cold paws!",
           "expr": "happy",
           "bond": 1
         }
@@ -9848,7 +9848,7 @@
           ]
         },
         "b": {
-          "say": "Snow: for building, not lunch. Got it.",
+          "say": "Snow is for building. Not for lunch!",
           "expr": "happy",
           "bond": 1
         }
@@ -9956,7 +9956,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think they copy the sun. Flowers are big fans.",
+              "reply": "I think they copy the sun. They love the sun.",
               "expr": "happy",
               "goto": "c"
             }
@@ -10159,7 +10159,7 @@
           ]
         },
         "b": {
-          "say": "Ants are tiny and mighty. Respect.",
+          "say": "Ants are tiny and strong. Wow.",
           "expr": "happy",
           "bond": 1
         }
@@ -10200,7 +10200,7 @@
             {
               "icon": "🪵",
               "label": "Just a pile",
-              "reply": "A pile is good. Piles are underrated.",
+              "reply": "A pile is good. I like piles.",
               "expr": "happy"
             }
           ],
@@ -10401,7 +10401,7 @@
             {
               "icon": "🤝",
               "label": "It's your friend",
-              "reply": "A friend who agrees with everything. Easy friend.",
+              "reply": "A friend who copies me! Hi, friend!",
               "expr": "happy",
               "set": {
                 "mirror": "is a friend who agrees"
@@ -10464,7 +10464,7 @@
             {
               "icon": "🐢",
               "label": "Slow",
-              "reply": "A slow dance. Very elegant. Ahem.",
+              "reply": "A slow dance. Sway, sway.",
               "expr": "happy",
               "goto": "b",
               "gesture": "hum"
@@ -10512,7 +10512,7 @@
             {
               "icon": "🗺️",
               "label": "Tiny maps",
-              "reply": "Tiny maps! In tiny pockets. Organized ants.",
+              "reply": "Tiny maps! In tiny pockets. Clever ants.",
               "expr": "delighted",
               "set": {
                 "ant": "uses a tiny map"
@@ -10544,7 +10544,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} I'll walk in a line too. …Nobody followed. Fine.",
+          "say": "{pet_phrase} I'll walk in a line too. …Just me. Still fun!",
           "expr": "happy",
           "bond": 1,
           "gesture": "wait"
@@ -10697,7 +10697,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Hiccup band's first song. A hit!",
+          "say": "{pet_phrase} Our hiccup band's first song! Yay!",
           "expr": "excited",
           "bond": 1
         }
@@ -10713,7 +10713,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Every map needs a compass. North, south… and snack.",
+          "say": "My map has arrows. Up, down… and snack!",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -10737,7 +10737,7 @@
             {
               "icon": "🫐",
               "label": "Snack-ward",
-              "reply": "Snack-ward! My favorite direction. Always that way.",
+              "reply": "To the snacks! My favorite way.",
               "expr": "delighted",
               "set": {
                 "map": "points snack-ward"
@@ -10769,7 +10769,7 @@
           ]
         },
         "c": {
-          "say": "I'll draw a new arrow. It points everywhere. Very useful.",
+          "say": "I'll draw a new arrow. It's a wiggly arrow.",
           "expr": "happy",
           "bond": 1,
           "gesture": "tap"
@@ -10806,7 +10806,7 @@
             {
               "icon": "🦊",
               "label": "A curled-up {name}",
-              "reply": "A curled-up me. That's basically what a nap looks like.",
+              "reply": "A curled-up me. That's what a nap looks like.",
               "expr": "happy",
               "goto": "b"
             }
@@ -10931,7 +10931,7 @@
           ]
         },
         "b": {
-          "say": "Bubble rides: short and floaty. Five stars.",
+          "say": "Bubble rides are short and floaty. Fun!",
           "expr": "happy",
           "bond": 1
         }
@@ -11003,7 +11003,7 @@
           ]
         },
         "c": {
-          "say": "I have no socks. My paws are already fluffy. Built-in socks.",
+          "say": "I have no socks. My paws are already fluffy.",
           "expr": "happy",
           "bond": 1
         }
@@ -11025,7 +11025,7 @@
             {
               "icon": "🧦",
               "label": "Another sock",
-              "reply": "Another sock! Classic. A sock pair.",
+              "reply": "Another sock! A sock pair.",
               "expr": "delighted",
               "goto": "b"
             },
@@ -11111,7 +11111,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think each bump is a little drop of summer.",
+              "reply": "I think each bump is a little drop of juice.",
               "expr": "happy",
               "goto": "c"
             }
@@ -11140,7 +11140,7 @@
             {
               "icon": "🫐",
               "label": "Yes please",
-              "reply": "Pretend berry delivered. Purple fingers for you.",
+              "reply": "Here's your pretend berry. Purple fingers for you!",
               "expr": "happy",
               "goto": "b",
               "gesture": "tap"
@@ -11214,7 +11214,7 @@
             {
               "icon": "🐛",
               "label": "Fireflies",
-              "reply": "A firefly club! Very glowy meeting.",
+              "reply": "A firefly party! All glowing.",
               "expr": "delighted",
               "set": {
                 "lantern": "has a firefly club inside"
@@ -11330,7 +11330,7 @@
             {
               "icon": "🎩",
               "label": "To wear like a hat",
-              "reply": "Eye hats! Fashion frog.",
+              "reply": "Eye hats! Fancy frog.",
               "expr": "delighted",
               "set": {
                 "frog": "wears its eyes like a hat"
@@ -11455,14 +11455,14 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think doors just wait. Very good waiters.",
+              "reply": "I think doors just wait for us.",
               "expr": "happy",
               "goto": "c"
             }
           ]
         },
         "c": {
-          "say": "Nice to meet you, door. Firm handshake.",
+          "say": "Nice to meet you, door. I shook your handle!",
           "expr": "happy",
           "bond": 1,
           "gesture": "groom"
@@ -11485,7 +11485,7 @@
             {
               "icon": "🔔",
               "label": "Ding-dong",
-              "reply": "Ding-dong! Classic. Very polite.",
+              "reply": "Ding-dong! A happy bell.",
               "expr": "delighted",
               "goto": "b"
             },
@@ -11616,7 +11616,7 @@
           ]
         },
         "b": {
-          "say": "Button piles are very satisfying.",
+          "say": "Button piles! I like button piles.",
           "expr": "happy",
           "bond": 1
         }
@@ -11681,7 +11681,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think the one that stops to look around wins. My kind.",
+              "reply": "I think the one that stops to look around wins. Like me!",
               "expr": "happy",
               "goto": "c"
             }
@@ -11718,7 +11718,7 @@
             {
               "icon": "🍃",
               "label": "A big leaf",
-              "reply": "A leaf hat. Drippy edges. Still dry-ish.",
+              "reply": "A leaf hat. Drippy edges. Almost dry.",
               "expr": "happy",
               "goto": "b"
             },
@@ -11909,7 +11909,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think if I sneezed a hundred times, I'd float. Don't test it.",
+              "reply": "I think if I sneezed a hundred times, I'd float!",
               "expr": "happy",
               "goto": "c"
             }
@@ -11953,7 +11953,7 @@
             {
               "icon": "🌼",
               "label": "Gesundheit",
-              "reply": "Gez-oon-hite! Big word. Achoo-sized word.",
+              "reply": "Gesundheit! Big word. A sneezy word.",
               "expr": "delighted",
               "goto": "b"
             }
@@ -12025,7 +12025,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think a mole. Moles are digging experts. Very quiet ones.",
+              "reply": "I think a mole. Moles dig and dig. So quiet.",
               "expr": "happy",
               "goto": "c"
             }
@@ -12178,14 +12178,14 @@
             {
               "icon": "♾️",
               "label": "All of them",
-              "reply": "All the nuts! A nut mountain. Squirrel heaven.",
+              "reply": "All the nuts! A nut mountain. Happy squirrel!",
               "expr": "delighted",
               "goto": "b"
             }
           ]
         },
         "b": {
-          "say": "I'd want three. One to eat. Two to admire.",
+          "say": "I'd want three. One to eat. Two to look at.",
           "expr": "happy",
           "bond": 1
         }
@@ -12213,7 +12213,7 @@
             {
               "icon": "🍃",
               "label": "Leaves",
-              "reply": "Leaf salad! Crunchy-small.",
+              "reply": "Leaf salad! Tiny and crunchy.",
               "expr": "delighted",
               "set": {
                 "ladybug": "eats leaf salad"
@@ -12250,7 +12250,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think tiny snacks. All day. Tiny-snack life.",
+              "reply": "I think tiny snacks. All day long.",
               "expr": "happy",
               "goto": "c"
             }
@@ -12411,7 +12411,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} I'll draw it on my map. Sky section.",
+          "say": "{pet_phrase} I'll draw it on my map. Up in the sky part.",
           "expr": "happy",
           "bond": 1
         }
@@ -12593,7 +12593,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} It landed on my nose. Decision made. Good choice.",
+          "say": "{pet_phrase} It landed on my nose. Hello, leaf!",
           "expr": "happy",
           "bond": 1
         }
@@ -12631,7 +12631,7 @@
           ]
         },
         "b": {
-          "say": "Leaves do anything.",
+          "say": "Leaves can be anything!",
           "expr": "happy",
           "bond": 1
         }
@@ -12696,7 +12696,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think a hill is the ground taking a deep breath.",
+              "reply": "I think a hill is a big lump of grass. A comfy lump.",
               "expr": "happy",
               "goto": "c"
             }
@@ -12812,7 +12812,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "intent": "listen",
-              "reply": "I think it'll be exactly what it's meant to be.",
+              "reply": "I think it'll be a surprise. A good one.",
               "expr": "happy",
               "goto": "c"
             }
@@ -12872,7 +12872,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Balloons go up. Everything else falls down. Balloons are rebels.",
+          "say": "Balloons go up. Everything else falls down. Silly balloons!",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -12973,7 +12973,7 @@
           ]
         },
         "b": {
-          "say": "Squeaky zoo. Opening soon.",
+          "say": "A squeaky balloon zoo!",
           "expr": "happy",
           "bond": 1
         }
@@ -12989,7 +12989,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "My leaf bed crunches when I lie down. Crunch-bed.",
+          "say": "My leaf bed crunches when I lie down. Crunch!",
           "expr": "happy",
           "next": "b",
           "wait": 2400
@@ -13208,7 +13208,7 @@
           ]
         },
         "b": {
-          "say": "Our code. Nobody knows it— well, the birds might.",
+          "say": "Our code! Just for us and the birds.",
           "expr": "happy",
           "bond": 1
         }
@@ -13248,7 +13248,7 @@
             {
               "icon": "✨",
               "label": "For wishes",
-              "reply": "For wishes! So everyone gets one. Generous flower.",
+              "reply": "For wishes! So everyone gets one. Kind flower.",
               "expr": "delighted",
               "set": {
                 "dandelion": "turns fluffy for wishes"
@@ -13434,7 +13434,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Best band. Chirpiest band.",
+          "say": "{pet_phrase} Best band. Chirp, chirp!",
           "expr": "happy",
           "bond": 1
         }
@@ -13469,7 +13469,7 @@
             {
               "icon": "🌌",
               "label": "Into the dark",
-              "reply": "Into the big dark. A shadow party. Everyone's invited.",
+              "reply": "Out to play with the night. A shadow party!",
               "expr": "happy",
               "goto": "c"
             },
@@ -13484,7 +13484,7 @@
           ]
         },
         "c": {
-          "say": "Night, shadow. Same spot later.",
+          "say": "Night, shadow. Sleep tight.",
           "expr": "happy",
           "bond": 1
         }
@@ -13600,7 +13600,7 @@
           ]
         },
         "b": {
-          "say": "Both! For science. CRUNCH.",
+          "say": "Both! Crunch, crunch. CRUNCH.",
           "expr": "happy",
           "bond": 1
         }
@@ -13709,7 +13709,7 @@
             {
               "icon": "🏃",
               "label": "Yes!",
-              "reply": "I got one branch. Squirrel got all of them. Fair.",
+              "reply": "I got one branch. Squirrel got all of them. Wow!",
               "expr": "happy",
               "goto": "c",
               "gesture": "pounce"
@@ -13725,7 +13725,7 @@
           ]
         },
         "c": {
-          "say": "Squirrels are tree experts. I'm a ground expert.",
+          "say": "Squirrels are good at trees. I'm good at ground.",
           "expr": "happy",
           "bond": 1
         }
@@ -13747,7 +13747,7 @@
             {
               "icon": "🐑",
               "label": "Fluffy",
-              "reply": "Fluffy! Obvious. Correct.",
+              "reply": "Fluffy! Hi, Fluffy!",
               "expr": "delighted",
               "goto": "b"
             },
@@ -13812,7 +13812,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} It got off at the end. Beetle bus complete.",
+          "say": "{pet_phrase} It got off at the end. Bye, beetle!",
           "expr": "happy",
           "bond": 1
         }
@@ -13848,7 +13848,7 @@
           ]
         },
         "b": {
-          "say": "The echo has a new friend list.",
+          "say": "The echo has a new friend!",
           "expr": "happy",
           "bond": 1
         }
@@ -13913,7 +13913,7 @@
             {
               "icon": "🍓",
               "label": "Strawberry",
-              "reply": "Strawberry! Then purple is blackberry. Obviously.",
+              "reply": "Strawberry! And purple is blackberry. Yum!",
               "expr": "delighted",
               "goto": "b"
             },
@@ -13983,7 +13983,7 @@
           "gesture": "tap"
         },
         "d": {
-          "say": "Ding! Pretend cake. Smells pretend-amazing.",
+          "say": "Ding! Pretend cake. It smells so good!",
           "expr": "excited",
           "bond": 1
         }
@@ -14062,7 +14062,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} The wind is a playful borrower.",
+          "say": "{pet_phrase} The wind likes to play with leaves.",
           "expr": "happy",
           "bond": 1
         }
@@ -14440,7 +14440,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} Thank you. Hiccup expert friend.",
+          "say": "{pet_phrase} Thank you! You fixed my hiccups.",
           "expr": "happy",
           "bond": 1
         }
@@ -14469,7 +14469,7 @@
             {
               "icon": "🫐",
               "label": "The berry bush",
-              "reply": "X at the berries. Treasure: snacks.",
+              "reply": "X at the berries. Snack treasure!",
               "expr": "happy",
               "goto": "b"
             },
@@ -14483,7 +14483,7 @@
           ]
         },
         "b": {
-          "say": "Map updated. Very important map.",
+          "say": "There! My map is so good now.",
           "expr": "happy",
           "bond": 1
         }
@@ -14519,7 +14519,7 @@
             {
               "icon": "🏠",
               "label": "As big as a house",
-              "reply": "A house bubble! We could live in it. Briefly.",
+              "reply": "A house bubble! We could live in it. Then pop!",
               "expr": "delighted",
               "goto": "c"
             }
@@ -14669,7 +14669,7 @@
             {
               "icon": "🪰",
               "label": "Bugs",
-              "reply": "A bug song! Snack song. Relatable.",
+              "reply": "A bug song! A snack song. Yum.",
               "expr": "delighted",
               "goto": "c"
             },
@@ -14713,14 +14713,14 @@
             {
               "icon": "🐾",
               "label": "Howl",
-              "reply": "Howl who? …Howl I get in if you don't open? Ha-HA!",
+              "reply": "Howl who? Awoo! It's me! Hee hee!",
               "expr": "delighted",
               "goto": "b"
             },
             {
               "icon": "🍯",
               "label": "Honey",
-              "reply": "Honey who? Honey, I'm home! Ha.",
+              "reply": "Honey who? Honey cake! Yum! Ha.",
               "expr": "delighted",
               "goto": "b"
             }
@@ -14809,7 +14809,7 @@
           ]
         },
         "b": {
-          "say": "{pet_phrase} Weather: danced. Good job, us.",
+          "say": "{pet_phrase} We danced! Good job, us.",
           "expr": "happy",
           "bond": 1
         }
@@ -14889,7 +14889,7 @@
             {
               "icon": "🌶️",
               "label": "Pepper",
-              "reply": "Pepper! Spicy sneezes. Achoo-hot.",
+              "reply": "Pepper! Spicy sneezes. Achoo!",
               "expr": "delighted",
               "goto": "b"
             }
@@ -14931,7 +14931,7 @@
             {
               "icon": "🍯",
               "label": "A honey room",
-              "reply": "A honey room! Underground snacks. Dream.",
+              "reply": "A honey room! Underground snacks. Yum!",
               "expr": "delighted",
               "goto": "c"
             },
@@ -14974,14 +14974,14 @@
             {
               "icon": "🪨",
               "label": "With a rock",
-              "reply": "A rock! Tool squirrels. Clever.",
+              "reply": "A rock! Bonk. Clever squirrel.",
               "expr": "delighted",
               "goto": "b"
             }
           ]
         },
         "b": {
-          "say": "Experts only. Not me.",
+          "say": "Squirrels can do it. Not me!",
           "expr": "happy",
           "bond": 1
         }
@@ -15023,7 +15023,7 @@
           ]
         },
         "c": {
-          "say": "Every spot is a dot of fancy.",
+          "say": "Every spot is so pretty.",
           "expr": "happy",
           "bond": 1
         }
@@ -15087,7 +15087,7 @@
             {
               "icon": "🍃",
               "label": "Under the leaf",
-              "reply": "Yes! You found it! Pinecone expert.",
+              "reply": "Yes! You found it! Good finding!",
               "expr": "delighted",
               "goto": "c"
             },
@@ -15182,7 +15182,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} Hills are good for yipping. Noted.",
+          "say": "{pet_phrase} Hills are good for yipping. Yip!",
           "expr": "happy",
           "bond": 1
         }
@@ -15329,7 +15329,7 @@
             {
               "icon": "👍",
               "label": "Tap!",
-              "reply": "Yes! Correct answer.",
+              "reply": "Yes! Tap! Honey cake is good.",
               "expr": "delighted",
               "goto": "c",
               "gesture": "tap"
@@ -15345,7 +15345,7 @@
           ]
         },
         "c": {
-          "say": "Our code works. Tap-tap fluency.",
+          "say": "Our code works. Tap, tap!",
           "expr": "happy",
           "bond": 1
         }
@@ -15367,7 +15367,7 @@
             {
               "icon": "⏳",
               "label": "Let's wait",
-              "reply": "Okay. I'll check every day. Like a fan.",
+              "reply": "Okay. I'll check every day.",
               "expr": "happy",
               "goto": "b"
             },
@@ -15382,7 +15382,7 @@
           ]
         },
         "b": {
-          "say": "Yellow now, fluffy later. Two-for-one flower.",
+          "say": "Yellow now, fluffy later. A two-in-one flower!",
           "expr": "happy",
           "bond": 1
         }
@@ -15426,7 +15426,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} We'll never find it. That's part of the game.",
+          "say": "{pet_phrase} It's hiding so well. That's the fun part.",
           "expr": "happy",
           "bond": 1
         }
@@ -15568,7 +15568,7 @@
           ]
         },
         "d": {
-          "say": "Best voyage ever.",
+          "say": "Best boat trip ever.",
           "expr": "happy",
           "bond": 1,
           "gesture": "groom"
@@ -15622,7 +15622,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} Teapots are the best mystery. You can drink the clues.",
+          "say": "{pet_phrase} The teapot smells warm. Sniff, sniff.",
           "expr": "happy",
           "bond": 1
         }
@@ -15932,7 +15932,7 @@
               "icon": "👍",
               "label": "@pool:yes",
               "intent": "yes",
-              "reply": "I'm beetle number four. Shiny-ish.",
+              "reply": "I'm beetle number four. Shiny me!",
               "expr": "happy",
               "gesture": "tap"
             },
@@ -16030,7 +16030,7 @@
               "icon": "😆",
               "label": "@pool:giggle",
               "intent": "giggle",
-              "reply": "It's funny, right? I'm winning by losing. Ha!",
+              "reply": "It's funny, right? I'm going slow on purpose. Ha!",
               "expr": "delighted"
             }
           ],
@@ -16081,7 +16081,7 @@
           "wait": 2400
         },
         "c": {
-          "say": "{pet_phrase} {name}: one-seventh rainbow. Official.",
+          "say": "{pet_phrase} I'm a little bit rainbow!",
           "expr": "happy",
           "bond": 1
         }
@@ -16235,7 +16235,7 @@
             {
               "icon": "😆",
               "label": "A little!",
-              "reply": "I'll keep them like this. Fashion.",
+              "reply": "I'll keep them like this. Silly ears!",
               "expr": "delighted",
               "goto": "c"
             },
@@ -16250,7 +16250,7 @@
           ]
         },
         "c": {
-          "say": "{pet_phrase} Wind is the best hairdresser. It never asks first though.",
+          "say": "{pet_phrase} The wind messed up my fur. Silly wind!",
           "expr": "happy",
           "bond": 1
         }
@@ -16395,7 +16395,7 @@
             {
               "icon": "➖",
               "label": "A line",
-              "reply": "Straight to… nowhere. Very straight.",
+              "reply": "A long line! Very straight.",
               "expr": "happy",
               "gesture": "pounce"
             },
@@ -16470,7 +16470,7 @@
             {
               "icon": "🖊️",
               "label": "Draw in the dirt",
-              "reply": "A circle. With ears. It's me. Obviously.",
+              "reply": "A circle. With ears. It's me!",
               "expr": "happy",
               "goto": "b",
               "gesture": "tap"
@@ -16521,7 +16521,7 @@
             {
               "icon": "🫐",
               "label": "Berries",
-              "reply": "Infinite berries! Okay that's greedy. One nice berry.",
+              "reply": "Lots of berries! No, one nice berry. Okay, two.",
               "expr": "delighted"
             },
             {
@@ -16734,7 +16734,7 @@
           ]
         },
         "b": {
-          "say": "Pretend treasure: hidden. Pretend me: proud.",
+          "say": "The pretend treasure is hidden. I'm so proud!",
           "expr": "happy",
           "bond": 1,
           "gesture": "tap"
@@ -16845,7 +16845,7 @@
           ]
         },
         "c": {
-          "say": "{var:sockName} says goodbye. What manners.",
+          "say": "{var:sockName} says goodbye. Bye-bye!",
           "expr": "happy",
           "bond": 1,
           "gesture": "wave"
@@ -16881,14 +16881,14 @@
             {
               "icon": "🦊",
               "label": "You ate it!",
-              "reply": "Did I? …Purple. Okay. Probably.",
+              "reply": "Did I? …My nose is purple. Oops!",
               "expr": "happy",
               "gesture": "tap"
             },
             {
               "icon": "🐿️",
               "label": "The squirrel",
-              "reply": "The squirrel?! It does like snacks. Fair.",
+              "reply": "The squirrel?! It does like snacks.",
               "expr": "delighted"
             },
             {
@@ -16938,7 +16938,7 @@
             {
               "icon": "🦊",
               "label": "A {name}",
-              "reply": "It's just me. My shadow is a perfect {name}. Obviously.",
+              "reply": "It's just me. My shadow is a perfect {name}!",
               "expr": "happy"
             }
           ],
@@ -17072,7 +17072,7 @@
           ]
         },
         "c": {
-          "say": "Button game: the winner is the button. It got held.",
+          "say": "Button game! Everybody wins. Even the button.",
           "expr": "happy",
           "bond": 1
         }
@@ -17107,14 +17107,14 @@
             {
               "icon": "🤫",
               "label": "Just listen",
-              "reply": "Rain music. Free concert. Ears on.",
+              "reply": "Rain music! My ears are listening.",
               "expr": "happy",
               "gesture": "settle"
             },
             {
               "icon": "🎤",
               "label": "Sing along",
-              "reply": "Pitter-patter, {name} is… flatter? I need better words.",
+              "reply": "Pitter-patter! Tap, tap. Drum with me!",
               "expr": "happy"
             }
           ],
@@ -17202,7 +17202,7 @@
             {
               "icon": "1️⃣",
               "label": "Just one",
-              "reply": "Just one. Neat and tidy. Efficient sneezer.",
+              "reply": "Just one. One neat little sneeze.",
               "expr": "happy"
             },
             {
@@ -17234,7 +17234,7 @@
           "gesture": "curious"
         },
         "b": {
-          "say": "…A tiny breeze came out. That means someone is breathing. Or it's wind.",
+          "say": "…A tiny breeze came out. Maybe it's wind. Maybe a mouse.",
           "expr": "happy",
           "next": "c",
           "wait": 2400
@@ -17253,7 +17253,7 @@
             {
               "icon": "🌼",
               "label": "A flower",
-              "reply": "A flower doorstep. Fancy neighbor stuff.",
+              "reply": "A flower by the door. So pretty.",
               "expr": "happy"
             },
             {
@@ -17326,7 +17326,7 @@
           ]
         },
         "c": {
-          "say": "Nut: hidden. Me: proud. Brain: already forgetting.",
+          "say": "The nut is hidden. Where? …I forget already!",
           "expr": "happy",
           "bond": 1
         }
@@ -17454,7 +17454,7 @@
             {
               "icon": "🙅",
               "label": "Keep it",
-              "reply": "Okay. Pinecone stays. It's on my shelf. Shelf-cone.",
+              "reply": "Okay. The pinecone stays. On my shelf.",
               "expr": "happy"
             }
           ],
@@ -17472,13 +17472,13 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "I have a leaf. I'm going to tickle my own nose. Science.",
+          "say": "I have a leaf. I'm going to tickle my own nose. Ready?",
           "expr": "happy",
           "next": "b",
           "wait": 2400
         },
         "b": {
-          "say": "Achoo! Science says: sneeze.",
+          "say": "Achoo! I knew it. Sneeze!",
           "expr": "excited",
           "next": "c",
           "wait": 2400,
@@ -17899,7 +17899,7 @@
           ]
         },
         "c1": {
-          "say": "They play. They nap. They tell stories about faraway worlds.",
+          "say": "They play. They nap. They tell stories at night.",
           "expr": "curious",
           "next": "d",
           "wait": 2500
@@ -17917,7 +17917,7 @@
           "wait": 2500
         },
         "d": {
-          "say": "Someday I'll tell them about your world. Snacks first. Probably.",
+          "say": "Someday I'll tell them about you. And snacks!",
           "expr": "happy",
           "bond": 2
         }
@@ -17951,14 +17951,14 @@
           ]
         },
         "b": {
-          "say": "Carrying! I carry your world in here. Look, it glows more.",
+          "say": "Look! I glow more now. Is that from you?",
           "expr": "proud",
           "gesture": "chest glow brightens",
           "next": "c",
           "wait": 2800
         },
         "c": {
-          "say": "I packed the day we met. And snacks. Mostly snacks.",
+          "say": "I packed my favorite things. And snacks. Mostly snacks.",
           "expr": "giggling",
           "choices": [
             {
@@ -18019,7 +18019,7 @@
           "wait": 2500
         },
         "b": {
-          "say": "I feel almost ready. Ready to carry your world back to the wild.",
+          "say": "I feel almost ready. Ready to take it all home.",
           "expr": "love",
           "choices": [
             {
@@ -18268,7 +18268,7 @@
           "wait": 2600
         },
         "d3": {
-          "say": "You asked me! So I came. To learn YOUR world.",
+          "say": "You asked me! So I came. To learn all about here.",
           "expr": "love",
           "next": "e",
           "wait": 2600
