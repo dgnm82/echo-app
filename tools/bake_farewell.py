@@ -40,7 +40,7 @@ def feather(f):
             elif ch=='B':im.putpixel((x,y),(Y)+(255,))
     put(im,[(14,3),(2,6)] if f else [(13,8),(5,1)],Y)
     return im
-for nm,fn in (('glowleaf',leaf),('starfeather',feather)):
+for nm,fn in (('songleaf',leaf),('songfeather',feather)):
     sh=img(32,16)
     for f in (0,1):sh.paste(fn(f),(16*f,0))
     sh.save(OUT+f'fw/{nm}.png');fn(0).save(OUT+f'i_{nm}.png')

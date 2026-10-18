@@ -148,10 +148,9 @@ input[type=checkbox]{width:8px;height:8px}
 @keyframes pathglow{0%{filter:brightness(1)}100%{filter:brightness(1.15)}}
 .creature.pxwalk{transition:left 2s steps(12,end)!important}
 .relscene.walking .creature{transition:left 3s steps(18,end)}
-.relscene.homestar::after,.farstar i,.cstar i{content:"";position:absolute;width:1px;height:1px;background:#fff;box-shadow:1px 0 0 #FFD27A,-1px 0 0 #FFD27A,0 1px 0 #FFD27A,0 -1px 0 #FFD27A,2px 0 0 #FFD27A,-2px 0 0 #FFD27A,0 2px 0 #FFD27A,0 -2px 0 #FFD27A;animation:twinkle 664ms steps(1,end) infinite}
+.relscene.homestar::after,.farstar i{content:"";position:absolute;width:1px;height:1px;background:#fff;box-shadow:1px 0 0 #FFD27A,-1px 0 0 #FFD27A,0 1px 0 #FFD27A,0 -1px 0 #FFD27A,2px 0 0 #FFD27A,-2px 0 0 #FFD27A,0 2px 0 #FFD27A,0 -2px 0 #FFD27A;animation:twinkle 664ms steps(1,end) infinite}
 .relscene.homestar::after{right:8px;top:10px}
 .farstar i{right:20px;top:18px}.farstar{position:absolute;inset:0;pointer-events:none}
-.cstar{position:relative;height:12px}.cstar i{left:50%;top:5px}
 .cnote{display:flex;justify-content:center;height:16px}.cnote .pxi{animation:cnb 664ms steps(1,end) infinite}@keyframes cnb{50%{transform:translateY(-1px)}}   /* Batch C v1.1: closing-card note */
 @keyframes twinkle{0%{opacity:1}50%{opacity:.4}}
 .mcard .fgrid{display:grid;grid-template-columns:1fr;gap:3px;margin:4px 0}
@@ -240,7 +239,7 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .mcard.places .place.on{outline:1px solid #FFD27A}
 /* ===== Farewell arc (farewell_arc.md v0.2) ===== */
 .fwstar{position:absolute;width:13px;height:13px;border:0;padding:0;background:transparent no-repeat 0 0/26px 13px;image-rendering:pixelated;z-index:3;animation:fwtw 1s steps(1,end) infinite;cursor:pointer}
-.fwstar.l1{animation-duration:2s}
+.fwstar.l1{animation-duration:2s;opacity:.55}.fwstar.l2{opacity:.8}   /* sweep: the home star is now a humming note (px/fw/hum.png) */
 @keyframes fwtw{0%{background-position:0 0}50%{background-position:-13px 0}}
 .fwstar.answer{animation-duration:.5s}
 .fwtrail{position:absolute;inset:0;pointer-events:none;z-index:2}
@@ -256,8 +255,8 @@ canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60
 .fwglow.on{animation:fwhum .5s steps(1,end) 3}   /* Batch C v1.1: a humming note at the chest (frame 0 note, frame 1 note + hum rings) */
 #sc .fwglow{z-index:3}   /* over #sc #cr (z 2, :331) now that it sits on the chest */
 @keyframes fwhum{0%{opacity:1;background-position:0 0}50%{opacity:1;background-position:-13px 0}}
-@keyframes fwpulse{0%{opacity:1}50%{opacity:0}}
-.fwspark{position:absolute;width:2px;height:2px;background:#FFF3C8;box-shadow:0 0 0 1px #FFD27A;z-index:8;transition:left 1.6s steps(12),top 1.6s steps(12),opacity .4s steps(2) 1.4s;pointer-events:none}
+
+
 .fwkeep{position:absolute;left:22px;bottom:40px;width:16px;height:16px;border:0;padding:0;background:transparent no-repeat 0 0/32px 16px;image-rendering:pixelated;z-index:9}
 .fwkeep.glim{animation:fwglim 1s steps(1,end) infinite}
 @keyframes fwglim{0%{background-position:0 0}50%{background-position:-16px 0}}
