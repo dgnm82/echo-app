@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 // Echo dialogue guardrail lint (Echo_Dialogue_Overhaul A4, B5/B10, B15, D4).
+// 3-family reference copy (Purrlings v1, Oct 18): adds species 'twitchel' (Purrlings) voice rules, Purrling kid-safety bans,
+// the naive-voice '-ish' check, and the lion-only playful 'roar' rule (lintAllow ['roar'] + cond var origin_animal 'lion').
 // Usage: node tools/lint-dialogue.js [dir-or-files...]   (default: dialogue/)
 //   --js <file>   also scan quoted strings in a JS file (UI text), e.g. --js game.js
 //   --strict      treat warnings as errors
@@ -33,6 +35,16 @@ const RULES=[
  // gendered assumptions about the child
  ['gender',/\b(good|big) (boy|girl)\b/i,'gender'],
 ];
+// per-family kid-safety bans (Purrlings v1 §5): on top of RULES, only for that family's file
+const FAMILY_RULES={twitchel:[
+ ['claws',/\bclaw(s|ed|ing)?\b/i,'cat-safety'],['fangs',/\bfangs?\b/i,'cat-safety'],['teeth',/\b(teeth|toothy)\b/i,'cat-safety'],
+ ['bite',/\b(bite|bites|biting|bit you|bitten)\b/i,'cat-safety'],['hiss',/\bhiss(es|ed|ing)?\b/i,'cat-safety'],['growl',/\bgrowl(s|ed|ing)?\b/i,'cat-safety'],
+ ['snarl',/\bsnarl(s|ed|ing)?\b/i,'cat-safety'],['prey',/\bprey\b/i,'cat-safety'],['stalk',/\bstalk(s|ed|ing)?\b/i,'cat-safety'],
+ ['scratch',/\bscratch(es|ed|ing)?\b/i,'cat-safety'],
+ ['chase-animal',/\b(chase[sd]?|chasing|pounce[sd]?|pouncing)\b[^.!?…]{0,12}\b(mouse|mice|birds?|bunn(y|ies)|rabbits?|squirrels?|fish|frogs?|lizards?|bugs?|butterfl(y|ies))\b/i,'cat-safety'],
+ ['roar',/\broar(s|ed|ing)?\b/i,'cat-safety (lion only, playful: lintAllow ["roar"] + lion cond)']]};
+const ISH_OK=new Set(['fish','wish','dish','swish','squish','finish','radish','polish','relish','splish','vanish','punish','cherish','perish','nourish','establish','parish','famish','furnish','garnish','banish','blemish','diminish','flourish','abolish','replenish','lavish','english','publish','squish','whish']);
+const isLion=c=>!!c&&((c.var&&c.var.origin_animal==='lion')||(c.any||[]).some(isLion));
 const EXPR=new Set(['neutral','happy','excited','eating','love','curious','surprised','sleepy','sad','delighted','thinking','giggling','proud','shy','wistful','concentrating']);
 const REACT=new Set(['happy','excited','pet','eat','sad','sleepy']);
 const FEELINGS=/\b(felt|feel|feeling|sad|upset|cried|scared|worried|good day|bad day|not great|gray days?)\b/i;
@@ -42,9 +54,12 @@ function scanText(file,where,text,allow,species){
   if(typeof text!=='string')return;
   for(const [id,re,cat] of RULES){if(re.test(text)&&!(allow||[]).includes(id))rep('error',file,where,`banned (${cat}: ${id})`,text)}
   if(species!==null&&/\{(?!var:|pick:)(\w+)\}/.test(text)){const k=text.match(/\{(?!var:|pick:)(\w+)\}/g).map(x=>x.slice(1,-1)).filter(k=>!KNOWN_SLOTS.has(k));if(k.length)rep('warn',file,where,'unknown slot(s) '+k.join(','),text)}
+  for(const [id,re,cat] of (FAMILY_RULES[species]||[])){if(re.test(text)&&!(allow||[]).includes(id))rep('error',file,where,`banned (${cat}: ${id})`,text)}
+  if(species==='twitchel'){const ish=(text.match(/\b[A-Za-z]{2,}-?ish\b/g)||[]).filter(w=>!ISH_OK.has(w.toLowerCase()));if(ish.length)rep('warn',file,where,'naive voice: -ish word '+ish.join(','),text)}
   // species voice rules (D4) — warnings
   const sentences=text.split(/(?<=[.!?…])\s+/).filter(x=>x.trim());
   if(species==='slyte'){if(sentences.some(x=>x.split(/\s+/).length>12))rep('warn',file,where,'Slyte: sentence over 12 words',text);if(sentences.length>4)rep('warn',file,where,'Slyte: more than 4 sentences',text);if((text.match(/\b[A-Z]{2,}\b/g)||[]).filter(w=>!['OK','TV'].includes(w)).length>1)rep('warn',file,where,'Slyte: more than 1 CAPS word',text)}
+  if(species==='twitchel'){const ss=text.replace(/\([^)]*\)/g,'').split(/(?<=[.!?…])\s+/).filter(x=>/[a-z]/i.test(x));if(ss.some(x=>x.trim().split(/\s+/).length>10))rep('warn',file,where,'Purrling: sentence over 10 words',text);if(ss.filter(x=>x.trim().split(/\s+/).length>2).length>4)rep('warn',file,where,'Purrling: more than 4 sentences',text);if((text.match(/\b[A-Z]{2,}\b/g)||[]).filter(w=>!['OK','TV','AND'].includes(w)).length>1)rep('warn',file,where,'Purrling: more than 1 CAPS word',text)}
   if(species==='whimber'){if((text.match(/\b[A-Z]{3,}\b/g)||[]).length)rep('warn',file,where,'Whimber: no CAPS',text);if(text.split(/\s+/).length>10&&!/…|\.\.\.|—|Hoo/.test(text))rep('warn',file,where,'Whimber: >10 words without a pause',text)}
 }
 const KNOWN_SLOTS=new Set(['name','child','fav','treasure','place','release','trust','quirk','token','gift','memory','spot','hint','guess','constellation','pet_phrase','word','goal','dist','rows','n']);   // games v2: numbers the Echo says at the end card (B(key,{dist,rows,n}))
@@ -59,6 +74,10 @@ function structure(file,d){
   for(const [key,pool] of Object.entries(d.barks||{})){if(!Array.isArray(pool)||!pool.length)rep('error',file,`barks.${key}`,'empty pool');
     (pool||[]).forEach((l,i)=>{if(!l.text&&!(l.text===''&&l.gesture))rep('error',file,`barks.${key}[${i}]`,'missing text');   // P5: text "" + gesture = act-out only
       if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);if(l.react&&!REACT.has(l.react))rep('error',file,`barks.${key}[${i}]`,'unknown react '+l.react)})}
+  if(d.species==='twitchel'||/twitchel/.test(path.basename(file))){
+    for(const [key,pool] of Object.entries(d.barks||{}))(pool||[]).forEach((l,i)=>{if((l.lintAllow||[]).includes('roar')&&!isLion(l.cond))rep('error',file,`barks.${key}[${i}]`,'roar allowed only on a lion line (cond var origin_animal "lion")',l.text)});
+    for(const c of d.conversations||[]){const lion=isLion(c.cond);const objs=[c,...Object.values(c.nodes||{}),...Object.values(c.nodes||{}).flatMap(n=>n.choices||[])];
+      if(objs.some(o=>(o.lintAllow||[]).includes('roar'))&&!lion)rep('error',file,`conv ${c.id}`,'roar allowed only in a lion conversation (cond var origin_animal "lion")')}}
   const ids=new Set();
   for(const c of d.conversations||[]){const w=`conv ${c.id}`;if(!c.id)rep('error',file,'conversation','missing id');if(ids.has(c.id))rep('error',file,w,'duplicate id');ids.add(c.id);
     const nodes=c.nodes||{};const start=c.start||Object.keys(nodes)[0];if(!nodes[start])rep('error',file,w,'start node missing');

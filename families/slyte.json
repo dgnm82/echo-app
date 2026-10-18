@@ -1,0 +1,383 @@
+{
+ "id": "slyte",
+ "label": "Howling",
+ "plural": "Howlings",
+ "status": "shipping",
+ "default_name": "Pipsong",
+ "kind": "fox",
+ "look_base": "fox",
+ "look_default": "howling",
+ "looks": [
+  "fox",
+  "dog",
+  "wolf",
+  "howling",
+  "coyote"
+ ],
+ "dialogue": "slyte",
+ "sprite": "slyte",
+ "look": "canines (fox-like)",
+ "signature": "generic canine: pointed or floppy ears, muzzle, tail; cream bib; forehead gem",
+ "animals": {
+  "dog": {
+   "label": "Dog",
+   "word": "dog",
+   "member": "dog",
+   "default_name": "Thrumble",
+   "look": "dog"
+  },
+  "fox": {
+   "label": "Fox",
+   "word": "fox",
+   "member": "fox",
+   "default_name": "Pipsong",
+   "look": "fox"
+  },
+  "wolf": {
+   "label": "Wolf",
+   "word": "wolf",
+   "member": "wolf",
+   "default_name": "Ramble",
+   "look": "wolf"
+  },
+  "coyote": {
+   "label": "Coyote",
+   "word": "coyote",
+   "member": "coyote",
+   "default_name": "Skarik",
+   "look": "coyote"
+  }
+ },
+ "animalOrder": [
+  "dog",
+  "fox",
+  "wolf",
+  "coyote"
+ ],
+ "members": {
+  "generic": {
+   "preset": {}
+  },
+  "dog": {
+   "preset": {}
+  },
+  "fox": {
+   "preset": {}
+  },
+  "wolf": {
+   "preset": {}
+  },
+  "coyote": {
+   "preset": {}
+  }
+ },
+ "colours": [
+  {
+   "word": "black",
+   "label": "Black",
+   "id": "dusk-plum",
+   "hex": "#3B2A5C",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[dusk-plum]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "brown",
+   "label": "Brown",
+   "id": "cocoa-cream",
+   "hex": "#8A5A3C",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[cocoa-cream]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "ginger",
+   "label": "Ginger",
+   "id": "ember-russet",
+   "hex": "#E8772E",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[ember-russet]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "golden",
+   "label": "Golden",
+   "id": "sunset-gold-solid",
+   "hex": "#E8B860",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[sunset-gold-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "white",
+   "label": "White",
+   "id": "snow-blush",
+   "hex": "#FFF6E6",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[snow-blush]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "grey",
+   "label": "Grey",
+   "id": "moon-lilac",
+   "hex": "#B8B4C8",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[moon-lilac]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "mint",
+   "label": "Mint",
+   "id": "mint-teal-solid",
+   "hex": "#7FE0C8",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[mint-teal-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "sky",
+   "label": "Sky",
+   "id": "sky-periwinkle-solid",
+   "hex": "#8CC8FF",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[sky-periwinkle-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "purple",
+   "label": "Purple",
+   "id": "violet-rose-solid",
+   "hex": "#A884E0",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[violet-rose-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "pink",
+   "label": "Pink",
+   "id": "rose-sapphire-solid",
+   "hex": "#F4A0C8",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[rose-sapphire-solid]",
+    "ink": "#3B2A5C"
+   }
+  }
+ ],
+ "names": [
+  "Biscuit",
+  "Pounce",
+  "Maple",
+  "Ziggy",
+  "Clover",
+  "Waffle",
+  "Sprocket",
+  "Juniper",
+  "Fennel",
+  "Scamper",
+  "Nugget",
+  "Poppy",
+  "Dash",
+  "Socks",
+  "Twig",
+  "Pepper",
+  "Hazel",
+  "Pickle",
+  "Noodle",
+  "Tango"
+ ],
+ "profile": {
+  "locomotion": "ground",
+  "home": "log",
+  "bed": "log_mouth",
+  "farewellRoute": "walk",
+  "foods": "foods.js (aliveness/foods.json) per family",
+  "place": "hollow log",
+  "talents": [
+   "Radar Ears",
+   "Master of Disguise",
+   "Super Jumper",
+   "Riddle Solver"
+  ],
+  "talentArt": [
+   "Master of Disguise",
+   "Riddle Solver"
+  ],
+  "quirks": [
+   "chases its tail tip",
+   "sneezes when happy",
+   "ear-flicks when thinking",
+   "hums a yippy tune",
+   "peeks from behind its tail"
+  ],
+  "game": "Shiny Pairs"
+ },
+ "creature": {
+  "title": "The Clever Trickster",
+  "badge": "🍃",
+  "bg": "fox-bg",
+  "foods": [
+   "🫐 wild blackberries",
+   "🍯 warm honey cakes",
+   "🌰 roasted nuts"
+  ],
+  "neutral": [
+   "🍎 apple slice"
+  ],
+  "place": "hollow log",
+  "release": "the sunlit flower meadow",
+  "treasure": "shiny trinket",
+  "token": "leaf",
+  "pathIcon": "🌼",
+  "sign": "🍂 a blackberry leaf and a shiny trinket by the hollow log",
+  "talents": [
+   "Radar Ears",
+   "Master of Disguise",
+   "Super Jumper",
+   "Riddle Solver"
+  ],
+  "trust": "curls along the bottom of the screen like a warm, fluffy scarf and rests its chin on its tail",
+  "quirks": [
+   "chases its tail tip",
+   "sneezes when happy",
+   "ear-flicks when thinking",
+   "hums a yippy tune",
+   "peeks from behind its tail"
+  ],
+  "game": "Shiny Pairs"
+ },
+ "sound": {
+  "register": "D major",
+  "octave": 4,
+  "timbre": "Howling chip palette (music v2)",
+  "voice": "slyte_<mood>_<1-3>"
+ },
+ "music": {
+  "home": "bg_slyte_<band>_loop",
+  "arrival": "slyte_arrival",
+  "release": "slyte_release",
+  "pet_motif": "slyte_pet_motif",
+  "bondup_sting": "bondup_sting_slyte",
+  "goodbye": {
+   "dog": "goodbye_dog",
+   "fox": "goodbye_fox",
+   "wolf": "goodbye_wolf",
+   "coyote": "goodbye_coyote"
+  }
+ },
+ "aura": {
+  "source": "px/aura.json roles[<ramp id>]",
+  "ramps": [
+   "cocoa-cream",
+   "dusk-plum",
+   "ember-russet",
+   "mint-teal-solid",
+   "moon-lilac",
+   "rose-sapphire-solid",
+   "sky-periwinkle-solid",
+   "snow-blush",
+   "sunset-gold-solid",
+   "violet-rose-solid"
+  ],
+  "notes": {
+   "sheet": "px/fx/notes_slyte.png",
+   "tints": [
+    "#FFD27A",
+    "#FF8FB8",
+    "#FFA97A",
+    "#8FD3FF"
+   ],
+   "row0": [
+    "#FFD27A",
+    "#E39A4A"
+   ]
+  }
+ },
+ "words": {
+  "body": [
+   "paw",
+   "paws",
+   "pawprint",
+   "pawprints",
+   "tail",
+   "tails",
+   "fur",
+   "furry",
+   "snout",
+   "snouts",
+   "muzzle",
+   "muzzles",
+   "whisker",
+   "whiskers",
+   "howl*",
+   "wag",
+   "wags",
+   "wagging",
+   "wagged",
+   "growl",
+   "growls",
+   "growling",
+   "claw",
+   "claws",
+   "sniff",
+   "sniffs",
+   "sniffing"
+  ],
+  "home": [
+   "den",
+   "dens"
+  ]
+ },
+ "scene": {
+  "homeProp": "log"
+ },
+ "games": {
+  "memoryDeck": [
+   "blackberry",
+   "honey_cake",
+   "trinket",
+   "leaf",
+   "nut",
+   "apple",
+   "daisy",
+   "pinecone",
+   "mushroom",
+   "ball"
+  ],
+  "pairNames": {
+   "blackberry": "blackberries",
+   "honey_cake": "honey cakes",
+   "trinket": "shiny trinkets",
+   "leaf": "leaves",
+   "nut": "nuts",
+   "apple": "apples",
+   "daisy": "daisies",
+   "pinecone": "pinecones",
+   "mushroom": "mushrooms",
+   "ball": "balls"
+  },
+  "token": "slyte_token",
+  "runnerKind": "jump",
+  "builder": "den"
+ },
+ "icon_fallback": "wolf"
+}

@@ -192,7 +192,7 @@
     ],
     "pet": [
       {
-        "text": "Mrrp… right there.",
+        "text": "Mmm… right there.",
         "expr": "love",
         "react": "pet"
       },
@@ -1704,7 +1704,7 @@
     ],
     "list_cozy_done": [
       {
-        "text": "Cozy sit, check. Mrrp. That one was extra warm.",
+        "text": "Cozy sit, check. Mmm. That one was extra warm.",
         "expr": "love"
       }
     ],
@@ -9735,7 +9735,7 @@
             {
               "icon": "🙂",
               "label": "You keep it",
-              "reply": "Okay. Mrrp. Best pillow I own.",
+              "reply": "Okay. Mmm. Best pillow ever.",
               "expr": "happy",
               "gesture": "settle"
             }
@@ -18181,7 +18181,7 @@
             {
               "icon": "🤗",
               "label": "Here's a hug",
-              "reply": "Mrrp. A pile of two.",
+              "reply": "Mmm. A pile of two.",
               "expr": "love",
               "react": "pet",
               "bond": 1,

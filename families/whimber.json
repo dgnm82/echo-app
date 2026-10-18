@@ -1,0 +1,445 @@
+{
+ "id": "whimber",
+ "label": "Wingsong",
+ "plural": "Wingsongs",
+ "status": "shipping",
+ "default_name": "Whimber",
+ "kind": "owl",
+ "look_base": "owl",
+ "look_default": "wingsong",
+ "looks": [
+  "owl",
+  "wingsong",
+  "duck",
+  "dove",
+  "pigeon",
+  "crow",
+  "eagle",
+  "chicken",
+  "gull"
+ ],
+ "dialogue": "whimber",
+ "sprite": "whimber",
+ "look": "birds (owl-like)",
+ "signature": "generic bird: round body, big eyes in soft eye patches, small beak, side wings with light tips; crest optional; moon gem",
+ "animals": {
+  "owl": {
+   "label": "Owl",
+   "word": "owl",
+   "member": "owl",
+   "default_name": "Whimber",
+   "look": "owl"
+  },
+  "bird": {
+   "label": "Bird",
+   "word": "bird",
+   "member": "bird",
+   "default_name": "Trilli",
+   "look": "wingsong"
+  },
+  "duck": {
+   "label": "Duck",
+   "word": "duck",
+   "member": "duck",
+   "default_name": "Whimber",
+   "look": "duck"
+  },
+  "dove": {
+   "label": "Dove",
+   "word": "dove",
+   "member": "dove",
+   "default_name": "Luma",
+   "look": "dove"
+  },
+  "pigeon": {
+   "label": "Pigeon",
+   "word": "pigeon",
+   "member": "pigeon",
+   "default_name": "Trumbit",
+   "look": "pigeon"
+  },
+  "crow": {
+   "label": "Crow",
+   "word": "crow",
+   "member": "crow",
+   "default_name": "Krell",
+   "look": "crow"
+  },
+  "eagle": {
+   "label": "Eagle",
+   "word": "eagle",
+   "member": "eagle",
+   "default_name": "Talryx",
+   "look": "eagle"
+  },
+  "chicken": {
+   "label": "Chicken",
+   "word": "chicken",
+   "member": "chicken",
+   "default_name": "Kippis",
+   "look": "chicken"
+  },
+  "gull": {
+   "label": "Gull",
+   "word": "gull",
+   "member": "gull",
+   "default_name": "Gullyn",
+   "look": "gull"
+  }
+ },
+ "animalOrder": [
+  "owl",
+  "bird",
+  "duck",
+  "dove",
+  "pigeon",
+  "crow",
+  "eagle",
+  "chicken",
+  "gull"
+ ],
+ "members": {
+  "generic": {
+   "preset": {}
+  },
+  "owl": {
+   "preset": {}
+  },
+  "bird": {
+   "preset": {}
+  },
+  "duck": {
+   "preset": {}
+  },
+  "dove": {
+   "preset": {}
+  },
+  "pigeon": {
+   "preset": {}
+  },
+  "crow": {
+   "preset": {}
+  },
+  "eagle": {
+   "preset": {}
+  },
+  "chicken": {
+   "preset": {}
+  },
+  "gull": {
+   "preset": {}
+  }
+ },
+ "colours": [
+  {
+   "word": "black",
+   "label": "Black",
+   "id": "crow-dusk",
+   "hex": "#3B2A5C",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[crow-dusk]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "brown",
+   "label": "Brown",
+   "id": "wren-cocoa",
+   "hex": "#8A5A3C",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[wren-cocoa]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "red",
+   "label": "Red",
+   "id": "robin-ember",
+   "hex": "#D9503A",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[robin-ember]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "grey",
+   "label": "Grey",
+   "id": "dove-mist",
+   "hex": "#B8B4C8",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[dove-mist]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "white",
+   "label": "White",
+   "id": "dove-mist",
+   "hex": "#FFF6E6",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[dove-mist]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "yellow",
+   "label": "Yellow",
+   "id": "sun-finch",
+   "hex": "#FFD84A",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[sun-finch]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "blue",
+   "label": "Blue",
+   "id": "sky-teal",
+   "hex": "#5A8AD8",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[sky-teal]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "green",
+   "label": "Green",
+   "id": "mint-aurora-solid",
+   "hex": "#6BBF6A",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[mint-aurora-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "tan",
+   "label": "Tan",
+   "id": "peach-dusk-solid",
+   "hex": "#D8A880",
+   "real": true,
+   "ramp": {
+    "ref": "px/aura.json roles[peach-dusk-solid]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "pink",
+   "label": "Pink",
+   "id": "plum-blush",
+   "hex": "#F4A0C8",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[plum-blush]",
+    "ink": "#3B2A5C"
+   }
+  },
+  {
+   "word": "purple",
+   "label": "Purple",
+   "id": "lilac-night",
+   "hex": "#A884E0",
+   "real": false,
+   "ramp": {
+    "ref": "px/aura.json roles[lilac-night]",
+    "ink": "#3B2A5C"
+   }
+  }
+ ],
+ "names": [
+  "Willow",
+  "Nimbus",
+  "Dewdrop",
+  "Pippin",
+  "Marigold",
+  "Cocoa",
+  "Puffin",
+  "Thimble",
+  "Velvet",
+  "Twinkle",
+  "Lark",
+  "Honey",
+  "Snug",
+  "Button",
+  "Linden",
+  "Plum",
+  "Quill",
+  "Mallow",
+  "Breeze",
+  "Pudding"
+ ],
+ "profile": {
+  "locomotion": "flyer",
+  "home": "hollow",
+  "bed": "hollow_sill",
+  "farewellRoute": "flight",
+  "foods": "foods.js (aliveness/foods.json) per family",
+  "place": "cozy tree hollow",
+  "talents": [
+   "Night Vision",
+   "Silent Flight",
+   "Super Radar Hearing",
+   "Sweet-Dream Lullaby"
+  ],
+  "talentArt": [],
+  "quirks": [
+   "tilts its head all the way round",
+   "hums and sways while it waits",
+   "fluffs up suddenly",
+   "blinks one eye at a time",
+   "trills when sleepy"
+  ],
+  "game": "Moonlight Pairs"
+ },
+ "creature": {
+  "title": "The Starlight Listener",
+  "badge": "🪶",
+  "bg": "owl-bg",
+  "foods": [
+   "🐟 crispy smoked fish strips",
+   "🥓 savory meat nibbles",
+   "💧 cool spring water"
+  ],
+  "neutral": [
+   "🌻 seeds"
+  ],
+  "place": "cozy tree hollow",
+  "release": "the cozy tree hollow under the stars",
+  "treasure": "soft feather",
+  "token": "feather",
+  "pathIcon": "⭐",
+  "sign": "🪶 a soft feather on the window sill",
+  "talents": [
+   "Night Vision",
+   "Silent Flight",
+   "Super Radar Hearing",
+   "Sweet-Dream Lullaby"
+  ],
+  "trust": "wraps a big soft wing across the bottom of the screen like a velvet blanket, then gently preens the edge",
+  "quirks": [
+   "tilts its head all the way round",
+   "hums and sways while it waits",
+   "fluffs up suddenly",
+   "blinks one eye at a time",
+   "trills when sleepy"
+  ],
+  "game": "Moonlight Pairs"
+ },
+ "sound": {
+  "register": "B-flat major",
+  "octave": 4,
+  "timbre": "Wingsong chip palette (music v2)",
+  "voice": "whimber_<mood>_<1-3>"
+ },
+ "music": {
+  "home": "bg_whimber_<band>_loop",
+  "arrival": "whimber_arrival",
+  "release": "whimber_release",
+  "pet_motif": "whimber_pet_motif",
+  "bondup_sting": "bondup_sting_whimber",
+  "goodbye": {
+   "owl": "goodbye_owl",
+   "bird": "goodbye_bird",
+   "duck": "goodbye_duck",
+   "dove": "goodbye_dove",
+   "pigeon": "goodbye_pigeon",
+   "crow": "goodbye_crow",
+   "eagle": "goodbye_eagle",
+   "chicken": "goodbye_chicken",
+   "gull": "goodbye_gull"
+  }
+ },
+ "aura": {
+  "source": "px/aura.json roles[<ramp id>]",
+  "ramps": [
+   "crow-dusk",
+   "dove-mist",
+   "lilac-night",
+   "mint-aurora-solid",
+   "peach-dusk-solid",
+   "plum-blush",
+   "robin-ember",
+   "sky-teal",
+   "sun-finch",
+   "wren-cocoa"
+  ],
+  "notes": {
+   "sheet": "px/fx/notes_whimber.png",
+   "tints": [
+    "#C9A8FF",
+    "#8FD3FF",
+    "#8EEBC8",
+    "#FFD27A"
+   ],
+   "row0": [
+    "#C9A8FF",
+    "#9474D9"
+   ]
+  }
+ },
+ "words": {
+  "body": [
+   "feather*",
+   "wing",
+   "wings",
+   "winged",
+   "wingtip",
+   "wingtips",
+   "beak",
+   "beaks",
+   "talon",
+   "talons",
+   "preen*",
+   "hoot*",
+   "tweet",
+   "tweets",
+   "tweeting",
+   "plumage",
+   "flock"
+  ],
+  "home": [
+   "nest",
+   "nests"
+  ]
+ },
+ "scene": {
+  "homeProp": "hollow"
+ },
+ "games": {
+  "memoryDeck": [
+   "star",
+   "moon",
+   "leaf_green",
+   "comet",
+   "feather",
+   "dewdrop",
+   "firefly",
+   "lantern",
+   "cloud",
+   "book"
+  ],
+  "pairNames": {
+   "star": "stars",
+   "moon": "moons",
+   "leaf_green": "green leaves",
+   "comet": "comets",
+   "feather": "feathers",
+   "dewdrop": "dewdrops",
+   "firefly": "fireflies",
+   "lantern": "lanterns",
+   "cloud": "clouds",
+   "book": "books"
+  },
+  "token": "whimber_token",
+  "runnerKind": "glide",
+  "builder": "nest"
+ },
+ "icon_fallback": "bird"
+}

@@ -2,7 +2,9 @@
 """Lint Echo dialogue JSON (schema v2, /workspace/echo-app/DIALOGUE_SCHEMA.md).
 Checks: schema, graph integrity, substitution tokens, banned words (Overhaul A4 + guide 8.3),
 duplicate Echo lines (per species, shared pooled in), and species voice rules (Overhaul D4).
-Usage: python3 lint_dialogue.py [dir]   (default: ../dialogue relative to this script). Exit 1 on any error."""
+3-family reference copy (Purrlings v1, Oct 18): species twitchel (Purrlings) voice rules, Purrling kid-safety bans,
+the naive-voice -ish check, lion-only playful "roar" (lintAllow ["roar"] + cond var origin_animal "lion"), lintAllow on barks.
+Usage: python3 lint_dialogue.py [dir] [--strict]   (default: ../dialogue relative to this script). Exit 1 on any error."""
 import json, re, sys, os
 from collections import defaultdict
 
@@ -17,7 +19,8 @@ FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5
   "thanks_nose","thanks_words","write_a_lot"}   # farewell_arc.md v0.2 (release_invite / release_forced / goodbye_ask / walk_end retired)
 ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_today","named_reply","named_kept","next_postcards_v2"}   # onboarding v1 + origin_v2.md v0.2
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-KEY_PREFIX = {"slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "shared": ("talent_","fallback_","ui_")}
+_PFX = ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_")
+KEY_PREFIX = {"twitchel": _PFX, "slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
 NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
 CHOICE_KEYS = {"caption","voice","gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
@@ -29,6 +32,14 @@ BANNED = [r"traitor", r"cheat\w*", r"rude", r"liars?", r"stupid", r"dumb", r"fat
   r"you look", r"I went looking", r"miss(ed)? you", r"come back", r"without you", r"alone", r"lonely", r"die[sd]?", r"dying", r"dead",
   r"hunt\w*", r"eat you", r"see you", r"again tomorrow", r"tomorrow\?", r"scary", r"spooky", r"monsters?", r"nightmares?", r"afraid", r"kill\w*",
   r"he", r"she", r"him", r"his", r"her", r"hers", r"boys?", r"girls?", r"school", r"rude", r"silly[- ]billy", r"shut up", r"hate"]
+FAMILY_BANNED = {"twitchel": [("claws", r"claw(s|ed|ing)?"), ("fangs", r"fangs?"), ("teeth", r"teeth|toothy"), ("bite", r"bite|bites|biting|bitten"),
+  ("hiss", r"hiss(es|ed|ing)?"), ("growl", r"growl(s|ed|ing)?"), ("snarl", r"snarl(s|ed|ing)?"), ("prey", r"prey"), ("stalk", r"stalk(s|ed|ing)?"),
+  ("scratch", r"scratch(es|ed|ing)?"), ("roar", r"roar(s|ed|ing)?"),
+  ("chase-animal", r"(chase[sd]?|chasing|pounce[sd]?|pouncing)\b[^.!?…]{0,12}\b(mouse|mice|birds?|bunn(y|ies)|rabbits?|squirrels?|fish|frogs?|lizards?|bugs?|butterfl(y|ies))")]}
+FAMILY_BANNED_RE = {sp: [(i, re.compile(r"(?<![\w'])(" + b + r")(?![\w'])", re.I)) for i, b in L] for sp, L in FAMILY_BANNED.items()}
+ISH_OK = {"fish","wish","dish","swish","squish","finish","radish","polish","relish","splish","vanish","punish","cherish","perish","nourish","establish","parish","famish","furnish","garnish","banish","blemish","diminish","flourish","abolish","replenish","lavish","english","publish","whish"}
+def is_lion(c):
+    return isinstance(c, dict) and ((c.get("var") or {}).get("origin_animal") == "lion" or any(is_lion(x) for x in c.get("any", [])))
 BANNED_RE = [(b, re.compile(r"(?<![\w'])" + b + r"(?![\w'])", re.I)) for b in BANNED]
 
 errors, warns = [], []
@@ -51,9 +62,11 @@ def check_tokens(text, where):
         err(where, f"unknown substitution {{{t}}}")
     if re.search(r"\{[^}]*$|^[^{]*\}", text): err(where, "unbalanced braces")
 
-def check_banned(text, where):
+def check_banned(text, where, sp=None, allow=()):
     for b, rx in BANNED_RE:
         if rx.search(text): err(where, f"banned word/phrase /{b}/ in: {text!r}")
+    for i, rx in FAMILY_BANNED_RE.get(sp, []):
+        if rx.search(text) and i not in allow: err(where, f"banned for this family ({i}) in: {text!r}")
 
 def words(s): return re.findall(r"[A-Za-z']+", s)
 def caps_words(s): return [w for w in words(s) if len(w) >= 2 and w.isupper() and w not in ("OK", "HA")]  # Ha-HA is a Slyte pet phrase
@@ -70,6 +83,13 @@ def voice(sp, text, where, stats):
             if len(words(x)) > 12: err(where, f"Slyte sentence >12 words: {x!r}")
         if len(counted_sentences(text)) > 4: err(where, f"Slyte line >4 sentences: {text!r}")
         if len(caps_words(text)) > 1: err(where, f"Slyte line >1 CAPS word: {text!r}")
+    elif sp == "twitchel":
+        for x in sentences(text):
+            if len(words(x)) > 10: err(where, f"Purrling sentence >10 words: {x!r}")
+        if len(counted_sentences(text)) > 4: err(where, f"Purrling line >4 sentences: {text!r}")
+        if len([w for w in caps_words(text) if w != "AND"]) > 1: err(where, f"Purrling line >1 CAPS word: {text!r}")
+        ish = [w for w in re.findall(r"[A-Za-z]{2,}-?ish\b", text) if w.lower() not in ISH_OK]
+        if ish: err(where, f"naive voice: -ish word {ish} in: {text!r}")
     elif sp == "whimber":
         if caps_words(text): err(where, f"Whimber CAPS word: {text!r}")
         if "…" not in text and "..." not in text and len(words(text)) > 10: err(where, f"Whimber line needs a pause or ≤10 words: {text!r}")
@@ -80,14 +100,14 @@ def lint_file(path, seen_ids, dup_pool):
     except Exception as e: return err(path, f"invalid JSON: {e}")
     fn = os.path.basename(path); sp = d.get("species")
     if d.get("version") != 2: err(fn, "version must be 2")
-    if sp not in ("shared","slyte","whimber"): err(fn, f"bad species {sp!r}")
+    if sp not in ("shared","slyte","whimber","twitchel"): err(fn, f"bad species {sp!r}")
     for k in ("vars","barks","conversations"):
         if k not in d: err(fn, f"missing top-level {k}")
     stats = {"lines": 0, "excl": 0}
-    def echo_line(text, where, act=False):
+    def echo_line(text, where, act=False, allow=()):
         if act and text == "": return  # P5 act-out only: nothing spoken, the gesture plays
         if not isinstance(text, str) or not text.strip(): return err(where, "empty text")
-        check_tokens(text, where); check_banned(text, where); voice(sp, text, where, stats)
+        check_tokens(text, where); check_banned(text, where, sp, allow); voice(sp, text, where, stats)
         if not words(text): return  # pure beats like "…" are not lines
         dup_pool[re.sub(r"\s+", " ", text.strip().lower())].append(f"{fn}:{where}")
     for key, lines in d.get("barks", {}).items():
@@ -96,14 +116,15 @@ def lint_file(path, seen_ids, dup_pool):
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
-            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice"}
+            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow"}
+            if "roar" in b.get("lintAllow", []) and not is_lion(b.get("cond")): err(fn, f"{w} roar allowed only on a lion line (cond var origin_animal 'lion')")
             if "caption" in b: check_banned(b["caption"], w)
             if b.get("voice", "soft") != "soft": err(fn, f"{w} voice must be 'soft'")
             if extra: err(fn, f"{w} unknown fields {extra}")
             if b.get("expr") not in EXPR: err(fn, f"{w} bad expr {b.get('expr')!r}")
             if "react" in b and b["react"] not in REACT: err(fn, f"{w} bad react {b['react']!r}")
             if "cond" in b: check_cond(b["cond"], f"{fn} {w}")
-            echo_line(b.get("text"), w, bool(b.get("gesture")))
+            echo_line(b.get("text"), w, bool(b.get("gesture")), b.get("lintAllow", []))
     for c in d.get("conversations", []):
         cid = c.get("id", "?"); w0 = f"conv {cid}"
         if cid in seen_ids: err(fn, f"duplicate conversation id {cid}")
@@ -112,12 +133,14 @@ def lint_file(path, seen_ids, dup_pool):
         if c.get("trigger") not in ("idle","first_home","ready"): err(fn, f"{w0} trigger must be idle, first_home or ready")
         if "cond" in c: check_cond(c["cond"], f"{fn} {w0}")
         nodes = c.get("nodes", {})
+        callow = c.get("lintAllow", [])
+        if "roar" in callow and not is_lion(c.get("cond")): err(fn, f"{w0} roar allowed only in a lion conversation")
         if c.get("start") not in nodes: err(fn, f"{w0} start node missing"); continue
         edges = defaultdict(set)
         for nid, n in nodes.items():
             w = f"{w0}.{nid}"
             if set(n) - NODE_KEYS: err(fn, f"{w} unknown fields {set(n)-NODE_KEYS}")
-            if "say" in n: echo_line(n["say"], w, bool(n.get("gesture")))
+            if "say" in n: echo_line(n["say"], w, bool(n.get("gesture")), callow + n.get("lintAllow", []))
             elif "branch" not in n: err(fn, f"{w} has neither say nor branch")
             if n.get("expr", "neutral") not in EXPR: err(fn, f"{w} bad expr")
             if "react" in n and n["react"] not in REACT: err(fn, f"{w} bad react")
@@ -129,8 +152,8 @@ def lint_file(path, seen_ids, dup_pool):
                     cw = f"{w}.choice{j}"
                     if set(ch) - CHOICE_KEYS: err(fn, f"{cw} unknown fields {set(ch)-CHOICE_KEYS}")
                     if not ch.get("icon") or not ch.get("label"): err(fn, f"{cw} needs icon and label")
-                    check_banned(ch.get("label", ""), cw)
-                    if "reply" in ch: echo_line(ch["reply"], cw, bool(ch.get("gesture")))
+                    check_banned(ch.get("label", ""), cw, sp, callow + ch.get("lintAllow", []))
+                    if "reply" in ch: echo_line(ch["reply"], cw, bool(ch.get("gesture")), callow + n.get("lintAllow", []) + ch.get("lintAllow", []))
                     if ch.get("expr", "neutral") not in EXPR: err(fn, f"{cw} bad expr")
                     if "react" in ch and ch["react"] not in REACT: err(fn, f"{cw} bad react")
                     if "cond" in ch: check_cond(ch["cond"], cw)
@@ -156,10 +179,11 @@ def lint_file(path, seen_ids, dup_pool):
     return d
 
 def main():
-    root = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'dialogue')
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    root = args[0] if args else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'dialogue')
     shared_pool = defaultdict(list); ids = set()
     lint_file(os.path.join(root, "shared.json"), ids, shared_pool)
-    for sp in ("slyte", "whimber"):
+    for sp in [x for x in ("slyte", "whimber", "twitchel") if os.path.exists(os.path.join(root, f"{x}.json"))]:  # FAMILIES.order
         pool = defaultdict(list, {k: list(v) for k, v in shared_pool.items()})
         lint_file(os.path.join(root, f"{sp}.json"), ids, pool)
         for text, where in pool.items():

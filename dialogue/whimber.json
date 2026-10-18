@@ -10621,7 +10621,7 @@
             {
               "icon": "💛",
               "label": "My chest",
-              "reply": "In the chest… warm. Like a purring cat.",
+              "reply": "In the chest… warm. Like a little hum.",
               "expr": "happy",
               "set": {
                 "music_box": "warms the chest"
