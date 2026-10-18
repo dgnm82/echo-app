@@ -43,6 +43,7 @@ function play(o){
   const gather=Array.from({length:16},(_,i)=>({a:i/16*Math.PI*2,ph:i%4}));
   const burst=Array.from({length:lowfx?8:24},(_,i)=>({a:i/(lowfx?8:24)*Math.PI*2+.1,s:1.6+(i%3)*.5}));
   const hearts=Array.from({length:5},(_,i)=>({x:fcx-16+i*8,d:i*2}));
+  const notes=root.NoteFX&&o.fam?NoteFX.burst({fam:o.fam,seed:o.seed,lowfx:lowfx||short}):null,N0=lowfx||short?8:42;   // Batch C1: note burst on every bond-up
   let f=0,timer=null,done=false,started=performance.now();const END=lowfx||short?30:76;
   function drawFrame(){
     wx.clearRect(0,0,180,320);wx.drawImage(bg,0,0);
@@ -61,6 +62,9 @@ function play(o){
     if(!lowfx&&!short){
       if(f>=14&&f<26){const t=(f-14)/11,r=42-34*t;gather.forEach((s,i)=>sparkle(wx,fcx+Math.cos(s.a+t*3)*r,fcy+Math.sin(s.a+t*3)*r,(s.ph+(f>>1))%4))}
       if(f>=42&&f<52){const t=f-42;burst.forEach(s=>sparkle(wx,fcx+Math.cos(s.a)*t*s.s*3,fcy+Math.sin(s.a)*t*s.s*3,t<3?2:(t>>1)%4));hearts.forEach(hh=>{if(t>=hh.d)heart(wx,hh.x,ey-(t-hh.d)*3)})}
+    }
+    if(notes&&f>=N0&&f<N0+notes.len)NoteFX.drawBurst(wx,notes,f-N0,fcx,fcy);   // world space like the hearts/sparkles: x3 under the zoom, x1 after
+    if(!lowfx&&!short){
       if(f>=6&&f<14){const r=Math.max(30,120-(f-6)*14);for(let y=0;y<320;y+=1)for(let x=(y&1);x<180;x+=2){const d=Math.hypot(x-fcx,y-fcy);if(d>r&&d<r+40&&BAYER[y&3][x&3]/16<(d-r)/40){wx.fillStyle='#1E1638';wx.fillRect(x,y,1,1)}}}
     }
     // zoom: crop around the Echo, integer scale x1 -> x2 -> x3 (one snap every 4 frames), back to x1 at beat G

@@ -95,12 +95,12 @@ async def run(b,dev,vp,errs,full=True):
   await pg.locator('.fwpost').wait_for(timeout=30000);await pg.wait_for_timeout(300);await shot('postcards-explained')
   await pick('write a lot',t=30000)
   ok=False;seen=set()
-  for _ in range(900):
-    c=await pg.evaluate("(document.querySelector('#cr .px-echo')||{})._col");seen.add(c)
-    if c in ('ev1:5','ev1:6','ev1:7'):await pg.wait_for_timeout(250);await shot('departure-dissolve-mid');ok=True;break
+  for _ in range(900):   # Batch C2: the Echo sings, then dissolves into notes on the NoteFX canvas (replaces the old _ev light dissolve)
+    c=await pg.evaluate("(()=>{const n=document.querySelector('canvas.notefx'),e=document.querySelector('#cr .px-echo');return n?'notefx':(e&&e._col)||null})()");seen.add(c)
+    if c=='notefx':await pg.wait_for_timeout(900);await shot('departure-notes-mid');ok=True;break
     await pg.wait_for_timeout(40)
-  assert ok,('release dissolve frames seen',seen);s=await st();assert s.get('released') and s['fw']['step']==9,'released at C9'
-  await pg.wait_for_timeout(1500);await shot('departure-star')
+  assert ok,('release note dissolve seen',seen);s=await st();assert s.get('released') and s['fw']['step']==9,'released at C9'
+  await pg.wait_for_timeout(1500);await shot('departure-notes-drift')
   await pg.locator('.closure').wait_for(timeout=20000);await pg.wait_for_timeout(300);await shot('closure')
   await pg.locator('#cont button').wait_for(timeout=8000);await pg.click('#cont button');await pg.wait_for_timeout(300)
   await pg.click('.full [data-i="0"]');await pg.click('.full [data-i="2"]');await shot('feelings')

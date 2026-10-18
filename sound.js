@@ -59,6 +59,8 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
     talk(sec){sec=sec||.6;(this.ducks=this.ducks||[]).push({to:.65,ms:Math.round(sec*1000)});if(!master||out)return;level(.65,.06);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.2)},sec*1000)},   // ~35% duck for the chirp's length, short fades (both Echoes)
     get level(){return master?master.gain.value:1},
     duck(v){out=!!v;level(v?0:1,v?.5:1.5)},   // bond-up: fade out, come back after
+    once(n,vol){if(!unlocked||!ctx||!enabled())return;level(.15,.4);get(n).then(b=>{if(!b)return level(1,1);const s=ctx.createBufferSource(),g=ctx.createGain();   // C2: one-shot goodbye melody, home loop ducked
+      s.buffer=b;g.gain.value=vol||.6;s.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+.05);s.onended=()=>level(1,1.5)}).catch(()=>level(1,1))},
     refresh(){if(!enabled())stopAll();else if(want)set(want)},
     stop(){want=null;stopAll()},
     get playing(){return cur&&cur.n},get buffers(){return mbuf}}})();

@@ -5,6 +5,7 @@ URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2]
 async def newecho(b,p,kind,errs):
   pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
   pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
+  await pg.add_init_script("window.__nb=0;addEventListener('DOMContentLoaded',()=>{if(window.NoteFX){const d=NoteFX.drawBurst;NoteFX.drawBurst=function(){__nb++;return d.apply(this,arguments)}}})")   # Batch C1: note burst counter
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
   c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
@@ -75,5 +76,5 @@ async def main():
     await pg.wait_for_timeout(5000);await pg.mouse.click(200,300);await pg.wait_for_timeout(1000)
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());__echo.state.bond=500;__echo.home()");got=await frames(pg,'whimber-4to5',[38,60]);assert len(got)==2
     assert await pg.evaluate("__echo.state.bondShown")==5 and not await pg.evaluate("__echo.state.releasePath")
-    await pg.close();print('ERR',errs);assert not errs;await b.close();print('bond-up test OK')
+    nb=await pg.evaluate('window.__nb');print('note burst frames',nb);assert nb>0,'bond-up note burst drew';await pg.close();print('ERR',errs);assert not errs;await b.close();print('bond-up test OK')
 asyncio.run(main())

@@ -1,0 +1,77 @@
+// Batch C (sound & song Echoes): pixel music-note effects. Sheets px/fx/notes_<slyte|whimber>.png: 12x12 cells,
+// col = glyph*3 + fade (glyphs: 0 eighth, 1 beamed, 2 clef, 3 sparkle-note; fades: 0 full, 1 dither50, 2 dither25), row = tint 0-3.
+// burst(): the bond-up note burst (every bond-up, no fail state). release(): the ending, the Echo dissolves into a cloud of
+// notes that drifts off toward the wild. All motion in integer pixels at the app's 12 fps (83 ms), deterministic per seed.
+(function(root){
+const CELL=12,FPS_MS=83,BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+const TINT={slyte:['#FFD27A','#FF8FB8','#FFA97A','#8FD3FF'],whimber:['#C9A8FF','#8FD3FF','#8EEBC8','#FFD27A']};
+const imgs={};
+function sheet(fam){fam=fam==='whimber'?'whimber':'slyte';if(!imgs[fam]&&typeof Image!=='undefined'){const i=new Image();i.src='px/fx/notes_'+fam+'.png';imgs[fam]=i}return imgs[fam]}
+function rng(seed){let a=(seed|0)||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pick(R,w){let r=R()*w.reduce((a,b)=>a+b,0);for(let i=0;i<w.length;i++){if((r-=w[i])<0)return i}return 0}
+function stamp(cx,img,g,fade,tint,x,y){if(img&&img.complete&&img.naturalWidth)cx.drawImage(img,(g*3+fade)*CELL,tint*CELL,CELL,CELL,Math.round(x)-6,Math.round(y)-6,CELL,CELL)}
+// ---- C1 bond-up burst -------------------------------------------------------------------------------------------------
+// Spec: 18 notes (8 in reduced effects) in 2 waves: 12 at frame 0 evenly round 360 deg (+-10 deg jitter), 6 at frame 2 on the
+// gaps. Launch 6.5-8.5 world px/frame (wave 2: 5-7; reduced 4-6), drag x0.82 per frame (reach ~35-47 world px = x3 on screen under
+// the bond-up zoom, i.e. clear of the zoomed Echo), lift -0.14 px/frame^2 (notes float up as they slow),
+// spawn on a 10 px ring round the face centre; arc: heading turns 0.03-0.06 rad/frame (alternating sign) + 1 px sine bob. Life 12-15 frames; dither50 for frames 5-3 before the end,
+// dither25 for the last 2. Whole burst <= 17 frames = 1.42 s. Glyph mix 40 % eighth, 25 % beamed, 25 % sparkle,
+// 10 % clef (max 2 clefs); tints cycle 0-3 so every family colour shows.
+function burst(o){o=o||{};const R=rng(o.seed||7),n=o.n||(o.lowfx?8:18),w1=o.lowfx?n:Math.round(n*2/3),P=[];let clefs=0;
+  for(let i=0;i<n;i++){const wave=i<w1?0:1,k=wave?i-w1:i,m=wave?n-w1:w1;
+    let g=pick(R,[40,25,10,25]);if(g===2&&++clefs>2)g=0;
+    P.push({a:(k+(wave?.5:0))/m*Math.PI*2+(R()-.5)*.35,sp:(o.lowfx?4:wave?5:6.5)+R()*2,turn:(i%2?1:-1)*(.03+R()*.03),
+      ph:R()*6.28,g,t:i%4,d:wave?2:0,life:12+(R()*4|0)})}
+  return {P,x:o.x||0,y:o.y||0,fam:o.fam,len:Math.max(...P.map(p=>p.d+p.life))}}
+function pos(p,k,x0,y0){let x=x0+Math.cos(p.a)*10,y=y0+Math.sin(p.a)*10,v=p.sp,a=p.a;for(let j=0;j<k;j++){x+=Math.cos(a)*v;y+=Math.sin(a)*v-.14*j;v*=.82;a+=p.turn}
+  return [x+Math.sin(k*.9+p.ph),y]}
+function drawBurst(cx,b,t,ox,oy){const img=sheet(b.fam);let live=0;   // t = frames since the burst started
+  for(const p of b.P){const k=t-p.d;if(k<0||k>=p.life)continue;live++;const [x,y]=pos(p,k,ox==null?b.x:ox,oy==null?b.y:oy),left=p.life-k;
+    stamp(cx,img,p.g,left<=2?2:left<=5?1:0,p.t,x,y)}return live}
+// ---- C2 release: dissolve into notes, drift to the wild -------------------------------------------------------------------
+// o: {parent (scene el, 180x320 space), el (.px-echo), fam, to:[x,y] the wild (off-screen point), seed, lowfx, onDone, manual}
+// Beats (12 fps): S sing f0-5 (hop + 3 notes pop from the head) | D dissolve f6-19 (top-down dithered, each 8x8 cell spawns notes
+// as it empties, emptied pixels flash cream for 1 frame) | F drift f6-~46 (notes rise, then steer to the wild with a sine bob,
+// 1.4 -> 4.4 px/frame, dither out near the edge) | A answer: the last note twinkles 3x at the treeline, done ~f54 (4.5 s).
+function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=o.fam==='whimber'?'whimber':'slyte',img=sheet(fam);
+  const cv=document.createElement('canvas');cv.width=180;cv.height=320;cv.className='notefx';
+  cv.style.cssText='position:absolute;left:0;top:0;width:180px;height:320px;pointer-events:none;z-index:40;image-rendering:pixelated';
+  const par=o.parent;par.appendChild(cv);const cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
+  // the Echo's current 48x48 frame, read from its sprite sheet at its current background-position
+  const el=o.el,PR=par.getBoundingClientRect(),z=PR.width/180||1,ER=el.getBoundingClientRect();
+  const ex=Math.round((ER.left-PR.left)/z),ey=Math.round((ER.top-PR.top)/z),src=document.createElement('canvas');src.width=48;src.height=48;
+  const sx=src.getContext('2d'),m=/url\("?([^")]+)"?\)/.exec(el.style.backgroundImage||getComputedStyle(el).backgroundImage||''),bp=(el.style.backgroundPosition||'0px 0px').split(' ').map(v=>-parseInt(v)||0);
+  let pix=null;const si=new Image();si.onload=()=>{sx.drawImage(si,bp[0],bp[1],48,48,0,0,48,48);pix=sx.getImageData(0,0,48,48)};if(m)si.src=m[1];
+  const to=o.to||[200,ey-20],N=[],thr=new Float32Array(48*48),gone=new Uint8Array(48*48),cellLeft={};
+  for(let y=0;y<48;y++)for(let x=0;x<48;x++)thr[y*48+x]=.6*(y/48)+.4*BAYER[y&3][x&3]/16;   // head first, paws last
+  const tintOf=(r,g,b)=>{let best=0,bd=1e9;TINT[fam].forEach((h,i)=>{const R2=parseInt(h.slice(1,3),16),G2=parseInt(h.slice(3,5),16),B2=parseInt(h.slice(5,7),16),d=(r-R2)**2+(g-G2)**2+(b-B2)**2;if(d<bd){bd=d;best=i}});return best};
+  const MAX=low?12:30;let f=0,done=false,timer=null;
+  function spawn(x,y,tint,delay,up){if(N.length>=MAX)return;N.push({x,y,vx:(R()-.5)*4,vy:-(up||1.6)-R()*1.6,g:pick(R,[40,25,10,25]),t:tint,
+    ph:R()*6.28,ty:to[1]+(R()-.5)*120,k:.6+R()*.8,s0:5+R()*8,d:delay||0,age:0,out:0})}
+  function step(){if(done)return;cx.clearRect(0,0,180,320);
+    if(f===0)el.style.visibility='hidden';
+    if(pix){const d=pix.data,hop=f>=1&&f<=4?[1,2,2,1][f-1]:0;
+      if(f<6){if(f===2)for(let i=0;i<3;i++)spawn(ex+18+i*6,ey+8,i%4,0,2.2);}
+      const p=low?Math.min(1,Math.max(0,(f-6)/4)):Math.max(0,(f-6)/13),im=cx.createImageData(48,48),od=im.data;
+      for(let i=0;i<48*48;i++){if(!d[i*4+3])continue;const x=i%48,y=i/48|0,t=low?BAYER[y&3][x&3]/16:thr[i];
+        if(p>t){if(!gone[i]){gone[i]=1;const c=(y>>3)*6+(x>>3);cellLeft[c]=(cellLeft[c]||0)+1;
+            if(!low&&cellLeft[c]%14===7)spawn(ex+x,ey+y,tintOf(d[i*4],d[i*4+1],d[i*4+2]),0);
+            if(!low){od[i*4]=0xFF;od[i*4+1]=0xF1;od[i*4+2]=0xC4;od[i*4+3]=255}}continue}
+        od[i*4]=d[i*4];od[i*4+1]=d[i*4+1];od[i*4+2]=d[i*4+2];od[i*4+3]=255}
+      if(low&&f===6)for(let i=0;i<10;i++)spawn(ex+10+R()*28,ey+8+R()*30,i%4,i);
+      const tmp=document.createElement('canvas');tmp.width=48;tmp.height=48;tmp.getContext('2d').putImageData(im,0,0);cx.drawImage(tmp,ex,ey-hop)}
+    let live=0;
+    for(const n of N){if(n.d>0){n.d--;live++;continue}if(n.out>=3)continue;live++;n.age++;
+      const dx=to[0]-n.x,dy=n.ty-n.y,dl=Math.hypot(dx,dy)||1,sp=Math.min(4.4,(low?1:1.4)+n.age*.13)*n.k,steer=Math.min(1,Math.max(0,(n.age-n.s0)/12));
+      n.vx=n.vx*.9*(1-steer*.3)+dx/dl*sp*steer*.3;n.vy=n.vy*.9*(1-steer*.3)+dy/dl*sp*steer*.3;
+      n.x+=n.vx;n.y+=n.vy;const off=n.x<-6||n.x>186||n.y<-6||n.y>326;if(off||dl<24||n.age>40)n.out++;
+      stamp(cx,img,n.g,n.out?Math.min(2,n.out):0,n.t,n.x,n.y+Math.sin(n.age*.6+n.ph)*2)}
+    const allOut=f>20&&!live;   // A: the answer twinkle at the treeline, on-screen point nearest the wild
+    if(allOut){const k=f-(A0=A0||f),ax=Math.max(8,Math.min(172,to[0])),ay=Math.max(8,Math.min(312,to[1]));if(k<8){if((k>>1)%2===0)stamp(cx,img,3,k<6?0:1,0,ax-6,ay)}else return finish()}
+    f++;if(f>90)return finish();if(!o.manual)timer=setTimeout(step,FPS_MS)}
+  let A0=0;
+  function finish(){if(done)return;done=true;clearTimeout(timer);cv.remove();o.onDone&&o.onDone()}
+  if(!o.manual)si.decode?si.decode().then(()=>step(),()=>step()):setTimeout(step,0);
+  return {step,finish,get frame(){return f},canvas:cv,get ready(){return !!pix}}}
+const API={burst,drawBurst,release,sheet,CELL,TINT};root.NoteFX=API;if(typeof module!=='undefined')module.exports=API;
+})(typeof window!=='undefined'?window:globalThis);

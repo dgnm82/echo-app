@@ -566,7 +566,7 @@ function playBondUp(from,to,live,done){
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX('bondup_sting_'+(S.kind==='fox'?'slyte':'whimber'),{vol:.9});
-    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,
+    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:S.kind==='fox'?'slyte':'whimber',seed:(S.g.seed||1)*7+to,
       onTitle:t=>{window.__butitle=t},
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;{const t=window.__butitle;if(t&&t.gesture&&window.Alive&&Alive.act)setTimeout(()=>{try{Alive.act(t.gesture)}catch(e){}},400)}   // the title's gesture plays after the scene
@@ -1237,7 +1237,7 @@ function fwTimeToGo(){if(!document.getElementById('feed'))return;const f=fw();ta
 function fwStartByChild(){const f=fw();
   if(f.state==='almost_ready'&&f.almostDays.length<=1&&!sess.tapEarly){sess.tapEarly=1;talk(B('path_tap_early'),3000)}
   setTimeout(()=>choices([['🌲',fwUI('ui_choice_ask',0),null],['🤗',fwUI('ui_choice_ask',1),null]],i=>{if(i===0)fwCeremony('child')}),sess.tapEarly===1?1500:0);if(sess.tapEarly===1)sess.tapEarly=2}
-// ---- the ceremony: Slyte walks to the meadow's edge; Whimber sits on the twilight branch, then flies as light to its star ----
+// ---- the ceremony: the fox walks to the meadow's edge; Whimber sits on the twilight branch; then the Echo sings and dissolves into notes (C2) ----
 function fwSay(l){return new Promise(res=>{if(!$('#b'))return res();if(typeof l==='string')l={text:l};talk(l,600000);const ms=FWC().lineMs||Math.max(2600,l.text.length*62);
   const sc=$('#sc');let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sc&&sc.removeEventListener('click',fin);res()};const t=setTimeout(fin,ms);setTimeout(()=>sc&&sc.addEventListener('click',fin),350)})}
 function fwChoose(list){return new Promise(res=>choices(list.map(x=>[x[0],x[1],null]),res))}
@@ -1309,11 +1309,13 @@ async function fwCeremony0(path,resume){
   const c=$('#cr'),pxe=$('#cr .px-echo');
   if(fox){c.classList.add('pxwalk');await fwMoveTo(150,58,1600);c.classList.remove('pxwalk');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
   else{react('excited');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
-  $('#b').style.display='none';SFX(fox?'slyte_release':'whimber_release');
-  await new Promise(res=>{if(!pxe)return res();PIXEL.event(pxe,'release',res);setTimeout(fwSparkles,900);
-    if(!fox){const [sx,sy]=fwStarXY();const x0=parseFloat(c.style.left)||58,b0=parseFloat(c.style.bottom)||64,tx=sx,tb=263-sy-24,n=26;let i=0;   // forward glide arc toward its star, never straight up
-      const t=setInterval(()=>{i++;const k=i/n;c.style.left=Math.round(x0+(tx-x0)*k)+'px';c.style.bottom=Math.round(b0+(tb-b0)*k+10*Math.sin(Math.PI*k))+'px';if(i>=n)clearInterval(t)},83)}});
-  const s=$('#fwstar');if(s)s.classList.add('answer');if(window.Sound&&S.voice!==false)Sound.play((fox?'slyte':'whimber')+'_pet_motif',{vol:.6});await fwSay(B('last_call'));closure()}
+  // Batch C2 (Cole art/audio v1): the Echo sings, then dissolves head-down into notes that drift off to the wild; its own goodbye melody plays once
+  $('#b').style.display='none';
+  const look=S.g.look,anim=Object.keys(FAMILIES.animals).find(k=>FAMILIES.animals[k].look===look)||(fox?'fox':'owl');   // 'howling'/'wingsong' looks -> fox / bird
+  if(window.Music&&Music.once)Music.once('goodbye_'+anim);
+  await new Promise(res=>{if(!pxe||!window.NoteFX)return res();NoteFX.release({parent:$('#sc'),el:pxe,fam:fox?'slyte':'whimber',
+    to:fox?[200,150]:[196,40],seed:S.g.seed||1,lowfx:lowFx(),onDone:res})});
+  await fwSay(B('last_call'));closure()}
 function fwRelease(){const f=fw();S.released=now();f.state='released';S.postcards=[];S.checkins=buildCheckins();S.pcv=Postcards.VERSION;save()}
 function fwResumeCheck(){const f=S.fw;if(!f||S.released)return false;   // closed mid-ceremony before C9: resume at the edge / on the branch
   if(f.state==='ceremony'){fwCeremony(f.path,true);return true}return false}
