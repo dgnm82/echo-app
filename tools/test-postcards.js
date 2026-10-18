@@ -13,4 +13,9 @@ T('d) memory-free fallbacks from the doc when nothing is saved',()=>{const c=P.b
 T('e) Slyte day 60 uses the gift when it was the trinket',()=>{assert(P.build({kind:'fox',child:'A',gift:'shiny trinket'})[5].text.includes('I still have the shiny trinket'));assert(P.build({kind:'fox',child:'A',gift:'a leaf'})[5].text.includes('a shiny thing'))});
 T('f) privacy: feelings-like memories are never used',()=>{const c=P.build({kind:'fox',child:'A',memories:['You felt not great today','You said you were sad']});assert(!c.some(x=>/not great|sad/.test(x.text)))});
 T('g) guardrail words: no "miss you", "come back", "secret", "watch"',()=>{for(const kind of ['fox','owl'])for(const x of P.build({kind,child:'A',memories:mem}))assert(!/miss you|come back|secret|watching|play tomorrow/i.test(x.text),x.text)});
+T('h) C1: every postcard signs with the given name, never a family name; missing/family names fall back to "your friend"',()=>{const FAM=/(—|,)\s*(Slytes?|Whimbers?|Howlings?|Wingsongs?|S\.|W\.)\s*$/;
+  for(const kind of ['fox','owl'])for(const m of [mem,[]])for(const gift of ['shiny trinket','a leaf']){
+    for(const x of P.build({kind,child:'Mia',name:'Pip',gift,memories:m})){assert(!FAM.test(x.text),x.text);assert(!/\{echo_name\}/.test(x.text),x.text);if(/—/.test(x.text))assert(/— (your friend, )?Pip$/.test(x.text),x.text)}
+    for(const name of [undefined,null,'','  ','Slyte','whimber','Howling','Wingsongs'])for(const x of P.build({kind,child:'Mia',name,gift,memories:m})){assert(!FAM.test(x.text),name+': '+x.text);assert(!/\{echo_name\}|undefined|null|, *$/.test(x.text),x.text);if(/—/.test(x.text))assert(/— your friend$/.test(x.text),x.text)}}
+  for(const sp of ['slyte','whimber'])assert(P.T[sp].filter(c=>/—/.test(c.text)).length>=4&&P.T[sp].every(c=>![c.text,c.alt,c.trinket].filter(Boolean).some(t=>FAM.test(t))))});
 console.log(ok+'/'+n+' postcard tests passed');if(ok!==n)process.exit(1);

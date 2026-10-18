@@ -769,7 +769,8 @@ function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);i
 
 
 // ---------- needs v2 §4: away timeline (note, kind leave) and holiday mode. Bond is frozen, never lowered; nothing guilt-y ----------
-const nvVars=()=>({child:S.child||'friend',name:S.g.name,fav:S.g.fav||''});
+const nvVars=()=>({child:S.child||'friend',name:Postcards.signName(S.g&&S.g.name)||'your friend',   // C1: away cards sign with the given name, never the family
+  fav:S.g.fav||''});
 const NVK={note:'away_note',leave:'leave_postcard',leave2:'away_postcard_day7',holidayStart:'holiday_start',holidayBack:'holiday_end'};
 const nvB=k=>B(NVK[k],nvVars()),nvLine=k=>(nvB(k)||{}).text||'';
 function awayOnHome(){   // called from home(true): one gentle beat per open, no counting of days out loud
@@ -1314,7 +1315,7 @@ function feelings(){
   d.querySelector('#ok').onclick=()=>{d.remove();const d2=full(`<div class="mcard"><div class="mtop">${PI('❤️')}</div><p class="mline">It's okay to feel more than one thing.</p><button class="btn">${PI('📖')}<span class="lbl">Memory Book</span></button></div>`);d2.classList.add('milestone');say("It's okay to feel more than one thing.");d2.querySelector('button').onclick=()=>{d2.remove();afterHome();book()}};
 }
 function buildCheckins(){ // Echo_Postcards.docx v0.5: six postcards (days 1, 3, 7, 14, 30, 60)
-  return Postcards.build({kind:S.kind,child:S.child,gift:S.gift,memories:S.memories,constellation:(S.constellations||[])[0]})}
+  return Postcards.build({kind:S.kind,child:S.child,name:S.g&&S.g.name,gift:S.gift,memories:S.memories,constellation:(S.constellations||[])[0]})}
 // migrate a v0.3 check-in schedule (postcards, notes, signs) to the v0.5 postcards; keep how far the child has got
 function migrateCheckins(){if(!S||!S.released||S.pcv===Postcards.VERSION)return;const old=S.checkins||[];
   const upTo=Math.max(0,...old.filter(k=>k.delivered).map(k=>k.day));S.checkins=buildCheckins();S.checkins.forEach(k=>{if(k.day<=upTo)k.delivered=true});

@@ -55,10 +55,11 @@ async def main():
     await pg.click('#book');await pg.wait_for_timeout(300);await pg.evaluate("document.querySelector('.book').scrollTop=99999");await pg.wait_for_timeout(200);await shot('memory-book-postcards')
     assert await pg.locator('.book .pcard').count()==6
     # migration: a v0.3 save (notes/signs, days up to 7 delivered) becomes six postcards with days <= 7 delivered
-    await pg.evaluate("""(()=>{window.__wiped=1;const S=JSON.parse(localStorage.getItem('echo-proto-v1'));delete S.pcv;S.checkins=[{day:1,type:'postcard',text:'old',delivered:true},{day:3,type:'postcard',text:'old',delivered:true},{day:7,type:'note',text:'old',delivered:true},{day:14,type:'sign',text:'old',delivered:false},{day:90,type:'sign',text:'old',delivered:false}];S.released=Date.now()-8*864e5;S.lastCheckinDate=new Date().toDateString();localStorage.setItem('echo-proto-v1',JSON.stringify(S))})()""")
+    await pg.evaluate("""(()=>{window.__wiped=1;const S=JSON.parse(localStorage.getItem('echo-proto-v1'));delete S.pcv;S.g.name='Pip';S.checkins=[{day:1,type:'postcard',text:'old',delivered:true},{day:3,type:'postcard',text:'old',delivered:true},{day:7,type:'note',text:'old',delivered:true},{day:14,type:'sign',text:'old',delivered:false},{day:90,type:'sign',text:'old',delivered:false}];S.released=Date.now()-8*864e5;S.lastCheckinDate=new Date().toDateString();localStorage.setItem('echo-proto-v1',JSON.stringify(S))})()""")
     await pg.reload();await pg.wait_for_timeout(1200)
     m=await pg.evaluate("({n:__echo.state.checkins.length,types:[...new Set(__echo.state.checkins.map(c=>c.type))],del:__echo.state.checkins.filter(c=>c.delivered).map(c=>c.day),pcv:__echo.state.pcv,old:__echo.state.checkins.some(c=>c.text==='old')})")
-    print('migrated',m);assert m['n']==6 and m['types']==['postcard'] and m['del']==[1,3,7] and m['pcv']==2 and not m['old']
+    sg=await pg.evaluate("(()=>{const S=__echo.state,re=/(—|,)\\s*(Slytes?|Whimbers?|Howlings?|Wingsongs?|S\\.|W\\.)\\s*$/;return {name:S.g.name,fam:S.checkins.filter(c=>re.test(c.text)).length,signed:S.checkins.filter(c=>/—/.test(c.text)).map(c=>c.text.split('— ').pop())}})()");print('signatures',sg);assert sg['fam']==0 and sg['name']=='Pip' and len(sg['signed'])>=4 and all(x in ('Pip','your friend, Pip') for x in sg['signed']),sg
+    print('migrated',m);assert m['n']==6 and m['types']==['postcard'] and m['del']==[1,3,7] and m['pcv']==3 and not m['old']
     assert 'feelings' not in await pg.evaluate("Object.keys(__echo.state).join(',')")
     print('ERR',errs);assert not errs;await b.close();print('memory + postcards playthrough OK')
 asyncio.run(main())
