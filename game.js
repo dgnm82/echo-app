@@ -160,8 +160,8 @@ async function reveal(kind){
   const e=E();
   const px=!!window.PIXEL;
   h(`<div class="scene ${e.bg}"><div class="creature" id="cr" ${px?'':'style="opacity:0;bottom:-40%;transition:all 1.2s cubic-bezier(.2,1.4,.4,1)"'}>${svg(kind,S.g,px?'neutral':'surprised')}</div><div class="bubble" id="b" style="display:none"></div></div>`);
-  // Arrival (guide 9.2, P0): falling star -> sparkles spiral in -> forms heart-out in light form -> blink open -> hop (~2 s)
-  SFX(kind==='fox'?'slyte_arrival':'whimber_arrival');if(px){const el=$('#cr .px-echo');el.dataset.stage=1;PIXEL.event(el,'arrival')}
+  // Arrival (C2, Oct 18): notes in the Echo's own colours converge and it resolves from the paws up (the release in reverse; no light form)
+  SFX(kind==='fox'?'slyte_arrival':'whimber_arrival');if(px){const el=$('#cr .px-echo');el.dataset.stage=1;obArrive(el,kind)}
   else setTimeout(()=>{const c=$('#cr');c.style.opacity=1;c.style.bottom='10%'},300);
   setTimeout(()=>{talk(B('reveal'),60000);
     setTimeout(()=>{choices([['👋','Hi!',null],['🤗','Welcome',null],['🤫','Just smile',null]],(i)=>{
@@ -282,12 +282,12 @@ async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await D
 function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
   if(!l)return null;const short=obBand()===OBC.bands['5-6']&&l.short;return {text:obFill(short||l.text),expr:l.expr||'happy',react:l.react}}
 function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
-// P4a yes: arrival event, colour motes, keep-colours line, growth strip
+// C2: the Echo arrives as notes that converge and resolve it paws-up (NoteFX.arrive); without NoteFX it just appears
+function obArrive(el,kind){window.__arrive=0;const go=()=>{window.__arrive=1;if(window.NoteFX&&NoteFX.arrive)NoteFX.arrive({el,fam:kind==='fox'?'slyte':'whimber',pal:el.dataset.pal,seed:(S.g&&S.g.seed||1)*3+1,lowfx:lowFx(),onDone:()=>{window.__arrive=2}});else window.__arrive=2};requestAnimationFrame(go)}
+// P4a yes: arrival (notes), keep-colours line, growth strip
 function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=document.querySelector('#orlf .px-echo');
   $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();
-  SFX(f.kind==='fox'?'slyte_arrival':'whimber_arrival');if(el&&window.PIXEL){el.dataset.stage=1;PIXEL.event(el,'arrival')}
-  const chip=o.chip&&f.chips.find(c=>c.id===o.chip);const mc=chip?chip.hex:'#ffd27a';
-  $('#orlf').insertAdjacentHTML('beforeend',[0,1,2].map(i=>`<i class="ormote m${i}" style="background:${i===1?'#ffd27a':mc}"></i>`).join(''));
+  SFX(f.kind==='fox'?'slyte_arrival':'whimber_arrival');if(el&&window.PIXEL){el.dataset.stage=1;obArrive(el,f.kind)}   // C2: forms from notes (colour motes removed)
   setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
   setTimeout(()=>{const hp=document.querySelector('.orinvite>.obpanel.small');if(hp)hp.remove();   // compact: the hum line has done its job
     app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);

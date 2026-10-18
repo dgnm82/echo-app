@@ -217,7 +217,7 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .orstamp{background:#ffe9c8;border:1px dashed #c9782e;padding:3px 5px;display:flex;gap:3px;align-items:center;font-size:8px;transform:rotate(-2deg)}
 .orfams{display:flex;gap:4px}.orfam{background:#fff6e6;border:1px solid #3b2a5c;box-shadow:0 2px 0 #23183a;font:inherit;font-size:8px;padding:3px;display:flex;flex-direction:column;align-items:center;width:80px;overflow:hidden}
 .orfam .px-echo,.orlightform .px-echo{position:relative!important;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important}
-.orlightform{position:relative;margin-top:auto;filter:drop-shadow(0 0 6px #ffd27a);transition:transform 1.6s ease-in,opacity 1.6s ease-in}
+.orlightform{position:relative;margin-top:auto;transition:transform 1.6s ease-in,opacity 1.6s ease-in}
 .orlightform.small{margin-top:0;height:60px;transform:scale(.6);transform-origin:top center}
 .orlightform.bow .px-echo{animation:orbow .9s steps(3) 1}@keyframes orbow{50%{transform:translateY(4px) rotate(4deg)!important}}
 .orlightform.drift{transform:translate(40px,-120px) scale(.35);opacity:0}

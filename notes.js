@@ -104,5 +104,32 @@ function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=FAM(o.fam)
   function finish(){if(done)return;done=true;clearTimeout(timer);cv.remove();o.onDone&&o.onDone()}
   if(!o.manual)si.decode?si.decode().then(()=>step(),()=>step()):setTimeout(step,0);
   return {step,finish,get frame(){return f},canvas:cv,get ready(){return !!pix}}}
-const API={burst,drawBurst,release,sheet,colours,tinted,CELL,TINT};root.NoteFX=API;if(typeof module!=='undefined')module.exports=API;
+// ---- C2 arrival (Zane, Oct 18): the release in reverse. Notes in the Echo's own colours converge from a loose ring onto the
+// sprite, which resolves from the paws up (each pixel flashes cream for 1 frame as it lands), head last; no light or sparkle.
+// o: {el (.px-echo, positioned inside its offsetParent), fam, pal, seed, lowfx, onDone, manual}. ~1.8 s (reduced: 8 notes, ~1 s).
+function arrive(o){o=o||{};const R=rng(o.seed||13),low=!!o.lowfx,fam=FAM(o.fam),el=o.el,par=el&&el.offsetParent;let img=sheet(fam),cols=null;
+  if(!el||!par){o.onDone&&o.onDone();return null}
+  const k=(el.offsetWidth||48)/48,W=144,cv=document.createElement('canvas');cv.width=W;cv.height=W;cv.className='notefx notearrive';
+  cv.style.cssText=`position:absolute;left:${el.offsetLeft-48*k}px;top:${el.offsetTop-48*k}px;width:${W*k}px;height:${W*k}px;pointer-events:none;z-index:3;image-rendering:pixelated`;
+  par.appendChild(cv);const cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;el.style.visibility='hidden';
+  const src=document.createElement('canvas');src.width=48;src.height=48;const sc=src.getContext('2d');
+  const m=/url\("?([^")]+)"?\)/.exec(el.style.backgroundImage||getComputedStyle(el).backgroundImage||''),bp=(el.style.backgroundPosition||'0px 0px').split(' ').map(v=>-parseInt(v)||0);
+  let pix=null;const si=new Image();si.onload=()=>{sc.drawImage(si,bp[0],bp[1],48,48,0,0,48,48);pix=sc.getImageData(0,0,48,48);
+    cols=o.cols||colours({fam,pal:o.pal||el.dataset.pal,data:pix.data});img=tinted(fam,cols)||img};if(m)si.src=m[1];
+  const thr=new Float32Array(48*48);for(let y=0;y<48;y++)for(let x=0;x<48;x++)thr[y*48+x]=.6*(1-y/48)+.4*BAYER[y&3][x&3]/16;   // paws first, head last
+  const n=low?8:18,N=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2+(R()-.5)*.4,r=52+R()*16,tx=48+8+R()*32,ty=48+6+(i/n)*36;
+    N.push({sx:72+Math.cos(a)*r,sy:72+Math.sin(a)*r,tx,ty,g:pick(R,[40,25,10,25]),t:i%4,d:(i%6),life:(low?6:10)+(R()*3|0),ph:R()*6.28})}
+  const T0=low?6:9,TD=low?4:12;let f=0,done=false,timer=null;const lit=new Uint8Array(48*48);
+  function step(){if(done)return;cx.clearRect(0,0,W,W);if(cols&&img===imgs[fam])img=tinted(fam,cols)||img;
+    for(const q of N){const kk=f-q.d;if(kk<0||kk>q.life)continue;const e=kk/q.life,ee=1-(1-e)*(1-e),x=q.sx+(q.tx-q.sx)*ee,y=q.sy+(q.ty-q.sy)*ee+Math.sin(kk*.9+q.ph);
+      stamp(cx,img,q.g,kk>=q.life-1?2:kk>=q.life-3?1:0,q.t,x,y)}
+    if(pix&&f>=T0){const p=low?Math.min(1,(f-T0)/TD):Math.min(1,(f-T0)/TD),d=pix.data,im=cx.createImageData(48,48),od=im.data;
+      for(let i=0;i<48*48;i++){if(!d[i*4+3])continue;const t=low?BAYER[(i/48|0)&3][(i%48)&3]/16:thr[i];if(p<=t&&p<1)continue;
+        const fl=!low&&!lit[i];lit[i]=1;od[i*4]=fl?0xFF:d[i*4];od[i*4+1]=fl?0xF1:d[i*4+1];od[i*4+2]=fl?0xC4:d[i*4+2];od[i*4+3]=255}
+      const tmp=document.createElement('canvas');tmp.width=48;tmp.height=48;tmp.getContext('2d').putImageData(im,0,0);cx.drawImage(tmp,48,48)}
+    f++;if((pix&&f>T0+TD+1&&f>Math.max(...N.map(q=>q.d+q.life))+1)||f>60)return finish();if(!o.manual)timer=setTimeout(step,FPS_MS)}
+  function finish(){if(done)return;done=true;clearTimeout(timer);el.style.visibility='';cv.remove();o.onDone&&o.onDone()}
+  if(!o.manual)si.decode?si.decode().then(()=>step(),()=>step()):setTimeout(step,0);
+  return {step,finish,get frame(){return f},canvas:cv}}
+const API={burst,drawBurst,release,arrive,sheet,colours,tinted,CELL,TINT};root.NoteFX=API;if(typeof module!=='undefined')module.exports=API;
 })(typeof window!=='undefined'?window:globalThis);
