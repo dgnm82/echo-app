@@ -1,5 +1,5 @@
 {
- "frames": 35200,
+ "frames": 31040,
  "max": 16,
  "over16": 0,
  "black": 0,
@@ -7,11 +7,18 @@
   "slyte": [
    "dog",
    "wolf",
-   "howling"
+   "howling",
+   "coyote"
   ],
   "whimber": [
    "wingsong",
-   "duck"
+   "duck",
+   "dove",
+   "pigeon",
+   "crow",
+   "eagle",
+   "chicken",
+   "gull"
   ]
  },
  "palettes": {

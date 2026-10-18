@@ -28,7 +28,9 @@ async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];b404=[]
     CASES=[('dog','golden',None,'slyte','dog'),('wolf','grey',None,'slyte','wolf'),('fox','ginger',None,'slyte',None),
-           ('bird','red',None,'whimber','wingsong'),('duck','green',None,'whimber','duck'),('owl','brown',None,'whimber',None)]   # birds and canines only
+           ('bird','red',None,'whimber','wingsong'),('duck','green',None,'whimber','duck'),('owl','brown',None,'whimber',None),
+           ('coyote','golden',None,'slyte','coyote'),('dove','grey',None,'whimber','dove'),('pigeon','grey',None,'whimber','pigeon'),('crow','black',None,'whimber','crow'),
+           ('eagle','brown',None,'whimber','eagle'),('chicken','white',None,'whimber','chicken'),('gull','white',None,'whimber','gull')]   # batch A2   # birds and canines only
     for animal,chip,fam,sp,look in CASES:
       pg,inv=await origin(b,p,animal,chip,errs,b404,fam)
       S=await pg.evaluate("window.__echo.state");pal=S['g']['pal'];fl=await pg.evaluate("PIXEL.variant(__echo.state.g.seed,'%s',__echo.state.g.pal).fluff"%sp)

@@ -5,8 +5,8 @@ import json, os
 SRC = '/workspace/echo/origin_v2/data'
 names = json.load(open(os.path.join(SRC, 'names.json')))['names'] if os.path.exists(SRC) else None
 LABELS = {  # family id -> shown family word (decided Oct 12 6:50 PM). Internal ids stay slyte / whimber. Looks are PLACEHOLDER (today's sheets).
-  'slyte':   {'label': 'Howling', 'plural': 'Howlings', 'default_name': 'Slyte',   'kind': 'fox', 'look_base': 'fox', 'look_default': 'howling', 'looks': ['fox', 'dog', 'wolf', 'howling'], 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
-  'whimber': {'label': 'Wingsong', 'plural': 'Wingsongs', 'default_name': 'Whimber', 'kind': 'owl', 'look_base': 'owl', 'look_default': 'wingsong', 'looks': ['owl', 'wingsong', 'duck'], 'dialogue': 'whimber', 'sprite': 'whimber', 'look': 'birds (owl-like)'},
+  'slyte':   {'label': 'Howling', 'plural': 'Howlings', 'default_name': 'Slyte',   'kind': 'fox', 'look_base': 'fox', 'look_default': 'howling', 'looks': ['fox', 'dog', 'wolf', 'howling', 'coyote'], 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
+  'whimber': {'label': 'Wingsong', 'plural': 'Wingsongs', 'default_name': 'Whimber', 'kind': 'owl', 'look_base': 'owl', 'look_default': 'wingsong', 'looks': ['owl', 'wingsong', 'duck', 'dove', 'pigeon', 'crow', 'eagle', 'chicken', 'gull'], 'dialogue': 'whimber', 'sprite': 'whimber', 'look': 'birds (owl-like)'},
 }
 # origin v0.3 (origin_config.json colour.chips): ONE solid colour per Echo. real=False -> under "Toy colours".
 CFG = '/workspace/echo/origin_v2/data/origin_config.json'
@@ -21,9 +21,16 @@ except Exception: CH = FALLBACK_CHIPS
 CHIPS = {f: [[w, w.capitalize(), HEX[w], r, bool(real)] for w, r, real in CH[f]] for f in LABELS}
 ANIMALS = [  # P1 cards: every card is a bird (Wingsong) or a canine (Howling). default_name: names.json defaults members
  ['dog','Dog','dog','slyte','Thrumble','dog'],['fox','Fox','fox','slyte','Slyte','fox'],['wolf','Wolf','wolf','slyte','Ramble','wolf'],
- ['owl','Owl','owl','whimber','Whimber','owl'],['bird','Bird','bird','whimber','Trilli','wingsong'],['duck','Duck','duck','whimber','Whimber','duck']]   # birds and canines only (Oct 14: no cat / bunny / other, no borrowed colours)
+ ['coyote','Coyote','coyote','slyte','Skarik','coyote'],
+ ['owl','Owl','owl','whimber','Whimber','owl'],['bird','Bird','bird','whimber','Trilli','wingsong'],['duck','Duck','duck','whimber','Whimber','duck'],
+ ['dove','Dove','dove','whimber','Luma','dove'],['pigeon','Pigeon','pigeon','whimber','Trumbit','pigeon'],['crow','Crow','crow','whimber','Krell','crow'],
+ ['eagle','Eagle','eagle','whimber','Talryx','eagle'],['chicken','Chicken','chicken','whimber','Kippis','chicken'],['gull','Gull','gull','whimber','Gullyn','gull']]   # batch A2: every families_v1 bird + canine   # birds and canines only (Oct 14: no cat / bunny / other, no borrowed colours)
 FALLBACK = {'slyte': ['Biscuit','Pounce','Maple','Ziggy','Clover','Waffle'], 'whimber': ['Willow','Nimbus','Dewdrop','Pippin','Marigold','Cocoa']}
-out = {'order': list(LABELS), 'animals': {a: {'label': l, 'word': w, 'family': f, 'default_name': dn, 'look': lk} for a, l, w, f, dn, lk in ANIMALS}, 'animalOrder': [a[0] for a in ANIMALS]}
+# card icon: px/origin/<animal>.png; until Cole draws one, the nearest existing icon (PLACEHOLDER, reported)
+ICON_FALLBACK = {'slyte': 'wolf', 'whimber': 'bird'}
+_PX = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'px', 'origin')
+icon = lambda a, f: a if os.path.exists(os.path.join(_PX, a + '.png')) else ICON_FALLBACK[f]
+out = {'order': list(LABELS), 'animals': {a: {'label': l, 'word': w, 'family': f, 'default_name': dn, 'look': lk, 'icon': icon(a, f)} for a, l, w, f, dn, lk in ANIMALS}, 'animalOrder': [a[0] for a in ANIMALS]}
 for fid, d in LABELS.items():
   out[fid] = dict(d, id=fid, names=(names or {}).get(fid) or FALLBACK[fid],
                   chips=[{'id': i, 'label': l, 'hex': h, 'ramp': r, 'real': real} for i, l, h, r, real in CHIPS[fid]])

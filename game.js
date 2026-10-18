@@ -248,7 +248,7 @@ function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
 function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
   obScene('orseen',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div>
-   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${F.animals[a].icon||a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
+   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard${F.animals[a].label.length>6?' long':''}" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${F.animals[a].icon||a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
    <button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button>`);
   app.querySelectorAll('.orcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.a;app.querySelectorAll('.orcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F.animals[sel].label)});
   $('#ornext').onclick=()=>{if(!sel)return;if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const A=F.animals[sel];S.origin.animal=sel;S.vars.origin_animal=A.word;save();

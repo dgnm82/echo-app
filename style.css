@@ -265,3 +265,4 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .scene.ob .obnextbtn{position:sticky;bottom:4px;margin-top:auto;flex-shrink:0;z-index:6}
 .scene.ob>*:not(.bg){flex-shrink:0}
 @media (max-height:420px){.orinvite .orlightform{transform:scale(.8);margin:-6px 0}.orinvite .obpanel,.orinvite .obbub{padding:2px 4px}}
+.orcard span{max-width:100%;white-space:nowrap}.orcard.long span{font-size:6px!important;letter-spacing:-.2px}   /* A2: 7-letter names (Chicken) fit the 54 px card */
