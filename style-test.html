@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Slyte — layered 2D puppet style test</title><link rel="icon" href="data:,">
+<title>Fox Echo — layered 2D puppet style test</title><link rel="icon" href="data:,">
 <style>
 :root{--ink:#3b2a24;--paper:#fbf3e4}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -77,7 +77,7 @@ h1{margin:0;font-size:22px;letter-spacing:.5px}header p{margin:6px auto 0;max-wi
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 footer{text-align:center;font-size:12px;opacity:.6;padding:0 0 24px}
 </style></head><body>
-<header><h1>Slyte: layered 2D puppet style test</h1><p>Painterly, cel-shaded parts on a rig. Tap a Slyte to make it hop. Drag or tilt to see the parallax. Three Slytes from three different seeds.</p></header>
+<header><h1>Fox Echo: layered 2D puppet style test</h1><p>Painterly, cel-shaded parts on a rig. Tap a fox to make it hop. Drag or tilt to see the parallax. Three foxes from three different seeds.</p></header>
 <div class="controls" role="toolbar" aria-label="Expressions">
   <button data-e="happy" aria-pressed="true">😊 Happy</button><button data-e="curious">🤔 Curious</button><button data-e="sleepy">😴 Sleepy</button><button data-e="silly">😜 Silly</button><button data-e="shy">☺️ Shy</button>
   <button class="alt" id="reroll">🎲 New seeds</button>
@@ -117,7 +117,7 @@ function slyte(v){const id='s'+(++uid),c=v.coat,sh=mix(c,'#3a1a40',.32),deep=mix
    </g></g></g>`;
   const leg=(x,front)=>`<g transform="${SX(x,236,1,v.leg)}"><path d="M${x-13} 236 C${x-14} 262 ${x-14} 282 ${x-12} 298 L${x+12} 298 C${x+14} 282 ${x+14} 262 ${x+13} 236 Z" fill="${front?legC:mix(legC,'#2a1030',.18)}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
      <ellipse cx="${x}" cy="300" rx="16" ry="8" fill="${v.paws}" stroke="${ink}" stroke-width="3"/>${front?`<path d="M${x+9} 244 C${x+11} 262 ${x+11} 280 ${x+9} 292" stroke="${rim}" stroke-width="2.4" fill="none" opacity=".7"/>`:''}</g>`;
-  return `<svg viewBox="0 0 300 330" class="rig" data-expr="happy" role="img" aria-label="Slyte, seed ${v.seed}">
+  return `<svg viewBox="0 0 300 330" class="rig" data-expr="happy" role="img" aria-label="Fox Echo, seed ${v.seed}">
   <defs>
    <linearGradient id="coat${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${c}"/><stop offset="1" stop-color="${mix(c,'#5a2040',.18)}"/></linearGradient>
    <linearGradient id="cream${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="${crs}"/></linearGradient>

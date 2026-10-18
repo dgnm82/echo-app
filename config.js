@@ -25,7 +25,7 @@ window.CONFIG = {
 // Creature profiles (spec v0.3). All spoken text lives in dialogue/*.json.
 window.CREATURES = {
   "fox": {
-    "name": (typeof window!=="undefined"&&window.FAMILIES)?FAMILIES.slyte.label:"Slyte",   // label lives in families.js
+    "name": (typeof window!=="undefined"&&window.FAMILIES)?FAMILIES.slyte.label:"Howling",   // label lives in families.js
     "title": "The Clever Trickster",
     "badge": "🍃",
     "bg": "fox-bg",

@@ -4,7 +4,12 @@ const app=$('#app'), ov=$('#overlay');
 const KEY='echo-proto-v1';
 let S=load(), sess={feeds:0,games:0,naps:0,chats:0};
 const rnd=(seed)=>()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s)}return s}catch(e){return null}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s);c6Names(s)}return s}catch(e){return null}}
+// C6: 'Slyte' is no longer a name players see. Saves still holding the old fox default move to the new one, SILENTLY (no name_changed line; Daniel decides later)
+function c6Names(s){const nn=(((window.FAMILIES||{}).animals||{}).fox||{}).default_name||'Pipsong';if(nn==='Slyte')return;
+  if(s.g&&s.g.name==='Slyte')s.g.name=nn;if(s.vars&&s.vars.default_name==='Slyte')s.vars.default_name=nn;
+  const k=s.keepsake;if(k&&typeof k.name==='string'){if(k.name==='Slyte')k.name=nn;k.name=k.name.replace(/ from Slyte$/,' from '+nn).replace(/^Glow-leaf from /,'Song-leaf from ').replace(/^Starlight feather from /,'Song feather from ')}   // + C2 keepsake wording
+  if(Array.isArray(s.memories))s.memories=s.memories.map(m=>typeof m==='string'?m.replace(/— Slyte$/,'— '+nn):m)}
 // Oct 14: only birds and canines exist. Old saves that picked cat / bunny / other (borrowed colours) keep their Echo; the animal becomes its family's base animal
 function onlyBirdsCanines(s){const A=(window.FAMILIES||{}).animals||{},o=s.origin;if(o&&o.animal&&!A[o.animal]){const w=o.family==='whimber'||s.kind==='owl'?'owl':o.family==='slyte'||s.kind==='fox'?'fox':null;o.animal=w;if(s.vars&&w)s.vars.origin_animal=A[w].word}
   if(o&&o.src==='borrowed')o.src='chips';if(Array.isArray(s.songs))s.songs=s.songs.filter(a=>A[a])}
@@ -1005,7 +1010,7 @@ function stackGame(){
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
   window.__stack=g;window.__stackPress=press;talk(B('tower_start'),2000)}
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
-const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'comets',feather:'feathers',dewdrop:'dewdrops',firefly:'fireflies',lantern:'lanterns',cloud:'clouds',book:'books',whimber_token:'Whimbers',blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Slytes'};
+const PAIR_NAMES={star:'stars',moon:'moons',leaf_green:'green leaves',comet:'comets',feather:'feathers',dewdrop:'dewdrops',firefly:'fireflies',lantern:'lanterns',cloud:'clouds',book:'books',whimber_token:'Wingsongs',blackberry:'blackberries',honey_cake:'honey cakes',trinket:'shiny trinkets',leaf:'leaves',nut:'nuts',apple:'apples',daisy:'daisies',pinecone:'pinecones',mushroom:'mushrooms',ball:'balls',slyte_token:'Howlings'};
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
 function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){

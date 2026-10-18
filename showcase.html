@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Project Echo: plush Slyte & Whimber showcase</title><link rel="icon" href="data:,"><script src="spirit.js"></script>
+<title>Project Echo: plush Echo showcase</title><link rel="icon" href="data:,"><script src="spirit.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:#120e26;color:#fbf3ff;font-family:"Trebuchet MS",system-ui,sans-serif}
@@ -25,11 +25,11 @@ h2{text-align:center;font-size:18px;margin:26px 0 4px}.cmpnote{text-align:center
 @media (max-width:560px){.cmp{grid-template-columns:1fr}}
 footer{text-align:center;font-size:12px;opacity:.6;padding-bottom:24px}
 </style></head><body>
-<header><h1>Slyte & Whimber: plush spirit Echoes</h1><p>A twilight meadow showcase. The two Echoes wander, play and switch expressions on a loop. Style preview only; the game itself is unchanged.</p></header>
+<header><h1>Plush spirit Echoes</h1><p>A twilight meadow showcase. The two Echoes wander, play and switch expressions on a loop. Style preview only; the game itself is unchanged.</p></header>
 <div class="bar"><button id="pause" aria-pressed="false">⏸ Pause</button><button id="fxbtn">✨ Full effects</button><button id="seeds">🎲 New seeds</button></div>
 <div class="stage" id="stage"><div class="cap" id="cap">…</div></div>
-<h2>Compare: v2 spirit Slyte vs plush Slyte</h2><p class="cmpnote">Same seed, two directions: the v2 spirit fox from style-test-v2 on the left, the plush version on the right.</p>
-<div class="cmp"><figure><div id="cmpA"></div><figcaption>v2 spirit Slyte</figcaption></figure><figure><div id="cmpB"></div><figcaption>Plush Slyte</figcaption></figure></div>
+<h2>Compare: v2 spirit fox vs plush fox</h2><p class="cmpnote">Same seed, two directions: the v2 spirit fox from style-test-v2 on the left, the plush version on the right.</p>
+<div class="cmp"><figure><div id="cmpA"></div><figcaption>v2 spirit fox</figcaption></figure><figure><div id="cmpB"></div><figcaption>Plush fox</figcaption></figure></div>
 <footer>Project Echo prototype · showcase</footer>
 <script>
 (()=>{const $=s=>document.querySelector(s),R=SPIRIT.rng(42);
@@ -55,7 +55,7 @@ function go(who,x,motion){const el=$('#'+who),s=A[who];s.classList.toggle('face-
 const ex=(who,e)=>SPIRIT.setExpr(A[who],e),mo=(who,n,ms)=>SPIRIT.motion(A[who],n,ms);
 const steps=[
  ['Wandering the meadow',()=>{go('fox',42,'walk');go('owl',62,'hop');ex('fox','happy');ex('owl','neutral')}],
- ['Slyte pounces · Whimber flaps',()=>{mo('fox','pounce',1200);ex('fox','delighted');mo('owl','flap',1300);ex('owl','excited')}],
+ ['Fox pounces · Owl flaps',()=>{mo('fox','pounce',1200);ex('fox','delighted');mo('owl','flap',1300);ex('owl','excited')}],
  ['Tail swish · head swivel',()=>{mo('fox','swish',1100);ex('fox','curious');mo('owl','swivel',1800);ex('owl','curious')}],
  ['Happy bounce',()=>{mo('fox','bounce',900);mo('owl','bounce',900);ex('fox','giggling');ex('owl','giggling')}],
  ['Swapping places',()=>{go('fox',72,'walk');go('owl',26,'walk');ex('fox','proud');ex('owl','happy')}],

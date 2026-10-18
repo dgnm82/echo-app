@@ -5,7 +5,7 @@ import json, os
 SRC = '/workspace/echo/origin_v2/data'
 names = json.load(open(os.path.join(SRC, 'names.json')))['names'] if os.path.exists(SRC) else None
 LABELS = {  # family id -> shown family word (decided Oct 12 6:50 PM). Internal ids stay slyte / whimber. Looks are PLACEHOLDER (today's sheets).
-  'slyte':   {'label': 'Howling', 'plural': 'Howlings', 'default_name': 'Slyte',   'kind': 'fox', 'look_base': 'fox', 'look_default': 'howling', 'looks': ['fox', 'dog', 'wolf', 'howling', 'coyote'], 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
+  'slyte':   {'label': 'Howling', 'plural': 'Howlings', 'default_name': 'Pipsong', 'kind': 'fox', 'look_base': 'fox', 'look_default': 'howling', 'looks': ['fox', 'dog', 'wolf', 'howling', 'coyote'], 'dialogue': 'slyte',   'sprite': 'slyte',   'look': 'canines (fox-like)'},
   'whimber': {'label': 'Wingsong', 'plural': 'Wingsongs', 'default_name': 'Whimber', 'kind': 'owl', 'look_base': 'owl', 'look_default': 'wingsong', 'looks': ['owl', 'wingsong', 'duck', 'dove', 'pigeon', 'crow', 'eagle', 'chicken', 'gull'], 'dialogue': 'whimber', 'sprite': 'whimber', 'look': 'birds (owl-like)'},
 }
 # origin v0.3 (origin_config.json colour.chips): ONE solid colour per Echo. real=False -> under "Toy colours".
@@ -20,7 +20,7 @@ try: CH = {f: [[c['word'], c['colour'], c['real']] for c in v] for f, v in json.
 except Exception: CH = FALLBACK_CHIPS
 CHIPS = {f: [[w, w.capitalize(), HEX[w], r, bool(real)] for w, r, real in CH[f]] for f in LABELS}
 ANIMALS = [  # P1 cards: every card is a bird (Wingsong) or a canine (Howling). default_name: names.json defaults members
- ['dog','Dog','dog','slyte','Thrumble','dog'],['fox','Fox','fox','slyte','Slyte','fox'],['wolf','Wolf','wolf','slyte','Ramble','wolf'],
+ ['dog','Dog','dog','slyte','Thrumble','dog'],['fox','Fox','fox','slyte','Pipsong','fox'],['wolf','Wolf','wolf','slyte','Ramble','wolf'],
  ['coyote','Coyote','coyote','slyte','Skarik','coyote'],
  ['owl','Owl','owl','whimber','Whimber','owl'],['bird','Bird','bird','whimber','Trilli','wingsong'],['duck','Duck','duck','whimber','Whimber','duck'],
  ['dove','Dove','dove','whimber','Luma','dove'],['pigeon','Pigeon','pigeon','whimber','Trumbit','pigeon'],['crow','Crow','crow','whimber','Krell','crow'],

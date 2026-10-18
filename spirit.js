@@ -159,7 +159,7 @@ function fox(v){if(typeof v==='number')v=variant('fox',v);const id='sf'+(++uid),
    +(v.accent==='leaf'?`<g transform="translate(198 122) rotate(28)"><path d="M0 0 C10 -10 24 -8 30 0 C24 8 10 10 0 0Z" fill="#6ad08a" stroke="${ink}" stroke-width="1.8"/><path d="M2 0 H26" stroke="#2f8a5a" stroke-width="1.2"/><path d="M6 6 C14 14 24 14 28 10 C22 4 12 4 6 6Z" fill="#9ae0a0" stroke="${ink}" stroke-width="1.5"/></g>`
     :v.accent==='flower'?`<g transform="translate(200 124)">${[0,72,144,216,288].map(a=>`<ellipse rx="5.5" ry="8.5" cy="-7" fill="#ffd0ea" stroke="${ink}" stroke-width="1.4" transform="rotate(${a})"/>`).join('')}<circle r="4.5" fill="#ffe27a" stroke="${ink}" stroke-width="1.4"/></g>`:'');
   const headP='M150 108 C200 108 226 140 224 172 L236 182 L226 188 L234 198 L218 202 C206 226 180 238 150 238 C120 238 94 226 82 202 L66 198 L74 188 L64 182 L76 172 C74 140 100 108 150 108Z';
-  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-fox fox" data-expr="neutral" role="img" aria-label="Slyte">
+  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-fox fox" data-expr="neutral" role="img" aria-label="Fox Echo">
   <defs>${common(id,P,P.f)}<linearGradient id="cream${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdff"/><stop offset="1" stop-color="${mix(cr,c2,.25)}"/></linearGradient>
    <clipPath id="bodyclip${id}"><path d="M150 186 C198 186 214 236 206 290 L94 290 C86 236 102 186 150 186Z"/></clipPath><clipPath id="headclip${id}"><path d="${headP}"/></clipPath></defs>
   <g class="sp-move"><g class="sp-dir"><g class="sp-curl">
@@ -292,7 +292,7 @@ function plushFox(v){if(typeof v==='number')v=pvariant('fox',v);const id='pf'+SP
      <ellipse class="sp-pulse fx-glow" cx="278" cy="166" rx="14" ry="16" fill="${G}" opacity=".7" filter="url(#glow${id})"/></g>
     ${softFur(r,12,256,220,24,40,'#fff',1.6)}
     ${[[292,130,0],[304,160,.6],[270,112,1.2],[312,190,1.8]].map(([x,y,dl],i)=>`<g class="sp-spark${i>1?' sp-x':''}" style="animation-delay:-${dl}s">${star(x,y,4.5,'#fff')}</g>`).join('')}`;
-  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-fox sp-plush fox" data-expr="neutral" role="img" aria-label="Slyte">
+  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-fox sp-plush fox" data-expr="neutral" role="img" aria-label="Fox Echo">
   <defs>${defs(id,P)}<clipPath id="hc${id}"><path d="${head}"/></clipPath><clipPath id="bc${id}"><path d="${body}"/></clipPath></defs>
   <g class="sp-move"><g class="sp-dir"><g class="sp-curl">
   <ellipse class="sp-aura sp-pulse" cx="150" cy="210" rx="140" ry="128" fill="url(#aura${id})"/>
