@@ -43,7 +43,7 @@ function play(o){
   const gather=Array.from({length:16},(_,i)=>({a:i/16*Math.PI*2,ph:i%4}));
   const burst=Array.from({length:lowfx?8:24},(_,i)=>({a:i/(lowfx?8:24)*Math.PI*2+.1,s:1.6+(i%3)*.5}));
   const hearts=Array.from({length:5},(_,i)=>({x:fcx-16+i*8,d:i*2}));
-  const notes=root.NoteFX&&o.fam?NoteFX.burst({fam:o.fam,seed:o.seed,lowfx:lowfx||short}):null,N0=lowfx||short?8:42;   // Batch C1: note burst on every bond-up
+  const notes=root.NoteFX&&o.fam?NoteFX.burst({fam:o.fam,seed:o.seed,lowfx:lowfx||short,pal:o.pal,img:sheet,sx:col*48,sy:0}):null,N0=lowfx||short?8:42;   // Batch C1: note burst on every bond-up
   let f=0,timer=null,done=false,started=performance.now();const END=lowfx||short?30:76;
   function drawFrame(){
     wx.clearRect(0,0,180,320);wx.drawImage(bg,0,0);

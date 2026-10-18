@@ -566,7 +566,7 @@ function playBondUp(from,to,live,done){
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX('bondup_sting_'+(S.kind==='fox'?'slyte':'whimber'),{vol:.9});
-    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:S.kind==='fox'?'slyte':'whimber',seed:(S.g.seed||1)*7+to,
+    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:S.kind==='fox'?'slyte':'whimber',seed:(S.g.seed||1)*7+to,pal:gpal,
       onTitle:t=>{window.__butitle=t},
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;{const t=window.__butitle;if(t&&t.gesture&&window.Alive&&Alive.act)setTimeout(()=>{try{Alive.act(t.gesture)}catch(e){}},400)}   // the title's gesture plays after the scene
@@ -1206,7 +1206,7 @@ function fwStarLevel(){const s=S.bondShown||PIXEL.stageFromBond(S.bond);return s
 function fwStarXY(){return S.kind==='fox'?[118,108]:[104,105]}   // Slyte: low over the meadow's edge; Whimber: its star low over the far trees (phone (104,162) bg)
 function fwStarHTML(lvl,id){if(!lvl)return '';const [x,y]=fwStarXY();return `<button class="fwstar l${lvl}" id="${id||'fwstar'}" aria-label="${S.g.name}'s home star" style="left:${x-6}px;top:${y-6}px;background-image:url(px/fw/star_${lvl}.png)"></button>`}
 function fwTrailHTML(n){if(S.kind==='fox')return '';const [sx,sy]=fwStarXY(),ax=58,ay=150;let o='';
-  for(let i=1;i<=Math.min(6,n);i++){const t=i/7,x=Math.round(ax+(sx-ax)*t),y=Math.round(ay+(sy-ay)*t-18*Math.sin(Math.PI*t));o+=`<i class="fwtr" style="left:${x-1}px;top:${y-1}px"></i>`}return o}
+  for(let i=1;i<=Math.min(6,n);i++){const t=i/7,x=Math.round(ax+(sx-ax)*t),y=Math.round(ay+(sy-ay)*t-18*Math.sin(Math.PI*t));o+=`<i class="fwtr${i%2?'':' b'}" style="left:${x-2}px;top:${y-4}px"></i>`}return o}
 function fwHomeBits(){   // home star + path / star trail for the Home scene
   const f=fw(),outdoor=!(S.kind!=='fox'&&curScene().id==='library');let h='';
   if(outdoor)h+=fwStarHTML(fwStarLevel());
@@ -1278,7 +1278,8 @@ async function fwCeremony0(path,resume){
     // C2 arrive
     star(3);await fwSay(B('edge_arrive'));fwStep(3)}
   // C3 setup callback, chest glow x3
-  const gl=$('#fwglow');if(gl){gl.classList.add('on');setTimeout(()=>gl.classList.remove('on'),1600)}
+  const gl=$('#fwglow'),pe0=$('#cr .px-echo'),sc0=$('#sc');if(gl&&pe0&&sc0){const R=sc0.getBoundingClientRect(),z=R.width/180||1,r=pe0.getBoundingClientRect();gl.style.left=Math.round((r.left-R.left)/z+18)+'px';gl.style.top=Math.round((r.top-R.top)/z+22)+'px';gl.style.bottom='auto'}   // C v1.1: the hum sits on the Echo's chest (sprite px 24,28), wherever it stands
+  if(gl){gl.classList.add('on');setTimeout(()=>gl.classList.remove('on'),1600)}
   star(3);await fwSay(fwLine('edge_explain',0));await fwSay(fwLine('edge_explain',1));fwStep(4);
   // C4 gift: the child gives
   if(!f.gift){await fwSay(B('gift_ask'));const fav=S.g.fav.split(' ');
@@ -1321,7 +1322,7 @@ function fwResumeCheck(){const f=S.fw;if(!f||S.released)return false;   // close
   if(f.state==='ceremony'){fwCeremony(f.path,true);return true}return false}
 function closure(){
   const g=S.g,f=fw();if(!S.released)fwRelease();f.step=9;save();ov.innerHTML='';
-  const d=full(`<div class="mcard closure"><div class="mtop">${PI('⭐')}<span class="mt">${g.name} is home</span>${PI('⭐')}</div><div class="cstar"><i></i></div><p class="mline">${fwUI('ui_closure',0)}</p><p class="mline">${fwUI('ui_closure',1)}</p><p class="mline">${PI('✉️')} ${fwUI('ui_closure',2)}</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
+  const d=full(`<div class="mcard closure"><div class="mtop">${PIXEL.icon('note')}<span class="mt">${g.name} is home</span>${PIXEL.icon('note')}</div><div class="cnote">${PIXEL.icon('note')}</div><p class="mline">${fwUI('ui_closure',0)}</p><p class="mline">${fwUI('ui_closure',1)}</p><p class="mline">${PI('✉️')} ${fwUI('ui_closure',2)}</p><div id="cont" style="height:24px"></div></div>`);d.classList.add('milestone');
   setTimeout(()=>{d.querySelector('#cont').innerHTML='<button class="btn">Continue</button>';d.querySelector('button').onclick=()=>{d.remove();f.closed=1;save();feelings()}},FWC().lineMs?600:5000);
 }
 function feelings(){

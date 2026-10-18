@@ -6,10 +6,40 @@
 const CELL=12,FPS_MS=83,BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 const TINT={slyte:['#FFD27A','#FF8FB8','#FFA97A','#8FD3FF'],whimber:['#C9A8FF','#8FD3FF','#8EEBC8','#FFD27A']};
 const imgs={};
-function sheet(fam){fam=fam==='whimber'?'whimber':'slyte';if(!imgs[fam]&&typeof Image!=='undefined'){const i=new Image();i.src='px/fx/notes_'+fam+'.png';imgs[fam]=i}return imgs[fam]}
+const FAM=f=>TINT[f]?f:'slyte';   // any family with a px/fx/notes_<id>.png sheet + TINT/ROW0 entry (twitchel added by Purrlings v1)
+function sheet(fam){fam=FAM(fam);if(!imgs[fam]&&typeof Image!=='undefined'){const i=new Image();i.src='px/fx/notes_'+fam+'.png';imgs[fam]=i}return imgs[fam]}
 function rng(seed){let a=(seed|0)||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function pick(R,w){let r=R()*w.reduce((a,b)=>a+b,0);for(let i=0;i<w.length;i++){if((r-=w[i])<0)return i}return 0}
-function stamp(cx,img,g,fade,tint,x,y){if(img&&img.complete&&img.naturalWidth)cx.drawImage(img,(g*3+fade)*CELL,tint*CELL,CELL,CELL,Math.round(x)-6,Math.round(y)-6,CELL,CELL)}
+function stamp(cx,img,g,fade,tint,x,y){if(img&&img.complete!==false&&(img.naturalWidth||img.width))cx.drawImage(img,(g*3+fade)*CELL,tint*CELL,CELL,CELL,Math.round(x)-6,Math.round(y)-6,CELL,CELL)}
+// ---- Batch C v1.1: each Echo's OWN colours (Daniel, Oct 18) ----------------------------------------------------------------
+// colours({pal, img, sx, sy} | {pal, data}): 4 tints = [aura glow, body, glow lightened, body lightened]. The aura glow comes from
+// px/aura.json roles[pal].glow (PIXEL.AURA, the same role glow v1 draws; pal = the sprite's data-pal, i.e. the look/colour choice).
+// The body colour is the most common coat pixel of the Echo's own 48x48 frame (plum ink, whites and cream skipped). Dark coats are
+// lifted toward cream until they read on the night sky (never pure black). tinted(fam, cols): the family sheet's row 0 palette-swapped
+// into those 4 rows (base -> tint, shade -> tint mixed 35 % toward plum ink); 11 colours + transparent, cached per colour set.
+const INK=[0x3B,0x2A,0x5C],CRM=[0xFF,0xF1,0xC4],WH=[255,255,255];
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)),lum=c=>(.2126*c[0]+.7152*c[1]+.0722*c[2])/255;
+const ROW0={slyte:['#FFD27A','#E39A4A'],whimber:['#C9A8FF','#9474D9']};
+function lift(c){for(let k=0;k<6&&lum(c)<.42;k++)c=mix(c,CRM,.2);return c.map(v=>Math.max(8,v))}
+function bodyOf(d){if(!d)return null;const n={};let best=null,bn=0;
+  for(let i=0;i<d.length;i+=4){if(d[i+3]<255)continue;const r=d[i],g=d[i+1],b=d[i+2];
+    if(Math.abs(r-INK[0])+Math.abs(g-INK[1])+Math.abs(b-INK[2])<40||Math.min(r,g,b)>225)continue;const k=r<<16|g<<8|b;n[k]=(n[k]||0)+1;if(n[k]>bn){bn=n[k];best=k}}
+  return best==null?null:[best>>16&255,best>>8&255,best&255]}
+function frameData(img,sx,sy){try{if(!img||!(img.naturalWidth||img.width))return null;const c=document.createElement('canvas');c.width=48;c.height=48;
+  const k=c.getContext('2d');k.drawImage(img,sx||0,sy||0,48,48,0,0,48,48);return k.getImageData(0,0,48,48).data}catch(e){return null}}
+function colours(o){o=o||{};const A=root.PIXEL&&PIXEL.AURA,role=A&&A.roles&&A.roles[o.pal],glow=role&&role.glow?hx(role.glow):null;
+  const body=bodyOf(o.data||frameData(o.img,o.sx,o.sy)),fb=hx(TINT[FAM(o.fam)][0]);
+  const g=lift(glow||body||fb),b=lift(body||glow||fb);return [g,b,mix(g,WH,.4),mix(b,CRM,.45)]}
+const TCACHE={};
+function tinted(fam,cols){fam=FAM(fam);const base=sheet(fam);if(!cols||!base||!base.complete||!base.naturalWidth)return null;
+  const key=fam+cols.join('|');if(TCACHE[key])return TCACHE[key];
+  const c=document.createElement('canvas');c.width=base.naturalWidth;c.height=base.naturalHeight;const k=c.getContext('2d');
+  const [b0,s0]=ROW0[fam].map(hx);k.drawImage(base,0,0,c.width,CELL,0,0,c.width,CELL);const row=k.getImageData(0,0,c.width,CELL);
+  cols.forEach((t,r)=>{const sh=mix(t,INK,.35),out=new ImageData(new Uint8ClampedArray(row.data),c.width,CELL),d=out.data;
+    for(let i=0;i<d.length;i+=4){if(!d[i+3])continue;const m=(q)=>d[i]===q[0]&&d[i+1]===q[1]&&d[i+2]===q[2];
+      if(m(b0)){d[i]=t[0];d[i+1]=t[1];d[i+2]=t[2]}else if(m(s0)){d[i]=sh[0];d[i+1]=sh[1];d[i+2]=sh[2]}}
+    k.putImageData(out,0,r*CELL)});
+  return TCACHE[key]=c}
 // ---- C1 bond-up burst -------------------------------------------------------------------------------------------------
 // Spec: 18 notes (8 in reduced effects) in 2 waves: 12 at frame 0 evenly round 360 deg (+-10 deg jitter), 6 at frame 2 on the
 // gaps. Launch 6.5-8.5 world px/frame (wave 2: 5-7; reduced 4-6), drag x0.82 per frame (reach ~35-47 world px = x3 on screen under
@@ -22,10 +52,10 @@ function burst(o){o=o||{};const R=rng(o.seed||7),n=o.n||(o.lowfx?8:18),w1=o.lowf
     let g=pick(R,[40,25,10,25]);if(g===2&&++clefs>2)g=0;
     P.push({a:(k+(wave?.5:0))/m*Math.PI*2+(R()-.5)*.35,sp:(o.lowfx?4:wave?5:6.5)+R()*2,turn:(i%2?1:-1)*(.03+R()*.03),
       ph:R()*6.28,g,t:i%4,d:wave?2:0,life:12+(R()*4|0)})}
-  return {P,x:o.x||0,y:o.y||0,fam:o.fam,len:Math.max(...P.map(p=>p.d+p.life))}}
+  return {P,x:o.x||0,y:o.y||0,fam:o.fam,cols:o.cols||(o.pal||o.img||o.data?colours(o):null),len:Math.max(...P.map(p=>p.d+p.life))}}
 function pos(p,k,x0,y0){let x=x0+Math.cos(p.a)*10,y=y0+Math.sin(p.a)*10,v=p.sp,a=p.a;for(let j=0;j<k;j++){x+=Math.cos(a)*v;y+=Math.sin(a)*v-.14*j;v*=.82;a+=p.turn}
   return [x+Math.sin(k*.9+p.ph),y]}
-function drawBurst(cx,b,t,ox,oy){const img=sheet(b.fam);let live=0;   // t = frames since the burst started
+function drawBurst(cx,b,t,ox,oy){const img=tinted(b.fam,b.cols)||sheet(b.fam);let live=0;   // t = frames since the burst started
   for(const p of b.P){const k=t-p.d;if(k<0||k>=p.life)continue;live++;const [x,y]=pos(p,k,ox==null?b.x:ox,oy==null?b.y:oy),left=p.life-k;
     stamp(cx,img,p.g,left<=2?2:left<=5?1:0,p.t,x,y)}return live}
 // ---- C2 release: dissolve into notes, drift to the wild -------------------------------------------------------------------
@@ -33,7 +63,7 @@ function drawBurst(cx,b,t,ox,oy){const img=sheet(b.fam);let live=0;   // t = fra
 // Beats (12 fps): S sing f0-5 (hop + 3 notes pop from the head) | D dissolve f6-19 (top-down dithered, each 8x8 cell spawns notes
 // as it empties, emptied pixels flash cream for 1 frame) | F drift f6-~46 (notes rise, then steer to the wild with a sine bob,
 // 1.4 -> 4.4 px/frame, dither out near the edge) | A answer: the last note twinkles 3x at the treeline, done ~f54 (4.5 s).
-function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=o.fam==='whimber'?'whimber':'slyte',img=sheet(fam);
+function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=FAM(o.fam);let img=sheet(fam),cols=null;
   const cv=document.createElement('canvas');cv.width=180;cv.height=320;cv.className='notefx';
   cv.style.cssText='position:absolute;left:0;top:0;width:180px;height:320px;pointer-events:none;z-index:40;image-rendering:pixelated';
   const par=o.parent;par.appendChild(cv);const cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
@@ -41,14 +71,15 @@ function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=o.fam==='w
   const el=o.el,PR=par.getBoundingClientRect(),z=PR.width/180||1,ER=el.getBoundingClientRect();
   const ex=Math.round((ER.left-PR.left)/z),ey=Math.round((ER.top-PR.top)/z),src=document.createElement('canvas');src.width=48;src.height=48;
   const sx=src.getContext('2d'),m=/url\("?([^")]+)"?\)/.exec(el.style.backgroundImage||getComputedStyle(el).backgroundImage||''),bp=(el.style.backgroundPosition||'0px 0px').split(' ').map(v=>-parseInt(v)||0);
-  let pix=null;const si=new Image();si.onload=()=>{sx.drawImage(si,bp[0],bp[1],48,48,0,0,48,48);pix=sx.getImageData(0,0,48,48)};if(m)si.src=m[1];
+  let pix=null;const si=new Image();si.onload=()=>{sx.drawImage(si,bp[0],bp[1],48,48,0,0,48,48);pix=sx.getImageData(0,0,48,48);
+    cols=o.cols||colours({fam,pal:o.pal||el.dataset.pal,data:pix.data});img=tinted(fam,cols)||img};if(m)si.src=m[1];
   const to=o.to||[200,ey-20],N=[],thr=new Float32Array(48*48),gone=new Uint8Array(48*48),cellLeft={};
   for(let y=0;y<48;y++)for(let x=0;x<48;x++)thr[y*48+x]=.6*(y/48)+.4*BAYER[y&3][x&3]/16;   // head first, paws last
-  const tintOf=(r,g,b)=>{let best=0,bd=1e9;TINT[fam].forEach((h,i)=>{const R2=parseInt(h.slice(1,3),16),G2=parseInt(h.slice(3,5),16),B2=parseInt(h.slice(5,7),16),d=(r-R2)**2+(g-G2)**2+(b-B2)**2;if(d<bd){bd=d;best=i}});return best};
+  const tintOf=(r,g,b)=>{let best=0,bd=1e9;(cols||TINT[fam].map(hx)).forEach((c,i)=>{const d=(r-c[0])**2+(g-c[1])**2+(b-c[2])**2;if(d<bd){bd=d;best=i}});return best};   // nearest of the Echo's own 4 tints
   const MAX=low?12:30;let f=0,done=false,timer=null;
   function spawn(x,y,tint,delay,up){if(N.length>=MAX)return;N.push({x,y,vx:(R()-.5)*4,vy:-(up||1.6)-R()*1.6,g:pick(R,[40,25,10,25]),t:tint,
     ph:R()*6.28,ty:to[1]+(R()-.5)*120,k:.6+R()*.8,s0:5+R()*8,d:delay||0,age:0,out:0})}
-  function step(){if(done)return;cx.clearRect(0,0,180,320);
+  function step(){if(done)return;cx.clearRect(0,0,180,320);if(cols&&img===imgs[fam])img=tinted(fam,cols)||img;
     if(f===0)el.style.visibility='hidden';
     if(pix){const d=pix.data,hop=f>=1&&f<=4?[1,2,2,1][f-1]:0;
       if(f<6){if(f===2)for(let i=0;i<3;i++)spawn(ex+18+i*6,ey+8,i%4,0,2.2);}
@@ -73,5 +104,5 @@ function release(o){o=o||{};const R=rng(o.seed||11),low=!!o.lowfx,fam=o.fam==='w
   function finish(){if(done)return;done=true;clearTimeout(timer);cv.remove();o.onDone&&o.onDone()}
   if(!o.manual)si.decode?si.decode().then(()=>step(),()=>step()):setTimeout(step,0);
   return {step,finish,get frame(){return f},canvas:cv,get ready(){return !!pix}}}
-const API={burst,drawBurst,release,sheet,CELL,TINT};root.NoteFX=API;if(typeof module!=='undefined')module.exports=API;
+const API={burst,drawBurst,release,sheet,colours,tinted,CELL,TINT};root.NoteFX=API;if(typeof module!=='undefined')module.exports=API;
 })(typeof window!=='undefined'?window:globalThis);
