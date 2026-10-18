@@ -16861,12 +16861,12 @@
           "wait": 2600
         },
         "c": {
-          "say": "I'm a {var:family}… we're made of bird songs, and a little light.",
+          "say": "I'm a {var:family}… we're made of bird songs.",
           "expr": "curious",
           "choices": [
             {
               "icon": "🪶",
-              "label": "Is it okay?",
+              "label": "Does it still sing?",
               "goto": "d1"
             },
             {

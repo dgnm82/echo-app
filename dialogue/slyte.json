@@ -18235,12 +18235,12 @@
           "wait": 2600
         },
         "c": {
-          "say": "I'm a {var:family}! {var:family_plural} are made of dog and fox and wolf songs. And light.",
+          "say": "I'm a {var:family}! {var:family_plural} are made of dog and fox and wolf songs.",
           "expr": "proud",
           "choices": [
             {
               "icon": "🐾",
-              "label": "Is it okay?",
+              "label": "Can it still sing?",
               "goto": "d1"
             },
             {
@@ -18256,7 +18256,7 @@
           ]
         },
         "d1": {
-          "say": "Yep! It still has all its song. Songs share. That's the trick.",
+          "say": "Yep! It still has all its song. Songs can share.",
           "expr": "happy",
           "next": "e",
           "wait": 2600
