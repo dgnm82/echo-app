@@ -244,11 +244,11 @@ function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
   obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
   app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
 function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.digLevel=S.digLevel==null||S.digLevel==='auto'?'easy':S.digLevel;['runLevel','catchLevel','stackLevel'].forEach(k=>{if(S[k]==null||S[k]==='auto')S[k]='easy'})}}
-// ---- Origin v2. P1 who did you see?
+// ---- Origin v2. P1 pick your Echo (batch A1)
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
 function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
-  obScene('orseen',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div><div class="obpanel small">${U('ui_or_seen_hint')}</div>
-   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
+  obScene('orseen',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div>
+   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${F.animals[a].icon||a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
    <button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button>`);
   app.querySelectorAll('.orcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.a;app.querySelectorAll('.orcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F.animals[sel].label)});
   $('#ornext').onclick=()=>{if(!sel)return;if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const A=F.animals[sel];S.origin.animal=sel;S.vars.origin_animal=A.word;save();
@@ -555,14 +555,17 @@ function playBondUp(from,to,live,done){
   const scr=SCR(),cr=document.querySelector('#cr .px-echo')||document.querySelector('.px-echo');if(!cr){done&&done();return}
   const R=scr.getBoundingClientRect(),z=R.width/180,r=cr.getBoundingClientRect(),echo={x:Math.round((r.left-R.left)/z),y:Math.round((r.top-R.top)/z)};
   const sheet=new Image();sheet.src=PIXEL.sheet(S.kind==='fox'?'slyte':'whimber',S.g);
-  const line=B('bond_up_'+to)||{text:'BOND UP!'};const lineObj=typeof line==='string'?{text:line}:line;
+  const line=B('bond_up_'+to)||{text:'…'};const lineObj=typeof line==='string'?{text:line}:line;
+  const tt=B('bond_up_title'),titleObj=typeof tt==='string'?{text:tt}:(tt||{text:'Closer!'});   // A3: Cole's bond_up_title lines (empty text = wordless cheer)
   if(live){S.bondShown=to;(S.bondMoments=S.bondMoments||[]).push({from,to,day:S.days});save()}   // the bond and the Memory Book entry are saved even if skipped
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX('bondup_sting_'+(S.kind==='fox'?'slyte':'whimber'),{vol:.9});
-    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,lowfx:lowFx(),short:!!S.shortBondUp,
+    const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,
+      onTitle:t=>{window.__butitle=t},
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
-      onDone:()=>{window.__bondup=null;if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
+      onDone:()=>{window.__bondup=null;{const t=window.__butitle;if(t&&t.gesture&&window.Alive&&Alive.act)setTimeout(()=>{try{Alive.act(t.gesture)}catch(e){}},400)}   // the title's gesture plays after the scene
+        if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
 function talk(t,ms){const b=$('#b');if(!b||!t)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   if(!o.text){if(o.gesture&&window.Alive)Alive.act(o.gesture);return}   // P5 act-out only: no bubble, the gesture plays
   if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
@@ -733,7 +736,7 @@ function book(){
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
   ${S.kind?`<h2>Our ${S.kind==='fox'?'hollow log':'hollow'}</h2><div class="homebook">${homeProp('book')}</div>${S.dig&&S.dig.games?`<p class="digline">${S.kind==='fox'?'Deepest dig':'Coziest nest'}: ${S.dig.best||0} rows · best ${Math.max(0,...Object.values((S.best&&S.best.dig)||{}).map(o=>o.score||0))} points</p>`:''}`:''}
-  ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Bond up! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
+  ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Closer! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${(S.wild||[]).length?`<h2>${PI('🍃')} Friends in the wild</h2>`+S.wild.map(w=>`<p class="mline">${w.name} · ${w.family||''} · ${'★'.repeat(Math.max(1,Math.min(9,w.stage||1)))}</p>`).join(''):''}

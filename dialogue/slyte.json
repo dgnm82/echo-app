@@ -3323,6 +3323,53 @@
         "expr": "giggling",
         "gesture": "giggle"
       }
+    ],
+    "bond_up_title": [
+      {
+        "text": "We're closer!",
+        "expr": "delighted",
+        "gesture": "spin"
+      },
+      {
+        "text": "Best buds!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Tail wags!",
+        "expr": "happy",
+        "gesture": "spin"
+      },
+      {
+        "text": "Yip yip! Closer!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Pawsome!",
+        "expr": "proud",
+        "gesture": "tap"
+      },
+      {
+        "text": "So close!",
+        "expr": "love",
+        "gesture": "settle"
+      },
+      {
+        "text": "Happy hop!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "Us! Closer!",
+        "expr": "delighted",
+        "gesture": "spin"
+      },
+      {
+        "text": "",
+        "expr": "delighted",
+        "gesture": "spin"
+      }
     ]
   },
   "conversations": [

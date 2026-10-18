@@ -10,11 +10,12 @@ function sparkle(cx,x,y,ph,col){x|=0;y|=0;cx.fillStyle=col||'#FFFFFF';
   if(ph===0){cx.fillRect(x,y,1,1);return}
   if(ph===3){for(const [a,b] of [[0,0],[-1,-1],[1,1],[-1,1],[1,-1]])cx.fillRect(x+a,y+b,1,1);return}
   const r=ph===1?1:2;cx.fillRect(x-r,y,2*r+1,1);cx.fillRect(x,y-r,1,2*r+1);if(ph===2){cx.fillStyle=GOLD;cx.fillRect(x,y,1,1)}}
+function heartsHTML(n){let h='';for(let i=0;i<n;i++){const c=document.createElement('canvas');c.width=7;c.height=6;heart(c.getContext('2d'),0,0);h+=`<img class="buheart" alt="" src="${c.toDataURL()}">`}return h}
 function heart(cx,x,y){x|=0;y|=0;cx.fillStyle='#FF8FB8';const H=['.##.##.','#######','#######','.#####.','..###..','...#...'];
   H.forEach((r,j)=>[...r].forEach((c,i)=>{if(c==='#')cx.fillRect(x+i,y+j,1,1)}))}
 function play(o){
   const scr=o.parent,lowfx=!!o.lowfx,short=!!o.short;
-  const cv=document.createElement('canvas');cv.width=180;cv.height=320;cv.className='bondup';cv.setAttribute('aria-label','Bond up');scr.appendChild(cv);
+  const cv=document.createElement('canvas');cv.width=180;cv.height=320;cv.className='bondup';cv.setAttribute('aria-label','Closer');scr.appendChild(cv);
   const cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
   const world=document.createElement('canvas');world.width=180;world.height=320;const wx=world.getContext('2d');wx.imageSmoothingEnabled=false;
   const ui=document.createElement('div');ui.className='bondup-ui';scr.appendChild(ui);
@@ -70,7 +71,10 @@ function play(o){
     if(!lowfx&&!short&&f>=34&&f<42){const a=FLASH_RAMP[f-34];if(a){cx.fillStyle=`rgba(${FLASH},${a})`;cx.fillRect(0,0,180,320)}}
     if(f===(lowfx||short?10:52))showBanner();
   }
-  function showBanner(){ui.innerHTML=`<div class="bubanner"><b>BOND UP!</b><span>${NAMES[o.to]||''}</span></div><div class="bubble buline">${o.line.text}</div>`;o.onLine&&o.onLine(o.line)}
+  function showBanner(){   // A3 (bondup_lines_v1): the family's bond_up_title line; empty text = wordless cheer (3 pixel hearts + a chirp)
+    const t=o.title||{text:'Closer!'},word=t.text?t.text:`<span class="buhearts" aria-label="hearts">${heartsHTML(3)}</span>`;
+    ui.innerHTML=`<div class="bubanner"><b>${word}</b><span>${NAMES[o.to]||''}</span></div><div class="bubble buline">${o.line.text}</div>`;
+    if(!t.text&&o.chirp)o.chirp();o.onTitle&&o.onTitle(t);o.onLine&&o.onLine(o.line)}
   function tick(){if(done)return;drawFrame();f++;if(f<END)timer=setTimeout(tick,83);else{timer=setTimeout(finish,4000)}}
   function finish(){if(done)return;done=true;clearTimeout(timer);cv.remove();ui.remove();scr.removeEventListener('pointerdown',skip,true);document.removeEventListener('keydown',skip,true);o.onDone&&o.onDone()}
   function skip(e){if(performance.now()-started<1000){e.stopPropagation();return}   // the tap that ended a game can't skip it

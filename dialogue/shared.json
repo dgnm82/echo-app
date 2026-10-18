@@ -581,13 +581,7 @@
     ],
     "ui_or_seen_ask": [
       {
-        "text": "Who did you see today?",
-        "expr": "happy"
-      }
-    ],
-    "ui_or_seen_hint": [
-      {
-        "text": "A pet, a park bird, a book or a toy all count!",
+        "text": "Pick Your Echo",
         "expr": "happy"
       }
     ],

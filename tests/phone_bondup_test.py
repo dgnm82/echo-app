@@ -24,13 +24,17 @@ async def main():
     pg=await newecho(b,p,'fox',errs)
     assert await pg.evaluate("__echo.state.bondShown")==1
     # queue: never during a game
-    await pg.evaluate("__echo.state.bond=130;__echo.fortBuilder()");await pg.wait_for_timeout(300)
+    await pg.evaluate("__echo.state.bond=130;__echo.linesGame()");await pg.wait_for_timeout(300)
     assert not await pg.evaluate("__echo.maybeBondUp()"),'no bond-up mid-game'
     await pg.click('#quit');await pg.wait_for_timeout(2500);await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove())")
     # back on Home: plays first, then the milestone card (the 'name' sticker milestone is due at bond 20)
     await pg.evaluate("__echo.state.badges=__echo.state.badges.filter(x=>x!=='place');__echo.home()")
     got=await frames(pg,'slyte-1to2',[3,10,20,30,35,38,45,60])
     assert len(got)==8,got
+    # A3 (bondup_lines_v1): the banner shows a bond_up_title line (never the old words) or the wordless cheer
+    bt=await pg.evaluate("(()=>{const b=document.querySelector('.bubanner b');return b&&[b.textContent,!!b.querySelector('.buhearts'),b.scrollWidth<=b.clientWidth+1]})()")
+    pool=await pg.evaluate("Dialogue.lib.barks.bond_up_title.map(l=>l.text)")
+    print('slyte title',bt);assert bt and 'BOND UP' not in bt[0].upper() and (bt[0] in pool or (bt[1] and '' in pool)) and bt[2],bt
     assert await pg.evaluate("__echo.state.bondShown")==2 and await pg.evaluate("__echo.state.bondMoments.length")==1
     # skip guard: a tap right away does nothing; later it jumps to the end state
     await pg.mouse.click(200,300);assert await pg.evaluate("!!window.__bondup")
@@ -40,6 +44,7 @@ async def main():
     await pg.screenshot(path=f'{OUT}/bondup-slyte-after.png')
     # Memory Book replay
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove())");await pg.click('#book');await pg.wait_for_timeout(300)
+    chip=await pg.inner_text('.book .bmom');assert chip.startswith('Closer! ') and 'Bond up' not in chip,chip
     await pg.locator('.book [data-replay]').first.scroll_into_view_if_needed();await pg.screenshot(path=f'{OUT}/bondup-memory-book.png')
     await pg.locator('.book [data-replay]').first.click();await pg.wait_for_timeout(1500);assert await pg.evaluate("!!window.__bondup");assert await pg.evaluate("__echo.state.bondMoments.length")==1
     await pg.wait_for_timeout(1000);await pg.mouse.click(200,300);await pg.wait_for_timeout(300);await pg.mouse.click(200,300);await pg.wait_for_timeout(500)
@@ -52,6 +57,20 @@ async def main():
     assert await pg.evaluate("__echo.state.bondShown")==3;await pg.close()
     # Whimber 3 -> 4 and the 4 -> 5 celebration (release untouched)
     pg=await newecho(b,p,'owl',errs)
+    # every title fits the banner at 180x320, both families (render each into a banner)
+    for fam in ('slyte','whimber'):
+      fit=await pg.evaluate("""f=>fetch('dialogue/'+f+'.json').then(r=>r.json()).then(d=>d.barks.bond_up_title.map(l=>{const u=document.createElement('div');u.className='bondup-ui';u.innerHTML='<div class="bubanner"><b></b><span>Growing</span></div>';document.getElementById('screen').appendChild(u);const b=u.querySelector('b');b.textContent=l.text;const ok=[l.text,b.scrollWidth<=b.clientWidth+1,b.getBoundingClientRect().height/(u.querySelector('.bubanner').getBoundingClientRect().width/140)];u.remove();return ok}))""",fam)
+      assert len(fit)==9 and sum(1 for f in fit if f[0]=='')==1 and all(f[1] for f in fit),(fam,fit);print(fam,'titles fit',len(fit))
+    # the wordless cheer: 3 pixel hearts + a chirp
+    await pg.evaluate("window.__chirps=0;const cp=Chirp.play;Chirp.play=function(t,k){if(t==='*')__chirps++;return cp.apply(this,arguments)};Dialogue.lib.barks.bond_up_title=Dialogue.lib.barks.bond_up_title.filter(l=>!l.text)")
+    await pg.evaluate("__echo.state.bondShown=3;__echo.state.bond=380;__echo.home()")
+    for i in range(80):
+      if await pg.evaluate("!!document.querySelector('.bubanner')"):break
+      await pg.wait_for_timeout(100)
+    wc=await pg.evaluate("(()=>{const b=document.querySelector('.bubanner b');return [b.textContent.trim(),b.querySelectorAll('.buheart').length,__chirps,window.__butitle&&window.__butitle.gesture]})()")
+    print('wordless',wc);assert wc[0]=='' and wc[1]==3 and wc[2]>=1 and wc[3]=='hum',wc
+    await pg.wait_for_timeout(5000);await pg.mouse.click(200,300);await pg.wait_for_timeout(1000)
+    await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove())")
     await pg.evaluate("__echo.state.bondShown=3;__echo.state.bond=380;__echo.home()");got=await frames(pg,'whimber-3to4',[20,30,38,45,60]);assert len(got)==5
     await pg.wait_for_timeout(5000);await pg.mouse.click(200,300);await pg.wait_for_timeout(1000)
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());__echo.state.bond=500;__echo.home()");got=await frames(pg,'whimber-4to5',[38,60]);assert len(got)==2

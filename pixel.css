@@ -209,7 +209,7 @@ input[type=checkbox]{width:8px;height:8px}
 /* ===== Bond-up scene (bond_up.md) ===== */
 canvas.bondup{position:absolute;left:0;top:0;width:180px;height:320px;z-index:60;image-rendering:pixelated}
 .bondup-ui{position:absolute;inset:0;z-index:61;pointer-events:none}
-.bondup-ui .bubanner{position:absolute;left:30px;right:30px;top:40px;background:#FFF6E6;border:2px solid #3B2A5C;box-shadow:0 0 0 1px #FFD27A;text-align:center;padding:4px;color:#3B2A5C;font-size:8px;display:flex;flex-direction:column;gap:3px}
+.bondup-ui .bubanner{position:absolute;left:20px;right:20px;top:40px;background:#FFF6E6;border:2px solid #3B2A5C;box-shadow:0 0 0 1px #FFD27A;text-align:center;padding:4px;color:#3B2A5C;font-size:8px;display:flex;flex-direction:column;gap:3px}
 .bondup-ui .bubanner b{font-size:16px;color:#E0457B;font-weight:normal}
 .bondup-ui .buline{display:block!important;position:absolute;left:8px;right:8px;top:auto;bottom:74px;width:auto!important;transform:none;max-width:none;white-space:normal!important}
 .book .bmom{display:flex;align-items:center;justify-content:space-between;gap:4px}
@@ -345,3 +345,4 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 /* Den Dig / Nest Weave results: nothing from the board (the woven nest / dug den blocks, HUD, Echo) shows behind or beside the card */
 .diggame:has(.g2card) .fb,.diggame:has(.g2card) .fbside,.diggame:has(.g2card) .fbecho,.diggame:has(.g2card) .dgspark{visibility:hidden}
 #gs:has(.g2card) .bubble{top:24px!important;bottom:auto!important;left:6px!important;right:6px!important;width:auto!important;max-width:none!important;transform:none!important;white-space:normal!important;z-index:6}   /* end card: the closing line sits above the results card, full width so it stays short */
+.bondup-ui .buhearts{display:flex;justify-content:center;gap:6px}.bondup-ui .buheart{width:14px;height:12px;image-rendering:pixelated}

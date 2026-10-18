@@ -3071,6 +3071,53 @@
         "expr": "giggling",
         "gesture": "giggle"
       }
+    ],
+    "bond_up_title": [
+      {
+        "text": "Closer now…",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "Hoo… closer.",
+        "expr": "happy",
+        "gesture": "hum"
+      },
+      {
+        "text": "Cozy friends.",
+        "expr": "love",
+        "gesture": "settle"
+      },
+      {
+        "text": "Snug as moss.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "Wings warm…",
+        "expr": "love",
+        "gesture": "stretch"
+      },
+      {
+        "text": "Heart hum…",
+        "expr": "love",
+        "gesture": "hum"
+      },
+      {
+        "text": "You and me…",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "Softly closer.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "",
+        "expr": "love",
+        "gesture": "hum"
+      }
     ]
   },
   "conversations": [
