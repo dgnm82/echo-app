@@ -5,7 +5,7 @@
 const NIGHT=[0x1E,0x16,0x38],CREAM='#FFF1C4',GOLD='#FFD27A',AMBER='#F7A85A',FLASH=[0xFF,0xE9,0xB8];
 const BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 const FLASH_RAMP=[0,.20,.42,.42,.28,.15,.06,0];   // f34..41, one ramped event (WCAG 2.3.1)
-const NAMES={2:'Early bond',3:'Growing',4:'Bonded',5:'Ready to shine'};
+const NAMES={2:'Early bond',3:'Growing',4:'Bonded',5:'Ready to sing'};
 function sparkle(cx,x,y,ph,col){x|=0;y|=0;cx.fillStyle=col||'#FFFFFF';
   if(ph===0){cx.fillRect(x,y,1,1);return}
   if(ph===3){for(const [a,b] of [[0,0],[-1,-1],[1,1],[-1,1],[1,-1]])cx.fillRect(x+a,y+b,1,1);return}

@@ -271,7 +271,7 @@
         "expr": "happy"
       },
       {
-        "text": "You helped it grow bright and brave.",
+        "text": "You helped its song grow big and brave.",
         "expr": "happy"
       },
       {
@@ -293,11 +293,11 @@
     ],
     "ui_keepsake": [
       {
-        "text": "Glow-leaf from {name}",
+        "text": "Song-leaf from {name}",
         "expr": "happy"
       },
       {
-        "text": "Starlight feather from {name}",
+        "text": "Song feather from {name}",
         "expr": "happy"
       }
     ],
@@ -571,7 +571,7 @@
     ],
     "ui_or_welcome": [
       {
-        "text": "Every animal hums a little song. Echoes are made of those songs, and light.",
+        "text": "Every animal hums a little song. Echoes are made of those songs.",
         "expr": "happy"
       },
       {
@@ -629,7 +629,7 @@
     ],
     "ui_or_keep_colours": [
       {
-        "text": "It's keeping your {var:origin_animal}'s colour. The more you play together, the brighter it glows.",
+        "text": "It's keeping your {var:origin_animal}'s colour. The more you play together, the bigger its song grows.",
         "expr": "happy"
       }
     ],

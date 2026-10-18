@@ -1444,14 +1444,14 @@
     ],
     "bond_up_2": [
       {
-        "text": "Whoa! New sparkles! I think those are from us.",
+        "text": "Whoa! New notes! I think those are from us.",
         "expr": "surprised",
         "react": "excited"
       }
     ],
     "bond_up_3": [
       {
-        "text": "Look at my tail! Fluffy AND sparkly. We did that.",
+        "text": "Look at my tail! So fluffy. And my song got bigger!",
         "expr": "proud"
       }
     ],
@@ -1463,7 +1463,7 @@
     ],
     "bond_up_5": [
       {
-        "text": "Look how bright I shine! We grew all this light together.",
+        "text": "Listen to my song! We grew all these notes together.",
         "expr": "proud"
       }
     ],
@@ -1584,7 +1584,7 @@
         "gesture": "one ear swivels to the horizon"
       },
       {
-        "text": "That bright spot past the meadow? I think it winked at me.",
+        "text": "Hear that song past the meadow? I think it sang hi to me.",
         "expr": "surprised",
         "cond": {
           "bondMin": 210
@@ -1607,7 +1607,7 @@
         }
       },
       {
-        "text": "I'm learning SO much here. My tail feels sparkly!",
+        "text": "I'm learning SO much here. My song feels bouncy!",
         "expr": "proud",
         "cond": {
           "bondMin": 290
@@ -1617,21 +1617,21 @@
     ],
     "bondup_after_3": [
       {
-        "text": "Something far away twinkled. Was it at me?",
+        "text": "Something far away sang. Was it to me?",
         "expr": "curious",
         "gesture": "glances at the faint home star"
       }
     ],
     "bondup_after_4": [
       {
-        "text": "I'm glowing more. Is that from you? I think so.",
+        "text": "I can hum more notes now. Is that from you? I think so.",
         "expr": "love",
         "gesture": "pats its chest glow"
       }
     ],
     "bondup_after_5": [
       {
-        "text": "I'm full of shiny things from here. Like a pocket!",
+        "text": "I have so many songs from here. Like a pocket of notes!",
         "expr": "proud",
         "gesture": "looks at the bright home star, then back at you"
       }
@@ -1828,12 +1828,12 @@
     ],
     "keepsake_give": [
       {
-        "text": "My turn! This is a glow-leaf. It has a bit of my light in it.",
+        "text": "My turn! This is a song-leaf. It has a bit of my song in it.",
         "expr": "proud",
         "gesture": "sets a glowing leaf down at your side"
       },
       {
-        "text": "When it glimmers, a postcard is here. Sneaky, right?",
+        "text": "When it hums, a postcard is here. Listen for it!",
         "expr": "giggling"
       }
     ],
@@ -1843,13 +1843,13 @@
         "expr": "love"
       },
       {
-        "text": "You helped me grow SO bright. Best friend in any world.",
+        "text": "You helped my song grow SO big. Best friend in any world.",
         "expr": "love"
       }
     ],
     "next_postcards": [
       {
-        "text": "Here's the plan. I turn into light, like when I arrived. Zoom!",
+        "text": "Here's the plan. I turn into little music notes and float home. Whoosh!",
         "expr": "excited"
       },
       {
@@ -2621,7 +2621,7 @@
         }
       },
       {
-        "text": "Riddle! Shiny, like me. Where?",
+        "text": "Riddle! Shiny and tiny. Where?",
         "expr": "proud",
         "cond": {
           "talent": "Riddle Solver",
@@ -10275,7 +10275,7 @@
           ]
         },
         "c": {
-          "say": "I'll twinkle back. Blink-blink. We're talking.",
+          "say": "I'll blink back. Blink-blink. We're talking.",
           "expr": "happy",
           "bond": 1,
           "gesture": "slowblink"
@@ -17951,7 +17951,7 @@
           ]
         },
         "b": {
-          "say": "Look! I glow more now. Is that from you?",
+          "say": "Listen! My song is bigger now. Is that from you?",
           "expr": "proud",
           "gesture": "chest glow brightens",
           "next": "c",
@@ -18041,7 +18041,7 @@
           ]
         },
         "c1": {
-          "say": "I know! My light filled up fast. You're good at friend stuff.",
+          "say": "I know! My song filled up fast. You're good at friend stuff.",
           "expr": "surprised",
           "next": "d",
           "wait": 2800

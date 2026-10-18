@@ -1283,7 +1283,7 @@ async function fwCeremony0(path,resume){
   // C5 gift: the Echo gives its keepsake (tap to keep)
   await fwSay(fwLine('keepsake_give',0));
   await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');b.className='fwkeep glim';b.id='fwkeep';b.setAttribute('aria-label',fwUI('ui_keepsake',fox?0:1));
-    b.style.backgroundImage=`url(px/fw/${fox?'glowleaf':'starfeather'}.png)`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${fox?'glow-leaf':'starlight feather'} to keep it</div></div>`;
+    b.style.backgroundImage=`url(px/fw/${fox?'glowleaf':'starfeather'}.png)`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${fox?'song-leaf':'song feather'} to keep it</div></div>`;
     b.onclick=()=>{ov.innerHTML='';S.keepsake={type:fox?'glowleaf':'starfeather',name:fwUI('ui_keepsake',fox?0:1),day:S.days};SFX('care_pet_sparkle');save();b.classList.add('kept');res()}});
   await fwSay(fwLine('keepsake_give',1));fwStep(6);
   // C6 thank-you, both ways (a second, different goodbye within 5 s plays two_goodbyes)

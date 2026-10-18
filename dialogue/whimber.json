@@ -1358,7 +1358,7 @@
     ],
     "bond_up_5": [
       {
-        "text": "So much light… we made all of it together. Hoo.",
+        "text": "So many notes… we made all of them together. Hoo.",
         "expr": "proud"
       }
     ],
@@ -1479,7 +1479,7 @@
         "gesture": "one ear tuft lifts"
       },
       {
-        "text": "That little light, low in the sky… I wonder what it's for.",
+        "text": "That little star, low in the sky… I wonder what it's for.",
         "expr": "thinking",
         "cond": {
           "bondMin": 210
@@ -1511,20 +1511,20 @@
     ],
     "bondup_after_3": [
       {
-        "text": "A little light just twinkled, far past the branches. I wonder…",
+        "text": "A little song just floated by, far past the branches. I wonder…",
         "expr": "curious",
         "gesture": "looks at the faint home star"
       }
     ],
     "bondup_after_4": [
       {
-        "text": "My light feels bigger… I glow with all I learned here.",
+        "text": "My song feels bigger… it hums with all I learned here.",
         "expr": "love"
       }
     ],
     "bondup_after_5": [
       {
-        "text": "…My light is so big now. It glows.",
+        "text": "…My song is so big now. Hum, hum.",
         "expr": "proud",
         "gesture": "looks at the bright home star, then back at you"
       }
@@ -1567,7 +1567,7 @@
     ],
     "list_play_done": [
       {
-        "text": "{var:listGame}… that's one for my light. Hoo.",
+        "text": "{var:listGame}… that's a new note for my song. Hoo.",
         "expr": "proud"
       }
     ],
@@ -1703,7 +1703,7 @@
         "expr": "love"
       },
       {
-        "text": "It's all in my light… every sound, every story. And you.",
+        "text": "It's all in my song… every sound, every story. And you.",
         "expr": "love",
         "gesture": "chest glow pulses three times"
       }
@@ -1723,12 +1723,12 @@
     ],
     "keepsake_give": [
       {
-        "text": "And this is for you… a starlight feather. A little of my light is in it.",
+        "text": "And this is for you… a song feather. A little of my song is in it.",
         "expr": "love",
         "gesture": "a glowing feather drifts down to your side"
       },
       {
-        "text": "When it glows… a postcard has arrived. Hoo.",
+        "text": "When it hums… a postcard has arrived. Hoo.",
         "expr": "happy"
       }
     ],
@@ -1738,13 +1738,13 @@
         "expr": "love"
       },
       {
-        "text": "You helped my light grow… slowly, and so warmly. Thank you.",
+        "text": "You helped my song grow… slowly, and so warmly. Thank you.",
         "expr": "love"
       }
     ],
     "next_postcards": [
       {
-        "text": "Here's what happens next… I'll fly to my star as light, the way I arrived.",
+        "text": "Here's what happens next… I'll turn into little notes and float to my star.",
         "expr": "curious"
       },
       {
@@ -7861,7 +7861,7 @@
           ]
         },
         "c": {
-          "say": "I said hello. In twinkle.",
+          "say": "I said hello. With a blink.",
           "expr": "happy",
           "bond": 1,
           "gesture": "slowblink"
@@ -16571,7 +16571,7 @@
           "wait": 2800
         },
         "b": {
-          "say": "Little bits of here… I keep them in my light.",
+          "say": "Little bits of here… I keep them in my song.",
           "expr": "love",
           "gesture": "chest glow brightens",
           "choices": [
@@ -16655,7 +16655,7 @@
           ]
         },
         "c1": {
-          "say": "My light filled up so gently. That was you.",
+          "say": "My song filled up so gently. That was you.",
           "expr": "love",
           "next": "d",
           "wait": 3000
