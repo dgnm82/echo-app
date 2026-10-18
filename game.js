@@ -918,10 +918,10 @@ function catchGame(){
   const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(fox)g2Img(IM,'canopy','px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
   g2Img(IM,'gold',`px/catch/${fox?'apple_gold':'feather_gold_inked'}.png`);ITEMS.forEach(k=>g2Img(IM,k,`px/i_${k}.png`));
   if(fox)['run0','run1','run2','run3','run4','run5','run_happy'].forEach(k=>g2Img(IM,k,`px/${FR.pd}slyte_${k}.png`));else g2Img(IM,'fly',FR.fly);
-  let ended=false,cheered=false,lastLine=-9,happy=0,face=1,F=0,pops=[];const AN=fetch('px/catch/anchors.json').then(r=>r.json()).then(j=>IM.anch=j).catch(()=>{});
+  let ended=false,cheered=false,lastLine=-9,happy=0,face=1,F=0,pops=[],fx=null,pid=null,ext=0,hold=false;const AN=fetch('px/catch/anchors.json').then(r=>r.json()).then(j=>IM.anch=j).catch(()=>{});
   const cv=$('#cc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
   const line=(k,ex)=>{if(g.t-lastLine<6)return false;lastLine=g.t;talk(B(k,ex),1800);return true};
-  function step(dt){if(ended)return;CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
+  function step(dt){if(ended)return;aim();CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
     for(const e of CatchEngine.take(g)){
       if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});if(e.gold){SFX('run_gold',{vol:.8});line('catch_gold')}else{SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});say('*')}}
       if(e.type==='streak'){SFX('run_treasure_5',{vol:.7});line('catch_streak')}
@@ -931,7 +931,7 @@ function catchGame(){
   function draw(){if(!document.getElementById('cc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);if(g2ok(IM.canopy))cx.drawImage(IM.canopy,-8,6);const low=lowFx();
     for(const it of g.items){const im=it.gold?IM.gold:IM[ITEMS[it.id%4]],x=Math.round(it.x-8),y=Math.round(it.y-8);if(it.gold)drawGlow(cx,x+8,y+8,performance.now());if(g2ok(im))cx.drawImage(im,x,y,16,16)}
     g.lands.forEach((x,i)=>{const im=IM[ITEMS[i%4]];if(g2ok(im))cx.drawImage(im,Math.round(x-6),A.LINE+34,12,12)});
-    const dx=g.tx-g.x;if(Math.abs(dx)>1)face=dx>0?1:-1;const moving=Math.abs(dx)>1,an=IM.anch;
+    const dx=g.tx-g.x;if(fx==null&&Math.abs(dx)>1)face=dx>0?1:-1;const moving=Math.abs(dx)>1,an=IM.anch;
     if(fox){const k=happy>0?'run_happy':moving?'run'+((F/5|0)%6):'run0',im=IM[k],a=(an&&an.slyte_basket[FR.sk]&&an.slyte_basket[FR.sk][k])||[22,22],top=A.LINE+4-a[1];
       if(g2ok(IM.run0)&&an){const h=g2Top(IM.run0,0,0,IM.run0.width,IM.run0.height);if(h){g.headY=A.LINE+4-a[1]+h.top;g.headDX=face*(h.cx-a[0])}}
       if(g2ok(im)){cx.save();if(face<0){cx.translate(Math.round(g.x)*2,0);cx.scale(-1,1)}cx.drawImage(im,Math.round(g.x-a[0]),top);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-a[0])+a[0]-11,top+a[1]+2-10);cx.restore()}}
@@ -949,11 +949,21 @@ function catchGame(){
     g2Banner(gs,fox?'PICNIC TIME!':'STARGAZE TIME!');talk(B(r.isBest&&!firstEver?'catch_best':'catch_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'catch',unit:fox?'berries':'stars',score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`longest streak ${g.longest}`,`goldens ${g.golds}`],onAgain:catchGame})},900)}
   const xOf=e=>{const r=cv.getBoundingClientRect();return (e.clientX-r.left)*180/r.width};
-  cv.addEventListener('pointerdown',e=>{CatchEngine.moveTo(g,xOf(e)-(g.headDX||0));cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});cv.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')CatchEngine.moveTo(g,xOf(e)-(g.headDX||0))});
+  // C4 touch: the head follows ONE finger (the newest; other/stale pointer ids are ignored) and the target is re-aimed every frame from it.
+  // Facing mirrors the fox's head offset (~15px), so it must not depend on the target (that loop made turns jitter): a touch faces the side
+  // the finger lands on (past the head by more than the offset), a drag faces the way the finger travels (after 10px back from its turn point).
+  const hdx=f=>fox?f*Math.abs(g.headDX||0):(g.headDX||0);
+  // after a drag turn the body holds (never steps back against the drag) until the finger is past the mirrored head
+  function aim(){if(fx==null)return;let t=fx-hdx(face);if(hold){if((t-g.x)*face>=0)hold=false;else t=g.x}CatchEngine.moveTo(g,t)}
+  const turn=(f,drag)=>{if(fox&&f&&f!==face){face=f;hold=!!drag}};
+  const pdn=e=>{e.preventDefault();pid=e.pointerId;hold=false;fx=ext=xOf(e);const d=fx-(g.x+hdx(face));if(Math.abs(d)>Math.abs(g.headDX||0)+4)turn(Math.sign(d));try{cv.setPointerCapture(e.pointerId)}catch(_){}aim()};
+  const pmv=e=>{if(e.pointerId!==pid)return;fx=xOf(e);if((fx-ext)*face>0)ext=fx;else if(Math.abs(fx-ext)>=10){turn(-face,1);ext=fx}aim()};
+  const pup=e=>{if(e.pointerId===pid){pid=null;fx=null}};
+  cv.addEventListener('pointerdown',pdn);cv.addEventListener('pointermove',pmv);['pointerup','pointercancel','lostpointercapture'].forEach(n=>cv.addEventListener(n,pup));
   function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')CatchEngine.nudge(g,-1);else if(k==='arrowright'||k==='d')CatchEngine.nudge(g,1);else return;e.preventDefault()}
   document.addEventListener('keydown',key);
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
-  window.__catch=g;window.__catchFinish=finish;talk(B('catch_start'),2000)}
+  window.__catch=g;window.__catchFace=()=>face;window.__catchFinish=finish;talk(B('catch_start'),2000)}
 function stackGame(){
   const fox=S.kind==='fox',level=v2Level('stack','stackLevel'),st=v2State('stack'),t0=now(),best0=bestGet('stack',level),firstEver=!st.games&&!best0,TITLE=fox?'Pancake Tower':'Cloud Steps',M=fox?'pancake':'cloud',LH=8,BASE=268;
   const g=StackEngine.create({level,seed:(S.g.seed||1)*41+st.games*13+1}),FR=g2Frames(fox);

@@ -20,6 +20,28 @@ async def main():
       await pg.click('#play');cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
       await pg.wait_for_selector('#cc',timeout=5000);b0=await pg.evaluate("__echo.state.bond")
       await pg.wait_for_timeout(600);mu=await pg.evaluate("Music.playing||'nomusic'");print(kind,'music',mu);assert mu in ('nomusic',f"game_{'berry_catch' if kind=='fox' else 'starfall_catch'}_loop")
+      # C4: quick left-then-right touch drag (real touches via CDP) + a held-finger wobble: one turn each way, no facing/position jitter
+      await pg.evaluate("const g=__catch;window.__sv=[g.items,g.spawnT];g.items=[];g.spawnT=1e9;window.__clog=[];window.__civ=setInterval(()=>__clog.push([g.x,g.headDX||0,__catchFace()]),16)")
+      rc=await pg.evaluate("(()=>{const r=document.getElementById('cc').getBoundingClientRect();return [r.left,r.top,r.width/180]})()");cdp=await pg.context.new_cdp_session(pg)
+      async def tch(typ,u):await cdp.send('Input.dispatchTouchEvent',{'type':typ,'touchPoints':[] if typ=='touchEnd' else [{'x':rc[0]+u*rc[2],'y':rc[1]+250*rc[2],'id':1}]})
+      await tch('touchStart',90);await pg.wait_for_timeout(400)
+      for u in list(range(90,40,-5))+list(range(40,130,5)):await tch('touchMove',u);await pg.wait_for_timeout(16)
+      await pg.wait_for_timeout(900)
+      for u in (128,126,127,125,127):await tch('touchMove',u);await pg.wait_for_timeout(60)
+      await pg.wait_for_timeout(600)
+      # a stale / second pointer id must not steer while finger 1 is down
+      st=await pg.evaluate("(()=>{const g=__catch,c=document.getElementById('cc'),r=c.getBoundingClientRect(),tx=g.tx;c.dispatchEvent(new PointerEvent('pointermove',{pointerId:987,pointerType:'touch',clientX:r.left+5,clientY:r.top+200,bubbles:true}));return [tx,g.tx]})()")
+      await tch('touchEnd',0);await pg.wait_for_timeout(100)
+      L=await pg.evaluate("clearInterval(__civ);const g=__catch;[g.items,g.spawnT]=__sv;__clog")
+      flips=sum(1 for a,c in zip(L,L[1:]) if a[2]!=c[2]);runs=[]
+      for a,c in zip(L,L[1:]):
+        d=c[0]-a[0]
+        if not d:continue
+        if runs and (runs[-1]>0)==(d>0):runs[-1]+=d
+        else:runs.append(d)
+      rev=len([r for r in runs if abs(r)>=4])-1;head=L[-1][0]+L[-1][1]   # body direction changes (runs >= 4px; following a 2px finger wobble is fine)
+      print(kind,'touch switch',{'flips':flips,'reversals':rev,'head':head,'stale':st})
+      assert flips<=(2 if kind=='fox' else 0) and rev<=1 and abs(head-127)<=2 and st[0]==st[1],(flips,rev,head,st)
       v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x;CatchEngine.moveTo(g,170);setTimeout(()=>r([g.x-x0,g.L.echoV]),500)})")
       assert 0<v[0]<=v[1]*0.5+12,v
       # head-touch v1: caught the moment the item touches the head top (well above the ground/nest line), head-only
