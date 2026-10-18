@@ -18235,7 +18235,7 @@
           "wait": 2600
         },
         "c": {
-          "say": "I'm a {var:family}! {var:family_plural} are made of dog and fox and wolf songs.",
+          "say": "I'm a {var:family}! {var:family_plural} are made of dog, fox, wolf and coyote songs.",
           "expr": "proud",
           "choices": [
             {

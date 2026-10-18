@@ -16861,7 +16861,7 @@
           "wait": 2600
         },
         "c": {
-          "say": "I'm a {var:family}… we're made of bird songs.",
+          "say": "I'm a {var:family}… we're made of bird songs. Owl, duck and dove… pigeon, crow and eagle… chicken, gull… every bird.",
           "expr": "curious",
           "choices": [
             {
