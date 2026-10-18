@@ -16857,11 +16857,17 @@
         "b": {
           "say": "From the {var:origin_animal} you saw… from its song.",
           "expr": "happy",
+          "next": "b2",
+          "wait": 2600
+        },
+        "b2": {
+          "say": "I'm a {var:family}… we're made of bird songs.",
+          "expr": "happy",
           "next": "c",
           "wait": 2600
         },
         "c": {
-          "say": "I'm a {var:family}… we're made of bird songs. Owl, duck and dove… pigeon, crow and eagle… chicken, gull… every bird.",
+          "say": "Owl, duck, dove, pigeon… crow, eagle, chicken, gull… every bird!",
           "expr": "curious",
           "choices": [
             {
