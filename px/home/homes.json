@@ -37,5 +37,26 @@
   "#FF00FF": "glow (all levels)",
   "#FFFF00": "glow (G>=3)",
   "#00FF00": "glow (G5)"
+ },
+ "basket": {
+  "mouth": [
+   36,
+   17
+  ],
+  "size": [
+   72,
+   40
+  ],
+  "lip": [
+   58,
+   24
+  ],
+  "rim": [
+   36,
+   17,
+   32,
+   8
+  ],
+  "baseline": 37
  }
 }
