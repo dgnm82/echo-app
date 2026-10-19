@@ -5,7 +5,7 @@
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';PFX=sys.argv[2] if len(sys.argv)>2 else '';OUT=(sys.argv[3] if len(sys.argv)>3 else '/tmp/relpt-')+PFX
-KIND=os.environ.get('ECHO','fox');SEL='#tree' if KIND=='owl' else '#bush';SP='whimber' if KIND=='owl' else 'slyte'
+KIND=os.environ.get('ECHO','fox');SEL='#tree' if KIND=='owl' else '#bush';SP={'owl':'whimber','cat':'twitchel'}.get(KIND,'slyte')   # ECHO=cat: a Purrling (lion) made through the origin picker, walks like the fox
 os.makedirs(os.path.dirname(OUT) or '.',exist_ok=True)
 FAST="CONFIG.ambientMin=999;CONFIG.ambientMax=999;CONFIG.farewell={calmAfterMs:0,lineMs:220,thanksWindowMs:2500}"
 DAYTIME="(()=>{const d=new Date();__echo.state.clockOffset=(__echo.state.clockOffset||0)+((11-d.getHours()+24)%24)*36e5})()"
@@ -32,9 +32,11 @@ async def run(b,dev,vp,errs,full=True):
     await clean();await pg.evaluate("Object.assign(__echo.state.needs,{food:50,play:80,rest:80,comfort:80});__echo.state.napUntil=0");await pg.click('#feed');await pg.locator('.choices button').first.click();await pg.wait_for_timeout(300)
   async def newday():
     await clean();await pg.click('#dbg');await pg.click('#b7');await pg.wait_for_timeout(500);await pg.evaluate(FAST)
-  await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','talk')");await pg.reload();await pg.wait_for_timeout(700)
-  await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(500);await pg.click(SEL);await pg.wait_for_timeout(3600)
-  await pick();await pg.wait_for_timeout(3200)
+  if KIND=='cat':await origin_cat(pg)
+  else:
+    await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','talk')");await pg.reload();await pg.wait_for_timeout(700)
+    await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(500);await pg.click(SEL);await pg.wait_for_timeout(3600)
+    await pick();await pg.wait_for_timeout(3200)
   if not full:await pg.close();return
   # Stage 1: setup talk on the first Home ("where I'm from"), saves the from_wild fact
   await pg.locator('.choices button').first.wait_for(timeout=15000);await shot('setup-where-from')
@@ -52,8 +54,8 @@ async def run(b,dev,vp,errs,full=True):
   await pg.wait_for_timeout(2500);await pg.evaluate(FAST+";"+DAYTIME);await calm()
   assert await answer_conv("!!document.querySelector('.fwlist')"),'almost-ready conversation -> list';s=await st()
   assert s['fw']['state']=='almost_ready' and len(s['fw']['list'])==3,s['fw'];await shot('almost-ready-list')
-  await clean();await pg.wait_for_timeout(300);await shot('ready-path' if KIND=='fox' else 'ready-star-trail')
-  if KIND=='fox':
+  await clean();await pg.wait_for_timeout(300);await shot('ready-path' if KIND!='owl' else 'ready-star-trail')
+  if KIND!='owl':
     # tick the food item by feeding the favourite
     await pg.evaluate("Object.assign(__echo.state.needs,{food:40})");await pg.click('#feed');fav=s['g']['fav'].split(' ',1)[1]
     await pg.locator('.choices button',has_text=fav).first.click();await pg.wait_for_timeout(2200)
@@ -72,7 +74,7 @@ async def run(b,dev,vp,errs,full=True):
   for _ in range(100):
     if (await st())['fw'].get('step',0)>=2:break
     await pg.wait_for_timeout(100)
-  await shot('ceremony-walk' if KIND=='fox' else 'ceremony-branch-stars')
+  await shot('ceremony-walk' if KIND!='owl' else 'ceremony-branch-stars')
   for _ in range(100):
     if (await st())['fw'].get('step',0)>=3:break
     await pg.wait_for_timeout(100)
@@ -122,13 +124,22 @@ async def migrate(b,errs):   # old-flow saves mid-release
     f=await pg.evaluate("__echo.state.fw");print('migrate',case,'->',f['state'],len(f.get('graceDays',[])));assert f['state']==want,(case,f)
     assert 'graceUntil' not in await pg.evaluate("__echo.state") and not await pg.evaluate("__echo.state.releasePath")
   await pg.close()
+async def origin_cat(pg,animal='lion',chip='golden'):   # the real onboarding: picker -> chips -> invite -> name -> home
+  async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
+  await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600);await T('#obgo',400)
+  for i in range(6):
+    if await pg.locator('#obnm').count():break
+    await T('.scene.ob',200)
+  await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
+  await T(f'.orcard[data-a={animal}]');await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
+  await T('#orinv');await T('#orinv',3000);await T('#ornm',400);await T('#orkeep');await T('#orkeep',3000)
 async def pick_first(pg):
   c=pg.locator('.choices button').first;await c.wait_for(timeout=20000);await c.click();await c.click()
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]
     await run(b,'phone',p.devices['iPhone 13'],errs)
-    await migrate(b,errs)
+    if KIND!='cat':await migrate(b,errs)
     await run(b,'desktop',{'viewport':{'width':1280,'height':900}},errs,False)
     print('ERR',errs);await b.close();assert not errs,errs;print('release playthrough OK')
 asyncio.run(main())

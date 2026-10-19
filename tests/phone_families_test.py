@@ -30,12 +30,14 @@ async def main():
     CASES=[('dog','golden',None,'slyte','dog'),('wolf','grey',None,'slyte','wolf'),('fox','ginger',None,'slyte',None),
            ('bird','red',None,'whimber','wingsong'),('duck','green',None,'whimber','duck'),('owl','brown',None,'whimber',None),
            ('coyote','golden',None,'slyte','coyote'),('dove','grey',None,'whimber','dove'),('pigeon','grey',None,'whimber','pigeon'),('crow','black',None,'whimber','crow'),
-           ('eagle','brown',None,'whimber','eagle'),('chicken','white',None,'whimber','chicken'),('gull','white',None,'whimber','gull')]   # batch A2   # birds and canines only
+           ('eagle','brown',None,'whimber','eagle'),('chicken','white',None,'whimber','chicken'),('gull','white',None,'whimber','gull'),
+           ('cat','ginger',None,'twitchel',None),('lion','golden',None,'twitchel','lion'),('tiger','ginger',None,'twitchel','tiger'),('leopard','tan',None,'twitchel','leopard'),
+           ('cheetah','golden',None,'twitchel','cheetah'),('snowleopard','white',None,'twitchel','snowleopard'),('lynx','brown',None,'twitchel','lynx')]   # Purrlings   # batch A2   # birds and canines only
     for animal,chip,fam,sp,look in CASES:
       pg,inv=await origin(b,p,animal,chip,errs,b404,fam)
       S=await pg.evaluate("window.__echo.state");pal=S['g']['pal'];fl=await pg.evaluate("PIXEL.variant(__echo.state.g.seed,'%s',__echo.state.g.pal).fluff"%sp)
       want=f"px/{sp}_{look+'_' if look else ''}{pal}_f{fl}.png"
-      check(S['g'].get('look')==(look or ('fox' if sp=='slyte' else 'owl')),f'{animal} saves look {S["g"].get("look")}')
+      check(S['g'].get('look')==(look or {'slyte':'fox','whimber':'owl','twitchel':'cat'}[sp]),f'{animal} saves look {S["g"].get("look")}')
       check(want[:-4] in inv,f'{animal} invite sprite uses {want} (or its _light lightform)')
       el=await pg.evaluate("(()=>{const e=document.querySelector('#cr .px-echo');return e?[e.style.backgroundImage,e.getAttribute('aria-label')]:null})()")
       check(el and want in el[0],f'{animal} home sheet {el and el[0]}')

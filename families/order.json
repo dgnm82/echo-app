@@ -1,7 +1,8 @@
 {
  "order": [
   "slyte",
-  "whimber"
+  "whimber",
+  "twitchel"
  ],
  "_note": "FAMILIES.order: index of the per-family shared UI pools. Add a family = add its id here + families/<id>.json"
 }

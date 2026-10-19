@@ -41,7 +41,7 @@ async def main():
     await run_to_seen(pg,'Mia',True)
     S=await pg.evaluate("window.__echo.state")
     check(S['child']=='Mia' and S['vars'].get('child_named')==1 and S['ageBand']=='7-8' and S['setupDone']==0,'name+age saved '+json.dumps({k:S.get(k) for k in ['child','ageBand','setupDone']}))
-    check(await pg.locator('.orcard').count()==13,'13 animal cards (every families_v1 bird + canine)');cards=await pg.evaluate("[...document.querySelectorAll('.orcard')].map(b=>b.dataset.a)");check(sorted(cards)==sorted(['dog','fox','wolf','coyote','owl','bird','duck','dove','pigeon','crow','eagle','chicken','gull']),'birds + canines only '+str(cards));hd=await pg.inner_text('.scene.ob .obpanel b');check(hd=='Pick Your Echo' and 'all count' not in await pg.inner_text('.scene.ob'),'A1 header '+hd)
+    check(await pg.locator('.orcard').count()==20,'20 animal cards (every bird, canine + cat)');cards=await pg.evaluate("[...document.querySelectorAll('.orcard')].map(b=>b.dataset.a)");check(sorted(cards)==sorted(['dog','fox','wolf','coyote','owl','bird','duck','dove','pigeon','crow','eagle','chicken','gull','cat','lion','tiger','leopard','cheetah','snowleopard','lynx']),'birds + canines + cats only '+str(cards));hd=await pg.inner_text('.scene.ob .obpanel b');check(hd=='Pick Your Echo' and 'all count' not in await pg.inner_text('.scene.ob'),'A1 header '+hd)
     await shot(pg,'ob06_seen')
     await T(pg,'.orcard[data-a=dog]');await T(pg,'#ornext')
     check(await pg.locator('.orchip').count()==10,'10 Howling chips')
@@ -153,8 +153,8 @@ async def main():
     await pg5.goto(URL);await pg5.wait_for_timeout(1500)
     m=await pg5.evaluate("(()=>{const s=__echo.state;return [s.origin.animal,s.origin.src,s.vars.origin_animal,s.songs]})()");check(m==['owl','chips','owl',['owl']],'old bunny save migrates to owl '+str(m))
     pg4=pg5
-    chk=await pg4.evaluate("(()=>{const F=FAMILIES,m=[];for(const f of F.order){const L=f==='slyte'?PIXEL.PAL:PIXEL.POWL;for(const c of F[f].chips)if(!L.includes(c.ramp))m.push(c.ramp)}return m})()")
-    check(not chk,'every chip colour in PIXEL.PAL/POWL '+str(chk))
+    chk=await pg4.evaluate("(()=>{const F=FAMILIES,m=[];for(const f of F.order){const L=PIXEL.pals(F[f].sprite);for(const c of F[f].chips)if(!L.includes(c.ramp))m.push(c.ramp)}return m})()")
+    check(not chk,'every chip colour in the family palette '+str(chk))
     # privacy: only same-origin requests
     from urllib.parse import urlparse
     host=urlparse(URL).netloc;ext=[u for u in reqs if urlparse(u).netloc not in (host,'') and not u.startswith('data:')]

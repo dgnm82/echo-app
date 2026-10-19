@@ -19,11 +19,11 @@ fs.writeFileSync(path.join(fd,'testfam.json'),JSON.stringify(m));
 const ord=JSON.parse(fs.readFileSync(path.join(FD,'order.json'),'utf8'));ord.order.push('testfam');fs.writeFileSync(path.join(fd,'order.json'),JSON.stringify(ord));
 const out3=path.join(tmp,'families3.js');build(fd,out3);
 const W=load(out3,[path.join(ROOT,'config.js'),path.join(ROOT,'memory.js'),path.join(ROOT,'postcards.js')]),F=W.FAMILIES;
-T('build: 3 families in order, the 2 shipping ones unchanged',()=>{assert.deepEqual(F.order,['slyte','whimber','testfam']);const W2=load(path.join(ROOT,'families.js'));
-  for(const f of ['slyte','whimber'])assert.equal(JSON.stringify(F[f]),JSON.stringify(W2.FAMILIES[f]),f)});
+T('build: the dummy is appended, the shipping families unchanged',()=>{assert.deepEqual(F.order,ord.order);const W2=load(path.join(ROOT,'families.js'));
+  for(const f of W2.FAMILIES.order)assert.equal(JSON.stringify(F[f]),JSON.stringify(W2.FAMILIES[f]),f)});
 T('build: the new animal card, kind and id lookups',()=>{assert.equal(F.animals.testcat.family,'testfam');assert.equal(F.animals.testcat.icon,'bird');
   assert.equal(F.animalOrder[F.animalOrder.length-1],'testcat');assert.equal(F.byKind.testkind.id,'testfam');assert.equal(F.idOf('testkind'),'testfam');assert.equal(F.of('fox').id,'slyte')});
-T('labels: FAMILIES.list names all three',()=>assert.equal(F.list(', '),'a Howling, a Wingsong, a Testling'));
+T('labels: FAMILIES.list names every family',()=>assert(F.list(', ').endsWith(', a Testling')&&F.list(', ').startsWith('a Howling, a Wingsong'),F.list(', ')));
 T('config: CREATURES has the new kind with its manifest profile + talents',()=>{const c=W.CREATURES.testkind;assert(c);assert.equal(c.name,'Testling');assert.deepEqual(c.talents,m.creature.talents)});
 T('memory: the deck + token come from the manifest',()=>{const g=W.MemoryEngine.create({species:'testfam',deck:F.testfam.games.memoryDeck,token:F.testfam.games.token,level:'bigkid',seed:3,disguise:true});
   assert.equal(g.cards.length,20);assert(g.cards.some(c=>c.item==='testfam_token'));assert.deepEqual(W.MemoryEngine.DECK.testfam,m.games.memoryDeck)});
@@ -33,7 +33,7 @@ T('runtime extras (music, notes, games, scene, ui) are carried for the new famil
 // family words: N families from the manifests (the dummy has no dialogue file of its own; it borrows whimber's); its body words are banned elsewhere
 const dd=path.join(tmp,'dialogue');fs.mkdirSync(dd);for(const f of fs.readdirSync(path.join(ROOT,'dialogue')))if(f.endsWith('.json'))fs.copyFileSync(path.join(ROOT,'dialogue',f),path.join(dd,f));
 const fw=()=>cp.spawnSync('node',[path.join(ROOT,'tools/test-family-words.js'),dd,fd],{encoding:'utf8'});
-T('family words: passes with 3 families',()=>{const r=fw();assert.equal(r.status,0,r.stdout+r.stderr);assert(/slyte, whimber, testfam/.test(r.stdout),r.stdout)});
+T('family words: passes with the dummy added',()=>{const r=fw();assert.equal(r.status,0,r.stdout+r.stderr);assert(/slyte, whimber.*testfam/.test(r.stdout),r.stdout)});
 T('family words: a Testling body word in a Howling line fails',()=>{const p=path.join(dd,'slyte.json'),d=JSON.parse(fs.readFileSync(p,'utf8'));d.barks.pet[0].text='My fins are warm.';fs.writeFileSync(p,JSON.stringify(d));
   const r=fw();assert.notEqual(r.status,0,'expected a failure');assert(/fins/.test(r.stdout+r.stderr))});
 fs.rmSync(tmp,{recursive:true,force:true});

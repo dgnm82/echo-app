@@ -6,7 +6,7 @@ const W=window,BASE='sfx/';
 const CORE=['ui_tap','ui_back','ui_panel_open','bond_meter_tick','care_feed_eat','care_pet_sparkle','care_nap_tuck'];
 const V2MOODS=['happy','curious','sleepy','shy','silly','excited','sad_gentle'];
 const FS=k=>{const F=W.FAMILIES;if(!F)return k==='owl'||k==='whimber'?'whimber':'slyte';const v=(F.of(k).sound||{}).voice;return v?v.split('_<')[0]:F.idOf(k)};   // kind or id -> voice prefix (manifest sound.voice '<prefix>_<mood>_<1-3>')
-const SPECIES=k=>{const s=FS(k);const v=[];V2MOODS.forEach(m=>[1,2,3].forEach(i=>v.push(s+'_'+m+'_'+i)));return [...v,s+'_pet_motif',s+'_arrival',s+'_release']};
+const SPECIES=k=>{const s=FS(k);const v=[];V2MOODS.forEach(m=>[1,2,3].forEach(i=>v.push(s+'_'+m+'_'+i)));const F=W.FAMILIES,lc=F?Object.values((F.of(k).sound||{}).lookChirps||{}).map(c=>c.sample):[];return [...v,s+'_pet_motif',s+'_arrival',s+'_release',...lc]};   // + per-look samples (manifest sound.lookChirps)
 // sound v2: Whimber's own takes of a few shared sounds (Slyte uses the plain name)
 const OWLVAR=new Set(['memory_card_flip','memory_card_flip_2nd','memory_flip_back','memory_card_flip_whimber','memory_pair_found_whimber','ui_tap_whimber','run_treasure_1_whimber','whimber_night_vision_glint','ui_panel_close','memory_pair_found','ui_tap','run_treasure_1']);
 const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','bondup_sting_slyte','bondup_sting_whimber','run_treasure_1','run_treasure_5','run_tumble_boop','run_gold','run_finale','run_hop_1','run_hop_2','run_hop_3','run_flap_1','run_flap_2','run_flap_3','whimber_radar_hearing_chime','memory_pair_found','memory_all_cleared','slyte_radar_ears_twinkle',];
@@ -21,7 +21,7 @@ function ac(){if(!ctx){const C=W.AudioContext||W.webkitAudioContext;if(!C)return
 function load(n){if(buf[n]||loading[n]||!ac())return loading[n];
   loading[n]=fetch(BASE+n+'.mp3').then(r=>{if(!r.ok)throw new Error('sfx '+n+' '+r.status);return r.arrayBuffer()})
     .then(a=>new Promise((res,rej)=>ctx.decodeAudioData(a,res,rej))).then(b=>{buf[n]=b;return b}).catch(e=>{console.warn(e.message||e);loading[n]=null});return loading[n]}
-function preload(kind){[...CORE,...SPECIES(kind)].forEach(load);setTimeout(()=>LATER.forEach(load),1500)}
+function preload(kind){[...CORE,...SPECIES(kind)].forEach(load);setTimeout(()=>{LATER.forEach(load);const F=W.FAMILIES;if(F)F.order.forEach(f=>F[f].music&&load(F[f].music.bondup_sting))},1500)}
 function unlock(){if(unlocked)return;const c=ac();if(!c)return;unlocked=true;
   try{const s=c.createBufferSource();s.buffer=c.createBuffer(1,1,22050);s.connect(c.destination);s.start(0)}catch(e){}
   if(c.state==='suspended')c.resume();const S=W.__echo&&W.__echo.state;preload(S&&S.kind)}
@@ -35,7 +35,8 @@ function chirp(text,kind,expr){
   if(!m)m=/\?/.test(t)?'curious':/(sleep|nap|yawn|rest|…$|zz)/i.test(t)?'sleepy':/!/.test(t)?'happy':'curious';
   const pet=W.Dialogue&&Dialogue.persona&&Dialogue.persona.petPhrase&&t.startsWith(Dialogue.persona.petPhrase);
   let i=1+Math.floor(Math.random()*3);if(i===lastVar[m])i=i%3+1;lastVar[m]=i;
-  const nm=pet?sp+'_pet_motif':sp+'_'+m+'_'+i,ok=play(nm,{voice:true,vol:.7,gap:120});if(ok&&W.Music)Music.talk(buf[nm]?buf[nm].duration:.6);return ok}
+  let lk=null;try{const F=W.FAMILIES,S=W.__echo&&W.__echo.state,c=F&&S&&S.g&&((F.of(kind).sound||{}).lookChirps||{})[S.g.look];if(c&&!pet&&c.moods.includes(m)&&Math.random()<c.chance&&buf[c.sample])lk=c.sample}catch(e){}   // e.g. the lion's silly little roar (lion look only)
+  const nm=lk||(pet?sp+'_pet_motif':sp+'_'+m+'_'+i),ok=play(nm,{voice:true,vol:.7,gap:120});if(ok&&W.Music)Music.talk(buf[nm]?buf[nm].duration:.6);return ok}
 W.Sound={get ctx(){return ctx},play,chirp,preload,unlock,get unlocked(){return unlocked},get loaded(){return Object.keys(buf)},MOOD};
 // ---- Music v2 (sound_design/v2): gapless loops (OGG Vorbis, sample-exact; 8-bit WAV fallback if OGG can't be decoded), never MP3.
 // Home: bg_<echo>_day / _twilight (evening + night), 4 s crossfade on change; games: their own theme. Ducks -6 dB under Echo voices.

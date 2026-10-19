@@ -1,0 +1,921 @@
+{
+ "id": "twitchel",
+ "label": "Purrling",
+ "plural": "Purrlings",
+ "status": "shipping",
+ "default_name": "Mibbit",
+ "look_base": "cat",
+ "look_default": "cat",
+ "sprite": "twitchel",
+ "dialogue": "twitchel",
+ "kind": "cat",
+ "animals": {
+  "cat": {
+   "label": "Cat",
+   "word": "cat",
+   "member": "cat",
+   "default_name": "Mibbit",
+   "look": "cat"
+  },
+  "lion": {
+   "label": "Lion",
+   "word": "lion",
+   "member": "lion",
+   "default_name": "Rumbo",
+   "look": "lion"
+  },
+  "tiger": {
+   "label": "Tiger",
+   "word": "tiger",
+   "member": "tiger",
+   "default_name": "Tibbo",
+   "look": "tiger"
+  },
+  "leopard": {
+   "label": "Leopard",
+   "word": "leopard",
+   "member": "leopard",
+   "default_name": "Dotti",
+   "look": "leopard"
+  },
+  "cheetah": {
+   "label": "Cheetah",
+   "word": "cheetah",
+   "member": "cheetah",
+   "default_name": "Zoomi",
+   "look": "cheetah"
+  },
+  "snowleopard": {
+   "label": "Snow leopard",
+   "word": "snow leopard",
+   "member": "snowleopard",
+   "default_name": "Flurry",
+   "look": "snowleopard"
+  },
+  "lynx": {
+   "label": "Lynx",
+   "word": "lynx",
+   "member": "lynx",
+   "default_name": "Tuffet",
+   "look": "lynx"
+  }
+ },
+ "animalOrder": [
+  "cat",
+  "lion",
+  "tiger",
+  "leopard",
+  "cheetah",
+  "snowleopard",
+  "lynx"
+ ],
+ "members": {
+  "generic": {
+   "preset": {
+    "ears": "cat",
+    "ear": 0.6,
+    "snout": 0.58,
+    "head": 1.07,
+    "tail": 0.98,
+    "swing": -14,
+    "thin": 0.52,
+    "marks": null,
+    "fluff": 1,
+    "fallback": "cat"
+   }
+  },
+  "cat": {
+   "preset": {
+    "ears": "cat",
+    "ear": 0.6,
+    "snout": 0.58,
+    "head": 1.07,
+    "tail": 0.98,
+    "swing": -14,
+    "thin": 0.52,
+    "marks": null,
+    "fluff": 1
+   }
+  },
+  "lion": {
+   "preset": {
+    "ears": "round",
+    "ear": 0.62,
+    "snout": 0.62,
+    "head": 1.05,
+    "tail": 0.96,
+    "swing": -8,
+    "thin": 0.58,
+    "marks": "mane",
+    "fluff": 1,
+    "tuft": true
+   }
+  },
+  "tiger": {
+   "preset": {
+    "ears": "round",
+    "ear": 0.64,
+    "snout": 0.62,
+    "head": 1.07,
+    "tail": 0.98,
+    "swing": -12,
+    "thin": 0.5,
+    "marks": "stripes",
+    "fluff": 1
+   }
+  },
+  "leopard": {
+   "preset": {
+    "ears": "round",
+    "ear": 0.66,
+    "snout": 0.6,
+    "head": 1.05,
+    "tail": 1.0,
+    "swing": -12,
+    "thin": 0.52,
+    "marks": "spots",
+    "fluff": 1
+   }
+  },
+  "cheetah": {
+   "preset": {
+    "ears": "round",
+    "ear": 0.6,
+    "snout": 0.6,
+    "head": 1.02,
+    "tail": 1.02,
+    "swing": -6,
+    "thin": 0.58,
+    "marks": "cheetah",
+    "fluff": 0
+   }
+  },
+  "snowleopard": {
+   "preset": {
+    "ears": "round",
+    "ear": 0.62,
+    "snout": 0.6,
+    "head": 1.06,
+    "tail": 1.12,
+    "swing": -16,
+    "thin": 0.3,
+    "marks": "snow",
+    "fluff": 2
+   }
+  },
+  "lynx": {
+   "preset": {
+    "ears": "lynx",
+    "ear": 0.86,
+    "snout": 0.62,
+    "head": 1.06,
+    "tail": 0.36,
+    "swing": -20,
+    "thin": 0.2,
+    "marks": "lynx",
+    "fluff": 2
+   }
+  }
+ },
+ "colours": [
+  {
+   "word": "black",
+   "label": "Black",
+   "id": "dusk-plum",
+   "hex": "#3B2A5C",
+   "real": true,
+   "ramp": {
+    "fur": "#8C7CC4",
+    "fur2": "#5E4E9C",
+    "tailmid": "#B4A8E0",
+    "tip": "#FFF0F6",
+    "inner": "#FFB8D6",
+    "gem": "#FFD86B",
+    "glow": "#E0D0FF",
+    "iris": "#FFC870",
+    "ink": "#23183A",
+    "shade": "#4A3A88"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "grey",
+   "label": "Grey",
+   "id": "moon-lilac",
+   "hex": "#B8B4C8",
+   "real": true,
+   "ramp": {
+    "fur": "#D4CCEC",
+    "fur2": "#A098C8",
+    "tailmid": "#E6E0F6",
+    "tip": "#FFFDF8",
+    "inner": "#FFC8DC",
+    "gem": "#FFD86B",
+    "glow": "#F0ECFF",
+    "iris": "#6A78D8",
+    "ink": "#2E2650",
+    "shade": "#7A70B0"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "ginger",
+   "label": "Ginger",
+   "id": "ember-russet",
+   "hex": "#E8772E",
+   "real": true,
+   "ramp": {
+    "fur": "#F2A060",
+    "fur2": "#D86A3A",
+    "tailmid": "#FAC898",
+    "tip": "#FFF6E8",
+    "inner": "#FFC0B0",
+    "gem": "#8FE0FF",
+    "glow": "#FFE0B0",
+    "iris": "#3E9AB8",
+    "ink": "#4A2438",
+    "shade": "#C04A5A"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "golden",
+   "label": "Golden",
+   "id": "sunset-gold-solid",
+   "hex": "#E8B860",
+   "real": true,
+   "ramp": {
+    "fur": "#FFC870",
+    "fur2": "#F2924A",
+    "tailmid": "#FFDFA8",
+    "tip": "#FFF6E0",
+    "inner": "#FFB8C8",
+    "gem": "#7FE0FF",
+    "glow": "#FFF0B0",
+    "iris": "#E08A20",
+    "ink": "#4A2B3F",
+    "shade": "#D8508A"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "white",
+   "label": "White",
+   "id": "snow-blush",
+   "hex": "#FFF6E6",
+   "real": true,
+   "ramp": {
+    "fur": "#F4D2DC",
+    "fur2": "#D4A2B6",
+    "tailmid": "#FAE4EA",
+    "tip": "#FFFDF8",
+    "inner": "#FFC0D4",
+    "gem": "#7FE0FF",
+    "glow": "#FFF6FC",
+    "iris": "#E09048",
+    "ink": "#3E2848",
+    "shade": "#A880A8"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "brown",
+   "label": "Brown",
+   "id": "cocoa-cream",
+   "hex": "#8A5A3C",
+   "real": true,
+   "ramp": {
+    "fur": "#D0A080",
+    "fur2": "#A06E5A",
+    "tailmid": "#E6C4A8",
+    "tip": "#FFF2E0",
+    "inner": "#FFC4C0",
+    "gem": "#9FF0D0",
+    "glow": "#FFE8D0",
+    "iris": "#B87040",
+    "ink": "#3E2440",
+    "shade": "#7A4A6A"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "tan",
+   "label": "Tan",
+   "id": "tan-sand",
+   "hex": "#D8A880",
+   "real": true,
+   "ramp": {
+    "fur": "#E8C394",
+    "fur2": "#B98C5E",
+    "tailmid": "#F2DCBC",
+    "tip": "#FFF6E8",
+    "inner": "#FFC4BC",
+    "gem": "#9FF0D0",
+    "glow": "#FFF0D8",
+    "iris": "#6FA048",
+    "ink": "#3E2440",
+    "shade": "#8A5A62"
+   },
+   "new_ramp": true
+  },
+  {
+   "word": "mint",
+   "label": "Mint",
+   "id": "mint-teal-solid",
+   "hex": "#7FE0C8",
+   "real": false,
+   "ramp": {
+    "fur": "#8EEBD8",
+    "fur2": "#43C6C1",
+    "tailmid": "#C6F1E2",
+    "tip": "#FFF7EC",
+    "inner": "#FFB8D6",
+    "gem": "#FFD86B",
+    "glow": "#C8FFF4",
+    "iris": "#2FB6C8",
+    "ink": "#3B2A5C",
+    "shade": "#7C8CFF"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "pink",
+   "label": "Pink",
+   "id": "rose-sapphire-solid",
+   "hex": "#F4A0C8",
+   "real": false,
+   "ramp": {
+    "fur": "#FFB0CF",
+    "fur2": "#E0609A",
+    "tailmid": "#FAD1E7",
+    "tip": "#F4F2FF",
+    "inner": "#FFE0EC",
+    "gem": "#FFE27A",
+    "glow": "#FFE0F2",
+    "iris": "#4A6AE0",
+    "ink": "#3A2050",
+    "shade": "#4A6AE0"
+   },
+   "new_ramp": false
+  },
+  {
+   "word": "purple",
+   "label": "Purple",
+   "id": "violet-rose-solid",
+   "hex": "#A884E0",
+   "real": false,
+   "ramp": {
+    "fur": "#C9A0FF",
+    "fur2": "#9A5AE0",
+    "tailmid": "#E4C4FB",
+    "tip": "#FFE8F6",
+    "inner": "#FFC0E0",
+    "gem": "#8FF0FF",
+    "glow": "#FFD0FF",
+    "iris": "#B45AF0",
+    "ink": "#3A2058",
+    "shade": "#6A4FD0"
+   },
+   "new_ramp": false
+  }
+ ],
+ "profile": {
+  "locomotion": "ground",
+  "home": "basket",
+  "bed": "basket_door",
+  "farewellRoute": "walk",
+  "foods": [
+   "smoked_fish",
+   "spring_water",
+   "fish_sticks",
+   "salmon_bites",
+   "tuna_sandwich",
+   "pumpkin_soup",
+   "plum_slices",
+   "mashed_potatoes",
+   "rice_bowl",
+   "oatmeal_honey",
+   "chamomile",
+   "blueberries",
+   "pear_slices",
+   "apple_slices",
+   "banana",
+   "melon",
+   "mango_slices",
+   "jam_toast",
+   "dumplings",
+   "rice_ball",
+   "spaghetti",
+   "sweet_potato",
+   "peas",
+   "cucumber",
+   "peach_slices",
+   "applesauce",
+   "honey_cake",
+   "cornbread",
+   "oat_cookie",
+   "birthday_cake",
+   "ice_pop",
+   "hot_sauce",
+   "lemon",
+   "granola_bar",
+   "toffee",
+   "sparkling_water",
+   "wild_blackberries",
+   "honey_cakes",
+   "roasted_nuts",
+   "apple_slice",
+   "strawberries",
+   "raspberries",
+   "banana_coins",
+   "watermelon",
+   "orange_segments",
+   "fruit_salad",
+   "corn_cob",
+   "carrot_sticks",
+   "snap_peas",
+   "pancakes",
+   "waffles",
+   "muffin",
+   "honey_toast",
+   "cucumber_rolls",
+   "noodle_soup",
+   "pickle",
+   "olives",
+   "brussels_sprouts",
+   "sunny_puff"
+  ],
+  "place": "cozy basket",
+  "talents": [
+   "Night Eyes",
+   "Soft Paws",
+   "Sunbeam Finder",
+   "Purr Song"
+  ],
+  "quirks": [
+   "makes biscuits on soft blankets",
+   "naps in every sunbeam",
+   "pounces on yarn and leaves",
+   "chirrups at bubbles"
+  ],
+  "game": "Cozy Pairs",
+  "talentArt": []
+ },
+ "names": [
+  "Mittens",
+  "Marmalade",
+  "Purrcy",
+  "Mochi",
+  "Saffron",
+  "Paprika",
+  "Tinsel",
+  "Moonpaw",
+  "Figaro",
+  "Sardine",
+  "Sunpuff",
+  "Cinnamon",
+  "Whisk",
+  "Toffee",
+  "Lulu",
+  "Zuzu",
+  "Domino",
+  "Paisley",
+  "Cashew",
+  "Jellybean"
+ ],
+ "sound": {
+  "register": "F major pentatonic",
+  "octave": 4,
+  "timbre": "pulse25 kalimba pluck over a triangle purr",
+  "key_shift": -7,
+  "voice": "twitchel_<mood>_<1-3>",
+  "signature": {
+   "purr": "sfx/twitchel_purr",
+   "mrrp": "sfx/twitchel_mrrp",
+   "chirrup": "sfx/twitchel_chirrup",
+   "lion_roar": "sfx/twitchel_lion_roar",
+   "tiger_chuff": "sfx/twitchel_tiger_chuff",
+   "snowleopard_chuff": "sfx/twitchel_snowleopard_chuff",
+   "cheetah_chirp": "sfx/twitchel_cheetah_chirp"
+  },
+  "lookChirps": {
+   "lion": {
+    "sample": "twitchel_lion_roar",
+    "moods": [
+     "silly",
+     "excited"
+    ],
+    "chance": 0.25
+   },
+   "tiger": {
+    "sample": "twitchel_tiger_chuff",
+    "moods": [
+     "happy",
+     "excited"
+    ],
+    "chance": 0.25
+   },
+   "snowleopard": {
+    "sample": "twitchel_snowleopard_chuff",
+    "moods": [
+     "happy",
+     "excited"
+    ],
+    "chance": 0.25
+   },
+   "cheetah": {
+    "sample": "twitchel_cheetah_chirp",
+    "moods": [
+     "happy",
+     "excited"
+    ],
+    "chance": 0.25
+   }
+  }
+ },
+ "music": {
+  "home": "bg_twitchel_<band>_loop",
+  "arrival": "twitchel_arrival",
+  "release": "twitchel_release",
+  "pet_motif": "twitchel_pet_motif",
+  "bondup_sting": "bondup_sting_twitchel",
+  "goodbye": {
+   "cat": "goodbye_cat",
+   "lion": "goodbye_lion",
+   "tiger": "goodbye_tiger",
+   "leopard": "goodbye_leopard",
+   "cheetah": "goodbye_cheetah",
+   "snowleopard": "goodbye_snowleopard",
+   "lynx": "goodbye_lynx"
+  }
+ },
+ "aura": {
+  "source": "px/aura.json roles[<ramp id>]",
+  "ramps": [
+   "dusk-plum",
+   "moon-lilac",
+   "ember-russet",
+   "sunset-gold-solid",
+   "snow-blush",
+   "cocoa-cream",
+   "tan-sand",
+   "mint-teal-solid",
+   "rose-sapphire-solid",
+   "violet-rose-solid"
+  ],
+  "new_roles": "px/aura_roles_add.json (tan-sand)",
+  "notes": {
+   "sheet": "px/fx/notes_twitchel.png",
+   "tints": [
+    "#FFB89A",
+    "#FFB8C8",
+    "#FFD27A",
+    "#8EEBC8"
+   ],
+   "row0": [
+    "#FFB89A",
+    "#E0806A"
+   ]
+  }
+ },
+ "sprites": {
+  "home": "px/twitchel_<look>_<pal>_f<0-3>.png",
+  "light": "..._light.png",
+  "events": "..._ev.png",
+  "walk": "..._walk.png (+ px/twitchel_<look>_<pal>_walk.png)",
+  "sleep": "px/twitchel_<look>_<pal>_sleep.png",
+  "family_base": "px/twitchel_<pal>_f<0-3>*.png (= cat)",
+  "icons": "px/origin/<animal>.png"
+ },
+ "words": {
+  "body": [
+   "paw",
+   "paws",
+   "pawprint*",
+   "tail",
+   "tails",
+   "fur",
+   "furry",
+   "whisker",
+   "whiskers",
+   "sniff",
+   "sniffs",
+   "sniffing",
+   "mane",
+   "manes",
+   "purr*",
+   "mew",
+   "mews",
+   "mewing",
+   "meow*",
+   "miaow*",
+   "mrr*",
+   "chirrup*",
+   "kitten*",
+   "toe beans"
+  ],
+  "home": []
+ },
+ "scene": {
+  "homeProp": "basket",
+  "idleSpots": [
+   "sunbeam",
+   "rug"
+  ],
+  "home": {
+   "k": "basket",
+   "x": 78,
+   "y": 225
+  },
+  "tail": true,
+  "napSink": [
+   6,
+   1
+  ],
+  "borrow": {
+   "from": "slyte",
+   "rename": {
+    "log_mouth": "basket_door"
+   },
+   "titles": {
+    "clearing": "The basket clearing"
+   },
+   "dropActs": [
+    "butterfly_chase"
+   ]
+  }
+ },
+ "games": {
+  "memoryDeck": [
+   "yarn",
+   "fish",
+   "bell",
+   "ribbon",
+   "button",
+   "pebble",
+   "leaf",
+   "daisy",
+   "ball",
+   "box"
+  ],
+  "runnerKind": "jump",
+  "builder": "basket",
+  "builderGame": "Yarn Tumble",
+  "cards": "px/mem/twitchel_<item>{,_glow,_flip}.png",
+  "runner": "px/run/[<look>/]<pal>/twitchel_<k>.png",
+  "home": "px/home/basket_*.png + homes.json basket",
+  "pairNames": {
+   "yarn": "yarn balls",
+   "fish": "fish",
+   "bell": "bells",
+   "ribbon": "ribbons",
+   "button": "buttons",
+   "pebble": "pebbles",
+   "leaf": "leaves",
+   "daisy": "daisies",
+   "ball": "balls",
+   "box": "boxes",
+   "twitchel_token": "Purrlings"
+  },
+  "token": "twitchel_token",
+  "style": "ground",
+  "builderMode": "dig",
+  "titles": {
+   "pairs": "Cozy Pairs",
+   "dig": "Yarn Tumble",
+   "run": "Meadow Dash",
+   "catch": "Snack Catch",
+   "stack": "Cushion Tower"
+  },
+  "icons": {
+   "pairs": "⭐",
+   "dig": "🧶"
+  },
+  "units": {
+   "catch": "snacks",
+   "stack": "cushions"
+  },
+  "catchBanner": "SNACK TIME!",
+  "stackItem": "pancake",
+  "digLabel": "Coziest basket"
+ },
+ "icon_fallback": "cat",
+ "creature": {
+  "title": "The Cozy Sunbeam Napper",
+  "badge": "🐾",
+  "bg": "fox-bg",
+  "foods": [
+   "🐟 crispy smoked fish strips",
+   "🐟 fish sticks",
+   "🍣 baked salmon bites"
+  ],
+  "neutral": [
+   "🍎 apple slice"
+  ],
+  "place": "cozy basket",
+  "release": "the sunlit flower meadow",
+  "treasure": "little bell",
+  "token": "bell",
+  "pathIcon": "🌼",
+  "sign": "🔔 a little bell and a ribbon by the basket",
+  "talents": [
+   "Night Eyes",
+   "Soft Paws",
+   "Sunbeam Finder",
+   "Purr Song"
+  ],
+  "trust": "curls up in a warm round ball along the bottom of the screen and purrs very softly",
+  "quirks": [
+   "makes biscuits on soft blankets",
+   "naps in every sunbeam",
+   "pounces on yarn and leaves",
+   "chirrups at bubbles"
+  ],
+  "game": "Cozy Pairs"
+ },
+ "coats": [
+  "#e39a52",
+  "#b8b4c8",
+  "#d9622b",
+  "#e8c394",
+  "#8c7cc4"
+ ],
+ "ui": {
+  "homeTitle": "cozy basket",
+  "awayTreasure": "I found you a little treasure while exploring",
+  "postcardScene": "meadow",
+  "pathIndex": 2,
+  "conversations": {
+   "where_from": "twitchel_where_from_v2",
+   "almost_ready": "twitchel_almost_ready"
+  },
+  "keepsake": {
+   "type": "songbell",
+   "art": "px/fw/songbell.png",
+   "hint": "purr bell",
+   "emoji": "🔔",
+   "index": 2
+  },
+  "tokenEmoji": "🔔",
+  "afterTitle": "The meadow",
+  "moonCall": "Mrrp!"
+ },
+ "looks": [
+  "cat",
+  "lion",
+  "tiger",
+  "leopard",
+  "cheetah",
+  "snowleopard",
+  "lynx"
+ ],
+ "look": "cats (cat-like)",
+ "palettes": [
+  "dusk-plum",
+  "moon-lilac",
+  "ember-russet",
+  "sunset-gold-solid",
+  "snow-blush",
+  "cocoa-cream",
+  "tan-sand",
+  "mint-teal-solid",
+  "rose-sapphire-solid",
+  "violet-rose-solid"
+ ],
+ "foods": {
+  "tiers": {
+   "fish_sticks": "favorite_pool",
+   "salmon_bites": "favorite_pool",
+   "smoked_fish": "favorite_pool",
+   "tuna_sandwich": "love",
+   "mango_slices": "love",
+   "peach_slices": "love",
+   "rice_ball": "love",
+   "noodle_soup": "love",
+   "dumplings": "love",
+   "honey_cakes": "love",
+   "wild_blackberries": "love",
+   "sunny_puff": "love",
+   "spring_water": "like",
+   "pumpkin_soup": "like",
+   "mashed_potatoes": "like",
+   "rice_bowl": "like",
+   "oatmeal_honey": "like",
+   "blueberries": "like",
+   "pear_slices": "like",
+   "melon": "like",
+   "jam_toast": "like",
+   "spaghetti": "like",
+   "sweet_potato": "like",
+   "applesauce": "like",
+   "honey_cake": "like",
+   "oat_cookie": "like",
+   "birthday_cake": "like",
+   "strawberries": "like",
+   "raspberries": "like",
+   "banana_coins": "like",
+   "watermelon": "like",
+   "fruit_salad": "like",
+   "pancakes": "like",
+   "waffles": "like",
+   "muffin": "like",
+   "honey_toast": "like",
+   "cucumber_rolls": "like",
+   "banana": "okay",
+   "apple_slices": "okay",
+   "apple_slice": "okay",
+   "peas": "okay",
+   "snap_peas": "okay",
+   "carrot_sticks": "okay",
+   "cucumber": "okay",
+   "cornbread": "okay",
+   "plum_slices": "okay",
+   "ice_pop": "okay",
+   "chamomile": "okay",
+   "corn_cob": "okay",
+   "granola_bar": "okay",
+   "toffee": "okay",
+   "lemon": "not_for_me",
+   "hot_sauce": "not_for_me",
+   "pickle": "not_for_me",
+   "olives": "not_for_me",
+   "sparkling_water": "not_for_me",
+   "brussels_sprouts": "not_for_me",
+   "roasted_nuts": "not_for_me",
+   "orange_segments": "not_for_me"
+  },
+  "new": [
+   {
+    "id": "mango_slices",
+    "name": "mango slices",
+    "emoji": "🥭",
+    "group": "fruit",
+    "taste": "love",
+    "eat_style": "nibble",
+    "delivery": "drop",
+    "icon": "i_mango"
+   },
+   {
+    "id": "peach_slices",
+    "name": "peach slices",
+    "emoji": "🍑",
+    "group": "fruit",
+    "taste": "love",
+    "eat_style": "nibble",
+    "delivery": "drop",
+    "icon": "i_peach"
+   },
+   {
+    "id": "pumpkin_soup",
+    "name": "pumpkin soup",
+    "emoji": "🎃",
+    "group": "kid",
+    "taste": "like",
+    "eat_style": "slurp",
+    "delivery": "plate",
+    "icon": "i_pumpkin_soup"
+   },
+   {
+    "id": "jam_toast",
+    "name": "jam toast",
+    "emoji": "🍞",
+    "group": "kid",
+    "taste": "like",
+    "eat_style": "crunch",
+    "delivery": "plate",
+    "icon": "i_jam_toast"
+   },
+   {
+    "id": "sunny_puff",
+    "name": "sunny puff",
+    "emoji": "🌞",
+    "group": "kid",
+    "taste": "love",
+    "eat_style": "nibble",
+    "delivery": "plate",
+    "icon": "i_sunny_puff"
+   },
+   {
+    "id": "plum_slices",
+    "name": "plum slices",
+    "emoji": "🟣",
+    "group": "fruit",
+    "taste": "okay",
+    "eat_style": "nibble",
+    "delivery": "drop",
+    "icon": "i_plum"
+   },
+   {
+    "id": "cucumber_rolls",
+    "name": "cucumber rice rolls",
+    "emoji": "🥒",
+    "group": "kid",
+    "taste": "like",
+    "eat_style": "nibble",
+    "delivery": "plate",
+    "icon": "i_cucumber_rolls"
+   }
+  ],
+  "_note": "tiers: proposals/foods_twitchel.json (Cole); new: handoff purrlings_art_audio_v1 §7 (sunny_puff fields filled like the rest). No dairy."
+ }
+}

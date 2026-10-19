@@ -27,7 +27,7 @@ async def main():
     await pg.route('**/families.js*',lambda r:r.fulfill(status=200,content_type='application/javascript',body=JS))
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600)
-    check(await pg.evaluate("FAMILIES.order.join()")=='slyte,whimber,testfam','3-family FAMILIES served')
+    check((await pg.evaluate("FAMILIES.order.join()")).endswith(',testfam'),'FAMILIES with the dummy served')
     await T(pg,'#obgo',400);await pg.evaluate("localStorage.setItem('echo-nosetup','1')")   # skip the first-meeting chat, go straight home
     for i in range(6):
       if await pg.locator('#obnm').count():break

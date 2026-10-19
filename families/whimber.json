@@ -482,7 +482,16 @@
   "conversations": {
    "where_from": "whimber_where_from_v2",
    "almost_ready": "whimber_almost_ready"
-  }
+  },
+  "keepsake": {
+   "type": "songfeather",
+   "art": "px/fw/songfeather.png",
+   "hint": "song feather",
+   "emoji": "💫",
+   "index": 1
+  },
+  "tokenEmoji": "🪶",
+  "afterTitle": "Our branch"
  },
  "coats": [
   "#8a6f5a",

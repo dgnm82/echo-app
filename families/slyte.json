@@ -419,7 +419,16 @@
   "conversations": {
    "where_from": "slyte_where_from_v2",
    "almost_ready": "slyte_almost_ready"
-  }
+  },
+  "keepsake": {
+   "type": "songleaf",
+   "art": "px/fw/songleaf.png",
+   "hint": "song-leaf",
+   "emoji": "🍂",
+   "index": 0
+  },
+  "tokenEmoji": "🍃",
+  "afterTitle": "The meadow"
  },
  "coats": [
   "#e8772e",

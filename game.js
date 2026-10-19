@@ -429,6 +429,11 @@ function home(greet){
 // ---------- Bond-up scene (bond_up.md v0.1): plays on the next Home, before any milestone card; once per transition per Echo ----------
 // ---------- Per-Echo scenes (echo/scenes/scenes.md v0.2) ----------
 const SC_OY=57;   // phone bg (180x320) is bottom-anchored in the 263 px scene: scene y = bg y - 57
+// a family without scenes of its own borrows another's (manifest scene.borrow {from, rename:{wp:newId}, titles, dropActs})
+function famScenes(){if(!window.FAMILIES||!window.SCENES)return;for(const f of FAMILIES.order){const F=FAMILIES[f],b=F.scene&&F.scene.borrow,c=F.dialogue;if(!b||SCENES[c])continue;
+  SCENES[c]=JSON.parse(JSON.stringify(SCENES[b.from])).map(sc=>{if(b.titles&&b.titles[sc.id])sc.title=b.titles[sc.id];sc.wp.forEach(w=>{if(b.rename&&b.rename[w.id])w.id=b.rename[w.id];w.acts=w.acts.filter(a=>!(b.dropActs||[]).includes(a))});return sc});
+  SCENES.weights[c]=SCENES.weights[c]||SCENES.weights[b.from];SCENES.release[c]=SCENES.release[c]||SCENES.release[b.from]}}
+famScenes();
 function scList(){return SCENES[CID()]}
 function scHome(){return scList()[0]}
 function scUnlocked(){return scList().filter((s,i)=>S.bond>=SCENES.unlock[i])}
@@ -464,7 +469,7 @@ const LV_IMPL={leaf_pounce:'leaf_pounce',leaf_toss:'leaf_pounce',sniff:'sniff',s
   head_tilt:'tilt',listen:'tilt',stargaze:'stargaze',stargaze_lie_back:'stargaze',moon_watch:'stargaze',lantern_share:'lantern',story_hum:'lullaby',lullaby_hum:'lullaby',sit_and_sway:'warm',cloud_shapes:'think',silent_flight_loop:'hop'};
 const LV_BAND={moon_yip:['night'],stargaze:['evening','night'],stargaze_lie_back:['evening','night'],moon_watch:['evening','night'],sunrise_greet:['morning'],good_morning_sun:['morning'],curl_nap:['evening'],midday_nap:['day'],nap_inside:['evening','night'],butterfly_chase:['morning','day'],sunbathe:['morning','day']};
 const LV_FOUND={leaf_pounce:'found_leaves',trinket:'found_trinket',moon_yip:'found_moon',sunrise:'found_sunrise',curl_nap:'found_curl',lullaby:'found_lullaby',stargaze:'found_stars',read:'found_book',nap:'found_nap',lantern:'found_lantern'};
-const SC_FOUND={clearing:{'log_mouth:sniff':'found_log','moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
+const SC_FOUND={clearing:{'log_mouth:sniff':'found_log','basket_door:sniff':'found_basket','moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
   branch:{hollow_sill:'found_branch_door',branch_tip:'found_branch_tip'},library:{reading_nook:'found_library_nook',window_sill:'found_library_sill'},hilltop:{tree_branch:'found_hilltop_branch',blanket:'found_hilltop_blanket'}};
 function lvDef(){const sc=curScene(),wp={};sc.wp.forEach(w=>{wp[w.id]=scWp(w.id)});return {wp,scene:sc}}
 function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].includes(w.id)||/exit/.test(w.kind)||!scReq(w.requires))return;
@@ -499,7 +504,7 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     sniff:()=>setExpr('curious'),
     trinket:()=>{setExpr('giggling');lvFx('px/living/trinket.png',x+18,y-16,'roll',dur)},
     curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
-    moon_yip:()=>{setExpr('excited');say('Yip!','excited');LIVE.actT=setTimeout(()=>say('Yip!','excited'),1000)},
+    moon_yip:()=>{const c=FUI().moonCall||'Yip!';setExpr('excited');say(c,'excited');LIVE.actT=setTimeout(()=>say(c,'excited'),1000)},
     sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
     lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
     stargaze:()=>{setExpr('thinking')},
@@ -754,7 +759,7 @@ function book(){
   const e=E(),d=document.createElement('div');d.className='book';
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${obLock('bk')}${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
-  ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(S.keepsake.type==='songleaf'?'🍂':'💫')}${S.keepsake.name}</span>`:''}
+  ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
   <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
@@ -783,7 +788,7 @@ function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,m
   if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
   if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
   if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase();curGame=/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=GROUND();Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder|den dig|nest weave/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch/.test(t)?(fox?'berry_catch':'starfall_catch'):/tower|steps/.test(t)?(fox?'pancake_tower':'cloud_steps'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=GROUND();Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder|den dig|nest weave/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch/.test(t)?(fox?'berry_catch':'starfall_catch'):/tower|steps/.test(t)?(fox?'pancake_tower':'cloud_steps'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
@@ -925,7 +930,7 @@ function linesGame(){
 // head-touch v1: top opaque row of a sprite frame near its anchor x (±4 px), cached per image+rect
 function g2Top(im,sx,sy,sw,sh){const k=sx+','+sy;im._top=im._top||{};if(k in im._top)return im._top[k];const c=document.createElement('canvas');c.width=sw;c.height=sh;const x=c.getContext('2d');x.drawImage(im,sx,sy,sw,sh,0,0,sw,sh);let d;try{d=x.getImageData(0,0,sw,sh).data}catch(e){return null}let top=null,lo=sw,hi=-1;for(let y=0;y<sh;y++){for(let xx=0;xx<sw;xx++)if(d[(y*sw+xx)*4+3]>40){if(top==null)top=y;if(y<top+12){lo=Math.min(lo,xx);hi=Math.max(hi,xx)}}if(top!=null&&y>=top+12)break}return im._top[k]=top==null?null:{top,cx:(lo+hi)/2}}   // head = the frame's top 12 rows (the sit-engine head is the highest part)
 // ---------- Games v2 §3.3 / §3.4: Berry Catch / Starfall Catch and Pancake Tower / Cloud Steps (happy ends, flat rewards) ----------
-function g2Frames(fox){const SP=SPR(),PL=SP==='whimber'?PIXEL.POWL:PIXEL.PAL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
+function g2Frames(fox){const SP=SPR(),PL=PIXEL.pals(SP);let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];const st=PIXEL.stageNow();
   const lk=PIXEL.lookOf(SP,S.g,pal);   // catch ears v1: per-look runner folders, family base-look fallback (any family)
   return {pal,pd:`run/${lk&&lk!==FAMD().look_base?lk+'/':''}${pal}/`,sk:'stage4',row:0,fly:PIXEL.sheet(SP,S.g).replace(/\.png$/,'_fly.png')}}
 function g2Img(IM,k,src){const im=IM[k]=new Image();im.onerror=()=>{const f=src.replace(/run\/[a-z]+\/([a-z-]+\/)/,"run/$1");if(f!==src&&!im.src.endsWith(f))im.src=f};im.src=src;return im}   // catch ears v1: missing look frames fall back to fox
@@ -1102,7 +1107,7 @@ function runGame(){
   const tb=$('.top b');tb.innerHTML=`<span id="rm">0m</span> <i class="pxi" style="background-image:url(px/${fox?'items/'+tre:'i_star'}.png)"></i><span id="rt">×0</span>${fox?'':'<i class="pxi rmoon" id="rmoon" style="background-image:url(px/i_moon.png);visibility:hidden" aria-label="moon piece"></i>'}${hudBest('run',level)}${level==='standard'?'':` <span class="fblvl">${level==='easy'?'Easy':'Big-kid'}</span>`}`;
   if(!rs.runs)setTimeout(()=>{const h=$('#rhint');if(h)h.classList.add('off')},3000);
   const cv=$('#rc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;const IM={};const ld=(k,s)=>{const im=IM[k]=new Image();im.onerror=()=>{const q=s.split('/'),f='px/run/'+q.pop()+'.png',g=q.length>2?'px/run/'+q[q.length-1]+'/'+s.split('/').pop()+'.png':f;if(!im.src.endsWith(g))im.src=g;else if(!im.src.endsWith(f))im.src=f};im.src='px/'+s+'.png'};   // missing frame: flat bonded fallback
-  const PL=SP==='whimber'?PIXEL.POWL:PIXEL.PAL;let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
+  const PL=PIXEL.pals(SP);let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const lk=PIXEL.lookOf(SP,S.g,pal),pd=`run/${lk&&lk!==FAMD().look_base?lk+'/':''}${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   window.__runHome=null;if(S.badges.includes('place')){IM.homeRest=new Image();IM.homeRest.src=`px/home/${homeKind()}_front.png`;window.__runHome=IM.homeRest.src}   // home_log_hollow: the log / hollow at the rest stop
   if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
@@ -1303,9 +1308,9 @@ async function fwCeremony0(path,resume){
   await fwSay(B('gift_got',{gift:f.gift}));fwStep(5);
   // C5 gift: the Echo gives its keepsake (tap to keep)
   await fwSay(fwLine('keepsake_give',0));
-  await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');b.className='fwkeep glim';b.id='fwkeep';b.setAttribute('aria-label',fwUI('ui_keepsake',fox?0:1));
-    b.style.backgroundImage=`url(px/fw/${fox?'songleaf':'songfeather'}.png)`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${fox?'song-leaf':'song feather'} to keep it</div></div>`;
-    b.onclick=()=>{ov.innerHTML='';S.keepsake={type:fox?'songleaf':'songfeather',name:fwUI('ui_keepsake',fox?0:1),day:S.days};SFX('care_pet_sparkle');save();b.classList.add('kept');res()}});
+  await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');b.className='fwkeep glim';b.id='fwkeep';const K=FUI().keepsake;b.setAttribute('aria-label',fwUI('ui_keepsake',K.index));   // manifest ui.keepsake {type, art, hint, emoji, index}
+    b.style.backgroundImage=`url(${K.art})`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${K.hint} to keep it</div></div>`;
+    b.onclick=()=>{ov.innerHTML='';S.keepsake={type:K.type,name:fwUI('ui_keepsake',K.index),day:S.days};SFX('care_pet_sparkle');save();b.classList.add('kept');res()}});
   await fwSay(fwLine('keepsake_give',1));fwStep(6);
   // C6 thank-you, both ways (a second, different goodbye within 5 s plays two_goodbyes)
   await fwSay(fwLine('thanks',0));await fwSay(fwLine('thanks',1));
@@ -1361,7 +1366,7 @@ function deliverCheckins(){
   S.postcards=S.checkins.filter(k=>k.delivered).map(k=>`<b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><br>${k.text}`);save();return due[due.length-1];
 }
 function pcScene(k,i){return k.scene||FUI().postcardScene}
-function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=e.token==='leaf'?'🍃':'🪶';
+function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=FUI().tokenEmoji||(e.token==='leaf'?'🍃':'🪶');
   const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho pose-${k.pose||'tall'}">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i></div>`
     :k.type==='sign'?`<div class="pcfront sign" style="background-image:url(px/pc_${scene}.png)"><i class="pcsign">${PI(e.sign.split(' ')[0])}</i></div>`
     :`<div class="pcfront note"><i class="pcstamp">${PI('✉️')}</i><span>a note from ${g.name}</span></div>`;
@@ -1369,7 +1374,7 @@ function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=e.token
 function afterHome(){
   const e=E(),g=S.g;ov.innerHTML='';const fresh=deliverCheckins(),sign=fresh&&fresh.type==='sign',days=Math.floor((now()-S.released)/864e5),ic=e.sign.split(' ')[0];
   const fox=FWALK(),ks=S.keepsake,cap=fwUI(days<1&&!(S.checkins||[]).some(k=>k.delivered)?'ui_after_day0':'ui_after_later');
-  h(`<div class="top"><b>${fox?'The meadow':'Our branch'} · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after pxscene" style="background:url(px/scenes/${fox?'meadow_day':'branch_twi'}.png) center bottom/180px 320px no-repeat !important"><div class="bubble">${cap}${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):''}</div>
+  h(`<div class="top"><b>${FUI().afterTitle||(fox?'The meadow':'Our branch')} · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after pxscene" style="background:url(px/scenes/${fox?'meadow_day':'branch_twi'}.png) center bottom/180px 320px no-repeat !important"><div class="bubble">${cap}${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):''}</div>
   ${fwStarHTML(3,'fwstar')}${ks?`<div class="fwkeep after${fresh?' glim':''}" aria-label="${ks.name}" style="background-image:url(px/fw/${ks.type}.png)"></div>`:''}
   <button class="spot mailbox${fresh&&!sign?' full':''}" id="mail" aria-label="Mailbox">${PI(fresh&&!sign?'📬':'📪')}</button>
   ${sign?`<button class="spot signspot" id="sign" aria-label="Something left for you">${PI(ic)}</button>`:''}</div>

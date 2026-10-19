@@ -193,6 +193,10 @@
       {
         "text": "Sit on the twilight branch",
         "expr": "happy"
+      },
+      {
+        "text": "Walk together to the meadow's edge",
+        "expr": "neutral"
       }
     ],
     "ui_choice_ask": [
@@ -299,6 +303,10 @@
       {
         "text": "Song feather from {name}",
         "expr": "happy"
+      },
+      {
+        "text": "Purr bell from {name}",
+        "expr": "neutral"
       }
     ],
     "ui_tagline": [
