@@ -4,13 +4,20 @@ const app=$('#app'), ov=$('#overlay');
 const KEY='echo-proto-v1';
 let S=load(), sess={feeds:0,games:0,naps:0,chats:0};
 const rnd=(seed)=>()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s);c6Names(s)}return s}catch(e){return null}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s);c6Names(s);w1Names(s)}return s}catch(e){return null}}
 // C6: 'Slyte' is no longer a name players see. Saves still holding the old fox default move to the new one, SILENTLY (no name_changed line; Daniel decides later)
 function c6Names(s){const nn=(((window.FAMILIES||{}).animals||{}).fox||{}).default_name||'Pipsong';if(nn==='Slyte')return;
   if(s.g&&s.g.name==='Slyte')s.g.name=nn;if(s.vars&&s.vars.default_name==='Slyte')s.vars.default_name=nn;
   const k=s.keepsake;if(k&&k.type){k.type=({glowleaf:'songleaf',starfeather:'songfeather'})[k.type]||k.type}   // sweep: keepsake art renamed
   if(k&&typeof k.name==='string'){if(k.name==='Slyte')k.name=nn;k.name=k.name.replace(/ from Slyte$/,' from '+nn).replace(/^Glow-leaf from /,'Song-leaf from ').replace(/^Starlight feather from /,'Song feather from ')}   // + C2 keepsake wording
   if(Array.isArray(s.memories))s.memories=s.memories.map(m=>typeof m==='string'?m.replace(/— Slyte$/,'— '+nn):m)}
+// Whimber rename (Oct 18, Kai/Daniel): 'Whimber' is no longer a name players see. Owl default Hoosa, duck default Quackaby (families/whimber.json).
+// Same as C6: saves still holding 'Whimber' move to their animal's new default, SILENTLY (no name_changed line). Ids stay whimber / whimber_token; family stays Wingsong(s)
+function w1Names(s){const A=(window.FAMILIES||{}).animals||{},o=s.origin||{};if(!(s.kind==='owl'||o.family==='whimber'))return;
+  const a=(o.animal==='duck'||(s.vars&&s.vars.origin_animal==='duck'))?'duck':'owl',nn=(A[a]||{}).default_name||(a==='duck'?'Quackaby':'Hoosa');if(nn==='Whimber')return;
+  if(s.g&&s.g.name==='Whimber')s.g.name=nn;if(s.vars&&s.vars.default_name==='Whimber')s.vars.default_name=nn;
+  const k=s.keepsake;if(k&&typeof k.name==='string'){if(k.name==='Whimber')k.name=nn;k.name=k.name.replace(/ from Whimber$/,' from '+nn)}
+  if(Array.isArray(s.memories))s.memories=s.memories.map(m=>typeof m==='string'?m.replace(/— Whimber$/,'— '+nn):m)}
 // Oct 14: only birds and canines exist. Old saves that picked cat / bunny / other (borrowed colours) keep their Echo; the animal becomes its family's base animal
 function onlyBirdsCanines(s){const A=(window.FAMILIES||{}).animals||{},o=s.origin;if(o&&o.animal&&!A[o.animal]){const w=o.family==='whimber'||s.kind==='owl'?'owl':o.family==='slyte'||s.kind==='fox'?'fox':null;o.animal=w;if(s.vars&&w)s.vars.origin_animal=A[w].word}
   if(o&&o.src==='borrowed')o.src='chips';if(Array.isArray(s.songs))s.songs=s.songs.filter(a=>A[a])}

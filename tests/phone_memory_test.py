@@ -59,7 +59,7 @@ async def main():
     await pg.reload();await pg.wait_for_timeout(1200)
     m=await pg.evaluate("({n:__echo.state.checkins.length,types:[...new Set(__echo.state.checkins.map(c=>c.type))],del:__echo.state.checkins.filter(c=>c.delivered).map(c=>c.day),pcv:__echo.state.pcv,old:__echo.state.checkins.some(c=>c.text==='old')})")
     sg=await pg.evaluate("(()=>{const S=__echo.state,re=/(—|,)\\s*(Slytes?|Howlings?|Wingsongs?|S\\.|W\\.)\\s*$/;return {name:S.g.name,fam:S.checkins.filter(c=>re.test(c.text)).length,signed:S.checkins.filter(c=>/—/.test(c.text)).map(c=>c.text.split('— ').pop())}})()");print('signatures',sg);assert sg['fam']==0 and sg['name']=='Pip' and len(sg['signed'])>=4 and all(x in ('Pip','your friend, Pip') for x in sg['signed']),sg
-    print('migrated',m);assert m['n']==6 and m['types']==['postcard'] and m['del']==[1,3,7] and m['pcv']==4 and not m['old']
+    print('migrated',m);assert m['n']==6 and m['types']==['postcard'] and m['del']==[1,3,7] and m['pcv']==5 and not m['old']
     assert 'feelings' not in await pg.evaluate("Object.keys(__echo.state).join(',')")
     # C6: an old save still on the fox default 'Slyte' is renamed to the new default silently (no name_changed), keepsake + postcards follow
     await pg.evaluate("""(()=>{window.__wiped=1;const S=JSON.parse(localStorage.getItem('echo-proto-v1'));S.g.name='Slyte';S.vars=S.vars||{};S.vars.default_name='Slyte';S.keepsake={type:'glowleaf',name:'Glow-leaf from Slyte',day:3};S.pcv=3;S.nameChanged=0;localStorage.setItem('echo-proto-v1',JSON.stringify(S))})()""")

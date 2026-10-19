@@ -34,10 +34,10 @@ function phrase(m){let t=String(m||'').replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27B
 function memories(list){const seen=new Set(),out=[];const L=(list||[]).filter(m=>m&&!BAD.test(m));
   const met=L.filter(m=>/day we met/i.test(m)),rest=L.filter(m=>!/day we met/i.test(m)).reverse();
   for(const m of [...rest,...met]){const p=phrase(m);if(p&&!seen.has(p)){seen.add(p);out.push(p)}}return out}
-// C1: postcards sign with the Echo's CURRENT name (typed or a kept default such as Pipsong / Whimber), never a family name
-// (Howling(s)/Wingsong(s), plus the legacy 'Slyte' as a safety net); none -> "your friend"
+// C1: postcards sign with the Echo's CURRENT name (typed or a kept default such as Pipsong / Hoosa / Quackaby), never a family name
+// (Howling(s)/Wingsong(s), plus the legacy 'Slyte' / 'Whimber' as safety nets); none -> "your friend"
 const FAMS=(typeof window!=='undefined'&&window.FAMILIES)||null,esc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const FAMILY=new RegExp('^('+['slytes?','howlings?','wingsongs?'].concat(FAMS?FAMS.order.flatMap(f=>[FAMS[f].label,FAMS[f].plural].map(t=>esc(t.toLowerCase()))):[]).join('|')+')$','i');   // every family label/plural from the manifests + legacy
+const FAMILY=new RegExp('^('+['slytes?','whimbers?','howlings?','wingsongs?'].concat(FAMS?FAMS.order.flatMap(f=>[FAMS[f].label,FAMS[f].plural].map(t=>esc(t.toLowerCase()))):[]).join('|')+')$','i');   // every family label/plural from the manifests + legacy
 function signName(n){const t=String(n==null?'':n).trim();return t&&!FAMILY.test(t)?t:null}
 function sign(text,n){const nm=signName(n);return nm?text.replace(/\{echo_name\}/g,nm):text.replace(/, \{echo_name\}/g,'').replace(/\{echo_name\}/g,'your friend')}
 function build(o){const sp=FAMS?FAMS.of(o.kind).dialogue:(o.kind==='owl'||o.kind==='whimber'?'whimber':'slyte'),mem=memories(o.memories);let mi=0;
@@ -48,6 +48,6 @@ function build(o){const sp=FAMS?FAMS.of(o.kind).dialogue:(o.kind==='owl'||o.kind
     const text=tpl.replace(/\{child_name\}/g,o.child||'friend').replace(/\{parting_gift\}/g,gift).replace(/\{constellation_name\}/g,o.constellation||'the shy little star we found');
     const text2=sign(text,o.name);
     return {day:c.day,type:'postcard',scene:c.scene,pose:c.pose,text:text2,delivered:false}})}
-const API={DAYS,T,build,phrase,memories,signName,sign,VERSION:4};   // v3 (C1): rebuild saved postcards so old family-name signatures go; v4 (C6): re-sign with the migrated name
+const API={DAYS,T,build,phrase,memories,signName,sign,VERSION:5};   // v3 (C1): rebuild saved postcards so old family-name signatures go; v4 (C6): re-sign with the migrated name; v5 (Whimber rename): re-sign Hoosa / Quackaby
 if(typeof module!=='undefined')module.exports=API;root.Postcards=API;
 })(typeof window!=='undefined'?window:globalThis);

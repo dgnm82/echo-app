@@ -339,7 +339,7 @@ function plushOwl(v){if(typeof v==='number')v=SP.pvariant('owl',v);const id='po'
     :v.mark==='constellation'?`<g stroke="${G}" stroke-width="1.4" fill="none" opacity=".8"><path d="M118 238 L134 252 L130 270 M134 252 L150 246"/></g><g fill="${G}"><circle cx="118" cy="238" r="3"/><circle cx="134" cy="252" r="3"/><circle cx="130" cy="270" r="2.4"/><circle cx="150" cy="246" r="2.4"/></g>`
     :`<g fill="none" stroke="${G}" stroke-width="2.6" stroke-linecap="round"><path d="M104 230 q-6 14 0 28"/><path d="M196 230 q6 14 0 28"/></g>`;
   const moon=v.moongem?`<g><path d="M158 105 A15 15 0 1 0 158 133 A11 11 0 0 1 158 105Z" fill="url(#crys${id})" stroke="${ink}" stroke-width="1.6"/><path class="sp-pulse fx-glow" d="M158 105 A15 15 0 1 0 158 133 A11 11 0 0 1 158 105Z" fill="${G}" opacity=".5" filter="url(#glow${id})"/></g>`:`${star(150,118,6,G)}`;
-  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-owl sp-plush owl" data-expr="neutral" role="img" aria-label="Whimber">
+  return `<svg viewBox="0 0 320 330" class="echo-svg sp sp-owl sp-plush owl" data-expr="neutral" role="img" aria-label="Owl Echo">
   <defs>${pdefs(id,P)}<clipPath id="hc${id}"><path d="${head}"/></clipPath><clipPath id="bc${id}"><path d="${body}"/></clipPath></defs>
   <g class="sp-move"><g class="sp-dir"><g class="sp-curl">
   <ellipse class="sp-aura sp-pulse" cx="150" cy="200" rx="140" ry="130" fill="url(#aura${id})"/>

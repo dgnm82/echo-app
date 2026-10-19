@@ -3,7 +3,7 @@
  "label": "Wingsong",
  "plural": "Wingsongs",
  "status": "shipping",
- "default_name": "Whimber",
+ "default_name": "Hoosa",
  "kind": "owl",
  "look_base": "owl",
  "look_default": "wingsong",
@@ -27,7 +27,7 @@
    "label": "Owl",
    "word": "owl",
    "member": "owl",
-   "default_name": "Whimber",
+   "default_name": "Hoosa",
    "look": "owl"
   },
   "bird": {
@@ -41,7 +41,7 @@
    "label": "Duck",
    "word": "duck",
    "member": "duck",
-   "default_name": "Whimber",
+   "default_name": "Quackaby",
    "look": "duck"
   },
   "dove": {
