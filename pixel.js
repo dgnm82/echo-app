@@ -32,6 +32,9 @@ function label(sp,g){const F=W.FAMILIES;return String((g&&g.name)||(F&&F[sp]&&F[
 function whimber(g,stage){const {u,v}=sheetBase('whimber',g),lt=stage===1;stage=stage||stageNow();
   {const pre=new Image();pre.src=`${u}_fly.png`}   // v1.1: no flash on the first take-off
   return `<div class="echo-svg px-echo owl" role="img" aria-label="${label('whimber',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)">${lt?'':AURA_CV}</div>`}
+// any other family's sprite (manifest `sprite`): the same home-sheet element; class fox = ground style, owl = sky style (blink/fly packs)
+function echo(sp,g,stage){const F=W.FAMILIES,f=F&&F[sp],cls=f&&f.games&&f.games.style==='sky'?'owl':'fox',{u,v}=sheetBase(sp,g),lt=stage===1;stage=stage||stageNow();
+  return `<div class="echo-svg px-echo ${cls}" role="img" aria-label="${label(sp,g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)">${lt?'':AURA_CV}</div>`}
 function slyte(g,stage){const {u,v}=sheetBase('slyte',g),lt=stage===1;stage=stage||stageNow();
   return `<div class="echo-svg px-echo fox" role="img" aria-label="${label('slyte',g)}" data-expr="neutral" data-stage="${stage}" ${gAttr(lt,v)} style="background-image:url(${u}${lt?'_light':''}.png)">${lt?'':AURA_CV}</div>`}
 // ---- glow v1.1 (handoff/glow_v1.md §2): the Echo keeps its origin colour; bond grows an aura in its OWN colour (G1..G5).
@@ -148,5 +151,5 @@ const INT={yes:'yes',no:'no',unsure:'question',listen:'ear',nod:'smile',giggle:'
 const ICON_FILE={dig:'dig/icon',weave:'weave/icon',feed:'icon_feed',play:'icon_play',pet:'icon_pet',sleep:'icon_sleep'};
 function iconName(emoji,intent){const e=String(emoji||'').trim();return EMO[e]||EMO[e.replace(/\uFE0F/g,'')]||INT[intent]||'talk'}
 function icon(name){return `<i class="pxi" data-icon="${name}" style="background-image:url(px/${ICON_FILE[name]||'i_'+name}.png)"></i>`}
-W.PIXEL={walk,wake,sleep,glowLevel,aura,auraDraw,get AURA(){return AURA},queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
+W.PIXEL={echo,walk,wake,sleep,glowLevel,aura,auraDraw,get AURA(){return AURA},queue,blink,fly,whimber,POWL,POWL0,PAL0,sheet:(sp,g)=>sheetBase(sp,g).u+'.png',lookOf,event,EV,react,icon,iconName,SEQ,variant,stageFromBond,stageNow,slyte,fit,FR,PAL,bg:k=>`<div class="bg pxbg pxbg-${k}"></div>`};
 })();

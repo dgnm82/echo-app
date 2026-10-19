@@ -5,7 +5,8 @@
 const W=window,BASE='sfx/';
 const CORE=['ui_tap','ui_back','ui_panel_open','bond_meter_tick','care_feed_eat','care_pet_sparkle','care_nap_tuck'];
 const V2MOODS=['happy','curious','sleepy','shy','silly','excited','sad_gentle'];
-const SPECIES=k=>{const s=k==='owl'||k==='whimber'?'whimber':'slyte';const v=[];V2MOODS.forEach(m=>[1,2,3].forEach(i=>v.push(s+'_'+m+'_'+i)));return [...v,s+'_pet_motif',s+'_arrival',s+'_release']};
+const FS=k=>{const F=W.FAMILIES;if(!F)return k==='owl'||k==='whimber'?'whimber':'slyte';const v=(F.of(k).sound||{}).voice;return v?v.split('_<')[0]:F.idOf(k)};   // kind or id -> voice prefix (manifest sound.voice '<prefix>_<mood>_<1-3>')
+const SPECIES=k=>{const s=FS(k);const v=[];V2MOODS.forEach(m=>[1,2,3].forEach(i=>v.push(s+'_'+m+'_'+i)));return [...v,s+'_pet_motif',s+'_arrival',s+'_release']};
 // sound v2: Whimber's own takes of a few shared sounds (Slyte uses the plain name)
 const OWLVAR=new Set(['memory_card_flip','memory_card_flip_2nd','memory_flip_back','memory_card_flip_whimber','memory_pair_found_whimber','ui_tap_whimber','run_treasure_1_whimber','whimber_night_vision_glint','ui_panel_close','memory_pair_found','ui_tap','run_treasure_1']);
 const LATER=['blocks_move','blocks_rotate','blocks_land','blocks_row_glow','blocks_floor_done','memory_card_flip','bondup_sting_slyte','bondup_sting_whimber','run_treasure_1','run_treasure_5','run_tumble_boop','run_gold','run_finale','run_hop_1','run_hop_2','run_hop_3','run_flap_1','run_flap_2','run_flap_3','whimber_radar_hearing_chime','memory_pair_found','memory_all_cleared','slyte_radar_ears_twinkle',];
@@ -25,12 +26,12 @@ function unlock(){if(unlocked)return;const c=ac();if(!c)return;unlocked=true;
   try{const s=c.createBufferSource();s.buffer=c.createBuffer(1,1,22050);s.connect(c.destination);s.start(0)}catch(e){}
   if(c.state==='suspended')c.resume();const S=W.__echo&&W.__echo.state;preload(S&&S.kind)}
 ['pointerdown','touchend','keydown'].forEach(ev=>W.addEventListener(ev,unlock,{capture:true,passive:true}));
-function play(n,o){o=o||{};try{const S=W.__echo&&W.__echo.state;if(S&&S.kind==='owl'&&OWLVAR.has(n))n=n+'_whimber'}catch(e){}if(!on()||!unlocked||!ctx)return false;const now=performance.now();if(last[n]&&now-last[n]<(o.gap||60))return false;last[n]=now;
+function play(n,o){o=o||{};try{const S=W.__echo&&W.__echo.state;const sv=S&&W.FAMILIES&&FAMILIES.of(S.kind).sound.sfxVariant;if(sv&&OWLVAR.has(n))n=n+'_'+sv}catch(e){}if(!on()||!unlocked||!ctx)return false;const now=performance.now();if(last[n]&&now-last[n]<(o.gap||60))return false;last[n]=now;
   const b=buf[n];if(!b){load(n);return false}
   const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;s.playbackRate.value=o.rate||1;g.gain.value=o.vol==null?.8:o.vol;s.connect(g);let out=g;if(o.pan&&ctx.createStereoPanner){const pn=ctx.createStereoPanner();pn.pan.value=Math.max(-1,Math.min(1,o.pan));g.connect(pn);out=pn}out.connect(ctx.destination);s.start(0);
   if(o.voice){try{voiceNode&&voiceNode.stop()}catch(e){}voiceNode=s}return true}
 function chirp(text,kind,expr){
-  const sp=kind==='owl'?'whimber':'slyte';let m=MOOD[expr]||null;const t=String(text||'');
+  const sp=FS(kind);let m=MOOD[expr]||null;const t=String(text||'');
   if(!m)m=/\?/.test(t)?'curious':/(sleep|nap|yawn|rest|…$|zz)/i.test(t)?'sleepy':/!/.test(t)?'happy':'curious';
   const pet=W.Dialogue&&Dialogue.persona&&Dialogue.persona.petPhrase&&t.startsWith(Dialogue.persona.petPhrase);
   let i=1+Math.floor(Math.random()*3);if(i===lastVar[m])i=i%3+1;lastVar[m]=i;
@@ -53,7 +54,7 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
   function level(v,sec){if(!master)return;const t=ctx.currentTime;master.gain.cancelScheduledValues(t);master.gain.setValueAtTime(master.gain.value,t);master.gain.linearRampToValueAtTime(v,t+(sec||.15))}
   function band(){const h=new Date().getHours();return h>=17||h<6?'twilight':'day'}
   return {
-    home(kind){const sp=kind==='owl'?'whimber':'slyte';set(`bg_${sp}_${band()}_loop`)},
+    home(kind){const F=W.FAMILIES;set(F?F.of(kind).music.home.replace('<band>',band()):`bg_${FS(kind)}_${band()}_loop`)},
     game(name){set(`game_${name}_loop`)},
     title(){set('title_welcome_loop')},   // onboarding §4: first-run title -> welcome -> name -> age (C major, neutral)
     talk(sec){sec=sec||.6;(this.ducks=this.ducks||[]).push({to:.65,ms:Math.round(sec*1000)});if(!master||out)return;level(.65,.06);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.2)},sec*1000)},   // ~35% duck for the chirp's length, short fades (both Echoes)

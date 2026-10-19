@@ -348,7 +348,17 @@
   ]
  },
  "scene": {
-  "homeProp": "log"
+  "homeProp": "log",
+  "home": {
+   "k": "log",
+   "x": 100,
+   "y": 219
+  },
+  "tail": true,
+  "napSink": [
+   6,
+   1
+  ]
  },
  "games": {
   "memoryDeck": [
@@ -373,11 +383,49 @@
    "daisy": "daisies",
    "pinecone": "pinecones",
    "mushroom": "mushrooms",
-   "ball": "balls"
+   "ball": "balls",
+   "slyte_token": "Howlings"
   },
   "token": "slyte_token",
   "runnerKind": "jump",
-  "builder": "den"
+  "builder": "den",
+  "style": "ground",
+  "builderMode": "dig",
+  "titles": {
+   "pairs": "Shiny Pairs",
+   "dig": "Den Dig",
+   "run": "Meadow Dash",
+   "catch": "Berry Catch",
+   "stack": "Pancake Tower"
+  },
+  "icons": {
+   "pairs": "⭐",
+   "dig": "🕳️"
+  },
+  "units": {
+   "catch": "berries",
+   "stack": "pancakes"
+  },
+  "catchBanner": "PICNIC TIME!",
+  "stackItem": "pancake",
+  "digLabel": "Deepest dig"
  },
- "icon_fallback": "wolf"
+ "icon_fallback": "wolf",
+ "ui": {
+  "homeTitle": "hollow log",
+  "awayTreasure": "I found you a shiny treasure while exploring",
+  "postcardScene": "meadow",
+  "pathIndex": 0,
+  "conversations": {
+   "where_from": "slyte_where_from_v2",
+   "almost_ready": "slyte_almost_ready"
+  }
+ },
+ "coats": [
+  "#e8772e",
+  "#d9622b",
+  "#c9853f",
+  "#b5533a",
+  "#e39a52"
+ ]
 }

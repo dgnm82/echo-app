@@ -336,7 +336,8 @@
   "register": "B-flat major",
   "octave": 4,
   "timbre": "Wingsong chip palette (music v2)",
-  "voice": "whimber_<mood>_<1-3>"
+  "voice": "whimber_<mood>_<1-3>",
+  "sfxVariant": "whimber"
  },
  "music": {
   "home": "bg_whimber_<band>_loop",
@@ -410,7 +411,17 @@
   ]
  },
  "scene": {
-  "homeProp": "hollow"
+  "homeProp": "hollow",
+  "home": {
+   "k": "hollow",
+   "x": 116,
+   "y": 89
+  },
+  "tail": false,
+  "napSink": [
+   7,
+   4
+  ]
  },
  "games": {
   "memoryDeck": [
@@ -435,11 +446,49 @@
    "firefly": "fireflies",
    "lantern": "lanterns",
    "cloud": "clouds",
-   "book": "books"
+   "book": "books",
+   "whimber_token": "Wingsongs"
   },
   "token": "whimber_token",
   "runnerKind": "glide",
-  "builder": "nest"
+  "builder": "nest",
+  "style": "sky",
+  "builderMode": "weave",
+  "titles": {
+   "pairs": "Moonlight Pairs",
+   "dig": "Nest Weave",
+   "run": "Moonlight Glide",
+   "catch": "Starfall Catch",
+   "stack": "Cloud Steps"
+  },
+  "icons": {
+   "pairs": "🌙",
+   "dig": "🪺"
+  },
+  "units": {
+   "catch": "stars",
+   "stack": "clouds"
+  },
+  "catchBanner": "STARGAZE TIME!",
+  "stackItem": "cloud",
+  "digLabel": "Coziest nest"
  },
- "icon_fallback": "bird"
+ "icon_fallback": "bird",
+ "ui": {
+  "homeTitle": "hollow",
+  "awayTreasure": "I found you a glowing treasure while exploring",
+  "postcardScene": "night",
+  "pathIndex": 1,
+  "conversations": {
+   "where_from": "whimber_where_from_v2",
+   "almost_ready": "whimber_almost_ready"
+  }
+ },
+ "coats": [
+  "#8a6f5a",
+  "#a08670",
+  "#6f6a80",
+  "#b49a7a",
+  "#7d6150"
+ ]
 }

@@ -36,11 +36,12 @@ function memories(list){const seen=new Set(),out=[];const L=(list||[]).filter(m=
   for(const m of [...rest,...met]){const p=phrase(m);if(p&&!seen.has(p)){seen.add(p);out.push(p)}}return out}
 // C1: postcards sign with the Echo's CURRENT name (typed or a kept default such as Pipsong / Whimber), never a family name
 // (Howling(s)/Wingsong(s), plus the legacy 'Slyte' as a safety net); none -> "your friend"
-const FAMILY=/^(slytes?|howlings?|wingsongs?)$/i;
+const FAMS=(typeof window!=='undefined'&&window.FAMILIES)||null,esc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const FAMILY=new RegExp('^('+['slytes?','howlings?','wingsongs?'].concat(FAMS?FAMS.order.flatMap(f=>[FAMS[f].label,FAMS[f].plural].map(t=>esc(t.toLowerCase()))):[]).join('|')+')$','i');   // every family label/plural from the manifests + legacy
 function signName(n){const t=String(n==null?'':n).trim();return t&&!FAMILY.test(t)?t:null}
 function sign(text,n){const nm=signName(n);return nm?text.replace(/\{echo_name\}/g,nm):text.replace(/, \{echo_name\}/g,'').replace(/\{echo_name\}/g,'your friend')}
-function build(o){const sp=o.kind==='owl'||o.kind==='whimber'?'whimber':'slyte',mem=memories(o.memories);let mi=0;
-  const gift=o.gift||(sp==='slyte'?'shiny trinket':'soft feather');
+function build(o){const sp=FAMS?FAMS.of(o.kind).dialogue:(o.kind==='owl'||o.kind==='whimber'?'whimber':'slyte'),mem=memories(o.memories);let mi=0;
+  const gift=o.gift||(FAMS&&FAMS.of(o.kind).creature.treasure)||(sp==='slyte'?'shiny trinket':'soft feather');
   return T[sp].map(c=>{let tpl=c.text;
     if(tpl.includes('{shared_memory}')){if(mi<mem.length)tpl=tpl.replace('{shared_memory}',mem[mi++]);else tpl=c.alt||tpl.replace('{shared_memory}','you')}
     if(c.trinket&&/trinket|shiny/i.test(o.gift||''))tpl=c.trinket;

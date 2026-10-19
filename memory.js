@@ -1,14 +1,14 @@
 // Shiny Pairs engine (Memory card game, game spec v0.3 §1). Pure logic, testable in node.
 // One board spans the 3 rounds; rounds end at pairs 3/6/10 (easy 2/4/6). No timer, no fail, no turn limit.
 (function(root){
-const DECK={slyte:['blackberry','honey_cake','trinket','leaf','nut','apple','daisy','pinecone','mushroom','ball'],
-  whimber:['star','moon','leaf_green','comet','feather','dewdrop','firefly','lantern','cloud','book']};
+const FAMS=root.FAMILIES||(typeof require!=='undefined'&&(()=>{const w=typeof window!=='undefined'?window:(global.window=global);require('./families.js');return w.FAMILIES})()),DECK={};
+for(const f of FAMS.order)DECK[f]=FAMS[f].games.memoryDeck;   // decks live in the family manifests
 const LEVELS={easy:{pairs:6,cols:3,rows:4,hintAfter:2,rounds:[2,4,6]},standard:{pairs:10,cols:4,rows:5,hintAfter:3,rounds:[3,6,10]},
   bigkid:{pairs:10,cols:4,rows:5,hintAfter:0,rounds:[3,6,10],stars:true}};
 function rng(seed){let s=(seed>>>0)||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
 function create(o){o=o||{};const level=LEVELS[o.level]?o.level:'standard',L=LEVELS[level],r=rng(o.seed||Date.now());
-  let items=(DECK[o.species||'slyte']).slice(0,L.pairs);
-  if(o.disguise&&level==='bigkid')items[items.length-1]='slyte_token';   // Master of Disguise: one hidden "Slyte" pair (board stays 20)
+  let items=(o.deck||DECK[o.species||'slyte']).slice(0,L.pairs);   // deck: manifest games.memoryDeck
+  if(o.disguise&&level==='bigkid')items[items.length-1]=o.token||'slyte_token';   // Master of Disguise: one hidden "Slyte" pair (board stays 20)
   const cards=[];items.forEach(it=>{cards.push({item:it,up:false,paired:false});cards.push({item:it,up:false,paired:false})});
   for(let i=cards.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}
   return {level,L,cols:L.cols,rows:L.rows,cards,open:[],pairs:0,turns:0,missStreak:0,hint:null,pending:false,events:[],cursor:0,done:false,roundIdx:0}}

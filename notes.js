@@ -4,10 +4,11 @@
 // notes that drifts off toward the wild. All motion in integer pixels at the app's 12 fps (83 ms), deterministic per seed.
 (function(root){
 const CELL=12,FPS_MS=83,BAYER=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
-const TINT={slyte:['#FFD27A','#FF8FB8','#FFA97A','#8FD3FF'],whimber:['#C9A8FF','#8FD3FF','#8EEBC8','#FFD27A']};
+const FAMS=root.FAMILIES,TINT={},ROW0={},SHEET={};   // per family from the manifests (families/<id>.json aura.notes {sheet,tints,row0})
+if(FAMS)for(const f of FAMS.order){const n=FAMS[f].notes;if(n){TINT[f]=n.tints;ROW0[f]=n.row0;SHEET[f]=n.sheet}}
 const imgs={};
-const FAM=f=>TINT[f]?f:'slyte';   // any family with a px/fx/notes_<id>.png sheet + TINT/ROW0 entry (twitchel added by Purrlings v1)
-function sheet(fam){fam=FAM(fam);if(!imgs[fam]&&typeof Image!=='undefined'){const i=new Image();i.src='px/fx/notes_'+fam+'.png';imgs[fam]=i}return imgs[fam]}
+const FAM=f=>TINT[f]?f:Object.keys(TINT)[0];   // unknown family -> the first family's notes
+function sheet(fam){fam=FAM(fam);if(!imgs[fam]&&typeof Image!=='undefined'){const i=new Image();i.src=SHEET[fam]||('px/fx/notes_'+fam+'.png');imgs[fam]=i}return imgs[fam]}
 function rng(seed){let a=(seed|0)||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function pick(R,w){let r=R()*w.reduce((a,b)=>a+b,0);for(let i=0;i<w.length;i++){if((r-=w[i])<0)return i}return 0}
 function stamp(cx,img,g,fade,tint,x,y){if(img&&img.complete!==false&&(img.naturalWidth||img.width))cx.drawImage(img,(g*3+fade)*CELL,tint*CELL,CELL,CELL,Math.round(x)-6,Math.round(y)-6,CELL,CELL)}
@@ -19,7 +20,6 @@ function stamp(cx,img,g,fade,tint,x,y){if(img&&img.complete!==false&&(img.natura
 // into those 4 rows (base -> tint, shade -> tint mixed 35 % toward plum ink); 11 colours + transparent, cached per colour set.
 const INK=[0x3B,0x2A,0x5C],CRM=[0xFF,0xF1,0xC4],WH=[255,255,255];
 const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)),lum=c=>(.2126*c[0]+.7152*c[1]+.0722*c[2])/255;
-const ROW0={slyte:['#FFD27A','#E39A4A'],whimber:['#C9A8FF','#9474D9']};
 function lift(c){for(let k=0;k<6&&lum(c)<.42;k++)c=mix(c,CRM,.2);return c.map(v=>Math.max(8,v))}
 function bodyOf(d){if(!d)return null;const n={};let best=null,bn=0;
   for(let i=0;i<d.length;i+=4){if(d[i+3]<255)continue;const r=d[i],g=d[i+1],b=d[i+2];

@@ -60,7 +60,7 @@ A.onTalk=function(o){if(!o)return;if(o.expr==='love'){const e=px();if(e)PIXEL.bl
 // ---- G1: need cues in body language (top need only, one every 8-15 s, none in the first 20 s; never droopy or "waiting")
 A.cueN={};A.cueMax=10;
 function topNeed(){const S=W.__echo&&W.__echo.state;if(!S||!S.needs)return null;const NS=W.NeedSelect;
-  const p=NS?NS.pressures(S.needs,S.kind==='fox'?'slyte':'whimber',W.__echo.band?W.__echo.band():'day'):{};const t=NS?NS.top(p):null;
+  const p=NS?NS.pressures(S.needs,W.FAMILIES?FAMILIES.of(S.kind).dialogue:(S.kind==='fox'?'slyte':'whimber'),W.__echo.band?W.__echo.band():'day'):{};const t=NS?NS.top(p):null;
   if(t)return t;return NS&&NS.content(S.needs)?'content':null}
 A.cue=function(st){const e=px(),c=cr();if(!e||!c)return;A.log.push('cue:'+st);A.cueN[st]=(A.cueN[st]||0)+1;
   if(st==='hungry'){PIXEL.queue(e,[[FR.cur1,3],[FR.cur2,3],[FR.cur1,3],[FR.think,4]],true);c.classList.add('alshiver');setTimeout(()=>c.classList.remove('alshiver'),700)}
@@ -74,7 +74,7 @@ setInterval(()=>{const e=px();const S=W.__echo&&W.__echo.state;if(e&&S&&S.needs)
   if(Date.now()-A.sess.t0<20000||!idle()||asleep())return;const st=topNeed();if(!st||(A.cueN[st]||0)>=A.cueMax)return;A.cue(st)},500);
 // ---- F1: food arrives (drop / bush_pop / float / plate), the Echo watches, eats bite by bite, reacts by tier
 A.food=function(food,tier,done){const p=scenePos(),s=sc(),S=W.__echo.state;if(!p||!s){done&&done();return}A.busy=true;
-  const fox=S.kind==='fox',side=fox?1:-1,fx0=p.x+side*16-8,fy=p.feet-16,how=food.delivery,e=px();
+  const fox=W.FAMILIES?FAMILIES.of(S.kind).games.style!=='sky':S.kind==='fox',side=fox?1:-1,fx0=p.x+side*16-8,fy=p.feet-16,how=food.delivery,e=px();
   const it=fx('alfood','',fx0,fy,16,16);it.style.backgroundImage=`url(px/${food.icon}.png)`;let plate=null,leaf=null;
   const over=()=>{const c=cr(),z=(parseInt(c&&c.style.zIndex)||2)+1;it.style.zIndex=z+1;if(plate)plate.style.zIndex=z;if(leaf)leaf.style.zIndex=z+1};setTimeout(over,0);   // food draws in front of the Echo (lvPlace depth-sorts #cr to 10+y/10); #sc isolates it, so modals still cover it
   if(e)W.setExpr&&W.setExpr('curious');

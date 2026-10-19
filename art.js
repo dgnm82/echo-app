@@ -164,7 +164,8 @@ const PROPS={
 };
 // Pixel milestone 1: Slyte and all scene backgrounds are pixel art (pixel.js / px/). Whimber keeps its old
 // vector art for now, shown in the same 48 px slot, until its pixel milestone.
-window.ART={creature:(k,g)=>k==='fox'?PIXEL.slyte(g):PIXEL.whimber(g),vectorOwl:owl, bg:k=>PIXEL.bg(k==='night'?'night':'dusk'), props:{bush:'',tree:''}, vectorBG:k=>BG[k]()};
+window.ART={creature:(k,g)=>{const F=window.FAMILIES,sp=F?F.of(k).sprite:(k==='fox'?'slyte':'whimber');return PIXEL[sp]?PIXEL[sp](g):PIXEL.echo(sp,g)},   // manifest sprite id
+vectorOwl:owl, bg:k=>PIXEL.bg(k==='night'?'night':'dusk'), props:{bush:'',tree:''}, vectorBG:k=>BG[k]()};
 // expression + reaction controller
 window.setExpr=(expr,el)=>{(el?[el]:document.querySelectorAll('.echo-svg')).forEach(s=>s.setAttribute('data-expr',expr||'neutral'))};
 window.react=(kind,el)=>{const c=el||document.getElementById('cr');if(!c)return;if(window.PIXEL){const px=c.querySelector('.px-echo');if(px)PIXEL.react(px,kind)}c.classList.remove('r-eat','r-happy','r-pet','r-excited','r-sad','r-sleepy');void c.offsetWidth;c.classList.add('r-'+kind);clearTimeout(c._rt);c._rt=setTimeout(()=>c.classList.remove('r-'+kind),1600)};
