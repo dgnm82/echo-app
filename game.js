@@ -785,10 +785,10 @@ function play(){
 }
 let GT=0;   // game token: a pending next-round timer is dropped if the child left the game
 function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,memoryGame],[G.icons.dig,G.titles.dig,linesGame]];
-  if(S.bond>=C.unlock.catch)L.push([fox?'🍓':'🌟',fox?'Berry Catch':'Starfall Catch',catchGame]);
-  if(S.bond>=C.unlock.run)L.push([fox?'🍂':'✨',fox?'Meadow Dash':'Moonlight Glide',runGame]);
-  if(S.bond>=C.unlock.stack)L.push([fox?'🥞':'☁️',fox?'Pancake Tower':'Cloud Steps',stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const t=title.toLowerCase(),fox=GROUND();Music.game(/pairs/.test(t)?(fox?'shiny_pairs':'starlight_pairs'):/builder|den dig|nest weave/.test(t)?(fox?'fort_builder':'hollow_builder'):/catch/.test(t)?(fox?'berry_catch':'starfall_catch'):/tower|steps/.test(t)?(fox?'pancake_tower':'cloud_steps'):(fox?'meadow_dash':'moonlight_glide'))}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+  if(S.bond>=C.unlock.catch)L.push([G.icons.catch||(fox?'🍓':'🌟'),G.titles.catch,catchGame]);
+  if(S.bond>=C.unlock.run)L.push([G.icons.run||(fox?'🍂':'✨'),G.titles.run,runGame]);
+  if(S.bond>=C.unlock.stack)L.push([G.icons.stack||(fox?'🥞':'☁️'),G.titles.stack,stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
+function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const fox=GROUND(),M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
@@ -847,7 +847,7 @@ function digLevel(){const f=digState(),set=S.digLevel||S.fortLevel||'auto';
 const HOMEPOS=()=>FAMD().scene.home;   // per family: manifest scene.home {k: px/home/<k>_*.png + homes.json key, x, y}
 function homeKind(){return HOMEPOS().k}
 function homeProp(cls){const h=HOMEPOS(),k=h.k,u=n=>`px/home/${k}_${n}.png`;
-  return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${k==='log'?'Our hollow log':'Our hollow'}">
+  return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${FUI().homeLabel||(k==='log'?'Our hollow log':'Our hollow')}">
     <i class="hb" style="background-image:url(${u('back')})"></i><canvas class="hgl hgi" data-m="${u('glow_in')}"></canvas><i class="hf" style="background-image:url(${u('front')})"></i><canvas class="hgl hgo" data-m="${u('glow_out')}"></canvas><i class="htail"></i></div>`}
 const HMASK={};function homeMask(url,pal,lv,cb){const A=PIXEL.AURA,key=url+'|'+pal+'|'+lv;if(HMASK[key])return cb(HMASK[key]);if(!A)return;const ro=A.roles[pal]||Object.values(A.roles)[0];
   const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(0,0,c.width,c.height),D=d.data;
@@ -874,11 +874,12 @@ function linesGame(){
   const fox=GROUND(),MODE=GG().builderMode,quiet=S.talents.includes('Silent Flight'),low=lowFx(),UI=GTU().LINES_UI||{bg:{},clearMs:250,bannerMs:1600,bigBannerMs:2000,bgBandEvery:2};
   const g=LinesEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:S.talents.includes('Master of Disguise')});
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
-  gameShell(fox?'Den Dig':'Nest Weave');const gs=$('#gs');gs.classList.add('fortgame','diggame');
-  gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="${fox?'Den':'Nest'} board"></canvas>
+  const DW=Object.assign(fox?{board:'Den',meter:'deeper',big:'Big dig!',done:'dug',memory:'We dug the den {n} rows deep'}:{board:'Nest',meter:'woven',big:'Big weave!',done:'woven',memory:'We wove the nest {n} rows'},GG().digWords||{});
+  gameShell(GG().titles.dig);const gs=$('#gs');gs.classList.add('fortgame','diggame');
+  gs.insertAdjacentHTML('beforeend',`<canvas id="fb" class="fb" width="${W}" height="${H}" style="width:${W}px;height:${H}px" aria-label="${DW.board} board"></canvas>
     <div class="fbside"><div class="fbnext"><span>next</span><canvas id="fbn" width="32" height="32"></canvas></div>
       <div class="dgstat"><span>score</span><b id="dgs">0</b><span>level</span><b id="dgl">1</b><span>rows</span><b id="dgr">0</b></div>
-      <div class="dgmeter" id="dgm" aria-label="${fox?'deeper':'woven'}"></div><div class="dgcap">${fox?'deeper':'woven'}</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}</div>
+      <div class="dgmeter" id="dgm" aria-label="${DW.meter}"></div><div class="dgcap">${DW.meter}</div>${lvlName?`<div class="fblvl">${lvlName}</div>`:''}</div>
     <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
   const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d');
@@ -899,7 +900,7 @@ function linesGame(){
   function after(){for(const e of LinesEngine.take(g)){
       if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});
       if(e.type==='clear'){SFX('blocks_row_glow');glow={rows:e.rows,cells:e.cells,t:now()};clears++;react('happy');if(!low)hop();if(g.lines%12===0||Math.floor(g.lines/12)>Math.floor((g.lines-e.n)/12))wrapT=now();
-        if(e.big){g2Banner(gs,fox?'Big dig!':'Big weave!');talk(B('dig_big'),UI.bigBannerMs);SFX('blocks_floor_done')}else if(clears%2===0)talk(B('dig_row'),1800);chirp()}
+        if(e.big){g2Banner(gs,DW.big);talk(B('dig_big'),UI.bigBannerMs);SFX('blocks_floor_done')}else if(clears%2===0)talk(B('dig_row'),1800);chirp()}
       if(e.type==='level'){g2Banner(gs,'Level '+e.level);talk(B('dig_level'),UI.bannerMs)}
       if(e.type==='disguise'){react('excited');talk(B('dig_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
@@ -908,9 +909,9 @@ function linesGame(){
     const r=bestPut('dig',level,R.score);if(S.talents.includes('Super Jumper'))react('happy');
     gs.classList.add('dgend');gs.insertAdjacentHTML('beforeend',`${Array.from({length:8},(_,i)=>`<i class="dgspark${low?'':' tw'}" style="left:${10+i*15}px;top:${60+(i%3)*14}px"></i>`).join('')}`);if(!low)hop();
     SFX('blocks_floor_done');setTimeout(()=>SFX('blocks_row_glow'),400);
-    remember(fox?`We dug the den ${lines} rows deep`:`We wove the nest ${lines} rows`,'dig_rows_'+lines);
+    remember(DW.memory.replace('{n}',lines),'dig_rows_'+lines);
     setExpr('happy');react('happy');talk(B(r.isBest&&!firstEver?'dig_end_best':'dig_end',{rows:lines}),2200);save();lullaby();
-    setTimeout(()=>endCard({game:'dig',unit:'points',score:R.score,was:r.was,best:Math.max(R.score,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`${lines} rows ${fox?'dug':'woven'}`,`level ${R.level}`],onAgain:()=>linesGame()}),900)}
+    setTimeout(()=>endCard({game:'dig',unit:'points',score:R.score,was:r.was,best:Math.max(R.score,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`${lines} rows ${DW.done}`,`level ${R.level}`],onAgain:()=>linesGame()}),900)}
   // touch: drag the piece sideways, tap it to turn, swipe down to drop
   let pd=null;cv.addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect(),k=r.width/W;pd={x:e.clientX,y:e.clientY,t:Date.now(),k,r,moved:false,off:g.piece?Math.floor((e.clientX-r.left)/k/16)-g.piece.x:0};cv.setPointerCapture&&cv.setPointerCapture(e.pointerId)});
   cv.addEventListener('pointermove',e=>{if(!pd||!g.piece)return;const col=Math.floor((e.clientX-pd.r.left)/pd.k/16)-pd.off;if(Math.abs(e.clientX-pd.x)>pd.k*6)pd.moved=true;if(col!==g.piece.x){LinesEngine.moveTo(g,col);draw()}});

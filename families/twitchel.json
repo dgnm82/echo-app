@@ -689,7 +689,10 @@
   },
   "icons": {
    "pairs": "⭐",
-   "dig": "🧶"
+   "dig": "🧶",
+   "catch": "🍓",
+   "run": "🍂",
+   "stack": "🥞"
   },
   "units": {
    "catch": "snacks",
@@ -697,7 +700,14 @@
   },
   "catchBanner": "SNACK TIME!",
   "stackItem": "pancake",
-  "digLabel": "Coziest basket"
+  "digLabel": "Coziest basket",
+  "digWords": {
+   "board": "Basket",
+   "meter": "cozier",
+   "big": "Big tumble!",
+   "done": "tumbled",
+   "memory": "We tumbled yarn into the basket, {n} rows"
+  }
  },
  "icon_fallback": "cat",
  "creature": {
@@ -758,7 +768,8 @@
   },
   "tokenEmoji": "🔔",
   "afterTitle": "The meadow",
-  "moonCall": "Mrrp!"
+  "moonCall": "Mrrp!",
+  "homeLabel": "Our cozy basket"
  },
  "looks": [
   "cat",

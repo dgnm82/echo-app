@@ -331,6 +331,7 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 /* home_log_hollow v1: foreground home; the Echo sits between back and front while it naps inside */
 .home{position:absolute;pointer-events:auto}.home>*{position:absolute;left:0;top:0;display:block;background:no-repeat;image-rendering:pixelated}
 .home-log{width:84px;height:46px}.home-log>i,.home-log>canvas{width:84px;height:46px}.home-hollow{width:64px;height:112px}.home-hollow>i,.home-hollow>canvas{width:64px;height:112px}
+.home-basket{width:72px;height:40px}.home-basket>i,.home-basket>canvas{width:72px;height:40px}   /* Purrlings: homes.json basket size */
 .home .hb,.home .hgi{z-index:1}.home .hf,.home .hgo{z-index:1}.home.in .hf,.home.in .hgo,.home .htail{z-index:3}#sc .home.in~#cr,#sc #cr{z-index:2}
 .home .hgl{display:none}.home.glow .hgl{display:block}.home .htail{display:none;width:30px!important;height:26px!important}.home-hollow .htail{width:24px!important;height:20px!important}.home .htail.on{display:block}
 .home.peek .hf{opacity:.5}.home.book{position:relative;left:auto!important;top:auto!important}
