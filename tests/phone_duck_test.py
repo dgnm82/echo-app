@@ -15,7 +15,7 @@ async def main():
         if await pg.evaluate("!!Music.playing"):break
         await pg.wait_for_timeout(200)
       sp='slyte' if kind=='fox' else 'whimber'
-      await pg.evaluate(f"Sound.preload&&Sound.preload(['{sp}_happy_1','{sp}_happy_2','{sp}_happy_3'])");
+      await pg.evaluate(f"Sound.preload&&Sound.preload('{kind}')");   # preload takes a kind (it used to get a name list, which preloaded the fox voices)
       for _ in range(100):
         if await pg.evaluate(f"['{sp}_happy_1','{sp}_happy_2','{sp}_happy_3'].every(n=>Sound.loaded.includes(n))"):break
         await pg.wait_for_timeout(200)

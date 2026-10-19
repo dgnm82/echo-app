@@ -33,7 +33,8 @@ function purgeFeelings(s){let ch=false;if('feelings' in s){delete s.feelings;ch=
   if(Array.isArray(s.checkins))s.checkins.forEach(k=>{if(bad.test(k.text)){k.text=k.text.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.');ch=true}});
   if(Array.isArray(s.postcards)){const p=s.postcards.map(x=>bad.test(x)?x.replace(/I still think about [^.]*\. It makes me [^.]*\./,'I found a glimmery leaf today.'):x);if(p.join()!==s.postcards.join()){s.postcards=p;ch=true}}
   if(ch)try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
-function save(){if(S&&S.needs){const m=S.metAt=S.metAt||{},p=sess._nv||{};for(const k in S.needs)if(p[k]!=null&&S.needs[k]>p[k])m[k]=now();sess._nv=Object.assign({},S.needs)}if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}if(S&&S.needs&&document.getElementById('sc'))thoughtRefresh()}
+function save(){if(S&&S.kind&&window.Sound&&Sound.unlocked&&sess._pk!==S.kind){sess._pk=S.kind;Sound.preload(S.kind)}   // the family's voices: unlock() runs before the Echo exists, so it preloaded the first family's
+  if(S&&S.needs){const m=S.metAt=S.metAt||{},p=sess._nv||{};for(const k in S.needs)if(p[k]!=null&&S.needs[k]>p[k])m[k]=now();sess._nv=Object.assign({},S.needs)}if(S&&!window.__wiped){S.last=now();localStorage.setItem(KEY,JSON.stringify(S))}if(S&&S.needs&&document.getElementById('sc'))thoughtRefresh()}
 // need thought bubble (playtest fix): re-picked whenever a need changes (every save), hidden when nothing is pressing; follows the Echo as it moves
 const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏️':'sleep','💗':'pet'}[w]||'talk'):w;
 function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}

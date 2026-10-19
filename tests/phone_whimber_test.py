@@ -17,10 +17,11 @@ async def main():
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(400);await pg.click('#tree')
     seen=set()
     for _ in range(80):
-      c=await pg.evaluate("(document.querySelector('#cr .px-echo')||{})._col");seen.add(c)
-      if c=='ev0:7':await shot('arrival-mid')
+      c=await pg.evaluate("[window.__arrive,!!document.querySelector('canvas.notearrive')]");seen.add(tuple(c))
+      if c[1] and 'mid' not in seen:seen.add('mid');await shot('arrival-mid')
+      if c[0]==2:break
       await pg.wait_for_timeout(40)
-    assert any(str(x).startswith('ev0:') for x in seen),seen
+    assert (1,True) in seen and any(x[0]==2 for x in seen if isinstance(x,tuple)),seen   # C2: the arrival forms from notes (NoteFX.arrive), no ev0 light frames
     assert 'whimber_' in await pg.evaluate("document.querySelector('#cr .px-echo').style.backgroundImage")
     await pg.wait_for_timeout(1500);await shot('arrival-end')
     c=pg.locator('.choices button').first;await c.wait_for(timeout=40000);await c.click();await c.click();await pg.wait_for_timeout(3000)

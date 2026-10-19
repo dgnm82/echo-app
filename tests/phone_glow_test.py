@@ -51,8 +51,11 @@ async def main():
       # reduced motion: the step-up shows the full aura in one frame
       await pg.evaluate("(()=>{const S=__echo.state;S.lowfx=true;S.releasePath=0;S.bond=0;S.glowMax=0;__echo.home()})()");await pg.wait_for_timeout(300)
       await pg.evaluate("(()=>{const S=__echo.state;S.bond=370;S.bondShown=9;__echo.glowSync()})()");await pg.wait_for_timeout(100);assert await pg.evaluate("document.querySelector('#cr .px-echo')._ring==null"),"reduced motion: no ring-by-ring growth";await pg.wait_for_timeout(300)
-      ext=await pg.evaluate("(()=>{const d=document.querySelector('#cr canvas.aura').getContext('2d').getImageData(0,0,74,65).data;let x0=99;for(let y=0;y<65;y++)for(let x=0;x<74;x++)if(d[(y*74+x)*4+3])x0=Math.min(x0,x);return x0})()")
-      assert ext<=13-5,ext
+      ext=await pg.evaluate("""(()=>{const d=document.querySelector('#cr canvas.aura').getContext('2d').getImageData(0,0,74,65).data;let x0=99;for(let y=0;y<65;y++)for(let x=0;x<74;x++)if(d[(y*74+x)*4+3])x0=Math.min(x0,x);
+        const el=document.querySelector('#cr .px-echo'),im=new Image();im.src=/url\\("?([^")]+)/.exec(el.style.backgroundImage)[1];const bp=el.style.backgroundPosition.split(' ').map(v=>-parseInt(v)||0);
+        const c=document.createElement('canvas');c.width=48;c.height=48;const k=c.getContext('2d');k.drawImage(im,bp[0],bp[1],48,48,0,0,48,48);const e=k.getImageData(0,0,48,48).data;let s0=99;for(let y=0;y<48;y++)for(let x=0;x<48;x++)if(e[(y*48+x)*4+3])s0=Math.min(s0,x);
+        return [x0,s0+13]})()""")
+      R4=AU['radius']['4'];assert ext[0]<=ext[1]-(R4-1),(kind,ext)   # lowfx: G4 at full radius at once, measured from the sprite's own edge (not the 48px box; sprites vary per look)
       await pg.close()
     assert not bad,bad[:3]
     print('ERR',errs);assert not [e for e in errs if '404' in e or 'Error' in e],errs
