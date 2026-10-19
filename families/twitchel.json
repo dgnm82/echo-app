@@ -547,6 +547,13 @@
    "cheetah": "goodbye_cheetah",
    "snowleopard": "goodbye_snowleopard",
    "lynx": "goodbye_lynx"
+  },
+  "games": {
+   "pairs": "cozy_pairs",
+   "dig": "yarn_tumble",
+   "catch": "snack_catch",
+   "stack": "cushion_tower",
+   "run": "meadow_dash_twitchel"
   }
  },
  "aura": {
@@ -642,7 +649,8 @@
    },
    "dropActs": [
     "butterfly_chase"
-   ]
+   ],
+   "art": "twitchel_"
   }
  },
  "games": {
@@ -699,7 +707,7 @@
    "stack": "cushions"
   },
   "catchBanner": "SNACK TIME!",
-  "stackItem": "pancake",
+  "stackItem": "cushion",
   "digLabel": "Coziest basket",
   "digWords": {
    "board": "Basket",
@@ -707,7 +715,28 @@
    "big": "Big tumble!",
    "done": "tumbled",
    "memory": "We tumbled yarn into the basket, {n} rows"
-  }
+  },
+  "stackBase": "px/stack/rug_base.png",
+  "builderArt": "yarn",
+  "catchArt": {
+   "bg": "px/scenes/twitchel_garden_day.png",
+   "canopy": "px/catch/awning.png"
+  },
+  "runArt": "garden",
+  "builderBg": [
+   [
+    "#C9A3B4",
+    "#D1ADBD"
+   ],
+   [
+    "#B996AE",
+    "#C2A0B7"
+   ],
+   [
+    "#A98AA6",
+    "#B394AF"
+   ]
+  ]
  },
  "icon_fallback": "cat",
  "creature": {
@@ -761,15 +790,20 @@
   },
   "keepsake": {
    "type": "songbell",
-   "art": "px/fw/songbell.png",
+   "art": "px/fw/songbell_glim4.png",
    "hint": "purr bell",
    "emoji": "🔔",
-   "index": 2
+   "index": 2,
+   "frames": 4
   },
   "tokenEmoji": "🔔",
   "afterTitle": "The meadow",
   "moonCall": "Mrrp!",
-  "homeLabel": "Our cozy basket"
+  "homeLabel": "Our cozy basket",
+  "gift": {
+   "emoji": "🎀",
+   "name": "a ribbon bow"
+  }
  },
  "looks": [
   "cat",

@@ -87,6 +87,7 @@ async def run(b,dev,vp,errs,full=True):
       if 'branch' in txt.lower():hit=True;await shot('ceremony-resumed');break
       await pg.wait_for_timeout(50)
     assert hit,txt
+  if KIND=='cat':await pg.locator('.choices button',has_text='a ribbon bow').first.wait_for(timeout=40000);assert not await pg.locator('.choices button',has_text='a flower').count(),'cats get the bow, not the fox flower'
   await pick(t=40000)   # C4 the gift: the third option (flower / pebble)
   await pg.wait_for_timeout(200)
   s=await st();print('gift',s['fw']['gift'])

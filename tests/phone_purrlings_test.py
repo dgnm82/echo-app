@@ -14,7 +14,7 @@ async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];b404=[]
     for i,(animal,chip,name) in enumerate(CATS):
-      ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+      ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await pg.add_init_script('performance.setResourceTimingBufferSize(20000)')
       pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
       async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
       await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600);await T('#obgo',400)
@@ -39,14 +39,14 @@ async def main():
         seen={}
         for _ in range(200):
           t=await pg.evaluate("(document.getElementById('b')||{}).textContent||''")
-          for k in ('cat songs','every cat!'):
-            if k in t and k not in seen:await pg.wait_for_timeout(700);seen[k]=await pg.evaluate(FITS+"('#b')");await pg.screenshot(path=f"{OUT}/origin-line-{k.split()[1].strip('!')}.png")
+          for k in ('cat songs','Cat, lion'):
+            if k in t and k not in seen:await pg.wait_for_timeout(700);seen[k]=await pg.evaluate(FITS+"('#b')");await pg.screenshot(path=f"{OUT}/origin-line-{'songs' if 'songs' in k else 'cat'}.png")
           if len(seen)==2:break
           if await pg.locator('.choices button').count():
             try:c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
             except Exception:pass
           await pg.wait_for_timeout(150)
-        check(seen.get('cat songs') and seen.get('every cat!'),'origin lines shown and fit the bubble '+str(seen))
+        check(seen.get('cat songs') and seen.get('Cat, lion'),'origin lines shown and fit the bubble '+str(seen))
         await pg.wait_for_timeout(2500);await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML='';document.querySelectorAll('.full').forEach(f=>f.remove())")
         # data: borrowed scenes, foods, chirps
         sc=await pg.evaluate("SCENES.twitchel.map(s=>[s.id,s.title,s.wp.map(w=>w.id+':'+w.acts.join('/'))])")
@@ -68,6 +68,21 @@ async def main():
         top=await pg.evaluate("(document.querySelector('.top b')||{}).textContent||''");cap=await pg.evaluate("(document.querySelector('.dgcap')||{}).textContent||''")
         check(top=='Yarn Tumble' and cap=='cozier' and (await pg.evaluate("__echo.state.gameCounts||{}")).get('dig')==1,f'Yarn Tumble opens: {top} / {cap}')
         await pg.screenshot(path=f'{OUT}/yarn-tumble.png');await pg.click('#quit');await pg.wait_for_timeout(2500)
+        RES="(k=>performance.getEntriesByType('resource').some(e=>e.name.includes(k)))"
+        for k in ('px/yarn/b_','music/game_yarn_tumble_loop','px/scenes/twitchel_clearing_'):check(await pg.evaluate(RES+f"('{k}')"),'loaded '+k)
+        for title,shot,keys in (('Snack Catch','snack-catch',('twitchel_garden_day','catch/awning','game_snack_catch_loop')),('Cushion Tower','cushion-tower',('stack/cushion_','stack/rug_base','twitchel_meadow_day','game_cushion_tower_loop')),('Meadow Dash','meadow-dash',('run/garden_sky','run/garden_gnd','/twitchel_run0','game_meadow_dash_twitchel_loop'))):
+          await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';CONFIG.sessionLimits.games=99;Object.assign(__echo.state,{bond:CONFIG.unlock.stack+5,bondShown:3,napUntil:0});Object.assign(__echo.state.needs,{food:80,play:20,rest:90,comfort:80});__echo.home()");await pg.wait_for_timeout(800);await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pg.wait_for_timeout(500)
+          L=await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent)")
+          if not any(title in l for l in L):check(False,f'{title} in menu {L} bond {await pg.evaluate("__echo.state.bond")}');continue
+          c=pg.locator('.choices button',has_text=title).first;await c.click();await c.click();await pg.wait_for_timeout(1200)
+          if await pg.locator('.choices button').count():
+            c=pg.locator('.choices button').first;await c.click();await c.click()
+          await pg.wait_for_timeout(2500);await pg.mouse.click(195,500);await pg.wait_for_timeout(800);await pg.screenshot(path=f'{OUT}/{shot}.png')
+          for k in keys:check(await pg.evaluate(RES+f"('{k}')"),f'{title} loaded {k}')
+          check(not await pg.evaluate(RES+"('/slyte_run')"),f'{title}: no fox runner frames')
+          if await pg.locator('#quit').count():await pg.click('#quit')
+          await pg.wait_for_timeout(2500)
+        check(await pg.evaluate("[...document.querySelectorAll('*')].every(e=>!/px\\/scenes\\/(clearing|grove|meadow)_/.test(e.style&&e.style.backgroundImage||''))"),'no fox scene art on screen')
         await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''")
         # bond-up burst (1 -> 2)
         await pg.evaluate("Object.assign(__echo.state,{bond:130,bondShown:1});__echo.state.badges=__echo.state.badges.filter(x=>x!=='place');__echo.home()")

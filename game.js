@@ -453,9 +453,10 @@ function scPickSession(){const L=scUnlocked(),seen=S.scenesSeen=S.scenesSeen||[s
   if(!opts.length){S.scene=scHome().id;return null}
   let t=Math.random()*opts.reduce((a,o)=>a+o[1],0);for(const [id,w] of opts){t-=w;if(t<=0){S.scene=id;break}}if(t>0)S.scene=opts[0][0];return null}
 function scWp(id){const w=curScene().wp.find(x=>x.id===id);return w?[w.xy[0],Math.max(52,w.xy[1]-SC_OY)]:null}
-function scStyle(){const s=curScene();return `background:url(px/scenes/${s.id}_${scVariant()}.png) center bottom/180px 320px no-repeat !important`}
+const SCART=(id,v)=>`px/scenes/${((FAMD().scene||{}).borrow||{}).art||''}${id}_${v}.png`;   // a borrowed scene can carry its own art (manifest scene.borrow.art prefix)
+function scStyle(){const s=curScene();return `background:url(${SCART(s.id,scVariant())}) center bottom/180px 320px no-repeat !important`}
 function scPicker(){   // 'Our places' (bond 140, the place badge): thumbnails of unlocked scenes; picking one travels there
-  const L=scUnlocked();const d=full(`<div class="mcard places"><div class="mtop">${PI('🌲')}<span class="mt">Our places</span></div><div class="plist">${L.map((s,i)=>`<button class="btn place${s.id===curScene().id?' on':''}" data-i="${i}"><i style="background-image:url(px/scenes/${s.id}_${scVariant()}.png)"></i><span>${s.title}</span></button>`).join('')}</div><button class="btn small" id="pclose">Close</button></div>`);
+  const L=scUnlocked();const d=full(`<div class="mcard places"><div class="mtop">${PI('🌲')}<span class="mt">Our places</span></div><div class="plist">${L.map((s,i)=>`<button class="btn place${s.id===curScene().id?' on':''}" data-i="${i}"><i style="background-image:url(${SCART(s.id,scVariant())})"></i><span>${s.title}</span></button>`).join('')}</div><button class="btn small" id="pclose">Close</button></div>`);
   d.style.zIndex=95;d.querySelector('#pclose').onclick=()=>d.remove();
   d.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const s=L[+b.dataset.i];d.remove();document.querySelectorAll('.book').forEach(x=>x.remove());if(s.id===curScene().id)return;
     S.scene=s.id;(S.scenesSeen=S.scenesSeen||[]).includes(s.id)||S.scenesSeen.push(s.id);save();const scr=SCR(),w=document.createElement('div');w.className='scwipe';scr.appendChild(w);setTimeout(()=>{home();setTimeout(()=>w.remove(),400)},300)})}
@@ -788,7 +789,7 @@ function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,m
   if(S.bond>=C.unlock.catch)L.push([G.icons.catch||(fox?'🍓':'🌟'),G.titles.catch,catchGame]);
   if(S.bond>=C.unlock.run)L.push([G.icons.run||(fox?'🍂':'✨'),G.titles.run,runGame]);
   if(S.bond>=C.unlock.stack)L.push([G.icons.stack||(fox?'🥞':'☁️'),G.titles.stack,stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const fox=GROUND(),M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const fox=GROUND(),MG=(FAMD().music||{}).games||{},M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(MG[curGame]||M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
@@ -883,9 +884,9 @@ function linesGame(){
     <div class="fbecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>
     <div class="fbpad"><button class="btn" id="kL" aria-label="Left">◀</button><button class="btn" id="kR" aria-label="Right">▶</button><button class="btn" id="kA" aria-label="Turn"><b>A</b>turn</button><button class="btn" id="kB" aria-label="Drop"><b>B</b>drop</button></div>`);
   const cv=$('#fb'),cx=cv.getContext('2d'),nx=$('#fbn').getContext('2d');
-  const IM={};new Set(Object.values(LinesEngine.MAT[MODE]).concat(['echo','ghost','glow0','glow1','glow2'])).forEach(k=>{IM[k]=new Image();IM[k].src=`px/${MODE}/${/^(ghost|glow)/.test(k)?k:'b_'+k}.png`});
+  const IM={};new Set(Object.values(LinesEngine.MAT[MODE]).concat(['echo','ghost','glow0','glow1','glow2'])).forEach(k=>{IM[k]=new Image();IM[k].src=`px/${GG().builderArt||MODE}/${/^(ghost|glow)/.test(k)?k:'b_'+k}.png`});
   let alive=true,clears=0,glow=null,wrapT=0,tLast=now();
-  function draw(){if(!alive)return;const band=Math.min(2,Math.floor((g.lv-1)/(UI.bgBandEvery||2))),bg=(UI.bg[MODE]||[])[band]||['#2E2452','#3B2A5C'];cx.fillStyle=bg[0];cx.fillRect(0,0,W,H);cx.fillStyle=bg[1];
+  function draw(){if(!alive)return;const band=Math.min(2,Math.floor((g.lv-1)/(UI.bgBandEvery||2))),bg=(GG().builderBg||UI.bg[MODE]||[])[band]||['#2E2452','#3B2A5C'];cx.fillStyle=bg[0];cx.fillRect(0,0,W,H);cx.fillStyle=bg[1];
     for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++)if((x+y)%2)cx.fillRect(x*16,y*16,16,16);
     for(let y=0;y<g.h;y++)for(let x=0;x<g.w;x++){const c=g.grid[y][x];if(c&&IM[c])cx.drawImage(IM[c],x*16,y*16)}
     if(glow){const k=low?1:Math.min(2,Math.floor((now()-glow.t)/(UI.clearMs/3)));glow.rows.forEach((y,i)=>{glow.cells[i].forEach((c,x)=>{if(IM[c])cx.drawImage(IM[c],x*16,y*16)});for(let x=0;x<g.w;x++)cx.drawImage(IM['glow'+k],x*16,y*16)});if(now()-glow.t>(low?83:UI.clearMs))glow=null}
@@ -945,7 +946,7 @@ function catchGame(){
   gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
-  const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(fox)g2Img(IM,'canopy','px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
+  const IM={};const CA=GG().catchArt||{};g2Img(IM,'bg',CA.bg||`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(CA.canopy||fox)g2Img(IM,'canopy',CA.canopy||'px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
   g2Img(IM,'gold',`px/catch/${fox?'apple_gold':'feather_gold_inked'}.png`);ITEMS.forEach(k=>g2Img(IM,k,`px/i_${k}.png`));
   if(fox)['run0','run1','run2','run3','run4','run5','run_happy'].forEach(k=>g2Img(IM,k,`px/${FR.pd}${SPR()}_${k}.png`));else g2Img(IM,'fly',FR.fly);
   let ended=false,cheered=false,lastLine=-9,happy=0,face=1,F=0,pops=[],fx=null,pid=null,ext=0,hold=false;const AN=fetch('px/catch/anchors.json').then(r=>r.json()).then(j=>IM.anch=j).catch(()=>{});
@@ -1000,7 +1001,7 @@ function stackGame(){
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','stackgame');
   gs.insertAdjacentHTML('beforeend',`<canvas id="stc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/stack/${M}_60.png);width:12px;height:8px"></i><span id="sh">0</span> ${hudBest('stack',level)} <span id="sp"></span>`;
-  const IM={};g2Img(IM,'bg',`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);g2Img(IM,'base',fox?'px/stack/plate.png':'px/run/bench.png');
+  const IM={};g2Img(IM,'bg',fox?SCART('meadow','day'):'px/scenes/hilltop_twi.png');g2Img(IM,'base',GG().stackBase||(fox?'px/stack/plate.png':'px/run/bench.png'));
   ['','_perfect'].forEach(p=>['l','m','r'].forEach(s=>g2Img(IM,p+s,`px/stack/${M}${p}_${s}.png`)));[0,1,2,3].forEach(i=>g2Img(IM,'burst'+i,`px/items/burst${i}.png`));
   if(fox)g2Img(IM,'home',PIXEL.sheet(SPR(),S.g));else g2Img(IM,'fly',FR.fly);
   let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0;const perf=new Set();
@@ -1111,8 +1112,8 @@ function runGame(){
   const PL=PIXEL.pals(SP);let pal=PIXEL.variant(S.g&&S.g.seed,SP,S.g&&S.g.pal).pal;if(!PL.includes(pal))pal=PL[0];   // unknown palette: default folder
   const lk=PIXEL.lookOf(SP,S.g,pal),pd=`run/${lk&&lk!==FAMD().look_base?lk+'/':''}${pal}/`,GL=glowNow();   // glow v1: one frame set; the aura carries the bond   // runner frames match the home sprite's palette and stage (runner_polish.md §7)
   window.__runHome=null;if(S.badges.includes('place')){IM.homeRest=new Image();IM.homeRest.src=`px/home/${homeKind()}_front.png`;window.__runHome=IM.homeRest.src}   // home_log_hollow: the log / hollow at the rest stop
-  if(fox){['meadow_sky','meadow_far','meadow_gnd','log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
-    ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+'slyte_'+k))}
+  if(fox){const RA=GG().runArt||'meadow';[['meadow_sky',RA+'_sky'],['meadow_far',RA+'_far'],['meadow_gnd',RA+'_gnd']].forEach(([k,f])=>ld(k,'run/'+f));['log','rock','puddle','sign','sunrock','cloud_day'].forEach(k=>ld(k,'run/'+k));
+    ['run0','run1','run2','run3','run4','run5','jump','fall','tumble','run_happy','disguise0','disguise1','reveal'].concat(['best_flag0','best_flag1'].map(k=>(ld(k,'run/'+k),null))).filter(Boolean).forEach(k=>ld(k,pd+SPR()+'_'+k))}
   else{['hill_sky','hill_stars0','hill_stars1','hill_gnd','cloud','sign_twi','bench','moss','branch120','branch160','branch200','branch240','branch280','branch320','branch360','branch400','cloud_far',...[60,80,100,120,160,200,240,280,320,360].map(v=>'cloudbank'+v),...[120,160,200,240,280,320,360,400].map(v=>'tree'+v),...RUN_BUSH.map(v=>'bush'+v)].forEach(k=>ld(k,'run/'+k));['flap0','flap1','flap2','flap3','glide','tumble','glide_happy'].forEach(k=>ld(k,pd+'whimber_'+k))}
   if(fox){ld('tre','items/'+tre);ld('gold','run/'+tre+'_gold')}else{ld('tre','i_star');ld('gold','i_moon');['best_star0','best_star1'].forEach(k=>ld(k,'run/'+k))}
   let alive=true,acc=0,last=performance.now(),happy=0,pops=[],frame=0;
@@ -1267,7 +1268,7 @@ function fwSay(l){return new Promise(res=>{if(!$('#b'))return res();if(typeof l=
   const sc=$('#sc');let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sc&&sc.removeEventListener('click',fin);res()};const t=setTimeout(fin,ms);setTimeout(()=>sc&&sc.addEventListener('click',fin),350)})}
 function fwChoose(list){return new Promise(res=>choices(list.map(x=>[x[0],x[1],null]),res))}
 const fwWait=ms=>new Promise(r=>setTimeout(r,ms));
-function fwBg(id,v){const sc=$('#sc');if(sc)sc.style.background=`url(px/scenes/${id}_${v}.png) center bottom/180px 320px no-repeat`}
+function fwBg(id,v){const sc=$('#sc');if(sc)sc.style.background=`url(${SCART(id,v)}) center bottom/180px 320px no-repeat`}
 function fwMoveTo(x,y,ms){const c=$('#cr');if(!c)return fwWait(0);return new Promise(res=>{const L0=parseFloat(c.style.left)||90,B0=parseFloat(c.style.bottom)||64,n=Math.max(1,Math.round(ms/83));let i=0;
   const t=setInterval(()=>{i++;const k=i/n;c.style.left=Math.round(L0+(x-L0)*k)+'px';c.style.bottom=Math.round(B0+(y-B0)*k)+'px';if(i>=n){clearInterval(t);res()}},83)})}
 function fwStep(n){const f=fw();f.step=n;save()}
@@ -1304,12 +1305,12 @@ async function fwCeremony0(path,resume){
   star(3);await fwSay(fwLine('edge_explain',0));await fwSay(fwLine('edge_explain',1));fwStep(4);
   // C4 gift: the child gives
   if(!f.gift){await fwSay(B('gift_ask'));const fav=S.g.fav.split(' ');
-    const opts=[['💎',S.treasures[0]||e.treasure],[fav[0],fav.slice(1).join(' ')],fox?['🌸','a flower']:['🪨','a smooth pebble']];
+    const opts=[['💎',S.treasures[0]||e.treasure],[fav[0],fav.slice(1).join(' ')],FUI().gift?[FUI().gift.emoji,FUI().gift.name]:fox?['🌸','a flower']:['🪨','a smooth pebble']];   // manifest ui.gift first: cats walk like the fox
     const i=await fwChoose(opts);f.gift=opts[i][1];S.gift=f.gift;save();hop()}
   await fwSay(B('gift_got',{gift:f.gift}));fwStep(5);
   // C5 gift: the Echo gives its keepsake (tap to keep)
   await fwSay(fwLine('keepsake_give',0));
-  await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');b.className='fwkeep glim';b.id='fwkeep';const K=FUI().keepsake;b.setAttribute('aria-label',fwUI('ui_keepsake',K.index));   // manifest ui.keepsake {type, art, hint, emoji, index}
+  await new Promise(res=>{const sc=$('#sc'),b=document.createElement('button');const K=FUI().keepsake;b.className='fwkeep glim'+(K.frames===4?' g4':'');b.id='fwkeep';b.setAttribute('aria-label',fwUI('ui_keepsake',K.index));   // manifest ui.keepsake {type, art, hint, emoji, index}
     b.style.backgroundImage=`url(${K.art})`;sc.appendChild(b);ov.innerHTML=`<div class="choices"><div class="hint">Tap the ${K.hint} to keep it</div></div>`;
     b.onclick=()=>{ov.innerHTML='';S.keepsake={type:K.type,name:fwUI('ui_keepsake',K.index),day:S.days};SFX('care_pet_sparkle');save();b.classList.add('kept');res()}});
   await fwSay(fwLine('keepsake_give',1));fwStep(6);
@@ -1375,8 +1376,8 @@ function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=FUI().t
 function afterHome(){
   const e=E(),g=S.g;ov.innerHTML='';const fresh=deliverCheckins(),sign=fresh&&fresh.type==='sign',days=Math.floor((now()-S.released)/864e5),ic=e.sign.split(' ')[0];
   const fox=FWALK(),ks=S.keepsake,cap=fwUI(days<1&&!(S.checkins||[]).some(k=>k.delivered)?'ui_after_day0':'ui_after_later');
-  h(`<div class="top"><b>${FUI().afterTitle||(fox?'The meadow':'Our branch')} · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after pxscene" style="background:url(px/scenes/${fox?'meadow_day':'branch_twi'}.png) center bottom/180px 320px no-repeat !important"><div class="bubble">${cap}${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):''}</div>
-  ${fwStarHTML(3,'fwstar')}${ks?`<div class="fwkeep after${fresh?' glim':''}" aria-label="${ks.name}" style="background-image:url(px/fw/${ks.type}.png)"></div>`:''}
+  h(`<div class="top"><b>${FUI().afterTitle||(fox?'The meadow':'Our branch')} · day +${days}</b><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button></div><div class="scene ${e.bg} after pxscene" style="background:url(${fox?SCART('meadow','day'):'px/scenes/branch_twi.png'}) center bottom/180px 320px no-repeat !important"><div class="bubble">${cap}${fresh?(sign?' Something was left here… tap it!':' There\'s something in the mailbox!'):''}</div>
+  ${fwStarHTML(3,'fwstar')}${ks?(K=>`<div class="fwkeep after${fresh?' glim':''}${K.frames===4?' g4':''}" aria-label="${ks.name}" style="background-image:url(${K.art||'px/fw/'+ks.type+'.png'})"></div>`)(FUI().keepsake&&FUI().keepsake.type===ks.type?FUI().keepsake:{}):''}
   <button class="spot mailbox${fresh&&!sign?' full':''}" id="mail" aria-label="Mailbox">${PI(fresh&&!sign?'📬':'📪')}</button>
   ${sign?`<button class="spot signspot" id="sign" aria-label="Something left for you">${PI(ic)}</button>`:''}</div>
   <div class="dock two"><button class="btn" id="pc">${PI('⏩')}<span class="lbl">Skip a day (demo)</span></button><button class="btn" id="again">${PI('🌿')}<span class="lbl">New Echo</span></button></div>`);
