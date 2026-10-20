@@ -56,6 +56,12 @@ async def main():
         for f in ('mango_slices','peach_slices','pumpkin_soup','jam_toast','sunny_puff','plum_slices','cucumber_rolls'):check(await pg.evaluate(f"FOODS.twitchel.some(x=>x.id==='{f}')"),'food '+f)
         for s in ('twitchel_lion_roar','twitchel_tiger_chuff','twitchel_snowleopard_chuff','twitchel_cheetah_chirp','bondup_sting_twitchel','goodbye_lion','bg_twitchel_day_loop'):
           st=await pg.evaluate(f"fetch('{'music/'+s+'.ogg' if s.startswith(('goodbye','bg_')) else 'sfx/'+s+'.mp3'}').then(r=>r.status)");check(st==200,f'sfx {s} {st}')
+        # Batch D for cats: bond tier layer + beat clock, postcard tune stamp, riddles only for deck items
+        await pg.click('#cr');await pg.wait_for_timeout(2500)
+        pl=await pg.evaluate("Music.playing");check(pl and pl.startswith('bg_twitchel_') and pl.endswith('_t1_loop'),f'cat new bond plays the T1 layer ({pl})')
+        check(await pg.evaluate("!!window.MusicFX&&!!MusicFX.beat()"),'cat beat clock')
+        st=await pg.evaluate("window.MusicFX?MusicFX.stampHTML('twitchel','grass'):''");check('pc_tune/twitchel_grass' in st,'cat postcard stamp '+st[:80])
+        await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''")
         # games menu
         await pg.evaluate("__echo.state.bond=CONFIG.unlock.stack+5;__echo.state.bondShown=3;__echo.home()");await pg.wait_for_timeout(600);await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''")
         await pg.click('#play');await pg.wait_for_timeout(500)

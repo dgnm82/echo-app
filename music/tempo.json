@@ -1,0 +1,203 @@
+{
+ "_about": "bpm, beatsPerBar and beats per loop. Beat 0 = sample 0 of the loop. Tier loops (_t1.._t3) share their full loop's grid.",
+ "bg_slyte_day_loop": {
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_slyte_day_t1_loop": {
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_slyte_day_t2_loop": {
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_slyte_day_t3_loop": {
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_slyte_twilight_loop": {
+  "bpm": 80,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_slyte_twilight_t1_loop": {
+  "bpm": 80,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_slyte_twilight_t2_loop": {
+  "bpm": 80,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_slyte_twilight_t3_loop": {
+  "bpm": 80,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_whimber_day_loop": {
+  "bpm": 84,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_whimber_day_t1_loop": {
+  "bpm": 84,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_whimber_day_t2_loop": {
+  "bpm": 84,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_whimber_day_t3_loop": {
+  "bpm": 84,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_whimber_twilight_loop": {
+  "bpm": 64,
+  "beatsPerBar": 4,
+  "beats": 48
+ },
+ "bg_whimber_twilight_t1_loop": {
+  "bpm": 64,
+  "beatsPerBar": 4,
+  "beats": 48
+ },
+ "bg_whimber_twilight_t2_loop": {
+  "bpm": 64,
+  "beatsPerBar": 4,
+  "beats": 48
+ },
+ "bg_whimber_twilight_t3_loop": {
+  "bpm": 64,
+  "beatsPerBar": 4,
+  "beats": 48
+ },
+ "bg_twitchel_day_loop": {
+  "bpm": 92,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_twitchel_day_t1_loop": {
+  "bpm": 92,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_twitchel_day_t2_loop": {
+  "bpm": 92,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_twitchel_day_t3_loop": {
+  "bpm": 92,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "bg_twitchel_twilight_loop": {
+  "bpm": 76,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_twitchel_twilight_t1_loop": {
+  "bpm": 76,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_twitchel_twilight_t2_loop": {
+  "bpm": 76,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "bg_twitchel_twilight_t3_loop": {
+  "bpm": 76,
+  "beatsPerBar": 3,
+  "beats": 48
+ },
+ "title_welcome_loop": {
+  "bpm": 72,
+  "beatsPerBar": 3,
+  "beats": 24
+ },
+ "game_shiny_pairs_loop": {
+  "bpm": 104,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_starlight_pairs_loop": {
+  "bpm": 90,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_cozy_pairs_loop": {
+  "bpm": 104,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_fort_builder_loop": {
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_hollow_builder_loop": {
+  "bpm": 104,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_yarn_tumble_loop": {
+  "bpm": 116,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_berry_catch_loop": {
+  "bpm": 112,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_starfall_catch_loop": {
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_snack_catch_loop": {
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_pancake_tower_loop": {
+  "bpm": 108,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_cloud_steps_loop": {
+  "bpm": 88,
+  "beatsPerBar": 4,
+  "beats": 48
+ },
+ "game_cushion_tower_loop": {
+  "bpm": 108,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_meadow_dash_loop": {
+  "bpm": 126,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_moonlight_glide_loop": {
+  "bpm": 112,
+  "beatsPerBar": 4,
+  "beats": 64
+ },
+ "game_meadow_dash_twitchel_loop": {
+  "bpm": 126,
+  "beatsPerBar": 4,
+  "beats": 64
+ }
+}

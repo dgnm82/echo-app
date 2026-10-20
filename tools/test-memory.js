@@ -23,4 +23,6 @@ T('i) handheld cursor: ◀ ▶ wrap in reading order and skip paired cards; B ju
 T('j) slow board = more than 2x as many turns as pairs (auto Easy rule)',()=>{const g=M.create({seed:7});solve(g);assert(!M.slow(g));g.turns=21;assert(M.slow(g))});
 T('riddle) every DECK.slyte item has one pairs_riddle line keyed by cond.var.riddle (Riddle Solver hints)',()=>{const L=require('../dialogue/slyte.json').barks.pairs_riddle;
   for(const it of M.DECK.slyte){const ls=L.filter(l=>l.cond&&l.cond.var&&l.cond.var.riddle===it);assert.ok(ls.length>=1,it);for(const l of ls)assert.ok(l.text.length<=42,'fits 3 rows: '+l.text)}});
+T('riddle) twitchel: every pairs_riddle names a memoryDeck item, every deck item has one',()=>{const L=require('../dialogue/twitchel.json').barks.pairs_riddle,D=require('../families/twitchel.json').games.memoryDeck;
+  for(const l of L)assert.ok(D.includes(l.cond.var.riddle),'not in deck: '+l.cond.var.riddle);for(const it of D)assert.ok(L.some(l=>l.cond.var.riddle===it),it)});
 console.log(ok+'/'+n+' memory tests passed');if(ok!==n)process.exit(1);

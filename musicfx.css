@@ -1,0 +1,31 @@
+/* Batch D (Oct 20) music-first tweaks. Link after pixel.css. Reduced motion: prefers-reduced-motion or .calm (Calm effects) = static. */
+/* title glow (main screen): the glow of a fully bonded Echo, frame set by musicfx.js on the music's beat (data-f 0..3) */
+.scene.ttl .oblogo-glow.g5{animation:none;background-image:url(px/title/logo_glow5_0.png)}
+.scene.ttl .oblogo-glow.g5[data-f="1"]{background-image:url(px/title/logo_glow5_1.png)}
+.scene.ttl .oblogo-glow.g5[data-f="2"]{background-image:url(px/title/logo_glow5_2.png)}
+.scene.ttl .oblogo-glow.g5[data-f="3"]{background-image:url(px/title/logo_glow5_3.png)}
+.scene.ttl .oblogo-glow.g5.calm,.scene.ttl.calm .oblogo-glow.g5{background-image:url(px/title/logo_glow5_0.png)}
+@media (prefers-reduced-motion:reduce){.scene.ttl .oblogo-glow.g5{background-image:url(px/title/logo_glow5_0.png)!important}.mfx-tnotes{display:none}}
+.scene.ttl .mfx-tnotes{position:absolute;left:0;top:0;width:180px;height:120px;image-rendering:pixelated;z-index:2;pointer-events:none}
+/* A2 home bond glow: 2 brightness steps on the beat (the aura is unchanged at rest) */
+.px-echo>canvas.aura.mfx-beat{filter:brightness(1.18)}
+.calm .px-echo>canvas.aura.mfx-beat{filter:none}
+@media (prefers-reduced-motion:reduce){.px-echo>canvas.aura.mfx-beat{filter:none}}
+/* A2 cat meadow bell post: the bell swings a little on each bar (3 frames of 7x7) */
+.mfx-bell{position:absolute;left:159px;width:7px;height:7px;image-rendering:pixelated;pointer-events:none;z-index:1;background-position:0 0}
+.mfx-bell[data-f="1"]{background-position:-7px 0}.mfx-bell[data-f="2"]{background-position:-14px 0}
+/* A10 postcard tune stamp (46x28) in the card's lower-left corner (the Echo stands at x 52-140); tap to hear. Playing: a 1 px hop per beat, off in reduced motion */
+.pcfront .pctune{position:absolute;left:4px;bottom:4px;width:46px;height:28px;image-rendering:pixelated;cursor:pointer;z-index:2}
+.pctune.playing{animation:mfxhop .3s steps(1) infinite}
+@keyframes mfxhop{0%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@media (prefers-reduced-motion:reduce){.pctune.playing{animation:none}}
+/* A8 + A11: anything that plays a sound gets the little note badge */
+.mfxsnd{position:relative}
+.chip[data-snd]::after{content:"";display:inline-block;width:9px;height:9px;margin-left:3px;vertical-align:middle;background:url(px/ui/note_badge.png);image-rendering:pixelated}
+.pctune.mfxsnd::after{content:"";position:absolute;right:-3px;top:-3px;width:9px;height:9px;background:url(px/ui/note_badge.png);image-rendering:pixelated}
+/* A9 play-off: each note pops above the Echo as its coloured, shaped note (12x12 from notes_shaped.png row 1 = lit) */
+.mfx-pnote{position:absolute;width:12px;height:12px;background-image:url(px/notes/notes_shaped.png);background-position-y:-12px!important;image-rendering:pixelated;pointer-events:none;z-index:5;animation:mfxrise .9s steps(9) forwards}
+.mfx-pnote.calm{animation:mfxfade .9s steps(3) forwards}
+@keyframes mfxrise{0%{transform:translateY(0);opacity:1}70%{opacity:1}100%{transform:translateY(-18px);opacity:0}}
+@keyframes mfxfade{0%,60%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.mfx-pnote{animation:mfxfade .9s steps(3) forwards}}

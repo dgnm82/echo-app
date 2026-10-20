@@ -42,20 +42,22 @@ W.Sound={get ctx(){return ctx},play,chirp,preload,unlock,get unlocked(){return u
 // Home: bg_<echo>_day / _twilight (evening + night), 4 s crossfade on change; games: their own theme. Ducks -6 dB under Echo voices.
 const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duckT=null,ducked=false,out=false;
   const enabled=()=>{try{const S=W.__echo&&W.__echo.state;return on()&&!(S&&S.music===false)}catch(e){return on()}};
+  const vf=()=>{try{const S=W.__echo&&W.__echo.state;return S&&S.musicQuiet?.5:1}catch(e){return 1}};   // Batch D A11: Grown-ups corner "Quieter music" (loops + tune notes at half level)
   function get(n){if(mbuf[n])return Promise.resolve(mbuf[n]);if(mload[n])return mload[n];
     const dec=ext=>fetch('music/'+n+'.'+ext).then(r=>{if(!r.ok)throw new Error('music '+n+' '+r.status);return r.arrayBuffer()}).then(a=>new Promise((res,rej)=>ctx.decodeAudioData(a,res,rej)));
     return mload[n]=dec('ogg').catch(()=>dec('wav')).then(b=>{mbuf[n]=b;return b}).catch(e=>{console.warn(e.message||e);mload[n]=null})}
   function bus(){if(!master){master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination)}return master}
   function set(n){want=n;if(!unlocked||!ctx||!enabled()){stopAll();return}if(cur&&cur.n===n)return;
     get(n).then(b=>{if(!b||want!==n||(cur&&cur.n===n))return;const t=ctx.currentTime,s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;s.loop=true;s.loopStart=0;s.loopEnd=b.duration;
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.32,t+(cur?4:1.2));s.connect(g);g.connect(bus());s.start(t);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.32*vf(),t+(cur?4:1.2));s.connect(g);g.connect(bus());s.start(t);
       if(cur){const o=cur;o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+4);setTimeout(()=>{try{o.s.stop()}catch(e){}},4200)}
-      cur={n,s,g}})}
+      cur={n,s,g,t0:t}})}   // t0: the loop's sample 0 on the audio clock (Batch D beat clock)
   function stopAll(){if(cur){try{cur.s.stop()}catch(e){}cur=null}}
   function level(v,sec){if(!master)return;const t=ctx.currentTime;master.gain.cancelScheduledValues(t);master.gain.setValueAtTime(master.gain.value,t);master.gain.linearRampToValueAtTime(v,t+(sec||.15))}
   function band(){const h=new Date().getHours();return h>=17||h<6?'twilight':'day'}
   return {
-    home(kind){const F=W.FAMILIES;set(F?F.of(kind).music.home.replace('<band>',band()):`bg_${FS(kind)}_${band()}_loop`)},
+    home(kind,tier){const F=W.FAMILIES;let n=F?F.of(kind).music.home.replace('<band>',band()):`bg_${FS(kind)}_${band()}_loop`;
+      if(tier>=1&&tier<=3)n=n.replace(/_loop$/,'_t'+Math.floor(tier)+'_loop');set(n)},   // Batch D A6: bond tier 1-3 -> fewer layers (music/bg_<fam>_<band>_t<n>_loop); 4+ = the full loop
     game(name){set(`game_${name}_loop`)},
     title(){set('title_welcome_loop')},   // onboarding §4: first-run title -> welcome -> name -> age (C major, neutral)
     talk(sec){sec=sec||.6;(this.ducks=this.ducks||[]).push({to:.65,ms:Math.round(sec*1000)});if(!master||out)return;level(.65,.06);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.2)},sec*1000)},   // ~35% duck for the chirp's length, short fades (both Echoes)
@@ -63,7 +65,11 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
     duck(v){out=!!v;level(v?0:1,v?.5:1.5)},   // bond-up: fade out, come back after
     once(n,vol){if(!unlocked||!ctx||!enabled())return;level(.15,.4);get(n).then(b=>{if(!b)return level(1,1);const s=ctx.createBufferSource(),g=ctx.createGain();   // C2: one-shot goodbye melody, home loop ducked
       s.buffer=b;g.gain.value=vol||.6;s.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+.05);s.onended=()=>level(1,1.5)}).catch(()=>level(1,1))},
-    refresh(){if(!enabled())stopAll();else if(want)set(want)},
+    refresh(){if(!enabled())stopAll();else{if(cur){const t=ctx.currentTime;cur.g.gain.cancelScheduledValues(t);cur.g.gain.setValueAtTime(cur.g.gain.value,t);cur.g.gain.linearRampToValueAtTime(.32*vf(),t+.3)}if(want)set(want)}},
+    clock(){if(!cur||!ctx||cur.t0==null)return null;const L=cur.s.buffer.duration;return {name:cur.n,t:((ctx.currentTime-cur.t0)%L+L)%L}},   // Batch D: position in the playing loop (s)
+    oneShot(n,o){o=o||{};if(!unlocked||!ctx||!enabled())return null;return get(n).then(b=>{if(!b)return null;const s=ctx.createBufferSource(),g=ctx.createGain();   // Batch D: tune notes, hums, home sounds
+      s.buffer=b;s.playbackRate.value=o.rate||1;g.gain.value=(o.vol==null?.5:o.vol)*vf();s.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+.01);
+      if(o.duck&&!out){level(o.duck,.05);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.25)},Math.min(1200,b.duration*1000/(o.rate||1)))}return s}).catch(()=>null)},
     stop(){want=null;stopAll()},
     get playing(){return cur&&cur.n},get buffers(){return mbuf}}})();
 W.Music=Music;W.addEventListener('pointerdown',()=>setTimeout(()=>{if(want_())Music.refresh()},50),{capture:true,passive:true});

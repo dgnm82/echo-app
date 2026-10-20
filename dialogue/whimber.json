@@ -458,12 +458,12 @@
         "gesture": "wait"
       },
       {
-        "text": "Oh… a little breeze.",
+        "text": "Oh… a little breeze. The leaves whisper fast.",
         "expr": "neutral",
         "gesture": "tap"
       },
       {
-        "text": "Practicing my hoot.",
+        "text": "Practicing my hoot… low hoo, high hoo.",
         "expr": "neutral",
         "gesture": "hum"
       },
@@ -473,7 +473,7 @@
         "gesture": "settle"
       },
       {
-        "text": "Warm spot.",
+        "text": "The stream goes… burble, burble. Low and quick.",
         "expr": "neutral",
         "gesture": "wait"
       },
@@ -488,7 +488,7 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Cold. Brr.",
+        "text": "A cricket… cree, cree. High and tiny.",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -508,7 +508,7 @@
         "gesture": "tap"
       },
       {
-        "text": "Twigs. Many twigs.",
+        "text": "Twigs go tick… leaves go shhh… soft.",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -528,7 +528,7 @@
         "gesture": "stretch"
       },
       {
-        "text": "A rustle. A nice one.",
+        "text": "A rustle… then quiet… then a tiny tap.",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -583,7 +583,7 @@
         "gesture": "preen"
       },
       {
-        "text": "Pretty.",
+        "text": "Hoo is low… a peep is high. Listen.",
         "expr": "neutral",
         "gesture": "lookup"
       },
@@ -612,7 +612,7 @@
         "expr": "neutral"
       },
       {
-        "text": "It's very {word:soft} music.",
+        "text": "The wind hums low… then whistles high. Mm.",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -666,7 +666,7 @@
         "gesture": "lookup"
       },
       {
-        "text": "Hoo-hoo. Just humming.",
+        "text": "Hoo-hoo… slow, slow. Just humming.",
         "expr": "happy",
         "gesture": "hum"
       },
@@ -2087,7 +2087,7 @@
         "expr": "love"
       },
       {
-        "text": "Hm-hm-hoo. A happy song.",
+        "text": "Hm-hm-hoo… low, low, high. A happy song.",
         "expr": "happy",
         "gesture": "hum"
       }
@@ -3127,6 +3127,77 @@
       {
         "text": "A soft bump… the moon piece helped.",
         "expr": "happy"
+      }
+    ],
+    "catch_song": [
+      {
+        "text": "That was a song… again?",
+        "expr": "delighted",
+        "gesture": "hum"
+      },
+      {
+        "text": "A whole little song… mm.",
+        "expr": "happy",
+        "gesture": "settle"
+      },
+      {
+        "text": "The stars sang… softly.",
+        "expr": "love",
+        "gesture": "slowblink"
+      },
+      {
+        "text": "Our little song… again?",
+        "expr": "love",
+        "gesture": "hum",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "",
+        "expr": "happy",
+        "gesture": "hum"
+      }
+    ],
+    "tower_beat": [
+      {
+        "text": "On the beat… mm.",
+        "expr": "delighted",
+        "gesture": "settle"
+      },
+      {
+        "text": "Plop… right with the music.",
+        "expr": "happy",
+        "gesture": "hum"
+      },
+      {
+        "text": "",
+        "expr": "happy",
+        "gesture": "slowblink"
+      }
+    ],
+    "dig_climb": [
+      {
+        "text": "The notes climbed… all the way up.",
+        "expr": "delighted",
+        "gesture": "hum"
+      },
+      {
+        "text": "Up and up… like a little stair.",
+        "expr": "happy",
+        "gesture": "lookup"
+      }
+    ],
+    "look_sing": [
+      {
+        "text": "Tap… and I fly a little. Or just listen.",
+        "expr": "love",
+        "gesture": "hum"
+      },
+      {
+        "text": "One note… one little flap. Or just listen.",
+        "expr": "happy",
+        "gesture": "settle"
       }
     ]
   },

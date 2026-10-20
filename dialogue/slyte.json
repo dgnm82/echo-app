@@ -506,7 +506,7 @@
         "gesture": "lookup"
       },
       {
-        "text": "Beetle parade.",
+        "text": "Beetle feet go tik-tik-tik. So fast!",
         "expr": "neutral",
         "gesture": "lookup"
       },
@@ -540,7 +540,7 @@
         "expr": "neutral"
       },
       {
-        "text": "Hmm. Which way is up? That way!",
+        "text": "Wind sound! Low whoo. Then high whee!",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -550,7 +550,7 @@
         "gesture": "pounce"
       },
       {
-        "text": "Fur fluffed. Pretty.",
+        "text": "Shh. Listen. Quiet, quiet… Then a tiny peep!",
         "expr": "neutral",
         "gesture": "groom"
       },
@@ -560,7 +560,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Toasty.",
+        "text": "Big log goes bonk. Low! Little stick goes tik. High!",
         "expr": "neutral",
         "gesture": "lookup"
       },
@@ -570,7 +570,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Round things are the best things.",
+        "text": "Bees go bzzz. One long, low note.",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -590,7 +590,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Nut is here. Or there.",
+        "text": "A woodpecker! Knock-knock-knock. Fast, fast!",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -610,7 +610,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Chirp. Chirp. Where?",
+        "text": "Chirp up high. Chirp down low. Two birds!",
         "expr": "neutral",
         "gesture": "curious"
       },
@@ -635,7 +635,7 @@
         "gesture": "wait"
       },
       {
-        "text": "Big sky. Still blue.",
+        "text": "Water goes plip… plop. Slow drops.",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -650,7 +650,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Clean paw. Very clean.",
+        "text": "My steps go pat… pat… pat. Now fast-fast-fast!",
         "expr": "neutral",
         "gesture": "tap"
       },
@@ -2205,7 +2205,7 @@
         "expr": "delighted"
       },
       {
-        "text": "Doo-doo-dee. Happy fox song.",
+        "text": "Doo, doo, dee! Low, low, high. Happy fox song.",
         "expr": "happy",
         "gesture": "hum"
       },
@@ -2697,6 +2697,66 @@
           "talent": "Riddle Solver",
           "var": {
             "riddle": "ball"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Goes crunch, crunch. Where?",
+        "expr": "curious",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "apple"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Goes crinkle, crackle. Where?",
+        "expr": "curious",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "leaf"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Goes boing, boing. Where?",
+        "expr": "curious",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "ball"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Goes crack! Then crunch. Where?",
+        "expr": "curious",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "nut"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Falls from a tree. Thunk! Where?",
+        "expr": "curious",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "pinecone"
+          }
+        }
+      },
+      {
+        "text": "Riddle! Goes ting. High and tiny. Where?",
+        "expr": "proud",
+        "cond": {
+          "talent": "Riddle Solver",
+          "var": {
+            "riddle": "trinket"
           }
         }
       }
@@ -3369,6 +3429,77 @@
         "text": "",
         "expr": "delighted",
         "gesture": "spin"
+      }
+    ],
+    "catch_song": [
+      {
+        "text": "That was a song! Again?",
+        "expr": "delighted",
+        "gesture": "spin"
+      },
+      {
+        "text": "We caught a whole song!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "La-la! The snacks sang!",
+        "expr": "giggling",
+        "gesture": "spin"
+      },
+      {
+        "text": "Our snack song! Again?",
+        "expr": "love",
+        "gesture": "tap",
+        "cond": {
+          "bondMin": 210
+        }
+      },
+      {
+        "text": "",
+        "expr": "delighted",
+        "gesture": "spin"
+      }
+    ],
+    "tower_beat": [
+      {
+        "text": "Right on the beat!",
+        "expr": "delighted",
+        "gesture": "tap"
+      },
+      {
+        "text": "Bounce, bounce, plop! On the beat!",
+        "expr": "excited",
+        "gesture": "pounce"
+      },
+      {
+        "text": "",
+        "expr": "happy",
+        "gesture": "tap"
+      }
+    ],
+    "dig_climb": [
+      {
+        "text": "Up, up, up! The notes climbed!",
+        "expr": "excited",
+        "gesture": "spin"
+      },
+      {
+        "text": "Do, re, mi… all the way up!",
+        "expr": "delighted",
+        "gesture": "pounce"
+      }
+    ],
+    "look_sing": [
+      {
+        "text": "Tap, and I hop. Or just listen.",
+        "expr": "happy",
+        "gesture": "tap"
+      },
+      {
+        "text": "One tap, one hop. Or just listen.",
+        "expr": "love",
+        "gesture": "settle"
       }
     ]
   },

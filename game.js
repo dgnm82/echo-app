@@ -292,7 +292,7 @@ const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
 function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
   const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):''}}
 // P3 hum + invite (tap to hear, tap again; never timed)
-async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);
+async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);if(window.MusicFX)setTimeout(()=>MusicFX.homeSound(o.animal),500);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
   obScene('orinvite meadow',`<div class="obpanel small">${U('ui_or_hum')}</div><div class="orlightform" id="orlf">${obSprite(fid,seed,o.ramp,1)}<i class="ornote a">♪</i><i class="ornote b">♫</i></div>
    <div class="obbub" id="obb" style="display:none"></div><div class="obpanel small orask">${U('ui_or_invite_ask')}</div><button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
@@ -335,18 +335,18 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={child:S.child,voice:S.voice,music:S.music,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
+  const keep={child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
   S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
   initDialogue();save();remember('The day we met in the meadow','met');
-  home();if(window.Music)Music.home(kind);const l=B(kept?'named_kept':'named_reply');talk(l,3200);
+  home();if(window.Music)Music.home(kind,glowNow());const l=B(kept?'named_kept':'named_reply');talk(l,3200);
   sess.fwBusy=1;setTimeout(()=>runConv(FUI(kind).conversations.where_from,()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)}
 // P7 every-session title: logo + tagline + "{name} is playing nearby!", Tap to start, lock top right. Auto-advance after 3 s.
 async function obReturnTitle(go){await obLib();const e=E();
   h(`<div class="scene ${e.bg} ob obreturn ttl${lowFx()?' calm':''}"><div class="bg pxbg pxbg-night"></div>${titleArt(1)}<div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
-  if(window.Music)Music.home(S.kind);obWireLock(()=>obReturnTitle(go));let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sess.nameCall=1;go()};
+  if(window.Music)Music.home(S.kind,glowNow());obWireLock(()=>obReturnTitle(go));let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sess.nameCall=1;go()};
   const t=setTimeout(()=>{if(!document.querySelector('.full'))fin()},3000);$('.scene.ob').onclick=fin}
 function nameCallLine(){if(S.nameChanged&&S.vars&&S.vars.child_named){S.nameChanged=0;save();return B('name_changed')}return B('name_call')}
 // ---- Grown-ups corner (§5): hold the lock 3 s -> a x b question -> settings
@@ -366,7 +366,7 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
    <button class="pcrow" id="pcname"><span>Name</span><b>${nm}</b></button>
    ${has?`<button class="pcrow" id="pcecho"><span>Echo's name</span><b>${S.g.name}</b></button>`:''}
    <button class="pcrow" id="pcage"><span>Age range</span><b>${(S&&S.ageBand)||'7-8'}</b></button>
-   ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
+   ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcquiet','Quieter music',!!(S&&S.musicQuiet))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
    ${tog('pcyes','Echoes always say yes',!!(S&&S.alwaysYes))}
    ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}${has?tog('pcholiday','Holiday mode',!!(S.holiday&&S.holiday.on))+`<div class="pcnote">Going away? Turn this on and ${S.g.name} takes a little holiday too. Needs and the 3-day goodbye timer pause. It ends when ${S.child||'your child'} next opens Echo.</div>`:''}
    <button class="pcrow" id="pcreset"><span>Start over</span><b>›</b></button>
@@ -374,6 +374,7 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
    <button class="btn" id="pcdone">${U('ui_pc_done')}</button>`);d.classList.add('pcset');
   const re=()=>{d.remove();pcSettings(back)};const need=()=>{if(!S){S={voice:true,music:true,vars:{},setupDone:0,oseed:Math.floor(Math.random()*2e9)+1,originIdx:0,songs:[]}}};
   d.querySelector('#pcmusic').onclick=()=>{need();S.music=S.music===false;save();if(window.Music)Music.refresh();re()};
+  d.querySelector('#pcquiet').onclick=()=>{need();S.musicQuiet=!S.musicQuiet;save();if(window.Music)Music.refresh();re()};
   d.querySelector('#pcvoice').onclick=()=>{need();S.voice=S.voice===false;save();re()};
   d.querySelector('#pcyes').onclick=()=>{need();S.alwaysYes=!S.alwaysYes;save();re()};
   d.querySelector('#pcshared').onclick=()=>{need();S.fwShared=!S.fwShared;save();re()};
@@ -411,18 +412,18 @@ function home(greet){
   if(ready){$('#rel').onclick=fwStartByChild;if($('#path'))$('#path').onclick=fwStartByChild;$('#fwl').onclick=fwList}
   if($('#fwstar')&&!FWALK()&&ready)$('#fwstar').onclick=fwStartByChild;
   // stroke to pet
-  let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(strokes%25===0)pet()}});
+  let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(window.MusicFX&&!asleep())MusicFX.petMove(ev,FID());if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
   if(window.Alive)Alive.twinkle();
   if(m==='sleep'){{const b=napBed();if(b&&LIVE.st!=='napgo')lvPlace(b[0],b[1])}talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene')){sess.woke=1;home()}},Math.max(500,S.napUntil-now()+200));return}
   if(sess.woke){sess.woke=0;const px=$('#cr .px-echo');if(px&&window.PIXEL){PIXEL.sleep(px,true);wakeUp(px)}}
-  if(greet)fwSession();
+  if(greet)fwSession();if(greet&&window.MusicFX)MusicFX.homeSound((S.origin&&S.origin.animal)||Object.keys(FAMILIES.animals).find(k=>FAMILIES.animals[k].look===S.g.look)||FAMD().look_base,{once:true});   // A5: the Echo's hello cue, once per session
   if(greet&&fwGreet()){}
   else if(greet&&window.__foundScene!==undefined&&!ready){const fs=window.__foundScene;window.__foundScene=undefined;lvStart(true,!!fs);if(sess.nameCall){sess.nameCall=0;const nc=nameCallLine();setTimeout(()=>talk(nc,1800),200)}}
   else if(greet){talk(sess.nameCall?(sess.nameCall=0,nameCallLine()):B('hello'));setTimeout(()=>{const b=$('#b');if(document.getElementById('feed')&&!ov.innerHTML.trim()&&!document.querySelector('.full')&&b)talk(B('time_'+tod()))},4200)}
   thoughtSync();if(LIVE.st!=='found'){const keep=m==='sleep'&&LIVE.pos&&LIVE.pos.slice();lvStart(false);if(keep)lvPlace(keep[0],keep[1])}   // asleep: stay on the bed, never re-place on the stage
   if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk(nvB('holidayStart'),3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
-  if(window.Music)Music.home(S.kind);
+  if(window.Music)Music.home(S.kind,glowNow());
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
 }
 
@@ -760,14 +761,14 @@ function book(){
   const e=E(),d=document.createElement('div');d.className='book';
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${obLock('bk')}${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
-  ${S.keepsake?`<h2>Keepsakes</h2><span class="chip">${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
-  <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip">${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
-  <h2>Talents</h2>${S.talents.map(s=>`<span class="chip">${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
+  ${S.keepsake?`<h2>Keepsakes</h2><span class="chip"${window.MusicFX?` data-snd="${FAMD().music.pet_motif}"`:''}>${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
+  <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip"${window.MusicFX?' data-snd="memory_pair_found"':''}>${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Talents</h2>${S.talents.map(s=>`<span class="chip"${window.MusicFX?' data-snd="care_pet_sparkle"':''}>${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
   ${S.kind?`<h2>Our ${FUI().homeTitle}</h2><div class="homebook">${homeProp('book')}</div>${S.dig&&S.dig.games?`<p class="digline">${GG().digLabel}: ${S.dig.best||0} rows · best ${Math.max(0,...Object.values((S.best&&S.best.dig)||{}).map(o=>o.score||0))} points</p>`:''}`:''}
   ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Closer! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
-  <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip">${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip"${window.MusicFX?' data-snd="run_treasure_1"':''}>${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${(S.wild||[]).length?`<h2>${PI('🍃')} Friends in the wild</h2>`+S.wild.map(w=>`<p class="mline">${w.name} · ${w.family||''} · ${'★'.repeat(Math.max(1,Math.min(9,w.stage||1)))}</p>`).join(''):''}
   ${S.checkins&&S.checkins.some(k=>k.delivered)?`<h2>${PI('🖼️')} Letters from the wild</h2>`+S.checkins.filter(k=>k.delivered).map((k,i)=>postcardHTML(k,i,true)).join(''):S.postcards&&S.postcards.length?'<h2>Letters from the wild</h2>'+S.postcards.map(p=>`<div class="postcard">${p}</div>`).join(''):''}`;
@@ -873,7 +874,7 @@ function homeTap(){const h=$('#home');if(!h||!h.classList.contains('in'))return 
 function linesGame(){
   const f=digState(),level=digLevel(),t0=now(),best0=bestGet('dig',level),firstEver=!(f.games||0)&&!best0;let ended=false;
   const fox=GROUND(),MODE=GG().builderMode,quiet=S.talents.includes('Silent Flight'),low=lowFx(),UI=GTU().LINES_UI||{bg:{},clearMs:250,bannerMs:1600,bigBannerMs:2000,bgBandEvery:2};
-  const g=LinesEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:S.talents.includes('Master of Disguise')});
+  const g=LinesEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:S.talents.includes('Master of Disguise')});if(window.MusicFX)MusicFX.digStart();
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
   const DW=Object.assign(fox?{board:'Den',meter:'deeper',big:'Big dig!',done:'dug',memory:'We dug the den {n} rows deep'}:{board:'Nest',meter:'woven',big:'Big weave!',done:'woven',memory:'We wove the nest {n} rows'},GG().digWords||{});
   gameShell(GG().titles.dig);const gs=$('#gs');gs.classList.add('fortgame','diggame');
@@ -900,7 +901,7 @@ function linesGame(){
   function stop(){alive=false;clearInterval(loop);clearTimeout(fall);document.removeEventListener('keydown',key)}
   function after(){for(const e of LinesEngine.take(g)){
       if(e.type==='settle'&&!quiet)SFX('blocks_land',{vol:.6});
-      if(e.type==='clear'){SFX('blocks_row_glow');glow={rows:e.rows,cells:e.cells,t:now()};clears++;react('happy');if(!low)hop();if(g.lines%12===0||Math.floor(g.lines/12)>Math.floor((g.lines-e.n)/12))wrapT=now();
+      if(e.type==='clear'){const dc=window.MusicFX&&MusicFX.digClear(FID(),e.n);if(!dc)SFX('blocks_row_glow');else if(dc.top)setTimeout(()=>talk(B('dig_climb'),1800),700);glow={rows:e.rows,cells:e.cells,t:now()};clears++;react('happy');if(!low)hop();if(g.lines%12===0||Math.floor(g.lines/12)>Math.floor((g.lines-e.n)/12))wrapT=now();
         if(e.big){g2Banner(gs,DW.big);talk(B('dig_big'),UI.bigBannerMs);SFX('blocks_floor_done')}else if(clears%2===0)talk(B('dig_row'),1800);chirp()}
       if(e.type==='level'){g2Banner(gs,'Level '+e.level);talk(B('dig_level'),UI.bannerMs)}
       if(e.type==='disguise'){react('excited');talk(B('dig_disguise'),2000)}}
@@ -942,7 +943,7 @@ function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">
 function catchGame(){
   const fox=GROUND(),G=GG(),level=v2Level('catch','catchLevel'),st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=G.titles.catch;
   const g=CatchEngine.create({level,seed:(S.g.seed||1)*37+st.games*11+1,fam:FID(),lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
-  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');if(window.MusicFX)MusicFX.catchStart();
   gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
@@ -954,7 +955,7 @@ function catchGame(){
   const line=(k,ex)=>{if(g.t-lastLine<6)return false;lastLine=g.t;talk(B(k,ex),1800);return true};
   function step(dt){if(ended)return;aim();CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
     for(const e of CatchEngine.take(g)){
-      if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});if(e.gold){SFX('run_gold',{vol:.8});line('catch_gold')}else{SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});say('*')}}
+      if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});const ct=window.MusicFX&&MusicFX.catchHit(FID());if(e.gold){SFX('run_gold',{vol:ct?.5:.8});line('catch_gold')}else{if(!ct)SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(ct&&ct.done&&ct.songs%2===1&&line('catch_song')))say('*')}}
       if(e.type==='streak'){SFX('run_treasure_5',{vol:.7});line('catch_streak')}
       if(e.type==='land')SFX('run_tumble_boop',{vol:.5,gap:200});
       if(e.type==='end')finish()}
@@ -1004,14 +1005,15 @@ function stackGame(){
   const IM={};g2Img(IM,'bg',fox?SCART('meadow','day'):'px/scenes/hilltop_twi.png');g2Img(IM,'base',GG().stackBase||(fox?'px/stack/plate.png':'px/run/bench.png'));
   ['','_perfect'].forEach(p=>['l','m','r'].forEach(s=>g2Img(IM,p+s,`px/stack/${M}${p}_${s}.png`)));[0,1,2,3].forEach(i=>g2Img(IM,'burst'+i,`px/items/burst${i}.png`));
   if(fox)g2Img(IM,'home',PIXEL.sheet(SPR(),S.g));else g2Img(IM,'fly',FR.fly);
-  let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0;const perf=new Set();
+  let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0,spk=[],beatN=0,beatT=0;const perf=new Set();
   const cv=$('#stc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
   function layer(x,y,w,p){x=Math.round(x);w=Math.max(6,Math.round(w));const P=p?'_perfect':'';if(!g2ok(IM[P+'m']))return;cx.drawImage(IM[P+'l'],x,y);let i=x+3;while(i<x+w-3){const c=Math.min(6,x+w-3-i);cx.drawImage(IM[P+'m'],0,0,c,8,i,y,c,8);i+=c}cx.drawImage(IM[P+'r'],x+w-3,y)}
   const yOf=h=>BASE-LH*(h+1)+cam;
   function step(dt){if(ended)return;StackEngine.step(g,dt);F++;const want=Math.max(0,132-(BASE-LH*(g.h+2)));if(cam<want)cam=lowFx()?Math.ceil(want/8)*8:Math.min(want,cam+2);
     for(const b of bits){if(fox&&!lowFx()){b.vy=Math.min(7,b.vy+1/6);b.y=Math.min(BASE+18-cam,b.y+b.vy)}else b.t--}bits=bits.filter(b=>fox&&!lowFx()?true:b.t>0)}
-  function press(){if(ended)return;const top=g.layers[g.layers.length-1],w0=g.w,sx=g.sx;StackEngine.press(g);
+  function press(){if(ended)return;const top=g.layers[g.layers.length-1],w0=g.w,sx=g.sx;const onBeat=window.MusicFX&&MusicFX.onBeatNow();StackEngine.press(g);
     for(const e of StackEngine.take(g)){
+      if(e.type==='place'&&onBeat){spk.push({x:g.top+g.w/2,h:g.h,t:0});if(++beatN%4===1&&now()-beatT>20000){beatT=now();setTimeout(()=>talk(B('tower_beat'),1600),300)}}
       if(e.type==='perfect'){perf.add(g.h+1);SFX('blocks_row_glow',{vol:.6});perfN++;if(perfN%3===1)talk(B('tower_perfect'),1600)}
       if(e.type==='place'){SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,y:yOf(g.h),vy:0,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,y:yOf(g.h),vy:0,t:8})}
       if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
@@ -1021,6 +1023,7 @@ function stackGame(){
     g.layers.forEach((l,i)=>{if(i>0)layer(l.x,yOf(i-1),l.w,perf.has(i))});
     if(!ended)layer(g.sx,yOf(g.h)-LH-2,g.w,false);
     for(const b of bits)if(fox||b.t%2)layer(b.x,Math.round(b.y),b.w,false);
+    if(spk.length&&window.MusicFX)spk=spk.filter(s=>MusicFX.drawSparkle(cx,s.x,yOf(s.h)+4,s.t++));
     if(plop&&plop.t<16){const im=IM['burst'+Math.min(3,lowFx()?0:plop.t>>2)];if(g2ok(im))cx.drawImage(im,Math.round(plop.x+plop.w/2-12),BASE+4,24,24);plop.t++}
     if(best0>0){const y=yOf(best0-1);cx.fillStyle='#FFD27A';for(let x=0;x<180;x+=4)cx.fillRect(x,y,2,1);cx.beginPath();cx.moveTo(170,y-6);cx.lineTo(178,y-3);cx.lineTo(170,y);cx.fill()}
     if(fox){if(g2ok(IM.home))cx.drawImage(IM.home,0,0,48,48,2,248,48,48)}else if(g2ok(IM.fly)){const fi=lowFx()?0:(F/6|0)%4;cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,132,Math.max(40,yOf(g.h)-40),48,48)}
@@ -1053,11 +1056,11 @@ function memoryGame(){
   const all=()=>B_.forEach((_,i)=>face(i));all();
   function tap(i){if(!alive)return;MemoryEngine.flip(g,i);handle()}
   function handle(){for(const e of MemoryEngine.take(g)){
-    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(g.cards[e.i].item===G.token){react('excited');talk(B('pairs_disguise'),1800)}
+    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(window.MusicFX)MusicFX.pairsFlip(FID(),g.cards[e.i].item===G.token?'token':g.cards[e.i].item,g.open.length!==1);if(g.cards[e.i].item===G.token){react('excited');talk(B('pairs_disguise'),1800)}
       // Night Vision (spec v0.3 §1): the partner of the first flipped card shimmers faintly once (once per board, default)
       if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){SFX('whimber_night_vision_glint',{vol:.5});B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
     if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
-    if(e.type==='pair'){SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
+    if(e.type==='pair'){if(!(window.MusicFX&&MusicFX.pairsMatch(FID(),e.item===G.token?'token':e.item)))SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
       if(pairsSaid%2===0)talk(Math.random()<.5?(fox?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:{text:`Two ${PAIR_NAMES[e.item]||e.item}… hoo.`,expr:'happy'}):B('pairs_pair'),1800);else say('*')}
     if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
       if(misses%3===0)talk(B('pairs_miss'),1800);
@@ -1121,7 +1124,7 @@ function runGame(){
   const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
   function bg(){const d=g.dist;
     if(fox){cx.drawImage(IM.meadow_sky,0,0);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
-      cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448)}
+      cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448);if(window.MusicFX)MusicFX.drawRunPulse(cx,84,450)}
     else{cx.drawImage(IM.hill_sky,0,0);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
       [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud_far&&IM.cloud_far.naturalWidth?IM.cloud_far:IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
   function drawObs(){const d=g.dist;for(const o of g.obs){const x=Math.round(o.x-d);if(x>370||x<-60)continue;const wob=o.pushed?Math.round(Math.sin(g.t*30)*2):0;
@@ -1330,7 +1333,11 @@ async function fwCeremony0(path,resume){
   // C9 departure: counts as done from here (S.released), so a closed app shows the closure next time
   fwStep(9);fwRelease();
   const c=$('#cr'),pxe=$('#cr .px-echo');
-  if(fox){c.classList.add('pxwalk');await fwMoveTo(150,58,1600);c.classList.remove('pxwalk');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
+  if(window.MusicFX&&MusicFX.ok(FID())){   // Batch D A9: never requires a tap; no retry, no score
+    await fwSay(B('look_sing'));const L0=parseFloat(c.style.left)||90,B0=parseFloat(c.style.bottom)||64;if(fox)c.classList.add('pxwalk');
+    await MusicFX.playoff({fam:FID(),tapEl:$('#sc'),noteEl:pxe||c,zoom:1,onNote:i=>{const k=(i+1)/4;if(fox)fwMoveTo(Math.round(L0+(150-L0)*k),Math.round(B0+(58-B0)*k),330);else hop()}});
+    c.classList.remove('pxwalk');if(!fox)react('excited');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
+  else if(fox){c.classList.add('pxwalk');await fwMoveTo(150,58,1600);c.classList.remove('pxwalk');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
   else{react('excited');c.classList.add('fwback');await fwSay(B('look_back'));c.classList.remove('fwback')}
   // Batch C2 (Cole art/audio v1): the Echo sings, then dissolves head-down into notes that drift off to the wild; its own goodbye melody plays once
   $('#b').style.display='none';
@@ -1369,7 +1376,7 @@ function deliverCheckins(){
 }
 function pcScene(k,i){return k.scene||FUI().postcardScene}
 function postcardHTML(k,i,mini){const e=E(),g=S.g,scene=pcScene(k,i),tok=FUI().tokenEmoji||(e.token==='leaf'?'🍃':'🪶');
-  const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho pose-${k.pose||'tall'}">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i></div>`
+  const front=k.type==='postcard'?`<div class="pcfront" style="background-image:url(px/pc_${scene}.png)"><div class="pcecho pose-${k.pose||'tall'}">${svg(S.kind,g,'happy')}</div><i class="pcstamp">${PI(tok)}</i>${window.MusicFX?MusicFX.stampHTML(FID(),scene):''}</div>`
     :k.type==='sign'?`<div class="pcfront sign" style="background-image:url(px/pc_${scene}.png)"><i class="pcsign">${PI(e.sign.split(' ')[0])}</i></div>`
     :`<div class="pcfront note"><i class="pcstamp">${PI('✉️')}</i><span>a note from ${g.name}</span></div>`;
   return `<div class="pcard${mini?' mini':''}">${front}<div class="pcback"><b>Day +${k.day} · ${k.type==='sign'?'small sign':k.type}</b><p>${k.text}</p></div></div>`}

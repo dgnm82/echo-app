@@ -15,7 +15,7 @@ async def run(b,p,kind,errs):
   pl=await pg.evaluate("Music.playing");assert pl and pl.startswith(f'bg_{sp}_'),pl
   # gapless: the decoded loop is sample-exact (whole bars), loops in Web Audio, and came from OGG/WAV, never MP3
   info=await pg.evaluate("(()=>{const b=Music.buffers[Music.playing];return {d:b.duration,sr:b.sampleRate}})()")
-  exp={'bg_slyte_day_loop':40.0,'bg_slyte_twilight_loop':36.0,'bg_whimber_day_loop':45.71,'bg_whimber_twilight_loop':45.0}[pl]
+  exp={'bg_slyte_day_loop':40.0,'bg_slyte_twilight_loop':36.0,'bg_whimber_day_loop':45.71,'bg_whimber_twilight_loop':45.0}[pl.replace('_t1_loop','_loop').replace('_t2_loop','_loop').replace('_t3_loop','_loop')]   # Batch D A6: a new bond plays the T1 layer (same length)
   assert abs(info['d']-exp)<0.011,(pl,info)
   assert not [u for u in reqs if u.startswith('music/') and u.endswith('.mp3')]
   assert any(u.startswith('music/') and u.endswith('.ogg') and s==200 for u,s in reqs.items()),reqs
