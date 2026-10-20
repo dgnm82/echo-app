@@ -9175,7 +9175,7 @@
           "choices": [
             {
               "icon": "🐾",
-              "label": "Can it still sing?",
+              "label": "Can you sing me your song?",
               "goto": "d1"
             },
             {
@@ -9191,10 +9191,11 @@
           ]
         },
         "d1": {
-          "say": "Yes! It still sings. I just learned its song.",
+          "say": "Okay! Listen...",
+          "sing": true,
           "expr": "happy",
           "next": "e",
-          "wait": 2600
+          "wait": 8000
         },
         "d2": {
           "say": "A purry one! Only Echoes can hear it. And now you, a bit.",

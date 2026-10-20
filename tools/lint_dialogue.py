@@ -10,7 +10,7 @@ from collections import defaultdict
 
 EXPR = {"neutral","happy","excited","eating","love","curious","surprised","sleepy","sad","delighted","thinking","giggling","proud","shy","wistful","concentrating"}
 REACT = {"happy","excited","pet","eat","sad","sleepy"}
-KNOWN_KEYS = {"food_decline","hug_full","play_full","away_note","leave_postcard","away_postcard_day7","holiday_start","holiday_end","hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
+KNOWN_KEYS = {"feed_full_play","not_sleepy_play","food_decline","hug_full","play_full","away_note","leave_postcard","away_postcard_day7","holiday_start","holiday_end","hello","grace_hello","last_day","ready_hint","ask_ready","stay_more","reveal","reveal_reply","fed","fed_fav",
   "full","pet","sit","nap","napping","not_sleepy","game_tired","game_end","stack_start","stack_roof","stack_roof_best","stack_floor_next","stack_row","stack_floor","stack_high","stack_disguise","stack_done","first_gift","favplace","trust",
   "hug_more","walk_memory","gift_ask","gift_got","farewell","look_back"}
 FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5","restless","almost_hello","list_nudge","list_play_done","list_food_done",
@@ -22,7 +22,7 @@ NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callba
 _PFX = ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_")
 KEY_PREFIX = {"twitchel": _PFX, "slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_"), "shared": ("talent_","fallback_","ui_")}
 COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
-NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond"}
+NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond","sing"}
 CHOICE_KEYS = {"caption","voice","gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal","dist","rows","n"}  # games v2: dist/rows/n

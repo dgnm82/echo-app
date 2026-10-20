@@ -128,7 +128,7 @@ D.run=function(conv,ui,done){
   if(typeof conv==='string')conv=D.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
   ui.seen&&ui.seen(conv.id);D.markTopic(conv);
   const finish=(info)=>{done&&done(info||{})};
-  const apply=o=>{if(!o)return;if(o.set)for(const k in o.set)ui.setVar(k,D.fill(o.set[k]));if(o.memory)ui.remember(D.fill(o.memory),o.memoryTag);if(o.bond)ui.bond(o.bond);if(o.react)ui.react(o.react)};
+  const apply=o=>{if(!o)return;if(o.set)for(const k in o.set)ui.setVar(k,D.fill(o.set[k]));if(o.memory)ui.remember(D.fill(o.memory),o.memoryTag);if(o.bond)ui.bond(o.bond);if(o.react)ui.react(o.react);if(o.sing&&ui.sing)ui.sing()};   // E5: the Echo sings its tune
   let tangentUsed=false;const T=D.timers;
   const go=id=>{
     const n=conv.nodes[id];

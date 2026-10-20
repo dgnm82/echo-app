@@ -16943,7 +16943,7 @@
           "choices": [
             {
               "icon": "🪶",
-              "label": "Does it still sing?",
+              "label": "Can you sing me your song?",
               "goto": "d1"
             },
             {
@@ -16959,10 +16959,11 @@
           ]
         },
         "d1": {
-          "say": "Yes… songs can be shared. It still has every note.",
+          "say": "Okay! Listen...",
+          "sing": true,
           "expr": "happy",
           "next": "e",
-          "wait": 2600
+          "wait": 8000
         },
         "d2": {
           "say": "A quiet one… you have to be very still to hear it.",

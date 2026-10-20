@@ -803,7 +803,8 @@
   "gift": {
    "emoji": "🎀",
    "name": "a ribbon bow"
-  }
+  },
+  "echoOf": "I'm the Echo of a cat, big and small!"
  },
  "looks": [
   "cat",

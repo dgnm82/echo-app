@@ -56,7 +56,7 @@ async def main():
     check(await pg.locator('#ornm').count()==1,'first Echo says yes')
     ar=await pg.evaluate("({seen:window.__arrSeen,st:window.__arrive,left:!!document.querySelector('canvas.notearrive'),vis:(document.querySelector('#orlf .px-echo')||{style:{}}).style.visibility,motes:document.querySelectorAll('.ormote').length,halo:getComputedStyle(document.querySelector('#orlf')).filter})")
     check(ar['seen']==1 and ar['st']==2 and not ar['left'] and ar['vis']!='hidden' and ar['motes']==0 and ar['halo'] in ('none',''),'C2 arrival forms from notes (no light motes/halo) '+str(ar))
-    t=await pg.locator('.orfamline').inner_text();check(t=="I'm a Howling! The Echo of a dog, fox, wolf or coyote!" and await pg.locator('.orfamline.obbub').count()==1,'ui_or_family '+t)
+    t=await pg.locator('.orfamline').inner_text();check(t=="I'm a Howling! I'm the Echo of a dog, wild and tame!" and await pg.locator('.orfamline.obbub').count()==1,'ui_or_family '+t)
     t=await pg.locator('.scene.ob').inner_text();check('Slyte' not in t and 'Whimber' not in t,'no old family word in origin UI')
     await shot(pg,'ob09_yes')
     await T(pg,'#ornm',400)

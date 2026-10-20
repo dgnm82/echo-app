@@ -3,6 +3,18 @@
   "species": "shared",
   "vars": {},
   "barks": {
+    "feed_full_play": [
+      {
+        "text": "My tummy's full! Let's play instead?",
+        "expr": "happy"
+      }
+    ],
+    "not_sleepy_play": [
+      {
+        "text": "I'm not sleepy yet! Let's play?",
+        "expr": "happy"
+      }
+    ],
     "napping": [
       {
         "text": "Zzz… ({name} is napping. It will wake soon.)",
@@ -625,7 +637,7 @@
     ],
     "ui_or_invite_ask": [
       {
-        "text": "It might like to come along with you. Ask it!",
+        "text": "Do you want to ask it to come with you?",
         "expr": "happy"
       }
     ],
@@ -637,13 +649,13 @@
     ],
     "ui_or_keep_colours": [
       {
-        "text": "It's keeping your {var:origin_animal}'s colour. The more you play together, the bigger its song grows.",
+        "text": "Your {var:origin_animal} is glowing with its song! The more you play together, the bigger and brighter its song will glow!",
         "expr": "happy"
       }
     ],
     "ui_or_family": [
       {
-        "text": "I'm {var:family_a}! The Echo of {var:family_animals}!",
+        "text": "I'm {var:family_a}! {var:family_echo}",
         "expr": "happy"
       }
     ],

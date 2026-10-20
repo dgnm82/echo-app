@@ -18371,7 +18371,7 @@
           "choices": [
             {
               "icon": "🐾",
-              "label": "Can it still sing?",
+              "label": "Can you sing me your song?",
               "goto": "d1"
             },
             {
@@ -18387,10 +18387,11 @@
           ]
         },
         "d1": {
-          "say": "Yep! It still has all its song. Songs can share.",
+          "say": "Okay! Listen...",
+          "sing": true,
           "expr": "happy",
           "next": "e",
-          "wait": 2600
+          "wait": 8000
         },
         "d2": {
           "say": "A humming one! Only Echoes can hear it. And now you, a bit.",

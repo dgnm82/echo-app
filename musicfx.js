@@ -62,6 +62,7 @@ MFX.playoff=function(o){return new Promise(res=>{const F=fam(o.fam);if(!F)return
   el.addEventListener('pointerdown',next);t=setTimeout(next,(P.autoplay_after_s||1.6)*1000)})};
 // ---------------- A10 postcard tune stamps (+ A8 Memory Book sounds): event delegation, works on every screen that shows them
 MFX.stampHTML=function(f,scene){const F=fam(f);if(!F||!F.postcards[scene])return '';return `<i class="pctune mfxsnd" role="button" aria-label="Play the postcard tune" data-tune="${f}:${scene}" style="background-image:url(px/pc_tune/${f}_${scene}.png)"></i>`};
+MFX.sing=function(f){const F=fam(f),T=F&&F.catch;if(!T)return 0;let t=0;const spb=60/(T.bpm||100);T.notes.forEach((n,k)=>{setTimeout(()=>note(f,n,{vol:.5}),t*1000);t+=T.beats[k]*spb});return t};   // E5 'Can you sing me your song?': the family tune
 MFX.playTune=function(f,scene,el){const F=fam(f),T=F&&F.postcards[scene];if(!T)return;let t=0;const spb=60/(T.bpm||96);
   T.notes.forEach((n,k)=>{setTimeout(()=>note(f,n,{vol:.5}),t*1000);t+=T.beats[k]*spb*.9});if(el&&!RM()){el.classList.add('playing');setTimeout(()=>el.classList.remove('playing'),t*1000)}};
 if(D)D.addEventListener('click',ev=>{const s=ev.target.closest&&ev.target.closest('[data-tune],[data-snd]');if(!s)return;
