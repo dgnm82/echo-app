@@ -290,7 +290,7 @@ function orColours(fid){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family
 // playtest: origin copy is data-driven from FAMILIES ("I'm a Howling! The Echo of a dog, fox or wolf!")
 const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
 function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
-  const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):''}}
+  const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):'',family_echo:(f.ui&&f.ui.echoOf)||''}}
 // P3 hum + invite (tap to hear, tap again; never timed)
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);if(window.MusicFX)setTimeout(()=>MusicFX.homeSound(o.animal),500);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
@@ -638,7 +638,7 @@ function maybeChat(){
 }
 function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
-  Dialogue.run(conv,{cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
+  Dialogue.run(conv,{sing:()=>{if(window.MusicFX&&MusicFX.sing)MusicFX.sing(FID())},cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
     remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n,false,'choice'),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(0,false,'reply');save();
     // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
@@ -670,7 +670,7 @@ function foodMenu(){const L=foodList(),tried=new Set(S.foods),pick=a=>a.length?a
 function foodIcon(f){return `<i class="pxi" data-icon="${f.icon.slice(2)}" style="background-image:url(px/${f.icon}.png)"></i>`}
 function feed(){
   if(asleep())return;
-  if(S.needs.food>=NeedsV2.full)return talk(B('food_decline'));if(sess.feeds>=C.sessionLimits.feeds)return talk(B('full'));   // needs v2: full (>= 90) politely declines, no bond
+  if(S.needs.food>=NeedsV2.full||sess.feeds>=C.sessionLimits.feeds)return talk(B('feed_full_play'));   // E7: full politely declines, no bond, and says why   // needs v2: full (>= 90) politely declines, no bond
   if(!foodList().length)return feedOld();
   const pool=foodMenu();
   ov.innerHTML=`<div class="choices">${pool.map((f,i)=>`<button class="btn" data-i="${i}">${foodIcon(f)}<span class="lbl">${f.name}</span></button>`).join('')}<div class="hint">Tap a food to feed</div></div>`;
@@ -691,8 +691,8 @@ function feedOld(){const e=E();
     addBond(0,false,fav?'feedFav':'feed');SFX('care_feed_eat');hop();setExpr('eating');setTimeout(()=>talk(B(fav?'fed_fav':'fed')),fav?900:0);if(fav)fwTick('food');if(fav&&!(S.memTags||[]).includes('favfood'))remember(`You found my favorite food: ${f}`,'favfood');save();maybeChat()});
 }
 function comfort(){   // affection v2: 3 of 10 kind things (affPick); closing costs nothing
-  if(asleep())return;const fam=CID(),opts=affPick(S,C.affection,Math.random),ic=o=>typeof o.icon==='string'?o.icon:o.icon[fam];save();
-  choices(opts.map(o=>[ic(o),o.label[fam],null]),i=>affDo(opts[i].id));
+  if(asleep())return;const fam=CID(),alt=GROUND()?'slyte':'whimber',opts=affPick(S,C.affection,Math.random),ic=o=>typeof o.icon==='string'?o.icon:(o.icon[fam]||o.icon[alt]);save();
+  choices(opts.map(o=>[ic(o),o.label[fam]||o.label[alt],null]),i=>affDo(opts[i].id));
 }
 function affDo(id){if(id==='pet')return pet();if(id==='hug')return hug();if(id==='sit')return sitTogether();kind(id)}
 function sitTogether(){
@@ -705,7 +705,7 @@ function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,CID
 function hug(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // E1 press-and-hold hug
   const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(hf)talk(B('hug_full'),1800);else if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}   // hugs are never refused
 function rest(){
-  const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy'));
+  const e=E(); if(sess.naps>=C.sessionLimits.naps)return talk(B('not_sleepy_play'));   // E7
   sess.naps++;if(window.NeedSelect){NeedSelect.pressures(S.needs,CID(),tod());needMet('sleepy')}const fav=S.badges.includes('place');S.needs.rest=clamp(S.needs.rest+(fav?C.restore.restFav:C.restore.rest));S.needs.play=clamp(S.needs.play);
   S.napUntil=now()+C.napSeconds*1000;const from=curScene();S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6); saved at once, shown after the wipe
 addBond(0,true,'nap');SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
@@ -779,7 +779,7 @@ function book(){
 
 // ---------- mini-games (§6.3) ----------
 function play(){
-  if(asleep())return; if(sess.games>=C.sessionLimits.games)return talk(B('game_tired'));
+  if(asleep())return;   // E7: games are always playable; after the first sessionLimits.games they are just for fun (no bond)
   if(S.needs.play>=NeedsV2.full)talk(B('play_full'),1800);   // games are never refused
   SFX('ui_panel_open');const start=g=>{sess.games++;S.needs.rest=clamp(S.needs.rest-5);g(0)};
   // Play picker (spec v0.3 §0; Night Sky cut): signature Pairs game (daily +3) + Builder on day 1, the runner at bond 70 (spec v0.6; bond 140 unlocks no game)
@@ -793,7 +793,8 @@ function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,m
 function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const fox=GROUND(),MG=(FAMD().music||{}).games||{},M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(MG[curGame]||M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
-function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
+const funOnly=()=>sess.games>C.sessionLimits.games;   // E7: past the session's bond games, play is just for fun
+function roundDone(round,next){S.needs.play=clamp(S.needs.play+C.restore.play);if(funOnly());else if(round>=2)addBond(0,true,'game');else addBond(0,true,'care');
   // signature-only daily bonus (spec §0/§4): first signature round of the day
   
   const t=GT;if(round>=2)setTimeout(()=>{if(t===GT)endGame(true)},2200);else setTimeout(()=>{if(t===GT)next(round+1)},2200)}
@@ -819,7 +820,7 @@ function leaveScreen(){const L=S.left,canVisit=!L.revisited&&now()-L.at<14*864e5
 function holidaySet(on,until){S.holiday=on?{on:true,since:now(),until:until||null}:{on:false};save()}
 // ---------- Games v2 shared kit (games_v2.md §3.0): flat rewards, best store, end card, HUD best, bonus glow, quiet auto-Easy ----------
 const GTU=()=>window.GAMES_TUNING;
-function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++)S.needs.play=clamp(S.needs.play+C.restore.play);if(n===R.roundsPerGame)addBond(0,true,'game');else addBond(0,true,'care');return n}   // needs v2 §2: +4 per finished game (6 a day); an early Done still counts as a visit
+function gameReward(t0){const R=GTU().REWARD,n=(now()-t0)/1000<R.quitEarlyS?R.quitEarlyRounds:R.roundsPerGame;for(let i=0;i<n;i++)S.needs.play=clamp(S.needs.play+C.restore.play);if(funOnly());else if(n===R.roundsPerGame)addBond(0,true,'game');else addBond(0,true,'care');return n}   // needs v2 §2: +4 per finished game (6 a day); an early Done still counts as a visit
 function bestStore(){S.best=S.best||{};['run','builder','dig','catch','stack'].forEach(k=>S.best[k]=S.best[k]||{});return S.best}
 function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
 function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}
@@ -836,7 +837,7 @@ function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=GROU
   {const cd=gs.querySelector('.g2card'),iv=setInterval(()=>{if(!cd.isConnected)return clearInterval(iv);const b=gs.querySelector('.bubble');if(!b||b.style.display==='none'||!b.textContent.trim())return;const s=cd.getBoundingClientRect().height/cd.offsetHeight||1,ov=b.getBoundingClientRect().bottom+4*s-cd.getBoundingClientRect().top;if(ov>0)cd.style.top=Math.min(gs.offsetHeight-cd.offsetHeight-4,cd.offsetTop+ov/s)+'px'},150)}   // the closing line never covers the results card: a long line nudges the card down
   SFX('run_finale',{vol:.7});save();
   $('#g2done').onclick=()=>endGame(true);
-  $('#g2again').onclick=()=>{if(sess.games>=C.sessionLimits.games){endGame(true);return setTimeout(()=>talk(B('game_tired')),400)}fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
+  $('#g2again').onclick=()=>{fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
 
 // ---------- Den Dig / Nest Weave state (den_dig.md) ----------
 function digState(){return S.dig=S.dig||{games:0,rows:0,best:0}}   // den_dig: replaces S.fort (old saves keep S.fort / S.homesBuilt, unused)
@@ -1010,19 +1011,19 @@ function stackGame(){
   function layer(x,y,w,p){x=Math.round(x);w=Math.max(6,Math.round(w));const P=p?'_perfect':'';if(!g2ok(IM[P+'m']))return;cx.drawImage(IM[P+'l'],x,y);let i=x+3;while(i<x+w-3){const c=Math.min(6,x+w-3-i);cx.drawImage(IM[P+'m'],0,0,c,8,i,y,c,8);i+=c}cx.drawImage(IM[P+'r'],x+w-3,y)}
   const yOf=h=>BASE-LH*(h+1)+cam;
   function step(dt){if(ended)return;StackEngine.step(g,dt);F++;const want=Math.max(0,132-(BASE-LH*(g.h+2)));if(cam<want)cam=lowFx()?Math.ceil(want/8)*8:Math.min(want,cam+2);
-    for(const b of bits){if(fox&&!lowFx()){b.vy=Math.min(7,b.vy+1/6);b.y=Math.min(BASE+18-cam,b.y+b.vy)}else b.t--}bits=bits.filter(b=>fox&&!lowFx()?true:b.t>0)}
+    const fall=fox&&!lowFx();for(const b of bits){if(fall){b.vy=Math.min(9,b.vy+.35);b.wy+=b.vy;b.a-=.05}else b.t--}bits=bits.filter(b=>fall?b.a>0&&b.wy+cam<330:b.t>0)}   // E8: trimmed bits fall in world space, leave view fast and fade (never ride the camera)
   function press(){if(ended)return;const top=g.layers[g.layers.length-1],w0=g.w,sx=g.sx;const onBeat=window.MusicFX&&MusicFX.onBeatNow();StackEngine.press(g);
     for(const e of StackEngine.take(g)){
       if(e.type==='place'&&onBeat){spk.push({x:g.top+g.w/2,h:g.h,t:0});if(++beatN%4===1&&now()-beatT>20000){beatT=now();setTimeout(()=>talk(B('tower_beat'),1600),300)}}
       if(e.type==='perfect'){perf.add(g.h+1);SFX('blocks_row_glow',{vol:.6});perfN++;if(perfN%3===1)talk(B('tower_perfect'),1600)}
-      if(e.type==='place'){SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,y:yOf(g.h),vy:0,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,y:yOf(g.h),vy:0,t:8})}
+      if(e.type==='place'){SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,wy:yOf(g.h)-cam,vy:1,a:1,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,wy:yOf(g.h)-cam,vy:1,a:1,t:8})}
       if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
     if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
   function draw(){if(!document.getElementById('stc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);
     if(g2ok(IM.base))fox?cx.drawImage(IM.base,47,BASE+cam):cx.drawImage(IM.base,79,BASE+cam,22,8);
     g.layers.forEach((l,i)=>{if(i>0)layer(l.x,yOf(i-1),l.w,perf.has(i))});
     if(!ended)layer(g.sx,yOf(g.h)-LH-2,g.w,false);
-    for(const b of bits)if(fox||b.t%2)layer(b.x,Math.round(b.y),b.w,false);
+    for(const b of bits){if(b.a<1){cx.globalAlpha=Math.max(0,b.a);layer(b.x,Math.round(b.wy+cam),b.w,false);cx.globalAlpha=1}else if(fox||b.t%2)layer(b.x,Math.round(b.wy+cam),b.w,false)}
     if(spk.length&&window.MusicFX)spk=spk.filter(s=>MusicFX.drawSparkle(cx,s.x,yOf(s.h)+4,s.t++));
     if(plop&&plop.t<16){const im=IM['burst'+Math.min(3,lowFx()?0:plop.t>>2)];if(g2ok(im))cx.drawImage(im,Math.round(plop.x+plop.w/2-12),BASE+4,24,24);plop.t++}
     if(best0>0){const y=yOf(best0-1);cx.fillStyle='#FFD27A';for(let x=0;x<180;x+=4)cx.fillRect(x,y,2,1);cx.beginPath();cx.moveTo(170,y-6);cx.lineTo(178,y-3);cx.lineTo(170,y);cx.fill()}
@@ -1037,7 +1038,7 @@ function stackGame(){
   function key(e){if(!document.getElementById('stc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
   document.addEventListener('keydown',key);
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
-  window.__stack=g;window.__stackPress=press;talk(B('tower_start'),2000)}
+  window.__stack=g;window.__stackPress=press;window.__stackBits=()=>bits.map(b=>({wy:b.wy,a:b.a}));talk(B('tower_start'),2000)}
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
 const PAIR_NAMES=new Proxy({},{get:(o,k)=>{for(const f of (window.FAMILIES||{order:[]}).order){const n=FAMILIES[f].games.pairNames[k];if(n)return n}}});   // manifest games.pairNames (every family's deck + token)
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
@@ -1395,6 +1396,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

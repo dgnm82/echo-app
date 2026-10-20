@@ -12,7 +12,7 @@ function step(g,dt){if(g.done)return g;g.t+=dt;const L=g.L,span=X1-g.w-X0;let v=
   g.sx+=g.dir*v*dt;if(g.sx>X0+span){g.sx=X0+span;g.dir=-1;newPass(g)}else if(g.sx<X0){g.sx=X0;g.dir=1;newPass(g)}return g}
 // playtest: classic stacker. Tight perfect window, every overhang trimmed (no width floor or glue), and the slider
 // re-enters from the side farther from the tower so a quick re-tap can't land on the same spot.
-const PERFECT={easy:3,standard:1.5,bigkid:1};
+const PERFECT={easy:2,standard:1,bigkid:.5};   // E8: tighter, so near-misses get trimmed
 function perfectW(g){return PERFECT[g.level]!=null?PERFECT[g.level]:g.L.perfect}
 function press(g){if(g.done)return g;const L=g.L,err=g.sx-g.top;
   if(Math.abs(err)<=perfectW(g)){g.run++;g.perfects++;let x=g.top;g.ev.push({type:'perfect',run:g.run});
