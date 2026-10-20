@@ -157,7 +157,7 @@ function start(){
   if(!S||S.setupDone===0)return setup();
   Dialogue.load(CID()).then(()=>{initDialogue();famVars();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
-const TAGLINE="ECHO: Every creature has a story to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
+const TAGLINE="ECHO: Every creature has a song to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
 function legacySetup(){   // test/playtest harness only (localStorage echo-nosetup)
   const fox=window.PIXEL?PIXEL.slyte({seed:7},1):'',owl=window.PIXEL?PIXEL.whimber({seed:4},1):'';
   h(`<div class="scene title"><div class="bg pxbg pxbg-night"></div><div class="tcard"><div class="tlogo"><img class="oblogo" src="px/title/logo.png" alt="ECHO" style="position:static;transform:none"><span>${TAGLINE.replace(/^ECHO:\s*/,'')}</span></div>
