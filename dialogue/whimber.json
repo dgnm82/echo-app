@@ -458,11 +458,6 @@
         "gesture": "wait"
       },
       {
-        "text": "Oh… a little breeze. The leaves whisper fast.",
-        "expr": "neutral",
-        "gesture": "tap"
-      },
-      {
         "text": "Practicing my hoot… low hoo, high hoo.",
         "expr": "neutral",
         "gesture": "hum"
@@ -609,15 +604,6 @@
       },
       {
         "text": "…a sleepy trill.",
-        "expr": "neutral"
-      },
-      {
-        "text": "The wind hums low… then whistles high. Mm.",
-        "expr": "neutral",
-        "gesture": "curious"
-      },
-      {
-        "text": "…a {word:soft} little breeze. Mm.",
         "expr": "neutral"
       },
       {
@@ -816,7 +802,7 @@
         "expr": "surprised"
       },
       {
-        "text": "A breeze. …There it goes.",
+        "text": "A moth. …There it goes.",
         "expr": "surprised",
         "gesture": "tap"
       }
@@ -839,14 +825,6 @@
         }
       },
       {
-        "text": "…the rain {var:rain}. I remember.",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "whimber_rain",
-          "varSet": "rain"
-        }
-      },
-      {
         "text": "…stars {var:stars}. Twinkle.",
         "expr": "happy",
         "cond": {
@@ -863,14 +841,6 @@
         }
       },
       {
-        "text": "…the wind {var:wind}. Whoosh.",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "whimber_wind",
-          "varSet": "wind"
-        }
-      },
-      {
         "text": "…the moth {var:moth}. Flutter.",
         "expr": "happy",
         "cond": {
@@ -884,14 +854,6 @@
         "cond": {
           "hasMemory": "whimber_dew",
           "varSet": "dew"
-        }
-      },
-      {
-        "text": "…fog {var:fog}. You said so.",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "whimber_fog",
-          "varSet": "fog"
         }
       },
       {
@@ -963,7 +925,10 @@
         "expr": "happy",
         "cond": {
           "hasMemory": "whimber_snow_w",
-          "varSet": "snow_w"
+          "varSet": "snow_w",
+          "var": {
+            "season": "snow"
+          }
         }
       },
       {
@@ -1063,14 +1028,6 @@
         }
       },
       {
-        "text": "…a puddle {var:puddle_w}. Hm.",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "whimber_puddle_w",
-          "varSet": "puddle_w"
-        }
-      },
-      {
         "text": "…a slow blink {var:owl_eyes}.",
         "expr": "happy",
         "cond": {
@@ -1123,7 +1080,10 @@
         "expr": "happy",
         "cond": {
           "hasMemory": "whimber_frost",
-          "varSet": "frost"
+          "varSet": "frost",
+          "var": {
+            "season": "snow"
+          }
         }
       },
       {
@@ -1463,7 +1423,7 @@
     ],
     "wild_glance": [
       {
-        "text": "…The wind came from far away tonight. It smelled of pine.",
+        "text": "…Something smelled of pine tonight. From far away.",
         "expr": "curious",
         "cond": {
           "bondMin": 140
@@ -2066,7 +2026,7 @@
     ],
     "need_content": [
       {
-        "text": "…everything is good. The breeze is nice.",
+        "text": "…everything is good. The leaves are nice.",
         "expr": "happy"
       },
       {
@@ -2159,28 +2119,6 @@
         "gesture": "curious"
       }
     ],
-    "weather_breezy": [
-      {
-        "text": "…the breeze is combing my feathers. Thank you, breeze.",
-        "expr": "happy"
-      },
-      {
-        "text": "Windy. The leaves are whispering.",
-        "expr": "curious",
-        "gesture": "hum"
-      }
-    ],
-    "weather_drizzle": [
-      {
-        "text": "…tiny rain. Each drop says tap.",
-        "expr": "happy"
-      },
-      {
-        "text": "A leaf umbrella. Hoo.",
-        "expr": "giggling",
-        "gesture": "settle"
-      }
-    ],
     "weather_snow": [
       {
         "text": "…snow is falling very quietly. Listen.",
@@ -2190,26 +2128,6 @@
         "text": "Cold. Sparkly.",
         "expr": "surprised",
         "gesture": "curious"
-      }
-    ],
-    "weather_fog": [
-      {
-        "text": "…the fog is a soft blanket for the trees.",
-        "expr": "thinking"
-      },
-      {
-        "text": "Everything is quiet and soft pink.",
-        "expr": "curious"
-      }
-    ],
-    "weather_rainbow": [
-      {
-        "text": "A rainbow. All the colors, holding wings.",
-        "expr": "delighted"
-      },
-      {
-        "text": "…after the rain, all the colors. Ooh.",
-        "expr": "love"
       }
     ],
     "food_smoked_fish": [
@@ -3199,6 +3117,118 @@
         "expr": "happy",
         "gesture": "settle"
       }
+    ],
+    "eib_invite": [
+      {
+        "text": "…a little tune is in my head. Sing it with me? Tap the note.",
+        "expr": "curious"
+      },
+      {
+        "text": "Hoo… shall we pass a song back and forth? Tap the note.",
+        "expr": "happy"
+      },
+      {
+        "text": "…I have a small song. Want it? Tap the note.",
+        "expr": "happy"
+      }
+    ],
+    "eib_hello": [
+      {
+        "text": "…I sing a little. Then you sing it back.",
+        "expr": "happy"
+      },
+      {
+        "text": "Hoo. I go first… then you.",
+        "expr": "happy"
+      }
+    ],
+    "eib_my_turn": [
+      {
+        "text": "…listen.",
+        "expr": "concentrating"
+      },
+      {
+        "text": "My turn… hoo.",
+        "expr": "happy"
+      },
+      {
+        "text": "…a small one. Listen.",
+        "expr": "happy"
+      }
+    ],
+    "eib_your_turn": [
+      {
+        "text": "…your turn.",
+        "expr": "curious"
+      },
+      {
+        "text": "Your turn… softly.",
+        "expr": "curious"
+      }
+    ],
+    "eib_same": [
+      {
+        "text": "…same! Again?",
+        "expr": "delighted"
+      },
+      {
+        "text": "Same… hoo. Lovely.",
+        "expr": "delighted"
+      },
+      {
+        "text": "Same. My feathers are fluffing up.",
+        "expr": "delighted"
+      }
+    ],
+    "eib_close": [
+      {
+        "text": "…close! Like this:",
+        "expr": "happy"
+      },
+      {
+        "text": "Ooh… close. Like this:",
+        "expr": "happy"
+      }
+    ],
+    "eib_new": [
+      {
+        "text": "…ooh, a new one. My turn:",
+        "expr": "delighted"
+      },
+      {
+        "text": "A new song… I copy you:",
+        "expr": "delighted"
+      },
+      {
+        "text": "Hoo… your song. My turn:",
+        "expr": "delighted"
+      }
+    ],
+    "eib_again": [
+      {
+        "text": "…once more. Slowly.",
+        "expr": "happy"
+      },
+      {
+        "text": "Here it is again… softly.",
+        "expr": "happy"
+      }
+    ],
+    "eib_rest": [
+      {
+        "text": "…listening is nice too. Tap any time.",
+        "expr": "happy"
+      }
+    ],
+    "eib_new_note": [
+      {
+        "text": "…a new note. Listen.",
+        "expr": "curious"
+      },
+      {
+        "text": "Hoo… a new note. Hear it?",
+        "expr": "curious"
+      }
     ]
   },
   "conversations": [
@@ -3712,86 +3742,6 @@
       }
     },
     {
-      "id": "whimber_rain_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "whimber_rain",
-        "varSet": "rain",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…pit-pat. You said the rain {var:rain}.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "intent": "yes",
-              "goto": "b"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "intent": "giggle",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…welcome down again, drops.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "whimber_rain_morning",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "morning"
-        ],
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Rainy morning… the sky is still in its pajamas.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "intent": "nod",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…a {word:soft} rain kind of morning.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
       "id": "whimber_stars_callback",
       "trigger": "idle",
       "weight": 3,
@@ -3959,92 +3909,6 @@
       }
     },
     {
-      "id": "whimber_wind_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "whimber_wind",
-        "varSet": "wind",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…the wind is busy again. You said it {var:wind}.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "intent": "yes",
-              "goto": "b"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "intent": "giggle",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…bye, wind. Whoosh.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "whimber_wind_evening",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "evening"
-        ],
-        "bondMin": 210
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "The evening wind is soft… like it's tiptoeing.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🤩",
-              "label": "@pool:wow",
-              "intent": "wow",
-              "goto": "b"
-            },
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "intent": "nod",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…a tiptoe wind tonight.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
       "id": "whimber_moth_callback",
       "trigger": "idle",
       "weight": 3,
@@ -4205,86 +4069,6 @@
         },
         "b": {
           "say": "…sparkly grass. Cold feet.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
-      "id": "whimber_fog_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "whimber_fog",
-        "varSet": "fog",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Soft edges again. You said the fog {var:fog}.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "intent": "yes",
-              "goto": "b"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "intent": "giggle",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…I'll walk slowly through it.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "whimber_fog_morning",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "morning"
-        ],
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Foggy morning… the trees are wearing scarves.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "intent": "nod",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…the trees have their scarves on.",
           "expr": "happy",
           "bond": 1
         }
@@ -4471,7 +4255,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "…drops on the window. You said it {var:window}.",
+          "say": "…the window again. You said it {var:window}.",
           "expr": "happy",
           "choices": [
             {
@@ -4967,7 +4751,10 @@
       "cond": {
         "hasMemory": "whimber_snow_w",
         "varSet": "snow_w",
-        "bondMin": 370
+        "bondMin": 370,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -5010,7 +4797,10 @@
         "time": [
           "morning"
         ],
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -6044,86 +5834,6 @@
       }
     },
     {
-      "id": "whimber_puddle_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "whimber_puddle_w",
-        "varSet": "puddle_w",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…a still puddle. You said a puddle {var:puddle_w}.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "intent": "yes",
-              "goto": "b"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "intent": "giggle",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "{pet_phrase} I won't step in. Just in case.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "whimber_puddle_morning",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "morning"
-        ],
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Morning puddles… full of morning sky.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "intent": "nod",
-              "goto": "b"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…morning puddles, full of sky.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
       "id": "whimber_blink_callback",
       "trigger": "idle",
       "weight": 3,
@@ -6631,7 +6341,10 @@
       "cond": {
         "hasMemory": "whimber_frost",
         "varSet": "frost",
-        "bondMin": 370
+        "bondMin": 370,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -6674,7 +6387,10 @@
         "time": [
           "morning"
         ],
-        "bondMin": 210
+        "bondMin": 210,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -7746,130 +7462,6 @@
       }
     },
     {
-      "id": "whimber_rain_wonder",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…Pit… pat. Pit-pat-pat. The rain is busy tonight.",
-          "expr": "thinking",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "What do you think rain is… before it falls?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☁️",
-              "label": "Cloud water",
-              "reply": "Cloud water… so clouds are wet pillows. Hm.",
-              "expr": "happy",
-              "set": {
-                "rain": "starts as cloud water"
-              },
-              "memory": "You told me… the rain starts as cloud water",
-              "memoryTag": "whimber_rain",
-              "goto": "c"
-            },
-            {
-              "icon": "🌊",
-              "label": "The sea",
-              "reply": "Sea that went for a visit… and is coming down to tell us.",
-              "expr": "happy",
-              "set": {
-                "rain": "started as the sea"
-              },
-              "memory": "You told me… the rain started as the sea",
-              "memoryTag": "whimber_rain",
-              "goto": "c"
-            },
-            {
-              "icon": "🫧",
-              "label": "Sky sprinkles",
-              "reply": "Sprinkles… the sky is watering its flowers.",
-              "expr": "happy",
-              "set": {
-                "rain": "is the sky watering flowers"
-              },
-              "memory": "You told me… the rain is the sky watering flowers",
-              "memoryTag": "whimber_rain",
-              "goto": "c"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "reply": "I think rain is water on a long journey.",
-              "expr": "thinking",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "{pet_phrase} Welcome down, little drops. Plip, plop.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 210
-      }
-    },
-    {
-      "id": "whimber_rain_smell",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Do you smell that? After rain.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "curious"
-        },
-        "b": {
-          "say": "What does after-rain smell like… to you?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🌱",
-              "label": "Grass",
-              "reply": "Green grass… yes. Like the ground woke up.",
-              "expr": "happy",
-              "goto": "c"
-            },
-            {
-              "icon": "🪨",
-              "label": "Wet stones",
-              "reply": "Wet stones… cool and old. I like that one.",
-              "expr": "happy",
-              "goto": "c"
-            },
-            {
-              "icon": "🤷",
-              "label": "@pool:unsure",
-              "intent": "unsure",
-              "reply": "Hard to say… hoo. It just smells nice.",
-              "expr": "happy",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "Mmm. Smells like the world got a bath.",
-          "expr": "happy",
-          "bond": 1,
-          "gesture": "settle"
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
       "id": "whimber_stars_wonder",
       "trigger": "idle",
       "weight": 2,
@@ -8106,79 +7698,6 @@
       },
       "cond": {
         "bondMin": 70
-      }
-    },
-    {
-      "id": "whimber_wind_wonder",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "The wind is in a hurry tonight.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "preen"
-        },
-        "b": {
-          "say": "What is the wind hurrying for?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🎉",
-              "label": "A party",
-              "reply": "A sky party… it's late. Everyone's flying over.",
-              "expr": "happy",
-              "set": {
-                "wind": "hurries to a sky party"
-              },
-              "memory": "You told me… the wind hurries to a sky party",
-              "memoryTag": "whimber_wind",
-              "goto": "c"
-            },
-            {
-              "icon": "🏠",
-              "label": "To get home",
-              "reply": "Going home… even wind has somewhere cozy.",
-              "expr": "happy",
-              "set": {
-                "wind": "hurries home"
-              },
-              "memory": "You told me… the wind hurries home",
-              "memoryTag": "whimber_wind",
-              "goto": "c"
-            },
-            {
-              "icon": "🍃",
-              "label": "Chasing leaves",
-              "reply": "Leaf chasing… hm. Catch them, wind.",
-              "expr": "happy",
-              "set": {
-                "wind": "chases leaves"
-              },
-              "memory": "You told me… the wind chases leaves",
-              "memoryTag": "whimber_wind",
-              "goto": "c"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "reply": "I think it forgot something… and went back for it.",
-              "expr": "happy",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "…Bye, wind. Please don't take my feathers.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 370
       }
     },
     {
@@ -8455,114 +7974,6 @@
       }
     },
     {
-      "id": "whimber_fog_wonder",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…The fog has made everything soft around the edges.",
-          "expr": "thinking",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "Where do you think the fog came from?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☁️",
-              "label": "A low cloud",
-              "reply": "A cloud came down to rest… on the grass.",
-              "expr": "happy",
-              "set": {
-                "fog": "is a cloud resting low"
-              },
-              "memory": "You told me… the fog is a cloud resting low",
-              "memoryTag": "whimber_fog",
-              "goto": "c"
-            },
-            {
-              "icon": "🌊",
-              "label": "The river",
-              "reply": "The river breathed out… a big cool breath.",
-              "expr": "happy",
-              "set": {
-                "fog": "is the river's breath"
-              },
-              "memory": "You told me… the fog is the river's breath",
-              "memoryTag": "whimber_fog",
-              "goto": "c"
-            },
-            {
-              "icon": "💤",
-              "label": "Dreams",
-              "reply": "Dreams that drifted out… before morning.",
-              "expr": "happy",
-              "set": {
-                "fog": "is drifted-out dreams"
-              },
-              "memory": "You told me… the fog is drifted-out dreams",
-              "memoryTag": "whimber_fog",
-              "goto": "c"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "reply": "I think the night didn't want to leave yet.",
-              "expr": "thinking",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "…It'll go when the sun gets brave. Not yet.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
-      "id": "whimber_fog_walk",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "In the fog… shall we walk very slowly?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🐌",
-              "label": "Very slowly",
-              "reply": "Slow… slow… hoo. The tree just appeared. Hello, tree.",
-              "expr": "happy",
-              "goto": "b"
-            },
-            {
-              "icon": "🤝",
-              "label": "Close together",
-              "reply": "Close together… yes. Wing to hand.",
-              "expr": "happy",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…Fog makes every step a small surprise.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 370
-      }
-    },
-    {
       "id": "whimber_owlhoot_wonder",
       "trigger": "idle",
       "weight": 2,
@@ -8791,7 +8202,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "…The window has little drops on the outside.",
+          "say": "…The window is very shiny.",
           "expr": "thinking",
           "next": "b",
           "wait": 2400
@@ -8800,18 +8211,6 @@
           "say": "What would the window say… if it could talk?",
           "expr": "curious",
           "choices": [
-            {
-              "icon": "🌧️",
-              "label": "It's wet out",
-              "reply": "“It's wet out here”… hoo. A wet window.",
-              "expr": "happy",
-              "set": {
-                "window": "would talk about the weather"
-              },
-              "memory": "You told me… the window would talk about the weather",
-              "memoryTag": "whimber_window",
-              "goto": "c"
-            },
             {
               "icon": "👋",
               "label": "Hello inside",
@@ -8864,7 +8263,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "If we drew on the foggy window… what would you draw?",
+          "say": "If we drew on the window… with one finger… what would you draw?",
           "expr": "curious",
           "choices": [
             {
@@ -8891,7 +8290,7 @@
           ]
         },
         "b": {
-          "say": "…The window will remember it until it dries.",
+          "say": "…The window will keep it. For a little while.",
           "expr": "thinking",
           "bond": 1
         }
@@ -9519,7 +8918,10 @@
         }
       },
       "cond": {
-        "bondMin": 210
+        "bondMin": 210,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -9561,7 +8963,10 @@
         }
       },
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -10880,86 +10285,13 @@
       }
     },
     {
-      "id": "whimber_puddle_wonder",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…The puddle is very still. Like a little window in the ground.",
-          "expr": "thinking",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "What do you think lives… under a puddle?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🐛",
-              "label": "Worms",
-              "reply": "Worms… with a wet ceiling.",
-              "expr": "happy",
-              "set": {
-                "puddle_w": "has worms underneath"
-              },
-              "memory": "You told me… a puddle has worms underneath",
-              "memoryTag": "whimber_puddle_w",
-              "goto": "c"
-            },
-            {
-              "icon": "🌌",
-              "label": "Another sky",
-              "reply": "Another sky… upside down.",
-              "expr": "happy",
-              "set": {
-                "puddle_w": "has another sky underneath"
-              },
-              "memory": "You told me… a puddle has another sky underneath",
-              "memoryTag": "whimber_puddle_w",
-              "goto": "c"
-            },
-            {
-              "icon": "🤷",
-              "label": "@pool:unsure",
-              "intent": "unsure",
-              "reply": "Nobody knows… it's a puddle surprise.",
-              "expr": "happy",
-              "set": {
-                "puddle_w": "keeps its underneath a mystery"
-              },
-              "memory": "You told me… a puddle keeps its underneath a mystery",
-              "memoryTag": "whimber_puddle_w",
-              "goto": "c"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "intent": "listen",
-              "reply": "I think just mud. Happy mud.",
-              "expr": "thinking",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "…I won't step in. Just in case it's another sky.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 210
-      }
-    },
-    {
       "id": "whimber_puddle_drop",
       "trigger": "idle",
       "weight": 2,
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Shall we drop a pebble in… and see the circles?",
+          "say": "Shall we drop a pebble in the pond… and see the circles?",
           "expr": "curious",
           "choices": [
             {
@@ -10972,14 +10304,14 @@
             {
               "icon": "🙅",
               "label": "Leave it still",
-              "reply": "Leave it still… yes. A calm puddle is nice too.",
+              "reply": "Leave it still… yes. A calm pond is nice too.",
               "expr": "happy",
               "goto": "b"
             }
           ]
         },
         "b": {
-          "say": "{pet_phrase} Puddles are so calm.",
+          "say": "{pet_phrase} Ponds are so calm.",
           "expr": "thinking",
           "bond": 1
         }
@@ -11715,7 +11047,10 @@
         }
       },
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -11751,7 +11086,10 @@
         }
       },
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -12312,7 +11650,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "…A little mushroom popped up after the rain.",
+          "say": "…A little mushroom popped up. Overnight!",
           "expr": "thinking",
           "next": "b",
           "wait": 2400
@@ -12321,18 +11659,6 @@
           "say": "Where do mushrooms… come from so fast?",
           "expr": "curious",
           "choices": [
-            {
-              "icon": "🌧️",
-              "label": "The rain",
-              "reply": "The rain… brought them up.",
-              "expr": "happy",
-              "set": {
-                "mushroom": "comes up with the rain"
-              },
-              "memory": "You told me… a mushroom comes up with the rain",
-              "memoryTag": "whimber_mushroom",
-              "goto": "c"
-            },
             {
               "icon": "🪄",
               "label": "Magic",
@@ -13078,42 +12404,6 @@
       }
     },
     {
-      "id": "whimber_fog_shapes",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "In the fog… things look like other things. What's that?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🐘",
-              "label": "An elephant",
-              "reply": "An elephant… oh. It's a bush. A big bush.",
-              "expr": "happy",
-              "goto": "b"
-            },
-            {
-              "icon": "🏰",
-              "label": "A castle",
-              "reply": "A castle… it's the shed. A small castle, then.",
-              "expr": "happy",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "…Fog makes funny shapes.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
       "id": "whimber_owlhoot_echo",
       "trigger": "idle",
       "weight": 2,
@@ -13477,7 +12767,10 @@
         }
       },
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -13973,42 +13266,6 @@
       }
     },
     {
-      "id": "whimber_puddle_boot",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Should we jump in the puddle… or step around?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🦘",
-              "label": "Jump in",
-              "reply": "Splash… hoo. My feathers are wet now. Worth it.",
-              "expr": "happy",
-              "goto": "b"
-            },
-            {
-              "icon": "🚶",
-              "label": "Step around",
-              "reply": "Step around… carefully. The sky stays still.",
-              "expr": "happy",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "{pet_phrase} Puddles are good either way.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
       "id": "whimber_blink_game",
       "trigger": "idle",
       "weight": 2,
@@ -14086,49 +13343,6 @@
       },
       "cond": {
         "bondMin": 370
-      }
-    },
-    {
-      "id": "whimber_wings_shelter",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…When it rains, I can spread my wings. Like a roof.",
-          "expr": "thinking",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "Should I make a wing roof… for you?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☂️",
-              "label": "Yes",
-              "reply": "There. Dry and cozy underneath.",
-              "expr": "happy",
-              "goto": "c",
-              "gesture": "wave"
-            },
-            {
-              "icon": "🌧️",
-              "label": "I like the rain",
-              "reply": "You like the rain… then I'll share a corner.",
-              "expr": "happy",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "{pet_phrase} Wings make good umbrellas. And good hugs.",
-          "expr": "thinking",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 210
       }
     },
     {
@@ -14284,7 +13498,10 @@
         }
       },
       "cond": {
-        "bondMin": 0
+        "bondMin": 0,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -14754,42 +13971,6 @@
       }
     },
     {
-      "id": "whimber_rain_window",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…the rain is drawing lines on the window. Which drop will win the race?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "⬅️",
-              "label": "That one",
-              "reply": "That one… it's going slowly. Patient drop.",
-              "expr": "happy",
-              "goto": "b"
-            },
-            {
-              "icon": "➡️",
-              "label": "The fast one",
-              "reply": "The fast one… oh, it joined another. Now they're one drop.",
-              "expr": "happy",
-              "goto": "b"
-            }
-          ]
-        },
-        "b": {
-          "say": "Nobody won… they all got to the bottom. That seems fair.",
-          "expr": "happy",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 210
-      }
-    },
-    {
       "id": "whimber_stars_name",
       "trigger": "idle",
       "weight": 2,
@@ -14899,50 +14080,6 @@
       }
     },
     {
-      "id": "whimber_wind_feathers",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "The wind is combing my feathers the wrong way.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "wave"
-        },
-        "b": {
-          "say": "Do I look very ruffled?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "😆",
-              "label": "Very!",
-              "reply": "Very ruffled… hoo-hoo. A windy {name}.",
-              "expr": "giggling"
-            },
-            {
-              "icon": "🙂",
-              "label": "A little",
-              "reply": "A little… I'll fluff and settle. There.",
-              "expr": "happy",
-              "gesture": "preen"
-            },
-            {
-              "icon": "🤗",
-              "label": "So cozy!",
-              "reply": "Cozy… I'll take cozy. Thank you.",
-              "expr": "happy"
-            }
-          ],
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
       "id": "whimber_moth_dance",
       "trigger": "idle",
       "weight": 2,
@@ -15016,48 +14153,6 @@
       },
       "cond": {
         "bondMin": 70
-      }
-    },
-    {
-      "id": "whimber_fog_hide",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…The fog is so thick… the old tree is hiding. Peekaboo, tree.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "Where do you think it went?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🌳",
-              "label": "It's still there",
-              "reply": "Still there… I believe you. Trees are very good at staying.",
-              "expr": "happy",
-              "goto": "c"
-            },
-            {
-              "icon": "☁️",
-              "label": "Inside the fog",
-              "reply": "Inside the fog… having a {word:soft} rest.",
-              "expr": "happy",
-              "goto": "c"
-            }
-          ]
-        },
-        "c": {
-          "say": "When the fog lifts… hello again, tree.",
-          "expr": "happy",
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 210
       }
     },
     {
@@ -15212,7 +14307,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "…I dipped my feather in a puddle. Now it's a pen. A wet pen.",
+          "say": "…I dipped my feather in the dew. Now it's a pen. A wet pen.",
           "expr": "thinking",
           "next": "b",
           "wait": 2400
@@ -15435,7 +14530,10 @@
         }
       },
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {
@@ -15922,43 +15020,6 @@
       }
     },
     {
-      "id": "whimber_puddle_sky",
-      "trigger": "idle",
-      "weight": 2,
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "…I'm looking into the puddle. There's a cloud in it.",
-          "expr": "thinking",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "Shall I poke the puddle cloud?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "👉",
-              "label": "Poke it",
-              "reply": "The cloud wobbled. Then it came back. Sturdy cloud.",
-              "expr": "happy",
-              "gesture": "tap"
-            },
-            {
-              "icon": "🙅",
-              "label": "Leave it",
-              "reply": "Leave it… yes. It's resting.",
-              "expr": "happy"
-            }
-          ],
-          "bond": 1
-        }
-      },
-      "cond": {
-        "bondMin": 70
-      }
-    },
-    {
       "id": "whimber_blink_back",
       "trigger": "idle",
       "weight": 2,
@@ -16215,7 +15276,10 @@
         }
       },
       "cond": {
-        "bondMin": 0
+        "bondMin": 0,
+        "var": {
+          "season": "snow"
+        }
       }
     },
     {

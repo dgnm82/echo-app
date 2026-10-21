@@ -1673,7 +1673,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "The air smells different today. Like rain, maybe.",
+          "say": "The air smells different today. Like flowers, maybe.",
           "expr": "curious",
           "next": "b",
           "wait": 2200

@@ -226,7 +226,7 @@
     ],
     "sit": [
       {
-        "text": "…quiet. I can hear the wind.",
+        "text": "…quiet. I can hear the crickets.",
         "expr": "happy"
       },
       {
@@ -516,11 +516,6 @@
         "gesture": "curious"
       },
       {
-        "text": "Wind in my whiskers!",
-        "expr": "neutral",
-        "gesture": "lookup"
-      },
-      {
         "text": "Achoo. Little sneeze.",
         "expr": "neutral",
         "gesture": "curious"
@@ -560,7 +555,7 @@
         "gesture": "curious"
       },
       {
-        "text": "Drip, drip. Slow drips. Plink! A high one.",
+        "text": "Drip, drip. The tap drips. Plink! A high one.",
         "expr": "neutral",
         "gesture": "lookup"
       },
@@ -668,11 +663,6 @@
         "text": "A dandelion. Puff! It flew.",
         "expr": "neutral",
         "gesture": "pounce"
-      },
-      {
-        "text": "Drip. A raindrop on my nose.",
-        "expr": "neutral",
-        "gesture": "lookup"
       },
       {
         "text": "I hear a cricket. Cree, cree.",
@@ -938,7 +928,7 @@
     ],
     "tangent": [
       {
-        "text": "Wait— a sound! …Just the wind.",
+        "text": "Wait— a sound! …Just a leaf.",
         "expr": "surprised"
       },
       {
@@ -1261,7 +1251,7 @@
     ],
     "wild_glance": [
       {
-        "text": "The wind smells like far-away grass. Sniff, sniff.",
+        "text": "The air smells like far-away grass. Sniff, sniff.",
         "expr": "curious",
         "cond": {
           "bondMin": 140
@@ -1734,7 +1724,7 @@
     ],
     "run_done": [
       {
-        "text": "Phew! What a run. My whiskers are windy.",
+        "text": "Phew! What a run. My whiskers are wiggly.",
         "expr": "happy",
         "react": "happy"
       },
@@ -2023,28 +2013,6 @@
         "gesture": "curious"
       }
     ],
-    "weather_breezy": [
-      {
-        "text": "Wind! My whiskers say hi to it.",
-        "expr": "happy",
-        "gesture": "wave"
-      },
-      {
-        "text": "Windy day! My fur goes whoosh.",
-        "expr": "giggling"
-      }
-    ],
-    "weather_drizzle": [
-      {
-        "text": "Pitter-pat. I'm staying under the leaf.",
-        "expr": "curious"
-      },
-      {
-        "text": "A raindrop on my nose. Boop.",
-        "expr": "giggling",
-        "gesture": "tap"
-      }
-    ],
     "weather_snow": [
       {
         "text": "Snow! A snowflake on my nose. Cold!",
@@ -2054,27 +2022,6 @@
         "text": "Paw prints! Look, I'm drawing.",
         "expr": "delighted",
         "gesture": "pounce"
-      }
-    ],
-    "weather_fog": [
-      {
-        "text": "Fog! The trees are hiding.",
-        "expr": "curious"
-      },
-      {
-        "text": "It smells like a cloud came down.",
-        "expr": "curious",
-        "gesture": "curious"
-      }
-    ],
-    "weather_rainbow": [
-      {
-        "text": "A rainbow! So many colors. Purr.",
-        "expr": "delighted"
-      },
-      {
-        "text": "Rain, then a rainbow. Nice sky.",
-        "expr": "happy"
       }
     ],
     "food_fish_sticks": [
@@ -3248,14 +3195,6 @@
         }
       },
       {
-        "text": "Rain {var:rain}. You told me!",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "twitchel_rain",
-          "varSet": "rain"
-        }
-      },
-      {
         "text": "My bell {var:bell}. You picked it!",
         "expr": "happy",
         "cond": {
@@ -3293,14 +3232,6 @@
         "cond": {
           "hasMemory": "twitchel_butterfly",
           "varSet": "butterfly"
-        }
-      },
-      {
-        "text": "The puddle {var:puddle}. You said!",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "twitchel_puddle",
-          "varSet": "puddle"
         }
       },
       {
@@ -3356,7 +3287,10 @@
         "expr": "happy",
         "cond": {
           "hasMemory": "twitchel_snow",
-          "varSet": "snow"
+          "varSet": "snow",
+          "var": {
+            "season": "snow"
+          }
         }
       },
       {
@@ -3405,22 +3339,6 @@
         "cond": {
           "hasMemory": "twitchel_dandelion",
           "varSet": "dandelion"
-        }
-      },
-      {
-        "text": "The rainbow {var:rainbow}. You said!",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "twitchel_rainbow",
-          "varSet": "rainbow"
-        }
-      },
-      {
-        "text": "The wind {var:wind}. You said so.",
-        "expr": "happy",
-        "cond": {
-          "hasMemory": "twitchel_wind",
-          "varSet": "wind"
         }
       },
       {
@@ -3645,6 +3563,118 @@
         "text": "One tap, one step. Or just listen.",
         "expr": "love",
         "gesture": "settle"
+      }
+    ],
+    "eib_invite": [
+      {
+        "text": "Mrrp! A song game? Tap the note!",
+        "expr": "excited"
+      },
+      {
+        "text": "A tiny tune. Sing with me? Tap the note!",
+        "expr": "happy"
+      },
+      {
+        "text": "La-la? Tap the note! Purr.",
+        "expr": "happy"
+      }
+    ],
+    "eib_hello": [
+      {
+        "text": "I sing. You sing it back. Ready? Mrrp.",
+        "expr": "excited"
+      },
+      {
+        "text": "Song game! Me first. Then you!",
+        "expr": "excited"
+      }
+    ],
+    "eib_my_turn": [
+      {
+        "text": "My turn! Listen.",
+        "expr": "happy"
+      },
+      {
+        "text": "Mrrp. Listen.",
+        "expr": "concentrating"
+      },
+      {
+        "text": "My turn. Little song.",
+        "expr": "happy"
+      }
+    ],
+    "eib_your_turn": [
+      {
+        "text": "Your turn!",
+        "expr": "curious"
+      },
+      {
+        "text": "Your turn! Tap, tap.",
+        "expr": "curious"
+      }
+    ],
+    "eib_same": [
+      {
+        "text": "Same! Again?",
+        "expr": "delighted"
+      },
+      {
+        "text": "Same! Purr-purr.",
+        "expr": "delighted"
+      },
+      {
+        "text": "Same! My whiskers are happy.",
+        "expr": "delighted"
+      }
+    ],
+    "eib_close": [
+      {
+        "text": "Close! Like this:",
+        "expr": "happy"
+      },
+      {
+        "text": "Ooh, close! Like this:",
+        "expr": "happy"
+      }
+    ],
+    "eib_new": [
+      {
+        "text": "Ooh, a new one! My turn:",
+        "expr": "delighted"
+      },
+      {
+        "text": "New song! I copy you:",
+        "expr": "delighted"
+      },
+      {
+        "text": "Mrrp! Your song. My turn:",
+        "expr": "delighted"
+      }
+    ],
+    "eib_again": [
+      {
+        "text": "Again. Slow.",
+        "expr": "happy"
+      },
+      {
+        "text": "Here it is again. Purr.",
+        "expr": "happy"
+      }
+    ],
+    "eib_rest": [
+      {
+        "text": "Just listening? Nice. Tap any time.",
+        "expr": "happy"
+      }
+    ],
+    "eib_new_note": [
+      {
+        "text": "New note! Hear it?",
+        "expr": "excited"
+      },
+      {
+        "text": "Mrrp! A new note. Listen.",
+        "expr": "excited"
       }
     ]
   },
@@ -4149,123 +4179,6 @@
         },
         "b": {
           "say": "I looked out today. Still nice out there.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_rain_talk",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Rain! Pitter-pat on the roof.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "curious"
-        },
-        "b": {
-          "say": "What does rain sound like to you?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🥁",
-              "label": "A drum",
-              "goto": "c",
-              "reply": "A rain drum! Pat-pat-pat.",
-              "expr": "excited",
-              "set": {
-                "rain": "sounds like a drum"
-              },
-              "memory": "You said rain sounds like a drum",
-              "memoryTag": "twitchel_rain"
-            },
-            {
-              "icon": "👏",
-              "label": "Clapping",
-              "goto": "c",
-              "reply": "The sky is clapping! For us?",
-              "expr": "delighted",
-              "set": {
-                "rain": "sounds like clapping"
-              },
-              "memory": "You said rain sounds like clapping",
-              "memoryTag": "twitchel_rain"
-            },
-            {
-              "icon": "🎵",
-              "label": "A song",
-              "goto": "c",
-              "reply": "A rain song. I'll purr along.",
-              "expr": "love",
-              "set": {
-                "rain": "sounds like a song"
-              },
-              "memory": "You said rain sounds like a song",
-              "memoryTag": "twitchel_rain"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "c",
-              "reply": "Pat. Pat. Pat-pat. I like it.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "c": {
-          "say": "Rain outside. Warm inside. Purr.",
-          "expr": "happy",
-          "bond": 1,
-          "gesture": "settle"
-        }
-      }
-    },
-    {
-      "id": "twitchel_rain_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "twitchel_rain",
-        "varSet": "rain",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Rain! You said it {var:rain}.",
-          "expr": "proud",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "goto": "b",
-              "intent": "yes"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "goto": "b",
-              "intent": "giggle"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Pat-pat. Yes. Still true.",
           "expr": "happy",
           "bond": 2
         }
@@ -4890,160 +4803,6 @@
           "say": "This one is staying. On my tail!",
           "expr": "happy",
           "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_puddle_talk",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "A puddle! Wet paws. Shake!",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "curious"
-        },
-        "b": {
-          "say": "What's in the puddle?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☁️",
-              "label": "The sky",
-              "goto": "c",
-              "reply": "The sky is in the puddle! Upside down.",
-              "expr": "surprised",
-              "set": {
-                "puddle": "has the sky in it"
-              },
-              "memory": "You said the puddle has the sky in it",
-              "memoryTag": "twitchel_puddle"
-            },
-            {
-              "icon": "🐱",
-              "label": "You!",
-              "goto": "c",
-              "reply": "Me! A puddle cat. Hi, puddle cat.",
-              "expr": "giggling",
-              "set": {
-                "puddle": "has a puddle cat in it"
-              },
-              "memory": "You said the puddle has a puddle cat in it",
-              "memoryTag": "twitchel_puddle"
-            },
-            {
-              "icon": "🐟",
-              "label": "A tiny fish",
-              "goto": "c",
-              "reply": "A fish? …No fish. Just splash.",
-              "expr": "curious",
-              "set": {
-                "puddle": "might have a fish in it"
-              },
-              "memory": "You said the puddle might have a fish in it",
-              "memoryTag": "twitchel_puddle"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "c",
-              "reply": "Splash. Shake, shake.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "c": {
-          "say": "Wet paws. Happy paws.",
-          "expr": "happy",
-          "bond": 1,
-          "gesture": "spin"
-        }
-      }
-    },
-    {
-      "id": "twitchel_puddle_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "twitchel_puddle",
-        "varSet": "puddle",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Puddle! You said it {var:puddle}.",
-          "expr": "proud",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "goto": "b",
-              "intent": "yes"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "goto": "b",
-              "intent": "giggle"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "I peeked. Still true!",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_puddle_morning",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "morning"
-        ],
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Morning puddle. It's cold. Tap, tap.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "goto": "b",
-              "intent": "nod"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Cold paws. Good morning, puddle.",
-          "expr": "happy",
-          "bond": 1
         }
       }
     },
@@ -5791,7 +5550,10 @@
       "trigger": "idle",
       "weight": 2,
       "cond": {
-        "bondMin": 70
+        "bondMin": 70,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -5868,7 +5630,10 @@
       "cond": {
         "hasMemory": "twitchel_snow",
         "varSet": "snow",
-        "bondMin": 370
+        "bondMin": 370,
+        "var": {
+          "season": "snow"
+        }
       },
       "start": "a",
       "nodes": {
@@ -6639,314 +6404,6 @@
           "say": "Puff! …There. Done.",
           "expr": "happy",
           "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_rainbow_talk",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "A rainbow! After the rain. Look!",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "curious"
-        },
-        "b": {
-          "say": "Where does the rainbow end?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🍯",
-              "label": "In a jar",
-              "goto": "c",
-              "reply": "In a jar! A rainbow jar. Pretty.",
-              "expr": "delighted",
-              "set": {
-                "rainbow": "ends in a jar"
-              },
-              "memory": "You said the rainbow ends in a jar",
-              "memoryTag": "twitchel_rainbow"
-            },
-            {
-              "icon": "🧺",
-              "label": "In my basket",
-              "goto": "c",
-              "reply": "In my basket? I'll check. …Just a blanket.",
-              "expr": "giggling",
-              "set": {
-                "rainbow": "ends in my basket"
-              },
-              "memory": "You said the rainbow ends in my basket",
-              "memoryTag": "twitchel_rainbow"
-            },
-            {
-              "icon": "⛰️",
-              "label": "On a hill",
-              "goto": "c",
-              "reply": "On a hill! Far, far away.",
-              "expr": "curious",
-              "set": {
-                "rainbow": "ends on a hill"
-              },
-              "memory": "You said the rainbow ends on a hill",
-              "memoryTag": "twitchel_rainbow"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "c",
-              "reply": "Rainbows end somewhere. Nobody knows where.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "c": {
-          "say": "Red, orange, yellow… so many stripes.",
-          "expr": "happy",
-          "bond": 1,
-          "gesture": "curious"
-        }
-      }
-    },
-    {
-      "id": "twitchel_rainbow_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "twitchel_rainbow",
-        "varSet": "rainbow",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Rainbow day! You said it {var:rainbow}.",
-          "expr": "proud",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "goto": "b",
-              "intent": "yes"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "goto": "b",
-              "intent": "giggle"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "I still think so too. Purr.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_rainbow_day",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "day"
-        ],
-        "bondMin": 210
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Sun and rain at once. Rainbow weather!",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "goto": "b",
-              "intent": "nod"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "{pet_phrase} I'm looking for colors.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
-      "id": "twitchel_wind_talk",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Whoosh! The wind moved my whiskers.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400,
-          "gesture": "curious"
-        },
-        "b": {
-          "say": "Where is the wind going?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🏔️",
-              "label": "Up a mountain",
-              "goto": "c",
-              "reply": "Up a mountain! Whoosh, up, up.",
-              "expr": "excited",
-              "set": {
-                "wind": "goes up a mountain"
-              },
-              "memory": "You said the wind goes up a mountain",
-              "memoryTag": "twitchel_wind"
-            },
-            {
-              "icon": "🌊",
-              "label": "To the sea",
-              "goto": "c",
-              "reply": "To the sea! It smells salty there.",
-              "expr": "curious",
-              "set": {
-                "wind": "goes to the sea"
-              },
-              "memory": "You said the wind goes to the sea",
-              "memoryTag": "twitchel_wind"
-            },
-            {
-              "icon": "🏠",
-              "label": "To our house",
-              "goto": "c",
-              "reply": "To our house! Hi, wind. Wipe your paws.",
-              "expr": "giggling",
-              "set": {
-                "wind": "visits our house"
-              },
-              "memory": "You said the wind visits our house",
-              "memoryTag": "twitchel_wind"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "c",
-              "reply": "Whoosh. It doesn't say.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "c": {
-          "say": "My fur went all puffy. Whoosh.",
-          "expr": "happy",
-          "bond": 1,
-          "gesture": "groom"
-        }
-      }
-    },
-    {
-      "id": "twitchel_wind_callback",
-      "trigger": "idle",
-      "weight": 3,
-      "once": true,
-      "cond": {
-        "hasMemory": "twitchel_wind",
-        "varSet": "wind",
-        "bondMin": 370
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Whoosh! You said the wind {var:wind}.",
-          "expr": "proud",
-          "choices": [
-            {
-              "icon": "✅",
-              "label": "Still true!",
-              "goto": "b",
-              "intent": "yes"
-            },
-            {
-              "icon": "😆",
-              "label": "@pool:giggle",
-              "goto": "b",
-              "intent": "giggle"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "My whiskers say yes. Still true.",
-          "expr": "happy",
-          "bond": 2
-        }
-      }
-    },
-    {
-      "id": "twitchel_wind_morning",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "time": [
-          "morning"
-        ],
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Morning wind! It smells like grass.",
-          "expr": "happy",
-          "choices": [
-            {
-              "icon": "🙂",
-              "label": "@pool:nod",
-              "goto": "b",
-              "intent": "nod"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Sniff, sniff. Grass and flowers.",
-          "expr": "happy",
-          "bond": 1
         }
       }
     },
@@ -12914,50 +12371,6 @@
       }
     },
     {
-      "id": "twitchel_drop_race",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Raindrops race on the window. Which one wins?",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "⬅️",
-              "label": "That one!",
-              "goto": "b",
-              "reply": "That one! Go, drop, go!",
-              "expr": "excited"
-            },
-            {
-              "icon": "➡️",
-              "label": "This one!",
-              "goto": "b",
-              "reply": "This one! Zoom! It won!",
-              "expr": "delighted"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "reply": "They all win. Plip.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Drip races are fun. Rain is fun.",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
       "id": "twitchel_hide_paw",
       "trigger": "idle",
       "weight": 2,
@@ -13597,50 +13010,6 @@
           "expr": "happy",
           "bond": 1,
           "gesture": "spin"
-        }
-      }
-    },
-    {
-      "id": "twitchel_smell_rain",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Sniff. I can smell rain coming.",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☔",
-              "label": "How?",
-              "goto": "b",
-              "reply": "My nose knows. It smells wet.",
-              "expr": "proud"
-            },
-            {
-              "icon": "😮",
-              "label": "Wow!",
-              "goto": "b",
-              "reply": "Good nose, right? Sniff.",
-              "expr": "happy"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "reply": "Wet stones. Green leaves. Rain smell.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Let's watch for it. Plip.",
-          "expr": "happy",
-          "bond": 1
         }
       }
     },
@@ -14618,7 +13987,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Night sounds. Crickets. Wind. Soft breathing.",
+          "say": "Night sounds. Crickets. Leaves. Soft breathing.",
           "expr": "sleepy",
           "choices": [
             {
@@ -15243,50 +14612,6 @@
         },
         "c": {
           "say": "My nose is yellow now. Ha!",
-          "expr": "happy",
-          "bond": 1
-        }
-      }
-    },
-    {
-      "id": "twitchel_puddle_hop",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 70
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "A puddle! Hop over it? Hop!",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "🦘",
-              "label": "Hop!",
-              "goto": "b",
-              "reply": "Hop! Made it! Dry paws!",
-              "expr": "proud"
-            },
-            {
-              "icon": "💦",
-              "label": "Splash!",
-              "goto": "b",
-              "reply": "Splash! Wet paws! Shake, shake.",
-              "expr": "giggling"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "reply": "Around it. Cats like dry paws.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Puddles are for looking in. Hi, sky.",
           "expr": "happy",
           "bond": 1
         }
@@ -16853,44 +16178,6 @@
       }
     },
     {
-      "id": "twitchel_rain_nap",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 210
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Rain is a nap song. Pat-pat-zzz.",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "😴",
-              "label": "Nap time",
-              "goto": "b",
-              "reply": "Pat-pat-zzz. Purr.",
-              "expr": "sleepy"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "b",
-              "reply": "Rain naps are cozy naps.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "b": {
-          "say": "Wake me for snacks.",
-          "expr": "sleepy",
-          "bond": 1,
-          "gesture": "yawn"
-        }
-      }
-    },
-    {
       "id": "twitchel_your_game",
       "trigger": "idle",
       "weight": 2,
@@ -17243,56 +16530,6 @@
           "expr": "happy",
           "bond": 1,
           "gesture": "hum"
-        }
-      }
-    },
-    {
-      "id": "twitchel_fog_day",
-      "trigger": "idle",
-      "weight": 2,
-      "cond": {
-        "bondMin": 210
-      },
-      "start": "a",
-      "nodes": {
-        "a": {
-          "say": "Nose on the window. Hmm.",
-          "expr": "happy",
-          "next": "b",
-          "wait": 2400
-        },
-        "b": {
-          "say": "Foggy outside. Everything is soft gray.",
-          "expr": "curious",
-          "choices": [
-            {
-              "icon": "☁️",
-              "label": "Like a cloud",
-              "goto": "c",
-              "reply": "A cloud on the ground! Walk on it?",
-              "expr": "curious"
-            },
-            {
-              "icon": "🙂",
-              "label": "Cozy",
-              "goto": "c",
-              "reply": "Fog days are inside days. Purr.",
-              "expr": "happy"
-            },
-            {
-              "icon": "👂",
-              "label": "@pool:listen",
-              "goto": "c",
-              "reply": "Gray and quiet. Shh.",
-              "expr": "happy",
-              "intent": "listen"
-            }
-          ]
-        },
-        "c": {
-          "say": "The trees are hiding. Hi, trees.",
-          "expr": "happy",
-          "bond": 1
         }
       }
     },
