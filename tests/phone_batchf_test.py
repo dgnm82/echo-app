@@ -42,7 +42,7 @@ async def main():
     w=await pg.evaluate("""(()=>{const L=Dialogue.lib,tx=[];for(const k in L.barks)for(const l of L.barks[k])tx.push(l.text||'');for(const c of L.conversations)for(const n of Object.values(c.nodes||{}))tx.push(n.say||'');
       return {rain:tx.filter(t=>/\\b(rain(?!bow)\\w*|puddles?|wind|windy|fog\\w*|drizzl\\w*|breez\\w*)\\b/i.test(t)&&!/Rain is|Pretend|wind chimes/.test(t)),pools:Object.keys(L.barks).filter(k=>/^weather_(drizzle|breezy|fog|rainbow)$/.test(k)),
         nose:tx.filter(t=>/raindrop on my nose/i.test(t)).length,eib:Object.keys(L.barks).filter(k=>k.startsWith('eib_')).length}})()""")
-    check(w['nose']==0,'"A raindrop on my nose" is gone');check(not w['pools'],'dead weather pools gone '+str(w['pools']));check(w['eib']==10,f"10 eib_ pools loaded ({w['eib']})")
+    check(w['nose']==0,'"A raindrop on my nose" is gone');check(not w['pools'],'dead weather pools gone '+str(w['pools']));check(w['eib']==20,f"20 eib_ pools loaded (Batch G adds 10) ({w['eib']})")
     check(len(w['rain'])==0,'no rain/wind/fog/puddle lines the Echo says '+str(w['rain'][:3]))
     await pg.evaluate("__echo.state.bond=100;__echo.glow()")
     s=await pg.evaluate("[Dialogue.ctx().vars.season,Dialogue.eligible('idle').some(c=>c.id==='twitchel_snow_talk')]")
@@ -59,7 +59,7 @@ async def main():
     pads=await pg.evaluate("[...document.querySelectorAll('.eibpad')].map(p=>p.dataset.pad)");check(pads==['0','1','2','4','5'],'T2: 5 pads do re mi sol la '+str(pads))
     st=await pg.evaluate("[...document.querySelectorAll('.eibpad')].map(p=>parseFloat(getComputedStyle(p).marginBottom))");check(st==sorted(st) and st[-1]>st[0],'staircase '+str(st))
     check(await wait("EchoBack.cur&&EchoBack.cur.phase==='child'",12000),'your turn comes');n_echo=await pg.evaluate("__os.filter(x=>/^notes\\/twitchel_/.test(x)).length")
-    asked=await pg.evaluate("EchoBack.cur.asked");check(len(asked)==3 and n_echo>=3,f'the Echo sang {len(asked)} notes ({n_echo} one-shots)')
+    asked=await pg.evaluate("EchoBack.cur.asked");check(len(asked)==4 and n_echo>=4,f'v2: age 7-8 starts at 4 notes; the Echo sang {len(asked)} ({n_echo} one-shots)')
     names=await pg.evaluate("EchoBack.cur.tune.n.map(x=>EchoBack.nameOf('twitchel',EchoBack.step(x)))");check(all(x in ('f4','g4','a4','c5','d5') for x in names),'twitchel F pentatonic '+str(names))
     await pg.screenshot(path=f'{OUT}/f1-your-turn.png')
     # same
@@ -69,7 +69,7 @@ async def main():
     check(await pg.evaluate("__spk.some(c=>c.includes('big')&&c.includes('go'))"),'big sparkle');await pg.screenshot(path=f'{OUT}/f2-same.png')
     # close (one note off)
     check(await wait("EchoBack.cur.phase==='child'",12000),'round 2');asked=await pg.evaluate("EchoBack.cur.asked")
-    pads_i=[int(x) for x in pads];alt=[x for x in pads_i if x!=asked[1] and x!=asked[0] and x!=asked[2]][0];ans=[asked[0],alt,asked[2]]
+    pads_i=[int(x) for x in pads];alt=[x for x in pads_i if x!=asked[1] and x!=asked[0] and x!=asked[2]][0];ans=[asked[0],alt]+asked[2:]
     r=await pg.evaluate(f"EchoBack.matchTune({asked},{ans})")
     for s_ in ans:await T(f'.eibpad[data-pad="{s_}"]',150)
     check(await wait(BUB+".startsWith('Close')||"+BUB+".startsWith('Ooh, close')",4000),f'close ({r}) -> "Close! Like this:" '+await pg.evaluate(BUB))
@@ -81,10 +81,12 @@ async def main():
     check(await wait("EchoBack.cur.phase==='child'",12000),'round 3');asked=await pg.evaluate("EchoBack.cur.asked")
     new=[pads_i[0],pads_i[4],pads_i[0],pads_i[4],pads_i[0]];await pg.evaluate("__os.length=0")
     for s_ in new:await T(f'.eibpad[data-pad="{s_}"]',120)
+    await wait("/new one|New song|our song/i.test("+BUB+")",4000)   # v2: 4 asked + 2 extra, so 5 taps end on the gap
     t=await pg.evaluate(BUB);check(any(x in t for x in ('new one','New song','Your song','your song')),'new -> "Ooh, a new one! My turn:" '+t)
     await pg.wait_for_timeout(4000);cp=await pg.evaluate("EchoBack.cur.lastCopy");check(cp and [EB for EB in cp['n']] and len(cp['n'])==5 and cp['v']==1,'copy-back is a Song v1 of the child\'s 5 notes')
     played=await pg.evaluate("__os.filter(x=>/^notes\\//.test(x)).slice(5)");check(len(played)>=5,f'the Echo sang the child\'s tune back ({len(played)})')
-    check(await pg.evaluate("__echo.state.bond")>b0,'rounds give bond (bond game)');check(await pg.evaluate("localStorage.getItem('echo-songbook-v1')")is None,'nothing writes the songbook yet')
+    check(await pg.evaluate("__echo.state.bond")==b0,'v2: no bond mid-round (bond comes with a finished round)');check(await pg.evaluate("EchoBack.cur.round.matches")==2,'same + close count, new does not')
+    sb=await pg.evaluate("JSON.parse(localStorage.getItem('echo-songbook-v1'))");check(sb and sb['v']==2 and list(sb['progress'].values())[0]['len']==4 and list(sb['progress'].values())[0]['band']=='7-8','v2 songbook holds per-child progress + age '+str(sb and sb.get('progress')))
     # multi-finger: two pointers at once, and a slide from one pad onto the next
     check(await wait("EchoBack.cur.phase==='child'",12000),'round 4');await pg.evaluate("__os.length=0")
     mf=await pg.evaluate("""(()=>{const P=[...document.querySelectorAll('.eibpad')],c=e=>{const r=e.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]};

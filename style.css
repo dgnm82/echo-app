@@ -232,6 +232,7 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .full.pcset,.full.pcgate,.full.pcreset{background:#3b2a5c;display:flex;flex-direction:column;gap:3px;align-items:stretch;justify-content:flex-start;padding:5px;overflow-y:auto;z-index:70}
 .pchead{background:#fff6e6;color:#3b2a5c;padding:4px;display:flex;gap:4px;align-items:center}.pchead i{width:10px;height:12px;background-size:100% 100%;image-rendering:pixelated}
 .pcrow{background:#fff6e6;color:#3b2a5c;border:0;box-shadow:0 2px 0 #23183a;display:flex;justify-content:space-between;align-items:center;font:inherit;font-size:8px;padding:2px 5px;min-height:18px;flex:none}
+.pcagebtns{display:flex;gap:3px}.pcagebtn{font:inherit;font-size:8px;padding:1px 4px;white-space:nowrap;border:1px solid #3b2a5c;background:#fff6e6;color:#3b2a5c;cursor:pointer}.pcagebtn.on{background:#3b2a5c;color:#fff6e6}
 .pcrow b{color:#6a5aa8}.pctog{width:20px;height:8px;border:1px solid #3b2a5c;flex:none;background:linear-gradient(90deg,#fff 50%,#e8d8c0 50%);display:block}.pctog.on{background:linear-gradient(90deg,#8ccf78 50%,#fff 50%)}
 .pcnote{background:#fff6e6;color:#3b2a5c;font-size:8px;padding:4px;line-height:10px}
 .pcpad{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}.pck{min-height:30px;justify-content:center}

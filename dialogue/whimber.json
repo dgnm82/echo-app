@@ -3229,6 +3229,66 @@
         "text": "Hoo… a new note. Hear it?",
         "expr": "curious"
       }
+    ],
+    "eib_more1": [
+      {
+        "text": "…one more note this time.",
+        "expr": "happy"
+      }
+    ],
+    "eib_more2": [
+      {
+        "text": "Ooh… two more.",
+        "expr": "excited"
+      }
+    ],
+    "eib_breath": [
+      {
+        "text": "Big song. I'll take a breath… hoo.",
+        "expr": "concentrating"
+      }
+    ],
+    "eib_comes_back": [
+      {
+        "text": "…this bit comes back.",
+        "expr": "curious"
+      }
+    ],
+    "eib_five": [
+      {
+        "text": "Hoo-hoo! Five! We sang five!",
+        "expr": "delighted"
+      }
+    ],
+    "eib_sticker": [
+      {
+        "text": "A sticker for our song… lovely.",
+        "expr": "delighted"
+      }
+    ],
+    "eib_sixteen": [
+      {
+        "text": "Sixteen notes… that's a whole song!",
+        "expr": "delighted"
+      }
+    ],
+    "eib_zippy": [
+      {
+        "text": "Let's go zippy… hoo!",
+        "expr": "excited"
+      }
+    ],
+    "eib_rest_ears": [
+      {
+        "text": "…let's rest our ears.",
+        "expr": "happy"
+      }
+    ],
+    "eib_little": [
+      {
+        "text": "…let's do a little one.",
+        "expr": "happy"
+      }
     ]
   },
   "conversations": [

@@ -2099,6 +2099,87 @@
     ]
    }
   ],
+  "v2": {
+   "_about": "Batch G (Echo It Back v2): round = 5 matches (same or close; a miss neither counts nor resets); 10 tunes without 5 = soft stop. Start length by age band, ramp only after a round with all 5 matched first try, cap 16. Past 8 notes: 4-note phrases (ABA up to 12, AABA above), echoed phrase by phrase, 1 slip (close) a phrase. After 16: +5% tempo a round. Stickers at lengths + the 3rd speed round. Lengths are dots on screen, never numbers.",
+   "round": 5,
+   "soft_stop_tunes": 10,
+   "start": {
+    "5-6": 3,
+    "7-8": 4,
+    "9-10": 6
+   },
+   "ramp": {
+    "5-6": [
+     [
+      16,
+      1
+     ]
+    ],
+    "7-8": [
+     [
+      8,
+      2
+     ],
+     [
+      16,
+      1
+     ]
+    ],
+    "9-10": [
+     [
+      8,
+      2
+     ],
+     [
+      16,
+      1
+     ]
+    ]
+   },
+   "min_len": 3,
+   "max_len": 16,
+   "phrase_from": 9,
+   "phrase_len": 4,
+   "shapes": {
+    "12": "ABA",
+    "16": "AABA"
+   },
+   "breath_beats": 1,
+   "max_distinct": 4,
+   "eased_after_misses": 2,
+   "little_minus": 2,
+   "bond_rounds": 2,
+   "tempo": {
+    "bpm": 88,
+    "step": 0.05,
+    "max_steps": 6,
+    "bpm_max": 150,
+    "min_note_ms": 120
+   },
+   "rhythm_shown_to": 8,
+   "stickers": [
+    {
+     "len": 4,
+     "title": "First Echo Tune"
+    },
+    {
+     "len": 8,
+     "title": "Big Tune"
+    },
+    {
+     "len": 12,
+     "title": "Long Song"
+    },
+    {
+     "len": 16,
+     "title": "Whole Song"
+    },
+    {
+     "speed_rounds": 3,
+     "title": "Zippy Tune"
+    }
+   ]
+  },
   "timing": {
    "answer_gap_ms": 1600,
    "answer_wait_ms": 7000,

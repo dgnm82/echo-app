@@ -96,7 +96,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
-    if(!l&&window.EchoBack&&!sess.eibInvite&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame()},{lowfx:lowFx()})}}
+    if(!l&&window.EchoBack&&!sess.eibInvite&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame('invite')},{lowfx:lowFx()})}}
     const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
 Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),seen:S.seen||[],
@@ -269,7 +269,14 @@ function obSetChild(n){S=S&&S.setupDone===0?S:{voice:true,music:true,vars:{},set
 function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
   obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
   app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
-function obSetBand(b){S.ageBand=b;if(OBC.bands[b].level==='easy'){S.pairsLevel=S.pairsLevel==null||S.pairsLevel==='auto'?'easy':S.pairsLevel;S.digLevel=S.digLevel==null||S.digLevel==='auto'?'easy':S.digLevel;['runLevel','catchLevel','stackLevel'].forEach(k=>{if(S[k]==null||S[k]==='auto')S[k]='easy'})}}
+const BAND_LV=['pairsLevel','digLevel','runLevel','catchLevel','stackLevel'];
+// Batch G: 5-6 puts the games that are on auto on Easy and remembers which (S.bandEasy); leaving 5-6 puts exactly those back on auto.
+// The band is also kept in the per-child store and sets Echo It Back to that band's starting length (up or down).
+function obSetBand(b){const was=S.ageBand;S.ageBand=b;
+  if(OBC.bands[b].level==='easy'){S.bandEasy=S.bandEasy||[];BAND_LV.forEach(k=>{if(S[k]==null||S[k]==='auto'){S[k]='easy';if(!S.bandEasy.includes(k))S.bandEasy.push(k)}})}
+  else{(S.bandEasy||[]).forEach(k=>{if(S[k]==='easy')S[k]='auto'});delete S.bandEasy}
+  if(window.EchoBack&&was!==b)EchoBack.setBand(kidId(),b)}
+function kidId(){if(!S.kidId)S.kidId='k'+Math.floor(Math.random()*2e9).toString(36);return S.kidId}   // per-child store key (kept across a new Echo)
 // ---- Origin v2. P1 pick your Echo (batch A1)
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
 function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
@@ -336,7 +343,7 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
+  const keep={kidId:S.kidId,bandEasy:S.bandEasy,child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
@@ -366,7 +373,8 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
   const d=full(`<div class="pchead"><i style="background-image:url(px/origin/lock.png)"></i>${U('ui_pc_title')}</div>
    <button class="pcrow" id="pcname"><span>Name</span><b>${nm}</b></button>
    ${has?`<button class="pcrow" id="pcecho"><span>Echo's name</span><b>${S.g.name}</b></button>`:''}
-   <button class="pcrow" id="pcage"><span>Age range</span><b>${(S&&S.ageBand)||'7-8'}</b></button>
+   <div class="pcrow pcages" id="pcage" role="radiogroup" aria-label="Age range"><span>Age range</span><span class="pcagebtns">${Object.keys(OBC.bands).map(b=>`<button class="pcagebtn${((S&&S.ageBand)||'7-8')===b?' on':''}" data-band="${b}" role="radio" aria-checked="${((S&&S.ageBand)||'7-8')===b}">${b}</button>`).join('')}</span></div>
+   ${has?`<button class="pcrow" id="pceib"><span>Echo It Back length: reset</span><b>›</b></button>`:''}
    ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcquiet','Quieter music',!!(S&&S.musicQuiet))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
    ${tog('pcyes','Echoes always say yes',!!(S&&S.alwaysYes))}
    ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}${has?tog('pcholiday','Holiday mode',!!(S.holiday&&S.holiday.on))+`<div class="pcnote">Going away? Turn this on and ${S.g.name} takes a little holiday too. Needs and the 3-day goodbye timer pause. It ends when ${S.child||'your child'} next opens Echo.</div>`:''}
@@ -381,7 +389,8 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
   d.querySelector('#pcshared').onclick=()=>{need();S.fwShared=!S.fwShared;save();re()};
   const hb=d.querySelector('#pcholiday');if(hb)hb.onclick=()=>{const on=!(S.holiday&&S.holiday.on);holidaySet(on);if(on)sess.holidayStart=1;re()};
   if(has)d.querySelector('#pcstay').onclick=()=>{const f=fw();f.paused=!f.paused;save();re()};
-  d.querySelector('#pcage').onclick=()=>{need();const L=Object.keys(OBC.bands);obSetBand(L[(L.indexOf(S.ageBand||'7-8')+1)%L.length]);save();re()};
+  d.querySelectorAll('.pcagebtn').forEach(x=>x.onclick=()=>{need();obSetBand(x.dataset.band);save();re()});
+  const eb=d.querySelector('#pceib');if(eb)eb.onclick=()=>{if(window.EchoBack)EchoBack.resetProgress(kidId(),S.ageBand||'7-8');re()};
   d.querySelector('#pcname').onclick=()=>{need();const p=full(`<div class="obpanel"><b>Name or nickname</b></div><div class="obfield"><input id="pcnm" maxlength="10" autocomplete="off" autocorrect="off" spellcheck="false" value="${S.vars.child_named?S.child:''}" aria-label="Name or nickname"></div><p class="obsmall" id="pcnh"></p>
       <div class="row"><button class="btn small" id="pcnok">Save</button><button class="btn small" id="pcnno">Use no name</button><button class="btn small" id="pcnfg">Forget name</button><button class="btn small" id="pcnx">${U('ui_pc_done')}</button></div>`);
     p.classList.add('pcset','pcsub');p.querySelector('#pcnx').onclick=()=>p.remove();
@@ -764,7 +773,7 @@ function book(){
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${obLock('bk')}${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   ${S.keepsake?`<h2>Keepsakes</h2><span class="chip"${window.MusicFX?` data-snd="${FAMD().music.pet_motif}"`:''}>${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
-  <h2>Stickers</h2>${S.stickers.map(s=>`<span class="chip"${window.MusicFX?' data-snd="memory_pair_found"':''}>${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
+  <h2>Stickers</h2>${S.stickers.map(s=>(S.eibSongs||{})[s]?`<button class="chip eibchip" data-eibsong="${s}">${PI('🎵')}${s}</button>`:`<span class="chip"${window.MusicFX?' data-snd="memory_pair_found"':''}>${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip"${window.MusicFX?' data-snd="care_pet_sparkle"':''}>${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
@@ -777,6 +786,7 @@ function book(){
   SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}obWireLock(null);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
+  d.querySelectorAll('[data-eibsong]').forEach(btn=>btn.onclick=()=>{const t=(S.eibSongs||{})[btn.dataset.eibsong];if(t&&window.EchoBack)EchoBack.ready.then(()=>{const ms=EchoBack.playSong(t.fam,t.song);if(ms&&!lowFx()){btn.classList.add('playing');setTimeout(()=>btn.classList.remove('playing'),ms)}})});   // Batch G: the tune that earned the sticker
 }
 
 // ---------- mini-games (§6.3) ----------
@@ -792,13 +802,19 @@ function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,m
   if(S.bond>=C.unlock.catch)L.push([G.icons.catch||(fox?'🍓':'🌟'),G.titles.catch,catchGame]);
   if(S.bond>=C.unlock.run)L.push([G.icons.run||(fox?'🍂':'✨'),G.titles.run,runGame]);
   if(S.bond>=C.unlock.stack)L.push([G.icons.stack||(fox?'🥞':'☁️'),G.titles.stack,stackGame]);if(window.EchoBack)L.push(['🎵',EchoBack.title,echoBackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-// Batch F: Echo It Back (music Part B piece 1, echoback.js). Always in the Play list; no fail state; Done ends it (finished once a round was sung).
-function echoBackGame(){if(!window.EchoBack)return;gameShell(EchoBack.title);const gs=$('#gs');gs.classList.add('eibgame');$('#toast').classList.remove('on');
-  gs.insertAdjacentHTML('beforeend',`<div class="eibecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>`);let rounds=0;S.eib=S.eib||{};
-  $('#quit').onclick=()=>{EchoBack.stop();endGame(rounds>0)};
+// Batch F/G: Echo It Back (echoback.js). Always in the Play list; no fail state. A round (5 matches, or the soft stop at 10 tunes)
+// ends at Home. Bond: the first 2 finished rounds a session (and never in fun-only play). Stickers + their tunes go in the Memory Book.
+function echoBackGame(mode){if(!window.EchoBack)return;gameShell(EchoBack.title);const gs=$('#gs');gs.classList.add('eibgame');$('#toast').classList.remove('on');
+  gs.insertAdjacentHTML('beforeend',`<div class="eibecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>`);let done=false;S.eib=S.eib||{};
+  $('#quit').onclick=()=>{EchoBack.stop();endGame(done)};
   EchoBack.ready.then(()=>{if($('#gs')!==gs||!EchoBack.data)return;EchoBack.start({gs,fam:FID(),tier:Math.min(4,glowNow()),lowfx:lowFx(),state:S.eib,save,
+    band:S.ageBand||'7-8',kid:kidId(),mode:mode==='invite'?'invite':'play',color:S.g.coat,
     line:k=>B(k),talk:(l,ms)=>talk(l,ms),react:e=>react(e),
-    onRound:n=>{rounds=n;S.needs.play=clamp(S.needs.play+C.restore.play);if(n<=3&&!funOnly())addBond(0,true,n===3?'game':'care');save()}})})}
+    hasSticker:t=>S.stickers.includes(t),
+    onSticker:(t,tune)=>{S.stickers.push(t);(S.eibSongs=S.eibSongs||{})[t]=tune;SFX('memory_pair_found');save()},
+    onTune:r=>{S.needs.play=clamp(S.needs.play+C.restore.play);save()},
+    onRound:o=>{done=true;sess.eibRounds=(sess.eibRounds||0)+1;if(sess.eibRounds<=2&&!funOnly())addBond(0,true,sess.eibRounds===2?'game':'care');save()},
+    onDone:()=>{if($('#gs')!==gs)return;EchoBack.stop();endGame(true)}})})}
 function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':/echo it back/.test(t)?'eib':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music&&curGame==='eib')Music.stop();else if(window.Music){const fox=GROUND(),MG=(FAMD().music||{}).games||{},M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(MG[curGame]||M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
@@ -834,7 +850,7 @@ function bestStore(){S.best=S.best||{};['run','builder','dig','catch','stack'].f
 function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
 function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}
 function v2State(gm){S.v2=S.v2||{};return S.v2[gm]=S.v2[gm]||{games:0,short:0,easy:false}}
-function v2Level(gm,key){const st=v2State(gm),set=S[key]||'auto';if(set!=='auto')return set;if(st.games<2)return 'easy';return st.easy?'easy':'standard'}   // never announced to the child
+function v2Level(gm,key){const st=v2State(gm),set=S[key]||'auto';if(window.Difficulty)return Difficulty.level(gm,{band:S.ageBand,set,games:st.games,autoEasy:st.easy});if(set!=='auto')return set;if(st.games<2)return 'easy';return st.easy?'easy':'standard'}   // never announced to the child
 function v2Count(gm,score){const A=GTU().AUTO_EASY,th=A[gm],st=v2State(gm);st.games++;if(score<th)st.short++;else st.short=0;if(st.short>=A.shortInARow)st.easy=true;if(score>=A.backUpAt*th){st.easy=false;st.short=0}}
 const GLOW=[0,1].map(i=>{const im=new Image();im.src=`px/fx/glow${i}.png`;return im});
 function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&&im.naturalWidth)cx.drawImage(im,Math.round(x-20),Math.round(y-20))}
@@ -851,6 +867,7 @@ function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=GROU
 // ---------- Den Dig / Nest Weave state (den_dig.md) ----------
 function digState(){return S.dig=S.dig||{games:0,rows:0,best:0}}   // den_dig: replaces S.fort (old saves keep S.fort / S.homesBuilt, unused)
 function digLevel(){const f=digState(),set=S.digLevel||S.fortLevel||'auto';
+  if(window.Difficulty)return Difficulty.level('dig',{band:S.ageBand,set,games:f.games||0,autoEasy:v2State('dig').easy});
   if((f.games||0)<2)return 'easy';             // the first 2 games ever are Easy
   if(set!=='auto')return set;                  // grown-up toggle (dev tools)
   return v2State('dig').easy?'easy':'standard'}   // quiet auto-Easy after 2 short games (AUTO_EASY.dig)
@@ -1051,7 +1068,7 @@ function stackGame(){
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
 const PAIR_NAMES=new Proxy({},{get:(o,k)=>{for(const f of (window.FAMILIES||{order:[]}).order){const n=FAMILIES[f].games.pairNames[k];if(n)return n}}});   // manifest games.pairNames (every family's deck + token)
 function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
-function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
+function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(window.Difficulty)return Difficulty.level('pairs',{band:S.ageBand,set,games:p.games,autoEasy:p.slow>=2});if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){
   const fox=GROUND(),SP=SPR(),G=GG(),TITLE=G.titles.pairs,NEXT=MEM_NEXT;
   const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({species:FID(),deck:G.memoryDeck,token:G.token,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:S.talents.includes('Master of Disguise')});
@@ -1405,6 +1422,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),levels:()=>({pairs:pairsLevel(),dig:digLevel(),run:runLevel(),catch:v2Level('catch','catchLevel'),stack:v2Level('stack','stackLevel')}),setBand:b=>{obSetBand(b);save()},pcSettings:()=>pcSettings(),memoryGame:()=>memoryGame(),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();
