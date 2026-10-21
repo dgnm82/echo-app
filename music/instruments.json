@@ -1,0 +1,112 @@
+{
+ "_about": "Instruments as data (lock 4). chip = Batch D chip-engine timbre (wave p12/p25/p50/tri/noise/gb_soft/gb_organ, vol, adsr seconds, cut = low-pass Hz, vib = [rate Hz, depth cents, delay s]). sample = phone one-shot path pattern, null = render from chip. voices = most notes sounding at once on the speaker.",
+ "v": 1,
+ "default": "musicbox",
+ "voices": 3,
+ "range": [
+  60,
+  84
+ ],
+ "instruments": {
+  "musicbox": {
+   "label": "Music box",
+   "use": "the Echo singing (Echo It Back)",
+   "sample": "notes/{fam}_{note}",
+   "gain": 0.5,
+   "chip": {
+    "wave": "gb_organ",
+    "vol": 0.85,
+    "a": 0.003,
+    "d": 0.55,
+    "s": 0.0,
+    "r": 0.25,
+    "cut": 5500,
+    "vib": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "piano": {
+   "label": "Piano",
+   "use": "jam pad (piece 2)",
+   "sample": null,
+   "gain": 0.5,
+   "chip": {
+    "wave": "p25",
+    "vol": 0.75,
+    "a": 0.003,
+    "d": 0.5,
+    "s": 0.15,
+    "r": 0.2,
+    "cut": 4200,
+    "vib": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "xylophone": {
+   "label": "Xylophone",
+   "use": "jam pad (piece 2) - the playtest instrument",
+   "sample": null,
+   "gain": 0.5,
+   "chip": {
+    "wave": "tri",
+    "vol": 0.95,
+    "a": 0.002,
+    "d": 0.18,
+    "s": 0.0,
+    "r": 0.08,
+    "cut": 5000,
+    "vib": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "flute": {
+   "label": "Flute",
+   "use": "jam pad (piece 2)",
+   "sample": null,
+   "gain": 0.45,
+   "chip": {
+    "wave": "tri",
+    "vol": 0.9,
+    "a": 0.04,
+    "d": 0.2,
+    "s": 0.7,
+    "r": 0.12,
+    "cut": 3000,
+    "vib": [
+     5.0,
+     14,
+     0.25
+    ]
+   }
+  },
+  "bells": {
+   "label": "Bells",
+   "use": "jam pad (piece 2)",
+   "sample": null,
+   "gain": 0.45,
+   "chip": {
+    "wave": "gb_organ",
+    "vol": 0.6,
+    "a": 0.006,
+    "d": 0.45,
+    "s": 0.0,
+    "r": 0.2,
+    "cut": 4000,
+    "vib": [
+     0,
+     0,
+     0
+    ]
+   }
+  }
+ }
+}

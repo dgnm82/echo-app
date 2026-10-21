@@ -96,9 +96,10 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
+    if(!l&&window.EchoBack&&!sess.eibInvite&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame()},{lowfx:lowFx()})}}
     const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
-Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:S.vars||(S.vars={}),seen:S.seen||[],
+Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
 const SCR=()=>document.getElementById('screen')||document.body;
 const PI=(e,intent)=>window.PIXEL?PIXEL.icon(PIXEL.iconName(e,intent)):e;
@@ -394,10 +395,10 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
   d.querySelector('#pcdone').onclick=()=>{SFX('ui_panel_close');d.remove();if(S&&S.kind&&document.getElementById('sc'))home();else if(back)back()}}
 function pcReset(set){const R=UA('ui_pc_reset');const d=full(`<div class="obpanel">${R[0]}</div><button class="btn pchold" id="pchold"><span>${R[1]}</span><i class="pcbar"></i></button><button class="btn small" id="pcrx">${U('ui_pc_done')}</button>`);d.classList.add('pcreset','pcsub');
   d.querySelector('#pcrx').onclick=()=>d.remove();const b=d.querySelector('#pchold');let t=null;
-  b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('hold');t=setTimeout(()=>{window.__wiped=1;localStorage.removeItem(KEY);localStorage.removeItem('echo-pc-cool');d.innerHTML=`<div class="obpanel">${R[2]}</div>`;setTimeout(()=>location.reload(),1600)},OBC.gate.holdMs)});
+  b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('hold');t=setTimeout(()=>{window.__wiped=1;localStorage.removeItem(KEY);localStorage.removeItem('echo-pc-cool');localStorage.removeItem('echo-songbook-v1');d.innerHTML=`<div class="obpanel">${R[2]}</div>`;setTimeout(()=>location.reload(),1600)},OBC.gate.holdMs)});
   const up=()=>{clearTimeout(t);b.classList.remove('hold')};b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up)}
 function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
-function home(greet){
+function home(greet){if(window.EchoBack)EchoBack.stop();
   ov.innerHTML='';if(S.left)return leaveScreen();
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
   h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
@@ -621,6 +622,7 @@ function chDismiss(el,onDismiss){if(!el)return;let swallow=false;
 // H1 need-aware selection (aliveness/selection/need_select.js). Weather: no weather system in v1, so lines tagged with
 // rain/wind/fog stay out; snow lines only in Dec-Feb by device month (Daniel's default).
 function snowSeason(){const m=new Date(now()).getMonth();return m===11||m<=1}
+function seasonVars(){const v=S.vars||(S.vars={});v.season=snowSeason()?'snow':'none';return v}   // Batch F: snow/frost lines are gated by cond.var.season
 function needCtx(){return {needs:S.needs,species:CID(),band:tod(),weather:snowSeason()?'snow':'clear'}}
 function needLine(){if(!window.NeedSelect)return B('ambient');const r=NeedSelect.slot(needCtx());return (r&&r.line)||B('ambient')}
 function needInit(){if(!window.NeedSelect)return;const sp=CID();NeedSelect.now=now;NeedSelect.tags=(window.NEED_TAGS||{})[sp]||{barks:{},convs:{}};
@@ -749,7 +751,7 @@ function dev(){
   d.querySelector('#b2').onclick=()=>{cl();addBond(500);S.met=Math.min(S.met||now(),now()-8*864e5);S.days=Math.max(S.days||1,6);sess.t0=now()-36e5;S.bondShown=Math.max(S.bondShown||1,4);home()};
   d.querySelector('#b3').onclick=()=>{cl();sess={feeds:0,games:0,naps:0,chats:0};S.napUntil=0;S.last=now()-6*36e5;simulate();save();home(true)};
   d.querySelector('#b4').onclick=()=>{S.voice=!S.voice;save();if(window.Music)Music.refresh();cl()};
-  d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);location.reload()}};
+  d.querySelector('#b5').onclick=()=>{if(confirm('Delete the Echo, memories and keepsakes?')&&confirm('Really delete everything?')){window.__wiped=1;localStorage.removeItem(KEY);localStorage.removeItem('echo-songbook-v1');location.reload()}};
   d.querySelector('#b6').onclick=cl;
   d.querySelector('#b14').onclick=()=>{cl();pcSettings()};   // shared device + stay a while moved to the grown-ups corner (onboarding §5)
   d.querySelector('#b9').onclick=()=>{const L=['auto','easy','standard','bigkid'];S.pairsLevel=L[(L.indexOf(S.pairsLevel||'auto')+1)%4];save();d.querySelector('#b9').textContent='Pairs level: '+S.pairsLevel};
@@ -789,8 +791,15 @@ let GT=0;   // game token: a pending next-round timer is dropped if the child le
 function gamesFor(){const fox=GROUND(),G=GG(),L=[[G.icons.pairs,G.titles.pairs,memoryGame],[G.icons.dig,G.titles.dig,linesGame]];
   if(S.bond>=C.unlock.catch)L.push([G.icons.catch||(fox?'🍓':'🌟'),G.titles.catch,catchGame]);
   if(S.bond>=C.unlock.run)L.push([G.icons.run||(fox?'🍂':'✨'),G.titles.run,runGame]);
-  if(S.bond>=C.unlock.stack)L.push([G.icons.stack||(fox?'🥞':'☁️'),G.titles.stack,stackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
-function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music){const fox=GROUND(),MG=(FAMD().music||{}).games||{},M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(MG[curGame]||M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
+  if(S.bond>=C.unlock.stack)L.push([G.icons.stack||(fox?'🥞':'☁️'),G.titles.stack,stackGame]);if(window.EchoBack)L.push(['🎵',EchoBack.title,echoBackGame]);return L}   // bond 70 (Talent 1); bond 140 unlocks no game (spec v0.6)
+// Batch F: Echo It Back (music Part B piece 1, echoback.js). Always in the Play list; no fail state; Done ends it (finished once a round was sung).
+function echoBackGame(){if(!window.EchoBack)return;gameShell(EchoBack.title);const gs=$('#gs');gs.classList.add('eibgame');$('#toast').classList.remove('on');
+  gs.insertAdjacentHTML('beforeend',`<div class="eibecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div>`);let rounds=0;S.eib=S.eib||{};
+  $('#quit').onclick=()=>{EchoBack.stop();endGame(rounds>0)};
+  EchoBack.ready.then(()=>{if($('#gs')!==gs||!EchoBack.data)return;EchoBack.start({gs,fam:FID(),tier:Math.min(4,glowNow()),lowfx:lowFx(),state:S.eib,save,
+    line:k=>B(k),talk:(l,ms)=>talk(l,ms),react:e=>react(e),
+    onRound:n=>{rounds=n;S.needs.play=clamp(S.needs.play+C.restore.play);if(n<=3&&!funOnly())addBond(0,true,n===3?'game':'care');save()}})})}
+function gameShell(title){GT++;{const t=title.toLowerCase(),TT=GG().titles||{},own=Object.keys(TT).find(k=>TT[k].toLowerCase()===t);curGame=own?own:/pairs/.test(t)?'pairs':/den dig|nest weave/.test(t)?'dig':/dash|glide/.test(t)?'run':/catch/.test(t)?'catch':/tower|steps/.test(t)?'stack':/echo it back/.test(t)?'eib':null;if(curGame)(S.gameCounts=S.gameCounts||{})[curGame]=(S.gameCounts[curGame]||0)+1}if(window.Music&&curGame==='eib')Music.stop();else if(window.Music){const fox=GROUND(),MG=(FAMD().music||{}).games||{},M={pairs:fox?'shiny_pairs':'starlight_pairs',dig:fox?'fort_builder':'hollow_builder',catch:fox?'berry_catch':'starfall_catch',stack:fox?'pancake_tower':'cloud_steps',run:fox?'meadow_dash':'moonlight_glide'};Music.game(MG[curGame]||M[curGame]||M.run)}const _t=document.getElementById('toast');if(_t)_t.classList.remove('on');h(`<div class="top"><b>${title}</b><button class="btn small" id="quit">Done</button></div><div class="scene ${E().bg}" id="gs"><div class="bubble" id="b" style="top:3%"></div></div>`);$('#quit').onclick=()=>{endGame(false)}}
 let curGame=null;
 function endGame(finished){GT++;if(finished)fwTick(null,curGame);if(sess.afterOneMore){sess.afterOneMore=0;save();home();return setTimeout(()=>{talk(B('after_one_more'),2600);setTimeout(fwTimeToGo,2700)},500)}if(window.NeedSelect)NeedSelect.pressures(S.needs,CID(),tod());if(finished){needMet('playful');S.needs.play=clamp(S.needs.play+C.restore.playFinish)}save();home();if(finished)talk(B('game_end'));maybeChat()}
 const funOnly=()=>sess.games>C.sessionLimits.games;   // E7: past the session's bond games, play is just for fun

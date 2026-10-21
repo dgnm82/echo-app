@@ -1,0 +1,41 @@
+/* Echo It Back (Batch F). Sizes are % of the scene (the app is a scaled pixel canvas, so no vw/px for layout). Sprites: px/eib/pads.png (24px cells, 9 cols C D E F G A B F# Bb x rest/pressed),
+   px/notes/notes_shaped.png (Batch D, 12px cells), px/eib/hold.png, px/eib/sparkle.png, px/eib/invite.png. --c = sprite column. */
+.eibgame .eibecho{position:absolute;left:50%;bottom:36%;width:32%;max-width:150px;transform:translateX(-50%);pointer-events:none}
+.eib{position:absolute;inset:0;pointer-events:none}
+.eibstrip{position:absolute;left:3%;right:3%;top:21%;display:flex;flex-direction:column;align-items:center;gap:6px}
+.eibrow{display:flex;gap:5px;min-height:30px;align-items:center;justify-content:center;flex-wrap:nowrap}
+.eibans:empty{visibility:hidden}
+.eibn{display:block;flex:none;width:30px;height:30px;position:relative;background:url(px/notes/notes_shaped.png) no-repeat;background-size:900% 200%;
+  background-position:calc(var(--c) * 12.5%) 0;image-rendering:pixelated;opacity:.8}
+.eibn.lit{background-position:calc(var(--c) * 12.5%) 100%;opacity:1;transform:translateY(-3px)}
+.eibn.short{width:24px;height:24px}
+.eibn.long{margin-right:26px}
+.eibn.long::after{content:"";position:absolute;left:100%;top:12px;width:24px;height:8px;background:url(px/eib/hold.png) no-repeat;
+  background-size:900% 100%;background-position:calc(var(--c) * 12.5%) 0;image-rendering:pixelated}
+.eibpads{position:absolute;left:2%;right:2%;bottom:3%;display:flex;justify-content:center;align-items:flex-end;gap:1.2%;padding:0;
+  pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.eibpad{flex:none;width:11%;height:auto;aspect-ratio:1/1;margin:0 0 calc(var(--i) * 1.8%);padding:0;border:0;border-radius:0;
+  background:url(px/eib/pads.png) no-repeat;background-size:900% 200%;background-position:calc(var(--c) * 12.5%) 0;image-rendering:pixelated;
+  touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.eibpad.on{background-position:calc(var(--c) * 12.5%) 100%}
+.eibpad:focus-visible{outline:3px solid #3B2A5C;outline-offset:2px}
+.eibpads.listen .eibpad{filter:saturate(.8)}
+.eibpads.turn .eibpad{animation:eibready 1.1s ease-in-out 2}
+@keyframes eibready{50%{transform:translateY(-3px)}}
+.eibspark{position:absolute;left:50%;top:-6px;width:48px;height:48px;margin-left:-24px;background:url(px/eib/sparkle.png) no-repeat;background-size:300% 100%;
+  image-rendering:pixelated;opacity:0;pointer-events:none}
+.eibspark.small{width:32px;height:32px;margin-left:-16px;top:2px}
+.eibspark.go{opacity:1;animation:eibspark .9s steps(1) forwards}
+@keyframes eibspark{0%{background-position:0 0}33%{background-position:50% 0}66%{background-position:100% 0}100%{background-position:100% 0;opacity:0}}
+#cr.eibsing{animation:eibsway .9s ease-in-out infinite}
+@keyframes eibsway{25%{transform:translateX(-50%) rotate(-3deg)}75%{transform:translateX(-50%) rotate(3deg)}}
+.eibinv{position:absolute;left:16%;bottom:44%;width:40px;height:40px;padding:0;border:0;background:url(px/eib/invite.png) no-repeat center/100%;
+  image-rendering:pixelated;z-index:6;cursor:pointer;animation:eibbob 1.8s ease-in-out infinite;transition:opacity .6s}
+.eibinv.fade{opacity:0;pointer-events:none}
+@keyframes eibbob{50%{transform:translateY(-4px)}}
+/* reduced motion / low-FX: no movement, the lit state alone shows what is playing; the sparkle is one still frame */
+.eibrm #cr.eibsing,.eibrm .eibpads.turn .eibpad,.eibinv.rm{animation:none}
+.eibrm .eibn.lit{transform:none}
+.eibrm .eibspark.go{animation:none;background-position:50% 0}
+.eibinv.rm{transition:none}
+@media (prefers-reduced-motion:reduce){#cr.eibsing,.eibpads.turn .eibpad,.eibinv{animation:none}.eibn.lit{transform:none}.eibspark.go{animation:none;background-position:50% 0}}
