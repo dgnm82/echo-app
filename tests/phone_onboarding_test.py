@@ -92,7 +92,7 @@ async def main():
     await T(pg,'#pcyes');check((await pg.evaluate("window.__echo.state.alwaysYes"))==True,'always-yes toggle')
     await T(pg,'#pcstay');check(await pg.evaluate("window.__echo.state.fw.paused")==True,'stay a while moved here')
     await T(pg,'#pcvoice');check(await pg.evaluate("window.__echo.state.voice")==False,'chirp toggle')
-    await T(pg,'#pcage');check(await pg.evaluate("window.__echo.state.ageBand")=='9-10','age range cycles')
+    await T(pg,'.pcagebtn[data-band="9-10"]');check(await pg.evaluate("window.__echo.state.ageBand")=='9-10','age range: 3 direct choices (Batch G)')
     await T(pg,'#pcname');await pg.fill('#pcnm','Ma7');await T(pg,'#pcnok');check(await pg.locator('#pcnm').input_value()=='','digits rejected')
     await pg.fill('#pcnm','Ana');await T(pg,'#pcnok');S=await pg.evaluate("window.__echo.state");check(S['child']=='Ana' and S['nameChanged']==1,'rename child')
     await T(pg,'#pcecho');await pg.fill('#pcen','B0b');await T(pg,'#pceok');check(await pg.locator('#pcen').input_value()=='','echo rename filter')
