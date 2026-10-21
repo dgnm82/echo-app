@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,"><title>Echo handheld - install firmware</title>
+<style>
+ body{font-family:system-ui,sans-serif;background:#2E2452;color:#FFFBF2;margin:0;padding:24px;line-height:1.5}
+ main{max-width:560px;margin:auto}
+ h1{font-size:1.5rem;margin:0 0 4px} .v{opacity:.75;margin:0 0 20px}
+ ol{padding-left:1.2rem} li{margin:6px 0}
+ .box{background:#3B2A5C;border-radius:12px;padding:16px 18px;margin:18px 0}
+ esp-web-install-button button{font-size:1.1rem;padding:12px 22px;border-radius:10px;border:0;background:#FFD45A;color:#3B2A5C;font-weight:700;cursor:pointer}
+ a{color:#FFD45A} .warn{color:#FFB3B3}
+</style>
+<script type="module" src="ewt/install-button.js"></script>
+</head><body><main>
+<h1>Echo handheld firmware</h1>
+<p class="v">v0.1.0 demo for the Waveshare ESP32-S3-Touch-LCD-2 (case v2/v3, no camera)</p>
+<div class="box">
+<ol>
+ <li>Use <b>Chrome or Edge on a computer</b> (Web Serial; not Safari, Firefox or a phone).</li>
+ <li>Plug the handheld in with a <b>data</b> USB-C cable (the port on the top edge).</li>
+ <li>Click <b>Connect</b> and pick the port called <b>USB JTAG/serial debug unit</b> (or "ESP32-S3").</li>
+ <li>First time: say <b>yes to erase</b>. Wait for "Installation complete", then unplug and plug back in.</li>
+</ol>
+<esp-web-install-button manifest="manifest.json">
+ <span slot="unsupported" class="warn">This browser can't flash devices. Please open this page in Chrome or Edge on a computer.</span>
+ <span slot="not-allowed" class="warn">Flashing needs a secure page (https). Open the GitHub Pages address, not a local file.</span>
+</esp-web-install-button>
+</div>
+<p><b>After flashing:</b> hold <b>B</b> (or touch the screen) while the ECHO logo shows to open the hardware test screen.</p>
+<p>Not connecting, blank screen or no sound? See the <a href="README.md">flash and troubleshooting note</a>.</p>
+<p style="opacity:.6;font-size:.85rem">Installer: <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> 10.4.0 (Apache-2.0), served from this site.</p>
+</main></body></html>
