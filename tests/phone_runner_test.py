@@ -63,7 +63,7 @@ async def main():
       await pg.screenshot(path=f'{OUT}/{sp}-bond140-milestone.png')
       await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';__echo.home()");await pg.wait_for_timeout(500)
       await pg.evaluate("__echo.state.needs.rest=100;__echo.state.napUntil=0")
-      L2=await pg.evaluate("__echo.games()");print(kind,'games at bond 150',L2);assert len(L2)==4 and name in L2,L2
+      L2=await pg.evaluate("__echo.games()");print(kind,'games at bond 150',L2);assert len([g for g in L2 if g!='Echo It Back'])==4 and name in L2 and 'Echo It Back' in L2,L2  # Batch F: Echo It Back is always in the Play list
       await pg.close()
     # migration: an old save with trail / connect state and counts
     pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)))
