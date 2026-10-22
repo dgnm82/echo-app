@@ -1,4 +1,4 @@
-# Echo handheld v0.1: flashing and troubleshooting
+# Echo handheld firmware: flashing and troubleshooting
 
 Current build: **v0.1.2**. Hold Power about 1 second to wake; the speaker (I2S amp on BCLK 44, LRCLK 18, DIN 43, SD on GPIO17) switches on only while playing. Logs are over USB only.
 
@@ -25,7 +25,7 @@ esptool.py --chip esp32s3 write_flash 0x0 echo_fw_v0.1.2.bin
   - **A** plays a 3-note chime, **B** buzzes, **L/R** change the glow colour, **Vol+/-** change the volume, and a tap gives a tick and a soft buzz. **Hold B** to leave.
 - **Demo:** Pipsong the fox at home. Tap Pipsong to pet: hearts, a pink glow and a soft buzz. Tap the **note bubble** (or press **A**) for Echo It Back.
   - In Echo It Back, Pipsong sings and you tap the coloured pads back. **L/R** gives fewer or more notes (tiers 1-4); **Done** or **B** goes home.
-  - **Hold Power** (about 1 s) to sleep. **Hold Power** again to wake: other buttons can wake it for a moment, but it goes back to sleep unless Power is held.
+  - **Hold Power** (about 1 s) to sleep. To wake it, hold **Power** (GPIO7) for about 1 s again. The other buttons don't wake it.
   - A boot after a crash is fine; after 3 crashes in a row it opens the test screen in **safe mode** (no sound, glow or motor).
 
 ## Troubleshooting (use the test screen)
@@ -48,4 +48,4 @@ esptool.py --chip esp32s3 write_flash 0x0 echo_fw_v0.1.2.bin
 Connect with any serial monitor on the same USB port (115200 baud; the rate doesn't matter for USB-JTAG), or run `idf.py monitor`. Every part logs OK/MISS at boot, along with button presses, touches and Pipsong's lines.
 
 ## Source
-The firmware source is in `/workspace/echo/firmware/echo_fw` (ESP-IDF 5.4.1). Every pin is in `main/echo_pins.h`. Art and data are converted from this app at build time by `tools/convert_assets.py`.
+The firmware source is kept in a private repository. Every pin is in `main/echo_pins.h`. Art and data are converted from this app at build time by `tools/convert_assets.py`.
