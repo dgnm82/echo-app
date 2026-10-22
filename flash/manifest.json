@@ -1,12 +1,12 @@
 {
   "name": "Echo handheld",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "home_assistant_domain": "",
   "new_install_prompt_erase": true,
   "builds": [
     {
       "chipFamily": "ESP32-S3",
-      "parts": [{ "path": "echo_fw_v0.1.0.bin", "offset": 0 }]
+      "parts": [{ "path": "echo_fw_v0.1.1.bin", "offset": 0 }]
     }
   ]
 }

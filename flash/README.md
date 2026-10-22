@@ -1,5 +1,7 @@
 # Echo handheld v0.1: flashing and troubleshooting
 
+Current build: **v0.1.1**. It turns on the speaker (I2S amp on BCLK 44, LRCLK 18, DIN 43), and logs are over USB only.
+
 Board: Waveshare ESP32-S3-Touch-LCD-2 in case v2/v3, board rotated 180°, camera unplugged (Option B). Pins come from Nya's `echo_pins_poc_v01.h`. This firmware has not run on real hardware yet, so the hardware test screen is how to check the wiring.
 
 ## Flash (one click)
@@ -11,7 +13,7 @@ Board: Waveshare ESP32-S3-Touch-LCD-2 in case v2/v3, board rotated 180°, camera
 
 **Manual flash:**
 ```
-esptool.py --chip esp32s3 write_flash 0x0 echo_fw_v0.1.0.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_fw_v0.1.1.bin
 ```
 (The bin is in this folder; it's a merged image at offset 0.)
 
