@@ -145,7 +145,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const k=msPerTick(bpm)*(o.slow?1.15:1);
     const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
     const e=echoEl();if(e)e.classList.add('eibsing');let t=350;const my=++singing;
-    notes.forEach((x,i)=>{const s=step(x),d=Math.max(V.tempo.min_note_ms,x[2]*k);later(t,()=>{play(fam,s,{vol:o.soft?.8:1});light(s,Math.min(420,d*.8));els.forEach(z=>z.classList.remove('lit'));if(els[i])els[i].classList.add('lit')});t+=d});
+    notes.forEach((x,i)=>{const s=step(x),d=Math.max(V.tempo.min_note_ms,x[2]*k);later(t,()=>{play(fam,s,{vol:o.soft?.8:1});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');light(s,Math.min(420,d*.8));els.forEach(z=>z.classList.remove('lit'));if(els[i])els[i].classList.add('lit')});t+=d});
     later(t+250,()=>{if(my===singing){els.forEach(z=>z.classList.remove('lit'));const e2=echoEl();if(e2)e2.classList.remove('eibsing')}done&&done()})}
   function yourTurn(){phase='child';answer=[];ans.innerHTML='';padBox.classList.remove('listen');padBox.classList.add('turn');if(ph<=0)say('eib_your_turn',1500);
     clearTimeout(waitT);waitT=later(DATA.timing.answer_wait_ms,idle)}

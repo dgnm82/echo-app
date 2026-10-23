@@ -1,0 +1,9575 @@
+{
+  "_schema": "echo-scenes-hotspots-v1",
+  "_version": "2.0.0",
+  "_owner": "Pixal (iOS UI & Environment Designer) \u2014 shared across iOS/Web (Jay) and Handheld Firmware (Zane)",
+  "scales": {
+    "slyte": [
+      "d4",
+      "e4",
+      "f#4",
+      "a4",
+      "b4",
+      "d5",
+      "e5",
+      "f#5",
+      "a5"
+    ],
+    "whimber": [
+      "f4",
+      "g4",
+      "bb4",
+      "c5",
+      "d5",
+      "f5",
+      "g5",
+      "bb5"
+    ],
+    "twitchel": [
+      "f4",
+      "g4",
+      "a4",
+      "c5",
+      "d5",
+      "f5",
+      "g5",
+      "a5"
+    ]
+  },
+  "fx_particle_sheet": {
+    "path": "px/scenes/fx/fx_musical_notes_pollen.png",
+    "cell_wh": [
+      16,
+      16
+    ],
+    "cells": [
+      "note_eighth_gold",
+      "note_beamed_rose",
+      "note_star_lilac",
+      "pollen_burst_1",
+      "pollen_burst_2",
+      "petal_twinkle"
+    ]
+  },
+  "scenes": {
+    "clearing": [
+      {
+        "id": "clearing_flower_1",
+        "label": "Meadow Bellflower Cluster",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18,
+        "phone": {
+          "x": 42,
+          "y": 276,
+          "w": 18,
+          "h": 18
+        },
+        "hh": {
+          "x": 14,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d4",
+          "f#4"
+        ],
+        "scientific_pitches": [
+          "D4",
+          "F#4"
+        ],
+        "midi": [
+          62,
+          66
+        ],
+        "hz": [
+          293.66,
+          369.99
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "clearing_flower_2",
+        "label": "Golden Sun-Daisy Patch",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 292,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f#4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F#4",
+          "A4"
+        ],
+        "midi": [
+          66,
+          69
+        ],
+        "hz": [
+          369.99,
+          440.0
+        ],
+        "degrees": [
+          3,
+          5
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "clearing_mushroom",
+        "label": "Mossy Fairy-Ring Mushrooms",
+        "kind": "mushroom",
+        "wp": "leaf_pile",
+        "x": 26,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 26,
+          "y": 248,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 52,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 12,
+          "y": 112,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "clearing_bell",
+        "label": "Hollow Log Song-Bell & Blooms",
+        "kind": "bell",
+        "wp": "log_mouth",
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 132,
+          "y": 228,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "b4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "B4",
+          "D5"
+        ],
+        "midi": [
+          71,
+          74
+        ],
+        "hz": [
+          493.88,
+          587.33
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "grove": [
+      {
+        "id": "grove_mushroom_1",
+        "label": "Hollow Log Spotted Mushrooms",
+        "kind": "mushroom",
+        "wp": "log_peek",
+        "x": 48,
+        "y": 246,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 48,
+          "y": 246,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 16,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 22,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "D4",
+          "A4"
+        ],
+        "midi": [
+          62,
+          69
+        ],
+        "hz": [
+          293.66,
+          440.0
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "grove_flower_1",
+        "label": "Autumn Crocus Cluster",
+        "kind": "flower",
+        "wp": "leaf_pile",
+        "x": 72,
+        "y": 276,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 72,
+          "y": 276,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 44,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "e4",
+          "f#4"
+        ],
+        "scientific_pitches": [
+          "E4",
+          "F#4"
+        ],
+        "midi": [
+          64,
+          66
+        ],
+        "hz": [
+          329.63,
+          369.99
+        ],
+        "degrees": [
+          2,
+          3
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "grove_bough",
+        "label": "Russet Maple Leaf Pile",
+        "kind": "bough",
+        "wp": "leaf_pile",
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16,
+        "phone": {
+          "x": 124,
+          "y": 258,
+          "w": 18,
+          "h": 16
+        },
+        "hh": {
+          "x": 42,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 86,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "b4"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "B4"
+        ],
+        "midi": [
+          69,
+          71
+        ],
+        "hz": [
+          440.0,
+          493.88
+        ],
+        "degrees": [
+          5,
+          6
+        ],
+        "key": "D major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "grove_lantern",
+        "label": "Amber Acorn Post Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 156,
+          "y": 228,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 50,
+          "y": 44,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 104,
+          "y": 114,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "b4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "B4",
+          "D5"
+        ],
+        "midi": [
+          71,
+          74
+        ],
+        "hz": [
+          493.88,
+          587.33
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "meadow": [
+      {
+        "id": "meadow_flower_1",
+        "label": "West Hillside Bellflowers",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 38,
+        "y": 276,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 38,
+          "y": 276,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 12,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 18,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d4",
+          "f#4"
+        ],
+        "scientific_pitches": [
+          "D4",
+          "F#4"
+        ],
+        "midi": [
+          62,
+          66
+        ],
+        "hz": [
+          293.66,
+          369.99
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "meadow_flower_2",
+        "label": "Center Meadow Sun-Daisies",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 96,
+        "y": 290,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 96,
+          "y": 290,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 66,
+          "y": 136,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f#4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F#4",
+          "A4"
+        ],
+        "midi": [
+          66,
+          69
+        ],
+        "hz": [
+          369.99,
+          440.0
+        ],
+        "degrees": [
+          3,
+          5
+        ],
+        "key": "D major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "meadow_flower_3",
+        "label": "East Starlight Wildflowers",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 136,
+        "y": 278,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 136,
+          "y": 278,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 42,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 132,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "meadow_bell",
+        "label": "Pennant Signpost Chime",
+        "kind": "bell",
+        "wp": "tall_grass",
+        "x": 148,
+        "y": 224,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 148,
+          "y": 224,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 46,
+          "y": 36,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 102,
+          "y": 112,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "b4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "B4",
+          "D5"
+        ],
+        "midi": [
+          71,
+          74
+        ],
+        "hz": [
+          493.88,
+          587.33
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "branch": [
+      {
+        "id": "branch_lantern",
+        "label": "Hanging Bough Star-Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 46,
+        "y": 196,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 46,
+          "y": 196,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 8,
+          "y": 8,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 22,
+          "y": 86,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "bb4",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "F5"
+        ],
+        "midi": [
+          70,
+          77
+        ],
+        "hz": [
+          466.16,
+          698.46
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "branch_bough",
+        "label": "Canopy Leafy Twig Cluster",
+        "kind": "bough",
+        "wp": "branch_tip",
+        "x": 16,
+        "y": 172,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 16,
+          "y": 172,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 4,
+          "y": 46,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 10,
+          "y": 74,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "D5"
+        ],
+        "midi": [
+          72,
+          74
+        ],
+        "hz": [
+          523.25,
+          587.33
+        ],
+        "degrees": [
+          2,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "branch_flower_1",
+        "label": "Mossy Root Star-Blooms",
+        "kind": "flower",
+        "wp": "grass_l",
+        "x": 52,
+        "y": 284,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 52,
+          "y": 284,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 20,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 34,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "bb4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "D5"
+        ],
+        "midi": [
+          70,
+          74
+        ],
+        "hz": [
+          466.16,
+          587.33
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "branch_flower_2",
+        "label": "East Lawn Moon-Bellflowers",
+        "kind": "flower",
+        "wp": "grass_r",
+        "x": 96,
+        "y": 296,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 96,
+          "y": 296,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 38,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 68,
+          "y": 138,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "library": [
+      {
+        "id": "library_lantern",
+        "label": "Rafter Reading Star-Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 26,
+          "y": 120,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 8,
+          "y": 22,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 16,
+          "y": 92,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "bb4",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "F5"
+        ],
+        "midi": [
+          70,
+          77
+        ],
+        "hz": [
+          466.16,
+          698.46
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "library_bell",
+        "label": "Celestial Brass Mobile & Window",
+        "kind": "bell",
+        "wp": "window_sill",
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 120,
+          "y": 122,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 14,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 82,
+          "y": 88,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "library_flower",
+        "label": "Window-Sill Starlight Planter",
+        "kind": "flower",
+        "wp": "window_sill",
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 86,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 22,
+          "y": 20,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 76,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "library_mushroom",
+        "label": "Storybook Nook Chime Trinket",
+        "kind": "mushroom",
+        "wp": "book_stack",
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 138,
+          "y": 218,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 46,
+          "y": 36,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 96,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "hilltop": [
+      {
+        "id": "hilltop_flower_1",
+        "label": "West Crest Starlight Blooms",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 20,
+          "y": 288,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 8,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 14,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "bb4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "D5"
+        ],
+        "midi": [
+          70,
+          74
+        ],
+        "hz": [
+          466.16,
+          587.33
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "hilltop_flower_2",
+        "label": "Picnic Blanket Bellflowers",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 98,
+          "y": 294,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 66,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "hilltop_bough",
+        "label": "Gnarled Hilltop Blossom Bough",
+        "kind": "bough",
+        "wp": "tree_branch",
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 32,
+          "y": 180,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 22,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 80,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "hilltop_lantern",
+        "label": "Log Bench Moss & Star Chime",
+        "kind": "lantern",
+        "wp": "bench",
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 126,
+          "y": 236,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 46,
+          "y": 46,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "twitchel_clearing": [
+      {
+        "id": "tw_clearing_flower_1",
+        "label": "Sunbeam Rose-Bellflowers",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18,
+        "phone": {
+          "x": 42,
+          "y": 276,
+          "w": 18,
+          "h": 18
+        },
+        "hh": {
+          "x": 14,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_clearing_flower_2",
+        "label": "Braided Rug Sun-Daisies",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 292,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_clearing_bell",
+        "label": "Woven Basket Purr-Bell",
+        "kind": "bell",
+        "wp": "basket_door",
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 132,
+          "y": 228,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_clearing_mushroom",
+        "label": "Cozy Yarn-Ball & Clover Cluster",
+        "kind": "mushroom",
+        "wp": "leaf_pile",
+        "x": 24,
+        "y": 250,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 24,
+          "y": 250,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 52,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 14,
+          "y": 114,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "twitchel_grove": [
+      {
+        "id": "tw_grove_flower_1",
+        "label": "Sunbeam Grove Daisy Patch",
+        "kind": "flower",
+        "wp": "leaf_pile",
+        "x": 50,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 50,
+          "y": 248,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 16,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 28,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_grove_bough",
+        "label": "Autumn Leaf & Yarn Pile",
+        "kind": "bough",
+        "wp": "leaf_pile",
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16,
+        "phone": {
+          "x": 124,
+          "y": 258,
+          "w": 18,
+          "h": 16
+        },
+        "hh": {
+          "x": 42,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 86,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_grove_lantern",
+        "label": "Warm Grove Post Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 156,
+          "y": 228,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 50,
+          "y": 44,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 104,
+          "y": 114,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_grove_mushroom",
+        "label": "Peek-Box Clover & Blooms",
+        "kind": "mushroom",
+        "wp": "log_peek",
+        "x": 74,
+        "y": 282,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 74,
+          "y": 282,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 26,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 48,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "twitchel_meadow": [
+      {
+        "id": "tw_meadow_flower_1",
+        "label": "West Meadow Rose-Bellflowers",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 38,
+        "y": 276,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 38,
+          "y": 276,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 12,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 18,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_meadow_flower_2",
+        "label": "Sunbeam Patch Daisies",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 94,
+        "y": 290,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 94,
+          "y": 290,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 64,
+          "y": 136,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "C5"
+        ],
+        "midi": [
+          69,
+          72
+        ],
+        "hz": [
+          440.0,
+          523.25
+        ],
+        "degrees": [
+          3,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_meadow_flower_3",
+        "label": "Golden Tall-Sunflower",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 104,
+        "y": 218,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 104,
+          "y": 218,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 36,
+          "y": 48,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 74,
+          "y": 108,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "D5"
+        ],
+        "midi": [
+          72,
+          74
+        ],
+        "hz": [
+          523.25,
+          587.33
+        ],
+        "degrees": [
+          5,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_meadow_bell",
+        "label": "Ribbon Bell-Post Chime",
+        "kind": "bell",
+        "wp": "signpost",
+        "x": 148,
+        "y": 218,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 148,
+          "y": 218,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 28,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 102,
+          "y": 110,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "F5"
+        ],
+        "midi": [
+          74,
+          77
+        ],
+        "hz": [
+          587.33,
+          698.46
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "twitchel_garden": [
+      {
+        "id": "tw_garden_flower_1",
+        "label": "West Picket Sunflowers",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 32,
+        "y": 280,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 32,
+          "y": 280,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 12,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 18,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_garden_flower_2",
+        "label": "Windowsill Planter Flowerbox",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 78,
+        "y": 220,
+        "w": 20,
+        "h": 16,
+        "phone": {
+          "x": 78,
+          "y": 220,
+          "w": 20,
+          "h": 16
+        },
+        "hh": {
+          "x": 22,
+          "y": 32,
+          "w": 12,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 54,
+          "y": 104,
+          "w": 18,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_garden_bell",
+        "label": "East Garden Bellflowers",
+        "kind": "bell",
+        "wp": "basket_door",
+        "x": 138,
+        "y": 280,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 138,
+          "y": 280,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "tw_garden_lantern",
+        "label": "Center Lawn Star-Daisies",
+        "kind": "lantern",
+        "wp": "sun_rock",
+        "x": 94,
+        "y": 294,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 94,
+          "y": 294,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 64,
+          "y": 136,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "stream": [
+      {
+        "id": "stream_1",
+        "label": "Hollow Log Spotted Mushrooms",
+        "kind": "mushroom",
+        "wp": "log_peek",
+        "x": 48,
+        "y": 246,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 48,
+          "y": 246,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 16,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 22,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "D4",
+          "A4"
+        ],
+        "midi": [
+          62,
+          69
+        ],
+        "hz": [
+          293.66,
+          440.0
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stream_2",
+        "label": "Autumn Crocus Cluster",
+        "kind": "flower",
+        "wp": "leaf_pile",
+        "x": 72,
+        "y": 276,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 72,
+          "y": 276,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 44,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "e4",
+          "f#4"
+        ],
+        "scientific_pitches": [
+          "E4",
+          "F#4"
+        ],
+        "midi": [
+          64,
+          66
+        ],
+        "hz": [
+          329.63,
+          369.99
+        ],
+        "degrees": [
+          2,
+          3
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stream_3",
+        "label": "Russet Maple Leaf Pile",
+        "kind": "bough",
+        "wp": "leaf_pile",
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16,
+        "phone": {
+          "x": 124,
+          "y": 258,
+          "w": 18,
+          "h": 16
+        },
+        "hh": {
+          "x": 42,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 86,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "b4"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "B4"
+        ],
+        "midi": [
+          69,
+          71
+        ],
+        "hz": [
+          440.0,
+          493.88
+        ],
+        "degrees": [
+          5,
+          6
+        ],
+        "key": "D major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stream_4",
+        "label": "Amber Acorn Post Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 156,
+          "y": 228,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 50,
+          "y": 44,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 104,
+          "y": 114,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "b4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "B4",
+          "D5"
+        ],
+        "midi": [
+          71,
+          74
+        ],
+        "hz": [
+          493.88,
+          587.33
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "stone": [
+      {
+        "id": "stone_1",
+        "label": "Meadow Bellflower Cluster",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18,
+        "phone": {
+          "x": 42,
+          "y": 276,
+          "w": 18,
+          "h": 18
+        },
+        "hh": {
+          "x": 14,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d4",
+          "f#4"
+        ],
+        "scientific_pitches": [
+          "D4",
+          "F#4"
+        ],
+        "midi": [
+          62,
+          66
+        ],
+        "hz": [
+          293.66,
+          369.99
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "D major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stone_2",
+        "label": "Golden Sun-Daisy Patch",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 292,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f#4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F#4",
+          "A4"
+        ],
+        "midi": [
+          66,
+          69
+        ],
+        "hz": [
+          369.99,
+          440.0
+        ],
+        "degrees": [
+          3,
+          5
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stone_3",
+        "label": "Mossy Fairy-Ring Mushrooms",
+        "kind": "mushroom",
+        "wp": "leaf_pile",
+        "x": 26,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 26,
+          "y": 248,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 52,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 12,
+          "y": 112,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "stone_4",
+        "label": "Hollow Log Song-Bell & Blooms",
+        "kind": "bell",
+        "wp": "log_mouth",
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 132,
+          "y": 228,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "b4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "B4",
+          "D5"
+        ],
+        "midi": [
+          71,
+          74
+        ],
+        "hz": [
+          493.88,
+          587.33
+        ],
+        "degrees": [
+          6,
+          8
+        ],
+        "key": "D major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "garden": [
+      {
+        "id": "garden_1",
+        "label": "West Picket Sunflowers",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 32,
+        "y": 280,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 32,
+          "y": 280,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 12,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 18,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "garden_2",
+        "label": "Windowsill Planter Flowerbox",
+        "kind": "flower",
+        "wp": "flowers",
+        "x": 78,
+        "y": 220,
+        "w": 20,
+        "h": 16,
+        "phone": {
+          "x": 78,
+          "y": 220,
+          "w": 20,
+          "h": 16
+        },
+        "hh": {
+          "x": 22,
+          "y": 32,
+          "w": 12,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 54,
+          "y": 104,
+          "w": 18,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "garden_3",
+        "label": "East Garden Bellflowers",
+        "kind": "bell",
+        "wp": "basket_door",
+        "x": 138,
+        "y": 280,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 138,
+          "y": 280,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "garden_4",
+        "label": "Center Lawn Star-Daisies",
+        "kind": "lantern",
+        "wp": "sun_rock",
+        "x": 94,
+        "y": 294,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 94,
+          "y": 294,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 64,
+          "y": 136,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "roof": [
+      {
+        "id": "roof_1",
+        "label": "Hanging Bough Star-Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 46,
+        "y": 196,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 46,
+          "y": 196,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 8,
+          "y": 8,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 22,
+          "y": 86,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "bb4",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "F5"
+        ],
+        "midi": [
+          70,
+          77
+        ],
+        "hz": [
+          466.16,
+          698.46
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "roof_2",
+        "label": "Canopy Leafy Twig Cluster",
+        "kind": "bough",
+        "wp": "branch_tip",
+        "x": 16,
+        "y": 172,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 16,
+          "y": 172,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 4,
+          "y": 46,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 10,
+          "y": 74,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "D5"
+        ],
+        "midi": [
+          72,
+          74
+        ],
+        "hz": [
+          523.25,
+          587.33
+        ],
+        "degrees": [
+          2,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "roof_3",
+        "label": "Mossy Root Star-Blooms",
+        "kind": "flower",
+        "wp": "grass_l",
+        "x": 52,
+        "y": 284,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 52,
+          "y": 284,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 20,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 34,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "bb4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "D5"
+        ],
+        "midi": [
+          70,
+          74
+        ],
+        "hz": [
+          466.16,
+          587.33
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "roof_4",
+        "label": "East Lawn Moon-Bellflowers",
+        "kind": "flower",
+        "wp": "grass_r",
+        "x": 96,
+        "y": 296,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 96,
+          "y": 296,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 38,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 68,
+          "y": 138,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "cloud": [
+      {
+        "id": "cloud_1",
+        "label": "West Crest Starlight Blooms",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 20,
+          "y": 288,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 8,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 14,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "bb4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "D5"
+        ],
+        "midi": [
+          70,
+          74
+        ],
+        "hz": [
+          466.16,
+          587.33
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cloud_2",
+        "label": "Picnic Blanket Bellflowers",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 98,
+          "y": 294,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 66,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cloud_3",
+        "label": "Gnarled Hilltop Blossom Bough",
+        "kind": "bough",
+        "wp": "tree_branch",
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 32,
+          "y": 180,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 22,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 80,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cloud_4",
+        "label": "Log Bench Moss & Star Chime",
+        "kind": "lantern",
+        "wp": "bench",
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 126,
+          "y": 236,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 46,
+          "y": 46,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "top": [
+      {
+        "id": "top_1",
+        "label": "West Crest Starlight Blooms",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 20,
+          "y": 288,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 8,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 14,
+          "y": 126,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "bb4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "D5"
+        ],
+        "midi": [
+          70,
+          74
+        ],
+        "hz": [
+          466.16,
+          587.33
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "top_2",
+        "label": "Picnic Blanket Bellflowers",
+        "kind": "flower",
+        "wp": "blanket",
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 98,
+          "y": 294,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 66,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "top_3",
+        "label": "Gnarled Hilltop Blossom Bough",
+        "kind": "bough",
+        "wp": "tree_branch",
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 32,
+          "y": 180,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 22,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 80,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "top_4",
+        "label": "Log Bench Moss & Star Chime",
+        "kind": "lantern",
+        "wp": "bench",
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 126,
+          "y": 236,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 46,
+          "y": 46,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "cushion": [
+      {
+        "id": "cushion_1",
+        "label": "Sunbeam Rose-Bellflowers",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18,
+        "phone": {
+          "x": 42,
+          "y": 276,
+          "w": 18,
+          "h": 18
+        },
+        "hh": {
+          "x": 14,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 20,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cushion_2",
+        "label": "Braided Rug Sun-Daisies",
+        "kind": "flower",
+        "wp": "flower_patch",
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 292,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 24,
+          "y": 60,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cushion_3",
+        "label": "Woven Basket Purr-Bell",
+        "kind": "bell",
+        "wp": "basket_door",
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 132,
+          "y": 228,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 44,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 94,
+          "y": 122,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "cushion_4",
+        "label": "Cozy Yarn-Ball & Clover Cluster",
+        "kind": "mushroom",
+        "wp": "leaf_pile",
+        "x": 24,
+        "y": 250,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 24,
+          "y": 250,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 6,
+          "y": 52,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 14,
+          "y": 114,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "window": [
+      {
+        "id": "window_1",
+        "label": "Rafter Reading Star-Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 26,
+          "y": 120,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 8,
+          "y": 22,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 16,
+          "y": 92,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "bb4",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "F5"
+        ],
+        "midi": [
+          70,
+          77
+        ],
+        "hz": [
+          466.16,
+          698.46
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "window_2",
+        "label": "Celestial Brass Mobile & Window",
+        "kind": "bell",
+        "wp": "window_sill",
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 120,
+          "y": 122,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 14,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 82,
+          "y": 88,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "window_3",
+        "label": "Window-Sill Starlight Planter",
+        "kind": "flower",
+        "wp": "window_sill",
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 86,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 22,
+          "y": 20,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 76,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "window_4",
+        "label": "Storybook Nook Chime Trinket",
+        "kind": "mushroom",
+        "wp": "book_stack",
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 138,
+          "y": 218,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 46,
+          "y": 36,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 96,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "yarn": [
+      {
+        "id": "yarn_1",
+        "label": "Sunbeam Grove Daisy Patch",
+        "kind": "flower",
+        "wp": "leaf_pile",
+        "x": 50,
+        "y": 248,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 50,
+          "y": 248,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 16,
+          "y": 56,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 28,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f4",
+          "a4"
+        ],
+        "scientific_pitches": [
+          "F4",
+          "A4"
+        ],
+        "midi": [
+          65,
+          69
+        ],
+        "hz": [
+          349.23,
+          440.0
+        ],
+        "degrees": [
+          1,
+          3
+        ],
+        "key": "F major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "yarn_2",
+        "label": "Autumn Leaf & Yarn Pile",
+        "kind": "bough",
+        "wp": "leaf_pile",
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16,
+        "phone": {
+          "x": 124,
+          "y": 258,
+          "w": 18,
+          "h": 16
+        },
+        "hh": {
+          "x": 42,
+          "y": 54,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 86,
+          "y": 128,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "g4",
+          "c5"
+        ],
+        "scientific_pitches": [
+          "G4",
+          "C5"
+        ],
+        "midi": [
+          67,
+          72
+        ],
+        "hz": [
+          392.0,
+          523.25
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "F major pentatonic",
+        "instrument": "marimba",
+        "sprite": "px/scenes/fx/bough_sway.png",
+        "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "yarn_3",
+        "label": "Warm Grove Post Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 156,
+          "y": 228,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 50,
+          "y": 44,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 104,
+          "y": 114,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "F major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "yarn_4",
+        "label": "Peek-Box Clover & Blooms",
+        "kind": "mushroom",
+        "wp": "log_peek",
+        "x": 74,
+        "y": 282,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 74,
+          "y": 282,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 26,
+          "y": 58,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 48,
+          "y": 134,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "a4",
+          "d5"
+        ],
+        "scientific_pitches": [
+          "A4",
+          "D5"
+        ],
+        "midi": [
+          69,
+          74
+        ],
+        "hz": [
+          440.0,
+          587.33
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "F major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ],
+    "shelf": [
+      {
+        "id": "shelf_1",
+        "label": "Rafter Reading Star-Lantern",
+        "kind": "lantern",
+        "wp": "lantern",
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18,
+        "phone": {
+          "x": 26,
+          "y": 120,
+          "w": 16,
+          "h": 18
+        },
+        "hh": {
+          "x": 8,
+          "y": 22,
+          "w": 8,
+          "h": 9
+        },
+        "hh_120x160": {
+          "x": 16,
+          "y": 92,
+          "w": 14,
+          "h": 16
+        },
+        "notes": [
+          "bb4",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "Bb4",
+          "F5"
+        ],
+        "midi": [
+          70,
+          77
+        ],
+        "hz": [
+          466.16,
+          698.46
+        ],
+        "degrees": [
+          1,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "bell",
+        "sprite": "px/scenes/fx/lantern_glow.png",
+        "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "shelf_2",
+        "label": "Celestial Brass Mobile & Window",
+        "kind": "bell",
+        "wp": "window_sill",
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 120,
+          "y": 122,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 28,
+          "y": 14,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 82,
+          "y": 88,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "d5",
+          "g5"
+        ],
+        "scientific_pitches": [
+          "D5",
+          "G5"
+        ],
+        "midi": [
+          74,
+          79
+        ],
+        "hz": [
+          587.33,
+          783.99
+        ],
+        "degrees": [
+          3,
+          6
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "chime",
+        "sprite": "px/scenes/fx/bell_chime.png",
+        "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+        "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "shelf_3",
+        "label": "Window-Sill Starlight Planter",
+        "kind": "flower",
+        "wp": "window_sill",
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 76,
+          "y": 86,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 22,
+          "y": 20,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 52,
+          "y": 76,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "c5",
+          "f5"
+        ],
+        "scientific_pitches": [
+          "C5",
+          "F5"
+        ],
+        "midi": [
+          72,
+          77
+        ],
+        "hz": [
+          523.25,
+          698.46
+        ],
+        "degrees": [
+          2,
+          5
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "harp",
+        "sprite": "px/scenes/fx/flower_bloom.png",
+        "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      },
+      {
+        "id": "shelf_4",
+        "label": "Storybook Nook Chime Trinket",
+        "kind": "mushroom",
+        "wp": "book_stack",
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16,
+        "phone": {
+          "x": 138,
+          "y": 218,
+          "w": 16,
+          "h": 16
+        },
+        "hh": {
+          "x": 46,
+          "y": 36,
+          "w": 8,
+          "h": 8
+        },
+        "hh_120x160": {
+          "x": 96,
+          "y": 124,
+          "w": 14,
+          "h": 14
+        },
+        "notes": [
+          "f5",
+          "bb5"
+        ],
+        "scientific_pitches": [
+          "F5",
+          "Bb5"
+        ],
+        "midi": [
+          77,
+          82
+        ],
+        "hz": [
+          698.46,
+          932.33
+        ],
+        "degrees": [
+          5,
+          8
+        ],
+        "key": "B-flat major pentatonic",
+        "instrument": "musicbox",
+        "sprite": "px/scenes/fx/mushroom_boing.png",
+        "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+        "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+        "frame_wh": [
+          16,
+          16
+        ],
+        "frames": 3
+      }
+    ]
+  },
+  "clearing": [
+    {
+      "id": "clearing_flower_1",
+      "label": "Meadow Bellflower Cluster",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 42,
+      "y": 276,
+      "w": 18,
+      "h": 18,
+      "phone": {
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18
+      },
+      "hh": {
+        "x": 14,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d4",
+        "f#4"
+      ],
+      "scientific_pitches": [
+        "D4",
+        "F#4"
+      ],
+      "midi": [
+        62,
+        66
+      ],
+      "hz": [
+        293.66,
+        369.99
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "clearing_flower_2",
+      "label": "Golden Sun-Daisy Patch",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 76,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f#4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F#4",
+        "A4"
+      ],
+      "midi": [
+        66,
+        69
+      ],
+      "hz": [
+        369.99,
+        440.0
+      ],
+      "degrees": [
+        3,
+        5
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "clearing_mushroom",
+      "label": "Mossy Fairy-Ring Mushrooms",
+      "kind": "mushroom",
+      "wp": "leaf_pile",
+      "x": 26,
+      "y": 248,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 26,
+        "y": 248,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 52,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 12,
+        "y": 112,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "clearing_bell",
+      "label": "Hollow Log Song-Bell & Blooms",
+      "kind": "bell",
+      "wp": "log_mouth",
+      "x": 132,
+      "y": 228,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "b4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "B4",
+        "D5"
+      ],
+      "midi": [
+        71,
+        74
+      ],
+      "hz": [
+        493.88,
+        587.33
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "grove": [
+    {
+      "id": "grove_mushroom_1",
+      "label": "Hollow Log Spotted Mushrooms",
+      "kind": "mushroom",
+      "wp": "log_peek",
+      "x": 48,
+      "y": 246,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 48,
+        "y": 246,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 16,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 22,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "D4",
+        "A4"
+      ],
+      "midi": [
+        62,
+        69
+      ],
+      "hz": [
+        293.66,
+        440.0
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "grove_flower_1",
+      "label": "Autumn Crocus Cluster",
+      "kind": "flower",
+      "wp": "leaf_pile",
+      "x": 72,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 72,
+        "y": 276,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 44,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "e4",
+        "f#4"
+      ],
+      "scientific_pitches": [
+        "E4",
+        "F#4"
+      ],
+      "midi": [
+        64,
+        66
+      ],
+      "hz": [
+        329.63,
+        369.99
+      ],
+      "degrees": [
+        2,
+        3
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "grove_bough",
+      "label": "Russet Maple Leaf Pile",
+      "kind": "bough",
+      "wp": "leaf_pile",
+      "x": 124,
+      "y": 258,
+      "w": 18,
+      "h": 16,
+      "phone": {
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16
+      },
+      "hh": {
+        "x": 42,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 86,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "b4"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "B4"
+      ],
+      "midi": [
+        69,
+        71
+      ],
+      "hz": [
+        440.0,
+        493.88
+      ],
+      "degrees": [
+        5,
+        6
+      ],
+      "key": "D major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "grove_lantern",
+      "label": "Amber Acorn Post Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 156,
+      "y": 228,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 50,
+        "y": 44,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 104,
+        "y": 114,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "b4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "B4",
+        "D5"
+      ],
+      "midi": [
+        71,
+        74
+      ],
+      "hz": [
+        493.88,
+        587.33
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "meadow": [
+    {
+      "id": "meadow_flower_1",
+      "label": "West Hillside Bellflowers",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 38,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 38,
+        "y": 276,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 12,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 18,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d4",
+        "f#4"
+      ],
+      "scientific_pitches": [
+        "D4",
+        "F#4"
+      ],
+      "midi": [
+        62,
+        66
+      ],
+      "hz": [
+        293.66,
+        369.99
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "meadow_flower_2",
+      "label": "Center Meadow Sun-Daisies",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 96,
+      "y": 290,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 96,
+        "y": 290,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 66,
+        "y": 136,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f#4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F#4",
+        "A4"
+      ],
+      "midi": [
+        66,
+        69
+      ],
+      "hz": [
+        369.99,
+        440.0
+      ],
+      "degrees": [
+        3,
+        5
+      ],
+      "key": "D major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "meadow_flower_3",
+      "label": "East Starlight Wildflowers",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 136,
+      "y": 278,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 136,
+        "y": 278,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 42,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 132,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "meadow_bell",
+      "label": "Pennant Signpost Chime",
+      "kind": "bell",
+      "wp": "tall_grass",
+      "x": 148,
+      "y": 224,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 148,
+        "y": 224,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 46,
+        "y": 36,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 102,
+        "y": 112,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "b4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "B4",
+        "D5"
+      ],
+      "midi": [
+        71,
+        74
+      ],
+      "hz": [
+        493.88,
+        587.33
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "branch": [
+    {
+      "id": "branch_lantern",
+      "label": "Hanging Bough Star-Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 46,
+      "y": 196,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 46,
+        "y": 196,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 8,
+        "y": 8,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 22,
+        "y": 86,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "bb4",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "F5"
+      ],
+      "midi": [
+        70,
+        77
+      ],
+      "hz": [
+        466.16,
+        698.46
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "branch_bough",
+      "label": "Canopy Leafy Twig Cluster",
+      "kind": "bough",
+      "wp": "branch_tip",
+      "x": 16,
+      "y": 172,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 16,
+        "y": 172,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 4,
+        "y": 46,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 10,
+        "y": 74,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "D5"
+      ],
+      "midi": [
+        72,
+        74
+      ],
+      "hz": [
+        523.25,
+        587.33
+      ],
+      "degrees": [
+        2,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "branch_flower_1",
+      "label": "Mossy Root Star-Blooms",
+      "kind": "flower",
+      "wp": "grass_l",
+      "x": 52,
+      "y": 284,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 52,
+        "y": 284,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 20,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 34,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "bb4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "D5"
+      ],
+      "midi": [
+        70,
+        74
+      ],
+      "hz": [
+        466.16,
+        587.33
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "branch_flower_2",
+      "label": "East Lawn Moon-Bellflowers",
+      "kind": "flower",
+      "wp": "grass_r",
+      "x": 96,
+      "y": 296,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 96,
+        "y": 296,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 38,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 68,
+        "y": 138,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "library": [
+    {
+      "id": "library_lantern",
+      "label": "Rafter Reading Star-Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 26,
+      "y": 120,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 8,
+        "y": 22,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 16,
+        "y": 92,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "bb4",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "F5"
+      ],
+      "midi": [
+        70,
+        77
+      ],
+      "hz": [
+        466.16,
+        698.46
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "library_bell",
+      "label": "Celestial Brass Mobile & Window",
+      "kind": "bell",
+      "wp": "window_sill",
+      "x": 120,
+      "y": 122,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 14,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 82,
+        "y": 88,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "library_flower",
+      "label": "Window-Sill Starlight Planter",
+      "kind": "flower",
+      "wp": "window_sill",
+      "x": 76,
+      "y": 86,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 22,
+        "y": 20,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 76,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "library_mushroom",
+      "label": "Storybook Nook Chime Trinket",
+      "kind": "mushroom",
+      "wp": "book_stack",
+      "x": 138,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 46,
+        "y": 36,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 96,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "hilltop": [
+    {
+      "id": "hilltop_flower_1",
+      "label": "West Crest Starlight Blooms",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 20,
+      "y": 288,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 8,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 14,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "bb4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "D5"
+      ],
+      "midi": [
+        70,
+        74
+      ],
+      "hz": [
+        466.16,
+        587.33
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "hilltop_flower_2",
+      "label": "Picnic Blanket Bellflowers",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 98,
+      "y": 294,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 66,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "hilltop_bough",
+      "label": "Gnarled Hilltop Blossom Bough",
+      "kind": "bough",
+      "wp": "tree_branch",
+      "x": 32,
+      "y": 180,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 22,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 80,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "hilltop_lantern",
+      "label": "Log Bench Moss & Star Chime",
+      "kind": "lantern",
+      "wp": "bench",
+      "x": 126,
+      "y": 236,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 46,
+        "y": 46,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "twitchel_clearing": [
+    {
+      "id": "tw_clearing_flower_1",
+      "label": "Sunbeam Rose-Bellflowers",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 42,
+      "y": 276,
+      "w": 18,
+      "h": 18,
+      "phone": {
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18
+      },
+      "hh": {
+        "x": 14,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_clearing_flower_2",
+      "label": "Braided Rug Sun-Daisies",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 76,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_clearing_bell",
+      "label": "Woven Basket Purr-Bell",
+      "kind": "bell",
+      "wp": "basket_door",
+      "x": 132,
+      "y": 228,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_clearing_mushroom",
+      "label": "Cozy Yarn-Ball & Clover Cluster",
+      "kind": "mushroom",
+      "wp": "leaf_pile",
+      "x": 24,
+      "y": 250,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 24,
+        "y": 250,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 52,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 14,
+        "y": 114,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "twitchel_grove": [
+    {
+      "id": "tw_grove_flower_1",
+      "label": "Sunbeam Grove Daisy Patch",
+      "kind": "flower",
+      "wp": "leaf_pile",
+      "x": 50,
+      "y": 248,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 50,
+        "y": 248,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 16,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 28,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_grove_bough",
+      "label": "Autumn Leaf & Yarn Pile",
+      "kind": "bough",
+      "wp": "leaf_pile",
+      "x": 124,
+      "y": 258,
+      "w": 18,
+      "h": 16,
+      "phone": {
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16
+      },
+      "hh": {
+        "x": 42,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 86,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_grove_lantern",
+      "label": "Warm Grove Post Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 156,
+      "y": 228,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 50,
+        "y": 44,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 104,
+        "y": 114,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_grove_mushroom",
+      "label": "Peek-Box Clover & Blooms",
+      "kind": "mushroom",
+      "wp": "log_peek",
+      "x": 74,
+      "y": 282,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 74,
+        "y": 282,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 26,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 48,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "twitchel_meadow": [
+    {
+      "id": "tw_meadow_flower_1",
+      "label": "West Meadow Rose-Bellflowers",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 38,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 38,
+        "y": 276,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 12,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 18,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_meadow_flower_2",
+      "label": "Sunbeam Patch Daisies",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 94,
+      "y": 290,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 94,
+        "y": 290,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 64,
+        "y": 136,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "C5"
+      ],
+      "midi": [
+        69,
+        72
+      ],
+      "hz": [
+        440.0,
+        523.25
+      ],
+      "degrees": [
+        3,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_meadow_flower_3",
+      "label": "Golden Tall-Sunflower",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 104,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 104,
+        "y": 218,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 36,
+        "y": 48,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 74,
+        "y": 108,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "D5"
+      ],
+      "midi": [
+        72,
+        74
+      ],
+      "hz": [
+        523.25,
+        587.33
+      ],
+      "degrees": [
+        5,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_meadow_bell",
+      "label": "Ribbon Bell-Post Chime",
+      "kind": "bell",
+      "wp": "signpost",
+      "x": 148,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 148,
+        "y": 218,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 28,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 102,
+        "y": 110,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "F5"
+      ],
+      "midi": [
+        74,
+        77
+      ],
+      "hz": [
+        587.33,
+        698.46
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "twitchel_garden": [
+    {
+      "id": "tw_garden_flower_1",
+      "label": "West Picket Sunflowers",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 32,
+      "y": 280,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 32,
+        "y": 280,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 12,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 18,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_garden_flower_2",
+      "label": "Windowsill Planter Flowerbox",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 78,
+      "y": 220,
+      "w": 20,
+      "h": 16,
+      "phone": {
+        "x": 78,
+        "y": 220,
+        "w": 20,
+        "h": 16
+      },
+      "hh": {
+        "x": 22,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 54,
+        "y": 104,
+        "w": 18,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_garden_bell",
+      "label": "East Garden Bellflowers",
+      "kind": "bell",
+      "wp": "basket_door",
+      "x": 138,
+      "y": 280,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 138,
+        "y": 280,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "tw_garden_lantern",
+      "label": "Center Lawn Star-Daisies",
+      "kind": "lantern",
+      "wp": "sun_rock",
+      "x": 94,
+      "y": 294,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 94,
+        "y": 294,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 64,
+        "y": 136,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "stream": [
+    {
+      "id": "stream_1",
+      "label": "Hollow Log Spotted Mushrooms",
+      "kind": "mushroom",
+      "wp": "log_peek",
+      "x": 48,
+      "y": 246,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 48,
+        "y": 246,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 16,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 22,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "D4",
+        "A4"
+      ],
+      "midi": [
+        62,
+        69
+      ],
+      "hz": [
+        293.66,
+        440.0
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stream_2",
+      "label": "Autumn Crocus Cluster",
+      "kind": "flower",
+      "wp": "leaf_pile",
+      "x": 72,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 72,
+        "y": 276,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 44,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "e4",
+        "f#4"
+      ],
+      "scientific_pitches": [
+        "E4",
+        "F#4"
+      ],
+      "midi": [
+        64,
+        66
+      ],
+      "hz": [
+        329.63,
+        369.99
+      ],
+      "degrees": [
+        2,
+        3
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stream_3",
+      "label": "Russet Maple Leaf Pile",
+      "kind": "bough",
+      "wp": "leaf_pile",
+      "x": 124,
+      "y": 258,
+      "w": 18,
+      "h": 16,
+      "phone": {
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16
+      },
+      "hh": {
+        "x": 42,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 86,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "b4"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "B4"
+      ],
+      "midi": [
+        69,
+        71
+      ],
+      "hz": [
+        440.0,
+        493.88
+      ],
+      "degrees": [
+        5,
+        6
+      ],
+      "key": "D major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stream_4",
+      "label": "Amber Acorn Post Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 156,
+      "y": 228,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 50,
+        "y": 44,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 104,
+        "y": 114,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "b4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "B4",
+        "D5"
+      ],
+      "midi": [
+        71,
+        74
+      ],
+      "hz": [
+        493.88,
+        587.33
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "stone": [
+    {
+      "id": "stone_1",
+      "label": "Meadow Bellflower Cluster",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 42,
+      "y": 276,
+      "w": 18,
+      "h": 18,
+      "phone": {
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18
+      },
+      "hh": {
+        "x": 14,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d4",
+        "f#4"
+      ],
+      "scientific_pitches": [
+        "D4",
+        "F#4"
+      ],
+      "midi": [
+        62,
+        66
+      ],
+      "hz": [
+        293.66,
+        369.99
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "D major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stone_2",
+      "label": "Golden Sun-Daisy Patch",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 76,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f#4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F#4",
+        "A4"
+      ],
+      "midi": [
+        66,
+        69
+      ],
+      "hz": [
+        369.99,
+        440.0
+      ],
+      "degrees": [
+        3,
+        5
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stone_3",
+      "label": "Mossy Fairy-Ring Mushrooms",
+      "kind": "mushroom",
+      "wp": "leaf_pile",
+      "x": 26,
+      "y": 248,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 26,
+        "y": 248,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 52,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 12,
+        "y": 112,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_mushroom_ring_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_mushroom_ring_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "stone_4",
+      "label": "Hollow Log Song-Bell & Blooms",
+      "kind": "bell",
+      "wp": "log_mouth",
+      "x": 132,
+      "y": 228,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "b4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "B4",
+        "D5"
+      ],
+      "midi": [
+        71,
+        74
+      ],
+      "hz": [
+        493.88,
+        587.33
+      ],
+      "degrees": [
+        6,
+        8
+      ],
+      "key": "D major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "garden": [
+    {
+      "id": "garden_1",
+      "label": "West Picket Sunflowers",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 32,
+      "y": 280,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 32,
+        "y": 280,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 12,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 18,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "garden_2",
+      "label": "Windowsill Planter Flowerbox",
+      "kind": "flower",
+      "wp": "flowers",
+      "x": 78,
+      "y": 220,
+      "w": 20,
+      "h": 16,
+      "phone": {
+        "x": 78,
+        "y": 220,
+        "w": 20,
+        "h": 16
+      },
+      "hh": {
+        "x": 22,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 54,
+        "y": 104,
+        "w": 18,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "garden_3",
+      "label": "East Garden Bellflowers",
+      "kind": "bell",
+      "wp": "basket_door",
+      "x": 138,
+      "y": 280,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 138,
+        "y": 280,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "garden_4",
+      "label": "Center Lawn Star-Daisies",
+      "kind": "lantern",
+      "wp": "sun_rock",
+      "x": 94,
+      "y": 294,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 94,
+        "y": 294,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 64,
+        "y": 136,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "roof": [
+    {
+      "id": "roof_1",
+      "label": "Hanging Bough Star-Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 46,
+      "y": 196,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 46,
+        "y": 196,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 8,
+        "y": 8,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 22,
+        "y": 86,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "bb4",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "F5"
+      ],
+      "midi": [
+        70,
+        77
+      ],
+      "hz": [
+        466.16,
+        698.46
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "roof_2",
+      "label": "Canopy Leafy Twig Cluster",
+      "kind": "bough",
+      "wp": "branch_tip",
+      "x": 16,
+      "y": 172,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 16,
+        "y": 172,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 4,
+        "y": 46,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 10,
+        "y": 74,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "D5"
+      ],
+      "midi": [
+        72,
+        74
+      ],
+      "hz": [
+        523.25,
+        587.33
+      ],
+      "degrees": [
+        2,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "roof_3",
+      "label": "Mossy Root Star-Blooms",
+      "kind": "flower",
+      "wp": "grass_l",
+      "x": 52,
+      "y": 284,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 52,
+        "y": 284,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 20,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 34,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "bb4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "D5"
+      ],
+      "midi": [
+        70,
+        74
+      ],
+      "hz": [
+        466.16,
+        587.33
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "roof_4",
+      "label": "East Lawn Moon-Bellflowers",
+      "kind": "flower",
+      "wp": "grass_r",
+      "x": 96,
+      "y": 296,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 96,
+        "y": 296,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 38,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 68,
+        "y": 138,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "cloud": [
+    {
+      "id": "cloud_1",
+      "label": "West Crest Starlight Blooms",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 20,
+      "y": 288,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 8,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 14,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "bb4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "D5"
+      ],
+      "midi": [
+        70,
+        74
+      ],
+      "hz": [
+        466.16,
+        587.33
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cloud_2",
+      "label": "Picnic Blanket Bellflowers",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 98,
+      "y": 294,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 66,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cloud_3",
+      "label": "Gnarled Hilltop Blossom Bough",
+      "kind": "bough",
+      "wp": "tree_branch",
+      "x": 32,
+      "y": 180,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 22,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 80,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cloud_4",
+      "label": "Log Bench Moss & Star Chime",
+      "kind": "lantern",
+      "wp": "bench",
+      "x": 126,
+      "y": 236,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 46,
+        "y": 46,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "top": [
+    {
+      "id": "top_1",
+      "label": "West Crest Starlight Blooms",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 20,
+      "y": 288,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 20,
+        "y": 288,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 8,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 14,
+        "y": 126,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "bb4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "D5"
+      ],
+      "midi": [
+        70,
+        74
+      ],
+      "hz": [
+        466.16,
+        587.33
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "top_2",
+      "label": "Picnic Blanket Bellflowers",
+      "kind": "flower",
+      "wp": "blanket",
+      "x": 98,
+      "y": 294,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 98,
+        "y": 294,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 66,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "top_3",
+      "label": "Gnarled Hilltop Blossom Bough",
+      "kind": "bough",
+      "wp": "tree_branch",
+      "x": 32,
+      "y": 180,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 32,
+        "y": 180,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 22,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 80,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "top_4",
+      "label": "Log Bench Moss & Star Chime",
+      "kind": "lantern",
+      "wp": "bench",
+      "x": 126,
+      "y": 236,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 126,
+        "y": 236,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 46,
+        "y": 46,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "cushion": [
+    {
+      "id": "cushion_1",
+      "label": "Sunbeam Rose-Bellflowers",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 42,
+      "y": 276,
+      "w": 18,
+      "h": 18,
+      "phone": {
+        "x": 42,
+        "y": 276,
+        "w": 18,
+        "h": 18
+      },
+      "hh": {
+        "x": 14,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 20,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cushion_2",
+      "label": "Braided Rug Sun-Daisies",
+      "kind": "flower",
+      "wp": "flower_patch",
+      "x": 76,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 292,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 24,
+        "y": 60,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cushion_3",
+      "label": "Woven Basket Purr-Bell",
+      "kind": "bell",
+      "wp": "basket_door",
+      "x": 132,
+      "y": 228,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 132,
+        "y": 228,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 44,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 94,
+        "y": 122,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "cushion_4",
+      "label": "Cozy Yarn-Ball & Clover Cluster",
+      "kind": "mushroom",
+      "wp": "leaf_pile",
+      "x": 24,
+      "y": 250,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 24,
+        "y": 250,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 6,
+        "y": 52,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 14,
+        "y": 114,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "window": [
+    {
+      "id": "window_1",
+      "label": "Rafter Reading Star-Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 26,
+      "y": 120,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 8,
+        "y": 22,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 16,
+        "y": 92,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "bb4",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "F5"
+      ],
+      "midi": [
+        70,
+        77
+      ],
+      "hz": [
+        466.16,
+        698.46
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "window_2",
+      "label": "Celestial Brass Mobile & Window",
+      "kind": "bell",
+      "wp": "window_sill",
+      "x": 120,
+      "y": 122,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 14,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 82,
+        "y": 88,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "window_3",
+      "label": "Window-Sill Starlight Planter",
+      "kind": "flower",
+      "wp": "window_sill",
+      "x": 76,
+      "y": 86,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 22,
+        "y": 20,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 76,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "window_4",
+      "label": "Storybook Nook Chime Trinket",
+      "kind": "mushroom",
+      "wp": "book_stack",
+      "x": 138,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 46,
+        "y": 36,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 96,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "yarn": [
+    {
+      "id": "yarn_1",
+      "label": "Sunbeam Grove Daisy Patch",
+      "kind": "flower",
+      "wp": "leaf_pile",
+      "x": 50,
+      "y": 248,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 50,
+        "y": 248,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 16,
+        "y": 56,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 28,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f4",
+        "a4"
+      ],
+      "scientific_pitches": [
+        "F4",
+        "A4"
+      ],
+      "midi": [
+        65,
+        69
+      ],
+      "hz": [
+        349.23,
+        440.0
+      ],
+      "degrees": [
+        1,
+        3
+      ],
+      "key": "F major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "yarn_2",
+      "label": "Autumn Leaf & Yarn Pile",
+      "kind": "bough",
+      "wp": "leaf_pile",
+      "x": 124,
+      "y": 258,
+      "w": 18,
+      "h": 16,
+      "phone": {
+        "x": 124,
+        "y": 258,
+        "w": 18,
+        "h": 16
+      },
+      "hh": {
+        "x": 42,
+        "y": 54,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 86,
+        "y": 128,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "g4",
+        "c5"
+      ],
+      "scientific_pitches": [
+        "G4",
+        "C5"
+      ],
+      "midi": [
+        67,
+        72
+      ],
+      "hz": [
+        392.0,
+        523.25
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "F major pentatonic",
+      "instrument": "marimba",
+      "sprite": "px/scenes/fx/bough_sway.png",
+      "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "yarn_3",
+      "label": "Warm Grove Post Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 156,
+      "y": 228,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 156,
+        "y": 228,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 50,
+        "y": 44,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 104,
+        "y": 114,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "F major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "yarn_4",
+      "label": "Peek-Box Clover & Blooms",
+      "kind": "mushroom",
+      "wp": "log_peek",
+      "x": 74,
+      "y": 282,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 74,
+        "y": 282,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 26,
+        "y": 58,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 48,
+        "y": 134,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "a4",
+        "d5"
+      ],
+      "scientific_pitches": [
+        "A4",
+        "D5"
+      ],
+      "midi": [
+        69,
+        74
+      ],
+      "hz": [
+        440.0,
+        587.33
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "F major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ],
+  "shelf": [
+    {
+      "id": "shelf_1",
+      "label": "Rafter Reading Star-Lantern",
+      "kind": "lantern",
+      "wp": "lantern",
+      "x": 26,
+      "y": 120,
+      "w": 16,
+      "h": 18,
+      "phone": {
+        "x": 26,
+        "y": 120,
+        "w": 16,
+        "h": 18
+      },
+      "hh": {
+        "x": 8,
+        "y": 22,
+        "w": 8,
+        "h": 9
+      },
+      "hh_120x160": {
+        "x": 16,
+        "y": 92,
+        "w": 14,
+        "h": 16
+      },
+      "notes": [
+        "bb4",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "Bb4",
+        "F5"
+      ],
+      "midi": [
+        70,
+        77
+      ],
+      "hz": [
+        466.16,
+        698.46
+      ],
+      "degrees": [
+        1,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "bell",
+      "sprite": "px/scenes/fx/lantern_glow.png",
+      "fx_strip": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_star_lantern_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_star_lantern_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "shelf_2",
+      "label": "Celestial Brass Mobile & Window",
+      "kind": "bell",
+      "wp": "window_sill",
+      "x": 120,
+      "y": 122,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 120,
+        "y": 122,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 28,
+        "y": 14,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 82,
+        "y": 88,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "d5",
+        "g5"
+      ],
+      "scientific_pitches": [
+        "D5",
+        "G5"
+      ],
+      "midi": [
+        74,
+        79
+      ],
+      "hz": [
+        587.33,
+        783.99
+      ],
+      "degrees": [
+        3,
+        6
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "chime",
+      "sprite": "px/scenes/fx/bell_chime.png",
+      "fx_strip": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_day": "px/scenes/fx/prop_purr_bell_day.png",
+      "fx_strip_twi": "px/scenes/fx/prop_purr_bell_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "shelf_3",
+      "label": "Window-Sill Starlight Planter",
+      "kind": "flower",
+      "wp": "window_sill",
+      "x": 76,
+      "y": 86,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 76,
+        "y": 86,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 22,
+        "y": 20,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 52,
+        "y": 76,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "c5",
+        "f5"
+      ],
+      "scientific_pitches": [
+        "C5",
+        "F5"
+      ],
+      "midi": [
+        72,
+        77
+      ],
+      "hz": [
+        523.25,
+        698.46
+      ],
+      "degrees": [
+        2,
+        5
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "harp",
+      "sprite": "px/scenes/fx/flower_bloom.png",
+      "fx_strip": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_starbloom_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_starbloom_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    },
+    {
+      "id": "shelf_4",
+      "label": "Storybook Nook Chime Trinket",
+      "kind": "mushroom",
+      "wp": "book_stack",
+      "x": 138,
+      "y": 218,
+      "w": 16,
+      "h": 16,
+      "phone": {
+        "x": 138,
+        "y": 218,
+        "w": 16,
+        "h": 16
+      },
+      "hh": {
+        "x": 46,
+        "y": 36,
+        "w": 8,
+        "h": 8
+      },
+      "hh_120x160": {
+        "x": 96,
+        "y": 124,
+        "w": 14,
+        "h": 14
+      },
+      "notes": [
+        "f5",
+        "bb5"
+      ],
+      "scientific_pitches": [
+        "F5",
+        "Bb5"
+      ],
+      "midi": [
+        77,
+        82
+      ],
+      "hz": [
+        698.46,
+        932.33
+      ],
+      "degrees": [
+        5,
+        8
+      ],
+      "key": "B-flat major pentatonic",
+      "instrument": "musicbox",
+      "sprite": "px/scenes/fx/mushroom_boing.png",
+      "fx_strip": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_day": "px/scenes/fx/flower_windowbox_day.png",
+      "fx_strip_twi": "px/scenes/fx/flower_windowbox_twi.png",
+      "frame_wh": [
+        16,
+        16
+      ],
+      "frames": 3
+    }
+  ]
+}

@@ -1,0 +1,3284 @@
+{
+  "_schema": "echo-ios-parallax-dens-v1",
+  "_version": "1.0.0",
+  "_date": "2026-10-23",
+  "_owner": "Pixal (iOS UI, Camera UX & Parallax Environments) \u2014 for Jay (Phone/Web Dev), Cole (Character Creative Director), and Kai (PM)",
+  "_pillars": {
+    "target_ages": [
+      "5-6",
+      "7-8",
+      "9-10"
+    ],
+    "narrator": false,
+    "kid_picks_age": true,
+    "real_musical_notes_only": true,
+    "offline_100_percent": true,
+    "zero_analytics_or_sdks": true,
+    "character_sprite_lock": "Cole owns 100% of the 20 animal character sprites (48x48 @ 12fps, #3B2A5C/#24162C plum-ink outline). Parallax layers and shaders NEVER alter character sprite pixels."
+  },
+  "viewport": {
+    "logical_width_px": 180,
+    "logical_height_px": 320,
+    "parallax_canvas_width_px": 196,
+    "parallax_canvas_height_px": 336,
+    "bleed_margin_px": 8,
+    "sprite_clock_fps": 12,
+    "sprite_tick_ms": 83,
+    "environment_clock_fps": 60,
+    "pro_motion_fps": 120,
+    "plum_ink_hex": "#3B2A5C",
+    "deep_ink_hex": "#24162C",
+    "cream_card_hex": "#FFF6E6"
+  },
+  "gyroscope_parallax": {
+    "input_source": "CoreMotion CMDeviceMotion (attitude.pitch, attitude.roll) / Web DeviceOrientationEvent fallback",
+    "reference_frame": "Neutral handheld reading posture: pitch0 = +35 deg from horizontal, roll0 = 0 deg",
+    "recenter_behavior": "Auto-recenter reference quaternion over 1.5s exponential moving average on scene enter or after 4s of static rest",
+    "clamp_pitch_deg": [
+      -12.0,
+      12.0
+    ],
+    "clamp_roll_deg": [
+      -12.0,
+      12.0
+    ],
+    "spring_physics": {
+      "model": "critically_damped_second_order",
+      "natural_frequency_rad_s": 14.0,
+      "damping_ratio_zeta": 1.0,
+      "step_equation": "a = omega_n^2 * (target - x) - 2 * zeta * omega_n * v"
+    },
+    "accessibility_bypass": {
+      "respects_prefers_reduced_motion": true,
+      "respects_echo_calm_effects_lowfx": true,
+      "grown_ups_toggle_key": "S.gyroParallax",
+      "fallback_offset_px": [
+        0,
+        0
+      ]
+    },
+    "depth_planes": [
+      {
+        "layer_id": "L0",
+        "name": "Far Sky Dome & Celestial Bodies",
+        "z_index": 0,
+        "depth_z": -1.0,
+        "max_offset_art_px": {
+          "dx": 1.0,
+          "dy": 0.5
+        },
+        "deg_to_px_factor": {
+          "x": 0.083,
+          "y": 0.042
+        },
+        "invert_direction": true,
+        "description": "Sky gradient LUT, sun/moon disc, twinkling starfield, high cirrus wisps"
+      },
+      {
+        "layer_id": "L1",
+        "name": "Distant Vista (Hills / Canopy / Rooftops)",
+        "z_index": 2,
+        "depth_z": -0.65,
+        "max_offset_art_px": {
+          "dx": 2.5,
+          "dy": 1.5
+        },
+        "deg_to_px_factor": {
+          "x": 0.208,
+          "y": 0.125
+        },
+        "invert_direction": true,
+        "description": "Silhouetted ridgelines, distant forest boughs, or attic dormer skyline + drifting 2-layer clouds"
+      },
+      {
+        "layer_id": "L2",
+        "name": "Mid-Den Architecture & Bond-Grown Props",
+        "z_index": 4,
+        "depth_z": -0.25,
+        "max_offset_art_px": {
+          "dx": 4.0,
+          "dy": 2.5
+        },
+        "deg_to_px_factor": {
+          "x": 0.333,
+          "y": 0.208
+        },
+        "invert_direction": true,
+        "description": "Hollow log / ancient tree trunk / sunlit attic rafters + 5 interactive bond-grown keepsake props"
+      },
+      {
+        "layer_id": "L3",
+        "name": "Stage Floor & Character Safe-Anchor Plane",
+        "z_index": 10,
+        "depth_z": 0.0,
+        "max_offset_art_px": {
+          "dx": 5.5,
+          "dy": 3.0
+        },
+        "deg_to_px_factor": {
+          "x": 0.458,
+          "y": 0.25
+        },
+        "invert_direction": false,
+        "character_locked_to_plane": true,
+        "description": "Ground moss, sturdy perch branch, or braided attic rug. Cole's 48x48 sprite + 74x65 aura canvas anchor directly to L3 coordinates so feet never slide."
+      },
+      {
+        "layer_id": "L4",
+        "name": "Foreground Framing Vignette & Ambient Motes",
+        "z_index": 18,
+        "depth_z": 0.45,
+        "max_offset_art_px": {
+          "dx": 8.0,
+          "dy": 4.5
+        },
+        "deg_to_px_factor": {
+          "x": 0.667,
+          "y": 0.375
+        },
+        "invert_direction": false,
+        "pointer_events": "none",
+        "keep_out_zone_art_px": {
+          "x": [
+            24,
+            156
+          ],
+          "y": [
+            56,
+            284
+          ]
+        },
+        "description": "Corner-only framing ferns, hanging vine bells, or sunbeam dust motes. Center stage and dock are 100% unobstructed."
+      }
+    ]
+  },
+  "time_of_day_presets": {
+    "morning_dew": {
+      "id": "morning_dew",
+      "label": "Morning Dew",
+      "local_hours": "06:00-10:59",
+      "sky_gradient_hex": [
+        "#FFD6B8",
+        "#FFE8C8",
+        "#C8ECF0"
+      ],
+      "ambient_tint_rgba": [
+        255,
+        232,
+        210,
+        0.14
+      ],
+      "directional_light_hex": "#FFF2CE",
+      "shadow_tint_hex": "#5E4B7A",
+      "character_rim_boost": 0.1,
+      "character_sprite_tint_mix": 0.0,
+      "weather_motes": {
+        "type": "dew_sparkles",
+        "max_count": 8,
+        "lowfx_count": 0,
+        "speed_px_s": [
+          3.0,
+          6.0
+        ],
+        "colors_hex": [
+          "#FFFDF6",
+          "#FFE8A8",
+          "#B8F4E8"
+        ]
+      },
+      "shader_uniforms": {
+        "u_timePhase": 0.0,
+        "u_warmth": 0.35,
+        "u_bloomIntensity": 0.22,
+        "u_lanternGlow": 0.0,
+        "u_spriteProtect": 1.0
+      }
+    },
+    "sunny_afternoon": {
+      "id": "sunny_afternoon",
+      "label": "Sunny Afternoon",
+      "local_hours": "11:00-16:59",
+      "sky_gradient_hex": [
+        "#A9DAF0",
+        "#C9E9F6",
+        "#F1EFD9"
+      ],
+      "ambient_tint_rgba": [
+        255,
+        252,
+        235,
+        0.06
+      ],
+      "directional_light_hex": "#FFFDF2",
+      "shadow_tint_hex": "#4A3B68",
+      "character_rim_boost": 0.05,
+      "character_sprite_tint_mix": 0.0,
+      "weather_motes": {
+        "type": "sunbeam_dandelion_motes",
+        "max_count": 6,
+        "lowfx_count": 0,
+        "speed_px_s": [
+          2.0,
+          4.5
+        ],
+        "colors_hex": [
+          "#FFFDF0",
+          "#FFD86B",
+          "#E8F8D8"
+        ]
+      },
+      "shader_uniforms": {
+        "u_timePhase": 0.33,
+        "u_warmth": 0.15,
+        "u_bloomIntensity": 0.18,
+        "u_lanternGlow": 0.0,
+        "u_spriteProtect": 1.0
+      }
+    },
+    "cozy_dusk": {
+      "id": "cozy_dusk",
+      "label": "Cozy Dusk (Golden Hour)",
+      "local_hours": "17:00-19:59",
+      "sky_gradient_hex": [
+        "#7A5592",
+        "#C8769E",
+        "#F7B79A",
+        "#FFE4A8"
+      ],
+      "ambient_tint_rgba": [
+        247,
+        178,
+        122,
+        0.18
+      ],
+      "directional_light_hex": "#FFD27A",
+      "shadow_tint_hex": "#3B2A5C",
+      "character_rim_boost": 0.22,
+      "character_sprite_tint_mix": 0.0,
+      "weather_motes": {
+        "type": "golden_leaves_and_motes",
+        "max_count": 10,
+        "lowfx_count": 0,
+        "speed_px_s": [
+          4.0,
+          8.0
+        ],
+        "colors_hex": [
+          "#FFD27A",
+          "#F4A078",
+          "#FFE9B8"
+        ]
+      },
+      "shader_uniforms": {
+        "u_timePhase": 0.67,
+        "u_warmth": 0.65,
+        "u_bloomIntensity": 0.32,
+        "u_lanternGlow": 0.65,
+        "u_spriteProtect": 1.0
+      }
+    },
+    "starlight_night": {
+      "id": "starlight_night",
+      "label": "Starlight Night",
+      "local_hours": "20:00-05:59",
+      "sky_gradient_hex": [
+        "#1F183B",
+        "#2E2452",
+        "#4B3B78"
+      ],
+      "ambient_tint_rgba": [
+        75,
+        63,
+        140,
+        0.2
+      ],
+      "directional_light_hex": "#FFE29A",
+      "shadow_tint_hex": "#24162C",
+      "character_rim_boost": 0.3,
+      "character_sprite_tint_mix": 0.0,
+      "night_rule": "Night NEVER locks a child out; warm den lanterns and fireflies light the stage so care and games work any hour.",
+      "weather_motes": {
+        "type": "twilight_fireflies_and_stars",
+        "max_count": 12,
+        "lowfx_count": 4,
+        "speed_px_s": [
+          1.5,
+          3.5
+        ],
+        "colors_hex": [
+          "#FFD27A",
+          "#8EEBC8",
+          "#C9A8FF",
+          "#FFF6E6"
+        ]
+      },
+      "shader_uniforms": {
+        "u_timePhase": 1.0,
+        "u_warmth": -0.2,
+        "u_bloomIntensity": 0.4,
+        "u_lanternGlow": 1.0,
+        "u_spriteProtect": 1.0
+      }
+    }
+  },
+  "dens": {
+    "moss_hollow": {
+      "den_id": "moss_hollow",
+      "title": "Moss Hollow",
+      "family_id": "slyte",
+      "family_label": "Howlings",
+      "animals": [
+        "dog",
+        "fox",
+        "wolf",
+        "coyote"
+      ],
+      "musical_key": "D major pentatonic",
+      "do_midi": 62,
+      "scale_notes": [
+        {
+          "note": "d4",
+          "scientific": "D4",
+          "midi": 62,
+          "hz": 293.66,
+          "degree": 1,
+          "octave": 0
+        },
+        {
+          "note": "e4",
+          "scientific": "E4",
+          "midi": 64,
+          "hz": 329.63,
+          "degree": 2,
+          "octave": 0
+        },
+        {
+          "note": "f#4",
+          "scientific": "F#4",
+          "midi": 66,
+          "hz": 369.99,
+          "degree": 3,
+          "octave": 0
+        },
+        {
+          "note": "a4",
+          "scientific": "A4",
+          "midi": 69,
+          "hz": 440.0,
+          "degree": 5,
+          "octave": 0
+        },
+        {
+          "note": "b4",
+          "scientific": "B4",
+          "midi": 71,
+          "hz": 493.88,
+          "degree": 6,
+          "octave": 0
+        },
+        {
+          "note": "d5",
+          "scientific": "D5",
+          "midi": 74,
+          "hz": 587.33,
+          "degree": 1,
+          "octave": 1
+        }
+      ],
+      "base_palette_16": [
+        "#3B2A5C",
+        "#B9DDF0",
+        "#D3EAF0",
+        "#FFF6D6",
+        "#A8CFA0",
+        "#8CCB7E",
+        "#6DB274",
+        "#4E8A5A",
+        "#FFD86B",
+        "#E6AE7C",
+        "#B0744E",
+        "#86573F",
+        "#FF9EC0",
+        "#F2DDB4",
+        "#FFF3C8",
+        "#FFFFFF"
+      ],
+      "safe_stage_anchors": {
+        "primary_stage_feet_xy": [
+          90,
+          256
+        ],
+        "sprite_top_left_xy": [
+          66,
+          208
+        ],
+        "sprite_box_wh": [
+          48,
+          48
+        ],
+        "aura_canvas_offset_xy": [
+          -13,
+          -13
+        ],
+        "aura_canvas_wh": [
+          74,
+          65
+        ],
+        "home_prop_xy": [
+          100,
+          219
+        ],
+        "home_prop_wh": [
+          84,
+          46
+        ],
+        "nap_bed_xy": [
+          112,
+          262
+        ],
+        "nap_sink_offset_xy": [
+          6,
+          1
+        ],
+        "wander_waypoints": [
+          {
+            "id": "stage",
+            "kind": "ground",
+            "xy": [
+              90,
+              256
+            ],
+            "face": "front"
+          },
+          {
+            "id": "log_mouth",
+            "kind": "ground",
+            "xy": [
+              112,
+              262
+            ],
+            "face": "left"
+          },
+          {
+            "id": "leaf_pile",
+            "kind": "prop",
+            "xy": [
+              35,
+              262
+            ],
+            "face": "right"
+          },
+          {
+            "id": "flower_patch",
+            "kind": "ground",
+            "xy": [
+              50,
+              290
+            ],
+            "face": "right"
+          },
+          {
+            "id": "moon_rock",
+            "kind": "prop",
+            "xy": [
+              21,
+              236
+            ],
+            "face": "up"
+          }
+        ]
+      },
+      "layers": {
+        "L0": {
+          "svg": "layers/moss_hollow_L0_sky.svg",
+          "png": "layers/moss_hollow_L0_sky.png",
+          "elements": [
+            "sky_gradient",
+            "sun_moon_disc",
+            "star_cluster",
+            "high_clouds"
+          ]
+        },
+        "L1": {
+          "svg": "layers/moss_hollow_L1_vista.svg",
+          "png": "layers/moss_hollow_L1_vista.png",
+          "elements": [
+            "distant_pine_ridge",
+            "rolling_meadow_hills",
+            "low_drifting_clouds",
+            "sunbeam_shafts"
+          ]
+        },
+        "L2": {
+          "svg": "layers/moss_hollow_L2_mid.svg",
+          "png": "layers/moss_hollow_L2_mid.png",
+          "elements": [
+            "ancient_mossy_hollow_log",
+            "fern_archway",
+            "moon_rock_ledge",
+            "bond_props_anchor"
+          ]
+        },
+        "L3": {
+          "svg": "layers/moss_hollow_L3_stage.svg",
+          "png": "layers/moss_hollow_L3_stage.png",
+          "elements": [
+            "soft_clover_stage_floor",
+            "stepping_pebbles",
+            "clover_flower_patch",
+            "character_ground_shadow"
+          ]
+        },
+        "L4": {
+          "svg": "layers/moss_hollow_L4_fg.svg",
+          "png": "layers/moss_hollow_L4_fg.png",
+          "elements": [
+            "top_left_fern_frond",
+            "top_right_oak_bough",
+            "bottom_corner_blackberry_bramble",
+            "floating_spore_motes"
+          ]
+        }
+      },
+      "bond_grown_props": [
+        {
+          "stage": 1,
+          "bond_min": 0,
+          "prop_id": "moss_leaf_cushion",
+          "label": "Mossy Leaf Cushion",
+          "layer": "L2",
+          "xy": [
+            114,
+            246
+          ],
+          "hitbox_wh": [
+            28,
+            22
+          ],
+          "tap_animation": "cushion_puff_3f_12fps + 2 floating leaf motes",
+          "musical_chime": {
+            "notes": [
+              "d4",
+              "a4"
+            ],
+            "midi": [
+              62,
+              69
+            ],
+            "hz": [
+              293.66,
+              440.0
+            ],
+            "instrument": "xylophone"
+          },
+          "haptic_id": "prop_soft_thump"
+        },
+        {
+          "stage": 2,
+          "bond_min": 70,
+          "prop_id": "blackberry_wicker_basket",
+          "label": "Blackberry Wicker Basket",
+          "layer": "L2",
+          "xy": [
+            36,
+            248
+          ],
+          "hitbox_wh": [
+            26,
+            24
+          ],
+          "tap_animation": "basket_rock_4f_12fps + berry sparkle pop",
+          "musical_chime": {
+            "notes": [
+              "e4",
+              "f#4",
+              "a4"
+            ],
+            "midi": [
+              64,
+              66,
+              69
+            ],
+            "hz": [
+              329.63,
+              369.99,
+              440.0
+            ],
+            "instrument": "xylophone"
+          },
+          "haptic_id": "prop_wicker_click"
+        },
+        {
+          "stage": 3,
+          "bond_min": 140,
+          "prop_id": "origin_painted_pebble",
+          "label": "Painted Origin Pebble",
+          "layer": "L3",
+          "xy": [
+            62,
+            268
+          ],
+          "hitbox_wh": [
+            22,
+            22
+          ],
+          "color_source": "S.g.pal (invited animal's origin colour chip)",
+          "tap_animation": "pebble_glow_pulse + origin colour note ring",
+          "musical_chime": {
+            "notes": [
+              "f#4",
+              "b4",
+              "d5"
+            ],
+            "midi": [
+              66,
+              71,
+              74
+            ],
+            "hz": [
+              369.99,
+              493.88,
+              587.33
+            ],
+            "instrument": "musicbox"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 4,
+          "bond_min": 290,
+          "prop_id": "acorn_amber_lantern",
+          "label": "Acorn Amber Lantern",
+          "layer": "L2",
+          "xy": [
+            154,
+            212
+          ],
+          "hitbox_wh": [
+            24,
+            28
+          ],
+          "tap_animation": "lantern_swing_6f + warm radial light boost (+0.25 u_lanternGlow for 3s)",
+          "musical_chime": {
+            "notes": [
+              "a4",
+              "b4",
+              "d5"
+            ],
+            "midi": [
+              69,
+              71,
+              74
+            ],
+            "hz": [
+              440.0,
+              493.88,
+              587.33
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_bell_ting"
+        },
+        {
+          "stage": 5,
+          "bond_min": 440,
+          "prop_id": "hollow_branch_windchime",
+          "label": "Songleaf Branch Wind-Chime",
+          "layer": "L2",
+          "xy": [
+            28,
+            174
+          ],
+          "hitbox_wh": [
+            30,
+            32
+          ],
+          "tap_animation": "chime_sway_8f + NoteFX.burst(8) in Echo's own tints",
+          "musical_chime": {
+            "mode": "play_latest_songbook_or_default",
+            "store_key": "echo-songbook-v1",
+            "fallback_notes": [
+              "d4",
+              "f#4",
+              "a4",
+              "b4",
+              "d5"
+            ],
+            "fallback_midi": [
+              62,
+              66,
+              69,
+              71,
+              74
+            ],
+            "fallback_hz": [
+              293.66,
+              369.99,
+              440.0,
+              493.88,
+              587.33
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_windchime_cascade"
+        }
+      ]
+    },
+    "starlight_canopy": {
+      "den_id": "starlight_canopy",
+      "title": "Starlight Canopy",
+      "family_id": "whimber",
+      "family_label": "Wingsongs",
+      "animals": [
+        "owl",
+        "bird",
+        "duck",
+        "dove",
+        "pigeon",
+        "crow",
+        "eagle",
+        "chicken",
+        "gull"
+      ],
+      "musical_key": "B-flat major pentatonic",
+      "do_midi": 70,
+      "scale_notes": [
+        {
+          "note": "f4",
+          "scientific": "F4",
+          "midi": 65,
+          "hz": 349.23,
+          "degree": 5,
+          "octave": -1
+        },
+        {
+          "note": "g4",
+          "scientific": "G4",
+          "midi": 67,
+          "hz": 392.0,
+          "degree": 6,
+          "octave": -1
+        },
+        {
+          "note": "bb4",
+          "scientific": "Bb4",
+          "midi": 70,
+          "hz": 466.16,
+          "degree": 1,
+          "octave": 0
+        },
+        {
+          "note": "c5",
+          "scientific": "C5",
+          "midi": 72,
+          "hz": 523.25,
+          "degree": 2,
+          "octave": 0
+        },
+        {
+          "note": "d5",
+          "scientific": "D5",
+          "midi": 74,
+          "hz": 587.33,
+          "degree": 3,
+          "octave": 0
+        },
+        {
+          "note": "f5",
+          "scientific": "F5",
+          "midi": 77,
+          "hz": 698.46,
+          "degree": 5,
+          "octave": 0
+        },
+        {
+          "note": "g5",
+          "scientific": "G5",
+          "midi": 79,
+          "hz": 783.99,
+          "degree": 6,
+          "octave": 0
+        },
+        {
+          "note": "bb5",
+          "scientific": "Bb5",
+          "midi": 82,
+          "hz": 932.33,
+          "degree": 1,
+          "octave": 1
+        }
+      ],
+      "base_palette_16": [
+        "#3B2A5C",
+        "#2E2452",
+        "#4B3F8C",
+        "#BFE0EE",
+        "#C9A8FF",
+        "#8FD3FF",
+        "#8EEBC8",
+        "#FFD27A",
+        "#8A6F5A",
+        "#A08670",
+        "#B49A7A",
+        "#6DB274",
+        "#FF8FB8",
+        "#FFF6E6",
+        "#EBD7BC",
+        "#FFFFFF"
+      ],
+      "safe_stage_anchors": {
+        "primary_stage_feet_xy": [
+          90,
+          190
+        ],
+        "ground_stage_feet_xy": [
+          90,
+          256
+        ],
+        "sprite_top_left_xy": [
+          66,
+          142
+        ],
+        "sprite_box_wh": [
+          48,
+          48
+        ],
+        "aura_canvas_offset_xy": [
+          -13,
+          -13
+        ],
+        "aura_canvas_wh": [
+          74,
+          65
+        ],
+        "home_prop_xy": [
+          116,
+          89
+        ],
+        "home_prop_wh": [
+          64,
+          112
+        ],
+        "nap_bed_xy": [
+          148,
+          156
+        ],
+        "nap_sink_offset_xy": [
+          7,
+          4
+        ],
+        "wander_waypoints": [
+          {
+            "id": "stage",
+            "kind": "perch",
+            "xy": [
+              90,
+              190
+            ],
+            "face": "front"
+          },
+          {
+            "id": "branch_tip",
+            "kind": "perch",
+            "xy": [
+              24,
+              187
+            ],
+            "face": "right"
+          },
+          {
+            "id": "lantern",
+            "kind": "perch",
+            "xy": [
+              54,
+              190
+            ],
+            "face": "front"
+          },
+          {
+            "id": "hollow_sill",
+            "kind": "prop",
+            "xy": [
+              148,
+              156
+            ],
+            "face": "left"
+          },
+          {
+            "id": "low_branch",
+            "kind": "perch",
+            "xy": [
+              100,
+              250
+            ],
+            "face": "right"
+          },
+          {
+            "id": "canopy_top",
+            "kind": "perch",
+            "xy": [
+              100,
+              111
+            ],
+            "face": "up"
+          }
+        ]
+      },
+      "layers": {
+        "L0": {
+          "svg": "layers/starlight_canopy_L0_sky.svg",
+          "png": "layers/starlight_canopy_L0_sky.png",
+          "elements": [
+            "nebula_sky_dome",
+            "crescent_moon_or_sun",
+            "constellation_twinkles",
+            "aurora_ribbon"
+          ]
+        },
+        "L1": {
+          "svg": "layers/starlight_canopy_L1_vista.svg",
+          "png": "layers/starlight_canopy_L1_vista.png",
+          "elements": [
+            "distant_treetop_sea",
+            "cloud_banks_below",
+            "far_hilltop_silhouette"
+          ]
+        },
+        "L2": {
+          "svg": "layers/starlight_canopy_L2_mid.svg",
+          "png": "layers/starlight_canopy_L2_mid.png",
+          "elements": [
+            "great_oak_trunk_and_hollow_door",
+            "upper_rafter_boughs",
+            "bond_props_anchor"
+          ]
+        },
+        "L3": {
+          "svg": "layers/starlight_canopy_L3_stage.svg",
+          "png": "layers/starlight_canopy_L3_stage.png",
+          "elements": [
+            "main_perch_bough_y190",
+            "hollow_sill_ledge_y156",
+            "lower_mossy_root_y256",
+            "perch_contact_shadow"
+          ]
+        },
+        "L4": {
+          "svg": "layers/starlight_canopy_L4_fg.svg",
+          "png": "layers/starlight_canopy_L4_fg.png",
+          "elements": [
+            "top_canopy_leaf_curtain",
+            "hanging_star_vines",
+            "drifting_feather_and_star_motes"
+          ]
+        }
+      },
+      "bond_grown_props": [
+        {
+          "stage": 1,
+          "bond_min": 0,
+          "prop_id": "woven_twig_nest_cushion",
+          "label": "Woven Twig & Moss Nest",
+          "layer": "L3",
+          "xy": [
+            144,
+            152
+          ],
+          "hitbox_wh": [
+            28,
+            22
+          ],
+          "tap_animation": "nest_fluff_bounce_3f + soft feather float",
+          "musical_chime": {
+            "notes": [
+              "bb4",
+              "f5"
+            ],
+            "midi": [
+              70,
+              77
+            ],
+            "hz": [
+              466.16,
+              698.46
+            ],
+            "instrument": "flute"
+          },
+          "haptic_id": "prop_soft_thump"
+        },
+        {
+          "stage": 2,
+          "bond_min": 70,
+          "prop_id": "dewdrop_leaf_cup",
+          "label": "Dewdrop Leaf Cup",
+          "layer": "L3",
+          "xy": [
+            32,
+            182
+          ],
+          "hitbox_wh": [
+            24,
+            24
+          ],
+          "tap_animation": "water_ripple_ring_4f + silver dropletplink",
+          "musical_chime": {
+            "notes": [
+              "c5",
+              "d5",
+              "f5"
+            ],
+            "midi": [
+              72,
+              74,
+              77
+            ],
+            "hz": [
+              523.25,
+              587.33,
+              698.46
+            ],
+            "instrument": "musicbox"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 3,
+          "bond_min": 140,
+          "prop_id": "origin_plume_keepsake",
+          "label": "Glowing Origin Plume",
+          "layer": "L2",
+          "xy": [
+            118,
+            126
+          ],
+          "hitbox_wh": [
+            24,
+            26
+          ],
+          "color_source": "S.g.pal (invited bird's origin colour chip)",
+          "tap_animation": "feather_sway_5f + shimmer note rise",
+          "musical_chime": {
+            "notes": [
+              "d5",
+              "g5",
+              "bb5"
+            ],
+            "midi": [
+              74,
+              79,
+              82
+            ],
+            "hz": [
+              587.33,
+              783.99,
+              932.33
+            ],
+            "instrument": "flute"
+          },
+          "haptic_id": "prop_feather_flutter"
+        },
+        {
+          "stage": 4,
+          "bond_min": 290,
+          "prop_id": "starlight_bough_lantern",
+          "label": "Starlight Bough Lantern",
+          "layer": "L3",
+          "xy": [
+            54,
+            186
+          ],
+          "hitbox_wh": [
+            24,
+            28
+          ],
+          "tap_animation": "lantern_pendulum_6f + starlight halo bloom",
+          "musical_chime": {
+            "notes": [
+              "f5",
+              "g5",
+              "bb5"
+            ],
+            "midi": [
+              77,
+              79,
+              82
+            ],
+            "hz": [
+              698.46,
+              783.99,
+              932.33
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_bell_ting"
+        },
+        {
+          "stage": 5,
+          "bond_min": 440,
+          "prop_id": "celestial_shell_windchime",
+          "label": "Star-Glass Canopy Chime",
+          "layer": "L2",
+          "xy": [
+            42,
+            118
+          ],
+          "hitbox_wh": [
+            32,
+            32
+          ],
+          "tap_animation": "chime_sparkle_cascade_8f + NoteFX.burst(8)",
+          "musical_chime": {
+            "mode": "play_latest_songbook_or_default",
+            "store_key": "echo-songbook-v1",
+            "fallback_notes": [
+              "bb4",
+              "c5",
+              "d5",
+              "f5",
+              "bb5"
+            ],
+            "fallback_midi": [
+              70,
+              72,
+              74,
+              77,
+              82
+            ],
+            "fallback_hz": [
+              466.16,
+              523.25,
+              587.33,
+              698.46,
+              932.33
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_windchime_cascade"
+        }
+      ]
+    },
+    "sunbeam_attic": {
+      "den_id": "sunbeam_attic",
+      "title": "Sunbeam Attic",
+      "family_id": "twitchel",
+      "family_label": "Purrlings",
+      "animals": [
+        "cat",
+        "lion",
+        "tiger",
+        "leopard",
+        "cheetah",
+        "snowleopard",
+        "lynx"
+      ],
+      "musical_key": "F major pentatonic",
+      "do_midi": 65,
+      "scale_notes": [
+        {
+          "note": "f4",
+          "scientific": "F4",
+          "midi": 65,
+          "hz": 349.23,
+          "degree": 1,
+          "octave": 0
+        },
+        {
+          "note": "g4",
+          "scientific": "G4",
+          "midi": 67,
+          "hz": 392.0,
+          "degree": 2,
+          "octave": 0
+        },
+        {
+          "note": "a4",
+          "scientific": "A4",
+          "midi": 69,
+          "hz": 440.0,
+          "degree": 3,
+          "octave": 0
+        },
+        {
+          "note": "c5",
+          "scientific": "C5",
+          "midi": 72,
+          "hz": 523.25,
+          "degree": 5,
+          "octave": 0
+        },
+        {
+          "note": "d5",
+          "scientific": "D5",
+          "midi": 74,
+          "hz": 587.33,
+          "degree": 6,
+          "octave": 0
+        },
+        {
+          "note": "f5",
+          "scientific": "F5",
+          "midi": 77,
+          "hz": 698.46,
+          "degree": 1,
+          "octave": 1
+        }
+      ],
+      "base_palette_16": [
+        "#3B2A5C",
+        "#AA7650",
+        "#C9A3B4",
+        "#FFF6E6",
+        "#E8C394",
+        "#E39A52",
+        "#D9622B",
+        "#86573F",
+        "#FFB89A",
+        "#FFB8C8",
+        "#FFD27A",
+        "#8EEBC8",
+        "#B8B4C8",
+        "#8C7CC4",
+        "#EBD7BC",
+        "#FFFFFF"
+      ],
+      "safe_stage_anchors": {
+        "primary_stage_feet_xy": [
+          90,
+          256
+        ],
+        "sprite_top_left_xy": [
+          66,
+          208
+        ],
+        "sprite_box_wh": [
+          48,
+          48
+        ],
+        "aura_canvas_offset_xy": [
+          -13,
+          -13
+        ],
+        "aura_canvas_wh": [
+          74,
+          65
+        ],
+        "home_prop_xy": [
+          78,
+          225
+        ],
+        "home_prop_wh": [
+          72,
+          40
+        ],
+        "nap_bed_xy": [
+          112,
+          262
+        ],
+        "nap_sink_offset_xy": [
+          6,
+          1
+        ],
+        "wander_waypoints": [
+          {
+            "id": "stage",
+            "kind": "ground",
+            "xy": [
+              90,
+              256
+            ],
+            "face": "front"
+          },
+          {
+            "id": "basket_door",
+            "kind": "ground",
+            "xy": [
+              112,
+              262
+            ],
+            "face": "left"
+          },
+          {
+            "id": "sunbeam_patch",
+            "kind": "ground",
+            "xy": [
+              48,
+              268
+            ],
+            "face": "right"
+          },
+          {
+            "id": "window_nook",
+            "kind": "prop",
+            "xy": [
+              30,
+              228
+            ],
+            "face": "up"
+          },
+          {
+            "id": "yarn_corner",
+            "kind": "prop",
+            "xy": [
+              146,
+              262
+            ],
+            "face": "left"
+          }
+        ]
+      },
+      "layers": {
+        "L0": {
+          "svg": "layers/sunbeam_attic_L0_sky.svg",
+          "png": "layers/sunbeam_attic_L0_sky.png",
+          "elements": [
+            "arched_dormer_window_sky",
+            "drifting_clouds_or_moon",
+            "distant_star_twinkles"
+          ]
+        },
+        "L1": {
+          "svg": "layers/sunbeam_attic_L1_vista.svg",
+          "png": "layers/sunbeam_attic_L1_vista.png",
+          "elements": [
+            "cozy_gable_rooftops",
+            "treetop_crown_outside_window",
+            "diagonal_sunbeam_light_shafts"
+          ]
+        },
+        "L2": {
+          "svg": "layers/sunbeam_attic_L2_mid.svg",
+          "png": "layers/sunbeam_attic_L2_mid.png",
+          "elements": [
+            "warm_timber_attic_rafters",
+            "window_seat_sill",
+            "bookshelf_nook",
+            "cozy_woven_basket_back",
+            "bond_props_anchor"
+          ]
+        },
+        "L3": {
+          "svg": "layers/sunbeam_attic_L3_stage.svg",
+          "png": "layers/sunbeam_attic_L3_stage.png",
+          "elements": [
+            "braided_oval_rag_rug",
+            "warm_sunbeam_floor_pool",
+            "honey_pine_floorboards",
+            "character_ground_shadow"
+          ]
+        },
+        "L4": {
+          "svg": "layers/sunbeam_attic_L4_fg.svg",
+          "png": "layers/sunbeam_attic_L4_fg.png",
+          "elements": [
+            "hanging_ribbon_and_purr_bells",
+            "potted_ivy_corner_tendrils",
+            "floating_sunbeam_dust_sparkles"
+          ]
+        }
+      },
+      "bond_grown_props": [
+        {
+          "stage": 1,
+          "bond_min": 0,
+          "prop_id": "quilted_sunbeam_cushion",
+          "label": "Quilted Sunbeam Cushion",
+          "layer": "L3",
+          "xy": [
+            44,
+            258
+          ],
+          "hitbox_wh": [
+            30,
+            22
+          ],
+          "tap_animation": "biscuit_knead_ squish_4f + warm heart puff",
+          "musical_chime": {
+            "notes": [
+              "f4",
+              "c5"
+            ],
+            "midi": [
+              65,
+              72
+            ],
+            "hz": [
+              349.23,
+              523.25
+            ],
+            "instrument": "piano"
+          },
+          "haptic_id": "prop_soft_purr_pulse"
+        },
+        {
+          "stage": 2,
+          "bond_min": 70,
+          "prop_id": "origin_yarn_spool",
+          "label": "Origin-Tinted Yarn Spool",
+          "layer": "L3",
+          "xy": [
+            146,
+            260
+          ],
+          "hitbox_wh": [
+            24,
+            24
+          ],
+          "color_source": "S.g.pal (invited cat's origin colour chip)",
+          "tap_animation": "yarn_roll_bounce_5f + ribbon curl",
+          "musical_chime": {
+            "notes": [
+              "g4",
+              "a4",
+              "c5"
+            ],
+            "midi": [
+              67,
+              69,
+              72
+            ],
+            "hz": [
+              392.0,
+              440.0,
+              523.25
+            ],
+            "instrument": "xylophone"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 3,
+          "bond_min": 140,
+          "prop_id": "window_storybook_stack",
+          "label": "Window Nook Picture Books",
+          "layer": "L2",
+          "xy": [
+            28,
+            222
+          ],
+          "hitbox_wh": [
+            26,
+            24
+          ],
+          "tap_animation": "page_flutter_4f + musical clef sparkle",
+          "musical_chime": {
+            "notes": [
+              "a4",
+              "c5",
+              "d5"
+            ],
+            "midi": [
+              69,
+              72,
+              74
+            ],
+            "hz": [
+              440.0,
+              523.25,
+              587.33
+            ],
+            "instrument": "musicbox"
+          },
+          "haptic_id": "prop_page_riffle"
+        },
+        {
+          "stage": 4,
+          "bond_min": 290,
+          "prop_id": "attic_paper_star_lantern",
+          "label": "Warm Paper-Star Lantern",
+          "layer": "L2",
+          "xy": [
+            148,
+            136
+          ],
+          "hitbox_wh": [
+            26,
+            28
+          ],
+          "tap_animation": "star_lantern_sway_6f + golden sunbeam warm boost",
+          "musical_chime": {
+            "notes": [
+              "c5",
+              "d5",
+              "f5"
+            ],
+            "midi": [
+              72,
+              74,
+              77
+            ],
+            "hz": [
+              523.25,
+              587.33,
+              698.46
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_bell_ting"
+        },
+        {
+          "stage": 5,
+          "bond_min": 440,
+          "prop_id": "rafter_ribbon_bell_carillon",
+          "label": "Ribbon & Purr-Bell Carillon",
+          "layer": "L2",
+          "xy": [
+            42,
+            122
+          ],
+          "hitbox_wh": [
+            34,
+            30
+          ],
+          "tap_animation": "bell_ribbon_dance_8f + NoteFX.burst(8)",
+          "musical_chime": {
+            "mode": "play_latest_songbook_or_default",
+            "store_key": "echo-songbook-v1",
+            "fallback_notes": [
+              "f4",
+              "g4",
+              "a4",
+              "c5",
+              "f5"
+            ],
+            "fallback_midi": [
+              65,
+              67,
+              69,
+              72,
+              77
+            ],
+            "fallback_hz": [
+              349.23,
+              392.0,
+              440.0,
+              523.25,
+              698.46
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_windchime_cascade"
+        }
+      ]
+    },
+    "sunny_clover_barn": {
+      "den_id": "sunny_clover_barn",
+      "title": "Sunny Clover Barn & Hayloft",
+      "family_id": "brumlo",
+      "family_label": "Barnsongs",
+      "animals": [
+        "cow",
+        "bison",
+        "sheep",
+        "goat",
+        "pig",
+        "llama",
+        "horse",
+        "donkey"
+      ],
+      "musical_key": "G major pentatonic",
+      "do_midi": 67,
+      "scale_notes": [
+        {
+          "note": "g4",
+          "scientific": "G4",
+          "midi": 67,
+          "hz": 392.0,
+          "degree": 1,
+          "octave": 0
+        },
+        {
+          "note": "a4",
+          "scientific": "A4",
+          "midi": 69,
+          "hz": 440.0,
+          "degree": 2,
+          "octave": 0
+        },
+        {
+          "note": "b4",
+          "scientific": "B4",
+          "midi": 71,
+          "hz": 493.88,
+          "degree": 3,
+          "octave": 0
+        },
+        {
+          "note": "d5",
+          "scientific": "D5",
+          "midi": 74,
+          "hz": 587.33,
+          "degree": 5,
+          "octave": 0
+        },
+        {
+          "note": "e5",
+          "scientific": "E5",
+          "midi": 76,
+          "hz": 659.25,
+          "degree": 6,
+          "octave": 0
+        },
+        {
+          "note": "g5",
+          "scientific": "G5",
+          "midi": 79,
+          "hz": 783.99,
+          "degree": 1,
+          "octave": 1
+        }
+      ],
+      "base_palette_16": [
+        "#A8DCF0",
+        "#CBEBF6",
+        "#F4F2DC",
+        "#FFF8E2",
+        "#9ED094",
+        "#A8E08E",
+        "#84C674",
+        "#5CA05A",
+        "#E25B4E",
+        "#FFD858",
+        "#E8B878",
+        "#B87E4A",
+        "#7E4E34",
+        "#F4DCA8",
+        "#FFF4C2",
+        "#FFFFFF"
+      ],
+      "safe_stage_anchors": {
+        "primary_stage_feet_xy": [
+          90,
+          256
+        ],
+        "sprite_top_left_xy": [
+          66,
+          208
+        ],
+        "sprite_box_wh": [
+          48,
+          48
+        ],
+        "aura_canvas_offset_xy": [
+          -13,
+          -13
+        ],
+        "aura_canvas_wh": [
+          74,
+          65
+        ],
+        "home_prop_xy": [
+          108,
+          224
+        ],
+        "home_prop_wh": [
+          64,
+          42
+        ],
+        "nap_bed_xy": [
+          116,
+          258
+        ],
+        "nap_sink_offset_xy": [
+          6,
+          2
+        ],
+        "wander_waypoints": [
+          {
+            "id": "stage",
+            "kind": "ground",
+            "xy": [
+              90,
+              256
+            ],
+            "face": "front"
+          },
+          {
+            "id": "hay_nest",
+            "kind": "ground",
+            "xy": [
+              116,
+              258
+            ],
+            "face": "left"
+          },
+          {
+            "id": "clover_patch",
+            "kind": "ground",
+            "xy": [
+              46,
+              286
+            ],
+            "face": "right"
+          },
+          {
+            "id": "sunflowers",
+            "kind": "prop",
+            "xy": [
+              138,
+              282
+            ],
+            "face": "left"
+          },
+          {
+            "id": "hayloft_perch",
+            "kind": "perch",
+            "xy": [
+              42,
+              102
+            ],
+            "face": "right"
+          }
+        ]
+      },
+      "layers": {
+        "L0": {
+          "svg": "layers/sunny_clover_barn_L0_sky.svg",
+          "png": "layers/sunny_clover_barn_L0_sky.png",
+          "elements": [
+            "pasture_sky_dome",
+            "sun_moon_disc",
+            "drifting_clouds"
+          ]
+        },
+        "L1": {
+          "svg": "layers/sunny_clover_barn_L1_vista.svg",
+          "png": "layers/sunny_clover_barn_L1_vista.png",
+          "elements": [
+            "rolling_clover_hills",
+            "distant_turning_windmill",
+            "orchard_treeline"
+          ]
+        },
+        "L2": {
+          "svg": "layers/sunny_clover_barn_L2_mid.svg",
+          "png": "layers/sunny_clover_barn_L2_mid.png",
+          "elements": [
+            "red_barn_timber_rafters",
+            "open_double_barn_doors",
+            "hay_bale_nest",
+            "bond_props_anchor"
+          ]
+        },
+        "L3": {
+          "svg": "layers/sunny_clover_barn_L3_stage.svg",
+          "png": "layers/sunny_clover_barn_L3_stage.png",
+          "elements": [
+            "barn_plank_threshold",
+            "clover_meadow_stage",
+            "musical_clover_and_sunflowers",
+            "character_ground_shadow"
+          ]
+        },
+        "L4": {
+          "svg": "layers/sunny_clover_barn_L4_fg.svg",
+          "png": "layers/sunny_clover_barn_L4_fg.png",
+          "elements": [
+            "rafter_clover_garland",
+            "floating_golden_pollen_motes"
+          ]
+        }
+      },
+      "bond_grown_props": [
+        {
+          "stage": 1,
+          "bond_min": 0,
+          "prop_id": "braided_hay_cushion",
+          "label": "Braided Golden Hay Cushion",
+          "layer": "L2",
+          "xy": [
+            116,
+            244
+          ],
+          "hitbox_wh": [
+            32,
+            22
+          ],
+          "tap_animation": "hay_puff_bounce_4f + golden straw mote",
+          "musical_chime": {
+            "notes": [
+              "g4",
+              "d5"
+            ],
+            "midi": [
+              67,
+              74
+            ],
+            "hz": [
+              392.0,
+              587.33
+            ],
+            "instrument": "marimba"
+          },
+          "haptic_id": "prop_soft_thump"
+        },
+        {
+          "stage": 2,
+          "bond_min": 70,
+          "prop_id": "apple_harvest_bucket",
+          "label": "Ruby Apple Wooden Bucket",
+          "layer": "L3",
+          "xy": [
+            24,
+            248
+          ],
+          "hitbox_wh": [
+            24,
+            24
+          ],
+          "tap_animation": "bucket_rock_4f + apple shine pop",
+          "musical_chime": {
+            "notes": [
+              "a4",
+              "b4",
+              "d5"
+            ],
+            "midi": [
+              69,
+              71,
+              74
+            ],
+            "hz": [
+              440.0,
+              493.88,
+              587.33
+            ],
+            "instrument": "dulcimer"
+          },
+          "haptic_id": "prop_wicker_click"
+        },
+        {
+          "stage": 3,
+          "bond_min": 140,
+          "prop_id": "origin_patchwork_quilt",
+          "label": "Origin-Tinted Barn Quilt Square",
+          "layer": "L2",
+          "xy": [
+            18,
+            152
+          ],
+          "hitbox_wh": [
+            24,
+            24
+          ],
+          "color_source": "S.g.pal (invited farm animal's origin colour chip)",
+          "tap_animation": "quilt_star_shimmer_4f + note rise",
+          "musical_chime": {
+            "notes": [
+              "b4",
+              "d5",
+              "g5"
+            ],
+            "midi": [
+              71,
+              74,
+              79
+            ],
+            "hz": [
+              493.88,
+              587.33,
+              783.99
+            ],
+            "instrument": "dulcimer"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 4,
+          "bond_min": 290,
+          "prop_id": "warm_milk_churn_lantern",
+          "label": "Warm Milk-Churn Barn Lantern",
+          "layer": "L2",
+          "xy": [
+            126,
+            110
+          ],
+          "hitbox_wh": [
+            24,
+            28
+          ],
+          "tap_animation": "lantern_swing_6f + golden hayloft glow boost",
+          "musical_chime": {
+            "notes": [
+              "d5",
+              "e5",
+              "g5"
+            ],
+            "midi": [
+              74,
+              76,
+              79
+            ],
+            "hz": [
+              587.33,
+              659.25,
+              783.99
+            ],
+            "instrument": "bells"
+          },
+          "haptic_id": "prop_bell_ting"
+        },
+        {
+          "stage": 5,
+          "bond_min": 440,
+          "prop_id": "rafter_cowbell_carillon",
+          "label": "Brass Cowbell & Horseshoe Carillon",
+          "layer": "L2",
+          "xy": [
+            54,
+            104
+          ],
+          "hitbox_wh": [
+            32,
+            30
+          ],
+          "tap_animation": "cowbell_sway_8f + NoteFX.burst(8)",
+          "musical_chime": {
+            "mode": "play_latest_songbook_or_default",
+            "store_key": "echo-songbook-v1",
+            "fallback_notes": [
+              "g4",
+              "a4",
+              "b4",
+              "d5",
+              "g5"
+            ],
+            "fallback_midi": [
+              67,
+              69,
+              71,
+              74,
+              79
+            ],
+            "fallback_hz": [
+              392.0,
+              440.0,
+              493.88,
+              587.33,
+              783.99
+            ],
+            "instrument": "cowbell_chime"
+          },
+          "haptic_id": "prop_windchime_cascade"
+        }
+      ]
+    },
+    "glowing_tidepool_cove": {
+      "den_id": "glowing_tidepool_cove",
+      "title": "Glowing Tidepool Cove",
+      "family_id": "finli",
+      "family_label": "Splashsongs",
+      "animals": [
+        "fish",
+        "dolphin",
+        "whale",
+        "shark",
+        "seal",
+        "octopus",
+        "seaturtle",
+        "seaotter"
+      ],
+      "musical_key": "C major pentatonic",
+      "do_midi": 60,
+      "scale_notes": [
+        {
+          "note": "c4",
+          "scientific": "C4",
+          "midi": 60,
+          "hz": 261.63,
+          "degree": 1,
+          "octave": 0
+        },
+        {
+          "note": "d4",
+          "scientific": "D4",
+          "midi": 62,
+          "hz": 293.66,
+          "degree": 2,
+          "octave": 0
+        },
+        {
+          "note": "e4",
+          "scientific": "E4",
+          "midi": 64,
+          "hz": 329.63,
+          "degree": 3,
+          "octave": 0
+        },
+        {
+          "note": "g4",
+          "scientific": "G4",
+          "midi": 67,
+          "hz": 392.0,
+          "degree": 5,
+          "octave": 0
+        },
+        {
+          "note": "a4",
+          "scientific": "A4",
+          "midi": 69,
+          "hz": 440.0,
+          "degree": 6,
+          "octave": 0
+        },
+        {
+          "note": "c5",
+          "scientific": "C5",
+          "midi": 72,
+          "hz": 523.25,
+          "degree": 1,
+          "octave": 1
+        },
+        {
+          "note": "d5",
+          "scientific": "D5",
+          "midi": 74,
+          "hz": 587.33,
+          "degree": 2,
+          "octave": 1
+        },
+        {
+          "note": "e5",
+          "scientific": "E5",
+          "midi": 76,
+          "hz": 659.25,
+          "degree": 3,
+          "octave": 1
+        }
+      ],
+      "base_palette_16": [
+        "#98E2F4",
+        "#C4F0F8",
+        "#EAF8F2",
+        "#FFF9EA",
+        "#68B8C8",
+        "#78E2CA",
+        "#4CC2B0",
+        "#2E968C",
+        "#FF88A8",
+        "#FFD86E",
+        "#E2C496",
+        "#B69268",
+        "#7E5E48",
+        "#387CA0",
+        "#FFF6CC",
+        "#FFFFFF"
+      ],
+      "safe_stage_anchors": {
+        "primary_stage_feet_xy": [
+          90,
+          256
+        ],
+        "sprite_top_left_xy": [
+          66,
+          208
+        ],
+        "sprite_box_wh": [
+          48,
+          48
+        ],
+        "aura_canvas_offset_xy": [
+          -13,
+          -13
+        ],
+        "aura_canvas_wh": [
+          74,
+          65
+        ],
+        "home_prop_xy": [
+          118,
+          228
+        ],
+        "home_prop_wh": [
+          56,
+          36
+        ],
+        "nap_bed_xy": [
+          126,
+          254
+        ],
+        "nap_sink_offset_xy": [
+          5,
+          3
+        ],
+        "wander_waypoints": [
+          {
+            "id": "stage",
+            "kind": "water_shallows",
+            "xy": [
+              90,
+              256
+            ],
+            "face": "front"
+          },
+          {
+            "id": "pearl_clam_bed",
+            "kind": "prop",
+            "xy": [
+              126,
+              254
+            ],
+            "face": "left"
+          },
+          {
+            "id": "anemone_ledge",
+            "kind": "water_shallows",
+            "xy": [
+              38,
+              282
+            ],
+            "face": "right"
+          },
+          {
+            "id": "conch_shoal",
+            "kind": "ground",
+            "xy": [
+              66,
+              296
+            ],
+            "face": "right"
+          },
+          {
+            "id": "basking_rock",
+            "kind": "perch",
+            "xy": [
+              28,
+              238
+            ],
+            "face": "right"
+          }
+        ]
+      },
+      "layers": {
+        "L0": {
+          "svg": "layers/glowing_tidepool_cove_L0_sky.svg",
+          "png": "layers/glowing_tidepool_cove_L0_sky.png",
+          "elements": [
+            "coastal_sky_dome",
+            "sun_moon_disc",
+            "sea_breeze_clouds"
+          ]
+        },
+        "L1": {
+          "svg": "layers/glowing_tidepool_cove_L1_vista.svg",
+          "png": "layers/glowing_tidepool_cove_L1_vista.png",
+          "elements": [
+            "shimmering_ocean_horizon",
+            "distant_waves"
+          ]
+        },
+        "L2": {
+          "svg": "layers/glowing_tidepool_cove_L2_mid.svg",
+          "png": "layers/glowing_tidepool_cove_L2_mid.png",
+          "elements": [
+            "coastal_rock_archways",
+            "giant_pearl_clam_bed",
+            "driftwood_seaglass_mobile"
+          ]
+        },
+        "L3": {
+          "svg": "layers/glowing_tidepool_cove_L3_stage.svg",
+          "png": "layers/glowing_tidepool_cove_L3_stage.png",
+          "elements": [
+            "crystal_tidepool_lagoon_stage",
+            "caustic_shimmer_net",
+            "musical_anemones_and_conch"
+          ]
+        },
+        "L4": {
+          "svg": "layers/glowing_tidepool_cove_L4_fg.svg",
+          "png": "layers/glowing_tidepool_cove_L4_fg.png",
+          "elements": [
+            "swaying_kelp_fronds",
+            "rising_pearl_bubbles_and_bioluminescence"
+          ]
+        }
+      },
+      "bond_grown_props": [
+        {
+          "stage": 1,
+          "bond_min": 0,
+          "prop_id": "velvet_kelp_pearl_bed",
+          "label": "Velvet Kelp & Pearl-Shell Cushion",
+          "layer": "L2",
+          "xy": [
+            122,
+            236
+          ],
+          "hitbox_wh": [
+            28,
+            22
+          ],
+          "tap_animation": "clam_cushion_gleam_4f + pearl bubble rise",
+          "musical_chime": {
+            "notes": [
+              "c4",
+              "g4"
+            ],
+            "midi": [
+              60,
+              67
+            ],
+            "hz": [
+              261.63,
+              392.0
+            ],
+            "instrument": "water_kalimba"
+          },
+          "haptic_id": "prop_soft_thump"
+        },
+        {
+          "stage": 2,
+          "bond_min": 70,
+          "prop_id": "singing_spiral_conch",
+          "label": "Singing Spiral Conch Shell",
+          "layer": "L3",
+          "xy": [
+            58,
+            292
+          ],
+          "hitbox_wh": [
+            24,
+            22
+          ],
+          "tap_animation": "conch_shimmer_tilt_4f + 2 bubble notes",
+          "musical_chime": {
+            "notes": [
+              "d4",
+              "e4",
+              "g4"
+            ],
+            "midi": [
+              62,
+              64,
+              67
+            ],
+            "hz": [
+              293.66,
+              329.63,
+              392.0
+            ],
+            "instrument": "shell_marimba"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 3,
+          "bond_min": 140,
+          "prop_id": "origin_sea_glass_pebble",
+          "label": "Origin-Tinted Frosted Sea-Glass",
+          "layer": "L3",
+          "xy": [
+            108,
+            286
+          ],
+          "hitbox_wh": [
+            22,
+            22
+          ],
+          "color_source": "S.g.pal (invited ocean creature's origin colour chip)",
+          "tap_animation": "seaglass_prism_glow_4f + harmonic ripple",
+          "musical_chime": {
+            "notes": [
+              "e4",
+              "g4",
+              "c5"
+            ],
+            "midi": [
+              64,
+              67,
+              72
+            ],
+            "hz": [
+              329.63,
+              392.0,
+              523.25
+            ],
+            "instrument": "glass_harp"
+          },
+          "haptic_id": "note_pad_transient"
+        },
+        {
+          "stage": 4,
+          "bond_min": 290,
+          "prop_id": "bioluminescent_jelly_lantern",
+          "label": "Bioluminescent Sea-Lantern",
+          "layer": "L2",
+          "xy": [
+            144,
+            156
+          ],
+          "hitbox_wh": [
+            24,
+            28
+          ],
+          "tap_animation": "sea_lantern_pulse_6f + aqua caustic bloom",
+          "musical_chime": {
+            "notes": [
+              "g4",
+              "a4",
+              "c5"
+            ],
+            "midi": [
+              67,
+              69,
+              72
+            ],
+            "hz": [
+              392.0,
+              440.0,
+              523.25
+            ],
+            "instrument": "celesta_bell"
+          },
+          "haptic_id": "prop_bell_ting"
+        },
+        {
+          "stage": 5,
+          "bond_min": 440,
+          "prop_id": "driftwood_seaglass_carillon",
+          "label": "Driftwood & Sea-Glass Windchime",
+          "layer": "L2",
+          "xy": [
+            20,
+            134
+          ],
+          "hitbox_wh": [
+            32,
+            30
+          ],
+          "tap_animation": "seaglass_dance_8f + NoteFX.burst(8)",
+          "musical_chime": {
+            "mode": "play_latest_songbook_or_default",
+            "store_key": "echo-songbook-v1",
+            "fallback_notes": [
+              "c4",
+              "d4",
+              "e4",
+              "g4",
+              "c5"
+            ],
+            "fallback_midi": [
+              60,
+              62,
+              64,
+              67,
+              72
+            ],
+            "fallback_hz": [
+              261.63,
+              293.66,
+              329.63,
+              392.0,
+              523.25
+            ],
+            "instrument": "glass_harp"
+          },
+          "haptic_id": "prop_windchime_cascade"
+        }
+      ]
+    }
+  },
+  "magic_window_camera_ux": {
+    "privacy_contract": {
+      "grown_up_gate_before_first_os_prompt": true,
+      "zero_photos_saved_or_uploaded": true,
+      "volatile_ram_buffer_only": "CVPixelBuffer 360x360 @ 2-3 fps, zeroized immediately after frame pass",
+      "stage0_person_face_gate": {
+        "requests": [
+          "VNDetectHumanRectanglesRequest(upperBody=false)",
+          "VNDetectFaceRectanglesRequest"
+        ],
+        "biometrics_or_landmarks_called": false,
+        "drop_confidence_threshold": 0.25,
+        "ui_badge_on_drop": "Friendly Paw + Toy beside Crossed-Out Smiley (zero scolding text, auto-resumes when clear)"
+      },
+      "always_visible_safety_badges": [
+        "far_away_no_touching_badge (open hand + gap + animal)",
+        "ios_system_green_camera_dot_unobstructed"
+      ],
+      "equal_non_camera_path": {
+        "button_id": "btn_crayon_card_path",
+        "placement": "Side-by-side equal twin button next to Magic Window camera button (50/50 split width, identical height & reward)",
+        "modes": [
+          "Pick Animal & Colour Card",
+          "Colour-In Silhouette with Crayons"
+        ]
+      }
+    },
+    "viewfinder_chrome": {
+      "frame_style": "Painterly soft-pixel archway (148x188 art px centered in 180x320 stage) with animated 60fps stardust border",
+      "shimmer_ring": {
+        "inner_radius_art_px": 34,
+        "outer_radius_art_px": 46,
+        "sampling_duration_ms": {
+          "5-6": 900,
+          "7-8": 750,
+          "9-10": 600
+        },
+        "shutter_mode": {
+          "5-6": "auto_hold_still_no_shutter",
+          "7-8": "tap_listen_note_button",
+          "9-10": "tap_listen_plus_top2_swatch_picker"
+        },
+        "dissolve_transition": "Freeze <120ms -> dissolve into 24 pixel notes & sparkles in <450ms (child sees photo disappear into music)"
+      }
+    },
+    "musical_color_quests": {
+      "description": "Child points Magic Window at real-world colors (yellow raincoat, red apple, blue block, green leaf). Dominant OKLab hue/chroma maps to an Echo palette ramp and plays a 3-note real musical motif in the active Echo's key.",
+      "session_bond_cap": 2,
+      "quest_palettes": [
+        {
+          "quest_id": "ruby_berry",
+          "label": "Berry Red",
+          "swatch_hex": "#D9503A",
+          "echo_ramp": "robin-ember",
+          "oklab_hue_deg_range": [
+            15,
+            48
+          ],
+          "primary_note": {
+            "scientific": "C4",
+            "midi": 60,
+            "hz": 261.63,
+            "col_index": 0
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "d4",
+                "f#4",
+                "a4"
+              ],
+              "midi": [
+                62,
+                66,
+                69
+              ],
+              "hz": [
+                293.66,
+                369.99,
+                440.0
+              ],
+              "character": "bouncy_warm_triad"
+            },
+            "whimber": {
+              "notes": [
+                "bb4",
+                "d5",
+                "f5"
+              ],
+              "midi": [
+                70,
+                74,
+                77
+              ],
+              "hz": [
+                466.16,
+                587.33,
+                698.46
+              ],
+              "character": "bright_wing_fanfare"
+            },
+            "twitchel": {
+              "notes": [
+                "f4",
+                "a4",
+                "c5"
+              ],
+              "midi": [
+                65,
+                69,
+                72
+              ],
+              "hz": [
+                349.23,
+                440.0,
+                523.25
+              ],
+              "character": "cozy_hearth_chord"
+            }
+          }
+        },
+        {
+          "quest_id": "ember_ginger",
+          "label": "Autumn Ginger",
+          "swatch_hex": "#E8772E",
+          "echo_ramp": "ember-russet",
+          "oklab_hue_deg_range": [
+            49,
+            75
+          ],
+          "primary_note": {
+            "scientific": "D4",
+            "midi": 62,
+            "hz": 293.66,
+            "col_index": 1
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "d4",
+                "e4",
+                "a4"
+              ],
+              "midi": [
+                62,
+                64,
+                69
+              ],
+              "hz": [
+                293.66,
+                329.63,
+                440.0
+              ],
+              "character": "leaf_pounce_skip"
+            },
+            "whimber": {
+              "notes": [
+                "c5",
+                "d5",
+                "g5"
+              ],
+              "midi": [
+                72,
+                74,
+                79
+              ],
+              "hz": [
+                523.25,
+                587.33,
+                783.99
+              ],
+              "character": "warm_bough_hop"
+            },
+            "twitchel": {
+              "notes": [
+                "g4",
+                "a4",
+                "d5"
+              ],
+              "midi": [
+                67,
+                69,
+                74
+              ],
+              "hz": [
+                392.0,
+                440.0,
+                587.33
+              ],
+              "character": "marmalade_purr_step"
+            }
+          }
+        },
+        {
+          "quest_id": "sunset_gold",
+          "label": "Sunny Gold",
+          "swatch_hex": "#FFD84A",
+          "echo_ramp": "sunset-gold-solid",
+          "oklab_hue_deg_range": [
+            76,
+            115
+          ],
+          "primary_note": {
+            "scientific": "E4",
+            "midi": 64,
+            "hz": 329.63,
+            "col_index": 2
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "f#4",
+                "a4",
+                "d5"
+              ],
+              "midi": [
+                66,
+                69,
+                74
+              ],
+              "hz": [
+                369.99,
+                440.0,
+                587.33
+              ],
+              "character": "sunbeam_howl_rise"
+            },
+            "whimber": {
+              "notes": [
+                "d5",
+                "f5",
+                "bb5"
+              ],
+              "midi": [
+                74,
+                77,
+                82
+              ],
+              "hz": [
+                587.33,
+                698.46,
+                932.33
+              ],
+              "character": "sun_finch_trill"
+            },
+            "twitchel": {
+              "notes": [
+                "a4",
+                "c5",
+                "f5"
+              ],
+              "midi": [
+                69,
+                72,
+                77
+              ],
+              "hz": [
+                440.0,
+                523.25,
+                698.46
+              ],
+              "character": "sunbeam_stretch_arpeggio"
+            }
+          }
+        },
+        {
+          "quest_id": "moss_mint",
+          "label": "Moss & Mint",
+          "swatch_hex": "#6BBF6A",
+          "echo_ramp": "mint-teal-solid",
+          "oklab_hue_deg_range": [
+            116,
+            195
+          ],
+          "primary_note": {
+            "scientific": "F4",
+            "midi": 65,
+            "hz": 349.23,
+            "col_index": 3
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "a4",
+                "f#4",
+                "d4"
+              ],
+              "midi": [
+                69,
+                66,
+                62
+              ],
+              "hz": [
+                440.0,
+                369.99,
+                293.66
+              ],
+              "character": "mossy_hollow_cadence"
+            },
+            "whimber": {
+              "notes": [
+                "f5",
+                "d5",
+                "bb4"
+              ],
+              "midi": [
+                77,
+                74,
+                70
+              ],
+              "hz": [
+                698.46,
+                587.33,
+                466.16
+              ],
+              "character": "canopy_breeze_fall"
+            },
+            "twitchel": {
+              "notes": [
+                "c5",
+                "a4",
+                "f4"
+              ],
+              "midi": [
+                72,
+                69,
+                65
+              ],
+              "hz": [
+                523.25,
+                440.0,
+                349.23
+              ],
+              "character": "garden_fern_lullaby"
+            }
+          }
+        },
+        {
+          "quest_id": "sky_periwinkle",
+          "label": "Sky Blue",
+          "swatch_hex": "#5A8AD8",
+          "echo_ramp": "sky-teal",
+          "oklab_hue_deg_range": [
+            196,
+            275
+          ],
+          "primary_note": {
+            "scientific": "G4",
+            "midi": 67,
+            "hz": 392.0,
+            "col_index": 4
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "e4",
+                "a4",
+                "b4"
+              ],
+              "midi": [
+                64,
+                69,
+                71
+              ],
+              "hz": [
+                329.63,
+                440.0,
+                493.88
+              ],
+              "character": "brook_ripple_fourth"
+            },
+            "whimber": {
+              "notes": [
+                "bb4",
+                "c5",
+                "f5"
+              ],
+              "midi": [
+                70,
+                72,
+                77
+              ],
+              "hz": [
+                466.16,
+                523.25,
+                698.46
+              ],
+              "character": "open_sky_glide"
+            },
+            "twitchel": {
+              "notes": [
+                "f4",
+                "g4",
+                "c5"
+              ],
+              "midi": [
+                65,
+                67,
+                72
+              ],
+              "hz": [
+                349.23,
+                392.0,
+                523.25
+              ],
+              "character": "raindrop_window_plink"
+            }
+          }
+        },
+        {
+          "quest_id": "starlight_lilac",
+          "label": "Starlight Purple",
+          "swatch_hex": "#A884E0",
+          "echo_ramp": "violet-rose-solid",
+          "oklab_hue_deg_range": [
+            276,
+            335
+          ],
+          "primary_note": {
+            "scientific": "A4",
+            "midi": 69,
+            "hz": 440.0,
+            "col_index": 5
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "b4",
+                "a4",
+                "f#4"
+              ],
+              "midi": [
+                71,
+                69,
+                66
+              ],
+              "hz": [
+                493.88,
+                440.0,
+                369.99
+              ],
+              "character": "twilight_star_hum"
+            },
+            "whimber": {
+              "notes": [
+                "g5",
+                "f5",
+                "d5"
+              ],
+              "midi": [
+                79,
+                77,
+                74
+              ],
+              "hz": [
+                783.99,
+                698.46,
+                587.33
+              ],
+              "character": "owl_moon_lullaby"
+            },
+            "twitchel": {
+              "notes": [
+                "d5",
+                "c5",
+                "a4"
+              ],
+              "midi": [
+                74,
+                72,
+                69
+              ],
+              "hz": [
+                587.33,
+                523.25,
+                440.0
+              ],
+              "character": "velvet_cushion_purr"
+            }
+          }
+        },
+        {
+          "quest_id": "blossom_pink",
+          "label": "Petal Pink",
+          "swatch_hex": "#F4A0C8",
+          "echo_ramp": "rose-sapphire-solid",
+          "oklab_hue_deg_range": [
+            336,
+            14
+          ],
+          "primary_note": {
+            "scientific": "B4",
+            "midi": 71,
+            "hz": 493.88,
+            "col_index": 6
+          },
+          "family_motifs": {
+            "slyte": {
+              "notes": [
+                "f#4",
+                "b4",
+                "d5"
+              ],
+              "midi": [
+                66,
+                71,
+                74
+              ],
+              "hz": [
+                369.99,
+                493.88,
+                587.33
+              ],
+              "character": "clover_dance_chime"
+            },
+            "whimber": {
+              "notes": [
+                "c5",
+                "f5",
+                "g5"
+              ],
+              "midi": [
+                72,
+                77,
+                79
+              ],
+              "hz": [
+                523.25,
+                698.46,
+                783.99
+              ],
+              "character": "dawn_feather_waltz"
+            },
+            "twitchel": {
+              "notes": [
+                "a4",
+                "d5",
+                "f5"
+              ],
+              "midi": [
+                69,
+                74,
+                77
+              ],
+              "hz": [
+                440.0,
+                587.33,
+                698.46
+              ],
+              "character": "ribbon_bow_twirl"
+            }
+          }
+        }
+      ]
+    },
+    "playdate_wave": {
+      "description": "Scanning a toy, pet, book picture, or drawing triggers a Guest Light Visit. Active Echo pops into bottom-left corner, waves, and sings a 2-bar call-and-response duet with the spotted animal spirit. Leaves a Song Stamp in Memory Book (never a photo).",
+      "same_family_behavior": "Active Echo waves, plays MFX.homeSound(animal), and harmonizes a 4-note duet in thirds/fifths.",
+      "different_family_behavior": "A Stage-1 light-form spirit of the spotted family/color floats into the Magic Window, sings its 4-note family phrase, active Echo answers in its own scale, and both burst into sparkles.",
+      "memory_book_stamp_schema": {
+        "saved_fields": [
+          "visited_family",
+          "visited_animal",
+          "visited_color_ramp",
+          "duet_song_v1"
+        ],
+        "photo_stored": false
+      }
+    },
+    "den_foraging": {
+      "description": "On-device VNClassifyImageRequest maps broad kid-safe everyday objects to temporary pixel den gifts and contextual conversation tags (ctx.spotted).",
+      "archetypes": [
+        {
+          "archetype_id": "nature_leaf_flower",
+          "vision_labels": [
+            "leaf",
+            "plant",
+            "flower",
+            "daisy",
+            "pinecone",
+            "fern",
+            "acorn"
+          ],
+          "pixel_gift_sprite": "px/hd/props/gift_leaf_crown.png",
+          "context_tag": "spotted_nature",
+          "chime_hz": [
+            440.0,
+            587.33
+          ]
+        },
+        {
+          "archetype_id": "cozy_cup_snack",
+          "vision_labels": [
+            "cup",
+            "mug",
+            "bowl",
+            "apple",
+            "banana",
+            "berry",
+            "fruit"
+          ],
+          "pixel_gift_sprite": "px/hd/props/gift_warm_berry_cup.png",
+          "context_tag": "spotted_snack",
+          "chime_hz": [
+            369.99,
+            440.0
+          ]
+        },
+        {
+          "archetype_id": "storybook_page",
+          "vision_labels": [
+            "book",
+            "notebook",
+            "comic",
+            "paper",
+            "drawing"
+          ],
+          "pixel_gift_sprite": "px/hd/props/gift_mini_storybook.png",
+          "context_tag": "spotted_book",
+          "chime_hz": [
+            523.25,
+            659.25
+          ]
+        },
+        {
+          "archetype_id": "cozy_blanket_plush",
+          "vision_labels": [
+            "pillow",
+            "cushion",
+            "blanket",
+            "quilt",
+            "knitted",
+            "fabric"
+          ],
+          "pixel_gift_sprite": "px/hd/props/gift_patchwork_throw.png",
+          "context_tag": "spotted_cozy",
+          "chime_hz": [
+            349.23,
+            523.25
+          ]
+        }
+      ]
+    }
+  },
+  "core_haptics_ahap": {
+    "grown_ups_toggle_key": "S.haptics",
+    "default_enabled": true,
+    "patterns": {
+      "petting_purr_continuous": {
+        "type": "CHHapticEventTypeContinuous",
+        "duration_s": 1.1,
+        "intensity_range": [
+          0.22,
+          0.42
+        ],
+        "sharpness_range": [
+          0.1,
+          0.18
+        ],
+        "velocity_modulation": "Modulated in real-time by MFX.petMove finger stroke speed (px/s)",
+        "family_tuning": {
+          "slyte": {
+            "base_intensity": 0.3,
+            "base_sharpness": 0.16,
+            "feel": "warm_tail_thrum"
+          },
+          "whimber": {
+            "base_intensity": 0.22,
+            "base_sharpness": 0.12,
+            "feel": "feather_trill_pulse"
+          },
+          "twitchel": {
+            "base_intensity": 0.38,
+            "base_sharpness": 0.1,
+            "feel": "deep_velvet_purr"
+          }
+        }
+      },
+      "note_pad_transient": {
+        "type": "CHHapticEventTypeTransient",
+        "intensity": 0.48,
+        "sharpness": 0.35,
+        "decay_tail_ms": 45,
+        "scale_pitch_map": "Sharpness scales gently from 0.28 (C4) to 0.52 (C6) to mirror musical pitch"
+      },
+      "prop_soft_thump": {
+        "type": "CHHapticEventTypeTransient",
+        "intensity": 0.4,
+        "sharpness": 0.15
+      },
+      "prop_wicker_click": {
+        "type": "CHHapticEventTypeTransient",
+        "intensity": 0.45,
+        "sharpness": 0.42
+      },
+      "prop_bell_ting": {
+        "type": "CHHapticEventTypeTransient + ContinuousDecay",
+        "intensity": 0.5,
+        "sharpness": 0.65,
+        "duration_s": 0.18
+      },
+      "prop_windchime_cascade": {
+        "type": "MultiTransientSequence",
+        "events_ms": [
+          0,
+          110,
+          220,
+          340,
+          480
+        ],
+        "intensities": [
+          0.35,
+          0.45,
+          0.52,
+          0.4,
+          0.3
+        ],
+        "sharpnesses": [
+          0.55,
+          0.62,
+          0.7,
+          0.65,
+          0.58
+        ]
+      },
+      "magic_window_shimmer": {
+        "type": "SparkleRamp + DissolvePop",
+        "duration_s": 0.65,
+        "intensity_curve": [
+          0.15,
+          0.35,
+          0.55,
+          0.2
+        ],
+        "sharpness_curve": [
+          0.3,
+          0.5,
+          0.75,
+          0.4
+        ]
+      },
+      "bond_up_swell": {
+        "type": "HeartbeatDoubleTap + NoteBurst",
+        "events_ms": [
+          0,
+          180,
+          620
+        ],
+        "intensities": [
+          0.45,
+          0.65,
+          0.8
+        ],
+        "sharpnesses": [
+          0.2,
+          0.28,
+          0.55
+        ]
+      }
+    }
+  },
+  "native_ui_and_age_bands": {
+    "dom_overlay_id": "ios-ui-layer",
+    "coordinate_bridge": "css_px = art_coord * var(--px-k)",
+    "font_stack": {
+      "speech_and_choices": "'SF Pro Rounded', -apple-system, BlinkMacSystemFont, 'Nunito', sans-serif",
+      "pixel_accents_and_badges": "'PressStart2P', monospace"
+    },
+    "age_bands": {
+      "5-6": {
+        "badge_icon": "sprout",
+        "bubble_font_size_pt": 20,
+        "bubble_line_height": 1.35,
+        "type_cps": 14,
+        "hold_duration_formula": "held_until_tapped (min 4500ms indicator)",
+        "use_short_lines": true,
+        "max_words_per_bubble": 6,
+        "choice_chip_min_art_px": 28,
+        "choice_chip_min_pt": 56,
+        "icon_target_min_art_px": 24,
+        "choice_format": "big_icon_plus_1_or_2_sight_words",
+        "eib_start_notes": 3,
+        "ghost_finger_demo": "every_new_screen"
+      },
+      "7-8": {
+        "badge_icon": "flower",
+        "bubble_font_size_pt": 17,
+        "bubble_line_height": 1.35,
+        "type_cps": 20,
+        "hold_duration_formula": "max(3500, chars * 75) ms, tap to hold/advance",
+        "use_short_lines": false,
+        "max_words_per_bubble": 14,
+        "choice_chip_min_art_px": 22,
+        "choice_chip_min_pt": 44,
+        "icon_target_min_art_px": 22,
+        "choice_format": "icon_plus_short_phrase (2-4 words)",
+        "eib_start_notes": 4,
+        "ghost_finger_demo": "first_use_only"
+      },
+      "9-10": {
+        "badge_icon": "tree",
+        "bubble_font_size_pt": 15.5,
+        "bubble_line_height": 1.4,
+        "type_cps": 28,
+        "hold_duration_formula": "max(3000, chars * 65) ms, tap to skip/advance",
+        "use_short_lines": false,
+        "max_words_per_bubble": 22,
+        "choice_chip_min_art_px": 22,
+        "choice_chip_min_pt": 44,
+        "icon_target_min_art_px": 22,
+        "choice_format": "icon_plus_expressive_phrase (3-6 words, riddles & song naming)",
+        "eib_start_notes": 6,
+        "ghost_finger_demo": "first_use_only"
+      }
+    }
+  },
+  "window_DEN_contract": {
+    "_note": "1:1 compatibility block for Jay's window.DEN / PIXEL.den hook in sprite_unification_and_parallax_plan_jay.md",
+    "dom_structure": {
+      "back_container": "#den.den-parallax (contains .den-layer.den-l0, .den-l1, .den-l2)",
+      "character_plane": "#cr (.creature > .px-echo + canvas.aura), .hb/.hgi, .lvprop, .alfx (z-index 10..30, depth 0.70)",
+      "front_container": "#den-fg.den-fg (contains .den-layer.den-l3, .den-l4)",
+      "depths": {
+        "L0": 0.0,
+        "L1": 0.2,
+        "L2": 0.45,
+        "character_stage": 0.7,
+        "L3": 0.9,
+        "L4": 1.15
+      },
+      "max_shift_art_px": {
+        "maxShiftX": 7,
+        "maxShiftY": 4
+      }
+    },
+    "scene_id_to_den": {
+      "meadow": "moss_hollow",
+      "stream": "moss_hollow",
+      "stone": "moss_hollow",
+      "garden": "moss_hollow",
+      "branch": "starlight_canopy",
+      "roof": "starlight_canopy",
+      "cloud": "starlight_canopy",
+      "top": "starlight_canopy",
+      "cushion": "sunbeam_attic",
+      "window": "sunbeam_attic",
+      "yarn": "sunbeam_attic",
+      "shelf": "sunbeam_attic"
+    },
+    "tod_lighting": {
+      "dawn": {
+        "preset_id": "morning_dew",
+        "ambient": "rgba(255, 196, 168, 0.14)",
+        "multiply": "rgba(74, 52, 96, 0.10)",
+        "rim": "#FFD6A5",
+        "motes": "warm"
+      },
+      "day": {
+        "preset_id": "sunny_afternoon",
+        "ambient": "rgba(255, 248, 224, 0.00)",
+        "multiply": "rgba(0, 0, 0, 0.00)",
+        "rim": "#FFF6E6",
+        "motes": "pollen"
+      },
+      "dusk": {
+        "preset_id": "cozy_dusk",
+        "ambient": "rgba(247, 168, 90, 0.18)",
+        "multiply": "rgba(59, 42, 92, 0.22)",
+        "rim": "#F7A85A",
+        "motes": "amber"
+      },
+      "night": {
+        "preset_id": "starlight_night",
+        "ambient": "rgba(122, 90, 200, 0.12)",
+        "multiply": "rgba(30, 22, 56, 0.45)",
+        "rim": "#9AD1D4",
+        "motes": "firefly"
+      }
+    },
+    "layer_assets_by_den": {
+      "moss_hollow": {
+        "L0": "/workspace/echo/ios_design/layers/moss_hollow_L0_sky.png",
+        "L1": "/workspace/echo/ios_design/layers/moss_hollow_L1_vista.png",
+        "L2": "/workspace/echo/ios_design/layers/moss_hollow_L2_mid.png",
+        "L3": "/workspace/echo/ios_design/layers/moss_hollow_L3_stage.png",
+        "L4": "/workspace/echo/ios_design/layers/moss_hollow_L4_fg.png"
+      },
+      "starlight_canopy": {
+        "L0": "/workspace/echo/ios_design/layers/starlight_canopy_L0_sky.png",
+        "L1": "/workspace/echo/ios_design/layers/starlight_canopy_L1_vista.png",
+        "L2": "/workspace/echo/ios_design/layers/starlight_canopy_L2_mid.png",
+        "L3": "/workspace/echo/ios_design/layers/starlight_canopy_L3_stage.png",
+        "L4": "/workspace/echo/ios_design/layers/starlight_canopy_L4_fg.png"
+      },
+      "sunbeam_attic": {
+        "L0": "/workspace/echo/ios_design/layers/sunbeam_attic_L0_sky.png",
+        "L1": "/workspace/echo/ios_design/layers/sunbeam_attic_L1_vista.png",
+        "L2": "/workspace/echo/ios_design/layers/sunbeam_attic_L2_mid.png",
+        "L3": "/workspace/echo/ios_design/layers/sunbeam_attic_L3_stage.png",
+        "L4": "/workspace/echo/ios_design/layers/sunbeam_attic_L4_fg.png"
+      }
+    }
+  }
+}

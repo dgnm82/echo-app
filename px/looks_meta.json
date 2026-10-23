@@ -1,16 +1,18 @@
 {
- "frames": 31040,
+ "frames": 69646,
  "max": 16,
  "over16": 0,
  "black": 0,
  "looks": {
   "slyte": [
+   "fox",
    "dog",
    "wolf",
-   "howling",
-   "coyote"
+   "coyote",
+   "howling"
   ],
   "whimber": [
+   "owl",
    "wingsong",
    "duck",
    "dove",
@@ -19,6 +21,15 @@
    "eagle",
    "chicken",
    "gull"
+  ],
+  "twitchel": [
+   "cat",
+   "lion",
+   "tiger",
+   "leopard",
+   "cheetah",
+   "snowleopard",
+   "lynx"
   ]
  },
  "palettes": {
@@ -45,6 +56,18 @@
    "peach-dusk-solid",
    "plum-blush",
    "lilac-night"
+  ],
+  "twitchel": [
+   "dusk-plum",
+   "moon-lilac",
+   "ember-russet",
+   "sunset-gold-solid",
+   "snow-blush",
+   "cocoa-cream",
+   "tan-sand",
+   "mint-teal-solid",
+   "rose-sapphire-solid",
+   "violet-rose-solid"
   ]
  }
 }

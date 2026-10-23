@@ -94,7 +94,7 @@ input[type=checkbox]{width:8px;height:8px}
 .chip{display:inline-flex;align-items:center;gap:2px;font-size:8px;padding:1px 3px;margin:1px;border:1px solid #3B2A5C;background:#fff}
 /* reactions move in whole pixels (guide 9.1), frames come from the sprite */
 @keyframes pxhop{0%{transform:translateX(-50%) translateY(0)}14%{transform:translateX(-50%) translateY(-3px)}28%{transform:translateX(-50%) translateY(-6px)}42%{transform:translateX(-50%) translateY(-8px)}58%{transform:translateX(-50%) translateY(-6px)}72%{transform:translateX(-50%) translateY(-3px)}86%,100%{transform:translateX(-50%) translateY(0)}}
-.creature.r-happy,.creature.r-excited{animation:pxhop 664ms steps(1,end) 1}
+.creature.r-happy,.creature.r-excited,.creature.r-delighted{animation:pxhop 664ms steps(1,end) 1}
 .creature.r-pet,.creature.r-eat,.creature.r-sad,.creature.r-sleepy{animation:none}
 /* choices: one row per option (icon left, label right) so long words never split */
 .choices{grid-template-columns:1fr}
@@ -110,7 +110,7 @@ input[type=checkbox]{width:8px;height:8px}
 .fortgame .fblvl{font-size:8px;color:#FFF6E6;background:#3B2A5C;padding:1px 2px}
 .fortgame .fbstars{display:flex;flex-direction:column;gap:1px}.pxi.dim{opacity:.35}
 .fortgame .fbecho{left:132px!important;right:auto;bottom:auto!important;top:148px;transform:none!important}
-.fortgame .fbecho.r-happy,.fortgame .fbecho.r-excited{animation:pxhop2 664ms steps(1,end) 1}
+.fortgame .fbecho.r-happy,.fortgame .fbecho.r-excited,.fortgame .fbecho.r-delighted{animation:pxhop2 664ms steps(1,end) 1}
 @keyframes pxhop2{0%,100%{transform:translateY(0)}20%{transform:translateY(-3px)}40%{transform:translateY(-6px)}60%{transform:translateY(-3px)}}
 .fortgame .fbstrip{position:absolute;left:4px;top:200px;width:128px;height:24px;border:1px solid #3B2A5C;image-rendering:pixelated}
 .fortgame .fbpad{position:absolute;left:2px;right:2px;bottom:4px;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
@@ -187,7 +187,7 @@ input[type=checkbox]{width:8px;height:8px}
 @keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
 .mcardbtn.wiggle{animation:wig 332ms steps(1,end) 2}
 .memgame .memecho{left:4px!important;right:auto;bottom:2px!important;top:auto;transform:none!important}
-.memgame .memecho.r-happy,.memgame .memecho.r-excited{animation:pxhop2 664ms steps(1,end) 1}
+.memgame .memecho.r-happy,.memgame .memecho.r-excited,.memgame .memecho.r-delighted{animation:pxhop2 664ms steps(1,end) 1}
 .memgame .memside{position:absolute;right:4px;bottom:6px;display:flex;flex-direction:column;align-items:flex-end;gap:2px;color:#FFF6E6;font-size:8px}
 .memgame .memside #mcount{display:none}
 .memgame .bubble{top:auto!important;bottom:2px;left:54px;right:2px;width:auto!important;transform:none;max-width:none;z-index:5;white-space:normal!important}
@@ -352,3 +352,20 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 .diggame:has(.g2card) .fb,.diggame:has(.g2card) .fbside,.diggame:has(.g2card) .fbecho,.diggame:has(.g2card) .dgspark{visibility:hidden}
 #gs:has(.g2card) .bubble{top:24px!important;bottom:auto!important;left:6px!important;right:6px!important;width:auto!important;max-width:none!important;transform:none!important;white-space:normal!important;z-index:6}   /* end card: the closing line sits above the results card, full width so it stays short */
 .bondup-ui .buhearts{display:flex;justify-content:center;gap:6px}.bondup-ui .buheart{width:14px;height:12px;image-rendering:pixelated}
+
+/* ===== 5-Layer Parallax Den (window.DEN / PIXEL.den) & Interactive Hotspots ===== */
+#sc{--den-l3-x:0px;--den-l3-y:0px}
+#sc .creature{transform:translate3d(calc(-50% + var(--den-l3-x, 0px)), var(--den-l3-y, 0px), 0)}
+.den-wrap{position:absolute;inset:0;width:180px;height:320px;overflow:hidden;pointer-events:none;z-index:0;isolation:isolate}
+.den-plane{position:absolute;left:-8px;top:-8px;width:196px;height:336px;background-repeat:no-repeat;background-size:196px 336px;image-rendering:pixelated;pointer-events:none;will-change:transform}
+.den-l0{z-index:0}.den-l1{z-index:2}.den-l2{z-index:4}.den-l3{z-index:10}.den-l4{z-index:18;pointer-events:none}
+.den-tint{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z-index:12;pointer-events:none}
+canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z-index:16;pointer-events:none;image-rendering:pixelated}
+.env-hotspots{position:absolute;inset:0;pointer-events:none;z-index:6}
+.env-spot{position:absolute;width:16px;height:16px;background-repeat:no-repeat;background-size:48px 16px;background-position:0 0;image-rendering:pixelated;pointer-events:auto;cursor:pointer}
+.env-spot[data-bloom="1"]{background-position:-16px 0;transform:translateY(-1px)}
+.env-spot[data-bloom="2"]{background-position:-32px 0;transform:translateY(-1px)}
+.env-spot[data-bloom="3"]{background-position:-16px 0;transform:translateY(0)}
+.env-note,.env-spark{position:absolute;pointer-events:none;image-rendering:pixelated}
+.env-note.rise,.env-spark.rise{animation:lvrise 1s steps(12,end) forwards}
+.env-note.calm,.env-spark.calm{animation:none;opacity:.85}

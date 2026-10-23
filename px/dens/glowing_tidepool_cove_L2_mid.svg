@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 336" width="196" height="336" shape-rendering="crispEdges">
+  <!-- Project Echo iOS Parallax Layer: glowing_tidepool_cove L2_mid (196x336 with 8px bleed) -->
+  <polygon points="0,132 52,132 34,264 0,264" fill="#B69268"/>
+  <polygon points="196,132 144,132 162,264 196,264" fill="#B69268"/>
+  <ellipse cx="140" cy="249" rx="14" ry="8" fill="#FF88A8" stroke="#7E5E48" stroke-width="2"/>
+</svg>

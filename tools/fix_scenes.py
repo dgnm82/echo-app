@@ -25,7 +25,7 @@ def fill_path(name,dev,ground,ox,oy):
     ims={v:Image.open(f'px/scenes/{name}{dev}_{v}.png').convert('RGB') for v in ('day','twi')}
     d=ims['day'];W,H=d.size;st=hx(P[name]['day'][13]);grass={hx(P[name]['day'][i]) for i in (5,6,7)};g2=hx(P[name]['day'][7])
     pts=[(x,y) for y in range(ground+6,H) for x in range(W) if d.getpixel((x,y))==st]
-    if not pts:return
+    if len(pts)<80:return
     x0,x1=min(p[0] for p in pts)-3,max(p[0] for p in pts)+3;y0,y1=min(p[1] for p in pts)-3,max(p[1] for p in pts)+3
     clean=[]
     for ty in range(ground,H-15,16):
