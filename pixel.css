@@ -334,6 +334,7 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 .home{position:absolute;pointer-events:auto}.home>*{position:absolute;left:0;top:0;display:block;background:no-repeat;image-rendering:pixelated}
 .home-log{width:84px;height:46px}.home-log>i,.home-log>canvas{width:84px;height:46px}.home-hollow{width:64px;height:112px}.home-hollow>i,.home-hollow>canvas{width:64px;height:112px}
 .home-basket{width:72px;height:40px}.home-basket>i,.home-basket>canvas{width:72px;height:40px}   /* Purrlings: homes.json basket size */
+.home-basket_room{width:56px;height:30px}.home-basket_room>i,.home-basket_room>canvas{width:56px;height:30px}.home-den,.home-den_wild{width:70px;height:46px}.home-den>i,.home-den>canvas,.home-den_wild>i,.home-den_wild>canvas{width:70px;height:46px}   /* H4: homes.json sizes (Pixal homes_batchH) */
 .home .hb,.home .hgi{z-index:1}.home .hf,.home .hgo{z-index:1}.home.in .hf,.home.in .hgo,.home .htail{z-index:3}#sc .home.in~#cr,#sc #cr{z-index:2}
 .home .hgl{display:none}.home.glow .hgl{display:block}.home .htail{display:none;width:30px!important;height:26px!important}.home-hollow .htail{width:24px!important;height:20px!important}.home .htail.on{display:block}
 .home.peek .hf{opacity:.5}.home.book{position:relative;left:auto!important;top:auto!important}
@@ -356,7 +357,7 @@ canvas.aura{position:absolute;left:-13px;top:-13px;width:74px;height:65px;pointe
 /* ===== 5-Layer Parallax Den (window.DEN / PIXEL.den) & Interactive Hotspots ===== */
 #sc{--den-l3-x:0px;--den-l3-y:0px}
 #sc .creature{transform:translate3d(calc(-50% + var(--den-l3-x, 0px)), var(--den-l3-y, 0px), 0)}
-.den-wrap{position:absolute;inset:0;width:180px;height:320px;overflow:hidden;pointer-events:none;z-index:0;isolation:isolate}
+.den-wrap{position:absolute;left:0;top:-57px;width:180px;height:320px;overflow:hidden;pointer-events:none;z-index:0;isolation:isolate}
 .den-plane{position:absolute;left:-8px;top:-8px;width:196px;height:336px;background-repeat:no-repeat;background-size:196px 336px;image-rendering:pixelated;pointer-events:none;will-change:transform}
 .den-l0{z-index:0}.den-l1{z-index:2}.den-l2{z-index:4}.den-l3{z-index:10}.den-l4{z-index:18;pointer-events:none}
 .den-tint{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z-index:12;pointer-events:none}
@@ -369,3 +370,75 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 .env-note,.env-spark{position:absolute;pointer-events:none;image-rendering:pixelated}
 .env-note.rise,.env-spark.rise{animation:lvrise 1s steps(12,end) forwards}
 .env-note.calm,.env-spark.calm{animation:none;opacity:.85}
+/* H11: conversation bubbles always above every scene prop, hotspot, den layer and particle */
+#sc>#b,#sc .bubble,#sc .thought,.pxscene .bubble,.pxscene .thought{z-index:50}   /* spec says 40; .lvfx/.alfx particles already sit at 40, so 50 keeps bubbles strictly on top */
+/* H13: the bubble is tappable (advance a conversation turn / dismiss a bark) with a pulsing corner cue */
+#sc>#b{pointer-events:auto;cursor:pointer}
+#sc>#b.tapnext::before{content:"\25B8";position:absolute;right:2px;bottom:0;font-size:6px;line-height:6px;color:#3B2A5C;animation:tapcue 996ms steps(2,end) infinite}
+@keyframes tapcue{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){#sc>#b.tapnext::before{animation:none}}
+/* H17: notes float up while the Echo hums */
+#sc .humnote{position:absolute;z-index:30;font-size:8px;color:#3B2A5C;pointer-events:none;animation:humrise 1600ms steps(8,end) forwards}
+@keyframes humrise{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-28px);opacity:0}}
+/* H1/H2 Magic Window (camera origin) */
+.orcam .orwin{position:relative;width:150px;height:150px;margin:6px auto 4px;border:2px solid #3B2A5C;box-shadow:0 2px 0 #23183a;background:#1F183B;overflow:hidden;border-radius:6px}
+.orcam .orwin video{width:100%;height:100%;object-fit:cover;display:block}
+.orcam .orscan{position:absolute;inset:0;pointer-events:none;background:linear-gradient(transparent 46%,rgba(255,210,122,.35) 50%,transparent 54%);background-size:100% 200%;animation:orscan 2s steps(20,end) infinite}
+.orcam .calm .orscan,.calm .orcam .orscan{animation:none}
+@keyframes orscan{0%{background-position:0 100%}100%{background-position:0 -100%}}
+.orcam .orbadge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#FFF6E6;border:1px solid #3B2A5C;padding:4px 6px;font-size:12px;box-shadow:0 2px 0 #23183a}
+.orcam .orwin.frozen video{filter:saturate(1.2) brightness(1.1)}
+.orcam .orwin.dissolve video{opacity:0;transition:opacity 450ms steps(6,end)}
+.orcam .ornotes{position:absolute;inset:0;pointer-events:none}
+.orcam .orcamnote{position:absolute;color:#FFD27A;font-size:9px;opacity:0;animation:orcamnote 700ms steps(7,end) forwards}
+@keyframes orcamnote{0%{opacity:0;transform:translateY(4px)}30%{opacity:1}100%{opacity:0;transform:translateY(-18px)}}
+.orcam .orcamctl{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+.orcam .orcamctl[hidden],.orcam .orcamhint[hidden]{display:none}
+.orcam .orcamhint{margin:4px 8px 0;text-align:center;font-size:8px;line-height:10px;color:#FFF6DD;text-shadow:1px 1px 0 #2A1E3A}
+.orcam .orcamhint.found{color:#FFD27A}
+.orcam .orcammiss{flex-basis:100%;margin:2px 8px;text-align:center;font-size:8px;line-height:10px;color:#FFF6DD;text-shadow:1px 1px 0 #2A1E3A}
+.orsteps{display:flex;gap:4px;justify-content:space-between}
+.orfamgrid{grid-template-columns:repeat(3,1fr)}
+/* H13: mini-game in-game callouts never block play: taps pass through to the game (game.js gcDismiss still closes it on a tap) */
+#sc>#b.gamecall{pointer-events:none;cursor:default}
+/* H4 (Cole ART_HANDOFF): basket sleeper (4 x 48x48 @12fps, 6 ticks each = 2 s) and wild-cat den tail-peek (4 x 32x24, 1 s sway) */
+.home .hsleep{position:absolute;left:4px;top:-17px;width:48px;height:48px;background:0 0/192px 48px no-repeat;display:none;image-rendering:pixelated}
+.home .hsleep.on{display:block;animation:hsleep 2s steps(4) infinite}
+@keyframes hsleep{to{background-position:-192px 0}}
+.home-den .htail.denpeek,.home-den_wild .htail.denpeek{width:32px;height:24px;background-size:128px 24px;background-repeat:no-repeat;animation:denpeek 1s steps(4) infinite;z-index:3}
+@keyframes denpeek{to{background-position:-128px 0}}
+@media (prefers-reduced-motion:reduce){.home .hsleep.on{animation:none}.home-den .htail.denpeek,.home-den_wild .htail.denpeek{animation:none;background-position:-32px 0}}
+.calm .home .hsleep.on{animation:none}.calm .home-den .htail.denpeek,.calm .home-den_wild .htail.denpeek{animation:none;background-position:-32px 0}
+/* H7 title diorama (Pixal biomes + Cole frames): bg -> sprites -> fg -> alive overlay -> UI; old hill/moon retire when a biome loads */
+.ttl .ttbio{position:absolute;left:0;top:0;width:180px;height:320px;background:0 0/180px 320px no-repeat;pointer-events:none;image-rendering:pixelated}
+.ttl .ttbio.bg{z-index:0}.ttl .ttsprites{position:absolute;inset:0;z-index:1;pointer-events:none}.ttl .ttbio.fg{z-index:2}.ttl .ttbio.alive{z-index:3}
+.ttl.biome .tthill,.ttl.biome .ttmoon{display:none}
+.ttl .ttspr{position:absolute;width:48px;height:48px;background-repeat:no-repeat;image-rendering:pixelated}
+.ttl .ttspr.flip{transform:scaleX(-1)}
+.ttl.biome .obtag span:not(.gold){color:var(--tt-ink,inherit);text-shadow:1px 1px 0 var(--tt-shadow,transparent)}
+/* Pixal follow-up 2: den bell-vine tap while napping -> tail-peek twitch (2 x 120 ms, 1 px), no new art */
+#home .htail.denpeek.twitch{animation:denpeek 1s steps(4) infinite,denTwitch 120ms steps(1) 2}
+@keyframes denTwitch{0%{translate:0 -1px}50%{translate:0 0}}
+@media (prefers-reduced-motion:reduce){#home .htail.denpeek.twitch{animation:none}}
+.calm #home .htail.denpeek.twitch{animation:none}
+/* Batch H (PM, Oct 25): family-first picker. Pixal's ios_design docs give no layout for this step, so it is tightened into a
+   centred 3-row stack: each family card is a wide row (icon + full name), so "Howlings / Wingsongs / Purrlings" never clip
+   (they needed 58-66 art px in a 52 px column) and the cards sit in the starfield instead of leaving it empty. */
+.orgrid.orfamgrid{grid-template-columns:1fr;gap:8px;width:128px;margin:14px auto 0}
+.orcard.orfamcard{width:100%;height:46px;flex-direction:row;justify-content:flex-start;gap:8px;padding:0 8px}
+.orcard.orfamcard i{flex:0 0 36px;width:36px;height:36px}
+.orcard.orfamcard span{font-size:10px;letter-spacing:0;white-space:nowrap;min-height:0;line-height:10px;max-width:none;overflow:visible}
+.ttl.biome .ttecho{display:none}   /* PM (Oct 25): the diorama cast (on Pixal anchors) replaces the floating legacy title Echoes */
+.scene.ttl .ttsprites{position:absolute!important;left:0!important;top:0!important;width:180px!important;height:320px!important;margin:0!important;transform:none!important}   /* PM (Oct 25): a generic .scene.ob div rule made this container relative at the centre (+90,+6 art px), so the title cast drew off its anchors */
+
+/* PM (Oct 25, Kai): reply chips cover the bottom of the scene; game.js chipLift() slides the home scene up under the top bar (z 5) just
+   enough that the Echo's feet, the home prop and some lawn stay visible above the chips. */
+#sc.pxscene{transition:transform 250ms steps(5,end)}
+#sc.pxscene.chiplift{transform:translateY(var(--chip-lift,0px))}
+@media (prefers-reduced-motion:reduce){#sc.pxscene{transition:none}}
+.calm #sc.pxscene{transition:none}
+/* PM round 2 (Kai): a returning player's own Echo on the title, grounded on the path, in front of the wild cast and the fg plants */
+.scene.ttl>.ttown{position:absolute!important;width:48px;height:48px;margin:0!important;transform:none!important;z-index:3!important;pointer-events:none}
+.ttl:not(.biome) .ttown{display:none}
+.scene.ttl>.ttbio{position:absolute!important;left:0!important;top:0!important;margin:0!important;transform:none!important}   /* PM round 2: the generic .scene.ob>* rule made fg / alive relative (offset in the flex column) */
+.scene.ttl.biome .obpanel{top:131px}   /* PM round 2: the return title's name panel sits right under the tagline, clear of the branch perches and the cast */

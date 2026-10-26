@@ -1,0 +1,118 @@
+{
+ "sky_sun_flare": [
+  192,
+  48
+ ],
+ "sky_moon_flare": [
+  192,
+  48
+ ],
+ "sky_star_twinkle": [
+  96,
+  24
+ ],
+ "sky_cloud_puff": [
+  128,
+  24
+ ],
+ "sky_notes_float": [
+  64,
+  24
+ ],
+ "sky_sun_flare_hh": [
+  96,
+  24
+ ],
+ "sky_moon_flare_hh": [
+  96,
+  24
+ ],
+ "sky_star_twinkle_hh": [
+  48,
+  12
+ ],
+ "sky_cloud_puff_hh": [
+  64,
+  12
+ ],
+ "sky_notes_float_hh": [
+  40,
+  16
+ ],
+ "weather_rain_tile": [
+  240,
+  80
+ ],
+ "weather_snow_tile": [
+  240,
+  80
+ ],
+ "weather_breeze_tile": [
+  240,
+  80
+ ],
+ "weather_storm_tile": [
+  240,
+  80
+ ],
+ "weather_rain_ripple": [
+  64,
+  6
+ ],
+ "weather_frost_sparkle": [
+  24,
+  8
+ ],
+ "weather_cloud_band": [
+  360,
+  48
+ ],
+ "weather_fog_band": [
+  360,
+  40
+ ],
+ "weather_fog_band_hh": [
+  120,
+  16
+ ],
+ "weather_fog_halo": [
+  32,
+  32
+ ],
+ "weather_storm_glow": [
+  360,
+  80
+ ],
+ "den_bellvine_day": [
+  48,
+  16
+ ],
+ "den_bellvine_hh_day": [
+  24,
+  8
+ ],
+ "den_bellvine_twi": [
+  48,
+  16
+ ],
+ "den_bellvine_hh_twi": [
+  24,
+  8
+ ],
+ "window_glint_sun": [
+  96,
+  32
+ ],
+ "window_glint_sun_hh": [
+  48,
+  16
+ ],
+ "window_glint_moon": [
+  96,
+  32
+ ],
+ "window_glint_moon_hh": [
+  48,
+  16
+ ]
+}

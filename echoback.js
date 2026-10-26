@@ -44,14 +44,33 @@ function rampLen(len,band,d){const V=V2(d);for(const [upTo,st] of (V.ramp[band]|
 function phrasesFor(len,d){const V=V2(d);if(len<V.phrase_from)return null;const shape=len<=12?V.shapes['12']:V.shapes['16'],nA=shape.split('A').length-1;
   for(let a=V.phrase_len;a>=2;a--){const b=len-nA*a;if(b>=2&&b<=V.phrase_len)return {shape,sizes:[...shape].map(l=>l==='A'?a:b),labels:[...shape]}}return null}
 function rng(seed){let a=(seed>>>0)||1;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
-// seeded scale walk over the tier's pads: a window of <= 4 neighbouring pads around do, mostly steps, ends home on do (B phrases end open)
+// seeded scale walk over the tier's pads: a window of <= 4 neighbouring pads around do.
+// H16: varied contours (ascending, descending, arch, valley/pendulum, leap-and-step, free walk) and a home ending on ANY stable degree
+// of the window (do, mi, sol or la), not only do-with-mi-before-it; B phrases still end open (never on do).
+const STABLE=x=>[0,2,4,5].includes(((x%7)+7)%7);
+const CONTOURS=['walk','asc','desc','arch','valley','leap'];
 function gen(fam,tier,len,seed,d){const D=d||DATA,V=V2(D),r=rng(seed),pads=padsFor(fam,tier,D),i0=pads.indexOf(0),w=Math.min(V.max_distinct,pads.length);
   const lo=Math.max(0,i0-w+1),hi=Math.min(i0,pads.length-w),ws=lo+Math.floor(r()*(hi-lo+1)),pool=pads.slice(ws,ws+w),d0=pool.indexOf(0),top=pool.length-1;
   const near=i=>pool[i>0&&(i>=top||r()<.5)?i-1:i+1];
-  function walk(n,home,from){let i=from,o=[pool[i]];const M=[-1,1,-1,1,0,2,-2];
-    for(let k=1;k<n;k++){let j;do{j=Math.max(0,Math.min(top,i+M[Math.floor(r()*M.length)]))}while(top>0&&j===i&&o.length>1&&o[o.length-1]===o[o.length-2]);i=j;o.push(pool[i])}
-    if(home){o[n-1]=0;if(n>=3&&Math.abs(pool.indexOf(o[n-2])-d0)>1)o[n-2]=near(d0)}else if(o[n-1]===0)o[n-1]=near(d0);
-    if(n>=2&&top>0&&o.every(x=>x===o[0]))o[0]=near(pool.indexOf(o[0]));return o}
+  const cl=i=>Math.max(0,Math.min(top,i));
+  function shape(n,kind,from){const ix=[from];const st=()=>1+(r()<.3?1:0);
+    for(let k=1;k<n;k++){const i=ix[k-1],half=k<Math.ceil(n/2);let j;
+      if(kind==='asc')j=i>=top?cl(i-1):i+st();
+      else if(kind==='desc')j=i<=0?cl(i+1):i-st();
+      else if(kind==='arch')j=half?(i>=top?cl(i-1):i+st()):(i<=0?cl(i+1):i-st());
+      else if(kind==='valley')j=half?(i<=0?cl(i+1):i-st()):(i>=top?cl(i-1):i+st());
+      else if(kind==='leap')j=k===1?(i+2<=top?i+2+(r()<.4&&i+3<=top?1:0):cl(i-2)):(ix[1]>ix[0]?i-1:i+1);
+      else{const M=[-1,1,-1,1,0,2,-2];do{j=i+M[Math.floor(r()*M.length)]}while(top>0&&cl(j)===i&&k>1&&ix[k-1]===ix[k-2]);}
+      ix.push(cl(j))}
+    return ix.map(i=>pool[i])}
+  function walk(n,home,from){const kind=CONTOURS[Math.floor(r()*CONTOURS.length)];
+    const start=kind==='asc'||kind==='arch'?Math.floor(r()*Math.max(1,Math.ceil((top+1)/2))):kind==='desc'||kind==='valley'?top-Math.floor(r()*Math.max(1,Math.ceil((top+1)/2))):from;
+    let o=shape(n,kind,cl(start));
+    if(home){if(!STABLE(o[n-1])){const pi=pool.indexOf(o[n-1]),c=pool.map((x,i)=>[Math.abs(i-pi),i,x]).filter(z=>STABLE(z[2])).sort((a,b)=>a[0]-b[0]||(r()<.5?-1:1));if(c.length)o[n-1]=c[0][2]}}
+    else if(o[n-1]===0)o[n-1]=near(d0);
+    if(n>=2&&top>0&&o.every(x=>x===o[0]))o[0]=near(pool.indexOf(o[0]));
+    if(home&&!STABLE(o[n-1]))o[n-1]=0;
+    return o}
   const P=phrasesFor(len,D);let steps,phrases=null;
   if(!P)steps=walk(len,true,Math.floor(r()*pool.length));
   else{const A=walk(P.sizes[P.labels.indexOf('A')],true,Math.floor(r()*pool.length));let B,g=0;
@@ -60,6 +79,27 @@ function gen(fam,tier,len,seed,d){const D=d||DATA,V=V2(D),r=rng(seed),pads=padsF
   const ticks=steps.map(()=>TPB);
   if(tier>=4&&len<=V.rhythm_shown_to)for(let i=0;i<len-2;i++)if(r()<.2){ticks[i]=18;ticks[i+1]=6;i++}   // long-short, shown never matched
   const s=Song.fromSteps(V.tempo.bpm,steps,ticks);return Object.assign(s,{id:'g'+seed,phrases,labels:P?P.labels:null})}
+// H16 dedupe core (pure, deterministic, mirrored by eib_core.c pick_fresh()):
+//  key = normalized diatonic steps joined by ','; a candidate is fresh when key != lastSeq and key is not in the round's seen list.
+//  1) hand-written tunes of exactly this length that are fresh, in file order; choose index floor(rng(seed)() * count).
+//  2) else the generator at seeds seed + k*0x9E3779B1 (mod 2^32), k = 0..GEN_TRIES-1: first fresh tune wins.
+//  3) else (tiny pools only) the first generated tune with key != lastSeq from k = GEN_TRIES..GEN_TRIES+FALLBACK_TRIES-1
+//     (round repeat allowed, back-to-back never); last resort: the k=0 tune.
+const GEN_TRIES=64,FALLBACK_TRIES=192;
+const seqKey=n=>norm(n).join(',');
+function pickFresh(o){const seen=new Set(o.seen||[]),last=o.lastSeq==null?null:String(o.lastSeq),fresh=k=>k!==last&&!seen.has(k);
+  const H=(o.hand||[]).filter(u=>u.n.length===o.len&&fresh(seqKey(u.n)));
+  if(H.length){const r=rng(o.seed>>>0);return {tune:H[Math.floor(r()*H.length)],src:'hand',k:-1}}
+  const sd=k=>((o.seed>>>0)+Math.imul(k,0x9E3779B1))>>>0;
+  for(let k=0;k<GEN_TRIES;k++){const t=o.gen(sd(k));if(fresh(seqKey(t.n)))return {tune:t,src:'gen',k}}
+  for(let k=GEN_TRIES;k<GEN_TRIES+FALLBACK_TRIES;k++){const t=o.gen(sd(k));if(seqKey(t.n)!==last)return {tune:t,src:'fallback',k}}
+  return {tune:o.gen(sd(0)),src:'last_resort',k:0}}
+// simulate rounds exactly like start() does (used by tests + vector export): returns [[keys of round 1], [keys of round 2], ...]
+function simulateRounds(o){const out=[];let last=o.lastSeq||null,seed=o.seed0||0;const tunes=tunesFor(o.fam,o.tier,o.data);
+  for(let r=0;r<o.rounds;r++){const seen=[];for(let i=0;i<(o.perRound||5);i++){seed++;const s=(seed*7919+(o.kid||'kid').length*104729+o.tier)>>>0;
+      const res=pickFresh({hand:tunes,len:o.len,seen,lastSeq:last,seed:s,gen:sd=>gen(o.fam,o.tier,o.len,sd,o.data)});const k=seqKey(res.tune.n);seen.push(k);last=k}
+    out.push(seen)}
+  return out}
 const bpmAt=(step,bpm0,d)=>{const T=V2(d).tempo;return Math.min(T.bpm_max,Math.round(bpm0*(1+T.step*Math.min(T.max_steps,step||0))))};
 const noteMs=(ticks,bpm,d)=>Math.max(V2(d).tempo.min_note_ms,ticks*60000/bpm/TPB);
 const matchPhrased=rs=>rs.includes('new')?'new':rs.includes('close')?'close':'same';
@@ -139,9 +179,11 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   const say=(k,ms)=>{const l=api.line&&api.line(k);if(l)api.talk(l,ms||2200)};
   const echoEl=()=>document.getElementById('cr');const saveBook=()=>Songbook.save(book);
   let phase='echo',tune=null,asked=[],answer=[],gapT=null,waitT=null,idles=0,retried=false,lastId=null,n=0,singing=0,R=null,curNotes=[],ph=-1,pres=[];
-  function pick(len){const L=tunes.filter(u=>u.n.length===len&&u.id!==lastId);P.seed=(P.seed||0)+1;saveBook();
-    if(L.length){const u=L[Math.floor(Math.random()*L.length)];lastId=u.id;return u}   // a hand-written tier tune when one has this length
-    return gen(fam,tier,len,(P.seed*7919+kid.length*104729+tier)>>>0)}
+  // H16: never the same note sequence back-to-back (st.lastSeq, kept across rounds) or twice in one round (R.seen); spec + vectors:
+  // phone_app_review/h16_eib_dedupe_spec.md, host/eib_dedupe_vectors.json (shared with eib_core.c)
+  function pick(len){P.seed=(P.seed||0)+1;saveBook();const seed=(P.seed*7919+kid.length*104729+tier)>>>0;
+    const res=pickFresh({hand:tunes,len,seen:R?R.seen:[],lastSeq:st.lastSeq||null,seed,gen:sd=>gen(fam,tier,len,sd)});
+    const k=seqKey(res.tune.n);if(R)R.seen.push(k);st.lastSeq=k;lastId=res.tune.id;api.save&&api.save();return res.tune}
   function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const k=msPerTick(bpm)*(o.slow?1.15:1);
     const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
     const e=echoEl();if(e)e.classList.add('eibsing');let t=350;const my=++singing;
@@ -197,7 +239,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   function softStop(){phase='end';say('eib_rest_ears',2400);Progress.finish(P,{soft:true},band);saveBook();
     api.onRound&&api.onRound({finished:true,soft:true});later(2600,()=>{phase='done';api.onDone&&api.onDone(true)})}   // counts as finished, takes one speed step back
   function newRound(len,little){tiles.hidden=true;tiles.innerHTML='';
-    R={len,played:len,little,matches:0,tunes:0,missRun:0,perfect:!little,eased:false,last:null,sayLittle:false,
+    R={len,played:len,little,seen:[],matches:0,tunes:0,missRun:0,perfect:!little,eased:false,last:null,sayLittle:false,
       intro:P.tempoStep>0?'eib_zippy':little?'eib_little':P.grew>=2?'eib_more2':P.grew===1?'eib_more1':null};
     beads.forEach(b=>b.classList.remove('on'));
     // opening: hello the first time; a new note (tier unlock) is played once on its own before the first tune
@@ -232,7 +274,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
 Object.assign(EB,{start,stop,invite,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
-  _pure:{matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng}});
+  _pure:{matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;
 })(typeof window!=='undefined'?window:globalThis);

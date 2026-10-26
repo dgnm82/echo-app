@@ -2,7 +2,7 @@
   "_schema": "echo-ios-parallax-dens-v1",
   "_version": "1.0.0",
   "_date": "2026-10-23",
-  "_owner": "Pixal (iOS UI, Camera UX & Parallax Environments) \u2014 for Jay (Phone/Web Dev), Cole (Character Creative Director), and Kai (PM)",
+  "_owner": "Pixal (iOS UI, Camera UX & Parallax Environments) — for Jay (Phone/Web Dev), Cole (Character Creative Director), and Kai (PM)",
   "_pillars": {
     "target_ages": [
       "5-6",
@@ -1563,17 +1563,17 @@
     "sunny_clover_barn": {
       "den_id": "sunny_clover_barn",
       "title": "Sunny Clover Barn & Hayloft",
-      "family_id": "brumlo",
-      "family_label": "Barnsongs",
+      "family_id": "cloverkin",
+      "family_label": "Cloverkin",
       "animals": [
-        "cow",
-        "bison",
-        "sheep",
+        "lamb",
+        "piglet",
+        "highland_calf",
+        "pony",
         "goat",
-        "pig",
-        "llama",
-        "horse",
-        "donkey"
+        "bunny",
+        "donkey",
+        "alpaca"
       ],
       "musical_key": "G major pentatonic",
       "do_midi": 67,
@@ -1965,84 +1965,56 @@
     "glowing_tidepool_cove": {
       "den_id": "glowing_tidepool_cove",
       "title": "Glowing Tidepool Cove",
-      "family_id": "finli",
-      "family_label": "Splashsongs",
+      "family_id": "tidelings",
+      "family_label": "Tidelings",
       "animals": [
-        "fish",
-        "dolphin",
-        "whale",
-        "shark",
+        "sea_otter",
         "seal",
+        "dolphin",
+        "sea_turtle",
+        "penguin",
         "octopus",
-        "seaturtle",
-        "seaotter"
+        "seahorse",
+        "hermit_crab"
       ],
-      "musical_key": "C major pentatonic",
-      "do_midi": 60,
+      "musical_key": "D major pentatonic",
+      "do_midi": 62,
       "scale_notes": [
-        {
-          "note": "c4",
-          "scientific": "C4",
-          "midi": 60,
-          "hz": 261.63,
-          "degree": 1,
-          "octave": 0
-        },
         {
           "note": "d4",
           "scientific": "D4",
           "midi": 62,
-          "hz": 293.66,
-          "degree": 2,
-          "octave": 0
+          "hz": 293.66
         },
         {
           "note": "e4",
           "scientific": "E4",
           "midi": 64,
-          "hz": 329.63,
-          "degree": 3,
-          "octave": 0
+          "hz": 329.63
         },
         {
-          "note": "g4",
-          "scientific": "G4",
-          "midi": 67,
-          "hz": 392.0,
-          "degree": 5,
-          "octave": 0
+          "note": "f#4",
+          "scientific": "F#4",
+          "midi": 66,
+          "hz": 369.99
         },
         {
           "note": "a4",
           "scientific": "A4",
           "midi": 69,
-          "hz": 440.0,
-          "degree": 6,
-          "octave": 0
+          "hz": 440.0
         },
         {
-          "note": "c5",
-          "scientific": "C5",
-          "midi": 72,
-          "hz": 523.25,
-          "degree": 1,
-          "octave": 1
+          "note": "b4",
+          "scientific": "B4",
+          "midi": 71,
+          "hz": 493.88
         },
         {
           "note": "d5",
           "scientific": "D5",
           "midi": 74,
-          "hz": 587.33,
-          "degree": 2,
-          "octave": 1
-        },
-        {
-          "note": "e5",
-          "scientific": "E5",
-          "midi": 76,
-          "hz": 659.25,
-          "degree": 3,
-          "octave": 1
+          "hz": 587.33
         }
       ],
       "base_palette_16": [
@@ -2211,16 +2183,16 @@
           "tap_animation": "clam_cushion_gleam_4f + pearl bubble rise",
           "musical_chime": {
             "notes": [
-              "c4",
-              "g4"
+              "d4",
+              "a4"
             ],
             "midi": [
-              60,
-              67
+              62,
+              69
             ],
             "hz": [
-              261.63,
-              392.0
+              293.66,
+              440.0
             ],
             "instrument": "water_kalimba"
           },
@@ -2243,19 +2215,19 @@
           "tap_animation": "conch_shimmer_tilt_4f + 2 bubble notes",
           "musical_chime": {
             "notes": [
-              "d4",
               "e4",
-              "g4"
+              "f#4",
+              "a4"
             ],
             "midi": [
-              62,
               64,
-              67
+              66,
+              69
             ],
             "hz": [
-              293.66,
               329.63,
-              392.0
+              369.99,
+              440.0
             ],
             "instrument": "shell_marimba"
           },
@@ -2279,19 +2251,19 @@
           "tap_animation": "seaglass_prism_glow_4f + harmonic ripple",
           "musical_chime": {
             "notes": [
-              "e4",
-              "g4",
-              "c5"
+              "f#4",
+              "a4",
+              "d5"
             ],
             "midi": [
-              64,
-              67,
-              72
+              66,
+              69,
+              74
             ],
             "hz": [
-              329.63,
-              392.0,
-              523.25
+              369.99,
+              440.0,
+              587.33
             ],
             "instrument": "glass_harp"
           },
@@ -2314,19 +2286,19 @@
           "tap_animation": "sea_lantern_pulse_6f + aqua caustic bloom",
           "musical_chime": {
             "notes": [
-              "g4",
               "a4",
-              "c5"
+              "b4",
+              "d5"
             ],
             "midi": [
-              67,
               69,
-              72
+              71,
+              74
             ],
             "hz": [
-              392.0,
               440.0,
-              523.25
+              493.88,
+              587.33
             ],
             "instrument": "celesta_bell"
           },
@@ -2351,31 +2323,32 @@
             "mode": "play_latest_songbook_or_default",
             "store_key": "echo-songbook-v1",
             "fallback_notes": [
-              "c4",
               "d4",
               "e4",
-              "g4",
-              "c5"
+              "f#4",
+              "a4",
+              "d5"
             ],
             "fallback_midi": [
-              60,
               62,
               64,
-              67,
-              72
+              66,
+              69,
+              74
             ],
             "fallback_hz": [
-              261.63,
               293.66,
               329.63,
-              392.0,
-              523.25
+              369.99,
+              440.0,
+              587.33
             ],
             "instrument": "glass_harp"
           },
           "haptic_id": "prop_windchime_cascade"
         }
-      ]
+      ],
+      "animals_note": "roster TBD (approved in concept); listed animals are candidates"
     }
   },
   "magic_window_camera_ux": {

@@ -21,10 +21,12 @@ ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
 _PFX = ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_")
 KEY_PREFIX = {"twitchel": _PFX, "slyte": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "whimber": ("talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "shared": ("talent_","fallback_","ui_")}
-COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any"}
+COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any","weather"}   # weather: Batch H / H9 (ctx.weather)
+WEATHER = ("clear","cloudy","rain","snow","fog","storm")
+HOO = re.compile(r"\bhoo", re.I)   # Batch H / H14: owl-only
 NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond","sing"}
 CHOICE_KEYS = {"caption","voice","gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
-CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow"}
+CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow","context"}   # context: selector metadata (H9)
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal","dist","rows","n"}  # games v2: dist/rows/n
 
 BANNED = [r"traitor", r"cheat\w*", r"rude", r"liars?", r"stupid", r"dumb", r"fat", r"skinny", r"thin", r"diet\w*",
@@ -38,6 +40,32 @@ FAMILY_BANNED = {"twitchel": [("claws", r"claw(s|ed|ing)?"), ("fangs", r"fangs?"
   ("chase-animal", r"(chase[sd]?|chasing|pounce[sd]?|pouncing)\b[^.!?…]{0,12}\b(mouse|mice|birds?|bunn(y|ies)|rabbits?|squirrels?|fish|frogs?|lizards?|bugs?|butterfl(y|ies))")]}
 FAMILY_BANNED_RE = {sp: [(i, re.compile(r"(?<![\w'])(" + b + r")(?![\w'])", re.I)) for i, b in L] for sp, L in FAMILY_BANNED.items()}
 ISH_OK = {"fish","wish","dish","swish","squish","finish","radish","polish","relish","splish","vanish","punish","cherish","perish","nourish","establish","parish","famish","furnish","garnish","banish","blemish","diminish","flourish","abolish","replenish","lavish","english","publish","whish"}
+def is_owl(c):
+    return isinstance(c, dict) and ((c.get("var") or {}).get("origin_animal") == "owl" or (bool(c.get("any")) and all(is_owl(x) for x in c["any"])))
+def check_hoo(text, where, owl):
+    if not owl and isinstance(text, str) and HOO.search(text): err(where, f"H14: 'hoo' is owl-only (line is not owl-gated): {text!r}")
+# Batch H / H9 (Daniel, Oct 25): the app is offline + season-driven, so an Echo line may describe ITS OWN weather and ASK
+# about the child's, but must never assert the child's weather / location. A sentence that talks about the child's place
+# ("where you are", "by you", "your sky", "outside your window", ...) must be a question; "your weather is" / "I can see
+# your sky" are always errors.
+WX_WORD = re.compile(r"\b(weather|sky|skies|sun\w*|cloud\w*|rain\w*|snow\w*|fog\w*|mist\w*|storm\w*|wind(y|s|storm)?|thunder\w*|drizzl\w*|frost\w*)\b", re.I)
+WX_ALWAYS = re.compile(r"\byour weather (is|looks|was)\b|\bI (can )?(see|hear) your (sky|skies|window|weather|street|town|house|yard)\b|\b(it'?s|it is) \w+ (outside|out) your window\b", re.I)
+WX_WHERE = re.compile(r"\bwhere you (are|live)\b", re.I)
+WX_PLACE = re.compile(r"\b(by|near|around) you\b|\b(at|outside|out of) your (house|home|place|window)\b|\byour (sky|skies|window|street|town|yard|city)\b", re.I)
+def check_child_weather(text, where):
+    if not isinstance(text, str): return
+    if WX_ALWAYS.search(text): return err(where, f"H9: asserts the child's weather/location: {text!r}")
+    for seg in re.split(r"(?<=[.!?…])\s*", text):
+        seg = seg.strip()
+        if not seg or seg.endswith("?"): continue
+        if WX_WHERE.search(seg) or (WX_PLACE.search(seg) and WX_WORD.search(seg)):
+            return err(where, f"H9: only ASK about the child's weather/place (sentence must be a question): {text!r}")
+# Batch H / H14 part 2: a non-owl whimber line must not speak as an owl ("from a small owl", "one owl. Me", "in owl").
+# Owls as other creatures ("an owl friend", "Moths, owls… and you") are fine.
+SELF_OWL = re.compile(r"\b(i'?m|i am|i was|i'll be|from)\s+(an?|the|one|this)?\s*(\w+\s+){0,2}owls?\b|\bowls?\b\W{1,6}(that'?s\s+)?me\b|\bowl\b[^.!?…]{0,40}\bthat'?s me\b|\b(we|us)\s+owls\b|\bfellow owls\b|\bowls like (me|us)\b|\bin owl\b|\bpart owl\b|\bowl'?s?\b[^.!?]{0,40}\b(my kind|like me)\b|\bowls? (do|are|write|blink)\b[^.!?…]{0,30}\b(like me|too)\b", re.I)
+def check_self_owl(text, where, sp, owl):
+    if sp == "whimber" and not owl and isinstance(text, str) and SELF_OWL.search(re.sub(r"\{[^}]*\}", "", text)):
+        err(where, f"H14: non-owl whimber line speaks as an owl (owl-gate or reword bird-neutral): {text!r}")
 def is_lion(c):
     return isinstance(c, dict) and ((c.get("var") or {}).get("origin_animal") == "lion" or any(is_lion(x) for x in c.get("any", [])))
 BANNED_RE = [(b, re.compile(r"(?<![\w'])" + b + r"(?![\w'])", re.I)) for b in BANNED]
@@ -52,7 +80,8 @@ def check_cond(c, where):
         if k not in COND_KEYS: err(where, f"unknown cond key {k!r}")
         if k == "any":
             for x in v: check_cond(x, where + ".any")
-        if k in ("mood", "time") and not isinstance(v, list): err(where, f"{k} must be a list")
+        if k in ("mood", "time", "weather") and not isinstance(v, list): err(where, f"{k} must be a list")
+        if k == "weather" and any(x not in WEATHER for x in v): err(where, f"bad weather value (use {'/'.join(WEATHER)})")
         if k == "time" and any(x not in ("morning","day","evening","night") for x in v): err(where, "bad time value")
         if k == "var" and not isinstance(v, dict): err(where, "var must be an object")
 
@@ -104,7 +133,8 @@ def lint_file(path, seen_ids, dup_pool):
     for k in ("vars","barks","conversations"):
         if k not in d: err(fn, f"missing top-level {k}")
     stats = {"lines": 0, "excl": 0}
-    def echo_line(text, where, act=False, allow=()):
+    def echo_line(text, where, act=False, allow=(), owl=False):
+        check_hoo(text, where, owl); check_child_weather(text, where); check_self_owl(text, where, sp, owl)
         if act and text == "": return  # P5 act-out only: nothing spoken, the gesture plays
         if not isinstance(text, str) or not text.strip(): return err(where, "empty text")
         check_tokens(text, where); check_banned(text, where, sp, allow); voice(sp, text, where, stats)
@@ -116,7 +146,8 @@ def lint_file(path, seen_ids, dup_pool):
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
-            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow"}
+            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow","context"}
+            bowl = is_owl(b.get("cond")); check_hoo(b.get("short"), w + ".short", bowl); check_hoo(b.get("caption"), w + ".caption", bowl)
             if "roar" in b.get("lintAllow", []) and not is_lion(b.get("cond")): err(fn, f"{w} roar allowed only on a lion line (cond var origin_animal 'lion')")
             if "caption" in b: check_banned(b["caption"], w)
             if b.get("voice", "soft") != "soft": err(fn, f"{w} voice must be 'soft'")
@@ -124,7 +155,7 @@ def lint_file(path, seen_ids, dup_pool):
             if b.get("expr") not in EXPR: err(fn, f"{w} bad expr {b.get('expr')!r}")
             if "react" in b and b["react"] not in REACT: err(fn, f"{w} bad react {b['react']!r}")
             if "cond" in b: check_cond(b["cond"], f"{fn} {w}")
-            echo_line(b.get("text"), w, bool(b.get("gesture")), b.get("lintAllow", []))
+            echo_line(b.get("text"), w, bool(b.get("gesture")), b.get("lintAllow", []), bowl)
     for c in d.get("conversations", []):
         cid = c.get("id", "?"); w0 = f"conv {cid}"
         if cid in seen_ids: err(fn, f"duplicate conversation id {cid}")
@@ -134,13 +165,15 @@ def lint_file(path, seen_ids, dup_pool):
         if "cond" in c: check_cond(c["cond"], f"{fn} {w0}")
         nodes = c.get("nodes", {})
         callow = c.get("lintAllow", [])
+        cowl = is_owl(c.get("cond"))
         if "roar" in callow and not is_lion(c.get("cond")): err(fn, f"{w0} roar allowed only in a lion conversation")
         if c.get("start") not in nodes: err(fn, f"{w0} start node missing"); continue
         edges = defaultdict(set)
         for nid, n in nodes.items():
             w = f"{w0}.{nid}"
             if set(n) - NODE_KEYS: err(fn, f"{w} unknown fields {set(n)-NODE_KEYS}")
-            if "say" in n: echo_line(n["say"], w, bool(n.get("gesture")), callow + n.get("lintAllow", []))
+            check_hoo(n.get("caption"), w + ".caption", cowl); check_hoo(n.get("memory"), w + ".memory", cowl)
+            if "say" in n: echo_line(n["say"], w, bool(n.get("gesture")), callow + n.get("lintAllow", []), cowl)
             elif "branch" not in n: err(fn, f"{w} has neither say nor branch")
             if n.get("expr", "neutral") not in EXPR: err(fn, f"{w} bad expr")
             if "react" in n and n["react"] not in REACT: err(fn, f"{w} bad react")
@@ -153,7 +186,9 @@ def lint_file(path, seen_ids, dup_pool):
                     if set(ch) - CHOICE_KEYS: err(fn, f"{cw} unknown fields {set(ch)-CHOICE_KEYS}")
                     if not ch.get("icon") or not ch.get("label"): err(fn, f"{cw} needs icon and label")
                     check_banned(ch.get("label", ""), cw, sp, callow + ch.get("lintAllow", []))
-                    if "reply" in ch: echo_line(ch["reply"], cw, bool(ch.get("gesture")), callow + n.get("lintAllow", []) + ch.get("lintAllow", []))
+                    chowl = cowl or is_owl(ch.get("cond"))
+                    for fld in ("label", "memory", "caption"): check_hoo(ch.get(fld), f"{cw}.{fld}", chowl)
+                    if "reply" in ch: echo_line(ch["reply"], cw, bool(ch.get("gesture")), callow + n.get("lintAllow", []) + ch.get("lintAllow", []), chowl)
                     if ch.get("expr", "neutral") not in EXPR: err(fn, f"{cw} bad expr")
                     if "react" in ch and ch["react"] not in REACT: err(fn, f"{cw} bad react")
                     if "cond" in ch: check_cond(ch["cond"], cw)
@@ -174,6 +209,10 @@ def lint_file(path, seen_ids, dup_pool):
             if nid not in reach: err(fn, f"{w0}.{nid} unreachable")
         turns = len(reach)
         if turns < 2: warn(fn, f"{w0} has only {turns} node(s)")
+    per = d.get("persona") or {}
+    for i, x in enumerate(per.get("petPhrases", [])): check_hoo(x, f"{fn} persona.petPhrases[{i}]", False)
+    for lk, xs in (per.get("lookPetPhrases") or {}).items():
+        for i, x in enumerate(xs): check_hoo(x, f"{fn} persona.lookPetPhrases.{lk}[{i}]", lk == "owl")
     if sp == "whimber" and stats["lines"] and stats["excl"] > stats["lines"] / 20:
         err(fn, f"Whimber exclamation budget exceeded: {stats['excl']} '!' in {stats['lines']} lines (max 1 per 20)")
     return d

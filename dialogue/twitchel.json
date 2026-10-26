@@ -3698,6 +3698,387 @@
         "expr": "delighted",
         "gesture": "pounce",
         "short": "Paw prints."
+      },
+      {
+        "text": "Snow! So soft!",
+        "short": "Soft snow!",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Cold nose. Warm cushion.",
+        "short": "Warm cushion!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Ooh! Snowflakes falling here!",
+        "short": "Snowflakes!",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Tiny paw prints! Mine!",
+        "short": "My paw prints!",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Snuggle time. Brr!",
+        "short": "Snuggle time!",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "I tapped a snowflake with my paw. It vanished!",
+        "short": "I tapped a snowflake.",
+        "expr": "surprised",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Fluffy fur keeps me warm on snowy days.",
+        "short": "Fluffy fur keeps me.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The garden looks like it's wearing a white blanket.",
+        "short": "The garden looks.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I'm watching the snowflakes dance from my window.",
+        "short": "I'm watching the.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Snow makes everything so quiet and calm. Purr.",
+        "short": "Snow makes.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Snow leopards wrap fluffy tails around their faces. Like scarves!",
+        "short": "Snow leopards wrap.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Every snowflake has six points. Each one is different.",
+        "short": "Every snowflake has.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Snow soaks up sound. That's why snowy days feel hushed.",
+        "short": "Snow soaks up sound.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Lynx paws are wide like snowshoes. They stay on top.",
+        "short": "Lynx paws are wide.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Fresh snow sparkles in the light like tiny gems.",
+        "short": "Fresh snow sparkles.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Cold cat nose. Warm cushion. Mrrp.",
+        "short": "Cold cat nose.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "Snow on my mane! Like a sparkly crown.",
+        "short": "Snow on my mane.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "Some tigers live in snowy forests. Brr, fun!",
+        "short": "Some tigers live in.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "Snow dots on my spots! So many dots.",
+        "short": "Snow dots on my.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "Snow is new for cheetahs! So cold, so sparkly.",
+        "short": "Snow is new for.",
+        "expr": "surprised",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "Snow is my favorite! My fluffy tail is a scarf.",
+        "short": "Snow is my favorite.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "My big lynx paws are like snowshoes.",
+        "short": "My big lynx paws.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "snow"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          }
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Snow here! Is it snowy by you?",
+        "short": "Snow here.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Snowflakes are drifting past my window. Is it snowing where you are?",
+        "short": "Snowflakes are.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "My garden is soft and white with snow. What's the weather doing by you?",
+        "short": "My garden is soft.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "snow"
+          ]
+        },
+        "context": {
+          "weather": "snow",
+          "age_band": "9-10",
+          "kind": "ask_child"
+        }
       }
     ],
     "food_fish_sticks": [
@@ -7390,6 +7771,1985 @@
           "var": {
             "origin_animal": "lynx"
           }
+        }
+      }
+    ],
+    "weather_clear": [
+      {
+        "text": "Sunbeam nap time! Purr.",
+        "short": "Sunbeam nap!",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Blue sky. Happy whiskers!",
+        "short": "Happy whiskers!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Warm sun on my paws.",
+        "short": "Warm paws!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Stars! So twinkly!",
+        "short": "So twinkly!",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "evening",
+            "night"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Clear sky. Let's play!",
+        "short": "Let's play!",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "I found the warmest sunbeam. Do you have a cozy spot?",
+        "short": "I found the warmest.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "My whiskers twitch when the sky is this clear.",
+        "short": "My whiskers twitch.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Clear night skies make the stars look extra close.",
+        "short": "Clear night skies.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "evening",
+            "night"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The sunshine makes my fur feel toasty and soft.",
+        "short": "The sunshine makes.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "No clouds today! Perfect for a garden stroll.",
+        "short": "No clouds today.",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Cats love sunny spots. Sunshine helps us feel warm and sleepy.",
+        "short": "Cats love sunny.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "My eyes squint in bright sun. That keeps them comfy.",
+        "short": "My eyes squint in.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "On clear nights, I spot the moon from my cushion.",
+        "short": "On clear nights, I.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "evening",
+            "night"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "The sky looks blue because of sunlight. Isn't that neat?",
+        "short": "The sky looks blue.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Clear air smells fresh and sweet. I smell the flowers.",
+        "short": "Clear air smells.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Mrrp! The sunniest window spot is mine.",
+        "short": "Mrrp.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "My golden mane glows in the sunshine.",
+        "short": "My golden mane glows.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "Sunshine makes my tiger stripes bold and bright.",
+        "short": "Sunshine makes my.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "I stretch on a high branch in the sun.",
+        "short": "I stretch on a.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "Sunny day! My speedy paws want a zoom.",
+        "short": "Sunny day.",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "Clear mountain air! My cloud tail fluffs up.",
+        "short": "Clear mountain air.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "My ear tufts glow in the bright sunshine.",
+        "short": "My ear tufts glow.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "clear"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          },
+          "time": [
+            "morning",
+            "day"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Sunny here in my garden! Is it sunny by you?",
+        "short": "Sunny here in my.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "My sunbeam spot is extra warm today. What's the weather where you are?",
+        "short": "My sunbeam spot is.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "The sky over my garden is clear and blue. What is your sky doing today?",
+        "short": "The sky over my.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "clear"
+          ]
+        },
+        "context": {
+          "weather": "clear",
+          "age_band": "9-10",
+          "kind": "ask_child"
+        }
+      }
+    ],
+    "weather_cloudy": [
+      {
+        "text": "Puffy clouds! Soft like me.",
+        "short": "Puffy clouds!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Gray sky. Cozy cushion.",
+        "short": "Cozy cushion!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "A cloud kitty in my sky!",
+        "short": "Cloud kitty!",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Clouds go slow. Purr.",
+        "short": "Slow clouds!",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "A breezy day. Ears flick!",
+        "short": "Ears flick!",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "That cloud looks like a big ball of yarn!",
+        "short": "That cloud looks.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The breeze ruffles my fur. It feels so nice.",
+        "short": "The breeze ruffles.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Cloudy days are perfect for a cozy window nap.",
+        "short": "Cloudy days are.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The clouds float by like slow, sleepy boats.",
+        "short": "The clouds float by.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I'm guessing cloud shapes. That one is a fish!",
+        "short": "I'm guessing cloud.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Clouds are tiny water drops. They float high in the sky.",
+        "short": "Clouds are tiny.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Gray clouds are thick. They block some of the sunlight.",
+        "short": "Gray clouds are.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Soft light on cloudy days is great for napping. Mrrp.",
+        "short": "Soft light on cloudy.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Wind pushes clouds along. Some clouds move faster than others.",
+        "short": "Wind pushes clouds.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Cloud names are fun. Fluffy ones are called cumulus.",
+        "short": "Cloud names are fun.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "My cat ears flick at the breeze.",
+        "short": "My cat ears flick.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "A cloudy day is a perfect lion nap day.",
+        "short": "A cloudy day is.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "Tiger stripes hide in cloud shadows. Peekaboo!",
+        "short": "Tiger stripes hide.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "From up high, clouds look close enough to touch.",
+        "short": "From up high, clouds.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "Clouds race by. I could race them!",
+        "short": "Clouds race by.",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "Clouds feel like home on my mountain.",
+        "short": "Clouds feel like.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "My tufted ears twitch in the cool breeze.",
+        "short": "My tufted ears.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          }
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Clouds here! Cloudy by you too?",
+        "short": "Clouds here.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Soft clouds are floating over my garden. What's your sky like?",
+        "short": "Soft clouds are.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Here the clouds look like fluffy yarn. Is it cloudy where you are?",
+        "short": "Here the clouds look.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "cloudy"
+          ]
+        },
+        "context": {
+          "weather": "cloudy",
+          "age_band": "9-10",
+          "kind": "ask_child"
+        }
+      }
+    ],
+    "weather_rain": [
+      {
+        "text": "Pitter-pat! Rain music.",
+        "short": "Rain music!",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Dry and cozy inside.",
+        "short": "Dry and cozy!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Raindrops on my window!",
+        "short": "Window raindrops!",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Rain song. Purr-purr.",
+        "short": "Rain song purr!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Tap, tap, tap. Rain!",
+        "short": "Tap, tap, rain!",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "I'm cozy by the window. Raindrops race down the glass.",
+        "short": "I'm cozy by the.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Cats like to stay dry. My basket is perfect.",
+        "short": "Cats like to stay.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The rain here sounds like tiny drums. Is it raining by you?",
+        "short": "The rain here sounds.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "My tail curls up tight while the rain sings.",
+        "short": "My tail curls up.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I'm counting raindrops on my window! So many!",
+        "short": "I'm counting.",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Most cats prefer dry paws. Tigers are different. They love water!",
+        "short": "Most cats prefer dry.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Rain helps the garden grow. The flowers get a drink.",
+        "short": "Rain helps the.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Rain smells fresh and earthy. My nose loves it.",
+        "short": "Rain smells fresh.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Each raindrop makes a note. Big drops sound lower.",
+        "short": "Each raindrop makes.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "After rain, I look for a rainbow. Sunlight makes it.",
+        "short": "After rain, I look.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "My cat paws stay dry by the window.",
+        "short": "My cat paws stay.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "Rain makes my mane all fluffy and puffy.",
+        "short": "Rain makes my mane.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "Tigers love water! Splash time for me.",
+        "short": "Tigers love water.",
+        "expr": "excited",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "I rest under thick leaves when it rains.",
+        "short": "I rest under thick.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "Cheetahs like dry paws. I'll wait inside.",
+        "short": "Cheetahs like dry.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "Rain? I'd rather have snow. Still cozy!",
+        "short": "Rain.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "Rain drips off my ear tufts. Plip!",
+        "short": "Rain drips off my.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "rain"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          }
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Rain on my window! Rain by you?",
+        "short": "Rain on my window.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "It's raining in my garden, so I'm in my basket. What's it like where you are?",
+        "short": "It's raining in my.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Here the rain is tapping a soft tune. What weather do you have today?",
+        "short": "Here the rain is.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "rain"
+          ]
+        },
+        "context": {
+          "weather": "rain",
+          "age_band": "9-10",
+          "kind": "ask_child"
+        }
+      }
+    ],
+    "weather_fog": [
+      {
+        "text": "Foggy! Soft and gray.",
+        "short": "Soft gray fog!",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Where did the garden go?",
+        "short": "Where's the garden?",
+        "expr": "surprised",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Fog tickles my whiskers.",
+        "short": "Fog tickles!",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "A cloud on the ground!",
+        "short": "Ground cloud!",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Close and cozy. Purr.",
+        "short": "Close and cozy!",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Fog makes the garden look sleepy and dreamy.",
+        "short": "Fog makes the garden.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "My whiskers help me feel my way in fog.",
+        "short": "My whiskers help me.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Tiny mist drops are sparkling on my fur.",
+        "short": "Tiny mist drops are.",
+        "expr": "delighted",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The lantern glows soft and round in the fog.",
+        "short": "The lantern glows.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I walk slowly in the fog. It's so soft.",
+        "short": "I walk slowly in.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Fog is a cloud that sits low on the ground.",
+        "short": "Fog is a cloud.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Cat whiskers sense air moving. They help in fog.",
+        "short": "Cat whiskers sense.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Fog forms when warm air cools down quickly.",
+        "short": "Fog forms when warm.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Sounds travel softly in fog. Everything feels hushed.",
+        "short": "Sounds travel softly.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Fog lifts when the air warms. Then colors peek out.",
+        "short": "Fog lifts when the.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "My cat whiskers guide me through fog.",
+        "short": "My cat whiskers.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "My lion ears listen softly in the fog.",
+        "short": "My lion ears listen.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "My stripes blend into the soft fog.",
+        "short": "My stripes blend.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "My spotted fur hides in the misty branches.",
+        "short": "My spotted fur hides.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "I trot slow in fog. No zooming now.",
+        "short": "I trot slow in.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "Mountain fog is my soft gray blanket.",
+        "short": "Mountain fog is my.",
+        "expr": "sleepy",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "My lynx eyes peek through the misty forest.",
+        "short": "My lynx eyes peek.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          }
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Foggy here! Foggy by you?",
+        "short": "Foggy here! Foggy by you?",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Fog is hiding my garden flowers. How's the sky where you are?",
+        "short": "Fog is hiding my.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Here everything looks soft and dreamy in the fog. What's your weather like?",
+        "short": "Here everything.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "fog"
+          ]
+        },
+        "context": {
+          "weather": "fog",
+          "age_band": "9-10",
+          "kind": "ask_child"
+        }
+      }
+    ],
+    "weather_storm": [
+      {
+        "text": "Rumble! I snuggle close.",
+        "short": "Snuggled up!",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Cozy blanket time. Purr.",
+        "short": "Blanket time!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Big rain. I stay dry.",
+        "short": "I stay dry!",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Sky drum! Boom, boom.",
+        "short": "Sky drum!",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "Warm basket. Safe and snug.",
+        "short": "Safe and snug!",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6"
+        }
+      },
+      {
+        "text": "The thunder is humming a low song. I'm cozy here.",
+        "short": "The thunder is.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I'm curled up cozy until the rumbling stops.",
+        "short": "I'm curled up cozy.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "My basket is warm and dry. So snug!",
+        "short": "My basket is warm.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "The rain is drumming fast. My home keeps me dry.",
+        "short": "The rain is drumming.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "I'll purr along with the thunder-song. Purr-rumble!",
+        "short": "I'll purr along with.",
+        "expr": "giggling",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8"
+        }
+      },
+      {
+        "text": "Thunder is just air moving fast. It rumbles like a drum.",
+        "short": "Thunder is just air.",
+        "expr": "proud",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Big cats find cozy shelter in storms. So do I.",
+        "short": "Big cats find cozy.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "Storms water the whole garden at once. Everything gets a drink.",
+        "short": "Storms water the.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "I'm listening. Rain patter, wind whoosh, thunder hum.",
+        "short": "I'm listening.",
+        "expr": "thinking",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "After a storm, the air smells fresh and clean.",
+        "short": "After a storm, the.",
+        "expr": "happy",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10"
+        }
+      },
+      {
+        "text": "I tuck my cat paws in. Cozy purr.",
+        "short": "I tuck my cat.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "cat"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "cat"
+        }
+      },
+      {
+        "text": "I curl up on my big lion cushion. So cozy.",
+        "short": "I curl up on.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "lion"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "lion"
+        }
+      },
+      {
+        "text": "A soft tiger chuff. I'm cozy inside.",
+        "short": "A soft tiger chuff.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "tiger"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "tiger"
+        }
+      },
+      {
+        "text": "I curl my balance tail around me. Snug.",
+        "short": "I curl my balance.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "leopard"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "leopard"
+        }
+      },
+      {
+        "text": "Chirp-mrrp. I'm snuggled close until the rumble ends.",
+        "short": "Chirp-mrrp.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "cheetah"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "cheetah"
+        }
+      },
+      {
+        "text": "I wrap my muffler tail around my paws. Cozy.",
+        "short": "I wrap my muffler.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "snowleopard"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "snowleopard"
+        }
+      },
+      {
+        "text": "I tuck my bobbed tail and snuggle close.",
+        "short": "I tuck my bobbed.",
+        "expr": "love",
+        "cond": {
+          "weather": [
+            "storm"
+          ],
+          "var": {
+            "origin_animal": "lynx"
+          }
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "look": "lynx"
+        }
+      },
+      {
+        "text": "Rumble! I'm cozy in my basket. Your weather?",
+        "short": "Rumble.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "5-6",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "A storm is drumming on my window. I'm warm and snug inside. What's the weather like by you?",
+        "short": "A storm is drumming.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "7-8",
+          "kind": "ask_child"
+        }
+      },
+      {
+        "text": "Here the storm sings a deep drum song. My basket is cozy. Is it stormy where you are, or calm?",
+        "short": "Here the storm sings.",
+        "expr": "curious",
+        "cond": {
+          "weather": [
+            "storm"
+          ]
+        },
+        "context": {
+          "weather": "storm",
+          "age_band": "9-10",
+          "kind": "ask_child"
         }
       }
     ]
@@ -20895,7 +23255,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Lie in the grass with me? Look up.",
+          "say": "I'm lying in my grass. Guess what I see?",
           "expr": "curious",
           "choices": [
             {
@@ -20916,7 +23276,7 @@
               "icon": "👂",
               "label": "@pool:listen",
               "goto": "b",
-              "reply": "Blue sky. Green grass. Us.",
+              "reply": "Blue sky. Green grass. So cozy.",
               "expr": "happy",
               "intent": "listen"
             }
@@ -23133,17 +25493,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a mrrp-purr to the sky.",
+          "say": "Let us purr a mrrp-purr to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My cat tail curls warm while we stargaze.",
+          "say": "My cat tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Curled Cat star is our night sign.",
+          "say": "Mrrp! The Curled Cat star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -24327,17 +26687,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a ruff-purr to the sky.",
+          "say": "Let us purr a ruff-purr to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My lion tail curls warm while we stargaze.",
+          "say": "My lion tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Golden Mane star is our night sign.",
+          "say": "Mrrp! The Golden Mane star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -25521,17 +27881,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a chuff-purr to the sky.",
+          "say": "Let us purr a chuff-purr to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My tiger tail curls warm while we stargaze.",
+          "say": "My tiger tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Striped Lantern star is our night sign.",
+          "say": "Mrrp! The Striped Lantern star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -26715,17 +29075,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a purr-pad to the sky.",
+          "say": "Let us purr a purr-pad to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My balance tail curls warm while we stargaze.",
+          "say": "My balance tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Rosette Bough star is our night sign.",
+          "say": "Mrrp! The Rosette Bough star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -27909,17 +30269,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a chirp-purr to the sky.",
+          "say": "Let us purr a chirp-purr to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My rudder tail curls warm while we stargaze.",
+          "say": "My rudder tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Swift Runner star is our night sign.",
+          "say": "Mrrp! The Swift Runner star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -29103,17 +31463,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a mrrp-trill to the sky.",
+          "say": "Let us purr a mrrp-trill to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My muffler tail curls warm while we stargaze.",
+          "say": "My muffler tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Cloud Peak star is our night sign.",
+          "say": "Mrrp! The Cloud Peak star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -30297,17 +32657,17 @@
           ]
         },
         "c1": {
-          "say": "Let us purr a purr-flick to the sky.",
+          "say": "Let us purr a purr-flick to my sky.",
           "expr": "happy",
           "next": "d"
         },
         "c2": {
-          "say": "My bobbed tail curls warm while we stargaze.",
+          "say": "My bobbed tail curls warm under my stars.",
           "expr": "love",
           "next": "d"
         },
         "d": {
-          "say": "Mrrp! The Tufted Ear star is our night sign.",
+          "say": "Mrrp! The Tufted Ear star is my night sign. Do you have one?",
           "expr": "love",
           "react": "happy",
           "bond": 2,
@@ -30592,6 +32952,936 @@
           "bond": 1
         }
       }
+    },
+    {
+      "id": "twitchel_weather_clear",
+      "topic": "weather_clear",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "clear"
+        ]
+      },
+      "context": {
+        "weather": "clear",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "My sky is so clear. What should I do?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunbeam nap",
+              "intent": "yes",
+              "reply": "Yes! The warmest sunbeam is right here.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌸",
+              "label": "Garden stroll",
+              "intent": "ask_more",
+              "reply": "A stroll! I'll sniff every flower.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "Mmm. I hear bees humming a tune.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Clear days make me purr extra loud.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_cloudy",
+      "topic": "weather_cloudy",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "cloudy"
+        ]
+      },
+      "context": {
+        "weather": "cloudy",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Let's find shapes in my clouds. Guess what I see!",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🧶",
+              "label": "A yarn ball",
+              "intent": "yes",
+              "reply": "A yarn ball! I want to bat it.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🐟",
+              "label": "A fish",
+              "intent": "ask_more",
+              "reply": "A cloud fish! It swims so slowly.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That cloud looks like a sleepy cat.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Cloud watching is cozy. Purr.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_rain",
+      "topic": "weather_rain",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "rain"
+        ]
+      },
+      "context": {
+        "weather": "rain",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Raindrops are racing down my window. Pick one?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "💧",
+              "label": "The big one",
+              "intent": "yes",
+              "reply": "Go, big drop, go! It won!",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "💦",
+              "label": "The tiny one",
+              "intent": "ask_more",
+              "reply": "The tiny one is super fast!",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "Pitter-pat. The rain sings so softly.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "I love rain from my cozy basket.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_snow",
+      "topic": "weather_snow",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "snow"
+        ]
+      },
+      "context": {
+        "weather": "snow",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "Snowflakes are falling here. Shall I watch from my window?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Count them",
+              "intent": "yes",
+              "reply": "One, two, three… too many! Mrrp!",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🧣",
+              "label": "Get a blanket",
+              "intent": "ask_more",
+              "reply": "A blanket! Now I'm warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "Snow falls so quietly. Shh.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Snowy days are for snuggles.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_fog",
+      "topic": "weather_fog",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "fog"
+        ]
+      },
+      "context": {
+        "weather": "fog",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "My garden is foggy. Shall I explore slowly?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🏮",
+              "label": "Bring a lantern",
+              "intent": "yes",
+              "reply": "Good idea! The lantern glows so softly.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🤝",
+              "label": "Stay close",
+              "intent": "ask_more",
+              "reply": "I'll stay close to my basket.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "My whiskers feel the soft mist.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Fog makes everything feel like a dream.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_storm",
+      "topic": "weather_storm",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "storm"
+        ]
+      },
+      "context": {
+        "weather": "storm",
+        "age_band": "7-8"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "My sky is rumbling. Time to get cozy in my basket.",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "🧺",
+              "label": "Basket snuggle",
+              "intent": "yes",
+              "reply": "My basket is extra snug. Purr.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🎵",
+              "label": "Purr a song",
+              "intent": "ask_more",
+              "reply": "Purr-purr-purr. A cozy thunder song.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "The rain drums here. I'm warm and dry.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "My basket makes storms cozy.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_clear_ask",
+      "topic": "weather_clear_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "clear"
+        ]
+      },
+      "context": {
+        "weather": "clear",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "In my garden, the sun is out! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Something else? Which one?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, my sunbeam is still warm.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! Sunny days make me happy.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_cloudy_ask",
+      "topic": "weather_cloudy_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "cloudy"
+        ]
+      },
+      "context": {
+        "weather": "cloudy",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "In my garden, it's cloudy! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Ooh! Which weather is it?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, the clouds look like yarn.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! I'll go find cloud shapes.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_rain_ask",
+      "topic": "weather_rain_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "rain"
+        ]
+      },
+      "context": {
+        "weather": "rain",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "In my garden, it's raining! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Something different? Pick one.",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, rain taps my window.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! Rainy days are for basket naps.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_snow_ask",
+      "topic": "weather_snow_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "snow"
+        ]
+      },
+      "context": {
+        "weather": "snow",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "In my garden, it's snowing! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Tell me more. Which one?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, snowflakes drift past my window.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! Snowy days are for snuggles too.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_fog_ask",
+      "topic": "weather_fog_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "fog"
+        ]
+      },
+      "context": {
+        "weather": "fog",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "In my garden, it's foggy! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "A surprise? Which weather?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, my garden is still foggy.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! Fog makes my garden dreamy.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
+    },
+    {
+      "id": "twitchel_weather_storm_ask",
+      "topic": "weather_storm_ask",
+      "trigger": "idle",
+      "weight": 3,
+      "once": false,
+      "cond": {
+        "weather": [
+          "storm"
+        ]
+      },
+      "context": {
+        "weather": "storm",
+        "age_band": "all",
+        "kind": "ask_child"
+      },
+      "start": "a",
+      "nodes": {
+        "a": {
+          "say": "A cozy storm is rumbling by my window! What's the weather like where you are?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "☀️",
+              "label": "Sunny",
+              "intent": "yes",
+              "reply": "Sunny! Thank you for telling me. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "☁️",
+              "label": "Cloudy",
+              "intent": "yes",
+              "reply": "Cloudy! Cloud days are cozy. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌧️",
+              "label": "Rainy",
+              "intent": "yes",
+              "reply": "Rainy! Snug and dry is best. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌈",
+              "label": "Something else",
+              "intent": "ask_more",
+              "goto": "c"
+            }
+          ]
+        },
+        "c": {
+          "say": "Something else? Which one is it?",
+          "expr": "curious",
+          "choices": [
+            {
+              "icon": "❄️",
+              "label": "Snowy",
+              "intent": "yes",
+              "reply": "Snowy! Wrap up warm and snug. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌫️",
+              "label": "Foggy",
+              "intent": "yes",
+              "reply": "Foggy! Everything looks so dreamy. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "🌬️",
+              "label": "Windy or stormy",
+              "intent": "yes",
+              "reply": "Windy or stormy? Stay cozy inside. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            },
+            {
+              "icon": "👂",
+              "label": "(just listen)",
+              "intent": "listen",
+              "reply": "That's okay. I'll tell you about mine. Here, my basket is warm and snug.",
+              "expr": "happy",
+              "goto": "b"
+            }
+          ]
+        },
+        "b": {
+          "say": "Thank you! Storms are cozy in my basket.",
+          "expr": "love",
+          "bond": 1,
+          "react": "happy"
+        }
+      }
     }
   ],
   "persona": {
@@ -30694,6 +33984,20 @@
       "v2_lynx_act_flower",
       "v2_lynx_act_minigame",
       "v2_lynx_act_cozy"
+    ],
+    "weather_chats": [
+      "weather_clear",
+      "weather_cloudy",
+      "weather_rain",
+      "weather_snow",
+      "weather_fog",
+      "weather_storm",
+      "weather_clear_ask",
+      "weather_cloudy_ask",
+      "weather_rain_ask",
+      "weather_snow_ask",
+      "weather_fog_ask",
+      "weather_storm_ask"
     ]
   }
 }

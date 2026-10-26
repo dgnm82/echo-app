@@ -1,0 +1,880 @@
+{
+ "_about": "Batch H / H7 title diorama frames (Cole). All frames 48x48, generated from tools/family_engine.py (same master rig as home/walk/run sheets). Strips are horizontal (frame i at x = 48*i). fps 12; ticks = how many 12 fps ticks each frame is held. anchor = foot point (ground/branch contact) in frame px for ground + perch strips, body centre for glide/fly strips. Sprites face RIGHT (side-on ground rigs) / FRONT (birds); flip with scaleX(-1) to walk left (flip about the frame centre x=24; foot x moves to 47-x). preview_ocean/ is NOT production (pending approval).",
+ "fps": 12,
+ "frame": [
+  48,
+  48
+ ],
+ "strips": [
+  {
+   "file": "px/title/fox_ember-russet_walk.png",
+   "family": "slyte",
+   "look": "fox",
+   "palette": "ember-russet",
+   "anim": "walk",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "side-on walk cycle (same poses as _walk.png cols 0-5); move ~1 px per tick"
+  },
+  {
+   "file": "px/title/fox_ember-russet_sniff.png",
+   "family": "slyte",
+   "look": "fox",
+   "palette": "ember-russet",
+   "anim": "sniff",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    4,
+    2,
+    3,
+    3,
+    3,
+    6,
+    2
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "stop, nose down to a flower (sniff-sniff, happy), back up. Spawn the flower note/sparkle on frame 5 (happy). Flower sits ~10 px in front of the foot point."
+  },
+  {
+   "file": "px/title/fox_ember-russet_peek.png",
+   "family": "slyte",
+   "look": "fox",
+   "palette": "ember-russet",
+   "anim": "peek",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    2,
+    2,
+    6,
+    2,
+    6,
+    3
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "crouched low behind a bush/rock (put the bush/rock layer IN FRONT, top edge ~row 30 of the frame), pops head up, blinks, happy, ducks back. Body sinks below the frame bottom in frames 0-1/6 (hidden by the cover layer); anchor = standing foot point, same as walk"
+  },
+  {
+   "file": "px/title/wolf_moon-lilac_walk.png",
+   "family": "slyte",
+   "look": "wolf",
+   "palette": "moon-lilac",
+   "anim": "walk",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    18,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "side-on walk cycle (same poses as _walk.png cols 0-5); move ~1 px per tick"
+  },
+  {
+   "file": "px/title/wolf_moon-lilac_sniff.png",
+   "family": "slyte",
+   "look": "wolf",
+   "palette": "moon-lilac",
+   "anim": "sniff",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    4,
+    2,
+    3,
+    3,
+    3,
+    6,
+    2
+   ],
+   "loop": false,
+   "anchor": [
+    18,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "stop, nose down to a flower (sniff-sniff, happy), back up. Spawn the flower note/sparkle on frame 5 (happy). Flower sits ~10 px in front of the foot point."
+  },
+  {
+   "file": "px/title/wolf_moon-lilac_peek.png",
+   "family": "slyte",
+   "look": "wolf",
+   "palette": "moon-lilac",
+   "anim": "peek",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    2,
+    2,
+    6,
+    2,
+    6,
+    3
+   ],
+   "loop": false,
+   "anchor": [
+    18,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "crouched low behind a bush/rock (put the bush/rock layer IN FRONT, top edge ~row 30 of the frame), pops head up, blinks, happy, ducks back. Body sinks below the frame bottom in frames 0-1/6 (hidden by the cover layer); anchor = standing foot point, same as walk"
+  },
+  {
+   "file": "px/title/cat_tan-sand_walk.png",
+   "family": "twitchel",
+   "look": "cat",
+   "palette": "tan-sand",
+   "anim": "walk",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "side-on walk cycle (same poses as _walk.png cols 0-5); move ~1 px per tick"
+  },
+  {
+   "file": "px/title/cat_tan-sand_sniff.png",
+   "family": "twitchel",
+   "look": "cat",
+   "palette": "tan-sand",
+   "anim": "sniff",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    4,
+    2,
+    3,
+    3,
+    3,
+    6,
+    2
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "stop, nose down to a flower (sniff-sniff, happy), back up. Spawn the flower note/sparkle on frame 5 (happy). Flower sits ~10 px in front of the foot point."
+  },
+  {
+   "file": "px/title/cat_tan-sand_peek.png",
+   "family": "twitchel",
+   "look": "cat",
+   "palette": "tan-sand",
+   "anim": "peek",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    2,
+    2,
+    6,
+    2,
+    6,
+    3
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "crouched low behind a bush/rock (put the bush/rock layer IN FRONT, top edge ~row 30 of the frame), pops head up, blinks, happy, ducks back. Body sinks below the frame bottom in frames 0-1/6 (hidden by the cover layer); anchor = standing foot point, same as walk"
+  },
+  {
+   "file": "px/title/lion_sunset-gold-solid_walk.png",
+   "family": "twitchel",
+   "look": "lion",
+   "palette": "sunset-gold-solid",
+   "anim": "walk",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "side-on walk cycle (same poses as _walk.png cols 0-5); move ~1 px per tick"
+  },
+  {
+   "file": "px/title/lion_sunset-gold-solid_sniff.png",
+   "family": "twitchel",
+   "look": "lion",
+   "palette": "sunset-gold-solid",
+   "anim": "sniff",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    4,
+    2,
+    3,
+    3,
+    3,
+    6,
+    2
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "stop, nose down to a flower (sniff-sniff, happy), back up. Spawn the flower note/sparkle on frame 5 (happy). Flower sits ~10 px in front of the foot point."
+  },
+  {
+   "file": "px/title/lion_sunset-gold-solid_peek.png",
+   "family": "twitchel",
+   "look": "lion",
+   "palette": "sunset-gold-solid",
+   "anim": "peek",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    2,
+    2,
+    6,
+    2,
+    6,
+    3
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "crouched low behind a bush/rock (put the bush/rock layer IN FRONT, top edge ~row 30 of the frame), pops head up, blinks, happy, ducks back. Body sinks below the frame bottom in frames 0-1/6 (hidden by the cover layer); anchor = standing foot point, same as walk"
+  },
+  {
+   "file": "px/title/lynx_cocoa-cream_walk.png",
+   "family": "twitchel",
+   "look": "lynx",
+   "palette": "cocoa-cream",
+   "anim": "walk",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "side-on walk cycle (same poses as _walk.png cols 0-5); move ~1 px per tick"
+  },
+  {
+   "file": "px/title/lynx_cocoa-cream_sniff.png",
+   "family": "twitchel",
+   "look": "lynx",
+   "palette": "cocoa-cream",
+   "anim": "sniff",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    4,
+    2,
+    3,
+    3,
+    3,
+    6,
+    2
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "stop, nose down to a flower (sniff-sniff, happy), back up. Spawn the flower note/sparkle on frame 5 (happy). Flower sits ~10 px in front of the foot point."
+  },
+  {
+   "file": "px/title/lynx_cocoa-cream_peek.png",
+   "family": "twitchel",
+   "look": "lynx",
+   "palette": "cocoa-cream",
+   "anim": "peek",
+   "frames": 7,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    2,
+    2,
+    6,
+    2,
+    6,
+    3
+   ],
+   "loop": false,
+   "anchor": [
+    19,
+    46
+   ],
+   "anchor_kind": "foot",
+   "notes": "crouched low behind a bush/rock (put the bush/rock layer IN FRONT, top edge ~row 30 of the frame), pops head up, blinks, happy, ducks back. Body sinks below the frame bottom in frames 0-1/6 (hidden by the cover layer); anchor = standing foot point, same as walk"
+  },
+  {
+   "file": "px/title/owl_lilac-night_glide.png",
+   "family": "whimber",
+   "look": "owl",
+   "palette": "lilac-night",
+   "anim": "glide",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    3,
+    3,
+    3,
+    3
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    22
+   ],
+   "anchor_kind": "centre",
+   "notes": "wings-out glide with a 1 px float bob; drift across the canopy (alternate with the _fly.png wingbeat)"
+  },
+  {
+   "file": "px/title/owl_lilac-night_perch_land.png",
+   "family": "whimber",
+   "look": "owl",
+   "palette": "lilac-night",
+   "anim": "perch_land",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    3,
+    4
+   ],
+   "loop": false,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "last wingbeat dropping onto a branch, feet touch on frame 5 (squash), settle; anchor = feet on the final frames: put it on the branch top"
+  },
+  {
+   "file": "px/title/owl_lilac-night_perch_idle.png",
+   "family": "whimber",
+   "look": "owl",
+   "palette": "lilac-night",
+   "anim": "perch_idle",
+   "frames": 8,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    4,
+    6,
+    4,
+    2,
+    6,
+    4,
+    6
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "sitting on a branch: breathe, blink, happy"
+  },
+  {
+   "file": "px/whimber_owl_lilac-night_f1_fly.png",
+   "family": "whimber",
+   "look": "owl",
+   "palette": "lilac-night",
+   "anim": "fly",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    23
+   ],
+   "anchor_kind": "centre",
+   "notes": "existing 4-frame wingbeat (unchanged, firmware-pack sheet)"
+  },
+  {
+   "file": "px/title/wingsong_robin-ember_glide.png",
+   "family": "whimber",
+   "look": "wingsong",
+   "palette": "robin-ember",
+   "anim": "glide",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    3,
+    3,
+    3,
+    3
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    22
+   ],
+   "anchor_kind": "centre",
+   "notes": "wings-out glide with a 1 px float bob; drift across the canopy (alternate with the _fly.png wingbeat)"
+  },
+  {
+   "file": "px/title/wingsong_robin-ember_perch_land.png",
+   "family": "whimber",
+   "look": "wingsong",
+   "palette": "robin-ember",
+   "anim": "perch_land",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    3,
+    4
+   ],
+   "loop": false,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "last wingbeat dropping onto a branch, feet touch on frame 5 (squash), settle; anchor = feet on the final frames: put it on the branch top"
+  },
+  {
+   "file": "px/title/wingsong_robin-ember_perch_idle.png",
+   "family": "whimber",
+   "look": "wingsong",
+   "palette": "robin-ember",
+   "anim": "perch_idle",
+   "frames": 8,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    4,
+    6,
+    4,
+    2,
+    6,
+    4,
+    6
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "sitting on a branch: breathe, blink, happy"
+  },
+  {
+   "file": "px/whimber_wingsong_robin-ember_f1_fly.png",
+   "family": "whimber",
+   "look": "wingsong",
+   "palette": "robin-ember",
+   "anim": "fly",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    22
+   ],
+   "anchor_kind": "centre",
+   "notes": "existing 4-frame wingbeat (unchanged, firmware-pack sheet)"
+  },
+  {
+   "file": "px/title/eagle_wren-cocoa_glide.png",
+   "family": "whimber",
+   "look": "eagle",
+   "palette": "wren-cocoa",
+   "anim": "glide",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    3,
+    3,
+    3,
+    3
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    24
+   ],
+   "anchor_kind": "centre",
+   "notes": "wings-out glide with a 1 px float bob; drift across the canopy (alternate with the _fly.png wingbeat)"
+  },
+  {
+   "file": "px/title/eagle_wren-cocoa_perch_land.png",
+   "family": "whimber",
+   "look": "eagle",
+   "palette": "wren-cocoa",
+   "anim": "perch_land",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    3,
+    4
+   ],
+   "loop": false,
+   "anchor": [
+    24,
+    43
+   ],
+   "anchor_kind": "foot",
+   "notes": "last wingbeat dropping onto a branch, feet touch on frame 5 (squash), settle; anchor = feet on the final frames: put it on the branch top"
+  },
+  {
+   "file": "px/title/eagle_wren-cocoa_perch_idle.png",
+   "family": "whimber",
+   "look": "eagle",
+   "palette": "wren-cocoa",
+   "anim": "perch_idle",
+   "frames": 8,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    4,
+    6,
+    4,
+    2,
+    6,
+    4,
+    6
+   ],
+   "loop": true,
+   "anchor": [
+    23,
+    43
+   ],
+   "anchor_kind": "foot",
+   "notes": "sitting on a branch: breathe, blink, happy"
+  },
+  {
+   "file": "px/whimber_eagle_wren-cocoa_f1_fly.png",
+   "family": "whimber",
+   "look": "eagle",
+   "palette": "wren-cocoa",
+   "anim": "fly",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    24
+   ],
+   "anchor_kind": "centre",
+   "notes": "existing 4-frame wingbeat (unchanged, firmware-pack sheet)"
+  },
+  {
+   "file": "px/title/duck_sky-teal_glide.png",
+   "family": "whimber",
+   "look": "duck",
+   "palette": "sky-teal",
+   "anim": "glide",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    3,
+    3,
+    3,
+    3
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    24
+   ],
+   "anchor_kind": "centre",
+   "notes": "wings-out glide with a 1 px float bob; drift across the canopy (alternate with the _fly.png wingbeat)"
+  },
+  {
+   "file": "px/title/duck_sky-teal_perch_land.png",
+   "family": "whimber",
+   "look": "duck",
+   "palette": "sky-teal",
+   "anim": "perch_land",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    3,
+    4
+   ],
+   "loop": false,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "last wingbeat dropping onto a branch, feet touch on frame 5 (squash), settle; anchor = feet on the final frames: put it on the branch top"
+  },
+  {
+   "file": "px/title/duck_sky-teal_perch_idle.png",
+   "family": "whimber",
+   "look": "duck",
+   "palette": "sky-teal",
+   "anim": "perch_idle",
+   "frames": 8,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    6,
+    4,
+    6,
+    4,
+    2,
+    6,
+    4,
+    6
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    42
+   ],
+   "anchor_kind": "foot",
+   "notes": "sitting on a branch: breathe, blink, happy"
+  },
+  {
+   "file": "px/whimber_duck_sky-teal_f1_fly.png",
+   "family": "whimber",
+   "look": "duck",
+   "palette": "sky-teal",
+   "anim": "fly",
+   "frames": 4,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    25
+   ],
+   "anchor_kind": "centre",
+   "notes": "existing 4-frame wingbeat (unchanged, firmware-pack sheet)"
+  }
+ ]
+}

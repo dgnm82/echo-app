@@ -26,7 +26,7 @@ const notes=fs.readdirSync(path.join(R,'music/notes')).map(f=>f.replace(/\.(ogg|
 for(const f of ['slyte','whimber','twitchel'])for(let t=1;t<=4;t++){const pads=EB.padsFor(f,t);
   ok(pads.every(x=>{const m=EB.midiOf(f,x);return m>=60&&m<=84&&notes.includes(f+'_'+EB.fileOf(f,x))}),`${f} T${t} pads in C4-C6 with samples`);
   for(const u of EB.tunesFor(f,t)){const st=u.n.map(EB.step),d=new Set(st).size,L=st.length;
-    ok(d<=4,`${f} ${u.id} <=4 distinct`);ok(t===1?L===2:t===2?L===3:t===3?L===4:L>=4&&L<=5,`${f} ${u.id} length ${L} fits T${t}`);ok(st.every(x=>pads.includes(x)),`${f} ${u.id} only unlocked pads`);ok(EB.Song.valid(u),`${f} ${u.id} is a valid Song v1`)}}
+    ok(d<=4,`${f} ${u.id} <=4 distinct`);ok(t===1?L>=2&&L<=4:t===2?L>=3&&L<=4:t===3?L===4:L>=4&&L<=5,`${f} ${u.id} length ${L} fits T${t}`);ok(st.every(x=>pads.includes(x)),`${f} ${u.id} only unlocked pads`);ok(EB.Song.valid(u),`${f} ${u.id} is a valid Song v1`)}}
 ok(E.tiers.find(x=>x.tier===4).tunes.some(u=>u.n.some(x=>x[2]===18)&&u.n.some(x=>x[2]===6)),'T4 shows long-short rhythm');
 // Song v1 (lock 1) + songbook (lock 2) + instruments (lock 4)
 const so=EB.Song.make(92,[[5,0,18],[3,0,6],[1,1,24],[5,-1,12],[0,0,12]]);const b=EB.Song.pack(so);
@@ -40,9 +40,21 @@ const KEYS=['eib_invite','eib_hello','eib_my_turn','eib_your_turn','eib_same','e
   'eib_more1','eib_more2','eib_breath','eib_comes_back','eib_five','eib_sticker','eib_sixteen','eib_zippy','eib_rest_ears','eib_little'];
 for(const f of ['slyte','whimber','twitchel']){const d=JSON.parse(fs.readFileSync(path.join(R,'dialogue',f+'.json'),'utf8'));for(const k of KEYS)ok((d.barks[k]||[]).length>0,`${f} has ${k}`);
   ok(d.barks.eib_new.every(l=>/new|your song/i.test(l.text)),`${f} copy-back lines say it is a new song`);ok(d.barks.eib_close.every(l=>/like this:$/i.test(l.text)),`${f} close lines end 'Like this:'`);
-  const PFX={slyte:'Awoo',whimber:'Hoo-hoo',twitchel:'Mrrp'}[f];ok(d.barks.eib_five.every(l=>l.text.startsWith(PFX+'!')&&/Five! We sang five!/.test(l.text)),`${f} round end has its own prefix (${PFX})`);
+  // H14: round-end prefixes are family-distinct; Hoo is owl-only (whimber lines are per look: owl Hoo-hoo, other birds their own call)
+  {const pfx=l=>(/^([^!]+)!/.exec(l.text)||[])[1]||'',look=l=>((l.cond||{}).var||{}).origin_animal||null,OWN={slyte:['Awoo'],twitchel:['Mrrp']},OTHER=f==='slyte'?['Mrrp']:f==='twitchel'?['Awoo']:['Awoo','Mrrp'];
+   ok(d.barks.eib_five.every(l=>/Five! We sang five!/.test(l.text)&&pfx(l)),`${f} round end lines have a call prefix`);
+   ok(d.barks.eib_five.every(l=>!OTHER.includes(pfx(l))),`${f} round end prefix is family-distinct`);
+   if(OWN[f])ok(d.barks.eib_five.every(l=>pfx(l)===OWN[f][0]),`${f} round end has its own prefix (${OWN[f][0]})`);
+   else{ok(d.barks.eib_five.every(l=>look(l)==='owl'||!/hoo/i.test(l.text)),'whimber round end: no Hoo unless the look is an owl');
+     ok(d.barks.eib_five.filter(l=>look(l)!=='owl').every(l=>look(l)),'whimber non-owl round ends are per-look gated');
+     ok(d.barks.eib_five.some(l=>look(l)==='owl'&&pfx(l)==='Hoo-hoo'),'whimber owl keeps Hoo-hoo')}}
   ok(!KEYS.some(k=>(d.barks[k]||[]).some(l=>/\b(streak|in a row|\d+)\b/i.test(l.text))),`${f} no streak wording or digits`);
+  (globalThis.__PFX=globalThis.__PFX||[]).push(...d.barks.eib_five.map(l=>[f,((l.cond||{}).var||{}).origin_animal||'*',(/^([^!]+)!/.exec(l.text)||[])[1]||'']));
   ok(!KEYS.some(k=>(d.barks[k]||[]).some(l=>/\b(wrong|oops|try again|no{1,2}pe|miss(ed)?|fail)\b/i.test(l.text))),`${f} no fail words`)}
+{const P=globalThis.__PFX||[],by={};for(const [f,lk,p] of P)(by[p.toLowerCase()]=by[p.toLowerCase()]||new Set()).add(f);
+  ok(P.length>=11&&Object.values(by).every(x=>x.size===1),'round-end prefixes never shared between families ('+P.map(x=>x[1]+'='+x[2]).join(' ')+')');
+  ok(P.every(([f,lk,p])=>!/hoo/i.test(p)||(f==='whimber'&&lk==='owl')),'round-end: no Hoo prefix unless the look is an owl');
+  {const wl=P.filter(x=>x[0]==='whimber').map(x=>x[2].toLowerCase());ok(new Set(wl).size===wl.length,'whimber round-end prefixes are distinct per look')}}
 // multi-finger PadInput exists and voices are capped by data
 ok(typeof EB.PadInput==='function'&&I.voices===3,'PadInput + 3 voices');
 // ---------------- v2 (Batch G)
@@ -57,12 +69,39 @@ for(let L=9;L<=16;L++){const ph=Q.phrasesFor(L);ok(ph&&ph.sizes.reduce((a,b)=>a+
   ok(ph.shape===(L<=12?'ABA':'AABA'),`len ${L}: ${ph.shape}`)}
 ok(Q.phrasesFor(8)===null,'8 notes or fewer: one whole tune');
 for(const f of ['slyte','whimber','twitchel'])for(let t=1;t<=4;t++)for(let L=3;L<=16;L++)for(let sd=1;sd<=6;sd++){const g=Q.gen(f,t,L,sd*31+L,E),st=g.n.map(EB.step),pads=EB.padsFor(f,t);
-  const okv=st.length===L&&new Set(st).size<=4&&st.every(x=>pads.includes(x))&&st[L-1]===0&&EB.Song.valid(g)&&(pads.length<2||new Set(st).size>=2);
+  const okv=st.length===L&&new Set(st).size<=4&&st.every(x=>pads.includes(x))&&Q.STABLE(st[L-1])&&EB.Song.valid(g)&&(pads.length<2||new Set(st).size>=2);
   if(!okv){ok(false,`${f} T${t} len ${L} seed ${sd}: ${st}`);continue}
   if(g.phrases){const parts=g.phrases.map(([a,b])=>st.slice(a,b).join());g.labels.forEach((l,i)=>{const j=g.labels.indexOf(l);if(j<i&&parts[j]!==parts[i])ok(false,`${f} len ${L}: repeated phrase differs`)});
     if(t>1&&parts[g.labels.indexOf('A')]===parts[g.labels.indexOf('B')])ok(false,`${f} T${t} len ${L}: B = A`)}
   if(L>V.rhythm_shown_to&&g.n.some(x=>x[2]!==12))ok(false,'no long-short past 8 notes')}
-ok(true,'generator: exact length, <= 4 distinct, tier pads only, ends on do, valid Song v1, phrases repeat (3 families x 4 tiers x 3-16)');
+ok(true,'generator: exact length, <= 4 distinct, tier pads only, ends on a stable degree (H16: do/mi/sol/la), valid Song v1, phrases repeat (3 families x 4 tiers x 3-16)');
+// H16: varied combinations + zero back-to-back / intra-round repeats (100 simulated 5-tune rounds, every tier x age band x family)
+{const g5=[1,2,3,4,5].map(sd=>Q.gen('slyte',1,3,sd,E).n.map(EB.step).join());ok(new Set(g5).size>=4,'T1 len 3 seeds 1..5 are varied (was [1,3,1],[3,1,1],[3,1,1],[5,3,1],[5,3,1]): '+g5.join(' | '));
+  const shapes=new Set();for(let sd=1;sd<=200;sd++)shapes.add(Q.gen('slyte',1,3,sd,E).n.map(EB.step).join());ok(shapes.size>=12,'T1 len 3: dozens of distinct shapes from 3 pads ('+shapes.size+')');
+  const ends=new Set();for(let sd=1;sd<=200;sd++){const st=Q.gen('twitchel',2,4,sd,E).n.map(EB.step);ends.add(st[3])}ok(ends.size>=3,'endings vary across stable degrees ('+[...ends]+')');
+  let rounds=0,b2b=0,intra=0;
+  for(const f of ['slyte','whimber','twitchel'])for(let t=1;t<=4;t++)for(const band of ['5-6','7-8','9-10']){const len=Q.startLen(band,E);
+    const R=Q.simulateRounds({fam:f,tier:t,len,rounds:100,perRound:5,seed0:0,kid:'kid',data:E});let last=null;
+    for(const r of R){rounds++;if(new Set(r).size!==r.length)intra++;for(const k of r){if(k===last)b2b++;last=k}}}
+  ok(rounds===3*4*3*100,'simulated '+rounds+' rounds');ok(b2b===0,'0 back-to-back repeats ('+b2b+')');ok(intra===0,'0 intra-round repeats ('+intra+')');
+  // longer lengths too (ramped players), incl. phrased tunes
+  let bad2=0;for(const len of [5,8,12,16])for(let t=1;t<=4;t++){const R=Q.simulateRounds({fam:'whimber',tier:t,len,rounds:20,data:E});let last=null;for(const r of R){if(new Set(r).size!==r.length)bad2++;for(const k of r){if(k===last)bad2++;last=k}}}
+  ok(bad2===0,'no repeats at lengths 5/8/12/16 ('+bad2+')');
+  // pickFresh rules
+  const hand=[{id:'a',n:[[1,0,12],[3,0,12],[5,0,12]]},{id:'b',n:[[5,0,12],[3,0,12],[1,0,12]]}];const G=sd=>Q.gen('slyte',1,3,sd,E);
+  ok(Q.pickFresh({hand,len:3,seen:[],lastSeq:'0,2,4',seed:9,gen:G}).tune.id==='b','hand tune equal to lastSeq is skipped');
+  ok(Q.pickFresh({hand,len:3,seen:['4,2,0'],lastSeq:'0,2,4',seed:9,gen:G}).src==='gen','hand tunes used up in the round -> generator');
+  ok(JSON.stringify(Q.pickFresh({hand:[],len:3,seen:[],lastSeq:null,seed:42,gen:G}))===JSON.stringify(Q.pickFresh({hand:[],len:3,seen:[],lastSeq:null,seed:42,gen:G})),'pickFresh is deterministic');
+  // exported vectors stay in sync with the JS algorithm
+  const vf=path.join(R,'host','eib_dedupe_vectors.json');if(fs.existsSync(vf)){const VX=JSON.parse(fs.readFileSync(vf,'utf8'));let mis=0;
+    for(const c of VX.cases){const got=Q.simulateRounds({fam:c.fam,tier:c.tier,len:c.len,rounds:c.rounds,perRound:c.per_round,seed0:c.seed0,kid:c.kid,lastSeq:c.last_seq,data:E});if(JSON.stringify(got)!==JSON.stringify(c.expect))mis++}
+    ok(mis===0,'host/eib_dedupe_vectors.json matches the JS algorithm ('+VX.cases.length+' cases, '+mis+' mismatched)');
+    // Batch H final (Jay): the 360 gen vectors too (Zane replays both tables), the spec constants, and a fresh export is byte-identical
+    let gm=0;for(const g of VX.gen){const t=Q.gen(g.fam,g.tier,g.len,g.seed,E);if(JSON.stringify(t.n.map(EB.step))!==JSON.stringify(g.steps)||JSON.stringify(t.phrases||null)!==JSON.stringify(g.phrases))gm++}
+    ok(VX.gen.length===360&&gm===0,'host vectors: '+VX.gen.length+' gen vectors match Q.gen ('+gm+' mismatched)');
+    ok(VX.cases.length===37&&VX.constants.GEN_TRIES===64&&VX.constants.FALLBACK_TRIES===192&&Q.GEN_TRIES===64&&Q.FALLBACK_TRIES===192&&VX.constants.SEED_STEP==='0x9E3779B1'&&JSON.stringify(VX.constants.STABLE_DEGREES)==='[1,3,5,6]'&&JSON.stringify(VX.constants.CONTOURS)===JSON.stringify(['walk','asc','desc','arch','valley','leap']),'host vectors: constants match h16_eib_dedupe_spec.md (64 / 192 / 0x9E3779B1 / do-mi-sol-la / 6 contours, 37 cases)');
+    {const tmp=require('os').tmpdir()+'/eib_vec_check_'+process.pid+'.json';require('child_process').execFileSync(process.execPath,[path.join(R,'tools','export_eib_vectors.js'),tmp],{stdio:'ignore'});
+     ok(fs.readFileSync(tmp,'utf8')===fs.readFileSync(vf,'utf8'),'host vectors: a fresh export_eib_vectors.js run is byte-identical to host/eib_dedupe_vectors.json');try{fs.unlinkSync(tmp)}catch(e){}}}else ok(false,'host/eib_dedupe_vectors.json missing')}
 ok(JSON.stringify(Q.gen('slyte',3,10,77,E))===JSON.stringify(Q.gen('slyte',3,10,77,E)),'generator is seeded (same seed, same tune)');
 ok(Q.bpmAt(0,88)===88&&Q.bpmAt(1,88)===92&&Q.bpmAt(6,88)===114&&Q.bpmAt(99,88)===114&&Q.bpmAt(6,140)===150,'tempo +5% a step, cap +30% / 150 bpm');
 ok(Q.noteMs(6,150)>=120&&Q.noteMs(1,150)===120,'notes never under 120 ms');

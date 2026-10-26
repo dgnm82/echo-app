@@ -22,17 +22,17 @@ const ANIMAL_META = {
   dog:         { family: 'slyte',    feat: 'floppy dog ears',     act: 'tail wags fast',     home: 'sunny step',      notes: ['a4','d5'],  sound: 'woof-hum' },
   wolf:        { family: 'slyte',    feat: 'silver wolf ruff',    act: 'nose sniffs softly', home: 'pine ridge',      notes: ['d4','a4'],  sound: 'awoo-hum' },
   coyote:      { family: 'slyte',    feat: 'nimble coyote paws',  act: 'ears swivel round',  home: 'warm rock',       notes: ['f#4','b4'], sound: 'yip-trill' },
-  // Whimber (Wingsongs — F/Bb major pentatonic)
+  // Whimber (Wingsongs — F/Bb major pentatonic). Batch H / H14: each bird's own sound word (spec table); 'hoo-' is owl-only
   owl:         { family: 'whimber',  feat: 'round owl eyes',      act: 'head tilts softly',  home: 'oak hollow',      notes: ['f4','c5'],  sound: 'hoo-hum' },
-  bird:        { family: 'whimber',  feat: 'bright song wings',   act: 'wings flutter',      home: 'leafy bough',     notes: ['c5','f5'],  sound: 'trill-hum' },
-  wingsong:    { family: 'whimber',  feat: 'bright song wings',   act: 'wings flutter',      home: 'leafy bough',     notes: ['c5','f5'],  sound: 'trill-hum' },
-  duck:        { family: 'whimber',  feat: 'webbed duck feet',    act: 'tail feathers waggle',home: 'reedy bank',     notes: ['g4','d5'],  sound: 'quack-hum' },
-  dove:        { family: 'whimber',  feat: 'soft dove feathers',  act: 'wings fold gently',  home: 'quiet branch',    notes: ['f4','a4'],  sound: 'coo-hum' },
-  pigeon:      { family: 'whimber',  feat: 'shimmer neck',        act: 'head bobs along',    home: 'rooftop sill',    notes: ['g4','c5'],  sound: 'coo-roo' },
-  crow:        { family: 'whimber',  feat: 'glossy crow wings',   act: 'beak taps a rhythm', home: 'tall pine top',   notes: ['d5','f5'],  sound: 'caw-chime' },
-  eagle:       { family: 'whimber',  feat: 'broad eagle wings',   act: 'eyes scan the sky',  home: 'high crag',       notes: ['c5','g5'],  sound: 'kree-hum' },
-  chicken:     { family: 'whimber',  feat: 'speckled crest',      act: 'feathers fluff up',  home: 'cozy straw nest', notes: ['a4','d5'],  sound: 'cluck-hum' },
-  gull:        { family: 'whimber',  feat: 'gliding gull wings',  act: 'wings catch the air',home: 'sunny ledge',     notes: ['d5','g5'],  sound: 'kree-chime' },
+  bird:        { family: 'whimber',  feat: 'bright song wings',   act: 'wings flutter',      home: 'leafy bough',     notes: ['c5','f5'],  sound: 'tweet-trill' },
+  wingsong:    { family: 'whimber',  feat: 'bright song wings',   act: 'wings flutter',      home: 'leafy bough',     notes: ['c5','f5'],  sound: 'tweet-trill' },
+  duck:        { family: 'whimber',  feat: 'webbed duck feet',    act: 'tail feathers waggle',home: 'reedy bank',     notes: ['g4','d5'],  sound: 'quack-flutter' },
+  dove:        { family: 'whimber',  feat: 'soft dove feathers',  act: 'wings fold gently',  home: 'quiet branch',    notes: ['f4','a4'],  sound: 'soft-coo' },
+  pigeon:      { family: 'whimber',  feat: 'shimmer neck',        act: 'head bobs along',    home: 'rooftop sill',    notes: ['g4','c5'],  sound: 'roo-coo' },
+  crow:        { family: 'whimber',  feat: 'glossy crow wings',   act: 'beak taps a rhythm', home: 'tall pine top',   notes: ['d5','f5'],  sound: 'caw-click' },
+  eagle:       { family: 'whimber',  feat: 'broad eagle wings',   act: 'eyes scan the sky',  home: 'high crag',       notes: ['c5','g5'],  sound: 'high-kree' },
+  chicken:     { family: 'whimber',  feat: 'speckled crest',      act: 'feathers fluff up',  home: 'cozy straw nest', notes: ['a4','d5'],  sound: 'bawk-cluck' },
+  gull:        { family: 'whimber',  feat: 'gliding gull wings',  act: 'wings catch the air',home: 'sunny ledge',     notes: ['d5','g5'],  sound: 'sea-call' },
   // Twitchel (Purrlings — F/G major pentatonic)
   cat:         { family: 'twitchel', feat: 'velvet cat paws',     act: 'whiskers twitch',    home: 'woven basket',    notes: ['f4','c5'],  sound: 'mrrp-purr' },
   lion:        { family: 'twitchel', feat: 'golden lion mane',    act: 'mane fluffs wide',   home: 'sunbeam rug',     notes: ['g4','d5'],  sound: 'ruff-purr' },
@@ -72,11 +72,16 @@ const SCENE_OBS = {
   library:           { '5-6': 'by the books',        '7-8': 'up in the cozy library rafters',     '9-10': 'beside the storybooks in the library nook' },
   hilltop:           { '5-6': 'on the hill',         '7-8': 'up on the starry hilltop bench',     '9-10': 'looking out from the open starry hilltop' },
   garden:            { '5-6': 'in the garden',       '7-8': 'along the warm sunbeam garden',      '9-10': 'where the garden bellflowers chime together' },
-  twitchel_clearing: { '5-6': 'by our basket',       '7-8': 'beside our woven cozy basket',       '9-10': 'on the braided rug by our sunlit basket' },
+  twitchel_wild_clearing: { '5-6': 'by our mossy den', '7-8': 'beside our mossy wild den',      '9-10': 'by the bell-vine at the mouth of our mossy den' },
+  twitchel_sunbeam_room:  { '5-6': 'in our sunny room', '7-8': 'in our warm sunbeam room',       '9-10': 'on the rug where the sunbeam crosses our room' },
   twitchel_grove:    { '5-6': 'in the sunbeams',     '7-8': 'in the warm sunbeam grove',          '9-10': 'where golden sunbeams cross the grove floor' },
   twitchel_meadow:   { '5-6': 'by the bellflowers',  '7-8': 'out in the bellflower meadow',       '9-10': 'amid the chiming bellflowers of the meadow' },
   twitchel_garden:   { '5-6': 'in the cat garden',   '7-8': 'under the cozy garden awning',       '9-10': 'in the sunny garden corner with soft cushions' }
 };
+
+// twitchel_clearing is retired (Pixal follow-up 2); the runtime scene ids are wild_clearing / sunbeam_room
+SCENE_OBS.wild_clearing = SCENE_OBS.twitchel_wild_clearing;
+SCENE_OBS.sunbeam_room = SCENE_OBS.twitchel_sunbeam_room;
 
 const NEED_CLAUSES = {
   hungry:  { '5-6': 'Snack time soon?',            '7-8': 'my tummy is ready for a tasty snack!',             '9-10': 'a favorite snack would give me extra energy for our next song.' },
@@ -257,7 +262,7 @@ function resolveContext(rawCtx){
   const meta = ANIMAL_META[look] || ANIMAL_META.fox;
   const family = rawCtx.family || meta.family || (S.kind === 'owl' ? 'whimber' : S.kind === 'cat' ? 'twitchel' : 'slyte');
   const ageBand = rawCtx.ageBand || S.ageBand || '7-8';
-  const scene = rawCtx.scene || S.scene || (family === 'whimber' ? 'branch' : 'clearing');
+  const scene = rawCtx.scene || S.scene || (family === 'whimber' ? 'branch' : family === 'twitchel' ? (['lion','tiger','leopard','cheetah','snowleopard','lynx'].includes(String(look).toLowerCase()) ? 'wild_clearing' : 'sunbeam_room') : 'clearing');
   const time = rawCtx.time || (W.__echo && W.__echo.band && W.__echo.band()) || 'day';
   let need = rawCtx.need || null;
   if (!need && S.needs) {
@@ -269,7 +274,10 @@ function resolveContext(rawCtx){
   }
   need = need || 'happy';
   const event = rawCtx.event || null;
-  return { state: S, look, family, ageBand, scene, time, need, event };
+  // H9 (final): the Echo's own seasonal weather (window.WEATHER, on-device date cycle only); undefined when off / absent
+  let weather = rawCtx.weather;
+  if (weather === undefined && W.WEATHER && W.WEATHER.dialogueCtx) { try { weather = W.WEATHER.dialogueCtx(S); } catch (e) { weather = undefined; } }
+  return { state: S, look, family, ageBand, scene, time, need, event, weather };
 }
 
 function generateCandidates(rawCtx){
@@ -309,10 +317,18 @@ function generateCandidates(rawCtx){
   return cands;
 }
 
+// H14: non-owl birds never say "Hoo": same swap table as dialogue.js (Dialogue.speciesCalls), one source of truth there
+function owlCalls(t, look){ const D = W.Dialogue; return (D && D.speciesCalls) ? D.speciesCalls(t, String(look || '').toLowerCase() === 'wingsong' ? 'bird' : String(look || '').toLowerCase()) : t; }
+const WEATHER_SHARE = 0.2;
 function pick(rawCtx, opts){
   opts = opts || {};
   const ctx = resolveContext(rawCtx);
   const hist = getHistory(ctx.state);
+  // H9: now and then voice Cole's weather_<state> line for the Echo's own weather (cond.weather is checked by dialogue.js)
+  if (ctx.weather && ctx.weather !== 'clear' && opts.weather !== false && W.Dialogue && W.Dialogue.lib && (opts.forceWeather || Math.random() < WEATHER_SHARE)) {
+    const line = W.Dialogue.bark('weather_' + ctx.weather, { weather: ctx.weather }, () => true);
+    if (line && line.text) return { id: 'weather_' + ctx.weather, text: owlCalls(line.text, ctx.look), expr: line.expr, react: line.react, weather: ctx.weather, score: 0 };
+  }
   const cands = generateCandidates(ctx);
   let best = null, bestScore = -1e9;
   for (const c of cands) {
@@ -326,6 +342,7 @@ function pick(rawCtx, opts){
   if (best && opts.record !== false) {
     recordHistory(best.id, ctx.state);
   }
+  if (best && best.text) best.text = owlCalls(best.text, ctx.look);   // H14: "Hoo" for owls only
   return best;
 }
 
@@ -440,7 +457,7 @@ function runMiniConversation(rawCtx, ui, onDone){
     else if (W.PIXEL && W.PIXEL.react && node.react) W.PIXEL.react(node.react);
     const voc = vocalize(ctx.family, node.notes);
     log.push({ turn: turnIdx, id: node.id, text: node.say, expr: node.expr, react: node.react, notes: node.notes, voc });
-    if (ui.say) ui.say({ text: node.say, expr: node.expr, react: node.react });
+    if (ui.say) ui.say({ text: owlCalls(node.say, ctx.look), expr: node.expr, react: node.react });
 
     const ch = node.choices || [];
     if (!ch.length) {
@@ -456,7 +473,7 @@ function runMiniConversation(rawCtx, ui, onDone){
       else if (W.PIXEL && W.PIXEL.react && picked.react) W.PIXEL.react(picked.react);
       const rVoc = vocalize(ctx.family, picked.notes);
       log.push({ turn: turnIdx + 0.5, id: picked.id, chipLabel: picked.label, text: picked.reply, expr: picked.expr, react: picked.react, notes: picked.notes, voc: rVoc });
-      if (ui.say) ui.say({ text: picked.reply, expr: picked.expr, react: picked.react });
+      if (ui.say) ui.say({ text: owlCalls(picked.reply, ctx.look), expr: picked.expr, react: picked.react });
       if (picked.goto && conv.nodes[picked.goto]) {
         stepNode(picked.goto, turnIdx + 1);
       } else {
@@ -493,6 +510,7 @@ const API = {
   buildCompositionalCandidate,
   generateCandidates,
   pick,
+  WEATHER_SHARE,
   miniConversation,
   runMiniConversation,
   vocalize

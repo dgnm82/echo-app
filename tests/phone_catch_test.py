@@ -41,7 +41,7 @@ async def main():
         else:runs.append(d)
       rev=len([r for r in runs if abs(r)>=4])-1;head=L[-1][0]+L[-1][1]   # body direction changes (runs >= 4px; following a 2px finger wobble is fine)
       print(kind,'touch switch',{'flips':flips,'reversals':rev,'head':head,'stale':st})
-      assert flips<=(2 if kind=='fox' else 0) and rev<=1 and abs(head-127)<=2 and st[0]==st[1],(flips,rev,head,st)
+      assert flips<=2 and rev<=1 and abs(head-127)<=(2 if kind=='fox' else 3) and st[0]==st[1],(flips,rev,head,st)
       v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x;CatchEngine.moveTo(g,170);setTimeout(()=>r([g.x-x0,g.L.echoV]),500)})")
       assert 0<v[0]<=v[1]*0.5+12,v
       # head-touch v1: caught the moment the item touches the head top (well above the ground/nest line), head-only

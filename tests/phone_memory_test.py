@@ -46,10 +46,10 @@ async def main():
     await pg.click('#quit');await pg.wait_for_timeout(500)
     # postcards v0.5: release, then each of the six days
     await pg.evaluate("""(()=>{window.__wiped=1;const S=__echo.state;S.gift='shiny trinket';S.released=Date.now()-1;S.checkins=__echo.buildCheckins();S.pcv=2;localStorage.setItem('echo-proto-v1',JSON.stringify(S))})()""")
-    days=[1,3,7,14,30,60];texts=[]
+    days=[1,3,7,14,30,60];texts=[]   # day 1 = 47 h back: postcard 1 waits for the first 04:00 after release (farewell arc §7), so -25 h failed when run before 04:00
     for k,d in enumerate(days):
-      await pg.evaluate(f"""(()=>{{window.__wiped=1;const S=JSON.parse(localStorage.getItem('echo-proto-v1'));S.clockOffset=0;S.released=Date.now()-{d}*864e5-36e5;S.lastCheckinDate=null;S.checkins.forEach(c=>c.delivered=c.day<{d});localStorage.setItem('echo-proto-v1',JSON.stringify(S))}})()""")
-      await pg.reload();await pg.wait_for_timeout(1200);await pg.click('#mail');await pg.wait_for_timeout(400);await shot(f'postcard-day{d}')
+      await pg.evaluate(f"""(()=>{{window.__wiped=1;const S=JSON.parse(localStorage.getItem('echo-proto-v1'));S.clockOffset=0;S.released=Date.now()-{(47*36e5 if d==1 else f'{d}*864e5-36e5')};S.lastCheckinDate=null;S.checkins.forEach(c=>c.delivered=c.day<{d});localStorage.setItem('echo-proto-v1',JSON.stringify(S))}})()""")
+      await pg.reload();await pg.wait_for_timeout(1200);await pg.click('#sign' if await pg.locator('#sign').count() else '#mail');await pg.wait_for_timeout(400);await shot(f'postcard-day{d}')   # a 'sign' check-in is left in the scene (tap it), the rest arrive in the mailbox
       t=await pg.inner_text('.pcwrap');texts.append(t);assert f'Day +{d}' in t and 'Dani' in t and '{' not in t,t
       await pg.click('.full button');await pg.wait_for_timeout(200)
     await pg.click('#book');await pg.wait_for_timeout(300);await pg.evaluate("document.querySelector('.book').scrollTop=99999");await pg.wait_for_timeout(200);await shot('memory-book-postcards')

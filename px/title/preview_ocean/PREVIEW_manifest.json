@@ -1,0 +1,121 @@
+{
+ "status": "PREVIEW - pending approval. Ocean (Tidelings) family is only a proposal; do not ship or wire into the app until Daniel/Kai approve.",
+ "roster": [
+  "sea_otter",
+  "seal",
+  "dolphin",
+  "sea_turtle",
+  "penguin",
+  "octopus",
+  "seahorse",
+  "hermit_crab"
+ ],
+ "lineup": "roster (8): sea_otter, seal, dolphin, sea_turtle, penguin, octopus, seahorse, hermit_crab (manatee out, hermit crab in). All 8 swim in the ocean mini-games. At home otter/seal/penguin walk and the hermit crab scuttles; in the games the hermit crab drifts/bobs on a current with its shell. Previewed: dolphin, sea_turtle, seahorse (swim) + hermit_crab (drift). puffin + narwhal dropped.",
+ "source": "tools/bake_batch_h.py ocean - layered pixel raster in master-rig conventions (no ocean rig exists yet); palettes are preview-only",
+ "strips": [
+  {
+   "file": "px/title/preview_ocean/PREVIEW_dolphin_swim.png",
+   "look": "dolphin",
+   "anim": "swim",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    25
+   ],
+   "anchor_kind": "centre",
+   "facing": "right"
+  },
+  {
+   "file": "px/title/preview_ocean/PREVIEW_sea_turtle_swim.png",
+   "look": "sea_turtle",
+   "anim": "swim",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    26,
+    26
+   ],
+   "anchor_kind": "centre",
+   "facing": "right"
+  },
+  {
+   "file": "px/title/preview_ocean/PREVIEW_seahorse_swim.png",
+   "look": "seahorse",
+   "anim": "swim",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    24,
+    25
+   ],
+   "anchor_kind": "centre",
+   "facing": "right (upright)"
+  },
+  {
+   "file": "px/title/preview_ocean/PREVIEW_hermit_crab_drift.png",
+   "look": "hermit_crab",
+   "anim": "drift",
+   "frames": 6,
+   "frame": [
+    48,
+    48
+   ],
+   "fps": 12,
+   "ticks": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "loop": true,
+   "anchor": [
+    25,
+    25
+   ],
+   "anchor_kind": "centre",
+   "facing": "right"
+  }
+ ]
+}

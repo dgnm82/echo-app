@@ -1,0 +1,1447 @@
+{
+ "_schema": "echo-title-biomes-v1",
+ "_owner": "Pixal (H7)",
+ "size": [
+  180,
+  320
+ ],
+ "tods": [
+  "dawn",
+  "day",
+  "dusk",
+  "night"
+ ],
+ "crossfade": {
+  "hold_ms": 11000,
+  "fade_ms": 1200,
+  "order": [
+   "woodland",
+   "pasture",
+   "cove"
+  ],
+  "advance_on": [
+   "tap_background",
+   "swipe"
+  ]
+ },
+ "z_order": [
+  "bg",
+  "echo sprites (feet on anchors)",
+  "fg",
+  "f0/f1 overlay (500 ms alternate)",
+  "weather fx (px/scenes/fx/weather_*)",
+  "logo/tagline/tap UI"
+ ],
+ "ui_keepouts": {
+  "logo": [
+   0,
+   0,
+   180,
+   80
+  ],
+  "tagline": [
+   0,
+   92,
+   180,
+   130
+  ],
+  "tap": [
+   37,
+   278,
+   143,
+   300
+  ]
+ },
+ "retire": [
+  ".tthill (px/title/hill.png)",
+  ".ttmoon (sun/moon now baked into each biome overlay)"
+ ],
+ "biomes": {
+  "woodland": {
+   "variants": {
+    "dawn": {
+     "bg": "px/title/biome_woodland_dawn.png",
+     "fg": "px/title/biome_woodland_dawn_fg.png",
+     "alive": [
+      "px/title/biome_woodland_dawn_f0.png",
+      "px/title/biome_woodland_dawn_f1.png"
+     ],
+     "palette": [
+      "#6E5C9C",
+      "#E89AB0",
+      "#FFD3A8",
+      "#FFF1C8",
+      "#A0BEA4",
+      "#B6D396",
+      "#9AC085",
+      "#799E78",
+      "#FD9EBF",
+      "#FDC985",
+      "#DEA078",
+      "#B6775E",
+      "#83564D",
+      "#D1BCD2",
+      "#FFE3A0",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#E89AB0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 5.79,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "day": {
+     "bg": "px/title/biome_woodland_day.png",
+     "fg": "px/title/biome_woodland_day_fg.png",
+     "alive": [
+      "px/title/biome_woodland_day_f0.png",
+      "px/title/biome_woodland_day_f1.png"
+     ],
+     "palette": [
+      "#5FA4DC",
+      "#9ED2F0",
+      "#E4F4F2",
+      "#FFF8DA",
+      "#8EC4A0",
+      "#A8DE8E",
+      "#86C77A",
+      "#5E9E6A",
+      "#FF9EC0",
+      "#FFD27A",
+      "#D9A06A",
+      "#A86E4A",
+      "#6A4636",
+      "#C9C2D8",
+      "#FFF3C8",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#9ED2F0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 7.74,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "dusk": {
+     "bg": "px/title/biome_woodland_dusk.png",
+     "fg": "px/title/biome_woodland_dusk_fg.png",
+     "alive": [
+      "px/title/biome_woodland_dusk_f0.png",
+      "px/title/biome_woodland_dusk_f1.png"
+     ],
+     "palette": [
+      "#4A3A7A",
+      "#8A4E8E",
+      "#F7A77E",
+      "#FFE2A8",
+      "#9CA89A",
+      "#AFBB8D",
+      "#96AA7E",
+      "#798D73",
+      "#ED8DB1",
+      "#EDB27E",
+      "#D28E73",
+      "#AF6A5C",
+      "#824D4E",
+      "#C6A7C2",
+      "#FFD27A",
+      "#FFE9A8"
+     ],
+     "tagline_bg": "#8A4E8E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 5.5,
+     "tagline_shadow": "#3B2A5C"
+    },
+    "night": {
+     "bg": "px/title/biome_woodland_night.png",
+     "fg": "px/title/biome_woodland_night_fg.png",
+     "alive": [
+      "px/title/biome_woodland_night_f0.png",
+      "px/title/biome_woodland_night_f1.png"
+     ],
+     "palette": [
+      "#1E1A44",
+      "#2E2A5E",
+      "#4A4482",
+      "#FFF1C8",
+      "#5A727F",
+      "#667E76",
+      "#56736C",
+      "#436065",
+      "#90608E",
+      "#90796C",
+      "#7E6165",
+      "#664955",
+      "#49354C",
+      "#76719A",
+      "#FFD27A",
+      "#FFF3C8"
+     ],
+     "tagline_bg": "#2E2A5E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 12.17,
+     "tagline_shadow": "#3B2A5C"
+    }
+   },
+   "anchors": {
+    "ground_paths": [
+     {
+      "id": "meadow_path",
+      "y": 262,
+      "x": [
+       -24,
+       204
+      ],
+      "acts": [
+       "walk",
+       "sniff",
+       "sit"
+      ],
+      "kinds": [
+       "ground"
+      ]
+     }
+    ],
+    "perches": [
+     {
+      "id": "oak_branch",
+      "kind": "branch",
+      "xy": [
+       52,
+       168
+      ],
+      "acts": [
+       "land",
+       "preen",
+       "sing"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "hollow_log_top",
+      "kind": "log",
+      "xy": [
+       40,
+       238
+      ],
+      "acts": [
+       "hop_up",
+       "sit",
+       "stretch"
+      ],
+      "kinds": [
+       "ground"
+      ]
+     },
+     {
+      "id": "right_tree_crown",
+      "kind": "branch",
+      "xy": [
+       150,
+       152
+      ],
+      "acts": [
+       "land",
+       "peek"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "mossy_rock",
+      "kind": "rock",
+      "xy": [
+       150,
+       248
+      ],
+      "acts": [
+       "hop_up",
+       "sit"
+      ],
+      "kinds": [
+       "ground"
+      ]
+     }
+    ],
+    "peek_spots": [
+     {
+      "id": "bush_peek",
+      "behind": "fg",
+      "xy": [
+       124,
+       262
+      ],
+      "side": "left",
+      "acts": [
+       "peek",
+       "hide"
+      ]
+     },
+     {
+      "id": "log_peek",
+      "behind": "bg_log_end",
+      "xy": [
+       18,
+       252
+      ],
+      "side": "right",
+      "acts": [
+       "peek"
+      ]
+     }
+    ],
+    "sniff_spots": [
+     {
+      "id": "fl_0",
+      "xy": [
+       66,
+       268
+      ],
+      "degree": 0
+     },
+     {
+      "id": "fl_1",
+      "xy": [
+       112,
+       262
+      ],
+      "degree": 1
+     },
+     {
+      "id": "fl_2",
+      "xy": [
+       128,
+       284
+      ],
+      "degree": 2
+     },
+     {
+      "id": "fl_3",
+      "xy": [
+       30,
+       290
+      ],
+      "degree": 3
+     },
+     {
+      "id": "fl_4",
+      "xy": [
+       160,
+       276
+      ],
+      "degree": 4
+     }
+    ],
+    "fly_lanes": [
+     {
+      "id": "canopy_glide",
+      "y": [
+       140,
+       176
+      ],
+      "x": [
+       -24,
+       204
+      ],
+      "land": [
+       "oak_branch",
+       "right_tree_crown"
+      ]
+     }
+    ],
+    "cast": {
+     "ground": [
+      "fox",
+      "wolf",
+      "lynx",
+      "cat",
+      "dog"
+     ],
+     "sky": [
+      "owl",
+      "bird",
+      "crow"
+     ],
+     "pick": 3
+    }
+   }
+  },
+  "pasture": {
+   "variants": {
+    "dawn": {
+     "bg": "px/title/biome_pasture_dawn.png",
+     "fg": "px/title/biome_pasture_dawn_fg.png",
+     "alive": [
+      "px/title/biome_pasture_dawn_f0.png",
+      "px/title/biome_pasture_dawn_f1.png"
+     ],
+     "palette": [
+      "#6E5C9C",
+      "#E89AB0",
+      "#FFD3A8",
+      "#FFF1C8",
+      "#B2CBA3",
+      "#C6DB92",
+      "#A4C682",
+      "#7CA36D",
+      "#EA6069",
+      "#FDC971",
+      "#EAB484",
+      "#C3845E",
+      "#8B584C",
+      "#F6E1D9",
+      "#FFE3A0",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#E89AB0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 5.79,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "day": {
+     "bg": "px/title/biome_pasture_day.png",
+     "fg": "px/title/biome_pasture_day_fg.png",
+     "alive": [
+      "px/title/biome_pasture_day_f0.png",
+      "px/title/biome_pasture_day_f1.png"
+     ],
+     "palette": [
+      "#5FA4DC",
+      "#9ED2F0",
+      "#E4F4F2",
+      "#FFF8DA",
+      "#A4D49E",
+      "#BCE88A",
+      "#92CE76",
+      "#62A45C",
+      "#E85258",
+      "#FFD262",
+      "#E8B878",
+      "#B87E4A",
+      "#744834",
+      "#F6EFE0",
+      "#FFF3C8",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#9ED2F0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 7.74,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "dusk": {
+     "bg": "px/title/biome_pasture_dusk.png",
+     "fg": "px/title/biome_pasture_dusk_fg.png",
+     "alive": [
+      "px/title/biome_pasture_dusk_f0.png",
+      "px/title/biome_pasture_dusk_f1.png"
+     ],
+     "palette": [
+      "#4A3A7A",
+      "#8A4E8E",
+      "#F7A77E",
+      "#FFE2A8",
+      "#ACB498",
+      "#BDC28A",
+      "#9FAF7C",
+      "#7C9169",
+      "#DD5666",
+      "#EDB26D",
+      "#DD9F7D",
+      "#BA765C",
+      "#894F4C",
+      "#E7C7C8",
+      "#FFD27A",
+      "#FFE9A8"
+     ],
+     "tagline_bg": "#8A4E8E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 5.5,
+     "tagline_shadow": "#3B2A5C"
+    },
+    "night": {
+     "bg": "px/title/biome_pasture_night.png",
+     "fg": "px/title/biome_pasture_night_fg.png",
+     "alive": [
+      "px/title/biome_pasture_night_f0.png",
+      "px/title/biome_pasture_night_f1.png"
+     ],
+     "palette": [
+      "#1E1A44",
+      "#2E2A5E",
+      "#4A4482",
+      "#FFF1C8",
+      "#657A7E",
+      "#708374",
+      "#5C776B",
+      "#45625E",
+      "#853B5C",
+      "#907961",
+      "#856C6C",
+      "#6E5055",
+      "#4E364B",
+      "#8C869D",
+      "#FFD27A",
+      "#FFF3C8"
+     ],
+     "tagline_bg": "#2E2A5E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 12.17,
+     "tagline_shadow": "#3B2A5C"
+    }
+   },
+   "anchors": {
+    "ground_paths": [
+     {
+      "id": "clover_path",
+      "y": 266,
+      "x": [
+       -24,
+       204
+      ],
+      "acts": [
+       "walk",
+       "graze_sniff",
+       "sit"
+      ],
+      "kinds": [
+       "ground",
+       "farm",
+       "cloverkin"
+      ],
+      "stations": [
+       {
+        "id": "cp_l",
+        "x": 40
+       },
+       {
+        "id": "cp_c",
+        "x": 88
+       },
+       {
+        "id": "cp_r",
+        "x": 128
+       }
+      ]
+     }
+    ],
+    "perches": [
+     {
+      "id": "fence_post_0",
+      "kind": "fence",
+      "xy": [
+       5,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_1",
+      "kind": "fence",
+      "xy": [
+       27,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_2",
+      "kind": "fence",
+      "xy": [
+       49,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_3",
+      "kind": "fence",
+      "xy": [
+       71,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_4",
+      "kind": "fence",
+      "xy": [
+       93,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_5",
+      "kind": "fence",
+      "xy": [
+       115,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_6",
+      "kind": "fence",
+      "xy": [
+       137,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "fence_post_7",
+      "kind": "fence",
+      "xy": [
+       159,
+       226
+      ],
+      "acts": [
+       "land",
+       "crow_call"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "hay_bale",
+      "kind": "hay",
+      "xy": [
+       143,
+       246
+      ],
+      "acts": [
+       "hop_up",
+       "sit",
+       "roll"
+      ],
+      "kinds": [
+       "ground",
+       "farm",
+       "cloverkin"
+      ]
+     },
+     {
+      "id": "apple_tree_l",
+      "kind": "branch",
+      "xy": [
+       24,
+       150
+      ],
+      "acts": [
+       "land",
+       "peck_apple"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     },
+     {
+      "id": "apple_tree_r",
+      "kind": "branch",
+      "xy": [
+       160,
+       150
+      ],
+      "acts": [
+       "land"
+      ],
+      "kinds": [
+       "sky"
+      ]
+     }
+    ],
+    "peek_spots": [
+     {
+      "id": "tall_grass",
+      "behind": "fg",
+      "xy": [
+       106,
+       268
+      ],
+      "side": "both",
+      "acts": [
+       "peek",
+       "pounce"
+      ],
+      "kinds": [
+       "ground",
+       "cloverkin"
+      ]
+     }
+    ],
+    "sniff_spots": [
+     {
+      "id": "fl_0",
+      "xy": [
+       30,
+       262
+      ],
+      "degree": 0
+     },
+     {
+      "id": "fl_1",
+      "xy": [
+       70,
+       270
+      ],
+      "degree": 1
+     },
+     {
+      "id": "fl_2",
+      "xy": [
+       98,
+       258
+      ],
+      "degree": 2
+     },
+     {
+      "id": "fl_3",
+      "xy": [
+       112,
+       286
+      ],
+      "degree": 3
+     },
+     {
+      "id": "fl_4",
+      "xy": [
+       150,
+       266
+      ],
+      "degree": 4
+     }
+    ],
+    "water": [
+     {
+      "id": "duck_pond",
+      "rect": [
+       30,
+       295,
+       74,
+       305
+      ],
+      "acts": [
+       "paddle",
+       "splash"
+      ],
+      "kinds": [
+       "duck",
+       "cloverkin_splash"
+      ]
+     }
+    ],
+    "fly_lanes": [
+     {
+      "id": "orchard_glide",
+      "y": [
+       150,
+       190
+      ],
+      "x": [
+       -24,
+       204
+      ],
+      "land": [
+       "fence_post_2",
+       "apple_tree_r"
+      ]
+     }
+    ],
+    "cast": {
+     "family": "cloverkin",
+     "status": "approved by Daniel - ships first; sprites pending (Cole). No Cloverkin PNGs exist in px/ yet.",
+     "scale": {
+      "key": "G major pentatonic",
+      "notes": [
+       "g4",
+       "a4",
+       "b4",
+       "d5",
+       "e5",
+       "g5"
+      ],
+      "hz": [
+       392.0,
+       440.0,
+       493.88,
+       587.33,
+       659.25,
+       783.99
+      ]
+     },
+     "pick": 3,
+     "max_per_slot": 1,
+     "slots": {
+      "ground": [
+       "clover_path.cp_l",
+       "clover_path.cp_c",
+       "clover_path.cp_r"
+      ],
+      "hop_on": [
+       "hay_bale"
+      ],
+      "peek": [
+       "tall_grass"
+      ],
+      "pond_edge": [
+       "duck_pond"
+      ],
+      "perch": [
+       "fence_post_0..7",
+       "apple_tree_l",
+       "apple_tree_r"
+      ],
+      "sky_lane": [
+       "orchard_glide"
+      ]
+     },
+     "roster": {
+      "lamb": [
+       "ground",
+       "hop_on",
+       "peek"
+      ],
+      "piglet": [
+       "ground",
+       "peek",
+       "pond_edge"
+      ],
+      "highland_calf": [
+       "ground"
+      ],
+      "pony": [
+       "ground"
+      ],
+      "goat": [
+       "hop_on",
+       "ground"
+      ],
+      "bunny": [
+       "ground",
+       "peek",
+       "hop_on"
+      ],
+      "donkey": [
+       "ground"
+      ],
+      "alpaca": [
+       "ground"
+      ]
+     },
+     "roster_note": "slot kinds are preferences; a member may use any slot listed for it. Big members (highland_calf, pony, donkey, alpaca) are ground-only.",
+     "interim": {
+      "members": [
+       "chicken",
+       "duck"
+      ],
+      "use": {
+       "chicken": [
+        "ground",
+        "perch",
+        "sky_lane"
+       ],
+       "duck": [
+        "pond_edge",
+        "ground",
+        "sky_lane"
+       ]
+      },
+      "sprites": {
+       "chicken": {
+        "sprite_prefix": "px/whimber_chicken_<pal>_f<0-3>",
+        "present": [
+         "_ev",
+         "_fly",
+         "_light",
+         "_run",
+         "_sleep",
+         "idle"
+        ],
+        "missing": [
+         "_glide",
+         "_glide_happy",
+         "_paddle",
+         "_swim",
+         "_walk"
+        ]
+       },
+       "duck": {
+        "sprite_prefix": "px/whimber_duck_<pal>_f<0-3>",
+        "present": [
+         "_ev",
+         "_fly",
+         "_light",
+         "_run",
+         "_sleep",
+         "idle"
+        ],
+        "missing": [
+         "_glide",
+         "_glide_happy",
+         "_paddle",
+         "_swim",
+         "_walk"
+        ]
+       }
+      },
+      "fallbacks": {
+       "walk": "use _run strip at 1/2 speed",
+       "paddle": "use idle f0 + 1px bob on duck_pond (no _paddle/_swim frames)",
+       "glide": "use _fly"
+      }
+     }
+    }
+   }
+  },
+  "cove": {
+   "variants": {
+    "dawn": {
+     "bg": "px/title/biome_cove_dawn.png",
+     "fg": "px/title/biome_cove_dawn_fg.png",
+     "alive": [
+      "px/title/biome_cove_dawn_f0.png",
+      "px/title/biome_cove_dawn_f1.png"
+     ],
+     "palette": [
+      "#6E5C9C",
+      "#E89AB0",
+      "#FFD3A8",
+      "#FFF1C8",
+      "#79A7C5",
+      "#93CCD9",
+      "#5F9BBF",
+      "#4E77A1",
+      "#FD92AB",
+      "#FDC178",
+      "#F2D2B1",
+      "#D1A285",
+      "#86677B",
+      "#84BC96",
+      "#FFE3A0",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#E89AB0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 5.79,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "day": {
+     "bg": "px/title/biome_cove_day.png",
+     "fg": "px/title/biome_cove_day_fg.png",
+     "alive": [
+      "px/title/biome_cove_day_f0.png",
+      "px/title/biome_cove_day_f1.png"
+     ],
+     "palette": [
+      "#5FA4DC",
+      "#9ED2F0",
+      "#E4F4F2",
+      "#FFF8DA",
+      "#5EA8C8",
+      "#7ED6E0",
+      "#3E9AC0",
+      "#2A6E9C",
+      "#FF8FA8",
+      "#FFC86A",
+      "#F2DDB0",
+      "#C9A27A",
+      "#6E5A6E",
+      "#6CC28E",
+      "#FFF3C8",
+      "#FFFFFF"
+     ],
+     "tagline_bg": "#9ED2F0",
+     "tagline_ink": "#3B2A5C",
+     "tagline_ink_contrast": 7.74,
+     "tagline_shadow": "#FFF6E6"
+    },
+    "dusk": {
+     "bg": "px/title/biome_cove_dusk.png",
+     "fg": "px/title/biome_cove_dusk_fg.png",
+     "alive": [
+      "px/title/biome_cove_dusk_f0.png",
+      "px/title/biome_cove_dusk_f1.png"
+     ],
+     "palette": [
+      "#4A3A7A",
+      "#8A4E8E",
+      "#F7A77E",
+      "#FFE2A8",
+      "#7994B7",
+      "#90B5C8",
+      "#628AB1",
+      "#546A97",
+      "#ED82A0",
+      "#EDAB73",
+      "#E4BAA5",
+      "#C6907E",
+      "#855C76",
+      "#84A78D",
+      "#FFD27A",
+      "#FFE9A8"
+     ],
+     "tagline_bg": "#8A4E8E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 5.5,
+     "tagline_shadow": "#3B2A5C"
+    },
+    "night": {
+     "bg": "px/title/biome_cove_night.png",
+     "fg": "px/title/biome_cove_night_fg.png",
+     "alive": [
+      "px/title/biome_cove_night_f0.png",
+      "px/title/biome_cove_night_f1.png"
+     ],
+     "palette": [
+      "#1E1A44",
+      "#2E2A5E",
+      "#4A4482",
+      "#FFF1C8",
+      "#436492",
+      "#67A5C7",
+      "#345E8E",
+      "#2A497D",
+      "#905883",
+      "#907465",
+      "#8A7E86",
+      "#76626C",
+      "#4B3F67",
+      "#4A7176",
+      "#FFD27A",
+      "#FFF3C8"
+     ],
+     "tagline_bg": "#2E2A5E",
+     "tagline_ink": "#FFF6E6",
+     "tagline_ink_contrast": 12.17,
+     "tagline_shadow": "#3B2A5C"
+    }
+   },
+   "anchors": {
+    "ground_paths": [
+     {
+      "id": "sand_floor",
+      "y": 270,
+      "x": [
+       -24,
+       204
+      ],
+      "acts": [
+       "scuttle",
+       "dig",
+       "sit"
+      ],
+      "kinds": [
+       "ocean_floor"
+      ]
+     }
+    ],
+    "swim_lanes": [
+     {
+      "id": "shallow",
+      "y": 178,
+      "x": [
+       -30,
+       210
+      ],
+      "amp": 4,
+      "acts": [
+       "swim",
+       "leap"
+      ],
+      "kinds": [
+       "ocean"
+      ]
+     },
+     {
+      "id": "mid",
+      "y": 206,
+      "x": [
+       -30,
+       210
+      ],
+      "amp": 6,
+      "acts": [
+       "swim",
+       "loop",
+       "bubble_trail"
+      ],
+      "kinds": [
+       "ocean"
+      ]
+     },
+     {
+      "id": "kelp_weave",
+      "y": 236,
+      "x": [
+       -30,
+       210
+      ],
+      "amp": 8,
+      "acts": [
+       "weave",
+       "hide_in_kelp"
+      ],
+      "kinds": [
+       "ocean"
+      ]
+     }
+    ],
+    "perches": [
+     {
+      "id": "rock_ledge",
+      "kind": "rock",
+      "xy": [
+       18,
+       138
+      ],
+      "acts": [
+       "land",
+       "call"
+      ],
+      "kinds": [
+       "sky",
+       "gull"
+      ]
+     },
+     {
+      "id": "surface_bob",
+      "kind": "water",
+      "xy": [
+       96,
+       158
+      ],
+      "acts": [
+       "float",
+       "paddle"
+      ],
+      "kinds": [
+       "duck",
+       "seaotter",
+       "seal"
+      ]
+     }
+    ],
+    "peek_spots": [
+     {
+      "id": "kelp_l",
+      "behind": "fg",
+      "xy": [
+       12,
+       230
+      ],
+      "side": "right",
+      "acts": [
+       "peek"
+      ]
+     },
+     {
+      "id": "kelp_r",
+      "behind": "fg",
+      "xy": [
+       168,
+       222
+      ],
+      "side": "left",
+      "acts": [
+       "peek"
+      ]
+     },
+     {
+      "id": "coral_ledge",
+      "behind": "bg_coral",
+      "xy": [
+       150,
+       262
+      ],
+      "side": "left",
+      "acts": [
+       "peek",
+       "nibble"
+      ]
+     }
+    ],
+    "bubble_vents": [
+     [
+      112,
+      262
+     ],
+     [
+      40,
+      270
+     ],
+     [
+      150,
+      250
+     ]
+    ],
+    "sniff_spots": [
+     {
+      "id": "starfish_0",
+      "xy": [
+       87,
+       294
+      ],
+      "degree": 0
+     },
+     {
+      "id": "starfish_1",
+      "xy": [
+       127,
+       300
+      ],
+      "degree": 1
+     }
+    ],
+    "fly_lanes": [
+     {
+      "id": "sea_breeze",
+      "y": [
+       96,
+       130
+      ],
+      "x": [
+       -24,
+       204
+      ],
+      "land": [
+       "rock_ledge"
+      ]
+     }
+    ],
+    "cast": {
+     "family": "tidelings",
+     "status": "approved in concept (later); roster named by Daniel (Oct 25) - data only, no production sprites (preview only: px/title/preview_ocean/).",
+     "scale": {
+      "key": "D major pentatonic",
+      "notes": [
+       "d4",
+       "e4",
+       "f#4",
+       "a4",
+       "b4",
+       "d5"
+      ],
+      "hz": [
+       293.66,
+       329.63,
+       369.99,
+       440.0,
+       493.88,
+       587.33
+      ]
+     },
+     "pick": 3,
+     "max_per_slot": 1,
+     "slots": {
+      "swim": [
+       "shallow",
+       "mid",
+       "kelp_weave"
+      ],
+      "floor": [
+       "sand_floor"
+      ],
+      "peek": [
+       "kelp_l",
+       "kelp_r",
+       "coral_ledge"
+      ],
+      "surface": [
+       "surface_bob"
+      ],
+      "perch": [
+       "rock_ledge"
+      ],
+      "sky_lane": [
+       "sea_breeze"
+      ]
+     },
+     "roster": {
+      "sea_otter": [
+       "surface",
+       "swim",
+       "perch"
+      ],
+      "seal": [
+       "perch",
+       "swim",
+       "surface"
+      ],
+      "dolphin": [
+       "swim",
+       "surface"
+      ],
+      "sea_turtle": [
+       "swim",
+       "floor"
+      ],
+      "penguin": [
+       "perch",
+       "swim"
+      ],
+      "octopus": [
+       "floor",
+       "peek",
+       "swim"
+      ],
+      "seahorse": [
+       "peek",
+       "swim"
+      ],
+      "hermit_crab": [
+       "floor",
+       "swim"
+      ]
+     },
+     "roster_note": "Roster (Oct 25): manatee out, hermit_crab in, octopus stays. Slot kinds are preferences. Movement: all 8 swim in the ocean mini-games; at home sea_otter/seal/penguin walk and hermit_crab scuttles; in the games hermit_crab drifts/bobs on a current with its shell. Data only - titleCast does not read roster; Tidelings stay unreachable.",
+     "movement": {
+      "games": {
+       "swim": [
+        "sea_otter",
+        "seal",
+        "dolphin",
+        "sea_turtle",
+        "penguin",
+        "octopus",
+        "seahorse",
+        "hermit_crab"
+       ],
+       "hermit_crab": "drift_on_current"
+      },
+      "home": {
+       "walk": [
+        "sea_otter",
+        "seal",
+        "penguin"
+       ],
+       "scuttle": [
+        "hermit_crab"
+       ]
+      }
+     },
+     "interim": {
+      "members": [
+       "gull",
+       "duck"
+      ],
+      "use": {
+       "gull": [
+        "perch",
+        "sky_lane"
+       ],
+       "duck": [
+        "surface",
+        "sky_lane"
+       ]
+      },
+      "sprites": {
+       "gull": {
+        "sprite_prefix": "px/whimber_gull_<pal>_f<0-3>",
+        "present": [
+         "_ev",
+         "_fly",
+         "_light",
+         "_run",
+         "_sleep",
+         "idle"
+        ],
+        "missing": [
+         "_glide",
+         "_glide_happy",
+         "_paddle",
+         "_swim",
+         "_walk"
+        ]
+       },
+       "duck": {
+        "sprite_prefix": "px/whimber_duck_<pal>_f<0-3>",
+        "present": [
+         "_ev",
+         "_fly",
+         "_light",
+         "_run",
+         "_sleep",
+         "idle"
+        ],
+        "missing": [
+         "_glide",
+         "_glide_happy",
+         "_paddle",
+         "_swim",
+         "_walk"
+        ]
+       }
+      },
+      "fallbacks": {
+       "glide": "use _fly",
+       "paddle": "use idle f0 + 2px sine bob on surface_bob (no _paddle/_swim frames)"
+      }
+     }
+    }
+   }
+  }
+ },
+ "tod_from_clock": {
+  "dawn": "05:30-07:30",
+  "day": "07:30-16:30",
+  "dusk": "16:30-19:30",
+  "night": "19:30-05:30",
+  "note": "same solar curve as H8 (Jay); title just picks the nearest of 4"
+ },
+ "weather_overlay": {
+  "allowed": [
+   "clear",
+   "cloudy",
+   "rain(sunshower)",
+   "snow",
+   "fog"
+  ],
+  "title_never": [
+   "storm"
+  ],
+  "fx": "px/scenes/fx/weather_<state>_phone.png"
+ }
+}

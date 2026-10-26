@@ -1,0 +1,206 @@
+{
+ "_schema": "echo-batchH-purr-home-v1",
+ "_owner": "Pixal",
+ "scenes": {},
+ "homes": {
+  "basket_room": {
+   "size": [
+    56,
+    30
+   ],
+   "mouth": [
+    27,
+    11
+   ],
+   "lip": [
+    42,
+    12
+   ],
+   "rim": [
+    27,
+    11,
+    27,
+    7
+   ],
+   "bed": [
+    27,
+    22
+   ],
+   "baseline": 28
+  },
+  "basket_room_hh": {
+   "size": [
+    20,
+    12
+   ],
+   "mouth": [
+    9,
+    5
+   ],
+   "lip": [
+    14,
+    6
+   ],
+   "rim": [
+    9,
+    5,
+    9,
+    3
+   ],
+   "bed": [
+    9,
+    9
+   ],
+   "baseline": 10
+  },
+  "den": {
+   "size": [
+    70,
+    46
+   ],
+   "mouth": [
+    25,
+    31
+   ],
+   "lip": [
+    19,
+    40
+   ],
+   "entrance": [
+    13,
+    18,
+    37,
+    43
+   ],
+   "bed": [
+    25,
+    42
+   ],
+   "baseline": 44
+  },
+  "den_hh": {
+   "size": [
+    24,
+    18
+   ],
+   "mouth": [
+    8,
+    10
+   ],
+   "lip": [
+    6,
+    12
+   ],
+   "entrance": [
+    4,
+    5,
+    12,
+    15
+   ],
+   "bed": [
+    8,
+    14
+   ],
+   "baseline": 16
+  },
+  "den_wild": {
+   "size": [
+    70,
+    46
+   ],
+   "mouth": [
+    25,
+    31
+   ],
+   "lip": [
+    19,
+    40
+   ],
+   "entrance": [
+    13,
+    18,
+    37,
+    43
+   ],
+   "bed": [
+    25,
+    42
+   ],
+   "baseline": 44
+  },
+  "den_wild_hh": {
+   "size": [
+    24,
+    18
+   ],
+   "mouth": [
+    8,
+    10
+   ],
+   "lip": [
+    6,
+    12
+   ],
+   "entrance": [
+    4,
+    5,
+    12,
+    15
+   ],
+   "bed": [
+    8,
+    14
+   ],
+   "baseline": 16
+  }
+ },
+ "placement": {
+  "cat (house cat, Mibbit)": {
+   "scene": "twitchel_sunbeam_room",
+   "home": {
+    "k": "basket_room",
+    "x": 118,
+    "y": 230
+   },
+   "home_hh": {
+    "k": "basket_room_hh",
+    "x": 39,
+    "y": 45
+   },
+   "stage": [
+    90,
+    256
+   ],
+   "stage_hh": [
+    30,
+    56
+   ],
+   "nap": "visible curled sleeper (_sleep.png) between basket_room_back and basket_room_front; no tail-only state"
+  },
+  "lion|tiger|leopard|cheetah|snowleopard|lynx": {
+   "scene": "twitchel_wild_clearing",
+   "home": {
+    "k": "den_wild",
+    "x": 108,
+    "y": 218
+   },
+   "home_hh": {
+    "k": "den_wild_hh",
+    "x": 36,
+    "y": 41
+   },
+   "stage": [
+    90,
+    256
+   ],
+   "stage_hh": [
+    30,
+    56
+   ],
+   "nap": "crawl in behind den_wild_front, tail peeks at lip (.htail.on)",
+   "back_baked_in_scene": true,
+   "twi_layers": "<k>_back_twi.png / <k>_front_twi.png when the scene is _twi/_dusk/_dawn",
+   "den_hotspot": "tw_wild_den_bellvine (replaces tw_clearing_bell); see ios_design/batch_h/h_followup_hotspots_for_jay.json"
+  }
+ }
+}

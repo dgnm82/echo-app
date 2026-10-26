@@ -3,6 +3,7 @@
 # Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json,subprocess,tempfile,shutil
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/thirdfam';os.makedirs(OUT,exist_ok=True)
 R=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..');tmp=tempfile.mkdtemp();fd=os.path.join(tmp,'families');shutil.copytree(os.path.join(R,'families'),fd)
 m=json.load(open(os.path.join(fd,'whimber.json')))
@@ -23,7 +24,7 @@ async def T(pg,sel,ms=250):
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[];b404=[]
-    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
     await pg.route('**/families.js*',lambda r:r.fulfill(status=200,content_type='application/javascript',body=JS))
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600)
@@ -33,6 +34,7 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T(pg,'.scene.ob',200)
     await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1')
+    check(await pg.locator('.orfamcard[data-f=testfam]').count()==1,'the dummy family card is in the picker');await to_family(pg,'testfam')
     check(await pg.locator('.orcard[data-a=testcat]').count()==1,'the dummy animal card is in the picker')
     await pg.screenshot(path=f'{OUT}/picker.png')
     await T(pg,'.orcard[data-a=testcat]');await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={chip}]',900)

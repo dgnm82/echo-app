@@ -498,7 +498,7 @@ const auraJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'px/aura.json'), 'ut
 
   console.log('=== Deliverable 4: Interactive Environment Hotspots (SCENE_HOTSPOTS v2.0.0) ===');
   check(W.SCENE_HOTSPOTS && W.SCENE_HOTSPOTS._version === '2.0.0', 'SCENE_HOTSPOTS v2.0.0 loaded');
-  for (const scId of ['clearing', 'grove', 'meadow', 'branch', 'library', 'hilltop', 'twitchel_clearing', 'twitchel_grove', 'twitchel_meadow', 'twitchel_garden']) {
+  for (const scId of ['clearing', 'grove', 'meadow', 'branch', 'library', 'hilltop', 'twitchel_wild_clearing', 'twitchel_sunbeam_room', 'twitchel_grove', 'twitchel_meadow', 'twitchel_garden']) {
     const spots = ENV.forScene(scId, scId.startsWith('twitchel_') ? 'twitchel' : (['branch','library','hilltop'].includes(scId) ? 'whimber' : 'slyte'));
     check(Array.isArray(spots) && spots.length >= 3 && spots.length <= 5, `Scene ${scId} has ${spots && spots.length} interactive hotspots`);
   }
@@ -542,7 +542,7 @@ const auraJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'px/aura.json'), 'ut
   // Verify 2-3 turn interactive mini-conversation
   let miniDone = null;
   DE.runMiniConversation(
-    { state: mockState, look: 'lion', family: 'twitchel', ageBand: '7-8', scene: 'twitchel_clearing', time: 'evening', need: 'happy' },
+    { state: mockState, look: 'lion', family: 'twitchel', ageBand: '7-8', scene: 'twitchel_wild_clearing', time: 'evening', need: 'happy' },
     { autoPick: 0 },
     info => { miniDone = info; }
   );

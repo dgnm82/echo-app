@@ -17,11 +17,16 @@ async def main():
     await pg.evaluate("__echo.state.bond=400;__echo.state.bondShown=5")
     # 1) carry-on: nobody answers
     await pg.evaluate("window.__echo.runConv('slyte_puddle_wonder',()=>window.__d=1)")
-    await pg.wait_for_function('window.__d===1',timeout=60000)
+    # Batch H / H13: every line stays up >= 6.5 s x age band; tap the bubble to advance (Dialogue.advance), never answer a choice
+    for _ in range(240):
+      if await pg.evaluate('window.__d===1'):break
+      await pg.evaluate("Dialogue.waiting&&Dialogue.waiting()&&Dialogue.advance()");await pg.wait_for_timeout(250)
+    assert await pg.evaluate('window.__d===1'),'carry-on conversation never ended'
     # 2) drift: the child answers every question (two taps), engine then drifts to a linked topic
     await pg.evaluate("Dialogue.cfg.carryOnMs=600000;window.__d=0;window.__echo.runConv('slyte_puddle_talk',()=>window.__d=1)")
     for _ in range(80):
       if await pg.evaluate('window.__d===1'):break
+      await pg.evaluate("Dialogue.waiting&&Dialogue.waiting()&&Dialogue.advance()")   # H13 tap-to-advance
       bt=pg.locator('.choices button')
       if await bt.count():
         for _k in range(2):

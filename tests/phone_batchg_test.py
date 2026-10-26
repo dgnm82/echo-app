@@ -3,6 +3,7 @@
 # Usage: python3 tests/phone_batchg_test.py [url] [outdir]
 import asyncio,sys,os,re
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick as orpick,nocam
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/batchg';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -20,7 +21,7 @@ async def main():
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required']);errs=[]
     for fam,animal,pfx,full in FAMS:
       if os.environ.get('ONLY') and os.environ['ONLY']!=fam:continue
-      ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+      ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
       pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and errs.append('404 '+r.url))
       async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
       async def pick(label,ms=900):
@@ -48,7 +49,7 @@ async def main():
         if await pg.locator('#obnm').count():break
         await T('.scene.ob',200)
       await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=2')   # 9-10
-      await T(f'.orcard[data-a={animal}]');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
+      await orpick(pg,animal);await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
       await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
       for _ in range(150):
         if not await pg.locator('.choices button').count() and await pg.locator('#play').count():break

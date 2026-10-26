@@ -2,6 +2,7 @@
 # Usage: python3 tests/phone_batchf_test.py [url] [outdir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick as orpick,nocam
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/batchf';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -14,7 +15,7 @@ BUB="((document.getElementById('b')||{}).textContent||'')"
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required']);errs=[]
-    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and errs.append('404 '+r.url))
     async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
     async def pick(label,ms=900):
@@ -29,7 +30,7 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
     await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
-    await T('.orcard[data-a=snowleopard]');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
+    await orpick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
     await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
     for _ in range(150):   # answer the setup talk
       if not await pg.locator('.choices button').count() and await pg.locator('#play').count():break
@@ -39,8 +40,9 @@ async def main():
       await pg.wait_for_timeout(200)
     await pg.wait_for_timeout(1500);await pg.evaluate(CLEAN+";CONFIG.ambientMin=999;CONFIG.ambientMax=999;CONFIG.sessionLimits.games=99");await pg.evaluate(SPY)
     # ---------------------------------------------------------------- weather cleanup (twitchel had no need tags, so its rain leaked)
-    w=await pg.evaluate("""(()=>{const L=Dialogue.lib,tx=[];for(const k in L.barks)for(const l of L.barks[k])tx.push(l.text||'');for(const c of L.conversations)for(const n of Object.values(c.nodes||{}))tx.push(n.say||'');
-      return {rain:tx.filter(t=>/\\b(rain(?!bow)\\w*|puddles?|wind|windy|fog\\w*|drizzl\\w*|breez\\w*)\\b/i.test(t)&&!/Rain is|Pretend|wind chimes/.test(t)),pools:Object.keys(L.barks).filter(k=>/^weather_(drizzle|breezy|fog|rainbow)$/.test(k)),
+    # Batch H9 brings weather back on purpose (WEATHER_CTX.md: weather_fog is a real pool, lines gated by cond.weather), so only UNGATED lines must stay weather-free
+    w=await pg.evaluate("""(()=>{const L=Dialogue.lib,tx=[],wx=c=>{const w=c&&c.cond&&c.cond.weather;return !!w&&w!=='any'};for(const k in L.barks)if(!/^weather_/.test(k))for(const l of L.barks[k])if(!wx(l))tx.push(l.text||'');for(const c of L.conversations)if(!wx(c))for(const n of Object.values(c.nodes||{}))tx.push(n.say||'');
+      return {rain:tx.filter(t=>/\\b(rain(?!bow)\\w*|puddles?|wind|windy|fog\\w*|drizzl\\w*|breez\\w*)\\b/i.test(t)&&!/Rain is|Pretend|wind chimes/.test(t)),pools:Object.keys(L.barks).filter(k=>/^weather_(drizzle|breezy|rainbow)$/.test(k)),
         nose:tx.filter(t=>/raindrop on my nose/i.test(t)).length,eib:Object.keys(L.barks).filter(k=>k.startsWith('eib_')).length}})()""")
     check(w['nose']==0,'"A raindrop on my nose" is gone');check(not w['pools'],'dead weather pools gone '+str(w['pools']));check(w['eib']==20,f"20 eib_ pools loaded (Batch G adds 10) ({w['eib']})")
     check(len(w['rain'])==0,'no rain/wind/fog/puddle lines the Echo says '+str(w['rain'][:3]))

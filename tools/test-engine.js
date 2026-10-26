@@ -20,14 +20,14 @@ T('a) generic labels get fresh phrasings from intent pools, no duplicates in one
   assert.equal(D.present([{label:'@pool:giggle'},{label:'Sparkle'}])[1].label,'Sparkle');});
 T('a) fallback reply: choice with no reply and no goto, and a broken goto',()=>{fresh('slyte');const log=[];let done=null;
   D.run({id:'t_x_1',nodes:{a:{say:'Pick one',choices:[{icon:'🤪',label:'Something silly!'},{icon:'🙂',label:'Other',goto:'missing'}]}}},ui(log),i=>done=i);
-  log.cb(0);const said=log.filter(x=>x[0]==='say').map(x=>x[1]);assert(J('slyte').barks.fallback_silly.some(l=>said.includes(l.text)),'silly fallback said');advance(5000);assert(done);
-  const log2=[];let d2=null;D.run({id:'t_y_1',nodes:{a:{say:'Pick',choices:[{icon:'🙂',label:'A',goto:'nope'},{icon:'🙂',label:'B',goto:'nope'}]}}},ui(log2),i=>d2=i);log2.cb(1);advance(5000);
+  log.cb(0);const said=log.filter(x=>x[0]==='say').map(x=>x[1]);assert(J('slyte').barks.fallback_silly.some(l=>said.includes(l.text)),'silly fallback said');advance(20000);assert(done);   // H13: young-reader pacing (>= 6.5 s per line)
+  const log2=[];let d2=null;D.run({id:'t_y_1',nodes:{a:{say:'Pick',choices:[{icon:'🙂',label:'A',goto:'nope'},{icon:'🙂',label:'B',goto:'nope'}]}}},ui(log2),i=>d2=i);log2.cb(1);advance(20000);
   assert(d2&&d2.fallback,'broken goto ends with a fallback');});
 T('b) after 45 s with no input the Echo carries on (listen choice) and a tap resets the timer',()=>{fresh('slyte');const log=[];let done=null;
   D.run({id:'t_z_1',nodes:{a:{say:'Hmm?',choices:[{icon:'👂',label:'(just listen)',reply:'Okay so…',goto:'b'},{icon:'🙂',label:'Other',goto:'b'}]},b:{say:'The end.'}}},ui(log),i=>done=i);
   advance(30000);log.onTap(1);advance(30000);assert(!log.some(x=>x[0]==='cancel'),'tap reset the timer');
   advance(16000);assert(log.some(x=>x[0]==='cancel'));const said=log.filter(x=>x[0]==='say').map(x=>x[1]);
-  assert(J('slyte').barks.carry_on.some(l=>said.includes(l.text)),'carry_on line');advance(10000);assert(said.length>=2&&log.filter(x=>x[0]==='say').some(x=>x[1]==='Okay so…'));advance(10000);assert(done);
+  assert(J('slyte').barks.carry_on.some(l=>said.includes(l.text)),'carry_on line');advance(10000);assert(said.length>=2&&log.filter(x=>x[0]==='say').some(x=>x[1]==='Okay so…'));advance(20000);assert(done);
   const l3=[];let d3=null;D.run({id:'t_w_1',nodes:{a:{say:'?',choices:[{icon:'1',label:'A'},{icon:'2',label:'B'}]}}},ui(l3),i=>d3=i);advance(60000);assert(d3&&d3.carriedOn,'no listen option → gentle end');});
 T('b) drift follows a linked topic (0.6 → 0.3 → 0); ~1 in 8 lose the thought',()=>{fresh('slyte');const conv=D.lib.conversations.find(c=>c.id==='slyte_puddle_talk');
   let r;D.rand=()=>0.05;r=D.afterConversation(conv,0);assert.equal(r.type,'lost');assert(J('slyte').barks.lost_thought.some(l=>l.text===r.line.text));

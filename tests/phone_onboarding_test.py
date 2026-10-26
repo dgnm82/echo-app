@@ -1,6 +1,7 @@
 # Onboarding v1 + Origin v2 phone v1 + grown-ups corner. Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/obtest';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -10,7 +11,7 @@ def check(c,m):
 async def shot(pg,n):
   await pg.locator('#screen').screenshot(path=f'{OUT}/{n}.png')
 async def fresh(b,p,errs,reqs,route=None):
-  ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+  ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
   pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(m.text));pg.on('request',lambda r:reqs.append(r.url))
   if route:await pg.route('**/families.js*',route)
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(700);return pg
@@ -41,9 +42,13 @@ async def main():
     await run_to_seen(pg,'Mia',True)
     S=await pg.evaluate("window.__echo.state")
     check(S['child']=='Mia' and S['vars'].get('child_named')==1 and S['ageBand']=='7-8' and S['setupDone']==0,'name+age saved '+json.dumps({k:S.get(k) for k in ['child','ageBand','setupDone']}))
-    check(await pg.locator('.orcard').count()==20,'20 animal cards (every bird, canine + cat)');cards=await pg.evaluate("[...document.querySelectorAll('.orcard')].map(b=>b.dataset.a)");check(sorted(cards)==sorted(['dog','fox','wolf','coyote','owl','bird','duck','dove','pigeon','crow','eagle','chicken','gull','cat','lion','tiger','leopard','cheetah','snowleopard','lynx']),'birds + canines + cats only '+str(cards));hd=await pg.inner_text('.scene.ob .obpanel b');check(hd=='Pick Your Echo' and 'all count' not in await pg.inner_text('.scene.ob'),'A1 header '+hd)
+    check(await pg.locator('.orfamcard').count()==3,'P1 is family-first: 3 family cards');hd=await pg.inner_text('.scene.ob .obpanel b');check(hd=='Pick Your Echo' and 'all count' not in await pg.inner_text('.scene.ob'),'A1 header '+hd)
+    cards=[]
+    for fam in ('slyte','whimber','twitchel'):
+      await to_family(pg,fam);cards+=await pg.evaluate("[...document.querySelectorAll('.orcard[data-a]')].map(b=>b.dataset.a)");await T(pg,'#orback')
+    check(len(cards)==20 and sorted(cards)==sorted(['dog','fox','wolf','coyote','owl','bird','duck','dove','pigeon','crow','eagle','chicken','gull','cat','lion','tiger','leopard','cheetah','snowleopard','lynx']),'20 animal cards: birds + canines + cats only '+str(cards))
     await shot(pg,'ob06_seen')
-    await T(pg,'.orcard[data-a=dog]');await T(pg,'#ornext')
+    await pick(pg,'dog');await T(pg,'#ornext')
     check(await pg.locator('.orchip').count()==10,'10 Howling chips')
     check(await pg.evaluate("[...document.querySelectorAll('.orchips')].map(x=>x.children.length).join()")=='6,4','6 real then 4 toy')
     check('Toy colours' in await pg.locator('.ortoy').inner_text(),'Toy colours label')
@@ -127,22 +132,22 @@ async def main():
     check(await pg3.evaluate("window.__echo.state.child")=='friend','skip name')
     await pg3.evaluate("window.__echo.state.originIdx=1;window.__echo.state.origin=null")
     s=await pg3.evaluate("(()=>{for(let s=1;s<9999;s++){if(window.__echo.hash(s+'|1|0')<.12)return s}})()");await pg3.evaluate(f"window.__echo.state.oseed={s}")
-    await T(pg3,'.orcard[data-a=owl]');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',1600)
+    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',1600)
     check(await pg3.locator('#orff').count()==1,'not today shows Find a friend')
     txt=await pg3.locator('.scene.ob').inner_text();check('Song heard' in txt,'song stamp')
     check(await pg3.evaluate("JSON.parse(localStorage.getItem('echo-proto-v1')).origin.declined")==True,'declined saved at once')
     check(await pg3.locator('.scene.ob .obpanel').count()==0,'decline: one bubble, no UI box')
     await shot(pg3,'ob17_not_today')
-    await T(pg3,'#orff');check(await pg3.locator('.orcard').count()==20,'Find a friend -> P1')
-    await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orcard').count()==20,'reopen mid-origin -> P1')
-    await T(pg3,'.orcard[data-a=owl]');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',3000)
+    await T(pg3,'#orff');check(await pg3.locator('.orfamcard').count()==3,'Find a friend -> P1 (family step)')
+    await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orfamcard').count()==3,'reopen mid-origin -> P1 (family step)')
+    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv');await T(pg3,'#orinv',3000)
     check(await pg3.locator('#ornm').count()==1,'next invite after a decline says yes')
     # data-only rename (Wingsong via the duck card; no borrowed colours any more)
     async def rename(route):
       r=await route.fetch();t=(await r.text()).replace('"label": "Howling"','"label": "Barklet"').replace('"label": "Wingsong"','"label": "Skylark"')
       await route.fulfill(response=r,body=t)
     pg4=await fresh(b,p,errs,reqs,rename);await run_to_seen(pg4,'Leo')
-    await T(pg4,'.orcard[data-a=duck]');await T(pg4,'#ornext',400)
+    await pick(pg4,'duck');await T(pg4,'#ornext',400)
     check(await pg4.locator('.orborrow,.orfam').count()==0,'no borrow screen');check(await pg4.locator('.orchip').count()==11,'Wingsong 11 chips (white+grey share dove-mist)');await T(pg4,'.orchip[data-c=green]',1000)
     await T(pg4,'#orinv');await T(pg4,'#orinv',3000);await T(pg4,'#ornm',400)
     check(await pg4.locator('#orkeep').inner_text()=='Just "Quackaby"','duck default name');await T(pg4,'#orkeep');await T(pg4,'#orkeep',1500)

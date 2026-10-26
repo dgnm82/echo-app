@@ -1,6 +1,7 @@
 # Families v1: animal -> look sheets (home, events, fly), fox/owl unchanged, old saves, aria-labels, colour budget. Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/famtest';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -10,7 +11,7 @@ def check(c,m):
 async def T(pg,sel,ms=250):
   await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
 async def origin(b,p,animal,chip,errs,b404,fam=None):
-  ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
+  ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
   pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear()");await pg.reload();await pg.wait_for_timeout(600)
   await T(pg,'#obgo',400)
@@ -18,7 +19,7 @@ async def origin(b,p,animal,chip,errs,b404,fam=None):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
   await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1')
-  await T(pg,f'.orcard[data-a={animal}]');await T(pg,'#ornext',300)
+  await pick(pg,animal);await T(pg,'#ornext',300)
   if fam:await T(pg,f'.orfam[data-f={fam}]')
   await T(pg,f'.orchip[data-c={chip}]',900)
   inv=await pg.evaluate("(document.querySelector('#orlf .px-echo')||{}).outerHTML||''")
@@ -46,7 +47,7 @@ async def main():
         st=await pg.evaluate(f"fetch('{want.replace('.png',suf+'.png')}').then(r=>r.status)");check(st==200,f'{animal} {suf} sheet {st}')
       await pg.locator('#screen').screenshot(path=f'{OUT}/home_{animal}.png');await pg.context.close()
     # old save without g.look: today's sheet, no 404s
-    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
+    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush');await pg.wait_for_timeout(4500)
     c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(1500)

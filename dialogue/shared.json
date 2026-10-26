@@ -823,6 +823,133 @@
         "expr": "happy",
         "short": "Just \"friend\"."
       }
+    ],
+    "ui_or_cam_ask": [
+      {
+        "text": "Show me an animal!",
+        "expr": "happy",
+        "short": "Show me an animal!",
+        "context": {
+          "age_band": "5-6",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Hold up a toy or a drawing!",
+        "expr": "happy",
+        "short": "Hold up a toy!",
+        "context": {
+          "age_band": "7-8",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Hold up an animal toy or drawing to find its Echo.",
+        "expr": "happy",
+        "short": "Find its Echo.",
+        "context": {
+          "age_band": "9-10",
+          "h1": "camera"
+        }
+      }
+    ],
+    "ui_or_cam_hint": [
+      {
+        "text": "Hold it still…",
+        "expr": "curious",
+        "short": "Hold it still…",
+        "context": {
+          "age_band": "5-6",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Hold it still. I'm looking…",
+        "expr": "curious",
+        "short": "I'm looking…",
+        "context": {
+          "age_band": "7-8",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Keep it in the window and hold still…",
+        "expr": "curious",
+        "short": "Hold still…",
+        "context": {
+          "age_band": "9-10",
+          "h1": "camera"
+        }
+      }
+    ],
+    "ui_or_cam_found": [
+      {
+        "text": "I found one!",
+        "expr": "happy",
+        "short": "I found one!",
+        "context": {
+          "age_band": "5-6",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "There's an Echo in there!",
+        "expr": "happy",
+        "short": "An Echo!",
+        "context": {
+          "age_band": "7-8",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Found it! An Echo is waking up.",
+        "expr": "happy",
+        "short": "Found it!",
+        "context": {
+          "age_band": "9-10",
+          "h1": "camera"
+        }
+      }
+    ],
+    "ui_or_cam_miss": [
+      {
+        "text": "Hmm… no Echo yet.",
+        "expr": "curious",
+        "short": "No Echo yet.",
+        "context": {
+          "age_band": "5-6",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "Hmm, I couldn't spot an Echo. Try again, or pick one!",
+        "expr": "curious",
+        "short": "Try again?",
+        "context": {
+          "age_band": "7-8",
+          "h1": "camera"
+        }
+      },
+      {
+        "text": "I couldn't find a match this time. Try another angle, or pick your Echo.",
+        "expr": "curious",
+        "short": "No match this time.",
+        "context": {
+          "age_band": "9-10",
+          "h1": "camera"
+        }
+      }
+    ],
+    "ui_or_cam_retry": [
+      {
+        "text": "Try again",
+        "expr": "happy",
+        "short": "Try again",
+        "context": {
+          "age_band": "all",
+          "h1": "camera"
+        }
+      }
     ]
   },
   "conversations": [

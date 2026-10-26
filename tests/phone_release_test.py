@@ -4,13 +4,14 @@
 # Usage: python3 tests/phone_release_test.py [base-url] [prefix] [out-dir-prefix]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';PFX=sys.argv[2] if len(sys.argv)>2 else '';OUT=(sys.argv[3] if len(sys.argv)>3 else '/tmp/relpt-')+PFX
 KIND=os.environ.get('ECHO','fox');SEL='#tree' if KIND=='owl' else '#bush';SP={'owl':'whimber','cat':'twitchel'}.get(KIND,'slyte')   # ECHO=cat: a Purrling (lion) made through the origin picker, walks like the fox
 os.makedirs(os.path.dirname(OUT) or '.',exist_ok=True)
 FAST="CONFIG.ambientMin=999;CONFIG.ambientMax=999;CONFIG.farewell={calmAfterMs:0,lineMs:220,thanksWindowMs:2500}"
-DAYTIME="(()=>{const d=new Date();__echo.state.clockOffset=(__echo.state.clockOffset||0)+((11-d.getHours()+24)%24)*36e5})()"
+DAYTIME="(()=>{const s=__echo.state,d=new Date(Date.now()+(s.clockOffset||0));s.clockOffset=(s.clockOffset||0)+((11-d.getHours()+24)%24)*36e5})()"   # 11:00 app time; idempotent (it used to add the real-clock gap again on a 2nd call, so a night-time run landed on 20:00)
 async def run(b,dev,vp,errs,full=True):
-  pg=await b.new_page(**vp);pg.on('pageerror',lambda e:errs.append(dev+':'+str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(dev+' console:'+m.text))
+  pg=await b.new_page(**vp);await nocam(pg);pg.on('pageerror',lambda e:errs.append(dev+':'+str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(dev+' console:'+m.text))
   pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
   pg.on('response',lambda r:r.status>=400 and errs.append(dev+' 404:'+r.url))
   st=lambda:pg.evaluate("__echo.state")
@@ -20,11 +21,13 @@ async def run(b,dev,vp,errs,full=True):
   async def answer_conv(until,t=40):   # answer any choices until the condition holds
     for _ in range(t*5):
       if await pg.evaluate(until):return True
+      await pg.evaluate("window.Dialogue&&Dialogue.waiting&&Dialogue.waiting()&&Dialogue.advance()")   # Batch H / H13: lines stay up >= 6.5 s; tap-to-advance
       if await pg.locator('.choices button').count():
         try:
           c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
         except Exception:pass
       await pg.wait_for_timeout(200)
+    print('answer_conv timed out on',until,'| screen:',(await pg.evaluate("(document.getElementById('app')||{}).innerText||''"))[:300].replace('\n',' / '),'| fw:',await pg.evaluate("JSON.stringify((__echo.state||{}).fw||null)"),'| dbg:',await pg.evaluate("JSON.stringify({needs:__echo.state.needs,bond:__echo.state.bond,shown:__echo.state.bondShown,nap:__echo.state.napUntil>Date.now(),full:[...document.querySelectorAll('.full,.book,.bondup')].map(e=>e.className),solar:(document.getElementById('sc')||{dataset:{}}).dataset.solar,hr:new Date(Date.now()+(__echo.state.clockOffset||0)).getHours(),feed:!!document.getElementById('feed')})"));await pg.screenshot(path=OUT+'answer-timeout.png')
     return False
   async def shot(n):await pg.screenshot(path=f'{OUT}{n}.png')
   async def clean():await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''")
@@ -117,7 +120,7 @@ async def run(b,dev,vp,errs,full=True):
   saved=await pg.evaluate("JSON.stringify(localStorage)");assert 'Proud' not in saved and 'Sad' not in saved and 'feelings' not in json.loads(await pg.evaluate("JSON.stringify(__echo.state)")),'feelings never saved'
   await pg.close()
 async def migrate(b,errs):   # old-flow saves mid-release
-  pg=await b.new_page(viewport={'width':390,'height':844});pg.on('pageerror',lambda e:errs.append('mig:'+str(e)))
+  pg=await b.new_page(viewport={'width':390,'height':844});await nocam(pg);pg.on('pageerror',lambda e:errs.append('mig:'+str(e)))
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.click(SEL);await pg.wait_for_timeout(3600);await pick_first(pg);await pg.wait_for_timeout(3000)
   for case,extra,want in (('grace',"s.graceUntil=Date.now()+(s.clockOffset||0)+1*864e5;s.badges.push('ready');s.bond=500",'grace'),('walk',"s.releasePath='child';s.badges.push('ready');s.bond=500",'walking'),('ready',"s.badges.push('ready');s.bond=500",'active')):
@@ -132,7 +135,7 @@ async def origin_cat(pg,animal='lion',chip='golden'):   # the real onboarding: p
     if await pg.locator('#obnm').count():break
     await T('.scene.ob',200)
   await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
-  await T(f'.orcard[data-a={animal}]');await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
+  await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
   await T('#orinv');await T('#orinv',3000);await T('#ornm',400);await T('#orkeep');await T('#orkeep',3000)
 async def pick_first(pg):
   c=pg.locator('.choices button').first;await c.wait_for(timeout=20000);await c.click();await c.click()

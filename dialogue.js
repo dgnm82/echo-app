@@ -8,6 +8,13 @@ const DAY=864e5;
 D.rand=Math.random;                       // injectable for tests
 D.now=()=>Date.now();                     // the game injects its demo-aware clock
 D.timers={set:(f,ms)=>setTimeout(f,ms),clear:t=>clearTimeout(t)};
+// H13 young-reader pacing: every line stays up max(6.5s, 120ms/char) x age-band factor; a tap on #b (D.advance) skips the wait.
+D.band='7-8';D.BAND_READ={'5-6':1.35,'7-8':1.15,'9-10':1.0};D.READ_MIN=6500;D.READ_PER_CHAR=120;
+D.readMs=function(t){const n=typeof t==='string'?t.length:((t&&t.text)||'').length;return Math.round(Math.max(D.READ_MIN,n*D.READ_PER_CHAR)*(D.BAND_READ[D.band]||1.15))};
+D._pend=null;
+D.wait=function(f,ms){const T=D.timers;if(D._pend)T.clear(D._pend.t);const p={f};p.t=T.set(()=>{if(D._pend===p)D._pend=null;f()},ms);D._pend=p;return p.t};
+D.advance=function(){const p=D._pend;if(!p)return false;D._pend=null;D.timers.clear(p.t);p.f();return true};
+D.waiting=function(){return !!D._pend};
 D.mem={};                                 // persisted by the game (S.dlg): lineAt, topicAt, phraseAt, petSince
 D.persona=null;                           // {petPhrase, word}
 D.cfg={lineDays:7,coreLineHours:24,topicDays:5,carryOnMs:45000,petEvery:10,driftChances:[0.6,0.3,0],lostThoughtChance:1/8};
@@ -34,8 +41,10 @@ D.use=function(species,sh,sp){
 // topic = explicit conv.topic, else the second id segment (slyte_puddle_talk → puddle)
 D.topic=c=>c.topic||(c.id.split('_')[1]||c.id);
 // pick this Echo's pet phrase and invented word deterministically from its seed (Overhaul D3)
-D.setPersona=function(seed){const p=D.lib.persona;const s=Math.abs(seed|0)||1;
-  D.persona={petPhrase:p.petPhrases.length?p.petPhrases[s%p.petPhrases.length]:'',word:p.words.length?p.words[Math.floor(s/7)%p.words.length]:''};return D.persona};
+// Batch H / H14: persona.lookPetPhrases[look] (look = arg, else ctx vars.origin_animal) wins over the family list, so only owls say "Hoo"
+D.setPersona=function(seed,look){const p=D.lib.persona;const s=Math.abs(seed|0)||1;
+  const lk=String(look||((D.ctx()||{}).vars||{}).origin_animal||'').replace(/\s+/g,'').toLowerCase();const lp=(p.lookPetPhrases||{})[lk];const pets=lp&&lp.length?lp:(p.petPhrases||[]);
+  D.persona={petPhrase:pets.length?pets[s%pets.length]:'',word:p.words.length?p.words[Math.floor(s/7)%p.words.length]:''};return D.persona};
 
 D.ctx=()=>({});
 function check(cond,ctx){
@@ -47,6 +56,7 @@ function check(cond,ctx){
   if(c.notMemory&&(ctx.memTags||[]).includes(c.notMemory))return false;
   if(c.talent&&!(ctx.talents||[]).includes(c.talent))return false;
   if(c.time&&!c.time.includes(ctx.time))return false;
+  if(c.weather&&!c.weather.includes(ctx.weather))return false;   // Batch H / H9: weather-gated lines need ctx.weather (clear|cloudy|rain|snow|fog|storm)
   if(c.var)for(const k in c.var){if((ctx.vars||{})[k]!==c.var[k])return false}
   if(c.varSet&&!(c.varSet in (ctx.vars||{})))return false;
   if(c.varUnset&&(c.varUnset in (ctx.vars||{})))return false;
@@ -65,12 +75,21 @@ D.personalize=function(text){
   if(D.persona.word&&p.words.length){const re=new RegExp('\\b('+p.words.map(w=>w.replace(/[-]/g,'\\-')).join('|')+')\\b','gi');t=t.replace(re,m=>cap(m,D.persona.word))}
   // pet phrase slot: at most once per petEvery lines
   if(t.includes('{pet_phrase}')){const ok=petBudget();t=t.replace(/\{pet_phrase\}/g,ok?D.persona.petPhrase:'').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/g,'');if(ok)D.mem.petSince=0}
-  return t;
+  return D.speciesCalls(t,D.lookOf(D.ctx&&D.ctx()));
 };
+// H14: "Hoo" belongs to owls only. Until the rebuilt corpus lands (Cole -> Zane EDZ1), any hoo / hoo-hoo / hoo-hum in a line spoken
+// by a non-owl bird is swapped for that species' own call (spec table). Owls, and the other families, are untouched.
+D.BIRD_CALLS={bird:['Chirp','Chirp-trill','tweet-trill'],duck:['Quack','Quack-quack','quack-flutter'],dove:['Coo','Coo-coo','soft-coo'],pigeon:['Roo','Coo-roo','roo-coo'],
+  crow:['Caw','Caw-caw','caw-click'],eagle:['Kree','Kree-kree','high-kree'],chicken:['Cluck','Cluck-cluck','bawk-cluck'],gull:['Kree','Kree-kee','sea-call']};
+D.lookOf=function(ctx){const v=(ctx&&ctx.vars)||{};let a=String(v.origin_animal||v.look||'').toLowerCase();if(a==='songbird'||a==='wingsong')a='bird';return a};
+D.speciesCalls=function(t,look){const C=D.BIRD_CALLS[look];if(!C||!t||!/hoo/i.test(t))return t;
+  const k=(m,w)=>m[0]===m[0].toUpperCase()?w[0].toUpperCase()+w.slice(1):w[0].toLowerCase()+w.slice(1);
+  return String(t).replace(/\bhoo[\s-]hoo\b/gi,m=>k(m,C[1])).replace(/\bhoo-hum\b/gi,m=>k(m,C[2])).replace(/\bhoo-(?=\w)/gi,m=>k(m,C[0]+'-'))
+    .replace(/\bho{3,}\b/gi,m=>k(m,C[0])).replace(/\bhoo\b/gi,m=>k(m,C[0]))};
 function petBudget(){return (D.mem.petSince==null?99:D.mem.petSince)>=D.cfg.petEvery}
 D.countLine=()=>{D.mem.petSince=(D.mem.petSince==null?99:D.mem.petSince)+1};
 // approved insertion point: prepend the pet phrase to a line if the budget allows
-D.withPet=function(line){if(!line||!D.persona||!D.persona.petPhrase||!petBudget())return line;D.mem.petSince=0;return {...line,text:D.persona.petPhrase+' '+line.text,pet:true}};
+D.withPet=function(line){if(!line||!D.persona||!D.persona.petPhrase||!petBudget())return line;D.mem.petSince=0;return {...line,text:D.speciesCalls(D.persona.petPhrase+' '+line.text,D.lookOf(D.ctx&&D.ctx())),pet:true}};
 
 D.fill=function(t,extra){const ctx={...D.ctx(),...(extra||{})};
   const out=String(t).replace(/\{(\w+)(?::([^}]+))?\}/g,(m,k,a)=>{
@@ -132,7 +151,7 @@ D.run=function(conv,ui,done){
   let tangentUsed=false;const T=D.timers;
   const go=id=>{
     const n=conv.nodes[id];
-    if(!n){if(id!=null){const f=D.fallback();ui.say(f);T.set(()=>finish({fallback:true}),2200)}else finish();return}
+    if(!n){if(id!=null){const f=D.fallback();ui.say(f);D.wait(()=>finish({fallback:true}),D.readMs(f))}else finish();return}
     const ctx=D.ctx();
     if(n.branch){const b=n.branch.find(x=>check(x.cond,ctx));return go(b?b.goto:n.next)}
     apply(n);
@@ -143,17 +162,17 @@ D.run=function(conv,ui,done){
       const pickChoice=(i,auto)=>{if(answered)return;answered=true;T.clear(carry);const c=ch[i];apply(c);
         let reply=c.reply!=null&&(c.reply||c.gesture)?{text:D.fill(c.reply||''),expr:c.expr||'happy',react:c.react,gesture:c.gesture,caption:c.caption&&D.fill(c.caption),voice:c.voice}:null;
         if(!reply&&!c.goto)reply=D.fallback(shown[i].intent);
-        if(reply){ui.say(reply);D.countLine();T.set(()=>go(c.goto),Math.max(1800,reply.text.length*55))}else go(c.goto)};
+        if(reply){ui.say(reply);D.countLine();D.wait(()=>go(c.goto),D.readMs(reply))}else go(c.goto)};
       const arm=ms=>{T.clear(carry);carry=T.set(()=>{if(answered)return;ui.cancelChoices&&ui.cancelChoices();
         const cl=D.bark('carry_on');ui.say(cl);D.countLine();
         const li=shown.findIndex(s=>s.intent==='listen');
-        T.set(()=>{if(li>=0)pickChoice(li,true);else{answered=true;finish({carriedOn:true})}},Math.max(2000,cl.text.length*55))},ms==null?D.cfg.carryOnMs:ms)};
+        D.wait(()=>{if(li>=0)pickChoice(li,true);else{answered=true;finish({carriedOn:true})}},D.readMs(cl))},ms==null?D.cfg.carryOnMs:ms)};
       arm();
       ui.choose(shown.map(s=>[s.icon,s.label,s.intent]),i=>pickChoice(i),{onTap:()=>arm(),onDismiss:()=>arm(0)});   // tapped away = nobody answered: carry on now (the talk never breaks)
-    }else{ui.say(line);const wait=n.wait||Math.max(1800,line.text.length*55);
+    }else{ui.say(line);const wait=Math.max(n.wait||0,D.readMs(line));
       if(n.next&&!tangentUsed&&ui.tangent&&D.rand()<(ui.tangentRate||0.15)){tangentUsed=true;
-        T.set(()=>{const t=ui.tangent();if(!t)return go(n.next);ui.say(t);T.set(()=>go(n.next),Math.max(2200,t.text.length*55))},wait)}
-      else if(n.next)T.set(()=>go(n.next),wait);else T.set(()=>finish(),Math.min(wait,2500))}
+        D.wait(()=>{const t=ui.tangent();if(!t)return go(n.next);ui.say(t);D.wait(()=>go(n.next),D.readMs(t))},wait)}
+      else if(n.next)D.wait(()=>go(n.next),wait);else D.wait(()=>finish(),wait)}
   };
   go(conv.start||Object.keys(conv.nodes)[0]);
 };

@@ -5,7 +5,12 @@ const KEY='echo-proto-v1';
 let S=load(), sess={feeds:0,games:0,naps:0,chats:0};
 const rnd=(seed)=>()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
 function migrateEchoG(s){if(!s||!s.g||!window.PIXEL)return;const f=FAMD(s.kind),sp=f?f.sprite:(s.kind==='owl'?'whimber':'slyte'),v=PIXEL.variant(s.g.seed,sp,s.g.pal,s.g.fluff);if(!s.g.pal)s.g.pal=v.pal;if(s.g.fluff==null)s.g.fluff=v.fluff;if(!Array.isArray(s.chatHistory))s.chatHistory=[];if(!s.g.look&&(!localStorage.getItem('echo-nosetup')||(s.origin&&s.origin.animal))){const A=(window.FAMILIES||{}).animals||{};s.g.look=(s.origin&&s.origin.animal&&A[s.origin.animal]&&A[s.origin.animal].look)||(f&&f.look_default)||null}}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){purgeFeelings(s);onlyBirdsCanines(s);migrateEchoG(s);c6Names(s);w1Names(s)}return s}catch(e){return null}}
+// Pixal follow-up 2: twitchel_clearing is retired. Old cat saves that point at it ('clearing' / 'twitchel_clearing', or the old
+// S.h4Homes===false opt-out) move to the wild den clearing (lion, tiger, leopard, cheetah, snowleopard, lynx) or the sunbeam room (house cat).
+const TW_RETIRED=['clearing','twitchel_clearing'],TW_WILD_LOOKS=['lion','tiger','leopard','cheetah','snowleopard','lynx'];
+function twClearingMigrate(s){if(!s||s.kind!=='cat')return s;const lk=String((s.origin&&s.origin.animal)||(s.g&&s.g.look)||'').toLowerCase(),to=TW_WILD_LOOKS.includes(lk)?'wild_clearing':'sunbeam_room';
+  if(TW_RETIRED.includes(s.scene))s.scene=to;if(Array.isArray(s.scenesSeen))s.scenesSeen=[...new Set(s.scenesSeen.map(x=>TW_RETIRED.includes(x)?to:x))];delete s.h4Homes;return s}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){twClearingMigrate(s);purgeFeelings(s);onlyBirdsCanines(s);migrateEchoG(s);c6Names(s);w1Names(s)}return s}catch(e){return null}}
 // C6: 'Slyte' is no longer a name players see. Saves still holding the old fox default move to the new one, SILENTLY (no name_changed line; Daniel decides later)
 function c6Names(s){const nn=(((window.FAMILIES||{}).animals||{}).fox||{}).default_name||'Pipsong';if(nn==='Slyte')return;
   if(s.g&&s.g.name==='Slyte')s.g.name=nn;if(s.vars&&s.vars.default_name==='Slyte')s.vars.default_name=nn;
@@ -48,12 +53,17 @@ const thoughtIcon=w=>window.PIXEL?PIXEL.icon({'🍎':'feed','⚽':'play','🛏�
 function thoughtHTML(w){return `<div class="thought" data-w="${w}">${thoughtIcon(w)}</div>`}
 let THO=null;   // the bubble's offset from the sprite, taken before the Echo first moves
 // speech bubble stays clear of the Echo at every perch: default top 60; if it would cover the Echo, flip below it, else above it, else beside it
+// The speech bubble never covers the Echo, and (PM round 2, Kai) never covers the thing the child just tapped: a sky tap (sun, moon,
+// cloud, star, window glint) or a scene hotspot leaves its rect on #sc (_tapAvoid, set in pixel.js, ~4 s). Default spot first, then
+// below / above the Echo, then the nearest free row, then beside the Echo.
 function bubSync(){const b=document.querySelector('#sc>#b'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!b||!c||!sc||b.style.display==='none')return;
   b.style.removeProperty('top');b.style.removeProperty('left');b.style.removeProperty('transform');b.classList.remove('bubflip');
   const R=sc.getBoundingClientRect(),z=R.width/180,H=R.height/z,q=e=>{const r=e.getBoundingClientRect();return {l:(r.left-R.left)/z,t:(r.top-R.top)/z,r:(r.right-R.left)/z,b:(r.bottom-R.top)/z,w:r.width/z,h:r.height/z}};
-  const cr=q(c.querySelector('.px-echo')||c),bb=q(b),hit=(t,l)=>!(l+bb.w<=cr.l||l>=cr.r||t+bb.h<=cr.t||t>=cr.b);if(!hit(bb.t,bb.l))return;
+  const cr=q(c.querySelector('.px-echo')||c),bb=q(b),ta=sc._tapAvoid&&Date.now()<sc._tapAvoid.until?sc._tapAvoid:null,av=ta?[cr,ta]:[cr];
+  const hitR=(t,l,a)=>!(l+bb.w<=a.l||l>=a.r||t+bb.h<=a.t||t>=a.b),free=(t,l)=>!av.some(a=>hitR(t,l,a));if(free(bb.t,bb.l))return;
   const set=(t,l)=>{b.style.setProperty('top',Math.round(t)+'px','important');if(l!=null){b.style.setProperty('left',Math.round(l)+'px','important');b.style.setProperty('transform','none','important')}b.classList.add('bubflip')};
-  const below=cr.b+3,above=cr.t-3-bb.h;if(below+bb.h<=H-2)return set(below);if(above>=2)return set(above);
+  const below=cr.b+3,above=cr.t-3-bb.h;if(below+bb.h<=H-2&&free(below,bb.l))return set(below);if(above>=2&&free(above,bb.l))return set(above);
+  if(ta){const rows=[];for(let t=2;t<=H-bb.h-2;t++)rows.push(t);rows.sort((x,y)=>Math.abs(x-bb.t)-Math.abs(y-bb.t));const t=rows.find(t=>free(t,bb.l));if(t!=null)return set(t)}
   const side=cr.l>=bb.w+4?cr.l-bb.w-3:Math.min(180-bb.w-2,cr.r+3);set(Math.max(2,Math.min(H-bb.h-2,cr.t)),side)}
 function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;if(c.classList.contains('lvmoving')){t.style.visibility='hidden';clearTimeout(thoughtSync._t);return}   // needs v2 P2: hide in flight, show 1 s after landing
   const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
@@ -84,7 +94,20 @@ function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{
 const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','gift_got','reveal_reply']);
 const B=(k,x)=>{const l=Dialogue.bark(k,x);if(l&&S){S.chatHistory=S.chatHistory||[];const lid=l.id||(k+':'+(l.text||'').slice(0,24));if(window.DialogueEngine)DialogueEngine.recordHistory(lid,S);else{S.chatHistory.push(lid);if(S.chatHistory.length>64)S.chatHistory.shift()}}return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
-function tod(){const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
+// H8: time of day follows the real local clock through the solar phase table (pixel.js SOLAR; offline, no location read):
+// dawn+morning -> 'morning', afternoon -> 'day', golden dusk -> 'evening', starlight night -> 'night'. S.devTod pins it (Grown-Ups/dev).
+function solarNow(){return window.SOLAR?SOLAR.at(now()):null}
+function tod(){if(S&&S.devTod&&['morning','day','evening','night'].includes(S.devTod))return S.devTod;const so=solarNow();if(so)return so.tod;const hr=new Date(now()).getHours();return hr<11?'morning':hr<17?'day':hr<20?'evening':'night'}
+// H8: a 60 s real-time tick: when the solar phase changes while the home scene is up, the scene art (_day/_twi), den lighting and sky follow
+// H9 (final): Echo weather reactions in its own world (catch a flake / shake off water / cozy up). Home only, awake, nothing
+// on screen, at most WX_REACT_MAX a session, first one ~12 s in then every ~90 s with a coin flip.
+const WX_REACT_MAX=3;
+function wxReactOk(){return !!(document.getElementById('feed')&&!document.querySelector('.full')&&!document.querySelector('#sc > #b:not(:empty)')&&!(S.napUntil>now())&&!sess.fwBusy&&!sess.welcomeBack)}   // side-effect free: fwCalm() would START the farewell news from a weather tick
+function wxReactSched(){clearTimeout(wxReactSched.t);clearInterval(wxReactSched.i);const go=()=>{if((sess.wxReact||0)>=WX_REACT_MAX||!window.WEATHER||!WEATHER.react)return;const w=wxNow();if(!w||!WEATHER.reactionFor(w)||!wxReactOk())return;if(WEATHER.react(w))sess.wxReact=(sess.wxReact||0)+1};
+  wxReactSched.t=setTimeout(go,12000);wxReactSched.i=setInterval(()=>{if(Math.random()<.5)go()},90000)}
+function todTick(){clearInterval(todTick.t);todTick.last=solarNow()&&solarNow().phase;todTick.t=setInterval(()=>{const so=solarNow();if(!so||so.phase===todTick.last)return;todTick.last=so.phase;
+  const sc=document.getElementById('sc');if(!sc||!document.getElementById('feed'))return;try{sc.style.setProperty('background',`url(${SCART(curScene().id,scVariant())}) center bottom/180px 320px no-repeat`,'important')}catch(e){}
+  if(window.DEN){DEN.setPreset(tod());if(denOn())DEN.mount(sc,{fam:FID(),sceneId:curScene().id,tod:tod()})}sc.dataset.solar=so.phase;if(window.WEATHER&&WEATHER.refresh)WEATHER.refresh(sc)},60000)}
 function remember(t,tag){S.memories.push(t);if(tag){S.memTags=S.memTags||[];if(!S.memTags.includes(tag))S.memTags.push(tag);(S.memTagAt=S.memTagAt||{})[tag]=S.memTagAt[tag]||now()}save()}
 // callbacks (Overhaul B8): memory >= callbackMinAgeHours old, each memory <= 3 callbacks, <= 1 per session moment
 function callbackLine(){const at=S.memTagAt||{},cnt=S.cbCount||{};
@@ -100,8 +123,10 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
     if(!l&&window.EchoBack&&!sess.eibInvite&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame('invite')},{lowfx:lowFx()})}}
     const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
-Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),seen:S.seen||[],
-  fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(S.memories[Math.floor(Math.random()*S.memories.length)]||'the day we met').replace(/\.$/,'')}}):{};
+// H9 (final): ctx.weather = the Echo's own seasonal weather from window.WEATHER (device date cycle only; 'off' -> undefined)
+function wxNow(){try{return window.WEATHER&&WEATHER.dialogueCtx?WEATHER.dialogueCtx(S,new Date(now())):undefined}catch(e){return undefined}}
+Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),weather:wxNow(),seen:S.seen||[],
+  fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(m=>String((m&&m.text)||m||'the day we met'))(S.memories[Math.floor(Math.random()*S.memories.length)]).replace(/\.$/,'')}}):{};
 const SCR=()=>document.getElementById('screen')||document.body;
 const PI=(e,intent)=>window.PIXEL?PIXEL.icon(PIXEL.iconName(e,intent)):e;
 function full(html){const d=document.createElement('div');d.className='full';d.innerHTML=html;SCR().appendChild(d);try{lvModal()}catch(e){}return d}
@@ -239,6 +264,86 @@ function titleArt(ret){   // title v1: pixel logo + glow pulse, 3-line tagline (
   const t=U('ui_tagline').replace(/^ECHO:\s*/,''),ss=t.match(/[^.!?]+[.!?]+/g)||[t],last=ss.length>1?ss.pop().trim():'',a=ss.join(' ').trim().split(' '),m=Math.floor(a.length/2),L=[a.slice(0,m).join(' '),a.slice(m).join(' '),last].filter(Boolean);
   const eco=ret&&S&&S.g?`<div class="ttecho" style="left:${(180-76)/2}px">${svg(S.kind,S.g,'neutral')}</div>`:(window.PIXEL?`<div class="ttecho" style="left:22px">${PIXEL.slyte({seed:7},1)}</div><div class="ttecho" style="left:84px">${PIXEL.whimber({seed:4},1)}</div>`:'');
   return `<i class="tthill"></i><i class="ttmoon"></i>${eco}<i class="oblogo-glow"></i><img class="oblogo" src="px/title/logo.png" alt="ECHO"><div class="obtag" aria-label="${t}">${L.map((l,i)=>`<span class="l${i}${i===2?' gold':''}">${l}</span>`).join('')}</div>`}
+// H7 title diorama (Pixal title_biomes.json + Cole title_frames.json). Biome bg/fg + f0/f1 alive overlay for the clock's tod,
+// tagline ink from the biome, a walker on the ground path and a glider crossing below the tagline. Sprites always face the way
+// they move (PIXEL.flipFor: side-on rigs face right, chicken/dove/pigeon/duck face left). Reduced motion / low-fx: no movement.
+// Any missing manifest or PNG -> the old hill/moon title stays (fallback).
+const TITLE_J={},TITLE_PAL={chicken:'peach-dusk-solid',duck:'sky-teal',gull:'lilac-night'};function titleJ(f){return TITLE_J[f]?Promise.resolve(TITLE_J[f]):fetch('px/title/'+f).then(r=>r.json()).then(j=>TITLE_J[f]=j)}
+function titleTod(){const so=solarNow(),p=so&&so.phase;return p==='dawn'?'dawn':p==='dusk'?'dusk':p==='night'?'night':'day'}
+function titleDio(){const sc=document.querySelector('.scene.ttl');if(!sc||sc._dio)return;sc._dio=1;
+  Promise.all([titleJ('title_biomes.json'),titleJ('title_frames.json')]).then(([B,Fm])=>{if(!sc.isConnected)return;
+    const own=titleOwnOn(sc),ord=(B.crossfade&&B.crossfade.order)||['woodland'],d0=Math.floor(Date.now()/864e5);
+    // one biome a day (woodland, pasture, cove). PM (Oct 25): a returning player's own Echo stands on dry land, so a biome with no
+    // ground path (the cove: its only path is the underwater sand floor) hands over to the next biome in the order.
+    let bio=ord[d0%ord.length];if(own){for(let k=0;k<ord.length;k++){const n=ord[(d0+k)%ord.length];if(titleGroundPath(B.biomes[n])){bio=n;break}}}
+    const b=B.biomes[bio],v=b&&b.variants&&b.variants[titleTod()];if(!v)return;
+    const lay=(cls,u)=>{const e=document.createElement('i');e.className='ttbio '+cls;e.style.backgroundImage=`url(${u})`;return e};
+    const bg=lay('bg',v.bg),fg=lay('fg',v.fg),al=lay('alive',v.alive[0]),sp=document.createElement('div');sp.className='ttsprites';
+    const im=new Image();im.onload=()=>{if(!sc.isConnected)return;const bgs=sc.querySelectorAll(':scope>.bg'),first=bgs[bgs.length-1]||sc.firstChild;first.after(bg,sp,fg,al);sc.classList.add('biome');sc.dataset.biome=bio;
+      const tag=sc.querySelector('.obtag');if(tag){tag.style.setProperty('--tt-ink',v.tagline_ink);tag.style.setProperty('--tt-shadow',v.tagline_shadow||'transparent')}
+      titleRun(sc,sp,al,v,b,Fm,fg,own)};im.src=v.bg}).catch(()=>{})}
+// PM (Oct 25, Kai): the returning player's own Echo joins the title cast (new players, no save: wild Echoes only)
+function titleOwnOn(sc){return !!(sc&&sc.classList.contains('obreturn')&&S&&S.kind&&S.g&&S.setupDone)}
+function titleGroundPath(b){const A=b&&(b.anchors||b);return ((A&&A.ground_paths)||[]).find(g=>(g.kinds||[]).includes('ground'))||null}
+// tagline line boxes in art px [l,t,r,b) (fallback when the DOM is not there; titleRun measures the live text)
+const TITLE_TAG=[[17,94,163,105],[25,105,152,116],[25,116,154,127]],TITLE_SAFE=2,TITLE_OWN_X=100,TITLE_FLOAT_SINK=3;
+// PM (Oct 25): every title Echo stands, perches or floats ON a surface from Pixal anchors (feet = the strip foot anchor row):
+// a ground walker on a ground path, a bird on a sky perch (branch / fence post / rock ledge) or a duck floating on the water
+// perch. Nothing glides or hovers in mid-air any more. Pure (no DOM) so tools/test-batch-h-final.js can check every biome and day.
+// PM round 2 (Kai): opt.box = opaque bbox per strip file ([l,t,r,b) frame px), opt.keep = tagline boxes. No sprite may cover the
+// tagline (a perch whose bird would reach it is skipped: woodland's right_tree_crown, pasture's apple trees, cove's rock_ledge),
+// walkers turn round inside the screen (TITLE_SAFE px margin, both facings) instead of walking off the edge, a floating duck sits
+// TITLE_FLOAT_SINK px into the water, and opt.own (a returning player's Echo: {box,foot}) stands in front on the ground path.
+function titleCast(b,Fm,day,opt){const S2=(Fm&&Fm.strips)||[];if(!b)return [];const A=b.anchors||b,C=A.cast||{},cast=[],nth=(L,k)=>L.length?L[(((day+(k||0))%L.length)+L.length)%L.length]:null;
+  opt=opt||{};const BX=opt.box||{},KEEP=opt.keep||TITLE_TAG,M=TITLE_SAFE,bx=st=>BX[st.file]||[0,0,48,48];
+  const ink=(st,left,top)=>{const q=bx(st);return [left+Math.min(q[0],48-q[2]),top+q[1],left+Math.max(q[2],48-q[0]),top+q[3]]};   // both facings
+  const clear=r=>r[0]>=M&&r[2]<=180-M&&r[1]>=0&&!KEEP.some(k=>r[0]<k[2]&&r[2]>k[0]&&r[1]<k[3]&&r[3]>k[1]);
+  const LK=l=>l==='wingsong'?'bird':l,okLook=(l,list)=>!Array.isArray(list)||list.includes(LK(l)),P=A.perches||[];
+  const at=(st,xy,sink)=>({left:xy[0]-st.anchor[0],top:xy[1]+(sink||0)-st.anchor[1]});
+  const put=(st,kind,xy,extra,sink)=>{const p=at(st,xy,sink);if(!clear(ink(st,p.left,p.top)))return false;
+    cast.push(Object.assign({st,kind,surf:xy[1],x:xy[0],y:p.top,left:p.left,dir:xy[0]<90?1:-1,moving:false,sink:sink||0},extra||{}));return true};
+  // ground: a walker on the biome ground path (Woodland also seats a second ground Echo on the log / rock)
+  const path=(A.ground_paths||[]).find(g=>(g.kinds||[]).includes('ground')),walks=S2.filter(x=>x.anim==='walk'&&x.family!=='whimber'&&x.anchor_kind==='foot'&&okLook(x.look,C.ground)),walk=nth(walks);
+  if(path&&walk){const q=bx(walk),lo=Math.min(q[0],48-q[2]),hi=Math.max(q[2],48-q[0]),x0=Math.max(path.x[0],M+24-lo),x1=Math.min(path.x[1],180-M+24-hi);   // place(): left = x-24
+    cast.push({st:walk,kind:'ground',surf:path.y,x:x0,y:path.y-walk.anchor[1],dir:1,speed:1,moving:true,x0,x1,path:path.id})}
+  const seat=P.find(q=>(q.kinds||[]).includes('ground')&&(q.acts||[]).includes('sit')&&q.kind!=='hay'),sitters=S2.filter(x=>x.anim==='peek'&&x.anchor_kind==='foot'&&okLook(x.look,C.ground)&&(!walk||x.look!==walk.look)),sit=nth(sitters,1);
+  if(path&&seat&&sit&&Array.isArray(C.ground))put(sit,'seat',seat.xy,{perch:seat.id});
+  // water: a duck floats on the water perch (Cove surface_bob), sitting a little into the water
+  const idle=S2.filter(x=>x.anim==='perch_idle'&&x.anchor_kind==='foot'),water=P.find(q=>q.kind==='water'&&(q.kinds||[]).includes('duck')),duck=idle.find(x=>x.look==='duck');
+  if(water&&duck)put(duck,'water',water.xy,{perch:water.id},TITLE_FLOAT_SINK);
+  // sky: a bird perches on a branch / fence post / rock ledge below the tagline (never hovering, never over the words)
+  const bird=nth(idle.filter(x=>x.look!=='duck'&&okLook(x.look,C.sky)),2);
+  if(bird){const sky=P.filter(q=>(q.kinds||[]).includes('sky')).filter(q=>{const p=at(bird,q.xy);return clear(ink(bird,p.left,p.top))}),per=nth(sky);if(per)put(bird,'perch',per.xy,{perch:per.id})}
+  // a returning player's own Echo: in front, grounded on the ground path (feet = its lowest opaque row)
+  if(opt.own&&path){const o=opt.own,q=o.box||[0,0,48,48],foot=o.foot!=null?o.foot:q[3]-1,left=TITLE_OWN_X-24,top=path.y-foot;
+    cast.push({own:true,st:{file:'own',anchor:[24,foot]},kind:'own',surf:path.y,x:TITLE_OWN_X,y:top,left,dir:1,moving:false,box:[left+q[0],top+q[1],left+q[2],top+q[3]]})}
+  return cast}
+// opaque bbox of frame 0..n-1 (union) of a strip / sheet, [l,t,r,b) in frame px; null if the image cannot be read
+function titleBox(url,frames,fw,fh){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas'),W=fw*frames;c.width=W;c.height=fh;const x=c.getContext('2d');x.drawImage(im,0,0);
+  const D=x.getImageData(0,0,W,fh).data;let U=null;for(let f=0;f<frames;f++)for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++){if(D[(y*W+f*fw+xx)*4+3]>0){if(!U)U=[xx,y,xx+1,y+1];else{U[0]=Math.min(U[0],xx);U[1]=Math.min(U[1],y);U[2]=Math.max(U[2],xx+1);U[3]=Math.max(U[3],y+1)}}}
+  res(U)}catch(e){res(null)}};im.onerror=()=>res(null);im.src=url})}
+// UI the cast must never cover: the tagline lines (text width x line box) and, on the return title, its name panel
+function titleKeep(sc){const t=sc.querySelector('.obtag'),R=sc.getBoundingClientRect(),k=R.width/180;if(!t||!k)return TITLE_TAG;const out=[];
+  t.querySelectorAll('span').forEach(s=>{const r=document.createRange();r.selectNodeContents(s);const a=r.getBoundingClientRect(),l=s.getBoundingClientRect();if(!a.width)return;
+    out.push([Math.floor((a.left-R.left)/k)-1,Math.floor((l.top-R.top)/k),Math.ceil((a.right-R.left)/k)+1,Math.ceil((l.bottom-R.top)/k)])});
+  sc.querySelectorAll(':scope>.obpanel').forEach(p=>{const r=p.getBoundingClientRect();if(r.width)out.push([Math.floor((r.left-R.left)/k),Math.floor((r.top-R.top)/k),Math.ceil((r.right-R.left)/k),Math.ceil((r.bottom-R.top)/k)])});   // the return title's "{name} is playing nearby!"
+  return out.length?out:TITLE_TAG}
+function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
+  const mk=st=>{const e=document.createElement('i');e.className='ttspr';e.style.backgroundImage=`url(${st.file})`;e.style.backgroundSize=`${st.frames*48}px 48px`;sp.appendChild(e);return e};
+  let ownEl=null;if(own){ownEl=document.createElement('div');ownEl.className='ttown';ownEl.innerHTML=svg(S.kind,S.g,'neutral');(fg||sp).after(ownEl)}   // in front of the wild cast and the fg plants
+  const strips=(Fm.strips||[]).filter(x=>x.anchor_kind==='foot'&&/^(walk|peek|perch_idle)$/.test(x.anim)),box={};
+  const ownPx=ownEl&&ownEl.querySelector('.px-echo'),ownUrl=ownPx&&(ownPx.style.backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1];
+  Promise.all([...strips.map(st=>titleBox(st.file,st.frames,48,48).then(q=>{if(q)box[st.file]=q})),ownUrl?titleBox(ownUrl,1,48,48):Promise.resolve(null)]).then(r=>{if(!sc.isConnected)return;
+  const ob=r[r.length-1];
+  const actors=titleCast(b,Fm,Math.floor(Date.now()/864e5),{box,keep:titleKeep(sc),own:ownEl?{box:ob||[0,0,48,48]}:null}).map(a=>a.own?Object.assign(a,{el:ownEl}):Object.assign(a,{el:mk(a.st),f:0,t:0}));
+  if(ownEl&&!actors.some(a=>a.own))ownEl.remove();
+  const place=a=>{a.el.style.left=Math.round(a.left!=null&&!a.moving?a.left:a.x-24)+'px';a.el.style.top=a.y+'px';a.el.dataset.surface=a.kind;if(a.own){a.el.dataset.surf=a.surf;return}
+    a.el.style.backgroundPosition=`${-a.f*48}px 0`;a.el.classList.toggle('flip',PIXEL.flipFor(a.st.look,a.dir));a.el.dataset.dir=a.dir};
+  sc.dataset.cast=actors.length;
+  if(low){actors.forEach(a=>{if(a.moving)a.x=Math.max(a.x0,Math.min(a.x1,56));place(a)});return}
+  let k=0;const T=setInterval(()=>{if(!sc.isConnected)return clearInterval(T);k++;if(k%Math.round(fps/2)===0&&v.alive[1])al.style.backgroundImage=`url(${v.alive[(k/Math.round(fps/2))%2|0]})`;
+    actors.forEach(a=>{if(a.own)return;const tk=a.st.ticks||[];if(++a.t>=(tk[a.f]||2)){a.t=0;a.f=(a.f+1)%a.st.frames}if(a.moving){a.x+=a.dir*a.speed;if(a.x>a.x1||a.x<a.x0){a.dir=-a.dir;a.x=Math.max(a.x0,Math.min(a.x1,a.x))}}place(a)})},Math.round(1000/fps));
+  actors.forEach(place)})}
 function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
 function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
@@ -251,7 +356,7 @@ async function setup(){
   await obLib();
   if(S&&S.setupDone===0&&S.child!==undefined)return orSeen();   // closed mid-origin: restart at P1 (a decline already saved stays saved)
   const tg=U('ui_tagline').replace(/^ECHO:\s*/,'');
-  obScene('obtitle ttl',`${titleArt()}<button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}`);
+  obScene('obtitle ttl',`${titleArt()}<button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}`);titleDio();
   obWireLock(setup);
   $('#obgo').onclick=()=>{SFX('ui_tap');if(window.Music)Music.title();obWelcome()};
 }
@@ -290,13 +395,53 @@ function obSetBand(b){const was=S.ageBand;S.ageBand=b;
 function kidId(){if(!S.kidId)S.kidId='k'+Math.floor(Math.random()*2e9).toString(36);return S.kidId}   // per-child store key (kept across a new Echo)
 // ---- Origin v2. P1 pick your Echo (batch A1)
 function orStart(src){const o=S.origin;S.origin={idx:S.originIdx||0,attempt:o&&o.idx===(S.originIdx||0)?(o.attempt||0):0,declined:!!(o&&o.idx===(S.originIdx||0)&&o.declined),src:null,animal:null,family:null,ramp:null,accent:null};save()}
-function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const F=FAM();let sel=null;
-  obScene('orseen',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div>
-   <div class="orgrid">${F.animalOrder.map(a=>`<button class="orcard${F.animals[a].label.length>6?' long':''}" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${F.animals[a].icon||a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
+// H2: camera-only Origin on the phone. The Magic Window (camera_match.js) is the normal path. The manual picker shows only when
+// the camera cannot match (retry + "Pick an Echo"), or there is no camera / access was declined. S.camOrigin===false (Grown-Ups/dev)
+// or no CamMatch -> picker. H3: the picker is two steps, family first, then the Echo within that family (+ Back), then colours.
+function orSeen(){if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();
+  if(window.CamMatch&&CamMatch.supported()&&S.camOrigin!==false&&!orSeen.pick)return orCamera();orSeen.pick=0;return orSeenFamily()}
+function orSeenPicker(){orCamStop();orSeen.pick=1;orSeenFamily()}
+function orCamStop(){if(orCamera.sess){try{orCamera.sess.stop()}catch(e){}orCamera.sess=null}}
+// H1 camera copy (Cole, dialogue/shared.json ui_or_cam_*): one variant per age band ([0]=5-6, [1]=7-8, [2]=9-10, or band:"all")
+const OR_BANDS=['5-6','7-8','9-10'];
+const OR_ALIAS={ui_or_cam_pick:'ui_or_seen_ask'};   // Cole's 'Pick your Echo' is already ui_or_seen_ask (the lint bans duplicate text)
+const bandOf=v=>v.band||(v.context&&v.context.age_band);
+function UB(k,x){const B=(OBL&&OBL[k])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k]),L=(B&&B.length?B:(OR_ALIAS[k]&&((OBL&&OBL[OR_ALIAS[k]])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[OR_ALIAS[k]]))))||[];if(!L.length)return '';const b=(S&&S.ageBand)||'7-8';
+  const l=L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[OR_BANDS.indexOf(b)]||L[1]||L[0];return l?obFill(l.text,x):''}
+function orCamera(){const F=FAM();orCamStop();
+  obScene('orcam',`<div class="obpanel small"><b id="orcamask">${UB('ui_or_cam_ask')}</b></div>
+   <div class="orwin" id="orwin"><video id="orvid" playsinline muted autoplay aria-label="Magic Window"></video><div class="orscan"></div><div class="orbadge" id="orbadge" hidden aria-hidden="true">🐾 + 🧸</div><div class="ornotes" id="ornotes"></div></div>
+   <p class="orcamhint" id="orcamhint">${UB('ui_or_cam_hint')}</p>
+   <div class="orcamctl" id="orcamctl" hidden><p class="orcammiss" id="orcammiss">${UB('ui_or_cam_miss')}</p><button class="btn" id="orretry">${PI('✨')}<span>${UB('ui_or_cam_retry')}</span></button><button class="btn" id="orpick">${PI('🐾')}<span>${UB('ui_or_cam_pick')}</span></button></div>`);
+  const vid=$('#orvid'),badge=$('#orbadge');
+  const unmatched=why=>{orCamera.sess=null;orCamera.misses=(orCamera.misses||0)+1;if(why==='denied'||why==='no_camera')return orSeenPicker();   // no camera / declined -> straight to the picker
+    const h=$('#orcamhint');if(h)h.hidden=true;const c=$('#orcamctl');if(!c)return;c.hidden=false;$('#orretry').onclick=()=>{SFX('ui_tap');orCamera()};$('#orpick').onclick=()=>{SFX('ui_tap');orSeenPicker()}};
+  orCamera.sess=CamMatch.start(vid,F,{onPerson:on=>{if(badge)badge.hidden=!on},onUnmatched:unmatched,
+    onMatch:m=>orCamMatched(m,vid)})}
+// Stage 3: freeze 120 ms -> 24 glowing notes within 450 ms -> home sound + family motif -> orInvite() with family, animal, ramp
+function orCamMatched(m,vid){const F=FAM(),A=F.animals[m.animal],f=F[m.family];if(!A||!f)return orSeenPicker();
+  try{if(vid)vid.pause()}catch(e){}const win=$('#orwin');if(win)win.classList.add('frozen');
+  S.origin.animal=m.animal;S.vars.origin_animal=A.word;S.origin.family=m.family;S.vars.family=f.label;S.vars.family_plural=f.plural;
+  const c=m.chip||f.chips.find(x=>x.real);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:'camera'});save();
+  setTimeout(()=>{if(win)win.classList.add('dissolve');const box=$('#ornotes');{const h=$('#orcamhint'),q=$('#orcamask'),t=UB('ui_or_cam_found');if(h){h.hidden=false;h.textContent=t;h.classList.add('found')}if(q)q.textContent=t}   // H1: 'found' at the shimmer
+    if(box&&!lowFx())for(let i=0;i<24;i++){const n=document.createElement('i');n.className='orcamnote';n.textContent=i%2?'♫':'♪';n.style.left=(8+(i*37)%84)+'%';n.style.top=(10+(i*53)%80)+'%';n.style.animationDelay=Math.round(i*450/24)+'ms';box.appendChild(n)}
+    if(window.MusicFX){try{MusicFX.homeSound(m.animal)}catch(e){}}
+    setTimeout(()=>{orCamera.sess=null;orInvite()},lowFx()?300:900)},120)}
+function orSeenFamily(){const F=FAM(),order=(F.order||['slyte','whimber','twitchel']).filter(k=>F[k]);let sel=null;
+  const icon=fid=>{const a=(F.animalOrder||[]).find(k=>F.animals[k].family===fid);return a?(F.animals[a].icon||a):fid};
+  obScene('orseen orfamstep',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div>
+   <div class="orgrid orfamgrid">${order.map(fid=>`<button class="orcard orfamcard" data-f="${fid}" aria-label="${F[fid].plural||F[fid].label}"><i style="background-image:url(px/origin/${icon(fid)}.png)"></i><span>${F[fid].plural||F[fid].label}</span></button>`).join('')}</div>
    <button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button>`);
+  app.querySelectorAll('.orfamcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.f;app.querySelectorAll('.orfamcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F[sel].plural||F[sel].label)});
+  $('#ornext').onclick=()=>{if(sel)orSeenAnimal(sel)}}
+function orSeenAnimal(fid){const F=FAM();let sel=null;const list=(F.animalOrder||[]).filter(a=>F.animals[a]&&F.animals[a].family===fid);
+  obScene('orseen oranimalstep',`<div class="obpanel"><b>${U('ui_or_seen_ask')}</b></div>
+   <div class="orgrid">${list.map(a=>`<button class="orcard${F.animals[a].label.length>6?' long':''}" data-a="${a}" aria-label="${F.animals[a].label}"><i style="background-image:url(px/origin/${F.animals[a].icon||a}.png)"></i><span>${F.animals[a].label}</span></button>`).join('')}</div>
+   <div class="orsteps"><button class="btn" id="orback" aria-label="Back">&lt; Back</button><button class="btn obnextbtn" id="ornext" disabled>&gt; Next</button></div>`);
   app.querySelectorAll('.orcard').forEach(b=>b.onclick=()=>{SFX('ui_tap');sel=b.dataset.a;app.querySelectorAll('.orcard').forEach(x=>x.classList.toggle('sel',x===b));$('#ornext').disabled=false;say(F.animals[sel].label)});
+  $('#orback').onclick=()=>{SFX('ui_tap');orSeenFamily()};
   $('#ornext').onclick=()=>{if(!sel)return;if(!S.origin||S.origin.idx!==(S.originIdx||0))orStart();const A=F.animals[sel];S.origin.animal=sel;S.vars.origin_animal=A.word;save();
-    if(!A||!A.family)return orSeen();orColours(A.family)}}
+    if(!A||!A.family)return orSeenFamily();orColours(A.family)}}
 function obSong(){const a=S.origin.animal;S.songs=S.songs||[];if(!S.songs.includes(a))S.songs.push(a);save()}   // song stamps: kind words only, no counts shown
 // P2 colours: one chip in v1 (decision 6). "I'm not sure" = seeded pick.
 function orColours(fid){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family=f.label;S.vars.family_plural=f.plural;
@@ -355,7 +500,7 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
   const keep={kidId:S.kidId,bandEasy:S.bandEasy,child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
-  const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;const _v=window.PIXEL?PIXEL.variant(g.seed,f.sprite,g.pal,o.fluff!=null?o.fluff:g.fluff):{pal:g.pal,fluff:0};g.pal=g.pal||_v.pal;g.fluff=_v.fluff;g.name=name;g.family=f.label;
+  const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;const _v=window.PIXEL?PIXEL.variant(g.seed,f.sprite,g.pal,o.fluff!=null?o.fluff:undefined):{pal:g.pal,fluff:0};g.pal=g.pal||_v.pal;g.fluff=_v.fluff;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],chatHistory:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
   S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
@@ -365,6 +510,7 @@ function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
 // P7 every-session title: logo + tagline + "{name} is playing nearby!", Tap to start, lock top right. Auto-advance after 3 s.
 async function obReturnTitle(go){await obLib();const e=E();
   h(`<div class="scene ${e.bg} ob obreturn ttl${lowFx()?' calm':''}"><div class="bg pxbg pxbg-night"></div>${titleArt(1)}<div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
+  titleDio();
   if(window.Music)Music.home(S.kind,glowNow());obWireLock(()=>obReturnTitle(go));let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);sess.nameCall=1;go()};
   const t=setTimeout(()=>{if(!document.querySelector('.full'))fin()},3000);$('.scene.ob').onclick=fin}
 function nameCallLine(){if(S.nameChanged&&S.vars&&S.vars.child_named){S.nameChanged=0;save();return B('name_changed')}return B('name_call')}
@@ -389,10 +535,14 @@ function pcSettings(back){const nm=S&&S.vars&&S.vars.child_named?S.child:'—',h
    ${tog('pcmusic','Music',!(S&&S.music===false))}${tog('pcquiet','Quieter music',!!(S&&S.musicQuiet))}${tog('pcvoice','Chirp sounds',!(S&&S.voice===false))}
    ${tog('pcyes','Echoes always say yes',!!(S&&S.alwaysYes))}
    ${has?tog('pcstay','Stay a while',!!(S.fw&&S.fw.paused)):''}${tog('pcshared','Shared device',!!(S&&S.fwShared))}${has?tog('pcholiday','Holiday mode',!!(S.holiday&&S.holiday.on))+`<div class="pcnote">Going away? Turn this on and ${S.g.name} takes a little holiday too. Needs and the 3-day goodbye timer pause. It ends when ${S.child||'your child'} next opens Echo.</div>`:''}
+   ${tog('pcden','Moving 3D den',!(S&&S.parallaxDen===false))}
+   <button class="pcrow" id="pcwx"><span>Weather</span><b>${({auto:'By season',off:'Off',clear:'Clear',cloudy:'Cloudy',rain:'Rain',snow:'Snow',fog:'Fog',storm:'Storm'})[(S&&S.weatherOverride)||'auto']}</b></button>
    <button class="pcrow" id="pcreset"><span>Start over</span><b>›</b></button>
-   <div class="pcnote">${U('ui_pc_privacy')} No camera on this version. Echo only remembers the kind of animal and a colour.</div>
+   <div class="pcnote">${U('ui_pc_privacy')} The camera only looks for a moment, right on this device. No photo is ever saved or sent anywhere. Echo only remembers the kind of animal and a colour.</div>
    <button class="btn" id="pcdone">${U('ui_pc_done')}</button>`);d.classList.add('pcset');
   const re=()=>{d.remove();pcSettings(back)};const need=()=>{if(!S){S={voice:true,music:true,vars:{},setupDone:0,oseed:Math.floor(Math.random()*2e9)+1,originIdx:0,songs:[]}}};
+  d.querySelector('#pcden').onclick=()=>{need();S.parallaxDen=S.parallaxDen===false?true:false;save();re()};   // H6 on by default
+  d.querySelector('#pcwx').onclick=()=>{need();const L=['auto','off','clear','cloudy','rain','snow','fog','storm'];S.weatherOverride=L[(L.indexOf(S.weatherOverride||'auto')+1)%L.length];save();re()};   // H9: grown-ups override (season / off / fixed state; drives visuals, ctx.weather and reactions)
   d.querySelector('#pcmusic').onclick=()=>{need();S.music=S.music===false;save();if(window.Music)Music.refresh();re()};
   d.querySelector('#pcquiet').onclick=()=>{need();S.musicQuiet=!S.musicQuiet;save();if(window.Music)Music.refresh();re()};
   d.querySelector('#pcvoice').onclick=()=>{need();S.voice=S.voice===false;save();re()};
@@ -435,7 +585,7 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
   // stroke to pet
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(window.MusicFX&&!asleep())MusicFX.petMove(ev,FID());if(strokes%25===0)pet()}});
   $('#cr').addEventListener('click',pet);
-  {const scEl=document.getElementById('sc');if(scEl){if(window.DEN){DEN.setPreset(tod());if(S.parallaxDen)DEN.mount(scEl,{fam:FID(),sceneId:curScene().id,tod:tod()});else DEN.syncDom(scEl)}if(window.ENV_HOTSPOTS)ENV_HOTSPOTS.mount(scEl,curScene().id,FID())}}if(window.Alive)Alive.twinkle();
+  {const scEl=document.getElementById('sc');if(scEl){if(window.DEN){DEN.setPreset(tod());if(denOn())DEN.mount(scEl,{fam:FID(),sceneId:curScene().id,tod:tod()});else DEN.syncDom(scEl)}if(window.ENV_HOTSPOTS)ENV_HOTSPOTS.mount(scEl,curScene().id,FID());const so=solarNow();if(so)scEl.dataset.solar=so.phase;if(window.WEATHER&&WEATHER.mount)WEATHER.mount(scEl,{fam:FID(),sceneId:curScene().id});todTick();wxReactSched()}}if(window.Alive)Alive.twinkle();
   if(m==='sleep'){{const b=napBed();if(b&&LIVE.st!=='napgo')lvPlace(b[0],b[1])}talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene')){sess.woke=1;home()}},Math.max(500,S.napUntil-now()+200));return}
   if(sess.woke){sess.woke=0;const px=$('#cr .px-echo');if(px&&window.PIXEL){PIXEL.sleep(px,true);wakeUp(px)}}
   if(greet)fwSession();if(greet&&window.MusicFX)MusicFX.homeSound((S.origin&&S.origin.animal)||Object.keys(FAMILIES.animals).find(k=>FAMILIES.animals[k].look===S.g.look)||FAMD().look_base,{once:true});   // A5: the Echo's hello cue, once per session
@@ -456,7 +606,7 @@ function famScenes(){if(!window.FAMILIES||!window.SCENES)return;for(const f of F
   SCENES[c]=JSON.parse(JSON.stringify(SCENES[b.from])).map(sc=>{if(b.titles&&b.titles[sc.id])sc.title=b.titles[sc.id];sc.wp.forEach(w=>{if(b.rename&&b.rename[w.id])w.id=b.rename[w.id];w.acts=w.acts.filter(a=>!(b.dropActs||[]).includes(a))});return sc});
   SCENES.weights[c]=SCENES.weights[c]||SCENES.weights[b.from];SCENES.release[c]=SCENES.release[c]||SCENES.release[b.from]}}
 famScenes();
-function scList(){return SCENES[CID()]}
+function scList(){const L=SCENES[CID()];return S&&S.kind==='cat'&&L?L.map(sc=>sc.id==='clearing'?h4Scene(sc):sc):L}   // the cat's borrowed 'clearing' is always re-routed (twitchel_clearing is retired)
 function scHome(){return scList()[0]}
 function scUnlocked(){return scList().filter((s,i)=>S.bond>=SCENES.unlock[i])}
 function curScene(){const L=scList();return L.find(s=>s.id===S.scene)||L[0]}
@@ -468,10 +618,10 @@ function scReq(r){if(!r)return true;let m;
 // pick the scene for a new session (>= 20 min away): a newly unlocked scene first (as a found-moment), else by time-of-day weight, last scene halved
 function scPickSession(){const L=scUnlocked(),seen=S.scenesSeen=S.scenesSeen||[scHome().id];let first=null;
   const bondPending=S.bondShown!=null&&bondTarget()>S.bondShown;
-  const fresh=L.find(s=>!seen.includes(s.id));
+  const fresh=L.find(s=>!seen.includes(s.id)&&!(s.from&&seen.includes(s.from)));
   if(fresh&&!bondPending){first=fresh.id;seen.push(fresh.id);S.scene=fresh.id;remember(`We found the ${fresh.title.toLowerCase()}`,'scene_'+fresh.id);return first}
   const W=SCENES.weights[CID()],b=scBand();let opts=[];
-  L.forEach(s=>{let w=W[s.id][b];if(s.id===S.scene)w*=.5;if(w>0)opts.push([s.id,w])});
+  L.forEach(s=>{let w=(W[s.id]||W[s.from]||[1,1,1,1])[b];if(s.id===S.scene)w*=.5;if(w>0)opts.push([s.id,w])});
   if(!opts.length){S.scene=scHome().id;return null}
   let t=Math.random()*opts.reduce((a,o)=>a+o[1],0);for(const [id,w] of opts){t-=w;if(t<=0){S.scene=id;break}}if(t>0)S.scene=opts[0][0];return null}
 function scWp(id){const w=curScene().wp.find(x=>x.id===id);return w?[w.xy[0],Math.max(52,w.xy[1]-SC_OY)]:null}
@@ -495,7 +645,10 @@ const LV_FOUND={leaf_pounce:'found_leaves',trinket:'found_trinket',moon_yip:'fou
 const SC_FOUND={clearing:{'log_mouth:sniff':'found_log','basket_door:sniff':'found_basket','moon_rock:moon_yip':'found_clearing_moon'},grove:{log_peek:'found_grove_log',leaf_pile:'found_grove_pile'},meadow:{sun_rock:'found_meadow_rock',flowers:'found_meadow_butterfly'},
   branch:{hollow_sill:'found_branch_door',branch_tip:'found_branch_tip'},library:{reading_nook:'found_library_nook',window_sill:'found_library_sill'},hilltop:{tree_branch:'found_hilltop_branch',blanket:'found_hilltop_blanket'}};
 function lvDef(){const sc=curScene(),wp={};sc.wp.forEach(w=>{wp[w.id]=scWp(w.id)});return {wp,scene:sc}}
-function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].includes(w.id)||/exit/.test(w.kind)||!scReq(w.requires))return;
+// H10/H11: a prop waypoint (lantern / bell / chime, or a lantern_share act) is only picked when its hotspot exists in this scene
+const wpNeedsProp=w=>/lantern|bell|chime/.test(w.id)||(w.acts||[]).includes('lantern_share');
+function wpOk(w){return !wpNeedsProp(w)||!window.ENV_HOTSPOTS||!ENV_HOTSPOTS.wpTarget||!!ENV_HOTSPOTS.wpTarget(w.id,curScene().id,FID())}
+function lvOptions(band){const out=[];curScene().wp.forEach(w=>{if(['stage'].includes(w.id)||/exit/.test(w.kind)||!scReq(w.requires)||!wpOk(w))return;
     w.acts.forEach(a=>{if(!LV_IMPL[a])return;if(LV_BAND[a]&&!LV_BAND[a].includes(band))return;if(band==='night'&&GROUND()&&!LV_BAND[a])return;out.push({wp:w.id,act:a,impl:LV_IMPL[a]})})});return out}
 const LIVE={st:'present',pos:null,act:null,timer:null,lastTouch:0,nextIdle:0,band:null,busy:false,log:[]};
 function lvEl(){return document.getElementById('cr')}
@@ -529,7 +682,7 @@ function lvDo(name,dur){   // run a behaviour at the current spot for dur ms
     curl_nap:()=>{let k=0;const turn=setInterval(()=>{const px=document.querySelector('#cr .px-echo');if(px)px.classList.toggle('lvflip');if(++k>=6){clearInterval(turn);if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)}},166)},
     moon_yip:()=>{const c=FUI().moonCall||'Yip!';setExpr('excited');say(c,'excited');LIVE.actT=setTimeout(()=>say(c,'excited'),1000)},
     sunrise:()=>{setExpr('happy');react('happy');if(fx)lvFx('px/i_sparkle.png',x+16,top,'rise',1200)},
-    lullaby:()=>{setExpr('happy');say('Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
+    lullaby:()=>{setExpr('happy');say(window.Dialogue&&Dialogue.speciesCalls?Dialogue.speciesCalls('Hoo…',Dialogue.lookOf(Dialogue.ctx())):'Hoo…','happy');let k=0;LIVE.zT=setInterval(()=>{if(fx||k%3===0)lvFx('px/living/note.png',x+8+(k%3)*8,top+4,'rise',1500);k++},500)},
     stargaze:()=>{setExpr('thinking')},
     nap:()=>{const px=document.querySelector('#cr .px-echo');if(px)PIXEL.sleep(px,true);else setExpr('sleepy');z();LIVE.zT=setInterval(z,1600)},
     read:()=>{setExpr('thinking');if(!GROUND())lvFx('px/i_book.png',x+14,y-18,'',dur)},
@@ -541,7 +694,7 @@ function lvStop(){clearInterval(LIVE.zT);lvClear();LIVE.act=null;const px=docume
 // wake (reverse of falling asleep): the sleep pose backwards, then the turn-around undone (6 flips), then a blink
 function wakeUp(px,done){if(!px||!PIXEL.wake){done&&done();return}PIXEL.wake(px,()=>{if(lowFx()){done&&done();return}let k=0;const t=setInterval(()=>{if(!px.isConnected){clearInterval(t);return}px.classList.toggle('lvflip');if(++k>=6){clearInterval(t);PIXEL.blink(px);done&&done()}},166)})}
 function lvPick(band,found){const last=(S.lvLast||[]).slice(-2);let opts=lvOptions(band).filter(o=>!last.includes(o.wp+':'+o.act));
-  if(found)opts=opts.filter(o=>{const f=SC_FOUND[curScene().id]||{};return LV_FOUND[o.impl]||f[o.wp]||f[o.wp+':'+o.act]});
+  if(found)opts=opts.filter(o=>{const f=SC_FOUND[curScene().from||curScene().id]||{};return LV_FOUND[o.impl]||f[o.wp]||f[o.wp+':'+o.act]});
   if(!opts.length)opts=lvOptions(band);if(!opts.length)return null;
   const mem=(S.memories||[]).slice(-6).join(' ').toLowerCase();const W=opts.flatMap(o=>{let w=1;if(o.impl==='leaf_pounce'&&/lea(f|ves)/.test(mem))w+=2;return Array(w).fill(o)});
   return W[Math.floor(Math.random()*W.length)]}
@@ -559,7 +712,7 @@ function lvFound(firstScene){   // opens mid-activity at a waypoint; notices the
   const band=tod();let o=null;
   if(band==='morning'&&S.sunriseDay!==new Date(now()).toDateString()){o=lvOptions(band).find(x=>x.impl==='sunrise');if(o)S.sunriseDay=new Date(now()).toDateString()}
   if(!o)o=lvPick(band,true);if(!o){lvPresent();return}
-  lvRemember(o.wp+':'+o.act);const sf=SC_FOUND[curScene().id]||{};
+  lvRemember(o.wp+':'+o.act);const sf=SC_FOUND[curScene().from||curScene().id]||{};
   LIVE.foundKey=firstScene?`found_${curScene().id}_first`:(sf[o.wp+':'+o.act]||(o.wp!=='moon_rock'&&sf[o.wp])||LV_FOUND[o.impl]||'hello');
   LIVE.st='found';LIVE.foundAct=o.impl;$('#sc')&&$('#sc').classList.add('lvaway');lvPlace(...scWp(o.wp),1);if(window.ENV_HOTSPOTS)ENV_HOTSPOTS.triggerWaypoint(o.wp,document.getElementById('sc'),FID(),curScene().id);lvDo(o.impl,60000);
   LIVE.noticeT=setTimeout(lvNotice,1500)}
@@ -586,8 +739,9 @@ function lvStart(found,firstScene){LIVE.pos=null;LIVE.st='present';LIVE.band=tod
   lvPlace(...lvDef().wp.stage,1);
   if(found)lvFound(firstScene);
   clearInterval(LIVE.tickT);LIVE.tickT=setInterval(lvTick,500);
-  const scr=SCR();if(!scr._lv){scr._lv=1;scr.addEventListener('pointerdown',e=>{if(!S||!document.getElementById('feed'))return;if(e.target.closest('.dock,#cr,.choices,#b,.thought'))lvPresent();else if(LIVE.st==='found')lvNotice()},true)}}
+  const scr=SCR();if(!scr._lv){scr._lv=1;scr.addEventListener('pointerdown',e=>{if(!S||!document.getElementById('feed'))return;if(e.target.closest('.dock,#cr,.choices,#b,.thought'))lvPresent();else if(e.target.closest('.env-spot[data-spot-id="tw_wild_den_bellvine"]'))return;else if(LIVE.st==='found')lvNotice()},true)}}   // the den bell-vine is vine-only (never calls the Echo)
 
+function denOn(){return S.parallaxDen!==false&&!lowFx()}   // H6: 5-layer den on by default (Grown-Ups can turn it off; lowFx keeps the flat scene)
 function lowFx(){return !!(S&&S.lowfx)||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
 function bondTarget(){return S.bond>=500?5:PIXEL.stageFromBond(S.bond)}
 function maybeBondUp(){
@@ -603,7 +757,7 @@ function bondBg(){   // freeze the Home scene (background layers + props, withou
     if(el.id==='sc'&&el.classList.contains('pxscene')){const u=(cs.backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1];if(u)jobs.push({u,x:(r.left-R.left)/z,y:(r.bottom-R.top)/z-320,w:180,h:320});return}if(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'){k.fillStyle=cs.backgroundColor;k.fillRect((r.left-R.left)/z,(r.top-R.top)/z,r.width/z,r.height/z)}
     const urls=[...cs.backgroundImage.matchAll(/url\("?([^")]+)"?\)/g)].map(m=>m[1]).reverse();urls.forEach(u=>jobs.push({u,x:(r.left-R.left)/z,y:(r.top-R.top)/z,w:r.width/z,h:r.height/z}))});
   return Promise.all(jobs.map(j=>new Promise(res=>{const im=new Image();im.onload=()=>res([j,im]);im.onerror=()=>res(null);im.src=j.u}))).then(L=>{
-    if(window.DEN&&DEN.compositeBack)DEN.compositeBack(k,scr.querySelector('#sc'));
+    if(window.DEN&&DEN.compositeBack){const w=scr.querySelector('#sc .den-wrap'),wr=w&&w.getBoundingClientRect();DEN.compositeBack(k,scr.querySelector('#sc'),wr?{x:(wr.left-R.left)/z,y:(wr.top-R.top)/z}:null)}
     L.forEach(x=>{if(!x)return;const [j,im]=x;k.drawImage(im,Math.round(j.x),Math.round(j.y),Math.min(im.width,Math.round(j.w))||im.width,Math.min(im.height,Math.round(j.h))||im.height)});return c})}
 function playBondUp(from,to,live,done){
   const scr=SCR(),cr=document.querySelector('#cr .px-echo')||document.querySelector('.px-echo');if(!cr){done&&done();return}
@@ -620,14 +774,42 @@ function playBondUp(from,to,live,done){
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;{const t=window.__butitle;if(t&&t.gesture&&window.Alive&&Alive.act)setTimeout(()=>{try{Alive.act(t.gesture)}catch(e){}},400)}   // the title's gesture plays after the scene
         if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
-function talk(t,ms){const b=$('#b');if(!b||!t)return;let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
+// H13: young-reader pacing (same formula as Dialogue.readMs) + tap the bubble to advance/dismiss (450 ms accidental-tap guard)
+function readMs(t){const n=typeof t==='string'?t.length:((t&&t.text)||'').length,f={'5-6':1.35,'7-8':1.15,'9-10':1.0}[(S&&S.ageBand)||'7-8']||1.15;return Math.round(Math.max(6500,n*120)*f)}
+function bubTap(){const b=$('#b');if(!b||b.style.display==='none')return false;if(now()-(talk.at||0)<450)return false;
+  if(window.Dialogue&&Dialogue.waiting&&Dialogue.waiting()){Dialogue.advance();return true}
+  if(talk.long)return false;clearTimeout(talk.t);b.style.display='none';b.classList.remove('tapnext');if(S&&S.kind&&$('#cr'))setExpr(baseExpr());return true}
+function bubArm(b){if(!b||b._tapArmed)return;b._tapArmed=1;b.addEventListener('click',e=>{if(bubTap()){e.stopPropagation();e.preventDefault()}})}
+// H13 (PM): mini-game IN-GAME callouts (dig_row, tower_perfect, eib_same ...) are exempt from reading pace: >= GAME_CALL_MIN,
+// never block play (the bubble lets taps through to the game) and a tap on the bubble still dismisses it. Pre-game
+// instructions (*_start, eib_hello) and end-of-round summaries (*_end, *_best, *_done, game_end, eib_five ...) keep full pace.
+const GAME_CALL_MIN=2500,GAME_PFX=/^(dig|catch|tower|stack|run|pairs|lines|clean|eib|melody|memory)_/,GAME_FULL=/_(start|intro|how|rules|hello|ready|end|end_best|best|done|summary|five|rest|rest_ears|round_end|result)$/;
+function callKind(o){const k=(o&&o.key)||'';return k==='game_end'?'full':!GAME_PFX.test(k)?'talk':GAME_FULL.test(k)?'full':'call'}
+function bubMs(o,ms){return callKind(o)==='call'?Math.max(GAME_CALL_MIN,ms||0):Math.max(ms||0,readMs(o))}
+function gcDismiss(e){const b=$('#b');if(!b||!b.classList.contains('gamecall')||b.style.display==='none')return document.removeEventListener('pointerdown',gcDismiss,true);
+  const r=b.getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom&&now()-(talk.at||0)>=250){clearTimeout(talk.t);b.style.display='none';b.classList.remove('tapnext','gamecall');document.removeEventListener('pointerdown',gcDismiss,true)}}   // passive: never stops the game's own tap
+function talk(t,ms){const b=$('#b');if(!b||!t)return;bubArm(b);let o=typeof t==='string'?{text:t}:t;if(o.expr)setExpr(o.expr);if(o.react)react(o.react);
   if(!o.text){if(o.gesture&&window.Alive)Alive.act(o.gesture);return}   // P5 act-out only: no bubble, the gesture plays
   if(window.Alive)Alive.onTalk(o);   // D1 say-do + B1 slow blink on love lines
-  b.style.display='block';b.textContent=o.text;b.classList.toggle('soft',o.voice==='soft');if(o.caption){const c=document.createElement('small');c.className='cap';c.textContent=o.caption;b.appendChild(c)}b.style.animation='none';void b.offsetWidth;b.style.animation='';bubSync();say(o.text,o.expr,o.voice==='soft');clearTimeout(talk.t);
-  talk.t=setTimeout(()=>{if(b)b.style.display='none';if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},ms||Math.max(3000,o.text.length*70))}
+  b.style.display='block';b.textContent=o.text;b.classList.toggle('soft',o.voice==='soft');if(o.caption){const c=document.createElement('small');c.className='cap';c.textContent=o.caption;b.appendChild(c)}b.style.animation='none';void b.offsetWidth;b.style.animation='';bubSync();say(o.text,o.expr,o.voice==='soft');clearTimeout(talk.t);talk.at=now();talk.long=!!(ms&&ms>=60000);b.classList.add('tapnext');if(window.Dialogue)Dialogue.band=(S&&S.ageBand)||'7-8';
+  {const gc=!talk.long&&callKind(o)==='call';b.classList.toggle('gamecall',gc);if(gc)document.addEventListener('pointerdown',gcDismiss,true)}
+  talk.t=setTimeout(()=>{if(b){b.style.display='none';b.classList.remove('tapnext','gamecall')}if(o.expr&&S&&S.kind&&$('#cr'))setExpr(baseExpr())},talk.long?ms:bubMs(o,ms))}
 function baseExpr(){const m=mood();return m==='sleep'?'sleepy':m==='happy'?'happy':'neutral'}
 function hop(){react('happy')}
 function asleep(){if(S.napUntil>now()){toast('Shh… napping');return true}}
+// PM (Oct 25, Kai): reply chips / food chips sit over the bottom of the scene. While they are open, lift the home scene (it slides under
+// the top bar) just enough that the Echo's feet, the home prop and a strip of lawn below them stay visible above the chips (never floating
+// over a chip panel). Measured live, so 2-4 chips, wrapped labels and a walking Echo all work. Off again when the chips close.
+const CHIP_LAWN=12,CHIP_LIFT_MAX=96;
+function chipLift(){const sc=document.getElementById('sc'),scr=document.getElementById('screen');if(!sc||!scr||!sc.classList.contains('pxscene'))return 0;
+  const ch=ov.querySelector('.choices'),cur=+sc.dataset.lift||0;let d=0;
+  if(ch&&ch.offsetHeight){   // layout boxes only (no transforms: the lift itself, the chips' slide-in, the Echo's bob never feed back)
+    const SR=scr.getBoundingClientRect(),k=SR.width/180||1,offY=(e,stop)=>{let y=0;while(e&&e!==stop){y+=e.offsetTop;e=e.offsetParent}return y};
+    const vis=(ov.getBoundingClientRect().top-SR.top)/k-offY(sc,scr);let g=0;
+    sc.querySelectorAll('#cr,#home').forEach(e=>{if(e.style.visibility==='hidden'||!e.offsetWidth)return;g=Math.max(g,offY(e,sc)+e.offsetHeight)});
+    if(g)d=Math.max(0,Math.min(CHIP_LIFT_MAX,Math.ceil(g+CHIP_LAWN-vis)))}
+  if(d!==cur){sc.dataset.lift=d;sc.style.setProperty('--chip-lift',(-d)+'px');sc.classList.toggle('chiplift',d>0)}return d}
+try{new MutationObserver(()=>chipLift()).observe(ov,{childList:true,subtree:true});setInterval(()=>{if(ov.querySelector('.choices'))chipLift()},400)}catch(e){}
 // two-tap reply choices (S9)
 function choices(list,cb,opts){
   let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
@@ -640,17 +822,17 @@ function chDismiss(el,onDismiss){if(!el)return;let swallow=false;
     if(ov.contains(el))ov.innerHTML='';onDismiss&&onDismiss()};
   const eat=e=>{if(!swallow)return;swallow=false;e.stopPropagation();e.preventDefault();document.removeEventListener('click',eat,true)};
   const off=()=>document.removeEventListener('pointerdown',down,true);setTimeout(()=>document.addEventListener('pointerdown',down,true),0)}
-// H1 need-aware selection (aliveness/selection/need_select.js). Weather: no weather system in v1, so lines tagged with
-// rain/wind/fog stay out; snow lines only in Dec-Feb by device month (Daniel's default).
+// H1 need-aware selection (aliveness/selection/need_select.js). Weather (H9 final): lines tagged w_<state> play only when
+// the Echo's own seasonal weather (window.WEATHER) matches; snow/frost season vars stay Dec-Feb by device month.
 function snowSeason(){const m=new Date(now()).getMonth();return m===11||m<=1}
 function seasonVars(){const v=S.vars||(S.vars={});v.season=snowSeason()?'snow':'none';return v}   // Batch F: snow/frost lines are gated by cond.var.season
-function needCtx(){return {needs:S.needs,species:CID(),band:tod(),weather:snowSeason()?'snow':'clear'}}
+function needCtx(){return {needs:S.needs,species:CID(),band:tod(),weather:wxNow()||'clear'}}
 function needLine(){if(!window.NeedSelect)return B('ambient');const r=NeedSelect.slot(needCtx());return (r&&r.line)||B('ambient')}
 function needInit(){if(!window.NeedSelect)return;const sp=CID();NeedSelect.now=now;NeedSelect.tags=(window.NEED_TAGS||{})[sp]||{barks:{},convs:{}};
   if(!needInit.done){needInit.done=1;NeedSelect.session();
-    const ok=v=>{const tg=NeedSelect.tags.convs[v.id]||[];return !tg.some(t=>t.startsWith('w_')&&!(t==='w_snow'&&snowSeason()))};   // weather chats follow the same rule
+    const ok=v=>{const tg=NeedSelect.tags.convs[v.id]||[],wx=wxNow();return !tg.some(t=>t.startsWith('w_')&&t!=='w_'+wx)};   // weather chats follow the Echo's weather
     const pc=NeedSelect.pickConversation;NeedSelect.pickConversation=ctx=>{const D=Dialogue,el=D.eligible;D.eligible=(tr,f)=>el(tr,v=>ok(v)&&(!f||f(v)));try{return pc(ctx)}finally{D.eligible=el}}}
-  NeedSelect.cfg.weatherP=0}
+  }
 function maybeChat(){
   const n=S.needs;
   if(fwCalm())return;
@@ -659,7 +841,7 @@ function maybeChat(){
   const conv=window.NeedSelect?NeedSelect.pickConversation(needCtx()):Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
-function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed);Dialogue.prune()}
+function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed,(S.origin&&S.origin.animal)||(S.g&&S.g.look));Dialogue.prune()}   // Cole H14: lookPetPhrases by look
 function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
   Dialogue.run(conv,{sing:()=>{if(window.MusicFX&&MusicFX.sing)MusicFX.sing(FID())},cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
@@ -669,7 +851,7 @@ function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=
     const nx=info&&info.carriedOn?null:Dialogue.afterConversation(conv,depth);
     if(nx&&nx.type==='lost'&&onHome()){talk(nx.line);sess.lost=(sess.lost||0)+1}
     else if(nx&&nx.type==='drift'&&sess.chats<obMaxConv()&&onHome()){sess.chats++;sess.drift=(sess.drift||0)+1;talk(nx.line);
-      return setTimeout(()=>{if(onHome())runConv(nx.conv,done,depth+1)},2600)}
+      return setTimeout(()=>{if(onHome())runConv(nx.conv,done,depth+1)},readMs(nx.line))}
     done&&done()},depth);
 }
 // F2: bigger food list (foods.js from aliveness/foods.json), seeded likes and gentle dislikes. F1: the food arrives and is eaten.
@@ -717,11 +899,20 @@ function comfort(){   // affection v2: 3 of 10 kind things (affPick); closing co
   if(asleep())return;const fam=CID(),alt=GROUND()?'slyte':'whimber',opts=affPick(S,C.affection,Math.random),ic=o=>typeof o.icon==='string'?o.icon:(o.icon[fam]||o.icon[alt]);save();
   choices(opts.map(o=>[ic(o),o.label[fam]||o.label[alt],null]),i=>affDo(opts[i].id));
 }
-function affDo(id){if(id==='pet')return pet();if(id==='hug')return hug();if(id==='sit')return sitTogether();kind(id)}
+function affDo(id){if(id==='pet')return pet();if(id==='hug')return hug();if(id==='sit')return sitTogether();if(id==='hum')return humSong();kind(id)}
+// H17: "Hum a song" really hums: the starred Songbook / Echo It Back song on the family voice, else MusicFX.sing; sing pose + floating notes
+function humSong(){if(asleep())return;kind('hum',true);let song=null;
+  try{const SB=window.EchoBack&&EchoBack.Songbook,sb=SB&&SB.load();const st=sb&&sb.star!=null&&(sb.songs||[]).find(x=>x.id===sb.star);if(st&&st.song)song=st.song;if(!song){const es=S.eibSongs||{},k=Object.keys(es).pop();if(k&&es[k])song=es[k].song||es[k]}}catch(e){}
+  let played=false;try{if(song&&window.EchoBack&&EchoBack.playSong){if(EchoBack.playSong(FID(),song))played='song'}}catch(e){}
+  if(!played)try{if(window.MusicFX&&MusicFX.sing){MusicFX.sing(FID());played='sing'}}catch(e){}
+  react('sing');try{window.Alive&&Alive.act&&Alive.act('sing')}catch(e){}humNotes();humSong.last=played||'none';return played}
+function humNotes(){const sc=$('#sc'),pe=$('#cr .px-echo');if(!sc||lowFx())return;const R=sc.getBoundingClientRect(),z=R.width/180||1,r=pe?pe.getBoundingClientRect():null;
+  const x0=r?Math.round((r.left-R.left)/z+24):90,y0=r?Math.round((r.top-R.top)/z):200;
+  for(let i=0;i<5;i++)setTimeout(()=>{const n=document.createElement('i');n.className='env-note humnote';n.textContent=i%2?'♫':'♪';n.style.left=(x0-10+Math.round(Math.random()*20))+'px';n.style.top=(y0-4)+'px';sc.appendChild(n);setTimeout(()=>n.remove(),1600)},i*380)}
 function sitTogether(){
     const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';if(window.Alive)Alive.sit(true);talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
     setTimeout(()=>{ov.innerHTML='';sc.style.filter='';if(window.Alive)Alive.sit(false);needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(0,false,'sit');S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000)}
-function kind(id){if(asleep())return;const touch=id==='groom',hf=touch&&S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');if(!lowFx())hop();if(touch&&window.Alive)Alive.petFx();talk(B(hf?'hug_full':'aff_'+id),2000);save()}
+function kind(id,quiet){if(asleep())return;const touch=id==='groom',hf=touch&&S.needs.comfort>=NeedsV2.full;if(!quiet)SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');if(!lowFx())hop();if(touch&&window.Alive)Alive.petFx();talk(B(hf?'hug_full':'aff_'+id),2000);save()}
 function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
 function pet(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');hop();if(window.Alive)Alive.petFx();talk(B(hf?'hug_full':'pet'),1800)}
 function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,CID(),tod());needMet('cuddly')}}
@@ -885,11 +1076,24 @@ function digLevel(){const f=digState(),set=S.digLevel||S.fortLevel||'auto';
   return v2State('dig').easy?'easy':'standard'}   // quiet auto-Easy after 2 short games (AUTO_EASY.dig)
 // home_log_hollow v1: Howling hollow log / Wingsong trunk hollow in the foreground (no fort home). Layers: back, glow_in,
 // [Echo], front, glow_out, tail. The glow masks are recoloured from px/aura.json roles at the current glow level.
-const HOMEPOS=()=>FAMD().scene.home;   // per family: manifest scene.home {k: px/home/<k>_*.png + homes.json key, x, y}
+// H4 hooks (Pixal homes_batchH.json placement + Cole ART_HANDOFF): wild Purrlings (lion/tiger/leopard/cheetah/snowleopard/lynx)
+// live in the den at (108,218); the house cat's basket_room (118,230) belongs to twitchel_sunbeam_room, so it only applies in that
+// scene (until the scene ships the cat keeps the old basket). Missing anchors in homes.json -> the manifest home (fallback).
+const H4_WILD=['lion','tiger','leopard','cheetah','snowleopard','lynx'];
+function curLook(){return String((S&&S.origin&&S.origin.animal)||(S&&S.g&&S.g.look)||'').toLowerCase()}
+function h4Home(base){if(!S||S.kind!=='cat')return base;const lk=curLook(),sid=(typeof curScene==='function'&&curScene()&&curScene().id)||'';
+  if(H4_WILD.includes(lk)){if(sid==='wild_clearing'&&(!HOMES_J||HOMES_J.den_wild))return {...base,k:'den_wild',x:108,y:218};if(!HOMES_J||HOMES_J.den)return {...base,k:'den',x:108,y:218}}
+  if(sid==='sunbeam_room'&&(!HOMES_J||HOMES_J.basket_room))return {...base,k:'basket_room',x:118,y:230};
+  return base}
+// H4 scene split (Pixal h_followup): a Purrling's first scene is the wild-den clearing for the wild cats and the sunbeam room for
+// the house cat (art px/scenes/twitchel_<id>_*.png via the twitchel borrow prefix; hotspots twitchel_<id>). Other scenes unchanged.
+const H4_SCENE={};function h4Scene(sc){const wild=H4_WILD.includes(curLook()),id=wild?'wild_clearing':'sunbeam_room';
+  return H4_SCENE[id]||(H4_SCENE[id]={...JSON.parse(JSON.stringify(sc)),id,title:wild?'The wild den clearing':'The sunbeam room',indoor:!wild,from:sc.id})}
+const HOMEPOS=()=>h4Home(FAMD().scene.home);   // per family: manifest scene.home {k: px/home/<k>_*.png + homes.json key, x, y}
 function homeKind(){return HOMEPOS().k}
 function homeProp(cls){const h=HOMEPOS(),k=h.k,u=n=>`px/home/${k}_${n}.png`;
-  return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${FUI().homeLabel||(k==='log'?'Our hollow log':'Our hollow')}">
-    <i class="hb" style="background-image:url(${u('back')})"></i><canvas class="hgl hgi" data-m="${u('glow_in')}"></canvas><i class="hf" style="background-image:url(${u('front')})"></i><canvas class="hgl hgo" data-m="${u('glow_out')}"></canvas><i class="htail"></i></div>`}
+  return `<div class="home home-${k}${cls?' '+cls:''}"${cls?'':' id="home"'} style="left:${h.x}px;top:${h.y-SC_OY}px" aria-label="${k==='den'||k==='den_wild'?'Our mossy den':FUI().homeLabel||(k==='log'?'Our hollow log':'Our hollow')}">
+    <i class="hb" style="background-image:url(${u('back')})"></i><canvas class="hgl hgi" data-m="${u('glow_in')}"></canvas>${k==='basket_room'?'<i class="hsleep"></i>':''}<i class="hf" style="background-image:url(${u('front')})"></i><canvas class="hgl hgo" data-m="${u('glow_out')}"></canvas><i class="htail"></i></div>`}
 const HMASK={};function homeMask(url,pal,lv,cb){const A=PIXEL.AURA,key=url+'|'+pal+'|'+lv;if(HMASK[key])return cb(HMASK[key]);if(!A)return;const ro=A.roles[pal]||Object.values(A.roles)[0];
   const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);const d=x.getImageData(0,0,c.width,c.height),D=d.data;
     const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),rim=hx(ro.rim[lv-1]),gl=hx(ro.glow);
@@ -903,9 +1107,20 @@ function homeGlow(on){const h=$('#home');if(!h)return;h.classList.toggle('glow',
 function homeIn(instant){const h=$('#home'),cr=$('#cr');if(!h||!cr||S.napUntil<=now())return lvDo(GROUND()?'curl_nap':'nap',0);LIVE.st='present';
   const sc=FAMD().scene,J=HOMES_J,an=J&&J[homeKind()],P=HOMEPOS();h.classList.add('in');
   const done=()=>{cr.style.visibility='hidden';const t=h.querySelector('.htail'),v=PIXEL.variant(S.g.seed,SPR(),S.g.pal,S.g.fluff),lk=PIXEL.lookOf(SPR(),S.g,v.pal);
-    if(sc.tail){const baseTail=`px/home/tail_${SPR()}${lk?'_'+lk:''}_${v.pal}.png`,fluffTail=`px/home/tail_${SPR()}${lk?'_'+lk:''}_${v.pal}_f${v.fluff}.png`;t.dataset.fluff=v.fluff;t.style.backgroundImage=`url(${fluffTail})`;const tim=new Image();tim.onerror=()=>{if(t.style&&t.style.backgroundImage.includes('_f'+v.fluff))t.style.backgroundImage=`url(${baseTail})`};tim.src=fluffTail;if(an){t.style.left=(an.lip[0]-15)+'px';t.style.top=(an.lip[1]-13)+'px'}t.classList.add('on')}else t.classList.remove('on');/* Wingsongs: no tail out of the hollow */homeGlow(true);
+    if(h4Nap(h,t,an,v,lk)){}   // H4: basket sleeper / den tail-peek strips (fallback: the old tail below)
+    else if(sc.tail){const baseTail=`px/home/tail_${SPR()}${lk?'_'+lk:''}_${v.pal}.png`,fluffTail=`px/home/tail_${SPR()}${lk?'_'+lk:''}_${v.pal}_f${v.fluff}.png`;t.dataset.fluff=v.fluff;t.style.backgroundImage=`url(${fluffTail})`;const tim=new Image();tim.onerror=()=>{if(t.style&&t.style.backgroundImage.includes('_f'+v.fluff))t.style.backgroundImage=`url(${baseTail})`};tim.src=fluffTail;if(an){t.style.left=(an.lip[0]-15)+'px';t.style.top=(an.lip[1]-13)+'px'}t.classList.add('on')}else t.classList.remove('on');/* Wingsongs: no tail out of the hollow */homeGlow(true);
     clearInterval(LIVE.zT);const m=an?an.mouth:[14,26];const z=()=>{if(!$('#home.in'))return clearInterval(LIVE.zT);lvFx('px/living/z.png',P.x+m[0],P.y-SC_OY+m[1]-12,lowFx()?'':'rise',1500)};z();LIVE.zT=setInterval(z,1600)};
   if(instant||lowFx())return done();let k=0;const [n,dy]=sc.napSink,t=setInterval(()=>{k++;cr.style.marginBottom=(-dy*k)+'px';if(k>=n){clearInterval(t);done()}},83)}
+// H4: house-cat basket sleeper between basket_room back/front (anchor: home + (4,-17), Echo hidden); wild-cat den tail-peek strip at
+// den + (-1,+23) above den_front. Each falls back to the old path if its PNG is missing.
+// Pixal follow-up 2: a bell-vine tap while the Echo naps in the den twitches only the tail-peek (Cole's _twitch frame when it lands; CSS 1px nudge until then)
+function denTwitch(){const t=document.querySelector('#home .htail.denpeek.on');if(!t||lowFx())return false;t.classList.remove('twitch');void t.offsetWidth;t.classList.add('twitch');clearTimeout(t._tw);t._tw=setTimeout(()=>t.classList.remove('twitch'),260);return true}
+try{document.addEventListener('denpeek_twitch',denTwitch)}catch(e){}
+function h4Nap(h,t,an,v,lk){const k=homeKind();if(k!=='basket_room'&&k!=='den'&&k!=='den_wild')return false;
+  if(k==='basket_room'){const z=h.querySelector('.hsleep');if(!z)return false;const u=`px/home/sleeper_twitchel_cat_${v.pal}.png`;z.style.backgroundImage=`url(${u})`;z.classList.add('on');
+    const im=new Image();im.onerror=()=>{z.classList.remove('on');const cr=$('#cr');if(cr)cr.style.visibility=''};im.src=u;t.classList.remove('on');return true}
+  const u=`px/home/denpeek_twitchel_${lk||curLook()}_${v.pal}.png`;t.className='htail denpeek on';t.style.left='-1px';t.style.top='23px';t.style.backgroundImage=`url(${u})`;
+  const im=new Image();im.onerror=()=>{t.className='htail';t.style.backgroundImage=''};im.src=u;return true}
 let HOMES_J=null;fetch('px/home/homes.json').then(r=>r.json()).then(j=>HOMES_J=j).catch(()=>{});
 function homeTap(){const h=$('#home');if(!h||!h.classList.contains('in'))return false;asleep();if(lowFx())return true;const cr=$('#cr'),px=cr&&cr.querySelector('.px-echo');
   h.classList.add('peek');if(cr){cr.style.visibility='';if(px)PIXEL.sleep(px,true)}setTimeout(()=>{h.classList.remove('peek');if(cr&&$('#home.in'))cr.style.visibility='hidden'},1500);return true}
@@ -977,6 +1192,7 @@ function g2Img(IM,k,src){const im=IM[k]=new Image();im.onerror=()=>{const f=src.
 const g2ok=im=>im&&im.complete&&im.naturalWidth;
 function g2Loop(step,draw){let acc=0,last=performance.now(),alive=true;function tick(t){if(!alive)return;acc+=Math.min(.1,(t-last)/1000);last=t;while(acc>=1/60&&alive){step(1/60);acc-=1/60}if(alive)draw();requestAnimationFrame(tick)}requestAnimationFrame(t=>{last=t;tick(t)});return ()=>{alive=false}}
 function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>${t}</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2000)}
+const BIRD_TOP=172;   // H18: 48 px bird sprite top -> body centre 196 (bob +/-3 -> 193..199), 32+ px above the ground line
 function catchGame(){
   const fox=GROUND(),G=GG(),level=v2Level('catch','catchLevel'),st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=G.titles.catch;
   const g=CatchEngine.create({level,seed:(S.g.seed||1)*37+st.games*11+1,fam:FID(),lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
@@ -984,7 +1200,7 @@ function catchGame(){
   gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
-  const IM={};const CA=GG().catchArt||{};g2Img(IM,'bg',CA.bg||`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(CA.canopy||fox)g2Img(IM,'canopy',CA.canopy||'px/catch/canopy.png');g2Img(IM,'car',`px/catch/${fox?'basket':'nest'}.png`);
+  const IM={};const CA=GG().catchArt||{};g2Img(IM,'bg',CA.bg||`px/scenes/${fox?'meadow_day':'hilltop_twi'}.png`);if(CA.canopy||fox)g2Img(IM,'canopy',CA.canopy||'px/catch/canopy.png');if(fox)g2Img(IM,'car','px/catch/basket.png');   // H18: birds carry no nest / ground chunk
   g2Img(IM,'gold',`px/catch/${fox?'apple_gold':'feather_gold_inked'}.png`);ITEMS.forEach(k=>g2Img(IM,k,`px/i_${k}.png`));
   if(fox)['run0','run1','run2','run3','run4','run5','run_happy'].forEach(k=>g2Img(IM,k,`px/${FR.pd}${SPR()}_${k}.png`));else{g2Img(IM,'fly',FR.fly);g2Img(IM,'fly_happy',`px/${FR.pd}${SPR()}_glide_happy.png`)}
   let ended=false,cheered=false,lastLine=-9,happy=0,face=1,F=0,pops=[],fx=null,pid=null,ext=0,hold=false;const AN=fetch('px/catch/anchors.json').then(r=>r.json()).then(j=>IM.anch=j).catch(()=>{});
@@ -1005,11 +1221,16 @@ function catchGame(){
     if(fox){const k=happy>0?'run_happy':moving?'run'+((F/5|0)%6):'run0',im=IM[k],a=(an&&(an[SPR()+'_basket']||an.slyte_basket)[FR.sk]&&(an[SPR()+'_basket']||an.slyte_basket)[FR.sk][k])||[22,22],top=A.LINE+4-a[1];
       if(g2ok(IM.run0)&&an){const h=g2Top(IM.run0,0,0,IM.run0.width,IM.run0.height);if(h){g.headY=A.LINE+4-a[1]+h.top;g.headDX=face*(h.cx-a[0])}}
       if(g2ok(im)){cx.save();if(face<0){cx.translate(Math.round(g.x)*2,0);cx.scale(-1,1)}const au=PIXEL.aura(im,0,0,pal,stg,(F/15)|0,low);if(au)cx.drawImage(au,Math.round(g.x-a[0])-13,top-13);cx.drawImage(im,Math.round(g.x-a[0]),top);if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-a[0])+a[0]-11,top+a[1]+2-10);cx.restore()}}
-    else{const fi=(F/6|0)%4,a=(an&&(an[SPR()+'_nest']||an.whimber_nest)[FR.sk]&&(an[SPR()+'_nest']||an.whimber_nest)[FR.sk]['fly'+fi])||[24,44],top=A.LINE-2-(a[1]-3);
-      if(g2ok(IM.fly)&&an){const h=g2Top(IM.fly,0,FR.row*48,48,48);if(h){g.headY=top+h.top;g.headDX=h.cx-a[0]}}
-      if(happy>0&&g2ok(IM.fly_happy)){const au=PIXEL.aura(IM.fly_happy,0,0,pal,stg,(F/15)|0,low);if(au)cx.drawImage(au,Math.round(g.x-a[0])-13,top-13);cx.drawImage(IM.fly_happy,Math.round(g.x-a[0]),top)}
-      else if(g2ok(IM.fly)){const au=PIXEL.aura(IM.fly,fi*48,FR.row*48,pal,stg,(F/15)|0,low);if(au)cx.drawImage(au,Math.round(g.x-a[0])-13,top-13);cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,Math.round(g.x-a[0]),top,48,48)}
-      if(g2ok(IM.car))cx.drawImage(IM.car,Math.round(g.x-11),A.LINE-2)}
+    else{   // H18: the bird flies: airborne (body centre y ~188..204, well above the y=236 ground line), 4-frame wingbeat + whole-pixel hover bob,
+            // left/right facing, glide_happy on a catch, a faint starry wing trail; no nest, nothing slides on the turf. Missed items still fall to A.LINE.
+      const fi=(F/6|0)%4,a=(an&&(an[SPR()+'_nest']||an.whimber_nest)[FR.sk]&&(an[SPR()+'_nest']||an.whimber_nest)[FR.sk]['fly'+fi])||[24,44];
+      const bob=low?0:Math.round(Math.sin(F/9)*3),top=BIRD_TOP+bob,bx=Math.round(g.x-24);
+      if(g2ok(IM.fly)){const h=g2Top(IM.fly,0,FR.row*48,48,48);if(h){g.headY=top+h.top;g.headDX=(PIXEL.flipFor(curLook(),face)?-1:1)*(h.cx-24)}else g.headY=top+12}else g.headY=top+12;
+      if(moving&&!low){cx.save();for(let k=1;k<=3;k++){cx.globalAlpha=.32-k*.09;cx.fillStyle=k%2?'#FFF4C8':'#FFD27A';cx.fillRect(bx+24-face*(10+k*5),top+26+((F+k)%3),k===1?2:1,k===1?2:1)}cx.restore()}
+      cx.save();if(PIXEL.flipFor(curLook(),face)){cx.translate(bx*2+48,0);cx.scale(-1,1)}   // face the way it flies (chicken/dove/pigeon/duck face left natively)
+      if(happy>0&&g2ok(IM.fly_happy)){const au=PIXEL.aura(IM.fly_happy,0,0,pal,stg,(F/15)|0,low);if(au)cx.drawImage(au,bx-13,top-13);cx.drawImage(IM.fly_happy,bx,top)}
+      else if(g2ok(IM.fly)){const au=PIXEL.aura(IM.fly,fi*48,FR.row*48,pal,stg,(F/15)|0,low);if(au)cx.drawImage(au,bx-13,top-13);cx.drawImage(IM.fly,fi*48,FR.row*48,48,48,bx,top,48,48)}
+      cx.restore();window.__catchBird={top,cy:top+24,face,nest:false}}
     {const hr=CatchEngine.headR(g);cx.save();cx.globalAlpha=low?.18:.14+.06*Math.sin(performance.now()/300);cx.fillStyle='#FFF4C8';cx.beginPath();cx.ellipse(Math.round(g.x+(g.headDX||0)),g.headY==null?A.LINE:g.headY,hr,3,0,0,6.283);cx.fill();cx.restore()}   // playtest: subtle head target
     cx.fillStyle='#FFD27A';cx.font='8px PS2P';for(const p of pops)cx.fillText(p.s,Math.round(p.x-6),Math.round(A.LINE-20-(low?0:(1-p.t)*14)));
     $('#cn').textContent=g.n;$('#cs').textContent=g.streak>=5?'×'+g.streak:'';$('#cs').className=g.streak>=10?'gold':'';
@@ -1024,10 +1245,10 @@ function catchGame(){
   // C4 touch: the head follows ONE finger (the newest; other/stale pointer ids are ignored) and the target is re-aimed every frame from it.
   // Facing mirrors the fox's head offset (~15px), so it must not depend on the target (that loop made turns jitter): a touch faces the side
   // the finger lands on (past the head by more than the offset), a drag faces the way the finger travels (after 10px back from its turn point).
-  const hdx=f=>fox?f*Math.abs(g.headDX||0):(g.headDX||0);
+  const hdx=f=>f*Math.abs(g.headDX||0);
   // after a drag turn the body holds (never steps back against the drag) until the finger is past the mirrored head
   function aim(){if(fx==null)return;let t=fx-hdx(face);if(hold){if((t-g.x)*face>=0)hold=false;else t=g.x}CatchEngine.moveTo(g,t)}
-  const turn=(f,drag)=>{if(fox&&f&&f!==face){face=f;hold=!!drag}};
+  const turn=(f,drag)=>{if(f&&f!==face){face=f;hold=fox&&!!drag}};
   const pdn=e=>{e.preventDefault();pid=e.pointerId;hold=false;fx=ext=xOf(e);const d=fx-(g.x+hdx(face));if(Math.abs(d)>Math.abs(g.headDX||0)+4)turn(Math.sign(d));try{cv.setPointerCapture(e.pointerId)}catch(_){}aim()};
   const pmv=e=>{if(e.pointerId!==pid)return;fx=xOf(e);if((fx-ext)*face>0)ext=fx;else if(Math.abs(fx-ext)>=10){turn(-face,1);ext=fx}aim()};
   const pup=e=>{if(e.pointerId===pid){pid=null;fx=null}};
@@ -1121,7 +1342,7 @@ function memoryGame(){
       if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){SFX('whimber_night_vision_glint',{vol:.5});B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
     if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
     if(e.type==='pair'){if(!(window.MusicFX&&MusicFX.pairsMatch(FID(),e.item===G.token?'token':e.item)))SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
-      if(pairsSaid%2===0)talk(Math.random()<.5?(fox?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted'}:{text:`Two ${PAIR_NAMES[e.item]||e.item}… hoo.`,expr:'happy'}):B('pairs_pair'),1800);else say('*')}
+      if(pairsSaid%2===0)talk(Math.random()<.5?(fox?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted',key:'pairs_pair'}:{text:Dialogue.speciesCalls(`Two ${PAIR_NAMES[e.item]||e.item}… hoo.`,Dialogue.lookOf(Dialogue.ctx())),expr:'happy',key:'pairs_pair'}):B('pairs_pair'),1800);else say('*')}
     if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
       if(misses%3===0)talk(B('pairs_miss'),1800);
       // Radar Ears (moved here from Shiny Search, spec v0.3): the hint jingle plays from the side where the partner card lies
@@ -1454,6 +1675,6 @@ function afterHome(){
   $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),levels:()=>({pairs:pairsLevel(),dig:digLevel(),run:runLevel(),catch:v2Level('catch','catchLevel'),stack:v2Level('stack','stackLevel')}),setBand:b=>{obSetBand(b);save()},pcSettings:()=>pcSettings(),memoryGame:()=>memoryGame(),catchGame:()=>catchGame(),stackGame:()=>stackGame(),obGlow:(fid,seed,pal,l,look,fluff)=>obGlow(fid,seed,pal,l,look,fluff),obGlowPaint:()=>obGlowPaint(),orFinish:(n,k)=>orFinish(n,k),genEcho:k=>genEcho(k),svg:(k,g,m)=>svg(k,g,m),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},chipLift:()=>chipLift(),choices:(l,cb,o)=>choices(l,cb,o),sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),denTwitch:()=>denTwitch(),twMigrate:s=>twClearingMigrate(s),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),levels:()=>({pairs:pairsLevel(),dig:digLevel(),run:runLevel(),catch:v2Level('catch','catchLevel'),stack:v2Level('stack','stackLevel')}),setBand:b=>{obSetBand(b);save()},pcSettings:()=>pcSettings(),memoryGame:()=>memoryGame(),catchGame:()=>catchGame(),stackGame:()=>stackGame(),obGlow:(fid,seed,pal,l,look,fluff)=>obGlow(fid,seed,pal,l,look,fluff),obGlowPaint:()=>obGlowPaint(),orFinish:(n,k)=>orFinish(n,k),genEcho:k=>genEcho(k),svg:(k,g,m)=>svg(k,g,m),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
 start();
 })();

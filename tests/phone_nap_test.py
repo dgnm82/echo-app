@@ -40,6 +40,10 @@ async def main():
         await pg.wait_for_timeout(700);await pg.evaluate(CL)
         await pg.click('#rest');name=f'{sp}-nap'+('-reduced-motion' if low else '')
         await frames(pg,name,32,40)
+        # Batch H: the walk now lands up to ~1 s after the 32-frame strip on a busier home scene; wait (<= 5 s) for the bed instead of a frame count
+        wpb=await pg.evaluate("(()=>{const w=SCENES['%s'].find(s=>s.id==='%s').wp.find(x=>x.id==='%s');return [w.xy[0],Math.max(52,w.xy[1]-57)]})()"%(sp,home,BED[kind]))
+        try:await pg.wait_for_function("p=>{const q=__echo.living.pos;return q&&q[0]===p[0]&&q[1]===p[1]}",arg=wpb,timeout=5000)
+        except Exception:pass
         st=await pg.evaluate("(()=>{const c=document.getElementById('cr'),sc=document.getElementById('sc');return [__echo.state.scene,__echo.scene.cur,[parseInt(c.style.left),sc.clientHeight-parseInt(c.style.bottom)],__echo.living.pos]})()")
         wp=await pg.evaluate("(()=>{const w=SCENES['%s'].find(s=>s.id==='%s').wp.find(x=>x.id==='%s');return [w.xy[0],Math.max(52,w.xy[1]-57)]})()"%(sp,home,BED[kind]))
         assert st[0]==home and st[2]==wp,(name,st,wp)
