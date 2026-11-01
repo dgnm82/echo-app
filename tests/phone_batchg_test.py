@@ -48,7 +48,7 @@ async def main():
       for _ in range(6):
         if await pg.locator('#obnm').count():break
         await T('.scene.ob',200)
-      await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=2')   # 9-10
+      await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('9-10')")   # 9-10
       await orpick(pg,animal);await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
       await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
       for _ in range(150):

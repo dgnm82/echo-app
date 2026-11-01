@@ -1,0 +1,191 @@
+{
+  "_about": "Music School Phase 1, step 1 (Nov 1 overrides): the child's music level (ML 1-5) and the quiet game dials. Pure data for musiclevel.js. No age prior: everyone starts from a neutral ML2, the hatching-song warm-up sets the start, then play adapts toward ~70-80% success. The child never sees a level, a number or a score.",
+  "v": 1,
+  "levels": {
+    "1": {
+      "pads_tier": 1,
+      "eib_len": 3,
+      "songbook": {
+        "max_distinct": 3,
+        "phrases": 1
+      },
+      "rhythm": false,
+      "solfege": "none"
+    },
+    "2": {
+      "pads_tier": 2,
+      "eib_len": 4,
+      "songbook": {
+        "max_distinct": 4,
+        "phrases": 1
+      },
+      "rhythm": false,
+      "solfege": "none"
+    },
+    "3": {
+      "pads_tier": 3,
+      "eib_len": 6,
+      "songbook": {
+        "max_distinct": 99,
+        "phrases": 1
+      },
+      "rhythm": "long-short",
+      "solfege": "none"
+    },
+    "4": {
+      "pads_tier": 4,
+      "eib_len": 7,
+      "songbook": {
+        "max_distinct": 99,
+        "phrases": 2
+      },
+      "rhythm": true,
+      "solfege": "pads"
+    },
+    "5": {
+      "pads_tier": 4,
+      "eib_len": 8,
+      "songbook": {
+        "max_distinct": 99,
+        "phrases": 99
+      },
+      "rhythm": true,
+      "solfege": "pads+strip",
+      "_note": "same pads as ML4: fa and ti are Phase 2"
+    }
+  },
+  "solfege": [
+    "do",
+    "re",
+    "mi",
+    "fa",
+    "sol",
+    "la",
+    "ti"
+  ],
+  "prior": 2,
+  "warmup": {
+    "up_at": 3.25,
+    "down_at": 1,
+    "beat": {
+      "bpm": 84,
+      "beats": 10,
+      "skip": 2,
+      "window_ms": 150,
+      "min_taps": 4
+    },
+    "pitch": {
+      "trials": [
+        4,
+        2
+      ],
+      "_note": "steps above do: a 5th (sol), then a 3rd (mi)"
+    },
+    "copy": {
+      "notes": [
+        4,
+        2
+      ],
+      "_note": "sol-mi"
+    },
+    "rhythm": {
+      "ticks": [
+        12,
+        6,
+        6,
+        12
+      ],
+      "ratio_tol": 0.45,
+      "long_short_min": 1.25,
+      "_rule": "right pattern = every long gap (12 ticks) is at least long_short_min x every short gap (6 ticks), tempo-free; same pat count only = 0.5"
+    },
+    "auto_ms": 6000,
+    "moment_max_ms": 20000,
+    "dial_from_ml": {
+      "1": 0,
+      "2": 0.5,
+      "3": 1.0,
+      "4": 1.0,
+      "5": 1.0
+    },
+    "dial_beat_bonus": {
+      "at": 0.7,
+      "add": 0.25
+    }
+  },
+  "adapt": {
+    "window": 4,
+    "up_above": 0.85,
+    "down_below": 0.65,
+    "up": 0.15,
+    "down": 0.2,
+    "min": 0,
+    "max": 2,
+    "games": [
+      "catch",
+      "stack",
+      "run",
+      "dig"
+    ],
+    "report_only": [
+      "pairs"
+    ]
+  },
+  "eib": {
+    "up_at": 0.85,
+    "down_below": 0.65,
+    "ramp_band": {
+      "1": "5-6",
+      "2": "7-8",
+      "3": "7-8",
+      "4": "7-8",
+      "5": "7-8"
+    },
+    "ml_up_rounds": 2,
+    "_note": "Round success = matches / tunes in the round. >= 0.85 at the saved length steps the length up (the +2 below 8 and the tempo steps after 16 stay); < 0.65 or a soft stop = 1 note shorter next round (never below 3). ML rises (never falls automatically) when the length has stayed >= the next level's start for 2 rounds."
+  },
+  "seed_from_len": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      6,
+      3
+    ],
+    [
+      7,
+      4
+    ],
+    [
+      8,
+      5
+    ]
+  ],
+  "seed_dial_from_band": {
+    "5-6": 0,
+    "7-8": 0.5,
+    "9-10": 1.0
+  },
+  "reading": {
+    "_about": "Dialogue band (5-6 / 7-8 / 9-10) for NEW children: starts at 5-6, nudged by the warm-up, grows with play. Only rises. Existing saves keep their band.",
+    "start": "5-6",
+    "from_ml": {
+      "1": "5-6",
+      "2": "5-6",
+      "3": "7-8",
+      "4": "9-10",
+      "5": "9-10"
+    },
+    "grow_sessions": [
+      [
+        15,
+        "7-8"
+      ]
+    ]
+  }
+}

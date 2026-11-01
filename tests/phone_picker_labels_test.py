@@ -19,7 +19,8 @@ async def main():
         if await pg.locator('#obnm').count():break
         await pg.locator('.scene.ob').first.click();await pg.wait_for_timeout(200)
       await pg.fill('#obnm','Mia')
-      for s in ['#obnext','#obyes','.obagebtn >> nth=1']:await pg.locator(s).first.click();await pg.wait_for_timeout(500)
+      for s in ['#obnext','#obyes']:await pg.locator(s).first.click();await pg.wait_for_timeout(500)
+      await pg.evaluate("__echo.setBand('7-8')")   # (Nov 1) no age step: the grown-ups Age range sets the band
       await pg.wait_for_selector('.orfamcard',timeout=15000);await pg.wait_for_timeout(500)
       m=await pg.evaluate("""[...document.querySelectorAll('.orfamcard')].map(c=>{const s=c.querySelector('span'),cr=c.getBoundingClientRect(),sr=s.getBoundingClientRect();return {t:s.textContent,cardW:cr.width,cw:c.clientWidth,csw:c.scrollWidth,sw:s.scrollWidth,sCW:s.clientWidth,sl:sr.left-cr.left,sr:cr.right-sr.right,font:getComputedStyle(s).fontSize}})""")
       check(len(m)==3 and {x['t'] for x in m}=={'Howlings','Wingsongs','Purrlings'},f'{name}: 3 family cards with full names {[x["t"] for x in m]}')

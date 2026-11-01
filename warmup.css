@@ -1,0 +1,34 @@
+/* Hatching-song warm-up (Music School Phase 1, step 1). Art: px/warmup/* (Pixal), laid out on the 180x320 canvas and scaled to fit.
+   Never tints sprite pixels: every state is a frame swap. Reduced motion (.rm or prefers-reduced-motion): static frames, no hop. */
+.wu{position:absolute;top:0;right:0;bottom:0;left:0;z-index:60;background:#24162C;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.wucv{position:absolute;left:0;top:0;width:180px;height:320px;transform-origin:0 0;background:#2E2452 center/180px 320px no-repeat;image-rendering:pixelated;overflow:hidden}
+.wucv>*,.wustage>*{position:absolute}
+.wustage{pointer-events:none}.wustage .wuhit,.wucv .wuhit{pointer-events:auto}
+.wusp{display:block;background-repeat:no-repeat;image-rendering:pixelated}
+.wuspot{background-image:url(px/warmup/stage_spot.png)}
+.wuglow{background-image:url(px/warmup/heartglow.png)}.wuglow.static{background-image:url(px/warmup/heartglow_static.png);background-position:0 0!important}
+.wuheart{background-image:url(px/warmup/heart_beat.png)}.wuheart.static{background-image:url(px/warmup/heart_beat_static.png);background-position:0 0!important}
+.wuecho .px-echo{width:48px;height:48px}
+.wuburst{background-image:url(px/warmup/pat_burst.png)}.wuburst.static{background-image:url(px/warmup/pat_burst_static.png);background-position:0 0!important}
+.wupad{background-image:url(px/warmup/copy_pads.png)}
+.wubeat{background-image:url(px/warmup/beat_pads.png)}
+.wuperch{background-image:url(px/warmup/perch_low.png)}
+.wuchirp{background-image:url(px/warmup/chirp_same_l.png)}
+.wuchirp.hop{animation:wuhop .45s steps(4) 1}
+@keyframes wuhop{40%{transform:translateY(-5px)}70%{transform:translateY(-2px)}}
+.wupip{background-image:url(px/warmup/moment_pips.png)}
+.wucue{background-image:url(px/warmup/cues.png)}
+.wuhit{display:block;margin:0;padding:0;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:none}
+.wuhit:focus-visible{outline:2px solid #FFF6E6;outline-offset:-2px}
+.wugo{font:8px/10px PS2P,monospace;color:#3B2A5C;background:#FFF6E6;border:1px solid #3B2A5C;box-shadow:0 2px 0 #23183a;border-radius:2px}
+.wubub{width:164px;box-sizing:border-box;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #23183a;padding:4px 5px;font:8px/10px PS2P,monospace;border-radius:2px;text-align:left}
+.wudim{background:rgba(36,22,44,.43)}
+.wucard{background:url(px/warmup/firstsong_card.png) no-repeat;cursor:pointer}.wucard>*{position:absolute}.wucard.lit{background-image:url(px/warmup/firstsong_card_lit.png)}
+.wunote{display:block;background:url(px/notes/notes_shaped.png) no-repeat;background-size:900% 200%;background-position:calc(var(--c) * 12.5%) 100%;image-rendering:pixelated}
+.wumark{background-image:url(px/warmup/beat_marks.png)}
+.wu.rm .wuchirp.hop{animation:none}
+@media (prefers-reduced-motion:reduce){.wuchirp.hop{animation:none}}
+/* Memory Book: "Our first song" card (same art, tap = play) */
+.bkfirst{position:relative;display:block;width:112px;height:64px;margin:4px 0;padding:0;border:0;background:url(px/warmup/firstsong_card.png) no-repeat;image-rendering:pixelated;cursor:pointer}
+.bkfirst.playing{background-image:url(px/warmup/firstsong_card_lit.png)}
+.bkfirst .wunote,.bkfirst .wumark{position:absolute}

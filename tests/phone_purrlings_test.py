@@ -22,7 +22,7 @@ async def main():
       for _ in range(6):
         if await pg.locator('#obnm').count():break
         await T('.scene.ob',200)
-      await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
+      await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
       if i==0:
         await to_family(pg,'twitchel')   # family-first picker: the Purrlings step
         cards=await pg.evaluate("[...document.querySelectorAll('.orcard')].map(b=>b.dataset.a)")

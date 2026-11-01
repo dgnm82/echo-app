@@ -8,7 +8,9 @@ const stepVal=(t,n)=>{let v=t[0][1];for(const [k,x] of t)if(n>=k)v=x;return v};
 // no simultaneous-item steps (the gap alone sets the density, capped by the level's top simul), so nothing jumps
 function ramp(L,n){const k=Math.floor(n/5),top=L.simul[L.simul.length-1][1];return {fall:Math.min(L.fallCap,L.fall0*Math.pow(1.04,k)),int:Math.max(L.intMin,L.int0*Math.pow(.96,k)),simul:top,sway:stepVal(L.sway,n),dx:Math.min(L.dxMax,L.dx0+3*n)}}
 const BIN=20;   // spawn "spots": 9 columns of 20 px; never 3 in a row from the same one
-function create(o){const T=(o&&o.T)||TUN,level=o.level||'standard',L=T.CATCH[level],r=rng(o.seed||1),P=T.CATCH_PICK;
+// Music School step 1: o.L = blended params (Difficulty.blend(CatchEngine.table(), dial)); without it, T.CATCH[level] as before
+function table(T){T=T||TUN;const o={};for(const lv of ['easy','standard','bigkid'])o[lv]=Object.assign({},T.CATCH[lv],{head:HEAD[lv]});return o}
+function create(o){const T=(o&&o.T)||TUN,level=o.level||'standard',L=(o&&o.L)||T.CATCH[level],r=rng(o.seed||1),P=T.CATCH_PICK;
   return {T,L,P,level,fam:o.fam||'slyte',lowfx:!!o.lowfx,r,t:0,x:90,tx:90,items:[],n:0,streak:0,longest:0,golds:0,bonus:0,landed:0,lands:[],spawnT:.6,lastX:90,lastLand:0,nextGold:P.goldEvery[0]+Math.floor(r()*(P.goldEvery[1]-P.goldEvery[0]+1)),made:0,done:false,ev:[]}}
 function landT(g,it){return g.t+(F.LINE-it.y)/it.v}
 function spawn(g){const R=ramp(g.L,g.n),P=g.P;g.made++;const gold=g.made>=g.nextGold;if(gold)g.nextGold=g.made+P.goldEvery[0]+Math.floor(g.r()*(P.goldEvery[1]-P.goldEvery[0]+1));
@@ -45,9 +47,11 @@ function step(g,dt){if(g.done)return g;g.t+=dt;const L=g.L;
         if(g.landed>=L.grass){g.done=true;g.ev.push({type:'end',n:g.n,streak:g.longest,golds:g.golds});return g}}}}
   return g}
 // playtest: only a hit on the Echo's head counts (head ~ basket width minus the item overhang)
-const HEAD={easy:22,standard:16,bigkid:14};function headR(g){return (HEAD[g.level]||16)/2+g.L.magnet}
+const HEAD={easy:22,standard:16,bigkid:14};function headR(g){return (g.L.head!=null?g.L.head:(HEAD[g.level]||16))/2+g.L.magnet}
+// success for the dial: caught / (caught + landed)
+function success(g){const t=g.n+g.landed;return t?g.n/t:0}
 function moveTo(g,x){g.tx=Math.max(FOLLOW.EDGE,Math.min(F.W-FOLLOW.EDGE,x))}
 function nudge(g,dir){moveTo(g,g.x+dir*30)}
 function score(g){return g.n}
 function take(g){const e=g.ev;g.ev=[];return e}
-W.CatchEngine={create,step,moveTo,nudge,take,score,ramp,F,landT,headR,FOLLOW};if(typeof module!=='undefined')module.exports=W.CatchEngine})(typeof window!=='undefined'?window:globalThis);
+W.CatchEngine={create,step,moveTo,nudge,take,score,ramp,F,landT,headR,FOLLOW,table,success,HEAD};if(typeof module!=='undefined')module.exports=W.CatchEngine})(typeof window!=='undefined'?window:globalThis);

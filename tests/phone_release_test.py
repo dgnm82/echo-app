@@ -136,7 +136,7 @@ async def origin_cat(pg,animal='lion',chip='golden'):   # the real onboarding: p
   for i in range(6):
     if await pg.locator('#obnm').count():break
     await T('.scene.ob',200)
-  await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
+  await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
   await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
   await T('#orinv');await T('#orinv',3000);await T('#ornm',400);await T('#orkeep');await T('#orkeep',3000)
 async def pick_first(pg):

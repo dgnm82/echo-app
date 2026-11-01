@@ -81,7 +81,7 @@ async def main():
     for _ in range(12):
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
-    await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1',600)
+    await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
     await pick(pg,'fox');await T('#ornext',300);await T('.orchip >> nth=0',900);await T('#orinv');await T('#orinv',3000);await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
     await pg.wait_for_timeout(500);await pg.close()
     for day,bio in [(0,'woodland'),(1,'pasture'),(2,'cove')]:

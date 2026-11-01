@@ -30,8 +30,8 @@ async def run_to_seen(pg,name='Mia',sh=False):
     if sh:await shot(pg,'ob04_confirm')
     await T(pg,'#obyes')
   else:await T(pg,'#obskip')
-  if sh:await shot(pg,'ob05_age')
-  await T(pg,'.obagebtn >> nth=1')
+  if sh:await shot(pg,'ob05_after_name')
+  await pg.evaluate("__echo.setBand('7-8')")
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])

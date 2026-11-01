@@ -14,10 +14,12 @@ function speedAt(L,m){return m<=L.dKid?L.v0+(L.vKid-L.v0)*m/L.dKid:Math.min(L.vM
 function two(L,m,a,b,c){const vAt=L.dKid+100*(L.vMax-L.vKid)/L.creep;if(m<=L.dKid)return L[a]+(L[b]-L[a])*m/L.dKid;const f=Math.min(1,(m-L.dKid)/(vAt-L.dKid));return L[b]+(L[c]-L[b])*f}
 const G={W:360,FEET:470,EX:40,TOP:42,HILL:528,OWL:40,CORE:[26,22]};
 function rng(s){let a=s>>>0||1;return()=>{a^=a<<13;a>>>=0;a^=a>>17;a^=a<<5;a>>>=0;return a/4294967296}}
-function create(o){const kind=o.kind||'jump',level=o.level||'standard',L=lvFor(kind,level,o),P=((o&&o.T)||TUN).PICKUPS;
+// Music School step 1: o.L = blended params (Difficulty.blend(RunnerEngine.table(kind), dial)); without it, lvFor(kind, level) as before
+function table(kind,o){const t={};for(const lv of ['easy','standard','bigkid'])t[lv]=lvFor(kind,lv,o);return t}
+function create(o){const kind=o.kind||'jump',level=o.level||'standard',L=o.L||lvFor(kind,level,o),P=((o&&o.T)||TUN).PICKUPS;
   const g={kind,level,L,r:rng(o.seed||1),talents:o.talents||[],evening:!!o.evening,t:0,dist:0,base:L.v0,mult:1,speed:L.v0,
     y:kind==='jump'?G.FEET:280,vy:0,air:false,airT:0,lastGround:0,buffer:-9,hops:0,held:false,heldT:0,
-    obs:[],tre:[],nextObs:G.W+120,nextTre:G.W+60,treasures:0,gold:0,bumps:0,stretchBumps:[0],stretch:0,stretchT:0,
+    obs:[],tre:[],nextObs:G.W+120,nextTre:G.W+60,treasures:0,gold:0,bumps:0,cleared:0,stretchBumps:[0],stretch:0,stretchT:0,
     tumble:0,haul:0,float:0,moon:0,saved:0,streak:0,P,DM:((o&&o.T)||TUN).TALENTS.disguiseEveryM,disguiseAt:-1e9,grace:0,pending:null,disguised:false,disguiseUsed:-1,phase:'run',restT:0,ev:[],chimeT:0,best:o.best||0,nTre:0};
   return g}
 const has=(g,t)=>g.talents.includes(t);
@@ -71,6 +73,7 @@ function step(g,dt){g.t+=dt;const L=g.L;
   // spawn ahead (spacing in seconds at the current speed)
   const ahead=g.dist+G.W+40;while(g.nextObs<ahead){spawnObs(g,g.nextObs);const sp=two(L,g.dist/16,'sMax','sMin','sOver')*g.speed*(1+g.r()*.5),dn=g.kind==='glide'?1-.3*Math.min(1,g.dist/16/800):1;g.nextObs+=Math.max(sp*dn,g.kind==='glide'?140*dn:104)}   // A5: glide hazards get denser with distance
   while(g.nextTre<ahead){spawnTre(g,g.nextTre);g.nextTre+=g.base*(g.P.treasureEvery[0]+g.r()*(g.P.treasureEvery[1]-g.P.treasureEvery[0]))}
+  for(const o of g.obs)if(!o.counted&&!o.pushed&&o.x+o.w-g.dist<G.EX){o.counted=1;g.cleared++}   // an obstacle met and got past (for the dial)
   g.obs=g.obs.filter(o=>o.x-g.dist>-80);for(const t of g.tre)if(!t.got&&t.x-g.dist<=-40)g.streak=0;g.tre=g.tre.filter(t=>t.x-g.dist>-40&&!t.got);
   // talents that look ahead
   for(const t of g.tre)if(!t.cued&&t.x-g.dist<G.W+g.speed){t.cued=1;if(t.gold&&has(g,'Radar Ears'))g.ev.push({type:'radar'});if(has(g,'Super Radar Hearing'))g.ev.push({type:'chime',y:t.y})}
@@ -86,6 +89,8 @@ function step(g,dt){g.t+=dt;const L=g.L;
   return g}
 function score(g){return Math.floor(g.dist/16)}
 function haul(g){return g.treasures+3*g.gold}
+// success for the dial: obstacles cleared / obstacles met (a bump or a moon-saved bump is met, not cleared)
+function success(g){const met=g.cleared+g.bumps+g.saved;return met?g.cleared/met:1}
 function take(g){const e=g.ev;g.ev=[];return e}
-W.RunnerEngine={speedAt,two,lvFor,haul,create,step,press,release,score,take,core,obox,LV,G}
+W.RunnerEngine={speedAt,two,lvFor,haul,create,step,press,release,score,take,core,obox,LV,G,table,success}
 if(typeof module!=='undefined')module.exports=W.RunnerEngine})(typeof window!=='undefined'?window:globalThis);

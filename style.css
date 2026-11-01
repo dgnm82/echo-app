@@ -205,7 +205,7 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .obfield span{color:#fff6e6;font-size:8px}
 .obchips,.ornames{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;max-width:172px}
 .obrow{gap:4px;justify-content:center}
-.obages{display:flex;flex-direction:column;gap:6px}.obagebtn{min-width:140px;min-height:36px;gap:8px}.obagebtn .pxi{transform:scale(2);margin:0 8px}
+
 .orgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
 .orcard{background:#fff6e6;border:1px solid #3b2a5c;box-shadow:0 2px 0 #23183a;width:54px;height:50px;font:inherit;font-size:8px;color:#3b2a5c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:1px}
 .orcard i{width:32px;height:32px;background-size:100% 100%;image-rendering:pixelated}

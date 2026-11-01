@@ -12,7 +12,7 @@ async def run(b,vp,animal):
   for i in range(8):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',300)
-  await pg.fill('#obnm','Leo');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1',600)
+  await pg.fill('#obnm','Leo');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
   for sel in ['#ornext']:
     r=await pg.evaluate("(()=>{const e=document.querySelector('#ornext');const a=e.getBoundingClientRect();return [a.top,a.bottom,innerHeight]})()");assert r[1]<=r[2]+.5,('P1 next',vp,r)
   await pick(pg,animal);await T(pg,'#ornext');await T(pg,'.orchip >> nth=0',1000);await T(pg,'#orinv');await T(pg,'#orinv',3200)

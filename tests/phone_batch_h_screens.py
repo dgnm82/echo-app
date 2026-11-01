@@ -13,7 +13,7 @@ async def onboard(pg,age=1):
   for _ in range(12):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
-  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,f'.obagebtn >> nth={age}',600)
+  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate(f"__echo.setBand('{['5-6','7-8','9-10'][age]}')")
 async def to_home(b,p,animal,hour=11):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await onboard(pg);await pick(pg,animal);await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={CHIP[animal]}]',900)
@@ -43,7 +43,7 @@ async def main():
     for _ in range(12):
       if await pg.locator('#obnm').count():break
       await T(pg,'.scene.ob',200)
-    await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1',600)
+    await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
     await pg.wait_for_selector('#orcamctl:not([hidden])',timeout=25000);await pg.wait_for_timeout(600);await shot(pg,'h1_picker_fallback')
     await T(pg,'#orpick',800);await shot(pg,'h3_family_picker');await ctx.close()
     # fox: den parallax + sky taps + hum

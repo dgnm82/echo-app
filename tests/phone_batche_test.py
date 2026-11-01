@@ -22,7 +22,7 @@ async def main():
     for _ in range(6):
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
-    await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await T('.obagebtn >> nth=1')
+    await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
     # E1 (family-first picker: the Purrlings step holds the long names)
     await to_family(pg,'twitchel')
     sp=await pg.evaluate("[...document.querySelectorAll('.orcard span')].map(s=>[s.textContent,getComputedStyle(s).fontSize,s.scrollWidth<=s.parentElement.clientWidth,(()=>{const r=document.createRange();r.selectNodeContents(s);return new Set([...r.getClientRects()].map(q=>Math.round(q.top))).size})()])")

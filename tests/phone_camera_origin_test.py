@@ -29,7 +29,7 @@ async def to_origin(b,p,errs,reqs,init=None,age=1):
   for _ in range(12):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
-  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,f'.obagebtn >> nth={age}',600)
+  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate(f"__echo.setBand('{['5-6','7-8','9-10'][age]}')")
   return ctx,pg
 async def common(pg,tag):
   txt=await pg.evaluate("document.querySelector('#app').innerText");check(not BANNED.search(txt),f'{tag}: no photo / picture / save wording on screen')

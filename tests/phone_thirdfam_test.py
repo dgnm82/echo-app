@@ -33,7 +33,7 @@ async def main():
     for i in range(6):
       if await pg.locator('#obnm').count():break
       await T(pg,'.scene.ob',200)
-    await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1')
+    await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
     check(await pg.locator('.orfamcard[data-f=testfam]').count()==1,'the dummy family card is in the picker');await to_family(pg,'testfam')
     check(await pg.locator('.orcard[data-a=testcat]').count()==1,'the dummy animal card is in the picker')
     await pg.screenshot(path=f'{OUT}/picker.png')

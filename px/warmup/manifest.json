@@ -1,0 +1,602 @@
+{
+ "_schema": "echo-px-warmup-v1",
+ "_owner": "Pixal",
+ "_step": "Music School Phase 1 step 1 (hatching-song warm-up)",
+ "_canvas": [
+  180,
+  320
+ ],
+ "_ink": [
+  "#3B2A5C",
+  "#24162C"
+ ],
+ "_generator": "echo/ios_design/music_phase1/warmup/make_warmup.py",
+ "_changelog": [
+  "Nov 1 (Kai): moment 3 chirps made listen-only. New chirp_same_<side> (identical, level sound lines) + chirp_reveal_<side> (+_static), named to match warmup.js hooks; both sides on perch_low.png. chirp_high_*, chirp_low_*, perch_high kept but deprecated (warmup.js fallback)."
+ ],
+ "layout": {
+  "echo_feet": [
+   90,
+   207
+  ],
+  "echo_cell_48": [
+   66,
+   164,
+   48,
+   48
+  ],
+  "stage_spot": [
+   58,
+   201
+  ],
+  "heartglow": [
+   50,
+   146
+  ],
+  "heart_beat": [
+   84,
+   154
+  ],
+  "pat_burst": [
+   74,
+   202
+  ],
+  "moment_pips": [
+   [
+    49,
+    36
+   ],
+   [
+    71,
+    36
+   ],
+   [
+    93,
+    36
+   ],
+   [
+    115,
+    36
+   ]
+  ],
+  "cue": [
+   82,
+   58
+  ],
+  "perch_low_l": [
+   12,
+   204
+  ],
+  "perch_low_r": [
+   144,
+   204
+  ],
+  "chirp_low_l": [
+   10,
+   180
+  ],
+  "chirp_low_r": [
+   142,
+   180
+  ],
+  "_moment3": "listen-only: both chirps use chirp_same_<side> at chirp_low_<side>, both perches perch_low.png at perch_low_<side>; chirp_high_*/perch_high are deprecated",
+  "copy_pad_mi": [
+   30,
+   252
+  ],
+  "copy_pad_sol": [
+   102,
+   242
+  ],
+  "beat_pad": [
+   66,
+   246
+  ],
+  "firstsong_card": [
+   34,
+   120
+  ],
+  "tap": {
+   "copy_pad_mi": [
+    26,
+    248,
+    56,
+    56
+   ],
+   "copy_pad_sol": [
+    98,
+    238,
+    56,
+    56
+   ],
+   "beat_pad": [
+    58,
+    238,
+    64,
+    64
+   ],
+   "heartbeat_echo": [
+    50,
+    146,
+    80,
+    70
+   ],
+   "chirp_left": [
+    0,
+    104,
+    60,
+    112
+   ],
+   "chirp_right": [
+    120,
+    104,
+    60,
+    112
+   ],
+   "firstsong_card": [
+    34,
+    120,
+    112,
+    64
+   ]
+  }
+ },
+ "files": [
+  {
+   "file": "px/warmup/copy_pads.png",
+   "size": [
+    432,
+    96
+   ],
+   "cell": [
+    48,
+    48
+   ],
+   "frames": "cols c d e f g a b f# bb (echoback.js COLS); row0 rest, row1 pressed/lit",
+   "use": "Moment 1 'copy two notes': two 48x48 pads (sol + mi of the family). Same shapes/colours as the EIB pads."
+  },
+  {
+   "file": "px/warmup/beat_pads.png",
+   "size": [
+    192,
+    96
+   ],
+   "cell": [
+    48,
+    48
+   ],
+   "frames": "cols heart, paw, wing, clap; row0 rest, row1 pressed",
+   "use": "Moment 2 heartbeat (heart col) and moment 4 'clap it back' (paw = Howlings/Purrlings, wing = Wingsongs, clap = optional alt)."
+  },
+  {
+   "file": "px/warmup/heartglow.png",
+   "size": [
+    240,
+    80
+   ],
+   "cell": [
+    80,
+    80
+   ],
+   "frames": "f0 rest, f1 thump, f2 settle (80x80 cells)",
+   "use": "Moment 2 heartbeat aura, drawn BEHIND the Echo sprite, centred on its body. One thump per beat.",
+   "reduced_motion": "heartglow_static.png"
+  },
+  {
+   "file": "px/warmup/heartglow_static.png",
+   "size": [
+    80,
+    80
+   ],
+   "cell": [
+    80,
+    80
+   ],
+   "frames": "single",
+   "use": "Reduced-motion heartbeat aura (no pulsing; pair with heart_beat_static)."
+  },
+  {
+   "file": "px/warmup/heart_beat.png",
+   "size": [
+    26,
+    13
+   ],
+   "cell": [
+    13,
+    13
+   ],
+   "frames": "f0 small (between beats), f1 big (on the beat) (13x13 cells)",
+   "use": "Little heart floating above the Echo head in moment 2 (in front of everything). Beats with the glow.",
+   "reduced_motion": "heart_beat_static.png"
+  },
+  {
+   "file": "px/warmup/heart_beat_static.png",
+   "size": [
+    13,
+    13
+   ],
+   "cell": [
+    13,
+    13
+   ],
+   "frames": "single",
+   "use": "Reduced-motion heart above the Echo."
+  },
+  {
+   "file": "px/warmup/chirp_same_l.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp (open beak, LEVEL sound lines), f2 happy (28x28 cells)",
+   "use": "Moment 3 (listen-only): the chirp on the LEFT side (faces right). Identical on both sides; pitch is heard only. Use f2 on ANY tap (both sides).",
+   "reduced_motion": "chirp_same_l_static.png"
+  },
+  {
+   "file": "px/warmup/chirp_same_l_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (= f1)",
+   "use": "Reduced motion: show while that chirp sounds, f0 otherwise."
+  },
+  {
+   "file": "px/warmup/chirp_reveal_l.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (happy + sparkle), 28x28",
+   "use": "Reveal after the tap: put this on the HIGHER chirp and run the .hop (translateY up ~5px, once). The lower one stays on chirp_same f2.",
+   "reduced_motion": "chirp_reveal_l_static.png"
+  },
+  {
+   "file": "px/warmup/chirp_reveal_l_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (body raised 4px inside the cell + sparkle)",
+   "use": "Reduced-motion reveal for the HIGHER chirp: no hop; the raised pose shows it went up. Hold ~800 ms."
+  },
+  {
+   "file": "px/warmup/chirp_same_r.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp (open beak, LEVEL sound lines), f2 happy (28x28 cells)",
+   "use": "Moment 3 (listen-only): the chirp on the RIGHT side (faces left). Identical on both sides; pitch is heard only. Use f2 on ANY tap (both sides).",
+   "reduced_motion": "chirp_same_r_static.png"
+  },
+  {
+   "file": "px/warmup/chirp_same_r_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (= f1)",
+   "use": "Reduced motion: show while that chirp sounds, f0 otherwise."
+  },
+  {
+   "file": "px/warmup/chirp_reveal_r.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (happy + sparkle), 28x28",
+   "use": "Reveal after the tap: put this on the HIGHER chirp and run the .hop (translateY up ~5px, once). The lower one stays on chirp_same f2.",
+   "reduced_motion": "chirp_reveal_r_static.png"
+  },
+  {
+   "file": "px/warmup/chirp_reveal_r_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single (body raised 4px inside the cell + sparkle)",
+   "use": "Reduced-motion reveal for the HIGHER chirp: no hop; the raised pose shows it went up. Hold ~800 ms."
+  },
+  {
+   "file": "px/warmup/chirp_high_l.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp, f2 delight (28x28 cells)",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_high_l_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_high_r.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp, f2 delight (28x28 cells)",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_high_r_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_low_l.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp, f2 delight (28x28 cells)",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_low_l_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_low_r.png",
+   "size": [
+    84,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "f0 idle, f1 chirp, f2 delight (28x28 cells)",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/chirp_low_r_static.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/perch_high.png",
+   "size": [
+    20,
+    64
+   ],
+   "cell": [
+    20,
+    64
+   ],
+   "frames": "single",
+   "use": "DEPRECATED (pre listen-only, Kai Nov 1): unused by the design; kept only for the warmup.js fallback. Use chirp_same_* / chirp_reveal_*.",
+   "deprecated": true,
+   "unused": true
+  },
+  {
+   "file": "px/warmup/perch_low.png",
+   "size": [
+    24,
+    12
+   ],
+   "cell": [
+    24,
+    12
+   ],
+   "frames": "single",
+   "use": "Moment 3: the SAME pebble perch on BOTH sides, same height (top surface y=1). Static. (Listen-only: no tall perch.)"
+  },
+  {
+   "file": "px/warmup/pat_burst.png",
+   "size": [
+    96,
+    12
+   ],
+   "cell": [
+    32,
+    12
+   ],
+   "frames": "f0 hit, f1 spread, f2 fade (32x12 cells), ~70 ms each, then hide",
+   "use": "Moment 4: one burst under the Echo per pat it makes (and per child pat on the pad, optional).",
+   "reduced_motion": "pat_burst_static.png"
+  },
+  {
+   "file": "px/warmup/pat_burst_static.png",
+   "size": [
+    32,
+    12
+   ],
+   "cell": [
+    32,
+    12
+   ],
+   "frames": "single",
+   "use": "Reduced motion: show for ~200 ms per pat, no frame run."
+  },
+  {
+   "file": "px/warmup/cues.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "cols: listen (ear), your turn up, your turn pressed (16x16 cells)",
+   "use": "Shows WHO goes now without words: ear while the Echo demos, tapping finger when it's the child's turn (alternate cols 1-2 at ~2 Hz).",
+   "reduced_motion": "col 1 (finger up) held, no alternation"
+  },
+  {
+   "file": "px/warmup/moment_pips.png",
+   "size": [
+    64,
+    32
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "cols copy, heartbeat, chirp, clap; row0 not-now (faded, grey ink), row1 now (bright, dotted ring)",
+   "use": "Optional strip at top showing which little moment is on. Never filled/ticked as \"done\" (not progress, not a score)."
+  },
+  {
+   "file": "px/warmup/stage_spot.png",
+   "size": [
+    64,
+    12
+   ],
+   "cell": [
+    64,
+    12
+   ],
+   "frames": "single",
+   "use": "Soft warm light on the stump top under the Echo (behind sprite). Static."
+  },
+  {
+   "file": "px/warmup/beat_marks.png",
+   "size": [
+    28,
+    6
+   ],
+   "cell": [
+    14,
+    6
+   ],
+   "frames": "cols short (round dot), long (bar) (14x6 cells)",
+   "use": "Rhythm row on the first-song card: one mark per tap of the child's rhythm (short vs long by SHAPE)."
+  },
+  {
+   "file": "px/warmup/firstsong_card.png",
+   "size": [
+    112,
+    64
+   ],
+   "cell": [
+    112,
+    64
+   ],
+   "frames": "single",
+   "use": "Memory Book 'Our first song' card art (112x64). Code draws the child's 2 notes in the slots and beat marks in the rhythm row; tap = play.",
+   "reduced_motion": "firstsong_card_lit.png is static too"
+  },
+  {
+   "file": "px/warmup/firstsong_card_lit.png",
+   "size": [
+    112,
+    64
+   ],
+   "cell": [
+    112,
+    64
+   ],
+   "frames": "single",
+   "use": "Same card while the first song plays (swap in, swap back at the end). Static frame, no motion needed."
+  },
+  {
+   "file": "px/warmup/firstsong_icon.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Small 24x24 sticker/icon for the Memory Book list or page tab."
+  }
+ ]
+}

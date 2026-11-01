@@ -31,7 +31,7 @@ ok(E.tiers.find(x=>x.tier===4).tunes.some(u=>u.n.some(x=>x[2]===18)&&u.n.some(x=
 // Song v1 (lock 1) + songbook (lock 2) + instruments (lock 4)
 const so=EB.Song.make(92,[[5,0,18],[3,0,6],[1,1,24],[5,-1,12],[0,0,12]]);const b=EB.Song.pack(so);
 ok(b.length===4+2*5,'2 bytes a note + 4 header');ok(JSON.stringify(EB.Song.unpack(b))===JSON.stringify(so),'pack/unpack round trip');ok(so.v===1&&so.tpb===12,'version + 12 ticks a beat');
-ok(EB.Songbook.KEY==='echo-songbook-v1'&&EB.Songbook.empty().v===2&&EB.Songbook.empty().slots===6&&typeof EB.Songbook.empty().progress==='object','songbook store schema v2 (Batch G), own key kept');
+ok(EB.Songbook.KEY==='echo-songbook-v1'&&EB.Songbook.empty().v===3&&EB.Songbook.empty().slots===6&&typeof EB.Songbook.empty().progress==='object','songbook store schema v3 (Music School step 1), own key kept');
 const src=fs.readFileSync(path.join(R,'game.js'),'utf8');ok(src.split("removeItem('echo-songbook-v1')").length-1===2,'erase-all (both) clears the songbook');
 ok(!/S\.songbook|songbook:S\./.test(src),'songbook is not in the Echo save');
 ok(I.instruments[I.default].sample&&Object.keys(I.instruments).length===5&&Object.values(I.instruments).every(x=>x.chip&&x.chip.wave),'instruments are data (chip timbres)');
@@ -111,8 +111,10 @@ let b={v:2,slots:6,songs:[],star:null,progress:{}};const p=Q.Progress.get(b,'k1'
 Q.Progress.finish(p,{perfect:false,played:4},'7-8');ok(p.len===4&&p.roundsDone===1,'a round with a miss does not step up');
 Q.Progress.finish(p,{perfect:true,played:2},'7-8');ok(p.len===4,'a "little one" round does not step up');
 Q.Progress.finish(p,{perfect:true,played:4},'7-8');ok(p.len===6&&p.grew===2,'a perfect round steps up (+2)');
-Q.Progress.get(b,'k1','9-10');ok(p.len===6&&p.band==='9-10','age up: set to the 9-10 start');p.len=12;Q.Progress.get(b,'k1','5-6');ok(p.len===3&&p.band==='5-6','age down: set to the 5-6 start (no "never move down")');
-Q.Progress.get(b,'k1','5-6');ok(p.len===3,'same band: no change');p.len=11;Q.Progress.get(b,'k1','5-6');ok(p.len===11,'same band keeps progress');
+// Nov 1: the band is the reading band only; it never moves the length (only Progress.setBand, the grown-ups age row, does)
+Q.Progress.get(b,'k1','9-10');ok(p.len===6,'reading band change keeps the length');Q.Progress.setBand(p,'9-10');ok(p.len===6&&p.band==='9-10','grown-ups age row: 9-10 start');
+p.len=12;Q.Progress.setBand(p,'5-6');ok(p.len===3&&p.band==='5-6','grown-ups age row: 5-6 start (up or down)');
+p.len=11;Q.Progress.get(b,'k1','7-8');ok(p.len===11,'get() keeps progress whatever the band');p.len=3;
 p.len=16;p.tempoStep=0;for(let i=0;i<8;i++)Q.Progress.finish(p,{perfect:true,played:16},'5-6');ok(p.len===16&&p.tempoStep===6,'past 16: tempo steps, capped');
 ok(p.speedRounds===7,'speed rounds counted');Q.Progress.finish(p,{soft:true},'5-6');ok(p.tempoStep===5&&p.roundsDone===11,'soft stop: one speed step back, not a finished step');
 ok(Q.Progress.reset(b,'k1','9-10').len===6&&b.progress.k1.tempoStep===0,'grown-ups reset to the band start');
@@ -123,11 +125,50 @@ ok(Q.stickersFor(3,0,has).length===0,'3 notes: no sticker yet');ok(Q.stickersFor
 ok(Q.stickersFor(16,3,t=>t!=='Zippy Tune').join()==='Zippy Tune','3rd speed round -> Zippy Tune');
 // store migration v1 -> v2 (silent; songs kept)
 const v1={v:1,slots:6,songs:[{id:'a',made:1,fam:'slyte',inst:'kalimba',song:EB.Song.make(88,[[1,0,12]])}],star:'a'};
-const m=EB.Songbook.migrate(JSON.parse(JSON.stringify(v1)));ok(m.v===2&&m.songs.length===1&&m.star==='a'&&JSON.stringify(m.progress)==='{}','v1 migrates to v2, songs + star kept');
+const m=EB.Songbook.migrate(JSON.parse(JSON.stringify(v1)));ok(m.v===3&&m.songs.length===1&&m.star==='a'&&JSON.stringify(m.progress)==='{}','v1 migrates to v3, songs + star kept');
 ok(EB.Songbook.migrate({v:2,songs:[]}).progress&&EB.Songbook.migrate({v:9,songs:[]})===null&&EB.Songbook.migrate(null)===null,'v2 passes, unknown versions rejected');
 const LS={};globalThis.localStorage={getItem:k=>k in LS?LS[k]:null,setItem:(k,v)=>{LS[k]=String(v)},removeItem:k=>{delete LS[k]}};
-LS['echo-songbook-v1']=JSON.stringify(v1);const L1=EB.Songbook.load();ok(L1.v===2&&JSON.parse(LS['echo-songbook-v1']).v===2,'load() migrates and saves silently');
-LS['echo-songbook-v1']='{bad json';ok(EB.Songbook.load().v===2,'a broken store loads as empty v2');
-delete LS['echo-songbook-v1'];ok(EB.setBand('kx','9-10').len===6&&EB.bandOf('kx')==='9-10'&&EB.setBand('kx','5-6').len===3,'age kept in the per-child store; setBand up and down');
+LS['echo-songbook-v1']=JSON.stringify(v1);const L1=EB.Songbook.load();ok(L1.v===3&&JSON.parse(LS['echo-songbook-v1']).v===3,'load() migrates and saves silently');
+LS['echo-songbook-v1']='{bad json';ok(EB.Songbook.load().v===3,'a broken store loads as empty v3');
+delete LS['echo-songbook-v1'];ok(EB.setBand('kx','9-10').len===6&&EB.bandOf('kx')==='9-10'&&EB.setBand('kx','5-6').len===3,'band kept in the per-child store; the grown-ups setBand up and down');
+// ---------------- Music School step 1: store v3, ml, the new ramp, pads rule (PLAN step 1 acceptance 5 + EIB parts of 2/3)
+{const ML=require(path.resolve(R,'musiclevel.js'));
+ const v2={v:2,slots:6,songs:[{id:'s1',made:1,fam:'slyte',inst:'kalimba',song:EB.Song.make(88,[[1,0,12],[3,0,12]])}],star:'s1',
+   progress:{ka:{band:'7-8',len:7,roundsDone:9,tempoStep:0,speedRounds:0,seed:41},kb:{band:'5-6',len:3,roundsDone:1,tempoStep:0,speedRounds:0,seed:2},kc:{band:'9-10',len:16,roundsDone:30,tempoStep:2,speedRounds:4,seed:99}}};
+ LS['echo-songbook-v1']=JSON.stringify(v2);const B3=EB.Songbook.load(),S3=JSON.parse(LS['echo-songbook-v1']);
+ ok(B3.v===3&&S3.v===3&&S3.songs.length===1&&S3.star==='s1','v2 -> v3: songs and star kept, saved silently');
+ ok(['len','roundsDone','tempoStep','speedRounds','seed','band'].every(k=>S3.progress.ka[k]===v2.progress.ka[k]&&S3.progress.kc[k]===v2.progress.kc[k]),'v2 -> v3: EIB progress kept field by field');
+ ok(S3.progress.ka.ml.level===4&&S3.progress.kb.ml.level===1&&S3.progress.kc.ml.level===5&&S3.progress.ka.ml.src==='seed'&&S3.progress.ka.ml.warm===null,'v2 -> v3: ml seeded from the EIB length (7 -> ML4, 3 -> ML1, 16 -> ML5)');
+ ok(S3.progress.kb.ml.dial.catch===0&&S3.progress.ka.ml.dial.run===.5&&S3.progress.kc.ml.dial.dig===1,'v2 -> v3: dials seeded from the band the save already has');
+ LS['echo-songbook-v1']=JSON.stringify({v:3,songs:'nope'});let threw=false,E3=null;try{E3=EB.Songbook.load()}catch(e){threw=true}ok(!threw&&E3.v===3&&!Object.keys(E3.progress).length,'a corrupt v3 store falls back to empty without throwing');
+ LS['echo-songbook-v1']=JSON.stringify({v:3,songs:[],progress:{kz:{len:5,ml:{v:1,level:9}}}});ok(EB.Songbook.load().progress.kz.ml.level===2,'a corrupt ml is re-seeded (EIB length 5 -> ML2)');
+ LS['echo-songbook-v1']=JSON.stringify({v:3,songs:[],progress:{kq:'x'}});ok(!EB.Songbook.load().progress.kq,'a corrupt progress entry is dropped');
+ delete LS['echo-songbook-v1'];const f=EB.mlFor('kn','5-6');ok(f.level===2&&f.src==='prior'&&EB.progressFor('kn','5-6').len===4,'a brand-new child: neutral ML2 prior, 4 notes (no age)');
+ EB.applyWarmup('kn',{copy:1,beat:1,pitch:1,rhythm:.5},123);ok(EB.mlFor('kn').level===3&&EB.progressFor('kn').len===6&&EB.mlFor('kn').warm.at===123,'warm-up sets ML3 and the first length (6)');
+ EB.applyWarmup('kn',{copy:0,beat:0,pitch:0,rhythm:0},456,{keep:true});ok(EB.mlFor('kn').level===3&&EB.mlFor('kn').warm.at===123,'a second Echo (keep): level and warm-up unchanged');
+ // a new Echo for the same child keeps ml: the store is per child, beside the Echo save
+ ok(EB.mlFor('kn').level===3,'a new Echo keeps ml (per-child store)');
+ ok(EB.seedMl('kold','9-10').level===3&&EB.progressFor('kold').len===6,'existing save that never played EIB: seeded from its band start length (9-10 -> 6 -> ML3)');
+ // ramp (round success >= 0.85 up, < 0.65 down, never below 3; tempo steps after 16 stay)
+ const q={len:4,roundsDone:0,tempoStep:0,speedRounds:0};
+ Q.Progress.finish(q,{played:4,success:5/6},'7-8');ok(q.len===4,'5 in 6 (0.83) holds');
+ Q.Progress.finish(q,{played:4,success:1},'7-8');ok(q.len===6&&q.grew===2,'round success 1.0 steps up (+2 below 8)');
+ Q.Progress.finish(q,{played:6,success:.85},'7-8');ok(q.len===8,'round success 0.85 steps up');
+ Q.Progress.finish(q,{played:8,success:5/8},'7-8');ok(q.len===7&&q.grew===-1,'round success < 0.65: one note shorter next round');
+ Q.Progress.finish(q,{played:7,success:.7},'7-8');ok(q.len===7,'0.65-0.85 holds');
+ Q.Progress.finish(q,{played:5,success:1,little:true},'7-8');ok(q.len===7,'a little one never steps up');
+ Q.Progress.finish(q,{soft:true},'7-8');ok(q.len===6,'a soft stop: one note shorter');
+ const lo={len:3,roundsDone:0,tempoStep:0};Q.Progress.finish(lo,{played:3,success:.5},'5-6');Q.Progress.finish(lo,{soft:true},'5-6');ok(lo.len===3,'never below 3');
+ const hi={len:16,roundsDone:0,tempoStep:2};Q.Progress.finish(hi,{played:16,success:1},'7-8');ok(hi.tempoStep===3&&hi.len===16,'past 16: tempo steps stay');Q.Progress.finish(hi,{played:16,success:.5},'7-8');ok(hi.tempoStep===2&&hi.len===16,'at 16, a low round gives a tempo step back first');
+ // ML rises (never falls on its own) after 2 rounds at or above the next level's start length
+ let mm=ML.fresh(1);ML.eibRound(mm,4,1);ok(mm.level===1,'one round at 4 notes: still ML1');ML.eibRound(mm,4,1);ok(mm.level===2,'two rounds at >= 4 notes: ML2');
+ ML.eibRound(mm,3,.4);ML.eibRound(mm,3,.4);ok(mm.level===2,'ML never falls on its own');ok(mm.win.eib.length===4&&mm.win.eib[3]===.4,'EIB success goes in the window');
+ // pads rule: music level OR song stage, whichever gives more; never fa/ti (degrees 4 and 7) in Phase 1
+ for(const f of ['slyte','whimber','twitchel'])for(let l=1;l<=5;l++)for(let t=1;t<=4;t++){const pt=Math.min(4,ML.padsTier(l,t)),pads=EB.padsFor(f,pt).map(x=>((x%7)+7)%7);
+   ok(pt===Math.max(t,ML.data.levels[l].pads_tier)&&!pads.includes(3)&&!pads.includes(6),`${f} ML${l} tier ${t}: pads tier ${pt}, no fa/ti`)}
+ ok(EB.padsFor('slyte',ML.padsTier(4,1)).length===8,'a musical child gets ML4 pads with a brand-new Echo (song stage 1)');
+ ok(EB.padsFor('slyte',ML.padsTier(1,3)).length===6,'song stage still gives more when the level is lower');
+ ok([1,2,3,4,5].map(ML.eibStartLen).join()==='3,4,6,7,8','EIB first length by ML: 3/4/6/7/8');
+ const src=fs.readFileSync(path.join(R,'echoback.js'),'utf8');ok(/padsTier\(lvl,tier\)/.test(src)&&/success:succ/.test(src),'echoback uses the pads rule and round success');}
 ok(['round','soft_stop_tunes','start','ramp','stickers','tempo'].every(k=>k in V)&&V.round===5&&V.soft_stop_tunes===10&&V.min_len===3,'v2 numbers live in tunes.json');}
 console.log(`echoback: ${n} checks, ${bad} failed`);process.exit(bad?1:0);

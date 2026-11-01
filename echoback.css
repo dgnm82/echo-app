@@ -74,3 +74,8 @@
 .eibrow.two .eibn.short{width:20px;height:20px}
 .eibrow.two .eibn.long::after{top:8px}
 .eibrow.two.many .eibn{width:20px;height:20px}
+/* Music School step 1: solfège names at ML4 (pads) and ML5 (pads + the note strip); text labels only, the art is untouched */
+.eib.solpads .eibpad{position:relative}
+.eib.solpads .eibpad::after{content:attr(data-sol);position:absolute;left:0;right:0;bottom:-12px;text-align:center;font:8px/10px PS2P,monospace;color:#FFF6E6;text-shadow:0 1px 0 #23183a;pointer-events:none}
+.eib.solstrip .eibn{position:relative}
+.eib.solstrip .eibn::before{content:attr(data-sol);position:absolute;left:50%;top:100%;transform:translateX(-50%);font:6px/8px PS2P,monospace;color:#FFF6E6;white-space:nowrap;pointer-events:none}

@@ -120,7 +120,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   const b=$('#b');const busy=!document.getElementById('feed')||document.querySelector('.full')||ov.innerHTML.trim()||(b&&b.style.display!=='none')||mood()==='sleep';
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
-    if(!l&&window.EchoBack&&!sess.eibInvite&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame('invite')},{lowfx:lowFx()})}}
+    if(!l&&window.EchoBack&&!sess.eibInvite&&!document.querySelector('.wuinv')&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame('invite')},{lowfx:lowFx()})}}
     const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
 // H9 (final): ctx.weather = the Echo's own seasonal weather from window.WEATHER (device date cycle only; 'off' -> undefined)
@@ -186,7 +186,7 @@ function flushMilestones(){
 function talentLine(t){return B('talent_'+t).text}
 function start(){
   if(!S||S.setupDone===0)return setup();
-  Dialogue.load(CID()).then(()=>{initDialogue();famVars();gamesMigrate();fwMigrate();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
+  Dialogue.load(CID()).then(()=>{initDialogue();famVars();gamesMigrate();fwMigrate();mlMigrate();mlSession();if(S.released){migrateCheckins();if(S.fw&&!S.fw.closed&&S.fw.step===9){afterHome();return closure()}return afterHome()}if(S.fw&&S.fw.state==='ceremony'){simulate();save();return fwCeremony(S.fw.path,true)}window.__awayMin=S.last?(now()-S.last)/6e4:0;if(window.__awayMin>=FWC().longAbsenceDays*1440)sess.welcomeBack=1;if(!S.scene)S.scene=scHome().id;if(window.__awayMin>=(C.foundMinAwayMinutes||20)&&!S.graceUntil)window.__foundScene=scPickSession();simulate();save();if(!localStorage.getItem('echo-nosetup')&&!sess.titled){sess.titled=1;return obReturnTitle(()=>home(true))}home(true)}).catch(e=>{console.error(e);h('<p style="padding:20px">Could not load dialogue. Please reload.</p>')});
 }
 const TAGLINE="ECHO: Every creature has a song to share. Can you hear it?";   // ui_tagline, /workspace/echo/onboarding/dialogue/shared_onboarding.json (also in dialogue/shared.json)
 function legacySetup(){   // test/playtest harness only (localStorage echo-nosetup)
@@ -374,21 +374,23 @@ function obName(val){
    <div class="row obrow"><button class="btn" id="obskip">${U('ui_ob_skip')}</button><button class="btn" id="obnext">Next &gt;</button></div>`);
   const inp=$('#obnm'),ct=()=>{$('#obct').textContent=inp.value.length+'/10';$('#obnh').textContent=/\s/.test(inp.value.trim())?U('ui_ob_name_short'):U('ui_ob_name_hint')};inp.oninput=ct;ct();
   app.querySelectorAll('.obchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');inp.value=b.dataset.n;ct()});
-  $('#obskip').onclick=()=>{SFX('ui_tap');obSetChild(null);obAge()};
-  $('#obnext').onclick=()=>{const r=obNameCheck(inp.value);if(!inp.value.trim())return obSetChild(null),obAge();
+  $('#obskip').onclick=()=>{SFX('ui_tap');obSetChild(null);orSeen()};
+  $('#obnext').onclick=()=>{const r=obNameCheck(inp.value);if(!inp.value.trim())return obSetChild(null),orSeen();
     if(!r.ok){SFX('ui_back');inp.value='';ct();$('#obnh').textContent=U('ui_ob_name_again');return}obConfirm(r.name)}}
 function obConfirm(n){
   obScene('obconfirm',`<div class="obpanel big">${((OBL.ui_ob_name_confirm||[])[0]||{text:'{child}?'}).text.replace('{child}',n)}</div><div class="row obrow"><button class="btn" id="obyes">${U('ui_ob_yes_change',0)}</button><button class="btn" id="obch">${U('ui_ob_yes_change',1)}</button></div>`);
-  $('#obyes').onclick=()=>{SFX('bond_meter_tick');obSetChild(n);obAge()};$('#obch').onclick=()=>{SFX('ui_back');obName(n)}}
+  $('#obyes').onclick=()=>{SFX('bond_meter_tick');obSetChild(n);orSeen()};$('#obch').onclick=()=>{SFX('ui_back');obName(n)}}
 function obSetChild(n){S=S&&S.setupDone===0?S:{voice:true,music:true,vars:{},setupDone:0,oseed:Math.floor(Math.random()*2e9)+1,originIdx:0,songs:[]};
+  // Nov 1: no age step. A new child starts on the simplest reading band (5-6); the warm-up nudges it, play grows it (bandAuto).
+  // The music level starts from the neutral ML2 prior in the per-child store; nothing here is age-based.
+  if(!S.ageBand){S.ageBand='5-6';S.bandAuto=1}S.mlSeeded=1;
   if(n){S.child=n;S.vars.child_named=1}else{S.child='friend';delete S.vars.child_named}save()}
-function obAge(){const bands=UA('ui_ob_age_bands'),ask=UA('ui_ob_age_ask');
-  obScene('obage',`<div class="obpanel"><b>${ask[0]}</b><br><small>${ask[1]||''}</small></div><div class="obages">${bands.map(b=>`<button class="btn obagebtn" data-b="${b}">${PIXEL.icon(OBC.bands[b].icon)}<span class="lbl">${b}</span></button>`).join('')}</div><div class="obsmall">Grown-ups can change this later.</div>`);
-  app.querySelectorAll('.obagebtn').forEach(b=>b.onclick=()=>{SFX('ui_tap');obSetBand(b.dataset.b);save();orSeen()})}
+// (Nov 1) the age step (obAge) is gone: the hatching-song warm-up after naming places the child.
 const BAND_LV=['pairsLevel','digLevel','runLevel','catchLevel','stackLevel'];
 // Batch G: 5-6 puts the games that are on auto on Easy and remembers which (S.bandEasy); leaving 5-6 puts exactly those back on auto.
 // The band is also kept in the per-child store and sets Echo It Back to that band's starting length (up or down).
-function obSetBand(b){const was=S.ageBand;S.ageBand=b;
+function obSetBand(b){const was=S.ageBand;S.ageBand=b;delete S.bandAuto;   // a grown-up's pick stops the automatic reading-band growth
+ 
   if(OBC.bands[b].level==='easy'){S.bandEasy=S.bandEasy||[];BAND_LV.forEach(k=>{if(S[k]==null||S[k]==='auto'){S[k]='easy';if(!S.bandEasy.includes(k))S.bandEasy.push(k)}})}
   else{(S.bandEasy||[]).forEach(k=>{if(S[k]==='easy')S[k]='auto'});delete S.bandEasy}
   if(window.EchoBack&&was!==b)EchoBack.setBand(kidId(),b)}
@@ -499,14 +501,46 @@ function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const 
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
 function orFinish(name,kept){const F=FAM(),o=S.origin,f=F[o.family],kind=f.kind;
-  const keep={kidId:S.kidId,bandEasy:S.bandEasy,child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
+  const keep={kidId:S.kidId,bandAuto:S.bandAuto,mlSeeded:S.mlSeeded,bandEasy:S.bandEasy,child:S.child,voice:S.voice,music:S.music,musicQuiet:S.musicQuiet,vars:S.vars,ageBand:S.ageBand,oseed:S.oseed,originIdx:S.originIdx||0,songs:S.songs||[],alwaysYes:S.alwaysYes,pairsLevel:S.pairsLevel,digLevel:S.digLevel||S.fortLevel,runLevel:S.runLevel,catchLevel:S.catchLevel,stackLevel:S.stackLevel,fwShared:S.fwShared,lowfx:S.lowfx,wild:S.wild,quietHours:S.quietHours};
   const g=genEcho(kind);g.seed=o.seed;if(o.ramp)g.pal=o.ramp;g.look=F.animals[o.animal].look||f.look_default;const _v=window.PIXEL?PIXEL.variant(g.seed,f.sprite,g.pal,o.fluff!=null?o.fluff:undefined):{pal:g.pal,fluff:0};g.pal=g.pal||_v.pal;g.fluff=_v.fluff;g.name=name;g.family=f.label;
   S=Object.assign(keep,{kind,g,needs:keep.wild&&keep.wild.length?{food:80,play:80,rest:80,comfort:80}:{food:60,play:50,rest:80,comfort:60},bond:0,badges:[],talents:[],stickers:[],treasures:[],memories:[],memTags:[],seen:[],chatHistory:[],foods:[],met:now(),days:1,lastHello:new Date(now()).toDateString(),
     origin:{idx:o.idx,animal:o.animal,family:o.family,ramp:o.ramp||null,accent:null,src:o.src,declined:!!o.declined},setupDone:1});
   S.vars.origin_animal=F.animals[o.animal].word;S.vars.family=f.label;S.vars.family_plural=f.plural;S.vars.default_name=F.animals[o.animal].default_name||f.default_name;S.originIdx=(o.idx||0)+1;
   initDialogue();save();remember('The day we met in the meadow','met');
-  home();if(window.Music)Music.home(kind,glowNow());const l=B(kept?'named_kept':'named_reply');talk(l,3200);
-  sess.fwBusy=1;setTimeout(()=>runConv(FUI(kind).conversations.where_from,()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)}
+  wuRun(null,()=>{home();if(window.Music)Music.home(kind,glowNow());const l=B(kept?'named_kept':'named_reply');talk(l,3200);
+    sess.fwBusy=1;setTimeout(()=>runConv(FUI(kind).conversations.where_from,()=>{sess.fwBusy=0;toast('Tip: tap the buttons below to care for '+S.g.name)}),3400)})}
+// ---------- Music School Phase 1, step 1: the hatching-song warm-up (warmup.js) + the child's quiet music level (musiclevel.js) ----------
+// Test hook: automated browsers (navigator.webdriver) skip the warm-up and its invite unless localStorage echo-dev-wu = '1'
+// ('0' turns it off anywhere), so the older phone suites keep their flow. Children's browsers never set webdriver.
+function wuOn(){let f=null;try{f=localStorage.getItem('echo-dev-wu')}catch(e){}if(f==='1')return true;if(f==='0')return false;return typeof navigator!=='undefined'&&!navigator.webdriver&&typeof document!=='undefined'}
+const mlOn=()=>!!(window.EchoBack&&window.MusicLevel);
+function mlGet(){if(!mlOn()||!S)return null;try{return EchoBack.mlFor(kidId(),S.ageBand)}catch(e){return null}}
+// reading band for new children (bandAuto): starts 5-6, nudged by the warm-up, grows with the music level and sessions; only rises
+function readingGrow(){if(!S||!S.bandAuto||!mlOn())return;const m=mlGet();if(!m)return;const b=MusicLevel.readingBand(S.ageBand,m.level,m.sessions);if(b!==S.ageBand){S.ageBand=b;save()}}
+function mlReport(gm,s){if(!mlOn()||typeof s!=='number'||!isFinite(s))return;try{EchoBack.withMl(kidId(),m=>MusicLevel.report(m,gm,s),S.ageBand);readingGrow()}catch(e){}}
+// existing saves (once): seed the level from the EIB length; the band's old "Easy" game levels go back to auto (the dial starts there)
+function mlMigrate(){if(!mlOn()||!S||S.mlSeeded)return;S.mlSeeded=1;try{EchoBack.seedMl(kidId(),S.ageBand||'7-8')}catch(e){}
+  if(S.bandEasy){S.bandEasy.forEach(k=>{if(S[k]==='easy')S[k]='auto'});delete S.bandEasy}save()}
+function mlSession(){if(!mlOn()||sess.mlCounted)return;sess.mlCounted=1;try{EchoBack.withMl(kidId(),m=>{m.sessions=(m.sessions|0)+1},S.ageBand)}catch(e){}readingGrow()}
+function wuLine(k){const L=(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k])||[];if(!L.length)return null;const b=(S&&S.ageBand)||'5-6';
+  const l=L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[0];return {text:obFill(b==='5-6'&&l.short?l.short:l.text),expr:l.expr||'happy',react:l.react}}
+let WU_MAN=null;
+function wuRun(mode,done){if(!wuOn()||!window.Warmup||!mlOn()||!S||!S.g)return done();
+  const m=mlGet();mode=mode||(m&&m.warm?'copy':'full');   // a second Echo for the same child: moment 1 only, the level is unchanged
+  if(window.Music)Music.stop();h('<div class="scene wuhost" id="wuh"></div>');const host=$('#wuh');
+  const tm=({morning:'dawn',day:'day',evening:'dusk',night:'twi'})[tod()]||'day';
+  const man=WU_MAN?Promise.resolve(WU_MAN):fetch('px/warmup/manifest.json').then(r=>r.json()).then(j=>WU_MAN=j).catch(()=>({}));
+  Promise.all([man,Warmup.ready,MusicLevel.ready,EchoBack.ready]).then(([mf])=>{if($('#wuh')!==host)return;
+    Warmup.start({host,fam:FID(),sprite:svg(S.kind,S.g,'happy'),bg:`px/scenes/eib_glade_${FID()}_${tm}.png`,lowfx:lowFx(),mode,manifest:mf,
+      speed:+(localStorage.getItem('echo-dev-wu-speed')||1)||1,line:k=>wuLine(k),say:(t,e)=>say(t,e,true),
+      onResult:r=>{if(mode==='full'){try{EchoBack.applyWarmup(kidId(),r.r,now())}catch(e){}readingGrow()}},
+      onDone:r=>{if(r&&r.song){S.firstSong={fam:FID(),song:{v:1,bpm:r.song.bpm,tpb:12,n:r.song.n},notes:r.song.notes,ticks:r.song.ticks,at:now()};save()}done()}})})}
+// existing children without a warm-up: an ignorable chip by the Echo on a Home visit, once a session, gone after 10 s
+function wuInviteMaybe(){if(!wuOn()||!mlOn()||sess.wuInvite||S.released||!S.setupDone)return;const m=mlGet();if(!m||m.warm)return;
+  setTimeout(()=>{if(sess.wuInvite||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup,.eibinv')||asleep())return;const cr=$('#cr');if(!cr||!cr.parentNode)return;
+    sess.wuInvite=1;const l=wuLine('wu_invite');if(l)talk(l,3200);const b=document.createElement('button');b.className='eibinv wuinv'+(lowFx()?' rm':'');b.setAttribute('aria-label',(l&&l.text)||'Help me learn a song');
+    cr.parentNode.appendChild(b);let gone=false;const t=setTimeout(()=>{if(gone)return;gone=true;b.classList.add('fade');setTimeout(()=>b.remove(),lowFx()?0:600)},10000);
+    b.onclick=e=>{e.stopPropagation();if(gone)return;gone=true;clearTimeout(t);b.remove();SFX('ui_panel_open');wuRun('full',()=>home())}},2500)}
 // P7 every-session title: logo + tagline + "{name} is playing nearby!", Tap to start, lock top right. Auto-advance after 3 s.
 async function obReturnTitle(go){await obLib();const e=E();
   h(`<div class="scene ${e.bg} ob obreturn ttl${lowFx()?' calm':''}"><div class="bg pxbg pxbg-night"></div>${titleArt(1)}<div class="obpanel small">${obFill(U('ui_title_hint'))}</div><button class="obtap" id="obgo">${U('ui_ob_tap_start')}</button>${obLock('tr')}</div>`);
@@ -595,7 +629,7 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
   thoughtSync();if(LIVE.st!=='found'){const keep=m==='sleep'&&LIVE.pos&&LIVE.pos.slice();lvStart(false);if(keep)lvPlace(keep[0],keep[1])}   // asleep: stay on the bed, never re-place on the stage
   if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk(nvB('holidayStart'),3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
   if(window.Music)Music.home(S.kind,glowNow());
-  setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();
+  setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();wuInviteMaybe();
 }
 
 // ---------- Bond-up scene (bond_up.md v0.1): plays on the next Home, before any milestone card; once per transition per Echo ----------
@@ -976,6 +1010,7 @@ function book(){
   d.innerHTML=`<button class="btn small ico" style="float:right" id="x" aria-label="Close">${PI('✕')}</button><h1 style="margin:0">${PI('📖')} Memory Book</h1>${obLock('bk')}${S.badges.includes('place')&&scUnlocked().length>1?`<button class="btn small" id="places">${PI('🌲')}<span class="lbl">Our places</span></button>`:''}
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   ${S.keepsake?`<h2>Keepsakes</h2><span class="chip"${window.MusicFX?` data-snd="${FAMD().music.pet_motif}"`:''}>${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
+  ${S.firstSong?`<h2>${(wuLine('wu_book_title')||{text:'Our first song'}).text}</h2><button class="bkfirst" id="bkfirst" aria-label="${(wuLine('wu_book_title')||{text:'Our first song'}).text}">${(S.firstSong.notes||[]).slice(0,2).map((s,j)=>`<i class="wunote" style="left:${j?77:53}px;top:13px;width:12px;height:12px;--c:${window.EchoBack?EchoBack.colOf(EchoBack.nameOf(S.firstSong.fam,s)):0}"></i>`).join('')}${(S.firstSong.ticks||[]).map((t,j,a)=>`<i class="wusp wumark" style="left:${50+j*(a.length>4?11:15)}px;top:44px;width:14px;height:6px;background-position:${t>=12?-14:0}px 0"></i>`).join('')}</button>`:''}
   <h2>Stickers</h2>${S.stickers.map(s=>(S.eibSongs||{})[s]?`<button class="chip eibchip" data-eibsong="${s}">${PI('🎵')}${s}</button>`:`<span class="chip"${window.MusicFX?' data-snd="memory_pair_found"':''}>${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip"${window.MusicFX?' data-snd="care_pet_sparkle"':''}>${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
@@ -989,6 +1024,7 @@ function book(){
   SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}obWireLock(null);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
+  {const fb=d.querySelector('#bkfirst');if(fb)fb.onclick=()=>{const f=S.firstSong;if(f&&window.EchoBack)EchoBack.ready.then(()=>{const ms=EchoBack.playSong(f.fam,f.song);if(ms){fb.classList.add('playing');setTimeout(()=>fb.classList.remove('playing'),ms)}})}}   // Music School step 1
   d.querySelectorAll('[data-eibsong]').forEach(btn=>btn.onclick=()=>{const t=(S.eibSongs||{})[btn.dataset.eibsong];if(t&&window.EchoBack)EchoBack.ready.then(()=>{const ms=EchoBack.playSong(t.fam,t.song);if(ms&&!lowFx()){btn.classList.add('playing');setTimeout(()=>btn.classList.remove('playing'),ms)}})});   // Batch G: the tune that earned the sticker
 }
 
@@ -1054,7 +1090,12 @@ function bestGet(gm,l){const b=bestStore()[gm][l];return (b&&b.score)||0}
 function bestPut(gm,l,score,haul){const B=bestStore()[gm],o=B[l]=B[l]||{score:0},was=o.score||0,isBest=score>was,hb=haul!=null&&haul>(o.haul||0);if(isBest){o.score=score;o.at=now()}if(hb)o.haul=haul;return {isBest,was,haulBest:hb,haul:o.haul||0}}
 function v2State(gm){S.v2=S.v2||{};return S.v2[gm]=S.v2[gm]||{games:0,short:0,easy:false}}
 function v2Level(gm,key){const st=v2State(gm),set=S[key]||'auto';if(window.Difficulty)return Difficulty.level(gm,{band:S.ageBand,set,games:st.games,autoEasy:st.easy});if(set!=='auto')return set;if(st.games<2)return 'easy';return st.easy?'easy':'standard'}   // never announced to the child
-function v2Count(gm,score){const A=GTU().AUTO_EASY,th=A[gm],st=v2State(gm);st.games++;if(score<th)st.short++;else st.short=0;if(st.short>=A.shortInARow)st.easy=true;if(score>=A.backUpAt*th){st.easy=false;st.short=0}}
+// Music School step 1: Catch / Stack / Run / Dig on 'auto' play at the child's quiet dial (blended easy/standard/bigkid params);
+// a set level (dev tools / an old save) still wins with that preset. The level name kept for best records = the nearest preset.
+const DIAL_ENG={catch:()=>window.CatchEngine,stack:()=>window.StackEngine,run:()=>window.RunnerEngine,dig:()=>window.LinesEngine};
+function v2Params(gm,set,fallback){const E=DIAL_ENG[gm]&&DIAL_ENG[gm]();if((set||'auto')!=='auto'||!window.Difficulty||!Difficulty.dial||!mlOn()||!E||!E.table)return {level:fallback()};
+  const d=Difficulty.dial(gm,{set:'auto',ml:mlGet()});const tab=gm==='run'?E.table(GG().runnerKind):E.table();return {level:Difficulty.nearest(d),L:Difficulty.blend(tab,d),dial:d}}
+function v2Count(gm,score,succ){mlReport(gm,succ);const A=GTU().AUTO_EASY,th=A[gm],st=v2State(gm);st.games++;if(score<th)st.short++;else st.short=0;if(st.short>=A.shortInARow)st.easy=true;if(score>=A.backUpAt*th){st.easy=false;st.short=0}}
 const GLOW=[0,1].map(i=>{const im=new Image();im.src=`px/fx/glow${i}.png`;return im});
 function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&&im.naturalWidth)cx.drawImage(im,Math.round(x-20),Math.round(y-20))}
 function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g2best"><i></i>${b}</span>`:''}
@@ -1126,9 +1167,9 @@ function homeTap(){const h=$('#home');if(!h||!h.classList.contains('in'))return 
   h.classList.add('peek');if(cr){cr.style.visibility='';if(px)PIXEL.sleep(px,true)}setTimeout(()=>{h.classList.remove('peek');if(cr&&$('#home.in'))cr.style.visibility='hidden'},1500);return true}
 // Den Dig (Howlings) / Nest Weave (Wingsongs): line-clear falling blocks, happy end when the den / nest is full (den_dig.md)
 function linesGame(){
-  const f=digState(),level=digLevel(),t0=now(),best0=bestGet('dig',level),firstEver=!(f.games||0)&&!best0;let ended=false;
+  const f=digState(),PZ=(f.games||0)<((window.Difficulty&&Difficulty.WARMUP.dig)||2)?{level:digLevel()}:v2Params('dig',S.digLevel||S.fortLevel,()=>digLevel()),level=PZ.level,t0=now(),best0=bestGet('dig',level),firstEver=!(f.games||0)&&!best0;let ended=false;
   const fox=GROUND(),MODE=GG().builderMode,quiet=S.talents.includes('Silent Flight'),low=lowFx(),UI=GTU().LINES_UI||{bg:{},clearMs:250,bannerMs:1600,bigBannerMs:2000,bgBandEvery:2};
-  const g=LinesEngine.create({level,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:S.talents.includes('Master of Disguise')});if(window.MusicFX)MusicFX.digStart();
+  const g=LinesEngine.create({level,L:PZ.L,seed:(S.g.seed||1)*31+(f.games||0)*7,mode:MODE,disguise:S.talents.includes('Master of Disguise')});if(window.MusicFX)MusicFX.digStart();
   const W=g.w*16,H=g.h*16,lvlName={easy:'Easy',standard:'',bigkid:'Big-kid'}[level];
   const DW=Object.assign(fox?{board:'Den',meter:'deeper',big:'Big dig!',done:'dug',memory:'We dug the den {n} rows deep'}:{board:'Nest',meter:'woven',big:'Big weave!',done:'woven',memory:'We wove the nest {n} rows'},GG().digWords||{});
   gameShell(GG().titles.dig);const gs=$('#gs');gs.classList.add('fortgame','diggame');
@@ -1161,7 +1202,7 @@ function linesGame(){
       if(e.type==='disguise'){react('excited');talk(B('dig_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
   function chirp(){try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}}
-  function finish(){if(ended)return;ended=true;g.done=true;draw();stop();const R=LinesEngine.result(g),lines=R.lines;f.games=(f.games||0)+1;f.rows=(f.rows||0)+lines;f.best=Math.max(f.best||0,lines);v2Count('dig',lines);
+  function finish(){if(ended)return;ended=true;g.done=true;draw();stop();const R=LinesEngine.result(g),lines=R.lines;f.games=(f.games||0)+1;f.rows=(f.rows||0)+lines;f.best=Math.max(f.best||0,lines);v2Count('dig',lines,LinesEngine.success(g));
     const r=bestPut('dig',level,R.score);if(S.talents.includes('Super Jumper'))react('happy');
     gs.classList.add('dgend');gs.insertAdjacentHTML('beforeend',`${Array.from({length:8},(_,i)=>`<i class="dgspark${low?'':' tw'}" style="left:${10+i*15}px;top:${60+(i%3)*14}px"></i>`).join('')}`);if(!low)hop();
     SFX('blocks_floor_done');setTimeout(()=>SFX('blocks_row_glow'),400);
@@ -1194,8 +1235,8 @@ function g2Loop(step,draw){let acc=0,last=performance.now(),alive=true;function 
 function g2Banner(gs,t){gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>${t}</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2000)}
 const BIRD_TOP=172;   // H18: 48 px bird sprite top -> body centre 196 (bob +/-3 -> 193..199), 32+ px above the ground line
 function catchGame(){
-  const fox=GROUND(),G=GG(),level=v2Level('catch','catchLevel'),st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=G.titles.catch;
-  const g=CatchEngine.create({level,seed:(S.g.seed||1)*37+st.games*11+1,fam:FID(),lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
+  const fox=GROUND(),G=GG(),PZ=v2Params('catch',S.catchLevel,()=>v2Level('catch','catchLevel')),level=PZ.level,st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=G.titles.catch;
+  const g=CatchEngine.create({level,L:PZ.L,seed:(S.g.seed||1)*37+st.games*11+1,fam:FID(),lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');if(window.MusicFX)MusicFX.catchStart();
   gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
@@ -1237,7 +1278,7 @@ function catchGame(){
     $('#cg').innerHTML=Array.from({length:g.L.grass},(_,i)=>`<i class="pxi" style="background-image:url(px/catch/grass_spot${i<g.landed?1:0}.png);width:9px;height:4px"></i>`).join('')}
   const stopLoop=g2Loop(step,draw);
   function stop(){stopLoop();document.removeEventListener('keydown',key)}
-  function finish(){if(ended)return;ended=true;const n=g.n;v2Count('catch',n);const r=bestPut('catch',level,n);
+  function finish(){if(ended)return;ended=true;const n=g.n;v2Count('catch',n,CatchEngine.success(g));const r=bestPut('catch',level,n);
     if(n>=5)remember(`We caught ${n} ${G.units.catch}`,'catch_'+n);react('happy');setExpr('happy');
     g2Banner(gs,G.catchBanner);talk(B(r.isBest&&!firstEver?'catch_best':'catch_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'catch',unit:G.units.catch,score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`longest streak ${g.longest}`,`goldens ${g.golds}`],onAgain:catchGame})},900)}
@@ -1259,8 +1300,8 @@ function catchGame(){
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
   window.__catch=g;window.__catchFace=()=>face;window.__catchFinish=finish;talk(B('catch_start'),2000)}
 function stackGame(){
-  const fox=GROUND(),G=GG(),level=v2Level('stack','stackLevel'),st=v2State('stack'),t0=now(),best0=bestGet('stack',level),firstEver=!st.games&&!best0,TITLE=G.titles.stack,M=G.stackItem,LH=8,BASE=268;
-  const g=StackEngine.create({level,seed:(S.g.seed||1)*41+st.games*13+1}),FR=g2Frames(fox);
+  const fox=GROUND(),G=GG(),PZ=v2Params('stack',S.stackLevel,()=>v2Level('stack','stackLevel')),level=PZ.level,st=v2State('stack'),t0=now(),best0=bestGet('stack',level),firstEver=!st.games&&!best0,TITLE=G.titles.stack,M=G.stackItem,LH=8,BASE=268;
+  const g=StackEngine.create({level,L:PZ.L,seed:(S.g.seed||1)*41+st.games*13+1}),FR=g2Frames(fox);
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','stackgame');
   gs.insertAdjacentHTML('beforeend',`<canvas id="stc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/stack/${M}_60.png);width:12px;height:8px"></i><span id="sh">0</span> ${hudBest('stack',level)} <span id="sp"></span>`;
@@ -1312,7 +1353,7 @@ function stackGame(){
     $('#sh').textContent=StackEngine.result(g).h;$('#sp').textContent='•'.repeat(g.run%((g.L.regrowAfter)||3))}
   const stopLoop=g2Loop(step,draw);
   function stop(){stopLoop();document.removeEventListener('keydown',key)}
-  function finish(){if(ended)return;ended=true;const R=StackEngine.result(g),n=R.h;v2Count('stack',n);const r=bestPut('stack',level,n);
+  function finish(){if(ended)return;ended=true;const R=StackEngine.result(g),n=R.h;v2Count('stack',n,StackEngine.success(g));const r=bestPut('stack',level,n);
     if(n>=5)remember(`We stacked ${n} ${G.units.stack}`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'stack',unit:G.units.stack,score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${R.perfects}`],onAgain:stackGame})},900)}
   cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
@@ -1365,7 +1406,8 @@ function memoryGame(){
     if(e.type==='done')finish()}
     $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.pairs}/${total}`;
     if(g.L.stars)$('#mstars').innerHTML=Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('');}
-  function finish(){alive=false;p.games++;p.boards++;if(level!=='bigkid'&&!stage){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
+  function finish(){alive=false;p.games++;p.boards++;mlReport('pairs',g.turns?Math.min(1,g.pairs/g.turns):0);   // Pairs keeps its own stage logic and only reports
+   if(level!=='bigkid'&&!stage){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
     if(SND)p.lastMorph=MemoryEngine.morphAfter(p,{slow:MemoryEngine.slow(g),hints:g.hints});   // LIST2 #5: 2 good boards -> more by sound; 2 slow -> a step back
     SFX('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
     gs.insertAdjacentHTML('beforeend',`<div class="fbdone memdone">${PI('✨')}<span>All ${total} pairs!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
@@ -1393,10 +1435,10 @@ const RUN_BUSH=[40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360
 function runState(){S.run=S.run||{best:{},runs:0,hard:0,auto:null};S.run.best=S.run.best||{};return S.run}
 function runLevel(){return v2Level('run','runLevel')}
 function runGame(){
-  const G=GG(),fox=G.runnerKind==='jump',SP=SPR(),rs=runState(),level=runLevel(),TITLE=G.titles.run;
+  const G=GG(),fox=G.runnerKind==='jump',SP=SPR(),rs=runState(),PZ=v2Params('run',S.runLevel,()=>runLevel()),level=PZ.level,TITLE=G.titles.run;
   const T=n=>S.talents.includes(n),silent=T('Silent Flight'),nv=T('Night Vision');
   const evening=tod()==='evening'||tod()==='night';
-  const g=RunnerEngine.create({kind:G.runnerKind,level,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
+  const g=RunnerEngine.create({kind:G.runnerKind,level,L:PZ.L,seed:(S.g.seed||1)*31+rs.runs*7+1,talents:S.talents});
   const t0=now(),best0=bestGet('run',level),firstEver=!rs.runs&&!best0;let cheered=false,ended=false,lastLine=-9,lastFlap=-9,treN=0,bumpN=0,lastTre=0;
   gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame');
   const tre=fox?'trinket':'star';   // A5: Wingsong pickups are stars (extend the glide) + moon fragments (one free bump)
@@ -1461,7 +1503,7 @@ handle()}
     if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');happy=1.2;SFX('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
       gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>NEW BEST!</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2200);
       if(!fox)S.hillStars=Math.min(12,(S.hillStars||0)+1)}}
-  function finish(){if(ended)return;ended=true;const m=RunnerEngine.score(g),n=RunnerEngine.haul(g);rs.runs++;v2Count('run',m);
+  function finish(){if(ended)return;ended=true;const m=RunnerEngine.score(g),n=RunnerEngine.haul(g);rs.runs++;v2Count('run',m,RunnerEngine.success(g));
     const r=bestPut('run',level,m,n);if(r.isBest&&m>=50)remember(`Our longest run was ${m} m`,'run_best');if(n>=5)remember(`We found ${n} ${tre}s in one run`,'run_haul');
     react('happy');setExpr('happy');if(T('Sweet-Dream Lullaby')&&evening)setTimeout(()=>{setExpr('sleepy');talk(B('yawn'),1800)},1500);
     talk(B(r.isBest&&!firstEver?'run_end_best':'run_end',{dist:m}),2400);if(window.Music)setTimeout(()=>Music.duck(false),10);
@@ -1684,9 +1726,9 @@ function afterHome(){
   const show=()=>{const d=full(`<div class="pcwrap">${postcardHTML(fresh,i)}<button class="btn">${PI('📖')}<span class="lbl">Keep it in my Memory Book</span></button></div>`);d.classList.add('milestone');say(fresh.text);d.querySelector('button').onclick=()=>{d.remove();const m=$('#mail');m.classList.remove('full');m.innerHTML=PI('📪')}};
   $('#book').onclick=book;$('#mail').onclick=()=>fresh&&!sign?show():book();if(sign)$('#sign').onclick=()=>{$('#sign').remove();show()};
   $('#pc').onclick=()=>{S.clockOffset=(S.clockOffset||0)+864e5;save();afterHome();const nx=(S.checkins||[]).find(k=>!k.delivered);if(nx)toast('Next letter around day +'+nx.day)};
-  $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
+  $('#again').onclick=()=>{if(confirm('Start with a new Echo? (This prototype keeps one save, so the old Memory Book will be cleared.)')){if(localStorage.getItem('echo-nosetup')){S={child:S.child,voice:S.voice};return discover()}S={child:S.child,kidId:S.kidId,bandAuto:S.bandAuto,mlSeeded:S.mlSeeded,voice:S.voice,music:S.music,vars:{child_named:S.vars&&S.vars.child_named},ageBand:S.ageBand,oseed:S.oseed||Math.floor(Math.random()*2e9)+1,originIdx:S.originIdx||1,songs:S.songs||[],alwaysYes:S.alwaysYes,fwShared:S.fwShared,setupDone:0};if(!S.vars.child_named)delete S.vars.child_named;save();orSeen()}};
 }
 window.addEventListener('visibilitychange',()=>{if(document.hidden)save();else if(S&&S.last&&now()-S.last>10*60e3){sess={feeds:0,games:0,naps:0,chats:0};simulate();save();if(!S.released)home(true)}});
-window.__echo={get state(){return S},chipLift:()=>chipLift(),choices:(l,cb,o)=>choices(l,cb,o),sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),denTwitch:()=>denTwitch(),twMigrate:s=>twClearingMigrate(s),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),levels:()=>({pairs:pairsLevel(),dig:digLevel(),run:runLevel(),catch:v2Level('catch','catchLevel'),stack:v2Level('stack','stackLevel')}),setBand:b=>{obSetBand(b);save()},pcSettings:()=>pcSettings(),memoryGame:()=>memoryGame(),catchGame:()=>catchGame(),stackGame:()=>stackGame(),obGlow:(fid,seed,pal,l,look,fluff)=>obGlow(fid,seed,pal,l,look,fluff),obGlowPaint:()=>obGlowPaint(),orFinish:(n,k)=>orFinish(n,k),genEcho:k=>genEcho(k),svg:(k,g,m)=>svg(k,g,m),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k)};
+window.__echo={get state(){return S},chipLift:()=>chipLift(),choices:(l,cb,o)=>choices(l,cb,o),sessGames:()=>sess.games,funOnly:()=>funOnly(),bubSync:()=>bubSync(),lvPlace:(x,y)=>lvPlace(x,y),wakeUp:()=>wakeUp(document.querySelector('#cr .px-echo')),affPick:()=>affPick(S,C.affection,Math.random),affDo:id=>affDo(id),homeIn:i=>homeIn(i),denTwitch:()=>denTwitch(),twMigrate:s=>twClearingMigrate(s),lvMove:(t,f)=>lvMove(t,null,f),lvPos:()=>LIVE.pos,homeTap:()=>homeTap(),glow:()=>glowNow(),glowLevel:()=>glowLevel(),glowSync:()=>glowSync(),toast:t=>toast(t),meters:()=>NeedsV2.meter(S.needs),led:()=>{const g=glowNow(),px=PIXEL.variant(S.g&&S.g.seed,SPR(),S.g&&S.g.pal).pal,A=PIXEL.AURA,sw=sess.swell&&now()-sess.swell<2000;return NeedsV2.led(S.needs,{glow:g,echoHex:A&&A.roles[px]?A.roles[px].glow:'#FFD27A',swell:!!sw})},simulate:()=>simulate(),sess:()=>sess,leaveScreen:()=>leaveScreen(),holiday:on=>holidaySet(on),setState:x=>{S=x},orDeclines:()=>orDeclines(),hash:x=>obHash(x),band:()=>tod(),talk:(t,ms)=>talk(t,ms),hug:()=>hug(),foodTaste:f=>foodTaste(f),foodMenu:()=>foodMenu(),feed:()=>feed(),runGame:()=>runGame(),games:()=>gamesFor().map(x=>x[1]),fw:{get s(){return fw()},calm:()=>fwCalm(),start:p=>fwCeremony(p),session:()=>fwSession()},milestone:id=>{mq.push({id});flushMilestones()},scene:{home:()=>scHome(),get cur(){return curScene().id},unlocked:()=>scUnlocked().map(s=>s.id),pick:()=>scPickSession(),picker:()=>scPicker()},living:{get st(){return LIVE.st},get pos(){return LIVE.pos},get act(){return LIVE.act},get log(){return LIVE.log},get foundAct(){return LIVE.foundAct},dbg:()=>({can:!!lvCanWander(),feed:!!document.getElementById('feed'),full:!!document.querySelector('.full,.book,.bondup'),ov:ov.innerHTML.trim().slice(0,60),b:($('#b')||{}).style&&$('#b').style.display,nap:S.napUntil>now(),next:LIVE.nextIdle-now(),timer:!!LIVE.timer,st:LIVE.st}),wander:()=>lvWander(),routine:b=>lvRoutine(b),found:()=>lvFound(),present:()=>lvPresent(),start:f=>lvStart(f),move:(to,f)=>lvMove(to,null,f)},home:g=>home(g),maybeBondUp:()=>maybeBondUp(),playBondUp:(a,b)=>playBondUp(a,b,false),trailGame:()=>trailGame(),connectGame:()=>connectGame(),gamesFor:()=>gamesFor().map(x=>x[1]),migrateCheckins:()=>migrateCheckins(),buildCheckins:()=>buildCheckins(),pairsLevel:()=>pairsLevel(),levels:()=>({pairs:pairsLevel(),dig:digLevel(),run:runLevel(),catch:v2Level('catch','catchLevel'),stack:v2Level('stack','stackLevel')}),setBand:b=>{obSetBand(b);save()},pcSettings:()=>pcSettings(),memoryGame:()=>memoryGame(),catchGame:()=>catchGame(),stackGame:()=>stackGame(),obGlow:(fid,seed,pal,l,look,fluff)=>obGlow(fid,seed,pal,l,look,fluff),obGlowPaint:()=>obGlowPaint(),orFinish:(n,k)=>orFinish(n,k),genEcho:k=>genEcho(k),svg:(k,g,m)=>svg(k,g,m),fortLevel:()=>fortLevel(),linesGame:()=>linesGame(),initDialogue:()=>initDialogue(),runConv:(id,d)=>runConv(id,d),callbackLine:()=>callbackLine(),bark:(k)=>B(k),ml:()=>mlGet(),book:()=>book(),wuRun:(m,d)=>wuRun(m,d||(()=>home())),wuOn:()=>wuOn(),wuLine:k=>wuLine(k),v2Params:gm=>v2Params(gm,'auto',()=>'standard')};
 start();
 })();

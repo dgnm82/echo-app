@@ -508,35 +508,6 @@
         "short": "Just a first name is plenty!"
       }
     ],
-    "ui_ob_age_ask": [
-      {
-        "text": "How old are you?",
-        "expr": "happy",
-        "short": "How old are you?"
-      },
-      {
-        "text": "It helps your friend pick games and words.",
-        "expr": "happy",
-        "short": "It helps your friend."
-      }
-    ],
-    "ui_ob_age_bands": [
-      {
-        "text": "5-6",
-        "expr": "happy",
-        "short": "5-6"
-      },
-      {
-        "text": "7-8",
-        "expr": "happy",
-        "short": "7-8"
-      },
-      {
-        "text": "9-10",
-        "expr": "happy",
-        "short": "9-10"
-      }
-    ],
     "ui_ob_star_go": [
       {
         "text": "The star is carrying your name to the meadow…",
@@ -948,6 +919,28 @@
         "context": {
           "age_band": "all",
           "h1": "camera"
+        }
+      }
+    ],
+    "wu_book_title": [
+      {
+        "text": "Our first song",
+        "short": "Our first song",
+        "expr": "happy",
+        "context": {
+          "age_band": "all",
+          "wu": "book"
+        }
+      }
+    ],
+    "wu_btn_go": [
+      {
+        "text": "Let's play!",
+        "short": "Let's play!",
+        "expr": "happy",
+        "context": {
+          "age_band": "all",
+          "wu": "btn"
         }
       }
     ]

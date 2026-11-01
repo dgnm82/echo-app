@@ -56,7 +56,7 @@ async def one(b,p,a,sem):
       for _ in range(12):
         if await pg.locator('#obnm').count():break
         await T(pg,'.scene.ob',200)
-      await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1',600)
+      await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
       await pick(pg,a);await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
       await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1500)
       await pg.evaluate("(()=>{const s=__echo.state,d=new Date(Date.now()+(s.clockOffset||0));s.clockOffset=(s.clockOffset||0)+((11-d.getHours()+24)%24)*36e5;s.weatherOn=false})()")

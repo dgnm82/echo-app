@@ -20,9 +20,12 @@ function parsePieces(steps){let cur=[];return steps.map(([lv,s])=>{const add=s.s
 const stepVal=(t,n)=>{let v=t[0][1];for(const [k,x] of t)if(n>=k)v=x;return v};
 function rng(seed){let s=(seed>>>0)||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
 function rotateCells(c){const r=c.map(([x,y])=>[-y,x]);const mx=Math.min(...r.map(p=>p[0])),my=Math.min(...r.map(p=>p[1]));return r.map(([x,y])=>[x-mx,y-my])}
-function create(o){o=o||{};const L=T()[o.level]?o.level:'standard',C=T()[L];const g={
+// Music School step 1: o.L = blended params (Difficulty.blend(LinesEngine.table(), dial)); without it, LINES[level] as before
+function table(){const t={};for(const lv of ['easy','standard','bigkid'])t[lv]=T()[lv];return t}
+function holes(grid){let n=0;for(let x=0;x<grid[0].length;x++){let roof=false;for(let y=0;y<grid.length;y++){if(grid[y][x])roof=true;else if(roof)n++}}return n}   // empty cells with something above
+function create(o){o=o||{};const L=T()[o.level]?o.level:'standard',C=o.L||T()[L];const g={
   w:o.w||C.w,h:o.h||C.h,level:L,C,mode:o.mode==='weave'?'weave':'dig',rand:rng(o.seed||Date.now()),steps:parsePieces(C.pieces),
-  grid:null,piece:null,next:null,bag:[],lines:0,lv:1,score:0,clears:[0,0,0,0,0],big:0,t:0,placed:0,events:[],done:false,
+  grid:null,piece:null,next:null,bag:[],lines:0,lv:1,score:0,clears:[0,0,0,0,0],holesMade:0,big:0,t:0,placed:0,events:[],done:false,
   disguise:!!o.disguise,disguiseUsed:false};
   g.grid=Array.from({length:g.h},()=>Array(g.w).fill(null));g.next=newPiece(g);spawn(g);return g}
 function fallMs(g){const C=g.C,k=Math.max(C.creepMin,1-C.creep*g.t/60);return Math.round(Math.max(C.floor,C.fall0*Math.pow(C.mult,g.lv-1)*k))}
@@ -47,17 +50,20 @@ function soft(g){const p=g.piece;if(!p||g.done)return null;if(fits(g,p.cells,p.x
 function drop(g){const p=g.piece;if(!p||g.done)return null;const y=ghostY(g);g.score+=T().hard*(y-p.y);p.y=y;return settle(g)}
 function clock(g,dt){if(!g.done)g.t+=dt;return fallMs(g)}   // the shell calls this with real seconds (pauses when the app is hidden)
 function full(g){if(g.done)return;g.done=true;g.piece=null;g.events.push({type:'full',score:g.score,lines:g.lines,level:g.lv})}
-function settle(g){const p=g.piece;p.cells.forEach(([cx,cy],i)=>{const Y=p.y+cy;if(Y>=0)g.grid[Y][p.x+cx]=p.mats[i]});g.placed++;
+function settle(g){const p=g.piece,h0=holes(g.grid);p.cells.forEach(([cx,cy],i)=>{const Y=p.y+cy;if(Y>=0)g.grid[Y][p.x+cx]=p.mats[i]});g.placed++;
   if(p.mats.includes('echo'))g.events.push({type:'disguise'});g.events.push({type:'settle'});
   const rows=[];for(let y=0;y<g.h;y++)if(g.grid[y].every(c=>c))rows.push(y);
   if(rows.length){const n=rows.length,pts=T().score[n]*g.lv,cells=rows.map(y=>g.grid[y].slice());
     for(const y of rows){g.grid.splice(y,1);g.grid.unshift(Array(g.w).fill(null))}
     g.lines+=n;g.score+=pts;g.clears[n]++;if(n===4)g.big++;g.events.push({type:'clear',rows,n,pts,cells,big:n===4});
     const lv=Math.min(g.C.levelMax,1+Math.floor(g.lines/g.C.perLevel));if(lv>g.lv){g.lv=lv;g.events.push({type:'level',level:lv})}}
+  g.holesMade+=Math.max(0,holes(g.grid)-h0);
   if(p.y<0||p.cells.some(([,cy])=>p.y+cy<0)){full(g);return 'full'}   // settled above the top line: the den / nest is full
   spawn(g);return g.done?'full':'settle'}
-function result(g){return {score:g.score,lines:g.lines,level:g.lv,big:g.big}}   // the one source for HUD, card and memory
+function result(g){return {score:g.score,lines:g.lines,level:g.lv,big:g.big}}
+// success for the dial: rows cleared / (rows cleared + covered holes made)
+function success(g){const t=g.lines+g.holesMade;return t?g.lines/t:0}   // the one source for HUD, card and memory
 function take(g){const e=g.events;g.events=[];return e}
-const API={SHAPES,MAT,DEF,parsePieces,create,fallMs,ghostOn,clock,move,moveTo,rotate,tick,soft,drop,ghostY,fits,result,take,rotateCells};
+const API={SHAPES,MAT,DEF,parsePieces,create,table,holes,success,fallMs,ghostOn,clock,move,moveTo,rotate,tick,soft,drop,ghostY,fits,result,take,rotateCells};
 if(typeof module!=='undefined')module.exports=API;root.LinesEngine=API;
 })(typeof window!=='undefined'?window:globalThis);

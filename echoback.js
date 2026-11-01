@@ -10,7 +10,12 @@
 // Start length by age band, ramp after a round with all 5 matched first try, cap 16, then a little faster each round. Past 8 notes the tune
 // is 4-note phrases (ABA / AABA) echoed phrase by phrase. Tunes come from a seeded scale walk (gen) unless a hand-written tier tune has the
 // exact length. All numbers live in music/tunes.json echo_it_back.v2. Progress is per child in the Songbook store (v:2, silent v1 migration).
+// Music School step 1 (Nov 1): store v:3 adds progress[kid].ml (MusicLevel, musiclevel.js; silent v1/v2 -> v3 migration, nothing lost).
+// The start length, the ramp band, the pads (music level OR song stage, whichever gives more; never fa/ti in Phase 1) and the solfege
+// labels come from ml.level. The length steps up after a round with success >= 0.85 (matches / tunes), and steps down 1 after < 0.65
+// or a soft stop (never below 3). The band is only the reading band now: it no longer resets the length (only the grown-ups age row does).
 (function(W){'use strict';
+const ML=(typeof MusicLevel!=='undefined'?MusicLevel:(W.MusicLevel||(typeof require!=='undefined'?require('./musiclevel.js'):null)));
 const EB={title:'Echo It Back',v:2};const MAJ=[0,2,4,5,7,9,11],TPB=12;
 const SHARP=['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'],FLAT=['c','db','d','eb','e','f','gb','g','ab','a','bb','b'];
 const COLS=['c','d','e','f','g','a','b','f#','bb'];   // sprite columns (Batch D notes_shaped.png order): C red ... B violet, then F#, Bb
@@ -106,15 +111,23 @@ const matchPhrased=rs=>rs.includes('new')?'new':rs.includes('close')?'close':'sa
 // progress (per child, in the Songbook store): {band, len, roundsDone, tempoStep, speedRounds, seed}
 const Progress={
   // the child's age band lives here too (Kai, Batch G): a changed age sets the length to that band's start, up or down
-  get(b,kid,band,d){b.progress=b.progress||{};const p=b.progress[kid]=b.progress[kid]||{band,len:startLen(band,d),roundsDone:0,tempoStep:0,speedRounds:0,seed:0};
-    if(band&&p.band!==band)Progress.setBand(p,band,d);return p},
+  // Nov 1: a new child starts at the music level's length (neutral ML2 = 4 notes until the warm-up sets it). The band passed in is the
+  // reading band; it is remembered but never moves the length (only setBand, from the grown-ups age row, does).
+  get(b,kid,band,d){b.progress=b.progress||{};let p=b.progress[kid];
+    if(!p){const m=ML?ML.fresh():null;p=b.progress[kid]={band,len:m?ML.eibStartLen(m.level):startLen(band,d),roundsDone:0,tempoStep:0,speedRounds:0,seed:0};if(m)p.ml=m}
+    if(ML)p.ml=ML.repair(p.ml);if(band&&!p.band)p.band=band;return p},
   setBand(p,band,d){p.band=band;p.len=startLen(band,d);p.tempoStep=0;p.grew=0;return p},
-  reset(b,kid,band,d){const o=(b.progress||{})[kid]||{};(b.progress=b.progress||{})[kid]={band,len:startLen(band,d),roundsDone:o.roundsDone||0,tempoStep:0,speedRounds:o.speedRounds||0,seed:o.seed||0};return b.progress[kid]},
-  // a finished round: only a round with all 5 matched first try, played at the saved length, steps up (+len below 16, +tempo at 16)
+  reset(b,kid,band,d){const o=(b.progress||{})[kid]||{};(b.progress=b.progress||{})[kid]={band,len:startLen(band,d),roundsDone:o.roundsDone||0,tempoStep:0,speedRounds:o.speedRounds||0,seed:o.seed||0};if(o.ml)b.progress[kid].ml=o.ml;return b.progress[kid]},   // the music level is kept
+  // a finished round (Nov 1 / LIST2 #6): success = matches / tunes. >= 0.85 at the saved length (not a "little one") steps up
+  // (+len below 16 via the ramp, +tempo at 16); < 0.65 (or a soft stop) takes a tempo step back, or 1 note off when there is no tempo
+  // step to give back (never below min_len). o.success missing (old callers): perfect = 1, otherwise a hold.
   finish(p,o,band,d){const V=V2(d),was=p.len;p.grew=0;
-    if(o.soft){p.tempoStep=Math.max(0,(p.tempoStep||0)-1);return p}
+    const s=typeof o.success==='number'?o.success:o.soft?0:o.perfect?1:.7,stepK=ML?ML.eibStep(s,!!o.soft):(o.soft?'down':o.perfect?'up':'hold');
+    const down=()=>{if((p.tempoStep||0)>0)p.tempoStep--;else if(p.len>V.min_len){p.len--;p.grew=-1}};
+    if(o.soft){down();return p}
     p.roundsDone=(p.roundsDone||0)+1;if(p.tempoStep>0)p.speedRounds=(p.speedRounds||0)+1;
-    if(o.perfect&&o.played===p.len){if(p.len<V.max_len){p.len=rampLen(p.len,band,d);p.grew=p.len-was}else p.tempoStep=Math.min(V.tempo.max_steps,(p.tempoStep||0)+1)}
+    if(stepK==='up'&&o.played===p.len&&!o.little){if(p.len<V.max_len){p.len=rampLen(p.len,band,d);p.grew=p.len-was}else p.tempoStep=Math.min(V.tempo.max_steps,(p.tempoStep||0)+1)}
+    else if(stepK==='down')down();
     return p}};
 function stickersFor(played,speedRounds,has,d){const out=[],S=V2(d).stickers;
   const L=S.find(x=>x.len&&x.len<=played&&!has(x.title));if(L)out.push(L.title);
@@ -128,11 +141,19 @@ const Song={v:1,tpb:TPB,
   pack(s){const b=new Uint8Array(4+2*s.n.length);b[0]=s.v;b[1]=s.bpm;b[2]=s.n.length&255;b[3]=s.n.length>>8;
     s.n.forEach((x,i)=>{b[4+2*i]=(x[0]&7)|(((x[1]+1)&7)<<3);b[5+2*i]=x[2]});return b},
   unpack(b){const n=[],len=b[2]|(b[3]<<8);for(let i=0;i<len;i++){const x=b[4+2*i];n.push([x&7,((x>>3)&7)-1,b[5+2*i]])}return {v:b[0],bpm:b[1],tpb:TPB,n}}};
-const Songbook={KEY:'echo-songbook-v1',   // key kept from v1 (store v:2 inside); beside the Echo save: survives a release and a new Echo; only "Start over" (erase all) removes it
-  schema:{v:2,slots:6,songs:'[{id, made: ms, fam, inst, song: Song v1}] (at most slots)',star:'song id | null (Echo\'s Song, piece 3)',progress:'{[child id]: {band, len, roundsDone, tempoStep, speedRounds, seed}} (age band + Echo It Back v2)'},
-  empty:()=>({v:2,slots:6,songs:[],star:null,progress:{}}),
-  migrate(j){if(!j||!Array.isArray(j.songs))return null;if(j.v===1)return Object.assign({},j,{v:2,progress:{}});if(j.v===2){j.progress=j.progress||{};return j}return null},   // v1 -> v2: songs kept, empty progress
-  load(){let j=null;try{j=JSON.parse(localStorage.getItem(Songbook.KEY)||'null')}catch(e){}const m=Songbook.migrate(j);if(!m)return Songbook.empty();if(j.v===1)Songbook.save(m);return m},
+const Songbook={KEY:'echo-songbook-v1',   // key kept from v1 (store v:3 inside); beside the Echo save: survives a release and a new Echo; only "Start over" (erase all) removes it
+  schema:{v:3,slots:6,songs:'[{id, made: ms, fam, inst, song: Song v1}] (at most slots)',star:'song id | null (Echo\'s Song, piece 3)',
+    progress:'{[child id]: {band, len, roundsDone, tempoStep, speedRounds, seed, ml}} (reading band + Echo It Back v2 + music level)',
+    ml:"{v:1, level:1-5, src:'prior'|'warmup'|'seed', warm:{at, r:{copy,beat,pitch,rhythm}}|null, dial:{catch,stack,run,dig: 0-2}, win:{<game>:[last 4 success 0-1]}, set:{}, met:{}, missions:{}, up, sessions}"},
+  empty:()=>({v:3,slots:6,songs:[],star:null,progress:{}}),
+  // v1 -> v3: songs kept, empty progress. v2 -> v3: every child's progress kept; ml seeded from the EIB length (and the band's dial).
+  migrate(j){if(!j||typeof j!=='object'||!Array.isArray(j.songs))return null;
+    if(j.v===1)return Object.assign({},j,{v:3,progress:{}});
+    if(j.v===2||j.v===3){const P=j.progress&&typeof j.progress==='object'?j.progress:{};
+      for(const k in P){const p=P[k];if(!p||typeof p!=='object'){delete P[k];continue}if(ML&&!ML.valid(p.ml))p.ml=ML.seed(p.len,p.band)}
+      return Object.assign(j,{v:3,progress:P})}
+    return null},
+  load(){let j=null;try{j=JSON.parse(localStorage.getItem(Songbook.KEY)||'null')}catch(e){}const was=j&&j.v,raw=JSON.stringify(j);let m=null;try{m=Songbook.migrate(j)}catch(e){m=null}if(!m)return Songbook.empty();if(was!==3||JSON.stringify(m)!==raw)Songbook.save(m);return m},
   save(b){try{localStorage.setItem(Songbook.KEY,JSON.stringify(b));return true}catch(e){return false}},
   clear(){try{localStorage.removeItem(Songbook.KEY)}catch(e){}}};
 // ---------------------------------------------------------------- data
@@ -159,7 +180,8 @@ function PadInput(root,opt){const live=new Map(),doc=root.ownerDocument||documen
 // ---------------------------------------------------------------- the game
 let TOK=0,cur=null;
 const msPerTick=bpm=>60000/bpm/TPB;
-function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn${ticks>=18?' long':ticks<=6?' short':''}${cls?' '+cls:''}" style="--c:${colOf(n)}" data-note="${n}"></i>`}
+const SOLN=['do','re','mi','fa','sol','la','ti'];
+function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn${ticks>=18?' long':ticks<=6?' short':''}${cls?' '+cls:''}" style="--c:${colOf(n)}" data-note="${n}" data-sol="${SOLN[((s%7)+7)%7]}"></i>`}
 // LIST2 #3 (Daniel, Oct 28): a row longer than 4 notes splits into two even rows (6 = 3+3, 8 = 4+4, odd: the top row gets the extra one);
 // 4 or fewer stay on one row. Same rule for the length dots on the start tiles. rowCols(n) = columns of the grid.
 const rowCols=n=>n>4?Math.ceil(n/2):Math.max(1,n);
@@ -169,12 +191,13 @@ const dotsHTML=n=>`<span class="eibdots" style="--n:${rowCols(n)}">${'<i></i>'.r
 function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier|0)),RM=!!api.lowfx,st=api.state||{},V=DATA.v2,band=api.band||'7-8',kid=api.kid||'kid';
   st.rounds=st.rounds||0;st.heard=st.heard||[];
   const book=Songbook.load(),P=Progress.get(book,kid,band);Songbook.save(book);
+  const lvl=P.ml?P.ml.level:2,ptier=ML?Math.min(4,ML.padsTier(lvl,tier)):tier,sol=ML?ML.solfege(lvl):'none',SOL=ML?ML.data.solfege:[];   // pads: music level OR song stage, whichever gives more
   const tok=++TOK,later=(ms,f)=>{const t=tok;return setTimeout(()=>{if(t===TOK)f()},ms)};
-  const pads=padsFor(fam,tier),tunes=tunesFor(fam,tier);
-  const root=document.createElement('div');root.className='eib'+(RM?' rm':'');root.id='eib';if(api.color)api.gs.style.setProperty('--ec',api.color);
+  const pads=padsFor(fam,ptier),tunes=tunesFor(fam,ptier);
+  const root=document.createElement('div');root.className='eib'+(RM?' rm':'')+(sol!=='none'?' solpads':'')+(sol==='pads+strip'?' solstrip':'');root.id='eib';if(api.color)api.gs.style.setProperty('--ec',api.color);
   root.innerHTML=`<div class="eibbeads" aria-hidden="true">${'<i></i>'.repeat(V.round)}</div>
     <div class="eibstrip" aria-live="polite"><div class="eibslots" aria-hidden="true"></div><div class="eibrow eibask" aria-label="The Echo's tune"></div><div class="eibrow eibans" aria-label="Your tune"></div><i class="eibspark"></i><i class="eibpuff"></i></div>
-    <div class="eibpads listen" role="group" aria-label="Notes">${pads.map((s,i)=>{const n=nameOf(fam,s);return `<button class="eibpad" data-pad="${s}" style="--c:${colOf(n)};--i:${i}" aria-label="Note ${n.replace(/\d/,'').toUpperCase().replace('#',' sharp').replace(/^(.)B$/,'$1 flat')}"></button>`}).join('')}</div>
+    <div class="eibpads listen" role="group" aria-label="Notes">${pads.map((s,i)=>{const n=nameOf(fam,s);return `<button class="eibpad" data-pad="${s}"${sol!=='none'?` data-sol="${SOL[((s%7)+7)%7]}"`:''} style="--c:${colOf(n)};--i:${i}" aria-label="Note ${n.replace(/\d/,'').toUpperCase().replace('#',' sharp').replace(/^(.)B$/,'$1 flat')}"></button>`}).join('')}</div>
     <div class="eibtiles" hidden></div>`;
   api.gs.appendChild(root);if(RM)api.gs.classList.add('eibrm');const ask=root.querySelector('.eibask'),ans=root.querySelector('.eibans'),padBox=root.querySelector('.eibpads'),spark=root.querySelector('.eibspark'),
     beads=[...root.querySelectorAll('.eibbeads i')],slots=root.querySelector('.eibslots'),puff=root.querySelector('.eibpuff'),tiles=root.querySelector('.eibtiles');
@@ -185,8 +208,8 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   let phase='echo',tune=null,asked=[],answer=[],gapT=null,waitT=null,idles=0,retried=false,lastId=null,n=0,singing=0,R=null,curNotes=[],ph=-1,pres=[];
   // H16: never the same note sequence back-to-back (st.lastSeq, kept across rounds) or twice in one round (R.seen); spec + vectors:
   // phone_app_review/h16_eib_dedupe_spec.md, host/eib_dedupe_vectors.json (shared with eib_core.c)
-  function pick(len){P.seed=(P.seed||0)+1;saveBook();const seed=(P.seed*7919+kid.length*104729+tier)>>>0;
-    const res=pickFresh({hand:tunes,len,seen:R?R.seen:[],lastSeq:st.lastSeq||null,seed,gen:sd=>gen(fam,tier,len,sd)});
+  function pick(len){P.seed=(P.seed||0)+1;saveBook();const seed=(P.seed*7919+kid.length*104729+ptier)>>>0;
+    const res=pickFresh({hand:tunes,len,seen:R?R.seen:[],lastSeq:st.lastSeq||null,seed,gen:sd=>gen(fam,ptier,len,sd)});
     const k=seqKey(res.tune.n);if(R)R.seen.push(k);st.lastSeq=k;lastId=res.tune.id;api.save&&api.save();return res.tune}
   function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const k=msPerTick(bpm)*(o.slow?1.15:1);
     const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);layoutRow(row,notes.length);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
@@ -234,13 +257,14 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   // ---- round end: the duet (last matched tune, pads + Echo lit), "Five! We sang five!", progress, stickers, then Home
   function roundEnd(){phase='end';const t=R.last,was=P.len;padBox.classList.add('duet');root.classList.add('duet');
     sing(t.n,t.bpm,()=>{phase='end';padBox.classList.remove('duet');root.classList.remove('duet');api.react&&api.react('delighted');say('eib_five',2400);
-      Progress.finish(P,{perfect:R.perfect&&!R.eased,played:R.played},band);
+      const succ=R.tunes?R.matches/R.tunes:0;Progress.finish(P,{perfect:R.perfect&&!R.eased,played:R.played,little:R.little,success:succ},ML?ML.rampBand(lvl):band);
+      if(ML&&P.ml)ML.eibRound(P.ml,P.len,succ);
       const got=stickersFor(t.n.length,P.speedRounds||0,api.hasSticker||(()=>true));saveBook();
       got.forEach(title=>api.onSticker&&api.onSticker(title,{fam,song:Song.make(t.bpm,t.n)}));
       const lines=[];if(got.length)lines.push('eib_sticker');if(was<V.max_len&&P.len>=V.max_len)lines.push('eib_sixteen');
       api.onRound&&api.onRound({finished:true,perfect:R.perfect,len:R.played,grew:P.grew||0,stickers:got});
       let w=2600;lines.forEach(k=>{later(w,()=>say(k,2400));w+=2600});later(w,()=>{phase='done';api.onDone&&api.onDone(true)})},{phase:'end'})}
-  function softStop(){phase='end';say('eib_rest_ears',2400);Progress.finish(P,{soft:true},band);saveBook();
+  function softStop(){phase='end';say('eib_rest_ears',2400);Progress.finish(P,{soft:true},band);if(ML&&P.ml)ML.report(P.ml,'eib',R.tunes?R.matches/R.tunes:0);saveBook();
     api.onRound&&api.onRound({finished:true,soft:true});later(2600,()=>{phase='done';api.onDone&&api.onDone(true)})}   // counts as finished, takes one speed step back
   function newRound(len,little){tiles.hidden=true;tiles.innerHTML='';
     R={len,played:len,little,seen:[],matches:0,tunes:0,missRun:0,perfect:!little,eased:false,last:null,sayLittle:false,
@@ -267,9 +291,19 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   api.save&&api.save();return cur}
 // grown-ups + age band hooks (game.js) and the Memory Book sticker tune
 EB.progressFor=(kid,band)=>{const b=Songbook.load(),p=Progress.get(b,kid,band);Songbook.save(b);return p};
-EB.setBand=(kid,band)=>{const b=Songbook.load();b.progress=b.progress||{};const p=b.progress[kid];if(p)Progress.setBand(p,band);else Progress.get(b,kid,band);Songbook.save(b);return b.progress[kid]};
+EB.setBand=(kid,band)=>{const b=Songbook.load();b.progress=b.progress||{};Progress.setBand(Progress.get(b,kid,band),band);Songbook.save(b);return b.progress[kid]};   // grown-ups age row only
 EB.bandOf=kid=>{const p=(Songbook.load().progress||{})[kid];return p&&p.band||null};
 EB.resetProgress=(kid,band)=>{const b=Songbook.load(),p=Progress.reset(b,kid,band);Songbook.save(b);return p};
+// the child's music level (game.js, warmup.js): read, or change and save in one go. fn(ml, progress) may return a replacement record.
+EB.mlFor=(kid,band)=>{const b=Songbook.load(),p=Progress.get(b,kid,band);Songbook.save(b);return p.ml};
+EB.withMl=(kid,fn,band)=>{const b=Songbook.load(),p=Progress.get(b,kid,band);const r=fn(p.ml,p);if(r&&typeof r==='object'&&r.v===1)p.ml=r;Songbook.save(b);return p.ml};
+// the warm-up result also sets the first Echo It Back length while the child has not sung a round yet
+EB.applyWarmup=(kid,r,at,o)=>EB.withMl(kid,(m,p)=>{const n=ML.applyWarmup(m,r,at,o);if(!p.roundsDone&&!(o&&o.keep))p.len=ML.eibStartLen(n.level);return n});
+// an existing save without a warm-up: seed the level from its EIB length (or the band's start length when it never played)
+EB.seedMl=(kid,band)=>{const b=Songbook.load();b.progress=b.progress||{};let p=b.progress[kid];
+  if(!p){p=b.progress[kid]={band,len:startLen(band||'7-8'),roundsDone:0,tempoStep:0,speedRounds:0,seed:0}}
+  if(ML&&(!ML.valid(p.ml)||(p.ml.src==='prior'&&!p.ml.warm)))p.ml=ML.seed(p.len,band||p.band);Songbook.save(b);return p.ml};
+EB.playNote=(fam,s,o)=>play(fam,s,o);
 EB.playSong=(fam,song)=>{if(!Song.valid(song))return 0;const k=msPerTick(song.bpm);let t=0;song.n.forEach(x=>{if(x[0]){const s=step(x);setTimeout(()=>play(fam,s,{vol:.8}),t)}t+=Math.max(DATA?V2().tempo.min_note_ms:120,x[2]*k)});return t};
 function stop(){TOK++;if(cur){cur.input.off();if(cur.root.parentNode)cur.root.remove();cur=null}voices.splice(0).forEach(v=>{try{v.stop()}catch(e){}})}
 // ---------------------------------------------------------------- the Echo-started invite: a note chip by the Echo, gone after 10 s, never repeated
@@ -277,7 +311,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   host.appendChild(b);const ms=(DATA&&DATA.timing.invite_fade_ms)||10000;let done=false;
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
-Object.assign(EB,{start,stop,invite,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
+Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
   _pure:{rowCols,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;

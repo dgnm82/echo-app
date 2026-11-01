@@ -7911,6 +7911,915 @@
           "kind": "ask_child"
         }
       }
+    ],
+    "wu_intro": [
+      {
+        "text": "My first song! Help me?",
+        "short": "My first song! Help me?",
+        "expr": "curious",
+        "context": {
+          "age_band": "5-6",
+          "wu": "intro"
+        }
+      },
+      {
+        "text": "Ooh, I don't have a song yet! Help me learn one?",
+        "short": "Help me learn a song?",
+        "expr": "curious",
+        "context": {
+          "age_band": "7-8",
+          "wu": "intro"
+        }
+      },
+      {
+        "text": "Every Echo needs a first song. Mine is still tiny. Will you help me find it?",
+        "short": "Help me find my song?",
+        "expr": "curious",
+        "context": {
+          "age_band": "9-10",
+          "wu": "intro"
+        }
+      }
+    ],
+    "wu_intro_go": [
+      {
+        "text": "Yay! Ears up!",
+        "short": "Yay! Ears up!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "intro"
+        }
+      },
+      {
+        "text": "Yay! Little sound games. Ears up!",
+        "short": "Yay! Ears up!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "intro"
+        }
+      },
+      {
+        "text": "Yay! A few little sound games, and my song starts growing.",
+        "short": "Yay! Sound games!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "intro"
+        }
+      }
+    ],
+    "wu_copy_show": [
+      {
+        "text": "Two notes. Listen!",
+        "short": "Two notes. Listen!",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Here go two notes. High, then low. Listen!",
+        "short": "Two notes. Listen!",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "I'll sing two notes, one high and one low. Ears up!",
+        "short": "Two notes. Ears up!",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_copy_turn": [
+      {
+        "text": "Your turn! Tap them.",
+        "short": "Your turn! Tap them.",
+        "expr": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Now you sing them to me. Tap the pads!",
+        "short": "Your turn! Tap them.",
+        "expr": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Now you sing them back on the pads. Any way you like!",
+        "short": "Your turn!",
+        "expr": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_copy_same": [
+      {
+        "text": "Same as me! Wow!",
+        "short": "Same as me! Wow!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "You sang my two notes! My tail is going wild.",
+        "short": "My two notes! Wow!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "That's exactly my high-low! It sounds even nicer from you.",
+        "short": "My high-low! Wow!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_copy_shape": [
+      {
+        "text": "Ooh! Down, like mine!",
+        "short": "Ooh! Down, like mine!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Ooh, you went down too! Your notes are new. I like them.",
+        "short": "Down, like mine!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "You went downhill like my notes, but with your own. Sneaky-nice!",
+        "short": "Downhill! Sneaky-nice!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_copy_new": [
+      {
+        "text": "New notes! I love them!",
+        "short": "New notes! I love them!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Ooh, new notes! I'm keeping those for our song.",
+        "short": "New notes! Keeping them!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Those are brand-new notes! I'm tucking them into our song.",
+        "short": "Brand-new notes!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_copy_wait": [
+      {
+        "text": "Listening? Me too! Here.",
+        "short": "Listening? Me too! Here.",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Just listening? That's fine! I'll sing them one more time.",
+        "short": "Just listening? Me too!",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "copy"
+        }
+      },
+      {
+        "text": "Listening is part of music too. Here they are once more.",
+        "short": "Here they are again.",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "copy"
+        }
+      }
+    ],
+    "wu_next": [
+      {
+        "text": "Ooh! Next one!",
+        "short": "Ooh! Next one!",
+        "expr": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "next"
+        }
+      },
+      {
+        "text": "My song got a little bigger! Next one!",
+        "short": "My song grew a bit!",
+        "expr": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "next"
+        }
+      },
+      {
+        "text": "I can feel my song starting. On to the next bit!",
+        "short": "On to the next bit!",
+        "expr": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "next"
+        }
+      }
+    ],
+    "wu_beat_show": [
+      {
+        "text": "My heart goes thump-thump!",
+        "short": "My heart goes thump-thump!",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Hear that? My heart goes thump, thump, thump.",
+        "short": "Thump, thump, thump.",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Every song has a heartbeat underneath. Here's mine. Thump, thump.",
+        "short": "Here's my heartbeat.",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "beat"
+        }
+      }
+    ],
+    "wu_beat_turn": [
+      {
+        "text": "Tap with my heart!",
+        "short": "Tap with my heart!",
+        "expr": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Tap along with my heartbeat. Thump, thump!",
+        "short": "Tap with my heart!",
+        "expr": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Tap along with my heartbeat, as long as you like.",
+        "short": "Tap with my heart!",
+        "expr": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "beat"
+        }
+      }
+    ],
+    "wu_beat_with": [
+      {
+        "text": "Our hearts go together!",
+        "short": "Our hearts go together!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "We tapped together! Like one big heart.",
+        "short": "Like one big heart!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Your taps and my heartbeat matched up. We sound like one drum!",
+        "short": "Like one drum!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "beat"
+        }
+      }
+    ],
+    "wu_beat_own": [
+      {
+        "text": "Your own beat! Fun!",
+        "short": "Your own beat! Fun!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Ooh, you have your own beat! It makes me want to dance.",
+        "short": "Your own beat! Fun!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "You made your own beat on top of mine. That's a real drummer trick!",
+        "short": "A drummer trick!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "beat"
+        }
+      }
+    ],
+    "wu_beat_wait": [
+      {
+        "text": "Listen. Thump, thump. Cozy!",
+        "short": "Listen. Thump, thump. Cozy!",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "Listening to my heart? It's a cozy sound, right?",
+        "short": "Thump, thump. Cozy!",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "beat"
+        }
+      },
+      {
+        "text": "You can just listen too. A heartbeat is the quietest music.",
+        "short": "The quietest music.",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "beat"
+        }
+      }
+    ],
+    "wu_high_show": [
+      {
+        "text": "Two notes. One is up high!",
+        "short": "Two notes. One is up high!",
+        "expr": "curious",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Two little notes! One is high and one is low. Hmm!",
+        "short": "One high, one low!",
+        "expr": "curious",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Two little notes, one on each side. One sits higher up. My ears are wobbly.",
+        "short": "One sits higher up.",
+        "expr": "curious",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_high_turn": [
+      {
+        "text": "Help me find the high one?",
+        "short": "Help me find the high one?",
+        "expr": "curious",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "My ears are mixed up. Tap the high one for me?",
+        "short": "Tap the high one?",
+        "expr": "curious",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "My ears keep mixing them up. Point me to the high one?",
+        "short": "Point to the high one?",
+        "expr": "curious",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_high_up": [
+      {
+        "text": "Up high! I hear it!",
+        "short": "Up high! I hear it!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "That one's way up high! Now my ears know.",
+        "short": "Way up high!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "That one sits way up high. My ears just learned a new trick!",
+        "short": "Way up high!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_high_low": [
+      {
+        "text": "Ooh, the low one! So cozy.",
+        "short": "Ooh, the low one! So cozy.",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Ooh, the low one, deep and cozy! Hear the high one too?",
+        "short": "Low and cozy!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "That's the low one, deep like a drum. Now hear its high friend!",
+        "short": "Low, like a drum!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_high_wait": [
+      {
+        "text": "Hmm! Low… then high!",
+        "short": "Hmm! Low… then high!",
+        "expr": "thinking",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Let's hear them both. Low, then up high!",
+        "short": "Low, then high!",
+        "expr": "thinking",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Let's hear them in a row, low then high. Like a tiny staircase.",
+        "short": "Low, then high!",
+        "expr": "thinking",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_high_more": [
+      {
+        "text": "Two more notes!",
+        "short": "Two more notes!",
+        "expr": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Ooh, two more! These are closer together.",
+        "short": "Two more notes!",
+        "expr": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "high"
+        }
+      },
+      {
+        "text": "Here are two more. These ones stand closer together. Listen!",
+        "short": "Two more notes!",
+        "expr": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "high"
+        }
+      }
+    ],
+    "wu_clap_show": [
+      {
+        "text": "My paws go pat-pat. Listen!",
+        "short": "My paws go pat-pat. Listen!",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "My paws can play a pattern. Pat, pat-pat, pat!",
+        "short": "Pat, pat-pat, pat!",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Here's a little pattern with my paws. Some pats are long, some are quick.",
+        "short": "A little paw pattern.",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_clap_turn": [
+      {
+        "text": "Now you pat!",
+        "short": "Now you pat!",
+        "expr": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Your turn! Pat it back on the pads.",
+        "short": "Your turn! Pat it!",
+        "expr": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Pat it back to me, or make up your own pattern.",
+        "short": "Pat it back to me!",
+        "expr": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_clap_same": [
+      {
+        "text": "Same pats! Yay!",
+        "short": "Same pats! Yay!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "You pat just like me! My ears are bouncing.",
+        "short": "Just like me! Yay!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "You played my whole pattern back. My ears are doing a happy dance.",
+        "short": "My whole pattern! Yay!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_clap_count": [
+      {
+        "text": "Pat pat! I like yours!",
+        "short": "Pat pat! I like yours!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Same number of pats, your own way! I like your way.",
+        "short": "I like your way!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Same number of pats with a new swing. I'll use your version!",
+        "short": "I'll use your version!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_clap_new": [
+      {
+        "text": "A new pattern! Fun!",
+        "short": "A new pattern! Fun!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "Ooh, a whole new pattern! Let's put it in our song.",
+        "short": "A new pattern! Fun!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "You made up a brand-new pattern. Drummers call that a fill. Fun!",
+        "short": "A brand-new pattern!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_clap_wait": [
+      {
+        "text": "Pat, pat-pat, pat. Fun!",
+        "short": "Pat, pat-pat, pat. Fun!",
+        "expr": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "I'll pat it once more. You can just listen!",
+        "short": "Pat, pat-pat, pat!",
+        "expr": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "clap"
+        }
+      },
+      {
+        "text": "I'll pat it once more. Listening counts as playing too.",
+        "short": "Once more. Listen!",
+        "expr": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "clap"
+        }
+      }
+    ],
+    "wu_song_make": [
+      {
+        "text": "Your notes make our song!",
+        "short": "Your notes make our song!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "5-6",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "I'm mixing your notes and your pats into one song!",
+        "short": "Making our song!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "7-8",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "Now I'll put your notes, your beat and your pats together. Here goes!",
+        "short": "Here goes our song!",
+        "expr": "excited",
+        "react": "excited",
+        "context": {
+          "age_band": "9-10",
+          "wu": "song"
+        }
+      }
+    ],
+    "wu_song_done": [
+      {
+        "text": "Our first song! I love it!",
+        "short": "Our first song! I love it!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "5-6",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "That's our first song! It has your notes in it.",
+        "short": "Our first song!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "7-8",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "Our very first song, and it's made from your music. My tail can't stop!",
+        "short": "Our very first song!",
+        "expr": "delighted",
+        "react": "happy",
+        "context": {
+          "age_band": "9-10",
+          "wu": "song"
+        }
+      }
+    ],
+    "wu_song_keep": [
+      {
+        "text": "It's in our Memory Book!",
+        "short": "It's in our Memory Book!",
+        "expr": "proud",
+        "context": {
+          "age_band": "5-6",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "It's in our Memory Book. We can play it any time!",
+        "short": "In our Memory Book!",
+        "expr": "proud",
+        "context": {
+          "age_band": "7-8",
+          "wu": "song"
+        }
+      },
+      {
+        "text": "It's saved in our Memory Book. We can play it whenever we like.",
+        "short": "In our Memory Book!",
+        "expr": "proud",
+        "context": {
+          "age_band": "9-10",
+          "wu": "song"
+        }
+      }
+    ],
+    "wu_invite": [
+      {
+        "text": "A new song! Help me?",
+        "short": "A new song! Help me?",
+        "expr": "curious",
+        "context": {
+          "age_band": "5-6",
+          "wu": "invite"
+        }
+      },
+      {
+        "text": "I'm learning a new song! Help me?",
+        "short": "A new song! Help me?",
+        "expr": "curious",
+        "context": {
+          "age_band": "7-8",
+          "wu": "invite"
+        }
+      },
+      {
+        "text": "I'm learning a brand-new song. Want to help me build it?",
+        "short": "A new song! Help me?",
+        "expr": "curious",
+        "context": {
+          "age_band": "9-10",
+          "wu": "invite"
+        }
+      }
     ]
   },
   "conversations": [

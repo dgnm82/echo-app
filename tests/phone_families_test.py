@@ -18,7 +18,7 @@ async def origin(b,p,animal,chip,errs,b404,fam=None):
   for i in range(6):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
-  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await T(pg,'.obagebtn >> nth=1')
+  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
   await pick(pg,animal);await T(pg,'#ornext',300)
   if fam:await T(pg,f'.orfam[data-f={fam}]')
   await T(pg,f'.orchip[data-c={chip}]',900)

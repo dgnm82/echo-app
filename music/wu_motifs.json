@@ -1,0 +1,632 @@
+{
+ "_about": "Cole step 1 warm-up motifs (Nov 1, 2026). Song v1 style [degree 1-7, octave, ticks @ 12/beat], ticks = onset to next onset. Play with the existing music/notes/<fam>_<note> samples (instruments.json musicbox). See MOTIFS.md.",
+ "v": 1,
+ "tpb": 12,
+ "do_midi": {
+  "slyte": 62,
+  "whimber": 70,
+  "twitchel": 65
+ },
+ "motifs": {
+  "copy": {
+   "bpm": 88,
+   "feel": "a friendly two-note call, falling: sol then mi, unhurried, like calling a name across a meadow",
+   "pads": [
+    [
+     3,
+     0
+    ],
+    [
+     5,
+     0
+    ]
+   ],
+   "by_family": {
+    "slyte": [
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      3,
+      0,
+      12
+     ]
+    ],
+    "whimber": [
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      3,
+      0,
+      12
+     ]
+    ],
+    "twitchel": [
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      3,
+      0,
+      12
+     ]
+    ]
+   },
+   "samples": {
+    "slyte": [
+     "slyte_a4",
+     "slyte_fs4"
+    ],
+    "whimber": [
+     "whimber_f5",
+     "whimber_d5"
+    ],
+    "twitchel": [
+     "twitchel_c5",
+     "twitchel_a4"
+    ]
+   }
+  },
+  "beat": {
+   "bpm": 84,
+   "beats": 10,
+   "skip": 2,
+   "feel": "a steady, warm, low heartbeat; soft thump, never a click; slightly louder on every 1st of 2 beats",
+   "gain": [
+    1.0,
+    0.8,
+    1.0,
+    0.8,
+    1.0,
+    0.8,
+    1.0,
+    0.8,
+    1.0,
+    0.8
+   ],
+   "by_family": {
+    "slyte": [
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ]
+    ],
+    "whimber": [
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ],
+     [
+      5,
+      -1,
+      12
+     ]
+    ],
+    "twitchel": [
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      12
+     ]
+    ]
+   },
+   "samples": {
+    "slyte": [
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4",
+     "slyte_d4"
+    ],
+    "whimber": [
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4",
+     "whimber_f4"
+    ],
+    "twitchel": [
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4",
+     "twitchel_f4"
+    ]
+   }
+  },
+  "high": {
+   "bpm": 100,
+   "feel": "two tiny pip-pip notes, one on each side; bright, short, curious; then (after ANY tap or none) the Echo plays low -> high as a little rising answer",
+   "pip": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     8
+    ]
+   ],
+   "gap_ticks": 12,
+   "by_family": {
+    "slyte": [
+     {
+      "low": [
+       1,
+       1
+      ],
+      "high": [
+       5,
+       1
+      ],
+      "interval": "perfect 5th (do-sol)",
+      "samples": [
+       "slyte_d5",
+       "slyte_a5"
+      ]
+     },
+     {
+      "low": [
+       1,
+       1
+      ],
+      "high": [
+       3,
+       1
+      ],
+      "interval": "major 3rd (do-mi)",
+      "samples": [
+       "slyte_d5",
+       "slyte_fs5"
+      ]
+     }
+    ],
+    "whimber": [
+     {
+      "low": [
+       1,
+       0
+      ],
+      "high": [
+       5,
+       0
+      ],
+      "interval": "perfect 5th (do-sol)",
+      "samples": [
+       "whimber_bb4",
+       "whimber_f5"
+      ]
+     },
+     {
+      "low": [
+       1,
+       0
+      ],
+      "high": [
+       3,
+       0
+      ],
+      "interval": "major 3rd (do-mi)",
+      "samples": [
+       "whimber_bb4",
+       "whimber_d5"
+      ]
+     }
+    ],
+    "twitchel": [
+     {
+      "low": [
+       1,
+       1
+      ],
+      "high": [
+       5,
+       1
+      ],
+      "interval": "perfect 5th (do-sol)",
+      "samples": [
+       "twitchel_f5",
+       "twitchel_c6"
+      ]
+     },
+     {
+      "low": [
+       1,
+       1
+      ],
+      "high": [
+       3,
+       1
+      ],
+      "interval": "major 3rd (do-mi)",
+      "samples": [
+       "twitchel_f5",
+       "twitchel_a5"
+      ]
+     }
+    ]
+   }
+  },
+  "clap": {
+   "bpm": 90,
+   "feel": "a bouncy pat pattern on one bright note: long, quick-quick, long (ta ti-ti ta)",
+   "ticks": [
+    12,
+    6,
+    6,
+    12
+   ],
+   "by_family": {
+    "slyte": [
+     [
+      1,
+      1,
+      12
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ],
+    "whimber": [
+     [
+      1,
+      1,
+      12
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ],
+    "twitchel": [
+     [
+      1,
+      1,
+      12
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      6
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ]
+   },
+   "samples": {
+    "slyte": [
+     "slyte_d5",
+     "slyte_d5",
+     "slyte_d5",
+     "slyte_d5"
+    ],
+    "whimber": [
+     "whimber_bb5",
+     "whimber_bb5",
+     "whimber_bb5",
+     "whimber_bb5"
+    ],
+    "twitchel": [
+     "twitchel_f5",
+     "twitchel_f5",
+     "twitchel_f5",
+     "twitchel_f5"
+    ]
+   }
+  },
+  "yay": {
+   "bpm": 104,
+   "feel": "the same tiny rising sparkle after EVERY answer (right, other or none), so no answer ever sounds different",
+   "by_family": {
+    "slyte": [
+     [
+      3,
+      0,
+      3
+     ],
+     [
+      5,
+      0,
+      3
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ],
+    "whimber": [
+     [
+      3,
+      0,
+      3
+     ],
+     [
+      5,
+      0,
+      3
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ],
+    "twitchel": [
+     [
+      3,
+      0,
+      3
+     ],
+     [
+      5,
+      0,
+      3
+     ],
+     [
+      1,
+      1,
+      12
+     ]
+    ]
+   },
+   "samples": {
+    "slyte": [
+     "slyte_fs4",
+     "slyte_a4",
+     "slyte_d5"
+    ],
+    "whimber": [
+     "whimber_d5",
+     "whimber_f5",
+     "whimber_bb5"
+    ],
+    "twitchel": [
+     "twitchel_a4",
+     "twitchel_c5",
+     "twitchel_f5"
+    ]
+   }
+  }
+ },
+ "first_song": {
+  "rule": [
+   "A, B = the child's first two copy taps (fallback sol, mi; one tap only: B = mi, or sol if A is mi).",
+   "R = the child's pats quantised to 6/12 ticks (gap <= 0.75 x their median gap -> 6, else 12; the last pat 12). Fewer than 3 or more than 6 pats, or none: R = the Echo's 12,6,6,12.",
+   "Phrase 1 = R over A,B,A,B... ; phrase 2 = R over A,B,... with the last two notes re -> do and the last length doubled (ends home on do).",
+   "Tempo = the child's heartbeat tapping tempo (median gap) clamped 76-104 bpm; no or few beat taps: 88.",
+   "Under it, the heartbeat note on every beat at 0.5 gain (2 voices total). At most 4 different pitches (re/do + A/B) - EIB rule holds."
+  ],
+  "example": {
+   "bpm": 88,
+   "n": [
+    [
+     5,
+     0,
+     12
+    ],
+    [
+     3,
+     0,
+     6
+    ],
+    [
+     5,
+     0,
+     6
+    ],
+    [
+     3,
+     0,
+     12
+    ],
+    [
+     5,
+     0,
+     12
+    ],
+    [
+     3,
+     0,
+     6
+    ],
+    [
+     2,
+     0,
+     6
+    ],
+    [
+     1,
+     0,
+     24
+    ]
+   ],
+   "note": "what a child who copies sol-mi and pats ta ti-ti ta (or taps nothing) hears"
+  }
+ }
+}
