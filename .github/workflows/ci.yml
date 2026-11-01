@@ -1,0 +1,168 @@
+# Project Echo web app CI: tools/check.sh (static gate, ~1,740-check suite) + the phone Playwright list from
+# tools/check.sh --phone, split into 5 parallel shards so each job stays well under 20 minutes.
+# tests/phone_catch_test.py is QUARANTINED (flaky ~1 in 3 at line 53, body-catch assert): it still runs on every build
+# in its own non-blocking job and is reported in the summary. Only actions/* are used; no analytics; read-only token;
+# nothing here deploys (GitHub Pages serves main as-is, separately).
+name: CI
+
+on:
+  push:
+    branches-ignore: [gh-pages]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_VERSION: "1.63.0"
+  PILLOW_VERSION: "13.0.0"
+  QUARANTINED: tests/phone_catch_test.py
+  SHARDS: 5
+
+jobs:
+  test:
+    name: ${{ matrix.shard == 'static' && 'static gate (tools/check.sh)' || matrix.shard == 'quarantine' && 'QUARANTINED phone_catch_test.py (non-blocking)' || format('phone shard {0}/5', matrix.shard) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    continue-on-error: ${{ matrix.shard == 'quarantine' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [static, "1", "2", "3", "4", "5", quarantine]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20          # no package.json / npm deps: the node tests use only node built-ins
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Cache pip + Playwright
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/ms-playwright
+          key: pip-pw${{ env.PLAYWRIGHT_VERSION }}-pil${{ env.PILLOW_VERSION }}-${{ runner.os }}
+
+      - name: Install Python deps
+        run: python3 -m pip install "playwright==${PLAYWRIGHT_VERSION}" "pillow==${PILLOW_VERSION}"
+
+      - name: Browser (the tests launch /usr/bin/google-chrome headless)
+        if: matrix.shard != 'static'
+        run: |
+          if [ ! -x /usr/bin/google-chrome ]; then python3 -m playwright install --with-deps chrome; fi
+          /usr/bin/google-chrome --version
+          sudo apt-get install -y -qq fonts-noto-color-emoji >/dev/null || true   # emoji render like on phones
+
+      - name: Box layout (tests use /workspace paths) + local server on :8765
+        run: |
+          sudo mkdir -p /workspace/shots /workspace/echo
+          sudo chown -R "$USER" /workspace
+          ln -sfn "$GITHUB_WORKSPACE" /workspace/echo-app
+          mkdir -p /tmp/results; : > /tmp/results/missing.txt
+          # Out-of-repo test inputs: staged from .github/ci-fixtures/ when present, otherwise reported as MISSING.
+          F="$GITHUB_WORKSPACE/.github/ci-fixtures"
+          for p in echo-test.py echo/batch_H/H1_camera_copy.json echo/ios_design/batch_h/h_followup_hotspots_for_jay.json; do
+            if [ -f "$F/$p" ]; then mkdir -p "$(dirname "/workspace/$p")"; cp "$F/$p" "/workspace/$p"
+            else echo "/workspace/$p" >> /tmp/results/missing.txt; echo "::error::missing out-of-repo test input /workspace/$p (add it as .github/ci-fixtures/$p)"; fi
+          done
+          mkdir -p /workspace/echo/ios_design && cp scenes_hotspots.json /workspace/echo/ios_design/scene_hotspots.json   # declared mirror
+          if [ "${{ matrix.shard }}" != static ]; then
+            nohup python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/http.log 2>&1 &
+            for _ in $(seq 30); do curl -sf -o /dev/null http://localhost:8765/ && break; sleep 1; done
+            curl -sf -o /dev/null http://localhost:8765/
+          fi
+
+      - name: Static gate (tools/check.sh)
+        if: matrix.shard == 'static'
+        run: |
+          set -o pipefail
+          bash tools/check.sh 2>&1 | tee /tmp/results/static.log
+
+      - name: Phone tests (tools/check.sh --phone list, shard ${{ matrix.shard }})
+        if: matrix.shard != 'static'
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          # The list comes from tools/check.sh so the suite stays defined in one place.
+          seg=$(grep -o 'echo "== phone playthrough";.*; fi' tools/check.sh | sed 's/^echo "== phone playthrough"; //; s/; fi$//')
+          mapfile -t ALL < <(printf '%s\n' "$seg" | sed 's/; /\n/g' | sed '/^\s*$/d')
+          [ "${#ALL[@]}" -ge 30 ] || { echo "::error::could not parse the --phone list from tools/check.sh"; exit 1; }
+          CMDS=(); i=0
+          for c in "${ALL[@]}"; do
+            if [[ "$c" == *"$QUARANTINED"* ]]; then [ "$SHARD" = quarantine ] && CMDS+=("$c"); continue; fi
+            [ "$SHARD" != quarantine ] && [ $((i % SHARDS + 1)) = "$SHARD" ] && CMDS+=("$c"); i=$((i + 1))
+          done
+          echo "${#ALL[@]} phone commands in tools/check.sh; this shard runs ${#CMDS[@]}"
+          out=/tmp/results/phone_$SHARD.tsv; : > "$out"; fail=0; n=0
+          for c in "${CMDS[@]}"; do
+            n=$((n + 1)); log="/tmp/results/log_${SHARD}_$n.txt"
+            echo "::group::$c"; start=$SECONDS
+            if timeout 420 bash -c "$c" > "$log" 2>&1; then r=PASS; else r=FAIL; fail=1; echo "::error::$c failed"; fi
+            cat "$log"; echo "::endgroup::"
+            [ "$SHARD" = quarantine ] && r="QUARANTINED-$r"
+            printf '%s\t%s\t%ss\t%s\n' "$r" "$c" "$((SECONDS - start))" "$(basename "$log")" >> "$out"
+          done
+          exit $fail
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: results-${{ matrix.shard }}
+          path: /tmp/results/
+          retention-days: 3
+
+  summary:
+    name: summary
+    needs: test
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: results-*
+          path: results
+      - name: Write job summary
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import glob, os, re
+          def rd(p):
+              try: return open(p, errors='replace').read()
+              except OSError: return ''
+          st = rd('results/results-static/static.log').splitlines()
+          sp = sf = 0
+          for l in st:
+              for a, b in re.findall(r'(\d+)/(\d+)\b', l):
+                  if re.search(r'passed|checks', l, re.I): sp += int(a); sf += int(b) - int(a)
+              m = re.search(r'(\d+) checks, (\d+) failed', l)
+              if m: sp += int(m[1]) - int(m[2]); sf += int(m[2])
+              m = re.search(r'OK \(?(\d+) checks', l)
+              if m: sp += int(m[1])
+          static_ok = bool(st) and st[-1].strip() == 'ALL CHECKS PASSED'
+          rows = []
+          for f in sorted(glob.glob('results/results-*/phone_*.tsv')):
+              d = os.path.dirname(f)
+              rows += [l.split('\t') + [d] for l in rd(f).splitlines() if l]
+          ph = [r for r in rows if not r[0].startswith('QUARANTINED')]; q = [r for r in rows if r[0].startswith('QUARANTINED')]
+          pp = sum(r[0] == 'PASS' for r in ph); pf = [r for r in ph if r[0] == 'FAIL']
+          miss = sorted(set(rd('results/results-static/missing.txt').split()))
+          ok = static_ok and not pf and len(ph) > 0
+          print(f"## Echo app CI {'✅ green' if ok else '❌ red'}: static {sp} passed / {sf} failed · phone {pp} passed / {len(pf)} failed of {len(ph)} · QUARANTINED phone_catch_test: {(q[0][0].split('-')[1] if q else 'not run')} (non-blocking)\n")
+          if miss: print(f'> ⚠️ MISSING out-of-repo test inputs (add under `.github/ci-fixtures/`): {", ".join(miss)}\n')
+          if not static_ok:
+              print('### static gate: last lines\n```'); print('\n'.join(st[-15:]) or '(no log)'); print('```')
+          for r in pf[:3]:
+              print(f'### FAIL `{r[1]}`\n```'); print('\n'.join(rd(os.path.join(r[4], r[3])).splitlines()[-12:])); print('```')
+          if q and q[0][0].endswith('FAIL'):
+              print('### QUARANTINED failure (tracked, does not fail the build)\n```'); print('\n'.join(rd(os.path.join(q[0][4], q[0][3])).splitlines()[-8:])); print('```')
+          PY

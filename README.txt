@@ -5,6 +5,7 @@ Files: art.js (SVG creatures, backgrounds, expressions), dialogue.js (engine), d
 Playtest tools: the "dev" button at top-left.
 Guardrail lint: node tools/lint-dialogue.js [dialogue dir or files] [--js game.js] [--strict]. It exits with code 1 on any guardrail error. Voice-style findings are warnings.
 Privacy: the child's feelings are never saved (legacy data is purged on load). Text-to-speech uses on-device voices only, and stays silent if there are none.
+CI: .github/workflows/ci.yml runs tools/check.sh and the --phone Playwright list on every push, PR and manual run (no deploy; Pages still serves main as-is). tests/phone_catch_test.py is QUARANTINED (flaky ~1 in 3, line 53): it runs in its own non-blocking step and shows in the job summary. Out-of-repo test inputs go in .github/ci-fixtures/.
 
 PIXEL ART (milestone 1)
 - Main game is pixel art per /workspace/echo/style_research/pixel/style_guide.md: 180x320 virtual phone screen scaled by whole
