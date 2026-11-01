@@ -1,0 +1,13 @@
+# TEST FIXTURE: not a real tune. Marked edition_check so the gate must hold it back.
+id: fixture_held
+fixture: yes
+title: Fixture held (test only)
+composer: none (test fixture)
+home: do
+meter: 3
+bpm: 90
+mood: test
+source: Test fixture, not a real tune. Not shipped.
+prov_status: edition_check
+echo: do4:12 fa4:12 ti4:12 do5:24
+child: do4:12 re4:12 mi4:12

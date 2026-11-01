@@ -34,6 +34,8 @@ function matchTune(asked,answered){const A=norm(asked),B=norm(answered);
   return 'new'}
 const doMidi=fam=>((DATA&&DATA.do_midi)||{slyte:62,whimber:70,twitchel:65})[fam];
 function midiOf(fam,s){const [d,o]=fromStep(s);return doMidi(fam)+MAJ[d-1]+12*o}
+const midiOfNote=(fam,x)=>doMidi(fam)+MAJ[x[0]-1]+12*(x[1]||0)+(x[3]||0);   // a Song v2 note [degree, octave, ticks, acc]
+const fileOfMidi=(fam,m)=>spell(fam,m).replace('#','s');
 function spell(fam,m){return (fam==='slyte'?SHARP:FLAT)[((m%12)+12)%12]+(Math.floor(m/12)-1)}   // tunes.json style: f#4, bb4
 const nameOf=(fam,s)=>spell(fam,midiOf(fam,s));
 const fileOf=(fam,s)=>nameOf(fam,s).replace('#','s');                   // music/notes/<fam>_<file>
@@ -105,6 +107,31 @@ function simulateRounds(o){const out=[];let last=o.lastSeq||null,seed=o.seed0||0
       const res=pickFresh({hand:tunes,len:o.len,seen,lastSeq:last,seed:s,gen:sd=>gen(o.fam,o.tier,o.len,sd,o.data)});const k=seqKey(res.tune.n);seen.push(k);last=k}
     out.push(seen)}
   return out}
+// ---------------------------------------------------------------- Ancient Echoes (Music School step 2; pure, tools/test-songbook.js)
+// music/tunes.json "songbook": {v:1, slyte:[tune], whimber:[...], twitchel:[...]}; tune = {id, title, composer, home, meter, bpm, mood, skills,
+// echo: Song v2 (the real hook the Echo sings), child: [Song v1 phrases on the family pads], min_ml, icon, prov, prov_status}.
+// Only prov_status "ok" tunes ever play (build_songbook.py holds back edition_check; test-songbook.js fails if one ships).
+let SB=null;
+const ANC_ECHO_MS=8000;
+function sbTunes(fam,sb){const B=sb||SB;const L=(B&&Array.isArray(B[fam]))?B[fam]:[];return L.filter(t=>t&&t.id&&t.prov_status==='ok'&&Song.valid(t.echo)&&Array.isArray(t.child)&&t.child.length&&t.child.every(Song.valid))}
+const sbById=(id,sb)=>{const B=sb||SB;if(!B)return null;for(const f of ['slyte','whimber','twitchel'])for(const t of sbTunes(f,B))if(t.id===id)return Object.assign({fam:f},t);return null};
+// the child's part, cut to the length they're on: the first `len` notes of the allowed phrases joined (ML: songbook.phrases, max_distinct).
+// <= 8 notes: one tune; longer: phrase by phrase at the child phrase boundaries. null = not for this child yet.
+function sbChild(t,len,lv,lim){lim=lim||{max_distinct:4,phrases:1};if(!t||(t.min_ml||1)>lv)return null;const P=t.child.slice(0,Math.max(1,lim.phrases|0));
+  const all=[],bounds=[];P.forEach(ph=>{bounds.push([all.length,all.length+ph.n.length]);all.push(...ph.n)});const n=all.slice(0,Math.max(3,len|0));if(n.length<3)return null;
+  const cut=bounds.map(([a,b])=>[a,Math.min(b,n.length)]).filter(([a,b])=>b>a);
+  if(cut.some(([a,b])=>new Set(n.slice(a,b).map(x=>step(x))).size>Math.min(4,lim.max_distinct||4)))return null;
+  const phrased=n.length>8&&cut.length>1;return {n:n.map(x=>[x[0],x[1],x[2]]),phrases:phrased?cut:null,labels:phrased?cut.map((z,i)=>String.fromCharCode(65+i)):null}}
+// which tune: allowed at this level, least heard first, never the same tune twice in a row (when there is another), seeded among ties
+function sbPick(o){const L=sbTunes(o.fam,o.sb).filter(t=>sbChild(t,o.len,o.lv,o.lim));if(!L.length)return null;const met=o.met||{},h=t=>(met[t.id]&&met[t.id].h)||0;
+  let C=L.length>1&&o.last?L.filter(t=>t.id!==o.last):L;const lo=Math.min(...C.map(h));C=C.filter(t=>h(t)===lo);return C[Math.floor(rng((o.seed>>>0)||1)()*C.length)]}
+// where in the round (0-based tune index): a seeded position, never the first tune. k slots (a chosen tune: 2) are distinct.
+function sbSlots(seed,round,k){const r=rng((seed>>>0)||1),out=[];k=Math.min(k||1,Math.max(1,round-1));while(out.length<k){const i=1+Math.floor(r()*(round-1));if(!out.includes(i))out.push(i)}return out.sort((a,b)=>a-b)}
+// the Echo version, cut at a note boundary to at most 8 s
+function sbEchoNotes(song,maxMs){const k=60000/song.bpm/TPB;let t=0;const out=[];for(const x of song.n){const d=x[2]*k;if(out.length&&t+d>(maxMs||ANC_ECHO_MS))break;out.push(x);t+=d}return out}
+// heard / matched (ml.met[id] = {h: times heard, m: 1 after the first match, o: order first heard, l: last heard, f: family})
+function sbHeard(ml,t,fam){ml.met=ml.met||{};ml.metN=(ml.metN|0)+1;const e=ml.met[t.id]||(ml.met[t.id]={h:0,m:0,o:ml.metN,f:fam});const first=!e.h;e.h++;e.l=ml.metN;return first}
+const sbList=(ml,fam)=>Object.keys((ml&&ml.met)||{}).map(id=>Object.assign({id},ml.met[id])).filter(e=>e.h>0&&(!fam||e.f===fam)&&sbById(e.id)).sort((a,b)=>a.o-b.o);
 const bpmAt=(step,bpm0,d)=>{const T=V2(d).tempo;return Math.min(T.bpm_max,Math.round(bpm0*(1+T.step*Math.min(T.max_steps,step||0))))};
 const noteMs=(ticks,bpm,d)=>Math.max(V2(d).tempo.min_note_ms,ticks*60000/bpm/TPB);
 const matchPhrased=rs=>rs.includes('new')?'new':rs.includes('close')?'close':'same';
@@ -133,14 +160,18 @@ function stickersFor(played,speedRounds,has,d){const out=[],S=V2(d).stickers;
   const L=S.find(x=>x.len&&x.len<=played&&!has(x.title));if(L)out.push(L.title);
   for(const x of S)if(x.speed_rounds&&speedRounds>=x.speed_rounds&&!has(x.title))out.push(x.title);return out}
 // ---------------------------------------------------------------- Song v1 (lock 1) + Songbook store (lock 2, v:2 adds per-child progress)
+// Song v2 (Music School step 2): v1 + an optional 4th element acc (-1/0/+1, the Echo's half-steps in the Ancient Echoes).
+// Still 2 bytes a note: b0 = degree | (octave+1)<<3 | (acc+1)<<6 in v2 (v1 keeps the top 2 bits 0, so every v1 pack is unchanged).
+// Child phrases stay v1. Song.valid accepts v1 and v2.
 const Song={v:1,tpb:TPB,
   make:(bpm,n)=>({v:1,bpm:bpm|0,tpb:TPB,n:n.map(x=>[x[0]|0,x[1]|0,Math.max(1,Math.min(255,x[2]|0))])}),
+  make2:(bpm,n)=>({v:2,bpm:bpm|0,tpb:TPB,n:n.map(x=>{const y=[x[0]|0,x[1]|0,Math.max(1,Math.min(255,x[2]|0))];if(x[3])y.push(Math.max(-1,Math.min(1,x[3]|0)));return y})}),
   fromSteps:(bpm,steps,ticks)=>Song.make(bpm,steps.map((s,i)=>{const [d,o]=fromStep(s);return [d,o,(ticks&&ticks[i])||TPB]})),
-  valid:s=>!!s&&s.v===1&&s.tpb===TPB&&s.bpm>=40&&s.bpm<=200&&Array.isArray(s.n)&&s.n.every(x=>x.length===3&&x[0]>=0&&x[0]<=7&&x[1]>=-1&&x[1]<=2&&x[2]>=1&&x[2]<=255),
+  valid:s=>!!s&&(s.v===1||s.v===2)&&s.tpb===TPB&&s.bpm>=40&&s.bpm<=200&&Array.isArray(s.n)&&s.n.every(x=>Array.isArray(x)&&(x.length===3||(s.v===2&&x.length===4&&[-1,0,1].includes(x[3])))&&x[0]>=0&&x[0]<=7&&x[1]>=-1&&x[1]<=2&&x[2]>=1&&x[2]<=255),
   // 2 bytes a note (ESP32 /songbook.bin): b0 = degree | (octave+1)<<3, b1 = ticks; 4-byte header v, bpm, count lo, count hi
   pack(s){const b=new Uint8Array(4+2*s.n.length);b[0]=s.v;b[1]=s.bpm;b[2]=s.n.length&255;b[3]=s.n.length>>8;
-    s.n.forEach((x,i)=>{b[4+2*i]=(x[0]&7)|(((x[1]+1)&7)<<3);b[5+2*i]=x[2]});return b},
-  unpack(b){const n=[],len=b[2]|(b[3]<<8);for(let i=0;i<len;i++){const x=b[4+2*i];n.push([x&7,((x>>3)&7)-1,b[5+2*i]])}return {v:b[0],bpm:b[1],tpb:TPB,n}}};
+    s.n.forEach((x,i)=>{b[4+2*i]=(x[0]&7)|(((x[1]+1)&7)<<3)|(s.v===2?((((x[3]||0)+1)&3)<<6):0);b[5+2*i]=x[2]});return b},
+  unpack(b){const n=[],len=b[2]|(b[3]<<8),v2=b[0]===2;for(let i=0;i<len;i++){const x=b[4+2*i],y=[x&7,((x>>3)&7)-1,b[5+2*i]];if(v2){const a=((x>>6)&3)-1;if(a)y.push(a)}n.push(y)}return {v:b[0],bpm:b[1],tpb:TPB,n}}};
 const Songbook={KEY:'echo-songbook-v1',   // key kept from v1 (store v:3 inside); beside the Echo save: survives a release and a new Echo; only "Start over" (erase all) removes it
   schema:{v:3,slots:6,songs:'[{id, made: ms, fam, inst, song: Song v1}] (at most slots)',star:'song id | null (Echo\'s Song, piece 3)',
     progress:'{[child id]: {band, len, roundsDone, tempoStep, speedRounds, seed, ml}} (reading band + Echo It Back v2 + music level)',
@@ -157,14 +188,15 @@ const Songbook={KEY:'echo-songbook-v1',   // key kept from v1 (store v:3 inside)
   save(b){try{localStorage.setItem(Songbook.KEY,JSON.stringify(b));return true}catch(e){return false}},
   clear(){try{localStorage.removeItem(Songbook.KEY)}catch(e){}}};
 // ---------------------------------------------------------------- data
-EB.ready=(W.fetch&&W.document)?Promise.all([fetch('music/tunes.json').then(r=>r.json()).then(j=>{DATA=j.echo_it_back||null}),
+EB.ready=(W.fetch&&W.document)?Promise.all([fetch('music/tunes.json').then(r=>r.json()).then(j=>{DATA=j.echo_it_back||null;SB=j.songbook||null}),
   fetch('music/instruments.json').then(r=>r.json()).then(j=>{INST=j})]).catch(()=>{}):Promise.resolve();
 EB.setData=(eib,inst)=>{DATA=eib;if(inst)INST=inst};
+EB.setSongbook=sb=>{SB=sb||null;return SB};
 // ---------------------------------------------------------------- voices (cap from instruments.json, 3 on the speaker)
 const voices=[];
 function play(fam,s,o){o=o||{};if(!W.Music||!Music.oneShot)return;const I=(INST&&INST.instruments&&INST.instruments[o.inst||INST.default])||{sample:'notes/{fam}_{note}',gain:.5};
   if(!I.sample)return;const cap=(INST&&INST.voices)||3;
-  const p=Music.oneShot(I.sample.replace('{fam}',fam).replace('{note}',fileOf(fam,s)),{vol:(o.vol||1)*(I.gain||.5)});
+  const p=Music.oneShot(I.sample.replace('{fam}',fam).replace('{note}',o.midi!=null?fileOfMidi(fam,o.midi):fileOf(fam,s)),{vol:(o.vol||1)*(I.gain||.5)});
   if(p&&p.then)p.then(src=>{if(!src)return;voices.push(src);while(voices.length>cap){const v=voices.shift();try{v.stop()}catch(e){}}
     src.onended=()=>{const i=voices.indexOf(src);if(i>=0)voices.splice(i,1)}})}
 // ---------------------------------------------------------------- PadInput (lock 3): several fingers, one live pad per pointer
@@ -193,18 +225,30 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   const book=Songbook.load(),P=Progress.get(book,kid,band);Songbook.save(book);
   const lvl=P.ml?P.ml.level:2,ptier=ML?Math.min(4,ML.padsTier(lvl,tier)):tier,sol=ML?ML.solfege(lvl):'none',SOL=ML?ML.data.solfege:[];   // pads: music level OR song stage, whichever gives more
   const tok=++TOK,later=(ms,f)=>{const t=tok;return setTimeout(()=>{if(t===TOK)f()},ms)};
-  const pads=padsFor(fam,ptier),tunes=tunesFor(fam,ptier);
+  let pads=padsFor(fam,ptier);const tunes=tunesFor(fam,ptier),basePads=pads.slice();
+  const LIM=(ML&&ML.data.levels[String(lvl)]&&ML.data.levels[String(lvl)].songbook)||{max_distinct:4,phrases:1};   // Ancient Echoes: what this music level copies
+  const padsHTML=L=>L.map((s,i)=>{const n=nameOf(fam,s);return `<button class="eibpad" data-pad="${s}"${sol!=='none'?` data-sol="${SOL[((s%7)+7)%7]}"`:''} style="--c:${colOf(n)};--i:${i}" aria-label="Note ${n.replace(/\d/,'').toUpperCase().replace('#',' sharp').replace(/^(.)B$/,'$1 flat')}"></button>`}).join('');
   const root=document.createElement('div');root.className='eib'+(RM?' rm':'')+(sol!=='none'?' solpads':'')+(sol==='pads+strip'?' solstrip':'');root.id='eib';if(api.color)api.gs.style.setProperty('--ec',api.color);
   root.innerHTML=`<div class="eibbeads" aria-hidden="true">${'<i></i>'.repeat(V.round)}</div>
     <div class="eibstrip" aria-live="polite"><div class="eibslots" aria-hidden="true"></div><div class="eibrow eibask" aria-label="The Echo's tune"></div><div class="eibrow eibans" aria-label="Your tune"></div><i class="eibspark"></i><i class="eibpuff"></i></div>
-    <div class="eibpads listen" role="group" aria-label="Notes">${pads.map((s,i)=>{const n=nameOf(fam,s);return `<button class="eibpad" data-pad="${s}"${sol!=='none'?` data-sol="${SOL[((s%7)+7)%7]}"`:''} style="--c:${colOf(n)};--i:${i}" aria-label="Note ${n.replace(/\d/,'').toUpperCase().replace('#',' sharp').replace(/^(.)B$/,'$1 flat')}"></button>`}).join('')}</div>
-    <div class="eibtiles" hidden></div>`;
+    <div class="eibpads listen" role="group" aria-label="Notes">${padsHTML(pads)}</div>
+    <div class="eibtiles" hidden></div><i class="eibflo" hidden aria-hidden="true"></i>`;
   api.gs.appendChild(root);if(RM)api.gs.classList.add('eibrm');const ask=root.querySelector('.eibask'),ans=root.querySelector('.eibans'),padBox=root.querySelector('.eibpads'),spark=root.querySelector('.eibspark'),
     beads=[...root.querySelectorAll('.eibbeads i')],slots=root.querySelector('.eibslots'),puff=root.querySelector('.eibpuff'),tiles=root.querySelector('.eibtiles');
   const padEl=s=>padBox.querySelector(`[data-pad="${s}"]`);
   const light=(s,ms)=>{const p=padEl(s);if(!p)return;p.classList.add('on');setTimeout(()=>p.classList.remove('on'),ms||260)};
   const say=(k,ms)=>{const l=api.line&&api.line(k);if(l)api.talk(l,ms||2200)};
   const echoEl=()=>document.getElementById('cr');const saveBook=()=>Songbook.save(book);
+  // ---- Ancient Echoes: the flourish over the Echo's head, the Echo version (real notes, half-steps included), the pads a tune needs
+  const flo=root.querySelector('.eibflo');
+  function flourish(){const e=echoEl(),g=api.gs.getBoundingClientRect();if(e){const a=e.getBoundingClientRect();flo.style.left=(a.left-g.left+a.width/2)+'px';flo.style.top=(a.top-g.top)+'px'}
+    flo.hidden=false;flo.className='eibflo'+(RM?' static':'');void flo.offsetWidth;flo.classList.add('go');later(RM?1000:600,()=>{flo.hidden=true;flo.classList.remove('go')})}
+  function singEcho(song,done){phase='echo';padBox.classList.add('listen');padBox.classList.remove('turn');ask.innerHTML='';ans.innerHTML='';const k=msPerTick(song.bpm),e=echoEl();if(e)e.classList.add('eibsing');
+    let t=300;const my=++singing;sbEchoNotes(song).forEach(x=>{const d=Math.max(V.tempo.min_note_ms,x[2]*k);if(x[0])later(t,()=>{play(fam,0,{midi:midiOfNote(fam,x)});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');
+      const s=step(x);if(!x[3]&&padEl(s))light(s,Math.min(420,d*.8))});t+=d});
+    later(t+300,()=>{if(my===singing){const e2=echoEl();if(e2)e2.classList.remove('eibsing')}done&&done()});return t}
+  function setPads(L){pads=L;padBox.innerHTML=padsHTML(L)}
+  function needPads(list){const need=new Set();list.forEach(c=>c.n.forEach(x=>need.add(step(x))));const L=[...new Set(basePads.concat([...need]))].sort((a,b)=>a-b);if(L.length!==pads.length||L.some((x,i)=>x!==pads[i]))setPads(L);return need}
   let phase='echo',tune=null,asked=[],answer=[],gapT=null,waitT=null,idles=0,retried=false,lastId=null,n=0,singing=0,R=null,curNotes=[],ph=-1,pres=[];
   // H16: never the same note sequence back-to-back (st.lastSeq, kept across rounds) or twice in one round (R.seen); spec + vectors:
   // phone_app_review/h16_eib_dedupe_spec.md, host/eib_dedupe_vectors.json (shared with eib_core.c)
@@ -227,7 +271,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   function finish(){clearTimeout(gapT);clearTimeout(waitT);if(phase!=='child'||!answer.length)return;phase='react';padBox.classList.remove('turn');
     const r=matchTune(asked,answer.map(a=>a.s));idles=0;st.last={tune:tune.id,r};
     if(tune.phrases)return phraseDone(r);
-    if(retried){if(r==='same'){sparkle('big');say('eib_same')}later(r==='same'?2400:700,nextTune);return}   // the one more go after a close is just for fun
+    if(retried){if(r==='same'){sparkle('big');say('eib_same');if(tune.ancient&&R.pendingAnc)R.pendingAnc.matched=true}later(r==='same'?2400:700,nextTune);return}   // the one more go after a close is just for fun
     n++;st.rounds++;tuneDone(r);
     if(r==='same'){sparkle('big');api.react&&api.react('happy');say('eib_same');later(2600,nextTune)}
     else if(r==='close'){sparkle('small');say('eib_close',1800);later(1400,()=>sing(tune.n,tune.bpm,()=>{retried=true;asked=norm(tune.n);yourTurn()},{slow:true,soft:true}))}
@@ -244,11 +288,25 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     if(i===0)return goSing();
     puff.classList.remove('go');void puff.offsetWidth;puff.classList.add('go');   // a 1-beat breath (and a breath puff) between phrases
     if(rep&&!st.saidBack){st.saidBack=1;api.save&&api.save();say('eib_comes_back',1800);later(Math.max(beat,1500),goSing)}else later(beat,goSing)}
-  function tuneDone(r){api.onTune&&api.onTune(r);
+  function tuneDone(r){api.onTune&&api.onTune(r);if(tune&&tune.ancient)R.pendingAnc={t:tune.ancient,matched:r!=='new',first:tune.first};
     if(r!=='new'){R.matches++;R.missRun=0;R.last=tune;beads.forEach((b,i)=>b.classList.toggle('on',i<R.matches))}
     else{R.perfect=false;R.missRun++;if(R.missRun>=V.eased_after_misses&&R.len>V.min_len){R.len--;R.eased=true;R.missRun=0;R.sayLittle=true}}}   // 2 misses in a row: one note shorter (this round only)
-  function nextTune(){if(R.matches>=V.round)return roundEnd();if(R.tunes>=V.soft_stop_tunes)return softStop();
-    R.tunes++;retried=false;ph=-1;pres=[];const t=pick(R.len);tune=Object.assign({},t,{bpm:bpmAt(P.tempoStep,t.bpm)});ans.innerHTML='';
+  // after an Ancient Echo: a match -> the Echo sings the whole hook again with the pads glowing; the first time -> it joins Ancient Echoes
+  function ancEpilogue(a,next){padBox.querySelectorAll('.need').forEach(z=>z.classList.remove('need'));
+    if(a.matched){if(P.ml&&P.ml.met&&P.ml.met[a.t.id])P.ml.met[a.t.id].m=1;saveBook()}
+    const go=()=>{if(a.first){flourish();say('eib_ancient_collection',2400);later(2600,next)}else next()};
+    if(a.matched){root.classList.add('duet');padBox.classList.add('duet');later(400,()=>singEcho(a.t.echo,()=>{root.classList.remove('duet');padBox.classList.remove('duet');go()}))}else go()}
+  function ancTune(a){const t=a.t,c=a.c;let first=false;if(P.ml){first=sbHeard(P.ml,t,fam);saveBook()}api.onAncient&&api.onAncient({id:t.id,first});
+    return Object.assign({id:'anc:'+t.id,n:c.n,phrases:c.phrases,labels:c.labels},{bpm:bpmAt(P.tempoStep,t.bpm),ancient:t,first})}
+  function nextTune(){if(R.pendingAnc){const a=R.pendingAnc;R.pendingAnc=null;return ancEpilogue(a,nextTune)}
+    if(R.matches>=V.round)return roundEnd();if(R.tunes>=V.soft_stop_tunes)return softStop();
+    R.tunes++;retried=false;ph=-1;pres=[];
+    const A=R.anc&&R.anc[R.tunes-1];
+    if(A){tune=ancTune(A);const k=seqKey(tune.n);R.seen.push(k);st.lastSeq=k;st.lastAnc=A.t.id;lastId=tune.id;api.save&&api.save();ans.innerHTML='';slots.innerHTML=tune.phrases?tune.labels.map(()=>'<i></i>').join(''):'';
+      const need=new Set(tune.n.map(x=>step(x)));padBox.querySelectorAll('.eibpad').forEach(z=>z.classList.toggle('need',need.has(+z.dataset.pad)));
+      flourish();say('eib_ancient_echo',2200);
+      return later(1500,()=>singEcho(A.t.echo,()=>{say('eib_my_turn',1400);if(tune.phrases)return later(900,()=>phrase(0));curNotes=tune.n;asked=norm(tune.n);later(700,()=>sing(tune.n,tune.bpm,yourTurn))}))}
+    const t=pick(R.len);tune=Object.assign({},t,{bpm:bpmAt(P.tempoStep,t.bpm)});ans.innerHTML='';
     slots.innerHTML=tune.phrases?tune.labels.map((l,i)=>`<i class="${tune.labels.indexOf(l)<i?'rep':''}"></i>`).join(''):'';
     let k='eib_my_turn';if(R.tunes===1&&R.intro)k=R.intro;else if(R.sayLittle){R.sayLittle=false;k='eib_little'}
     if(tune.phrases&&!st.saidBreath){st.saidBreath=1;api.save&&api.save();k='eib_breath'}
@@ -266,27 +324,37 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
       let w=2600;lines.forEach(k=>{later(w,()=>say(k,2400));w+=2600});later(w,()=>{phase='done';api.onDone&&api.onDone(true)})},{phase:'end'})}
   function softStop(){phase='end';say('eib_rest_ears',2400);Progress.finish(P,{soft:true},band);if(ML&&P.ml)ML.report(P.ml,'eib',R.tunes?R.matches/R.tunes:0);saveBook();
     api.onRound&&api.onRound({finished:true,soft:true});later(2600,()=>{phase='done';api.onDone&&api.onDone(true)})}   // counts as finished, takes one speed step back
-  function newRound(len,little){tiles.hidden=true;tiles.innerHTML='';
-    R={len,played:len,little,seen:[],matches:0,tunes:0,missRun:0,perfect:!little,eased:false,last:null,sayLittle:false,
+  function planAnc(len,chosen){const out={};if(!SB)return out;const seed=(Math.imul((P.seed||0)+1,2654435761)^Math.imul((P.roundsDone||0)+1,40503)^(kid.length*97+lvl))>>>0;   // P.seed is NOT advanced: the tune picker's seeds (and the firmware vectors) stay as they were
+    let t=null;if(chosen){const c=sbById(chosen);t=c&&c.fam===fam&&sbChild(c,len,lvl,LIM)?c:null}
+    if(!t&&!chosen)t=sbPick({fam,len,lv:lvl,lim:LIM,met:P.ml&&P.ml.met,last:st.lastAnc,seed});
+    if(!t)return out;const c=sbChild(t,len,lvl,LIM);sbSlots(seed^0x5bd1e995,V.round,chosen?2:1).forEach(i=>{out[i]={t,c}});needPads([c]);return out}
+  function newRound(len,little,chosen){tiles.hidden=true;tiles.innerHTML='';if(pads.length!==basePads.length)setPads(basePads.slice());
+    R={len,played:len,little,seen:[],matches:0,tunes:0,missRun:0,perfect:!little,eased:false,last:null,sayLittle:false,anc:null,pendingAnc:null,
       intro:P.tempoStep>0?'eib_zippy':little?'eib_little':P.grew>=2?'eib_more2':P.grew===1?'eib_more1':null};
     beads.forEach(b=>b.classList.remove('on'));
+    // the new-note intro only counts the child's own pads (an Ancient Echo's extra pads are just for that tune)
+    const own=basePads;R.anc=planAnc(len,chosen);
     // opening: hello the first time; a new note (tier unlock) is played once on its own before the first tune
-    const fresh=pads.filter(s=>!st.heard.includes(s));
-    if(!st.heard.length){st.heard=pads.slice();say('eib_hello',2600);later(2200,nextTune)}
+    const fresh=own.filter(s=>!st.heard.includes(s));
+    if(!st.heard.length){st.heard=own.slice();say('eib_hello',2600);later(2200,nextTune)}
     else if(fresh.length){st.heard=st.heard.concat(fresh);say('eib_new_note',2200);let t=900;fresh.forEach(s=>{later(t,()=>{play(fam,s);light(s,500)});t+=700});later(t+700,nextTune)}
     else nextTune();api.save&&api.save()}
   // start tiles (from the Play list, once a round has been sung): big "Same as last time" (default) + small "A little one" (-2, this round only)
   function showTiles(){const lit=Math.max(V.min_len,P.len-V.little_minus);phase='tiles';
     tiles.innerHTML=`<button class="eibtile big" id="eibsame" aria-label="Same as last time">${dotsHTML(P.len)}<span>Same as last time</span></button>`+
       (lit<P.len?`<button class="eibtile small" id="eiblittle" aria-label="A little one">${dotsHTML(lit)}<span>A little one</span></button>`:'');
-    tiles.hidden=false;tiles.querySelector('#eibsame').onclick=()=>newRound(P.len,false);const b=tiles.querySelector('#eiblittle');if(b)b.onclick=()=>newRound(lit,true)}
+    // Ancient Echoes tile: only once this family has a heard tune; up to 4 of the most recently heard icons, filling from the left (no empty wells)
+    const heard=sbList(P.ml,fam).sort((a,b)=>b.l-a.l).slice(0,4).map(e=>sbById(e.id)).filter(t=>t&&sbChild(t,P.len,lvl,LIM));
+    if(heard.length)tiles.insertAdjacentHTML('afterbegin',`<div class="eibanc" role="group" aria-label="${api.ancTitle||'Ancient Echoes'}">${heard.map((t,i)=>`<button class="eibanci" data-anc="${t.id}" style="--k:${i};background-image:url(${t.icon})" aria-label="${t.title}"></button>`).join('')}</div>`);
+    tiles.hidden=false;tiles.querySelector('#eibsame').onclick=()=>newRound(P.len,false);const b=tiles.querySelector('#eiblittle');if(b)b.onclick=()=>newRound(lit,true);
+    tiles.querySelectorAll('[data-anc]').forEach(z=>z.onclick=()=>{z.classList.add('on');later(180,()=>newRound(P.len,false,z.dataset.anc))})}
   const input=PadInput(padBox,{down(s){play(fam,s);const p=padEl(s);if(p)p.classList.add('on');
       if(phase!=='child')return;answer.push({s,t:Date.now()});layoutRow(ans,Math.max(asked.length,answer.length));ans.insertAdjacentHTML('beforeend',noteHTML(fam,s,TPB,'lit'));const kids=ans.children;if(kids.length>1)kids[kids.length-2].classList.remove('lit');
       clearTimeout(waitT);clearTimeout(gapT);
       if(answer.length>=asked.length+DATA.timing.extra_notes)return finish();
       gapT=later(eq(asked,answer.map(a=>a.s))?900:DATA.timing.answer_gap_ms,finish)},
     up(s){const p=padEl(s);if(p)setTimeout(()=>p.classList.remove('on'),120)}});
-  cur={root,input,api,get phase(){return phase},get asked(){return asked},get tune(){return tune},get round(){return R},get progress(){return P},get phraseIdx(){return ph},finish,lastCopy:null};
+  cur={root,input,api,get pads(){return pads},get phase(){return phase},get asked(){return asked},get tune(){return tune},get round(){return R},get progress(){return P},get phraseIdx(){return ph},finish,lastCopy:null};
   if(api.mode==='invite'||!P.roundsDone)newRound(P.len,false);else showTiles();
   api.save&&api.save();return cur}
 // grown-ups + age band hooks (game.js) and the Memory Book sticker tune
@@ -304,6 +372,10 @@ EB.seedMl=(kid,band)=>{const b=Songbook.load();b.progress=b.progress||{};let p=b
   if(!p){p=b.progress[kid]={band,len:startLen(band||'7-8'),roundsDone:0,tempoStep:0,speedRounds:0,seed:0}}
   if(ML&&(!ML.valid(p.ml)||(p.ml.src==='prior'&&!p.ml.warm)))p.ml=ML.seed(p.len,band||p.band);Songbook.save(b);return p.ml};
 EB.playNote=(fam,s,o)=>play(fam,s,o);
+// Ancient Echoes for game.js (Memory Book page): the heard tunes (order heard), the shipped tunes of a family, and the Echo version
+EB.ancientHeard=(kid,fam)=>{const b=Songbook.load(),p=(b.progress||{})[kid];return sbList(p&&p.ml,fam).map(e=>Object.assign(sbById(e.id),{heard:e}))};
+EB.ancientTunes=fam=>sbTunes(fam);
+EB.playEcho=id=>{const t=sbById(id);if(!t)return 0;const k=msPerTick(t.echo.bpm);let ms=0;sbEchoNotes(t.echo).forEach(x=>{if(x[0]){const m=midiOfNote(t.fam,x);setTimeout(()=>play(t.fam,0,{midi:m,vol:.8}),ms)}ms+=Math.max(V2().tempo.min_note_ms,x[2]*k)});return ms};
 EB.playSong=(fam,song)=>{if(!Song.valid(song))return 0;const k=msPerTick(song.bpm);let t=0;song.n.forEach(x=>{if(x[0]){const s=step(x);setTimeout(()=>play(fam,s,{vol:.8}),t)}t+=Math.max(DATA?V2().tempo.min_note_ms:120,x[2]*k)});return t};
 function stop(){TOK++;if(cur){cur.input.off();if(cur.root.parentNode)cur.root.remove();cur=null}voices.splice(0).forEach(v=>{try{v.stop()}catch(e){}})}
 // ---------------------------------------------------------------- the Echo-started invite: a note chip by the Echo, gone after 10 s, never repeated
@@ -312,6 +384,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
 Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
+  sbTunes,sbById,sbChild,sbPick,sbSlots,sbEchoNotes,sbHeard,sbList,midiOfNote,fileOfMidi,
   _pure:{rowCols,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;

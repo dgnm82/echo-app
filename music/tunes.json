@@ -5551,5 +5551,13 @@
     }
    }
   }
+ },
+ "songbook": {
+  "v": 1,
+  "_about": "Ancient Echoes (Music School step 2). Built by tools/build_songbook.py from tools/songbook_src/<fam>/<id>.txt (Cole). echo = Song v2 (the real hook the Echo sings, acc = half-steps), child = Song v1 phrases on the family pads. Only prov_status ok ships.",
+  "held": [],
+  "slyte": [],
+  "whimber": [],
+  "twitchel": []
  }
 }

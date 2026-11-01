@@ -8820,6 +8820,42 @@
           "wu": "invite"
         }
       }
+    ],
+    "eib_ancient_echo": [
+      {
+        "text": "An Ancient Echo! Listen!",
+        "short": "An Ancient Echo!",
+        "expr": "excited",
+        "context": {
+          "placeholder": "jay_step2_until_cole"
+        }
+      },
+      {
+        "text": "Ooh! An Ancient Echo! Listen close.",
+        "short": "An Ancient Echo!",
+        "expr": "excited",
+        "context": {
+          "placeholder": "jay_step2_until_cole"
+        }
+      }
+    ],
+    "eib_ancient_collection": [
+      {
+        "text": "It's in our Ancient Echoes now!",
+        "short": "In our Ancient Echoes!",
+        "expr": "delighted",
+        "context": {
+          "placeholder": "jay_step2_until_cole"
+        }
+      },
+      {
+        "text": "That one stays in our Ancient Echoes.",
+        "short": "In our Ancient Echoes!",
+        "expr": "delighted",
+        "context": {
+          "placeholder": "jay_step2_until_cole"
+        }
+      }
     ]
   },
   "conversations": [

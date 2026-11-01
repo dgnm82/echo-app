@@ -32,3 +32,5 @@
 .bkfirst{position:relative;display:block;width:112px;height:64px;margin:4px 0;padding:0;border:0;background:url(px/warmup/firstsong_card.png) no-repeat;image-rendering:pixelated;cursor:pointer}
 .bkfirst.playing{background-image:url(px/warmup/firstsong_card_lit.png)}
 .bkfirst .wunote,.bkfirst .wumark{position:absolute}
+/* Home invite chip for existing saves (Pixal, Nov 1): same size/frame as the EIB chip; all other .eibinv rules unchanged */
+.eibinv.wuinv{background-image:url(px/warmup/invite_chip.png)}

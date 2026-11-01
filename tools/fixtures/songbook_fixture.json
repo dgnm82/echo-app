@@ -1,0 +1,206 @@
+{
+ "v": 1,
+ "_about": "Ancient Echoes (Music School step 2). Built by tools/build_songbook.py from tools/songbook_src/<fam>/<id>.txt (Cole). echo = Song v2 (the real hook the Echo sings, acc = half-steps), child = Song v1 phrases on the family pads. Only prov_status ok ships.",
+ "held": [],
+ "slyte": [
+  {
+   "id": "fixture_held",
+   "title": "Fixture held (test only)",
+   "composer": "none (test fixture)",
+   "home": "do",
+   "meter": 3,
+   "bpm": 90,
+   "mood": "test",
+   "skills": [],
+   "echo": {
+    "v": 2,
+    "bpm": 90,
+    "tpb": 12,
+    "n": [
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      4,
+      0,
+      12
+     ],
+     [
+      7,
+      0,
+      12
+     ],
+     [
+      1,
+      1,
+      24
+     ]
+    ]
+   },
+   "child": [
+    {
+     "v": 1,
+     "bpm": 90,
+     "tpb": 12,
+     "n": [
+      [
+       1,
+       0,
+       12
+      ],
+      [
+       2,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ]
+     ]
+    }
+   ],
+   "min_ml": 1,
+   "icon": "px/songbook/ancient_emblem.png",
+   "prov": "Test fixture, not a real tune. Not shipped.",
+   "prov_status": "edition_check",
+   "fixture": true,
+   "_echo_seconds": 3.33
+  },
+  {
+   "id": "fixture_steps",
+   "title": "Fixture steps (test only)",
+   "composer": "none (test fixture)",
+   "home": "do",
+   "meter": 4,
+   "bpm": 96,
+   "mood": "test",
+   "skills": [],
+   "echo": {
+    "v": 2,
+    "bpm": 96,
+    "tpb": 12,
+    "n": [
+     [
+      1,
+      0,
+      12
+     ],
+     [
+      3,
+      0,
+      12
+     ],
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      6,
+      0,
+      12
+     ],
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      4,
+      0,
+      12,
+      -1
+     ],
+     [
+      2,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      24
+     ]
+    ]
+   },
+   "child": [
+    {
+     "v": 1,
+     "bpm": 96,
+     "tpb": 12,
+     "n": [
+      [
+       1,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ],
+      [
+       5,
+       0,
+       12
+      ],
+      [
+       6,
+       0,
+       12
+      ],
+      [
+       5,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ]
+     ]
+    },
+    {
+     "v": 1,
+     "bpm": 96,
+     "tpb": 12,
+     "n": [
+      [
+       5,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ],
+      [
+       2,
+       0,
+       12
+      ],
+      [
+       1,
+       0,
+       24
+      ]
+     ]
+    }
+   ],
+   "min_ml": 1,
+   "icon": "px/songbook/ancient_emblem.png",
+   "prov": "Test fixture, not a real tune. Not shipped.",
+   "prov_status": "ok",
+   "fixture": true,
+   "_echo_seconds": 5.62
+  }
+ ],
+ "whimber": [],
+ "twitchel": []
+}

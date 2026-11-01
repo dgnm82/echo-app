@@ -1,0 +1,811 @@
+{
+ "_schema": "echo-px-songbook-v1",
+ "_owner": "Pixal",
+ "_step": "Music School Phase 1 step 2 (family songbooks / Ancient Echoes)",
+ "_naming": "Ancient Echoes everywhere (never the old name). Tune ids below are CANONICAL (Kai, Nov 1): code, tunes.json and tools/songbook_src/<fam>/<id>.txt use exactly these.",
+ "_canvas": [
+  180,
+  320
+ ],
+ "_ink": [
+  "#3B2A5C",
+  "#24162C"
+ ],
+ "_generator": "echo/ios_design/music_phase1/songbook/make_songbook.py",
+ "tune_ids_canonical": true,
+ "_changelog": [
+  "Nov 1 (Kai): tune ids canonical.",
+  "Nov 1 (Kai): Ancient Echoes page shows only heard tunes + ONE sleeping pebble; ancient_page.png replaced by top/row/bottom pieces, no fixed grid."
+ ],
+ "tunes": [
+  {
+   "id": "hall_mountain_king",
+   "family": "slyte",
+   "icon": "px/songbook/hall_mountain_king.png",
+   "canonical": true
+  },
+  {
+   "id": "william_tell",
+   "family": "slyte",
+   "icon": "px/songbook/william_tell.png",
+   "canonical": true
+  },
+  {
+   "id": "toccata_fugue",
+   "family": "slyte",
+   "icon": "px/songbook/toccata_fugue.png",
+   "canonical": true
+  },
+  {
+   "id": "overture_1812",
+   "family": "slyte",
+   "icon": "px/songbook/overture_1812.png",
+   "canonical": true
+  },
+  {
+   "id": "ride_valkyries",
+   "family": "slyte",
+   "icon": "px/songbook/ride_valkyries.png",
+   "canonical": true
+  },
+  {
+   "id": "night_bald_mountain",
+   "family": "slyte",
+   "icon": "px/songbook/night_bald_mountain.png",
+   "canonical": true
+  },
+  {
+   "id": "minute_waltz",
+   "family": "slyte",
+   "icon": "px/songbook/minute_waltz.png",
+   "canonical": true
+  },
+  {
+   "id": "summer_storm",
+   "family": "slyte",
+   "icon": "px/songbook/summer_storm.png",
+   "canonical": true
+  },
+  {
+   "id": "spring",
+   "family": "whimber",
+   "icon": "px/songbook/spring.png",
+   "canonical": true
+  },
+  {
+   "id": "ode_to_joy",
+   "family": "whimber",
+   "icon": "px/songbook/ode_to_joy.png",
+   "canonical": true
+  },
+  {
+   "id": "swan_lake",
+   "family": "whimber",
+   "icon": "px/songbook/swan_lake.png",
+   "canonical": true
+  },
+  {
+   "id": "flight_bumblebee",
+   "family": "whimber",
+   "icon": "px/songbook/flight_bumblebee.png",
+   "canonical": true
+  },
+  {
+   "id": "jesu_joy",
+   "family": "whimber",
+   "icon": "px/songbook/jesu_joy.png",
+   "canonical": true
+  },
+  {
+   "id": "hallelujah",
+   "family": "whimber",
+   "icon": "px/songbook/hallelujah.png",
+   "canonical": true
+  },
+  {
+   "id": "ave_maria",
+   "family": "whimber",
+   "icon": "px/songbook/ave_maria.png",
+   "canonical": true
+  },
+  {
+   "id": "fur_elise",
+   "family": "twitchel",
+   "icon": "px/songbook/fur_elise.png",
+   "canonical": true
+  },
+  {
+   "id": "rondo_alla_turca",
+   "family": "twitchel",
+   "icon": "px/songbook/rondo_alla_turca.png",
+   "canonical": true
+  },
+  {
+   "id": "sugar_plum_fairy",
+   "family": "twitchel",
+   "icon": "px/songbook/sugar_plum_fairy.png",
+   "canonical": true
+  },
+  {
+   "id": "the_entertainer",
+   "family": "twitchel",
+   "icon": "px/songbook/the_entertainer.png",
+   "canonical": true
+  },
+  {
+   "id": "danse_macabre",
+   "family": "twitchel",
+   "icon": "px/songbook/danse_macabre.png",
+   "canonical": true
+  },
+  {
+   "id": "largo_al_factotum",
+   "family": "twitchel",
+   "icon": "px/songbook/largo_al_factotum.png",
+   "canonical": true
+  },
+  {
+   "id": "moonlight_sonata",
+   "family": "twitchel",
+   "icon": "px/songbook/moonlight_sonata.png",
+   "canonical": true
+  }
+ ],
+ "layout": {
+  "page_on_canvas": [
+   8,
+   64
+  ],
+  "page_tabs_on_page": [
+   [
+    8,
+    -14
+   ],
+   [
+    30,
+    -14
+   ],
+   [
+    52,
+    -14
+   ]
+  ],
+  "page_pieces": {
+   "top": "ancient_page_top.png (h46)",
+   "row": "ancient_page_row.png (h42, x rows)",
+   "bottom": "ancient_page_bottom.png (h12)"
+  },
+  "page_flow": "items = heard tunes (order heard) + ONE slot_sleeping pebble (omit the pebble when that family has no unheard tune left). rows = ceil(items/4). page height = 46 + 42*rows + 12. Item k at (18 + (k%4)*34, 53 + floor(k/4)*42). Never draw extra empty slots.",
+  "page_slot_k": "(18 + (k%4)*34, 53 + floor(k/4)*42)",
+  "page_slots_examples_first8": [
+   [
+    18,
+    53
+   ],
+   [
+    52,
+    53
+   ],
+   [
+    86,
+    53
+   ],
+   [
+    120,
+    53
+   ],
+   [
+    18,
+    95
+   ],
+   [
+    52,
+    95
+   ],
+   [
+    86,
+    95
+   ],
+   [
+    120,
+    95
+   ]
+  ],
+  "page_icon_in_slot": [
+   2,
+   2
+  ],
+  "page_play_hint": "tap a met icon = Echo version plays; icon_pressed_ring at (-2,-2) of the icon while it plays",
+  "tile_on_canvas": [
+   12,
+   96
+  ],
+  "tile_wells": [
+   [
+    44,
+    8
+   ],
+   [
+    71,
+    8
+   ],
+   [
+    98,
+    8
+   ],
+   [
+    125,
+    8
+   ]
+  ],
+  "tile_icon_in_well": [
+   1,
+   1
+  ],
+  "flourish_on_canvas_over_echo": [
+   66,
+   116
+  ],
+  "emblem_title": "ancient_emblem.png left of the \"Ancient Echoes\" title text"
+ },
+ "files": [
+  {
+   "file": "px/songbook/hall_mountain_king.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a sneaky troll-mountain (eyes + crown). Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "hall_mountain_king",
+   "family": "slyte",
+   "title": "In the Hall of the Mountain King",
+   "composer": "Grieg"
+  },
+  {
+   "file": "px/songbook/william_tell.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a galloping horse. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "william_tell",
+   "family": "slyte",
+   "title": "William Tell Overture (finale)",
+   "composer": "Rossini"
+  },
+  {
+   "file": "px/songbook/toccata_fugue.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: pipe organ + little bat. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "toccata_fugue",
+   "family": "slyte",
+   "title": "Toccata and Fugue in D minor",
+   "composer": "Bach"
+  },
+  {
+   "file": "px/songbook/overture_1812.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a cannon going BOOM + a bell. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "overture_1812",
+   "family": "slyte",
+   "title": "1812 Overture",
+   "composer": "Tchaikovsky"
+  },
+  {
+   "file": "px/songbook/ride_valkyries.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a winged helmet. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "ride_valkyries",
+   "family": "slyte",
+   "title": "Ride of the Valkyries",
+   "composer": "Wagner"
+  },
+  {
+   "file": "px/songbook/night_bald_mountain.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a friendly swirly ghost over a bare hill at night. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "night_bald_mountain",
+   "family": "slyte",
+   "title": "Night on Bald Mountain",
+   "composer": "Mussorgsky / Rimsky-Korsakov"
+  },
+  {
+   "file": "px/songbook/minute_waltz.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a puppy chasing its tail in a circle. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "minute_waltz",
+   "family": "slyte",
+   "title": "Minute Waltz",
+   "composer": "Chopin"
+  },
+  {
+   "file": "px/songbook/summer_storm.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a storm cloud, lightning and rain. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "summer_storm",
+   "family": "slyte",
+   "title": "The Four Seasons: Summer (storm)",
+   "composer": "Vivaldi"
+  },
+  {
+   "file": "px/songbook/spring.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a songbird on a blossom branch. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "spring",
+   "family": "whimber",
+   "title": "The Four Seasons: Spring",
+   "composer": "Vivaldi"
+  },
+  {
+   "file": "px/songbook/ode_to_joy.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a big smiling sun. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "ode_to_joy",
+   "family": "whimber",
+   "title": "Ode to Joy",
+   "composer": "Beethoven"
+  },
+  {
+   "file": "px/songbook/swan_lake.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a white swan on ripples. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "swan_lake",
+   "family": "whimber",
+   "title": "Swan Lake (swan theme)",
+   "composer": "Tchaikovsky"
+  },
+  {
+   "file": "px/songbook/flight_bumblebee.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a bumblebee with a zigzag path. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "flight_bumblebee",
+   "family": "whimber",
+   "title": "Flight of the Bumblebee",
+   "composer": "Rimsky-Korsakov"
+  },
+  {
+   "file": "px/songbook/jesu_joy.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a little sailboat on rolling waves. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "jesu_joy",
+   "family": "whimber",
+   "title": "Jesu, Joy of Man's Desiring",
+   "composer": "Bach"
+  },
+  {
+   "file": "px/songbook/hallelujah.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a golden trumpet with a sparkle burst. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "hallelujah",
+   "family": "whimber",
+   "title": "Hallelujah Chorus",
+   "composer": "Handel"
+  },
+  {
+   "file": "px/songbook/ave_maria.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a calm glowing candle. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "ave_maria",
+   "family": "whimber",
+   "title": "Ave Maria",
+   "composer": "Schubert"
+  },
+  {
+   "file": "px/songbook/fur_elise.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a cat tail swishing. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "fur_elise",
+   "family": "twitchel",
+   "title": "Für Elise",
+   "composer": "Beethoven"
+  },
+  {
+   "file": "px/songbook/rondo_alla_turca.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a marching drum and sticks. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "rondo_alla_turca",
+   "family": "twitchel",
+   "title": "Rondo alla Turca",
+   "composer": "Mozart"
+  },
+  {
+   "file": "px/songbook/sugar_plum_fairy.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a twirling fairy with a star wand. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "sugar_plum_fairy",
+   "family": "twitchel",
+   "title": "Dance of the Sugar Plum Fairy",
+   "composer": "Tchaikovsky"
+  },
+  {
+   "file": "px/songbook/the_entertainer.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: piano keys + a bouncy note. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "the_entertainer",
+   "family": "twitchel",
+   "title": "The Entertainer",
+   "composer": "Joplin"
+  },
+  {
+   "file": "px/songbook/danse_macabre.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a clock at midnight (no numerals) + a little bat. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "danse_macabre",
+   "family": "twitchel",
+   "title": "Danse Macabre",
+   "composer": "Saint-Saëns"
+  },
+  {
+   "file": "px/songbook/largo_al_factotum.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: the barber's scissors and comb. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "largo_al_factotum",
+   "family": "twitchel",
+   "title": "Largo al factotum",
+   "composer": "Rossini"
+  },
+  {
+   "file": "px/songbook/moonlight_sonata.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a full moon over still water. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
+   "id": "moonlight_sonata",
+   "family": "twitchel",
+   "title": "Moonlight Sonata (1st mvt)",
+   "composer": "Beethoven"
+  },
+  {
+   "file": "px/songbook/ancient_emblem.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Ancient Echoes emblem 24x24 (glowing). Use beside the tile/page title and as the Memory Book tab icon."
+  },
+  {
+   "file": "px/songbook/ancient_emblem32.png",
+   "size": [
+    32,
+    32
+   ],
+   "cell": [
+    32,
+    32
+   ],
+   "frames": "single",
+   "use": "Ancient Echoes emblem 32x32 (glowing), for the tile's left end."
+  },
+  {
+   "file": "px/songbook/ancient_emblem_sleep.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Emblem, not lit (stone note not glowing). Optional disabled/no-tunes-yet look."
+  },
+  {
+   "file": "px/songbook/ancient_tile.png",
+   "size": [
+    156,
+    44
+   ],
+   "cell": [
+    156,
+    44
+   ],
+   "frames": "rest",
+   "use": "Ancient Echoes start tile (EIB start tiles), 156x44. Emblem at left; code draws up to 4 most-recently-heard tune icons at layout.tile_wells (no empty wells baked in).",
+   "reduced_motion": "static (no motion)"
+  },
+  {
+   "file": "px/songbook/ancient_tile_pressed.png",
+   "size": [
+    156,
+    44
+   ],
+   "cell": [
+    156,
+    44
+   ],
+   "frames": "single",
+   "use": "Ancient Echoes tile, pressed (shifted 2px down, warm fill)."
+  },
+  {
+   "file": "px/songbook/icon_pressed_ring.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "28x28 golden ring drawn around a tune icon (offset -2,-2) while pressed / while that tune plays."
+  },
+  {
+   "file": "px/songbook/ancient_flourish.png",
+   "size": [
+    192,
+    48
+   ],
+   "cell": [
+    48,
+    48
+   ],
+   "frames": "f0-f3 rings growing",
+   "use": "'An Ancient Echo!' moment: rings ripple out from the emblem as the Echo announces its famous tune (and again when a tune icon joins). 4 frames, ~120 ms each, play once (or twice).",
+   "reduced_motion": "ancient_flourish_static.png"
+  },
+  {
+   "file": "px/songbook/ancient_flourish_static.png",
+   "size": [
+    48,
+    48
+   ],
+   "cell": [
+    48,
+    48
+   ],
+   "frames": "single",
+   "use": "Reduced-motion flourish: show for ~1 s."
+  },
+  {
+   "file": "px/songbook/slot_sleeping.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "Page slot, not heard yet: a sleeping pebble (same for all). Not a lock, grade or count; tapping it does nothing (or a soft 'hmm' from the Echo)."
+  },
+  {
+   "file": "px/songbook/slot_met.png",
+   "size": [
+    28,
+    28
+   ],
+   "cell": [
+    28,
+    28
+   ],
+   "frames": "single",
+   "use": "Page slot backing for a met tune; draw the 24x24 icon at +2,+2."
+  },
+  {
+   "file": "px/songbook/page_tabs.png",
+   "size": [
+    60,
+    32
+   ],
+   "cell": [
+    20,
+    16
+   ],
+   "frames": "cols slyte, whimber, twitchel; row0 not selected, row1 selected",
+   "use": "Family tabs for the page (leaf = Howlings, feather = Wingsongs, paw = Purrlings). Show a tab only for families with at least one met tune. Selected = taller + stronger colour."
+  },
+  {
+   "file": "px/songbook/ancient_page_top.png",
+   "size": [
+    164,
+    46
+   ],
+   "cell": [
+    164,
+    46
+   ],
+   "frames": "single",
+   "use": "Memory Book 'Ancient Echoes' page, TOP piece (stone header + emblem; title text in HTML). 164x46."
+  },
+  {
+   "file": "px/songbook/ancient_page_row.png",
+   "size": [
+    164,
+    42
+   ],
+   "cell": [
+    164,
+    42
+   ],
+   "frames": "single",
+   "use": "Page ROW band, 164x42, repeat once per 4 slots (rows = ceil((heard + pebble) / 4)). Plain: no slot marks baked in."
+  },
+  {
+   "file": "px/songbook/ancient_page_bottom.png",
+   "size": [
+    164,
+    12
+   ],
+   "cell": [
+    164,
+    12
+   ],
+   "frames": "single",
+   "use": "Page BOTTOM piece, 164x12 (border + shadow)."
+  }
+ ]
+}

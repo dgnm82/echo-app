@@ -1,0 +1,15 @@
+# TEST FIXTURE: not a real tune (a scale walk on the Howlings pads). Never shipped.
+id: fixture_steps
+fixture: yes
+title: Fixture steps (test only)
+composer: none (test fixture)
+home: do
+meter: 4
+bpm: 96
+mood: test
+min_ml: 1
+source: Test fixture, not a real tune. Not shipped.
+prov_status: ok
+echo: do4:12 mi4:12 sol4:12 la4:12 | sol4:12 fab4:12 re4:12 do4:24
+child: do4:12 mi4:12 sol4:12 la4:12 sol4:12 mi4:12
+child: sol4:12 mi4:12 re4:12 do4:24

@@ -79,3 +79,29 @@
 .eib.solpads .eibpad::after{content:attr(data-sol);position:absolute;left:0;right:0;bottom:-12px;text-align:center;font:8px/10px PS2P,monospace;color:#FFF6E6;text-shadow:0 1px 0 #23183a;pointer-events:none}
 .eib.solstrip .eibn{position:relative}
 .eib.solstrip .eibn::before{content:attr(data-sol);position:absolute;left:50%;top:100%;transform:translateX(-50%);font:6px/8px PS2P,monospace;color:#FFF6E6;white-space:nowrap;pointer-events:none}
+/* Music School step 2: Ancient Echoes (art: px/songbook, Pixal). The game screen is the 180-px pixel canvas (pixel.js), so 1 CSS px = 1 art px.
+   Frame swaps and outlines only; sprite pixels are never tinted. */
+.eibanc{--s:1;position:relative;width:calc(156px * var(--s));height:calc(44px * var(--s));background:url(px/songbook/ancient_tile.png) 0 0/100% 100% no-repeat;image-rendering:pixelated;flex:none}
+.eibanci{position:absolute;top:calc(9px * var(--s));left:calc((45px + var(--k) * 27px) * var(--s));width:calc(24px * var(--s));height:calc(24px * var(--s));padding:0;border:0;border-radius:0;
+  background:transparent 0 0/100% 100% no-repeat;image-rendering:pixelated;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.eibanci.on::after,.eibanci:active::after{content:'';position:absolute;left:calc(-2px * var(--s));top:calc(-2px * var(--s));width:calc(28px * var(--s));height:calc(28px * var(--s));background:url(px/songbook/icon_pressed_ring.png) 0 0/100% 100% no-repeat;image-rendering:pixelated}
+.eibflo{position:absolute;z-index:6;width:48px;height:48px;margin:-36px 0 0 -24px;background:url(px/songbook/ancient_flourish.png) 0 0/400% 100% no-repeat;image-rendering:pixelated;pointer-events:none}
+.eibflo.go{animation:eibflo .48s steps(4) 1 forwards}
+.eibflo.static{background-image:url(px/songbook/ancient_flourish_static.png);background-size:100% 100%;animation:none}
+@keyframes eibflo{from{background-position:0 0}to{background-position:-192px 0}}
+.eib.rm .eibflo.go{animation:none}
+@media (prefers-reduced-motion:reduce){.eibflo.go{animation:none}}
+.eibpad.need{outline:3px solid #FFF6E6;outline-offset:1px}
+/* Memory Book "Ancient Echoes" page (game.js ancPage): 1 CSS px = 1 art px, like the first-song card */
+.bkancw{position:relative;width:164px;margin:18px 0 4px}
+.bkanch{display:flex;align-items:center;gap:6px}.bkance{display:inline-block;width:24px;height:24px;background:url(px/songbook/ancient_emblem.png) no-repeat;image-rendering:pixelated}
+.bkanc{position:relative;width:164px}
+.bkancp{position:absolute;left:0;width:164px;background-repeat:no-repeat;image-rendering:pixelated}
+.bkancs{position:absolute;width:28px;height:28px;padding:0;border:0;border-radius:0;background:url(px/songbook/slot_met.png) no-repeat;image-rendering:pixelated;cursor:pointer}
+.bkancs>i{position:absolute;left:2px;top:2px;width:24px;height:24px;background-repeat:no-repeat;image-rendering:pixelated}
+.bkancs.playing::after{content:'';position:absolute;left:0;top:0;width:28px;height:28px;background:url(px/songbook/icon_pressed_ring.png) no-repeat;image-rendering:pixelated}
+.bkancs.sleep{background-image:url(px/songbook/slot_sleeping.png);cursor:default}
+.bkanct{position:absolute;left:0;top:-14px;height:16px}
+.bkanctab{position:absolute;top:0;left:calc(8px + var(--k) * 22px);width:20px;height:16px;padding:0;border:0;background:url(px/songbook/page_tabs.png) no-repeat;background-position:calc(var(--k) * -20px) 0;image-rendering:pixelated;cursor:pointer}
+.bkanctab.sel{background-position:calc(var(--k) * -20px) -16px}
+.bkanccap{min-height:1.2em;margin:4px 0 0;font-size:.9em}

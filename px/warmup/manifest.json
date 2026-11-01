@@ -12,6 +12,7 @@
  ],
  "_generator": "echo/ios_design/music_phase1/warmup/make_warmup.py",
  "_changelog": [
+  "Nov 1: invite_chip.png added (Home chip inviting existing saves to the warm-up; matches px/eib/invite.png).",
   "Nov 1 (Kai): moment 3 chirps made listen-only. New chirp_same_<side> (identical, level sound lines) + chirp_reveal_<side> (+_static), named to match warmup.js hooks; both sides on perch_low.png. chirp_high_*, chirp_low_*, perch_high kept but deprecated (warmup.js fallback)."
  ],
  "layout": {
@@ -597,6 +598,19 @@
    ],
    "frames": "single",
    "use": "Small 24x24 sticker/icon for the Memory Book list or page tab."
+  },
+  {
+   "file": "px/warmup/invite_chip.png",
+   "size": [
+    18,
+    18
+   ],
+   "cell": [
+    18,
+    18
+   ],
+   "frames": "single frame (like px/eib/invite.png; no pressed state, no @2x/@3x)",
+   "use": "Home invite chip for existing saves with no warm-up: egg + note, no words. Same size/frame as px/eib/invite.png: use on the .wuinv button (background-image:url(px/warmup/invite_chip.png)); all other .eibinv rules (40x40, pixelated, bob, fade, .rm) unchanged."
   }
  ]
 }
