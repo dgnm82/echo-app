@@ -13,10 +13,11 @@ min_ml: 1
 family: whimber
 icon: px/songbook/swan_lake.png
 bar_ticks: 48
-source: Tchaikovsky, Swan Lake Op.20, piano score, P. Jurgenson, Moscow 1877, No.10 Scene (oboe theme) - NOT READ: no 1877 scan reachable this run
-prov: Tchaikovsky (d.1893). Swan Lake Op.20 (Jurgenson 1877). Oboe theme, melody only, own arrangement. PD US + life+70.
-prov_status: edition_check
-read: none
+source: Tchaikovsky, Lebedinoe ozero (Swan Lake) Op.20, piano arr. N. Kashkin, P. Jurgenson, Moscow [1877], Act II No.1 Scene, p.64, bars 2-5
+prov: Tchaikovsky (d.1893). Swan Lake Op.20, Jurgenson piano score (Kashkin, 1877) p.64. Oboe theme, melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://commons.wikimedia.org/wiki/Category:Swan_Lake
+read: verified
 # echo: 3.5 bars, 16 notes, 7.5 s at 112 bpm (cap 8 s). Sounding pitches:
 #   d5:24 g4:6 a4:6 bb4:6 c5:6 | d5:18 bb4:6 d5:18 bb4:6 | d5:18 g4:6 bb4:6 g4:6 eb4:6 bb4:6 | g4:24
 echo: mi4:24 la3:6 ti3:6 do4:6 re4:6 | mi4:18 do4:6 mi4:18 do4:6 | mi4:18 la3:6 do4:6 la3:6 fa3:6 do4:6 | la3:24
@@ -24,5 +25,7 @@ echo: mi4:24 la3:6 ti3:6 do4:6 re4:6 | mi4:18 do4:6 mi4:18 do4:6 | mi4:18 la3:6 
 child: mi4:24 la3:6 do4:6 re4:6
 # child phrase, sounding: d5:18 bb4:6 d5:18 bb4:6 d5:24
 child: mi4:18 do4:6 mi4:18 do4:6 mi4:24
-# note: B minor theme moved to G minor; 3 bars + the landing note (8 s cap). PLAN child kept. edition_check until Kai
-# note: checks a scan.
+# note: Pass 3: read from the Jurgenson piano score (Kashkin), BnF copy on Commons: "Lebedinoe ozero-Le Lac des cygnes
+# note: ... bpt6k1913424b (068 of 172).jpg", printed p.64 (Act II No.1 = No.10 Scene), plate 2950. The draft matched
+# note: note for note (F# | B C# D E | F#. D F#. D | F#. B D B G D | B); no change. B minor moved to G minor. Last note
+# note: shortened (8 s cap).

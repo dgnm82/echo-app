@@ -4,6 +4,8 @@
 # id: night_bald_mountain  family: slyte
 # title: Night on Bald Mountain (Modest Mussorgsky / N. Rimsky-Korsakov)
 # BLOCKED: PLAN allows only the Bessel Rimsky-Korsakov score (St. Petersburg 1886/87, plate 1538; IMSLP #139196).
-# IMSLP downloads sit behind a bot check; no other copy of that edition found (IA, Commons). Not transcribed.
-# Not transcribed from memory on purpose (the version people know is Fantasia 1940). Unblock: Kai downloads IMSLP
-# #139196 (or the Bessel 4-hand Artsybushev print #59100, if Kai accepts it) into scans/, then I transcribe.
+# IMSLP is behind a bot check; IA/Commons/Mutopia have no copy of it. Not transcribed.
+# Not transcribed from memory on purpose (the version people know is Fantasia 1940). Pass 3: Commons has only
+# Bessel title pages; Mutopia #1892 is the Chernov piano arrangement with source "IMSLP #19990" (no named pre-1931
+# edition), so not used. Unblock: Kai/Daniel shares IMSLP #139196 (or the Bessel 4-hand print #59100, if Kai
+# accepts it), then I transcribe.

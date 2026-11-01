@@ -15,10 +15,9 @@ icon: px/songbook/fur_elise.png
 bar_ticks: 18
 source: Beethoven, Fuer Elise WoO 59, first edition in L. Nohl, Neue Briefe Beethovens, Cotta, Stuttgart 1867, No.33 (music on p.28), bars 1-5
 prov: Beethoven (d.1827). WoO 59, first ed. Nohl 1867 (Neue Briefe Beethovens). Melody only, own arrangement. PD US + life+70.
-prov_status: edition_check
+prov_status: ok
 scan: https://commons.wikimedia.org/wiki/File:Beethoven_WoO_59_Erstausgabe.png
 read: verified
-# EDITION CHECK tune (PLAN): read from the named edition above; held as edition_check until Kai checks the scan.
 # echo: 6.33 bars, 27 notes, 7.5 s at 76 bpm (cap 8 s). Sounding pitches:
 #   a5:3 g#5:3 | a5:3 g#5:3 a5:3 e5:3 g5:3 f5:3 | d5:9 f4:3 a4:3 d5:3 | e5:9 a4:3 c#5:3 e5:3 | f5:9 a4:3 a5:3
 #   g#5:3 | a5:3 g#5:3 a5:3 e5:3 g5:3 f5:3 | d5:18
@@ -27,6 +26,6 @@ echo: mi5:3 mib5:3 | mi5:3 mib5:3 mi5:3 ti4:3 re5:3 do5:3 | la4:9 do4:3 mi4:3 la
 child: mi5:3 re5:3 mi5:3 re5:3 mi5:3 la4:3 re5:3 do5:3
 # child phrase, sounding: d5:9 f4:3 a4:3 d5:12
 child: la4:9 do4:3 mi4:3 la4:12
-# note: Edition check done: read from the Nohl 1867 first edition (A minor, up a 4th to D minor). PLAN child is 9 notes,
-# note: over the 8-note limit, so it is split: phrase 1 = the swish + answer (8 notes), phrase 2 = the little broken
-# note: chord.
+# note: Pass 3 second check: re-read note for note against the Nohl 1867 first edition p.28 (Commons scan) - confirmed,
+# note: no change. A minor, up a 4th to D minor. PLAN child is 9 notes, over the 8-note limit, so it is split: phrase 1
+# note: = the swish + answer (8 notes), phrase 2 = the little broken chord.

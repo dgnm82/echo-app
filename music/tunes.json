@@ -5560,41 +5560,6 @@
     "id": "overture_1812",
     "fam": "slyte",
     "why": "edition_check"
-   },
-   {
-    "id": "toccata_fugue",
-    "fam": "slyte",
-    "why": "edition_check"
-   },
-   {
-    "id": "hallelujah",
-    "fam": "whimber",
-    "why": "edition_check"
-   },
-   {
-    "id": "ode_to_joy",
-    "fam": "whimber",
-    "why": "edition_check"
-   },
-   {
-    "id": "swan_lake",
-    "fam": "whimber",
-    "why": "edition_check"
-   },
-   {
-    "id": "fur_elise",
-    "fam": "twitchel",
-    "why": "edition_check"
-   },
-   {
-    "id": "largo_al_factotum",
-    "fam": "twitchel",
-    "why": "edition_check"
-   },
-   {
-    "id": "the_entertainer",
-    "fam": "twitchel",
-    "why": "edition_check"
    }
   ],
   "slyte": [
@@ -6522,6 +6487,126 @@
     }
    },
    {
+    "id": "toccata_fugue",
+    "title": "Toccata and Fugue in D minor",
+    "composer": "J. S. Bach",
+    "home": "la",
+    "meter": 4,
+    "bpm": 144,
+    "mood": "playful-spooky",
+    "skills": [
+     "fastslow",
+     "highlow"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 144,
+     "tpb": 12,
+     "n": [
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       18
+      ],
+      [
+       0,
+       0,
+       6
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       1,
+       1,
+       3
+      ],
+      [
+       7,
+       0,
+       3
+      ],
+      [
+       6,
+       0,
+       3
+      ],
+      [
+       6,
+       0,
+       6,
+       -1
+      ],
+      [
+       6,
+       0,
+       12
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 144,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        1,
+        6
+       ],
+       [
+        2,
+        1,
+        6
+       ],
+       [
+        3,
+        1,
+        24
+       ],
+       [
+        2,
+        1,
+        6
+       ],
+       [
+        1,
+        1,
+        6
+       ],
+       [
+        6,
+        0,
+        24
+       ]
+      ]
+     }
+    ],
+    "min_ml": 2,
+    "icon": "px/songbook/toccata_fugue.png",
+    "prov": "Bach (d.1750). BWV 565, Bach-Gesellschaft vol.15 (1867), read via Mutopia #1780. Opening figure, melody only, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 48,
+    "_echo_seconds": 2.08,
+    "spoken": {
+     "tune": "Toccata and Fugue",
+     "composer": "Bach"
+    }
+   },
+   {
     "id": "william_tell",
     "title": "William Tell Overture",
     "composer": "Gioachino Rossini",
@@ -7159,6 +7244,341 @@
     }
    },
    {
+    "id": "hallelujah",
+    "title": "Hallelujah Chorus",
+    "composer": "George Frideric Handel",
+    "home": "do",
+    "meter": 4,
+    "bpm": 96,
+    "mood": "grand",
+    "skills": [
+     "loudsoft"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 96,
+     "tpb": 12,
+     "n": [
+      [
+       1,
+       0,
+       18
+      ],
+      [
+       5,
+       -1,
+       6
+      ],
+      [
+       6,
+       -1,
+       6
+      ],
+      [
+       5,
+       -1,
+       18
+      ],
+      [
+       1,
+       0,
+       18
+      ],
+      [
+       5,
+       -1,
+       6
+      ],
+      [
+       6,
+       -1,
+       6
+      ],
+      [
+       5,
+       -1,
+       12
+      ],
+      [
+       1,
+       0,
+       3
+      ],
+      [
+       1,
+       0,
+       3
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       12
+      ],
+      [
+       1,
+       0,
+       3
+      ],
+      [
+       1,
+       0,
+       3
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       18
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 96,
+      "tpb": 12,
+      "n": [
+       [
+        1,
+        0,
+        18
+       ],
+       [
+        5,
+        -1,
+        6
+       ],
+       [
+        6,
+        -1,
+        6
+       ],
+       [
+        5,
+        -1,
+        18
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 96,
+      "tpb": 12,
+      "n": [
+       [
+        1,
+        0,
+        3
+       ],
+       [
+        1,
+        0,
+        3
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        1,
+        0,
+        12
+       ]
+      ]
+     }
+    ],
+    "min_ml": 1,
+    "icon": "px/songbook/hallelujah.png",
+    "prov": "Handel (d.1759). Messiah (1742). Call read from the Schirmer 1912 vocal score p.193. Melody only, no words, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 48,
+    "_echo_seconds": 7.5,
+    "spoken": {
+     "tune": "the Hallelujah Chorus",
+     "composer": "Handel"
+    }
+   },
+   {
+    "id": "ode_to_joy",
+    "title": "Ode to Joy",
+    "composer": "Ludwig van Beethoven",
+    "home": "do",
+    "meter": 4,
+    "bpm": 126,
+    "mood": "happy",
+    "skills": [
+     "highlow"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 126,
+     "tpb": 12,
+     "n": [
+      [
+       3,
+       0,
+       24
+      ],
+      [
+       4,
+       0,
+       12
+      ],
+      [
+       5,
+       0,
+       12
+      ],
+      [
+       5,
+       0,
+       12
+      ],
+      [
+       4,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ],
+      [
+       2,
+       0,
+       12
+      ],
+      [
+       1,
+       0,
+       24
+      ],
+      [
+       2,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       12
+      ],
+      [
+       3,
+       0,
+       18
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       24
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 126,
+      "tpb": 12,
+      "n": [
+       [
+        1,
+        0,
+        24
+       ],
+       [
+        2,
+        0,
+        12
+       ],
+       [
+        3,
+        0,
+        12
+       ],
+       [
+        3,
+        0,
+        18
+       ],
+       [
+        2,
+        0,
+        6
+       ],
+       [
+        2,
+        0,
+        24
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 126,
+      "tpb": 12,
+      "n": [
+       [
+        1,
+        0,
+        24
+       ],
+       [
+        2,
+        0,
+        12
+       ],
+       [
+        3,
+        0,
+        12
+       ],
+       [
+        2,
+        0,
+        18
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        1,
+        0,
+        24
+       ]
+      ]
+     }
+    ],
+    "min_ml": 1,
+    "icon": "px/songbook/ode_to_joy.png",
+    "prov": "Beethoven (d.1827). Symphony No.9 Op.125 (1826). Theme read from Breitkopf & Haertel 4-hand ed. (arr. Horn) p.240. Melody only, no words, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 48,
+    "_echo_seconds": 7.62,
+    "spoken": {
+     "tune": "Ode to Joy",
+     "composer": "Beethoven"
+    }
+   },
+   {
     "id": "spring",
     "title": "The Four Seasons: Spring",
     "composer": "Antonio Vivaldi",
@@ -7437,6 +7857,176 @@
      "tune": "Spring",
      "composer": "Vivaldi"
     }
+   },
+   {
+    "id": "swan_lake",
+    "title": "Swan Lake",
+    "composer": "Pyotr Ilyich Tchaikovsky",
+    "home": "la",
+    "meter": 4,
+    "bpm": 112,
+    "mood": "gentle",
+    "skills": [
+     "loudsoft"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 112,
+     "tpb": 12,
+     "n": [
+      [
+       3,
+       0,
+       24
+      ],
+      [
+       6,
+       -1,
+       6
+      ],
+      [
+       7,
+       -1,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       18
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       18
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       18
+      ],
+      [
+       6,
+       -1,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       6,
+       -1,
+       6
+      ],
+      [
+       4,
+       -1,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       6,
+       -1,
+       24
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 112,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        0,
+        24
+       ],
+       [
+        6,
+        -1,
+        6
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        2,
+        0,
+        6
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 112,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        0,
+        18
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        3,
+        0,
+        18
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        3,
+        0,
+        24
+       ]
+      ]
+     }
+    ],
+    "min_ml": 1,
+    "icon": "px/songbook/swan_lake.png",
+    "prov": "Tchaikovsky (d.1893). Swan Lake Op.20, Jurgenson piano score (Kashkin, 1877) p.64. Oboe theme, melody only, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 48,
+    "_echo_seconds": 7.5,
+    "spoken": {
+     "tune": "Swan Lake",
+     "composer": "Tchaikovsky"
+    }
    }
   ],
   "twitchel": [
@@ -7654,6 +8244,446 @@
     "spoken": {
      "tune": "Danse Macabre",
      "composer": "Saint-Saëns"
+    }
+   },
+   {
+    "id": "fur_elise",
+    "title": "Fur Elise",
+    "composer": "Ludwig van Beethoven",
+    "home": "la",
+    "meter": 1,
+    "bpm": 76,
+    "mood": "gentle",
+    "skills": [
+     "highlow"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 76,
+     "tpb": 12,
+     "n": [
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       3,
+       -1
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       3,
+       -1
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       7,
+       0,
+       3
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       1,
+       1,
+       3
+      ],
+      [
+       6,
+       0,
+       9
+      ],
+      [
+       1,
+       0,
+       3
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       6,
+       0,
+       3
+      ],
+      [
+       7,
+       0,
+       9
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       6,
+       0,
+       3,
+       -1
+      ],
+      [
+       7,
+       0,
+       3
+      ],
+      [
+       1,
+       1,
+       9
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       3,
+       -1
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       3,
+       -1
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       7,
+       0,
+       3
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       1,
+       1,
+       3
+      ],
+      [
+       6,
+       0,
+       18
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 76,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        1,
+        3
+       ],
+       [
+        2,
+        1,
+        3
+       ],
+       [
+        3,
+        1,
+        3
+       ],
+       [
+        2,
+        1,
+        3
+       ],
+       [
+        3,
+        1,
+        3
+       ],
+       [
+        6,
+        0,
+        3
+       ],
+       [
+        2,
+        1,
+        3
+       ],
+       [
+        1,
+        1,
+        3
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 76,
+      "tpb": 12,
+      "n": [
+       [
+        6,
+        0,
+        9
+       ],
+       [
+        1,
+        0,
+        3
+       ],
+       [
+        3,
+        0,
+        3
+       ],
+       [
+        6,
+        0,
+        12
+       ]
+      ]
+     }
+    ],
+    "min_ml": 1,
+    "icon": "px/songbook/fur_elise.png",
+    "prov": "Beethoven (d.1827). WoO 59, first ed. Nohl 1867 (Neue Briefe Beethovens). Melody only, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 18,
+    "_echo_seconds": 7.5,
+    "spoken": {
+     "tune": "Für Elise",
+     "composer": "Beethoven"
+    }
+   },
+   {
+    "id": "largo_al_factotum",
+    "title": "Largo al factotum",
+    "composer": "Gioachino Rossini",
+    "home": "do",
+    "meter": 2,
+    "bpm": 138,
+    "mood": "bouncy",
+    "skills": [
+     "fastslow"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 138,
+     "tpb": 12,
+     "n": [
+      [
+       3,
+       0,
+       24
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       24
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       6
+      ],
+      [
+       3,
+       0,
+       6
+      ],
+      [
+       2,
+       0,
+       6
+      ],
+      [
+       1,
+       0,
+       24
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 138,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        0,
+        24
+       ],
+       [
+        2,
+        0,
+        6
+       ],
+       [
+        1,
+        0,
+        6
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 138,
+      "tpb": 12,
+      "n": [
+       [
+        3,
+        0,
+        6
+       ],
+       [
+        2,
+        0,
+        6
+       ],
+       [
+        1,
+        0,
+        6
+       ],
+       [
+        3,
+        0,
+        6
+       ],
+       [
+        2,
+        0,
+        6
+       ],
+       [
+        1,
+        0,
+        6
+       ]
+      ]
+     }
+    ],
+    "min_ml": 1,
+    "icon": "px/songbook/largo_al_factotum.png",
+    "prov": "Rossini (d.1868). Barber of Seville (1816). Calls read from the Peters c1882 vocal score p.33. Melody only, no words, own arrangement. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 36,
+    "_echo_seconds": 6.52,
+    "spoken": {
+     "tune": "Largo al Factotum",
+     "composer": "Rossini"
     }
    },
    {
@@ -8195,6 +9225,230 @@
     "spoken": {
      "tune": "the Sugar Plum Fairy",
      "composer": "Tchaikovsky"
+    }
+   },
+   {
+    "id": "the_entertainer",
+    "title": "The Entertainer",
+    "composer": "Scott Joplin",
+    "home": "do",
+    "meter": 2,
+    "bpm": 76,
+    "mood": "bouncy",
+    "skills": [
+     "fastslow"
+    ],
+    "echo": {
+     "v": 2,
+     "bpm": 76,
+     "tpb": 12,
+     "n": [
+      [
+       2,
+       0,
+       3
+      ],
+      [
+       3,
+       0,
+       3,
+       -1
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       1,
+       1,
+       6
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       1,
+       1,
+       6
+      ],
+      [
+       3,
+       0,
+       3
+      ],
+      [
+       1,
+       1,
+       18
+      ],
+      [
+       1,
+       1,
+       3
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       3,
+       -1
+      ],
+      [
+       3,
+       1,
+       3
+      ],
+      [
+       1,
+       1,
+       3
+      ],
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       3,
+       1,
+       6
+      ],
+      [
+       7,
+       0,
+       3
+      ],
+      [
+       2,
+       1,
+       6
+      ],
+      [
+       1,
+       1,
+       18
+      ]
+     ]
+    },
+    "child": [
+     {
+      "v": 1,
+      "bpm": 76,
+      "tpb": 12,
+      "n": [
+       [
+        2,
+        0,
+        3
+       ],
+       [
+        3,
+        0,
+        3
+       ],
+       [
+        1,
+        1,
+        6
+       ],
+       [
+        3,
+        0,
+        3
+       ],
+       [
+        1,
+        1,
+        6
+       ],
+       [
+        3,
+        0,
+        3
+       ],
+       [
+        1,
+        1,
+        18
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 76,
+      "tpb": 12,
+      "n": [
+       [
+        1,
+        1,
+        3
+       ],
+       [
+        2,
+        1,
+        3
+       ],
+       [
+        3,
+        1,
+        3
+       ],
+       [
+        1,
+        1,
+        3
+       ],
+       [
+        2,
+        1,
+        3
+       ],
+       [
+        3,
+        1,
+        6
+       ]
+      ]
+     },
+     {
+      "v": 1,
+      "bpm": 76,
+      "tpb": 12,
+      "n": [
+       [
+        6,
+        0,
+        3
+       ],
+       [
+        2,
+        1,
+        6
+       ],
+       [
+        1,
+        1,
+        18
+       ]
+      ]
+     }
+    ],
+    "min_ml": 2,
+    "icon": "px/songbook/the_entertainer.png",
+    "prov": "Joplin (d.1917). The Entertainer, John Stark & Son 1902, p.2. Melody only, own arrangement; not the 1973 film version. PD US + life+70.",
+    "prov_status": "ok",
+    "bar_ticks": 24,
+    "_echo_seconds": 6.32,
+    "spoken": {
+     "tune": "the Entertainer",
+     "composer": "Joplin"
     }
    }
   ]

@@ -15,19 +15,19 @@ icon: px/songbook/the_entertainer.png
 bar_ticks: 24
 source: Joplin, The Entertainer, John Stark & Son, St. Louis 1902, p.2, intro bar 4 pickup + A strain bars 1-4 (Library of Congress copy)
 prov: Joplin (d.1917). The Entertainer, John Stark & Son 1902, p.2. Melody only, own arrangement; not the 1973 film version. PD US + life+70.
-prov_status: edition_check
+prov_status: ok
 scan: https://www.loc.gov/item/2023864238/
 read: verified
-# EDITION CHECK tune (PLAN): read from the named edition above; held as edition_check until Kai checks the scan.
-# echo: 3.75 bars, 18 notes, 5.92 s at 76 bpm (cap 8 s). Sounding pitches:
-#   g4:3 g#4:3 | a4:3 f5:6 a4:3 f5:6 a4:3 f5:15 | f5:3 g5:3 g#5:3 a5:3 f5:3 g5:3 a5:6 | e5:3 g5:6 f5:15
-echo: re4:3 mib4:3 | mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:15 | do5:3 re5:3 mib5:3 mi5:3 do5:3 re5:3 mi5:6 | ti4:3 re5:6 do5:15
-# child phrase, sounding: g4:3 a4:3 f5:6 a4:3 f5:6 a4:3 f5:15
-child: re4:3 mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:15
+# echo: 4.0 bars, 18 notes, 6.32 s at 76 bpm (cap 8 s). Sounding pitches:
+#   g4:3 g#4:3 | a4:3 f5:6 a4:3 f5:6 a4:3 f5:18 | f5:3 g5:3 g#5:3 | a5:3 f5:3 g5:3 a5:6 e5:3 g5:6 | f5:18
+echo: re4:3 mib4:3 | mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:18 | do5:3 re5:3 mib5:3 | mi5:3 do5:3 re5:3 mi5:6 ti4:3 re5:6 | do5:18
+# child phrase, sounding: g4:3 a4:3 f5:6 a4:3 f5:6 a4:3 f5:18
+child: re4:3 mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:18
 # child phrase, sounding: f5:3 g5:3 a5:3 f5:3 g5:3 a5:6
 child: do5:3 re5:3 mi5:3 do5:3 re5:3 mi5:6
 # child phrase, sounding: d5:3 g5:6 f5:18
 child: la4:3 re5:6 do5:18
-# note: Edition check done: read from the 1902 Stark sheet (C, up a 4th to F; the high answer is an octave down so it
-# note: stays under c6). PLAN phrase 2 was 9 notes, so it is split into 2 phrases (6 + 3). Bar-1 rhythm written as
-# note: 16th-8th-16th-8th-16th + tied do; Kai please confirm it against p.2 while checking the edition.
+# note: Pass 3 second check on the LoC 1902 Stark p.2 (IIIF image read at full size). Bar 1 CORRECTED: it is
+# note: 16th-8th-16th | 8th-16th-16th tied (E C E | C E C~), and the last C is held through bar 2 beat 1 plus a 16th (18
+# note: ticks) before C D D#; the first pass had the tied C at 15 ticks. C, up a 4th to F; the high answer is an octave
+# note: down so it stays under c6. PLAN phrase 2 was 9 notes, so it is split into 2 phrases (6 + 3).
