@@ -1,7 +1,7 @@
 # Music School step 3: the game music touches on a phone (touch, iPhone 13 profile, real shipped songbook).
 # Home beat bounce + den flower sway (and none in reduced motion), Catch plays a songbook hook, Stack climbs the ladder with note sparkles,
 # Meadow Dash is beat-locked to its 126 bpm loop with the gold beat mark, a Dig floor plays a tune opening, "Our song grew!" plays the growing song.
-# Usage: python3 tests/phone_music3_test.py [URL] [SHOTDIR]
+# Usage: python3 tests/phone_music3_test.py [URL] [SHOTDIR]   (ECHO_TZ=UTC etc. sets the browser time zone: the home loop is day/twilight by local hour)
 import asyncio,sys,os,json,time
 from playwright.async_api import async_playwright
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
@@ -23,7 +23,7 @@ async def wait(pg,js,ms):
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])
-    ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    ctx=await b.new_context(**p.devices['iPhone 13'],**({'timezone_id':os.environ['ECHO_TZ']} if os.environ.get('ECHO_TZ') else {}));pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
     await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-dev-wu','0')");await pg.reload();await pg.wait_for_timeout(600)
     await T(pg,'#obgo',400)
     for _ in range(12):
@@ -35,11 +35,15 @@ async def main():
     # 1) Home: bounce + sway on the beat while the home loop plays
     check(await wait(pg,"Music.clock()&&/^bg_/.test(Music.clock().name)",8000),'home loop playing')
     name=await pg.evaluate("Music.clock()&&Music.clock().name")
+    # Sample >= 3 s, and keep going (up to 3 sway periods + 0.5 s) until both frames showed: day loops sway on every beat, but twilight loops
+    # (80 bpm, 3/4) sway only on beat 1 of each bar, alternating f1/f2 per bar (2.25 s), so a flat 3 s window caught a single downbeat.
     seen=await pg.evaluate("""new Promise(res=>{const o={beat:0,rest:0,sway:new Set(),url:'',spots:document.querySelectorAll('#sc .den-hotspot[data-sway-orig]').length,shot:false};const t0=performance.now();
+      const c=Music.clock(),tm=((window.MusicFX&&MusicFX.tempo&&MusicFX.tempo())||{})[c&&c.name]||{bpm:96,beatsPerBar:4},tw=/twilight/.test((c&&c.name)||'');
+      const unit=60000/tm.bpm*(tw?tm.beatsPerBar:1),maxMs=Math.max(3000,3*unit+500);o.maxMs=Math.round(maxMs);
       (function f(){const c=document.querySelector('#sc #cr');if(c&&c.classList.contains('beat'))o.beat++;else o.rest++;document.querySelectorAll('#sc .den-hotspot[data-sway-orig]').forEach(e=>{o.sway.add(e.dataset.sway);if(e.dataset.sway!=='0')o.url=e.style.backgroundImage});
-        if(performance.now()-t0<3000)requestAnimationFrame(f);else{o.sway=[...o.sway];o.spots=document.querySelectorAll('#sc .den-hotspot[data-sway-orig]').length;res(o)}})()})""")
+        const el=performance.now()-t0;if(el<3000||(el<maxMs&&!(o.sway.has('1')&&o.sway.has('2'))))requestAnimationFrame(f);else{o.ms=Math.round(el);o.sway=[...o.sway].sort();o.spots=document.querySelectorAll('#sc .den-hotspot[data-sway-orig]').length;res(o)}})()})""")
     check(seen['beat']>0 and seen['rest']>seen['beat'],f'home ({name}): the Echo bobs on the beat, short holds ({seen["beat"]} beat / {seen["rest"]} rest frames)')
-    check(seen['spots']>0 and '1' in seen['sway'] and '2' in seen['sway'] and 'px/beat/sway_' in seen['url'],f'den flowers sway f1/f2 with Pixal\'s strips ({seen["spots"]} flowers, {seen["sway"]}, {seen["url"][:40]})')
+    check(seen['spots']>0 and '1' in seen['sway'] and '2' in seen['sway'] and 'px/beat/sway_' in seen['url'],f'den flowers sway f1/f2 with Pixal\'s strips ({seen["spots"]} flowers, {seen["sway"]}, {seen["url"][:40]}, {seen["ms"]}/{seen["maxMs"]} ms)')
     tr=await pg.evaluate("getComputedStyle(document.querySelector('#sc #cr')).transitionProperty");check('transform' not in tr and 'all' not in tr,f'the bob is instant (no easing on transform: {tr})')
     await wait(pg,"document.querySelector('#sc #cr.beat')&&[...document.querySelectorAll('#sc .den-hotspot[data-sway-orig]')].some(e=>e.dataset.sway!=='0')",4000)
     await pg.screenshot(path=f'{SHOT}/home_beat_bounce_sway.png')
@@ -71,7 +75,9 @@ async def main():
     # 4) Meadow Dash: beat-locked to the 126 bpm loop, the gold beat mark after the obstacles
     await pg.evaluate("const s=RunnerEngine.step;RunnerEngine.step=function(g,dt){window.__rg=g;return s(g,dt)};window.__pm=[];const d=MusicFX.drawRunPulse;MusicFX.drawRunPulse=function(cx,x,y){__pm.push([x,y]);return d.apply(this,arguments)}")
     await pg.evaluate("__echo.runGame()")
-    ok=await wait(pg,"window.__rg&&__rg.beat&&Music.clock()&&/meadow_dash/.test(Music.clock().name)",6000);bt=await pg.evaluate("window.__rg&&__rg.beat")
+    # g.beat is refreshed every frame from the playing loop, so read it once it was taken from the meadow-dash clock (the first frames
+    # after runGame can still carry the home loop's grid while the music crossfades: a read on the same tick as the clock check raced)
+    ok=await wait(pg,"window.__rg&&__rg.beat&&Music.clock()&&/meadow_dash/.test(Music.clock().name)&&__rg.beat.bpm===MusicFX.tempo()[Music.clock().name].bpm",6000);bt=await pg.evaluate("window.__rg&&__rg.beat")
     check(ok and abs(bt['spb']-60/126)<1e-6,f'Run: the beat grid comes from game_meadow_dash_loop ({bt})')
     await wait(pg,"__rg.obs.some(o=>o.beat&&o.x-__rg.dist<300)&&MusicFX.beat().phase<.12",5000);await pg.screenshot(path=f'{SHOT}/run_beat_mark.png')
     nb=await pg.evaluate("[__rg.obs.filter(o=>o.beat).length,__rg.obs.length]");check(nb[0]>=1,f'Run: obstacles were moved onto the beat ({nb[0]}/{nb[1]})')
