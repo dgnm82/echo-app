@@ -16,7 +16,7 @@ const TPB=12,stepOf=x=>(x[0]-1)+7*(x[1]||0),fromStep=s=>{const o=Math.floor(s/7)
 const seqMs=(seq,bpm)=>seq.reduce((a,x)=>a+x[2]*60000/bpm/TPB,0);
 // ---------------------------------------------------------------- timing (ms at speed 1)
 const T={say:1600,auto:6000,doneGap:900,lastGap:1600,patEnd:1300,outcome:1900,yayGap:250,next:1400,introAuto:6000,goSay:1500,
-  chirpTail:800,songTail:1600,keep:2000,trialGap:300,pitchAuto:4500,pitchOutcome:1300,pitchSay2:1000};
+  chirpTail:800,songTail:1600,keep:2000,trialGap:300,pitchAuto:4500,pitchOutcome:800,pitchSay2:1000};
 function M(){return MOT.motifs}
 const yayMs=()=>seqMs(M().yay.by_family.slyte,M().yay.bpm);
 // worst case with no taps at all (tools/test-warmup.js: each moment < 20 s, the whole warm-up < 2.5 min)
@@ -136,7 +136,7 @@ function start(api){stop();const fam=api.fam,RM=!!api.lowfx,sp=Math.max(.05,+api
       later(i===0?T.say:T.pitchSay2,()=>{const d=side1(0,pit[0]);later(d+mo.gap_ticks*pipMs,()=>{const d2=side1(1,pit[1]);later(d2,turn)})});
       function turn(){setCue('turn');talk('wu_high_turn',2400);const at=later(T.pitchAuto,()=>done(null));tapH=k=>{if(k!=='L'&&k!=='R')return;clearTimeout(at);res.taps++;done(k==='L'?0:1)}}
       function done(j){tapH=null;setCue('ear');out.push(j==null?null:j===hiSide);if(j!=null){note(pit[j]);look(j,2)}   // the tapped one: chirp_same f2, whichever it is
-        talk(j==null?'wu_high_wait':j===hiSide?'wu_high_up':'wu_high_low',T.pitchOutcome+1600);
+        talk(j==null?'wu_high_wait':j===hiSide?'wu_high_up':'wu_high_low',T.pitchOutcome+2100);   // the line stays as long as before; only the silent wait before the sparkle is shorter
         // afterwards the Echo always plays low then high; the higher one reveals as it ends, the lower one is happy (chirp_same f2)
         later(T.pitchOutcome,()=>{const y=yay();later(y+T.yayGap,()=>{const loS=1-hiSide,d=side1(loS,lo,()=>look(loS,2));later(d,()=>{const dh=side1(hiSide,hi,()=>reveal(hiSide));
           later(dh+T.chirpTail,()=>{i++;if(i<trials.length)trial();else{res.r.pitch=ML.scorePitch(out);next()}})})})})}

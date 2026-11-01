@@ -93,6 +93,9 @@ async def run_taps(b,p,tag,touch=False,rm=False,shots=True):
 async def run_none(b,p):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await onboard(pg,1);t0=time.time()
+  await pg.wait_for_selector('.wu [data-press="L"]',timeout=60000);tp=time.time()
+  await pg.wait_for_selector('.wu [data-press="pat"]',timeout=60000);tq=time.time()
+  print(f'no taps: "which is higher" moment (chirps on screen until the clap pad) {tq-tp:.1f} s')
   await pg.wait_for_selector('#feed',timeout=160000);dt=time.time()-t0
   check(dt<150,f'no taps: auto-finishes in {dt:.0f} s (< 150 s)')
   ml=await pg.evaluate("__echo.ml()");check(ml['level']==1 and ml['src']=='warmup','no taps: ML1 (gentlest start), still a happy ending')
