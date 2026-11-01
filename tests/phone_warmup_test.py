@@ -2,11 +2,11 @@
 #   A) fresh child, taps through every moment (mouse+touch phone context) -> Home; screenshots of each moment; no numbers / scores on screen
 #   B) a child who taps nothing: auto-finishes at speed 1 in under 2.5 min, lands on Home, first song saved + in the Memory Book
 #   C) touch-only + reduced motion (static frames, no hop)
-# Usage: python3 tests/phone_warmup_test.py [URL] [SHOTDIR]   (server: python3 -m http.server 8797 in echo-app; 8765/8766 are taken)
+# Usage: python3 tests/phone_warmup_test.py [URL] [SHOTDIR]   (default http://localhost:8765/, the server tools/check.sh --phone and CI start; pass a URL for any other port)
 import asyncio,sys,os,re,time
 from playwright.async_api import async_playwright
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
-URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8797/'
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 SHOT=sys.argv[2] if len(sys.argv)>2 else '/tmp/warmup_shots'
 os.makedirs(SHOT,exist_ok=True)
 fails=[]

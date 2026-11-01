@@ -5,7 +5,7 @@
 import asyncio,sys,os,json,time
 from playwright.async_api import async_playwright
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
-URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8797/'
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 SHOT=sys.argv[2] if len(sys.argv)>2 else '/tmp/music3_shots';os.makedirs(SHOT,exist_ok=True)
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SB=json.load(open(os.path.join(R,'music/tunes.json')))['songbook'];IDS={t['id'] for t in SB['slyte']}
