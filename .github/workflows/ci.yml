@@ -159,6 +159,7 @@ jobs:
           ok = static_ok and not pf and len(ph) > 0
           print(f"## Echo app CI {'✅ green' if ok else '❌ red'}: static {sp} passed / {sf} failed · phone {pp} passed / {len(pf)} failed of {len(ph)} · QUARANTINED phone_catch_test: {(q[0][0].split('-')[1] if q else 'not run')} (non-blocking)\n")
           if miss: print(f'> ⚠️ MISSING out-of-repo test inputs (add under `.github/ci-fixtures/`): {", ".join(miss)}\n')
+          if any('SKIPPED (runs in echo-firmware CI)' in l for l in st): print('> ⏭️ SKIPPED (runs in echo-firmware CI): EDZ1 dialogue_repo.dz compile (tools/compile_dialogue_v2.py needs build_packs from the private echo-firmware repo)\n')
           if not static_ok:
               print('### static gate: last lines\n```'); print('\n'.join(st[-15:]) or '(no log)'); print('```')
           for r in pf[:3]:

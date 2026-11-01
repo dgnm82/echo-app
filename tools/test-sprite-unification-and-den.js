@@ -549,12 +549,19 @@ const auraJson = JSON.parse(fs.readFileSync(path.join(ROOT, 'px/aura.json'), 'ut
   check(miniDone && miniDone.turnsCompleted >= 2 && miniDone.log.length >= 4, `2-3 turn mini-conversation completed (${miniDone && miniDone.log.length} beats logged)`);
 
   // Verify Zane's EDZ1 compiler script succeeds
-  const edzOut = cp.execFileSync('python3', [path.join(ROOT, 'tools/compile_dialogue_v2.py')], { encoding: 'utf8' });
-  check(edzOut.includes('EDZ1 dialogue_repo.dz built:'), `EDZ1 dialogue_repo.dz built cleanly: ${edzOut.trim().split('\n').pop()}`);
+  // build_packs lives in the private echo-firmware repo (/workspace/echo/firmware/echo_fw/tools). Where it isn't there
+  // (public echo-app CI) this one check is SKIPPED and runs in echo-firmware CI instead; any other error still fails.
+  let edzOut = null, skipped = '';
+  try { edzOut = cp.execFileSync('python3', [path.join(ROOT, 'tools/compile_dialogue_v2.py')], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); }
+  catch (e) {
+    if (/ModuleNotFoundError: No module named 'build_packs'/.test(String(e.stderr || ''))) console.log(skipped = 'SKIPPED (runs in echo-firmware CI): EDZ1 dialogue_repo.dz compile - build_packs (echo-firmware tools) not importable here');
+    else throw e;
+  }
+  if (edzOut !== null) check(edzOut.includes('EDZ1 dialogue_repo.dz built:'), `EDZ1 dialogue_repo.dz built cleanly: ${edzOut.trim().split('\n').pop()}`);
 
   if (failed.length) {
     console.error(`\nFAILED ${failed.length}/${total} checks`);
     process.exit(1);
   }
-  console.log(`\nALL ${passed}/${total} SPRITE UNIFICATION, DEN, HOTSPOTS & DIALOGUE V2 CHECKS PASSED!`);
+  console.log(`\nALL ${passed}/${total} SPRITE UNIFICATION, DEN, HOTSPOTS & DIALOGUE V2 CHECKS PASSED!${skipped ? ' + 1 ' + skipped.split(':')[0] : ''}`);
 })();

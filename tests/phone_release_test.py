@@ -60,8 +60,10 @@ async def run(b,dev,vp,errs,full=True):
   await clean();await pg.wait_for_timeout(300);await shot('ready-path' if KIND!='owl' else 'ready-star-trail')
   if KIND!='owl':
     # tick the food item by feeding the favourite
-    await pg.evaluate("Object.assign(__echo.state.needs,{food:40})");await pg.click('#feed');fav=s['g']['fav'].split(' ',1)[1]
-    await pg.locator('.choices button',has_text=fav).first.click();await pg.wait_for_timeout(2200)
+    # foodMenu() offers the favourite only ~50% of the time once loved foods exist (by design); pin Math.random for this
+    # one menu build so the favourite slot is chosen, then restore it before the tap (the favourite path is still real)
+    await pg.evaluate("Object.assign(__echo.state.needs,{food:40});window.__rnd=Math.random;Math.random=()=>0.1");await pg.click('#feed');await pg.evaluate("Math.random=window.__rnd");fav=s['g']['fav'].split(' ',1)[1]
+    await pg.locator('.choices button',has_text=fav).first.click(timeout=5000);await pg.wait_for_timeout(2200)
     assert any(x['done'] for x in (await st())['fw']['list'] if x['id']=='food'),'food item ticked';await clean();await pg.click('#fwl');await pg.wait_for_timeout(300);await shot('list-food-ticked');await clean()
     # session-days 2 and 3 -> the ask at a calm moment -> Not yet -> 3 grace session-days -> walking day
     await newday();await newday();await calm();await pick('Not yet');await pg.wait_for_timeout(600);s=await st();assert s['fw']['state']=='grace',s['fw']

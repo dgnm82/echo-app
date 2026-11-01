@@ -103,7 +103,9 @@ async def one(b,p,a,sem):
           check(bb is not None,f'{a} {nm} tap: a speech bubble is up')
           if av and bb:check(bb['r']<=av['l'] or bb['l']>=av['r'] or bb['b']<=av['t'] or bb['t']>=av['b'],f"{a} {nm} tap at {xy}: bubble {[round(bb[q]) for q in 'ltrb']} clear of the tapped rect {[round(av[q]) for q in 'lrtb']}")
           if nm=='body':
-            fl=await pg.evaluate("[...document.querySelectorAll('#sc .env-sky-flare,#sc .env-spark')].map(e=>{const R=document.getElementById('sc').getBoundingClientRect(),k=R.width/180,r=e.getBoundingClientRect();return [(r.left-R.left)/k,(r.top-R.top)/k,(r.right-R.left)/k,(r.bottom-R.top)/k]})")
+            # spawn geometry: rewind each fx's 1 s lvrise animation (translateY -18px) to t=0 while measuring, so the result
+            # doesn't depend on how long the runner took to get here (a slow runner caught the top spark mid-rise)
+            fl=await pg.evaluate("[...document.querySelectorAll('#sc .env-sky-flare,#sc .env-spark')].map(e=>{const R=document.getElementById('sc').getBoundingClientRect(),k=R.width/180,an=e.getAnimations(),t=an.map(a=>a.currentTime);an.forEach(a=>{a.pause();a.currentTime=0});const r=e.getBoundingClientRect();an.forEach((a,i)=>{a.currentTime=t[i];a.play()});return [(r.left-R.left)/k,(r.top-R.top)/k,(r.right-R.left)/k,(r.bottom-R.top)/k]})")
             check(len(fl)>0 and av and all(f[0]>=av['l']-1 and f[2]<=av['r']+1 and f[1]>=av['t']-1 and f[3]<=av['b']+1 for f in fl),f'{a} body tap: flare + sparks inside the avoided rect ({len(fl)} fx)')
             if bb and fl:check(all(bb['r']<=f[0] or bb['l']>=f[2] or bb['b']<=f[1] or bb['t']>=f[3] for f in fl),f'{a} body tap: the bubble covers none of the flare / sparks')
           for _ in range(4):   # a hop / ear-perk reaction may lift the Echo for a beat: judge where it lands
