@@ -64,7 +64,7 @@ async def main():
       assert abs(tr[0][0]-s0[0])<3 and abs(tr[0][1]-s0[1])<3 and st<=14,(kind,'nap flight snap',s0,tr[:3],st)
       print(kind,'nap from',hi[0],'no snap (max step %.1f px)'%st)
       await pg.evaluate("__echo.state.needs.food=5");await pg.wait_for_timeout(4500)
-      off=lambda: pg.evaluate("(()=>{const t=document.querySelector('#sc .thought'),c=document.querySelector('#cr .px-echo');if(!t||!c||t.style.visibility==='hidden')return null;const a=t.getBoundingClientRect(),b=c.getBoundingClientRect();return [a.left-b.left,a.top-b.top]})()")
+      off=lambda: pg.evaluate("(()=>{const t=document.querySelector('#sc .thought'),c=document.querySelector('#cr .px-echo');if(!t||!c||t.style.visibility==='hidden')return null;const cr=document.getElementById('cr'),on=cr.classList.contains('beat');cr.classList.remove('beat');const a=t.getBoundingClientRect(),b=c.getBoundingClientRect();if(on)cr.classList.add('beat');return [a.left-b.left,a.top-b.top]})()")   # Music step 3: the Echo bobs 1 px on the home beat (#cr.beat); measure off-beat
       o1=await off();assert o1,(kind,'need bubble after wake')
       await pg.evaluate("__echo.lvPlace(%d,%d)"%(lo[1],lo[2]));await pg.wait_for_timeout(1300);o2=await off()
       assert o2 and abs(o1[0]-o2[0])<2 and abs(o1[1]-o2[1])<2 and 0<=o1[0]<=110 and -70<=o1[1]<=0,(kind,'bubble detached',o1,o2)

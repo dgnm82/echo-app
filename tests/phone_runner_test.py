@@ -1,6 +1,7 @@
 # Runner phone test (spec v0.6 §3): picker at bond 70 shows the runner (no Trail / Connect), Meadow Dash / Moonlight Glide start, mid-run,
 # NEW BEST, rest-stop score card, rewards; bond 140 = home milestone only (no new game); old saves with trail/connect state migrate.
 # Usage: python3 tests/phone_runner_test.py [base-url] [shots-dir]
+# Music School step 1: an 'auto' run plays at the child's dial and keeps its best under the nearest preset, so a best of 5 is seeded for every level.
 import asyncio,sys,os
 from playwright.async_api import async_playwright
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/runtest';os.makedirs(OUT,exist_ok=True)
@@ -14,7 +15,7 @@ async def main():
       await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.click(sel);await pg.wait_for_timeout(3800)
       c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2500)
-      await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;const s=__echo.state;s.bond=80;s.bondShown=2;s.run={best:{},runs:1};s.best={run:{easy:{score:5}}};s.v2={run:{games:0,short:0}};document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';__echo.home()")
+      await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;const s=__echo.state;s.bond=80;s.bondShown=2;s.run={best:{},runs:1};s.best={run:{easy:{score:5},standard:{score:5},bigkid:{score:5}}};s.v2={run:{games:0,short:0}};document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';__echo.home()")
       await pg.wait_for_timeout(800);await pg.click('#play');await pg.wait_for_selector('.choices button');await pg.wait_for_timeout(400)
       labels=await pg.locator('.choices button').all_inner_texts();print(kind,'picker',labels)
       assert any(name in l for l in labels) and not any(('Trail' in l or 'Parade' in l or 'Connect' in l) for l in labels),labels

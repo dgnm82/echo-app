@@ -162,7 +162,7 @@ jobs:
           if any('SKIPPED (runs in echo-firmware CI)' in l for l in st): print('> ⏭️ SKIPPED (runs in echo-firmware CI): EDZ1 dialogue_repo.dz compile (tools/compile_dialogue_v2.py needs build_packs from the private echo-firmware repo)\n')
           if not static_ok:
               print('### static gate: last lines\n```'); print('\n'.join(st[-15:]) or '(no log)'); print('```')
-          for r in pf[:3]:
+          for r in pf:
               print(f'### FAIL `{r[1]}`\n```'); print('\n'.join(rd(os.path.join(r[4], r[3])).splitlines()[-12:])); print('```')
           if q and q[0][0].endswith('FAIL'):
               print('### QUARANTINED failure (tracked, does not fail the build)\n```'); print('\n'.join(rd(os.path.join(q[0][4], q[0][3])).splitlines()[-8:])); print('```')

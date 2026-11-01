@@ -20,7 +20,7 @@ DENY="navigator.mediaDevices&&(navigator.mediaDevices.getUserMedia=()=>Promise.r
 NOAPI="try{Object.defineProperty(navigator,'mediaDevices',{value:undefined,configurable:true})}catch(e){}"
 VISION="window.ECHO_VISION={classify:async()=>({labels:[{id:'fox',conf:.97}]})}"
 async def T(pg,sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
-async def to_origin(b,p,errs,reqs,init=None,age=1):
+async def to_origin(b,p,errs,reqs,init=None):   # no age step any more (Music Phase 1): a new child starts on the 5-6 band
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page()
   if init:await pg.add_init_script(init)
   pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('request',lambda r:reqs.append(r.url))
@@ -29,7 +29,7 @@ async def to_origin(b,p,errs,reqs,init=None,age=1):
   for _ in range(12):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
-  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate(f"__echo.setBand('{['5-6','7-8','9-10'][age]}')")
+  await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes')
   return ctx,pg
 async def common(pg,tag):
   txt=await pg.evaluate("document.querySelector('#app').innerText");check(not BANNED.search(txt),f'{tag}: no photo / picture / save wording on screen')
@@ -41,16 +41,16 @@ async def main():
     # A) fake camera, no vision model: the window opens first; a miss offers retry + pick
     ctx,pg=await to_origin(b,p,errs,reqs)
     check(await pg.locator('#orvid').count()==1 and await pg.locator('.orfamcard').count()==0,'A: the Magic Window opens first (camera-first Origin)')
-    check((await pg.inner_text('#orcamask')).strip()==band('ui_or_cam_ask','7-8'),'A: ask copy is the 7-8 band line')
-    check((await pg.inner_text('#orcamhint')).strip()==band('ui_or_cam_hint','7-8'),'A: hint copy is the 7-8 band line')
+    check((await pg.inner_text('#orcamask')).strip()==band('ui_or_cam_ask','5-6'),'A: ask copy is the 5-6 band line')
+    check((await pg.inner_text('#orcamhint')).strip()==band('ui_or_cam_hint','5-6'),'A: hint copy is the 5-6 band line')
     await pg.wait_for_timeout(1500);live=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return !!(v&&v.srcObject&&v.srcObject.getTracks().some(t=>t.readyState==='live'))})()")
     check(live,'A: the fake camera stream is live in the window');await pg.locator('#screen').screenshot(path=f'{OUT}/a-window.png')
     await common(pg,'A window')
     try:await pg.wait_for_selector('#orcamctl:not([hidden]),#orinv',timeout=20000)
     except Exception:pass
     if await pg.locator('#orcamctl:not([hidden])').count():
-      check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','7-8'),'A: miss copy (7-8)')
-      check(band('ui_or_cam_retry','7-8') in await pg.inner_text('#orretry') and 'Pick' in await pg.inner_text('#orpick'),'A: retry + pick buttons')
+      check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','5-6'),'A: miss copy (5-6)')
+      check(band('ui_or_cam_retry','5-6') in await pg.inner_text('#orretry') and 'Pick' in await pg.inner_text('#orpick'),'A: retry + pick buttons')
       st=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return v?!!v.srcObject:false})()");check(not st,'A: the camera is stopped after a miss')
       await pg.locator('#screen').screenshot(path=f'{OUT}/a-miss.png');await common(pg,'A miss')
       await T(pg,'#orretry',800);check(await pg.locator('#orvid').count()==1 and await pg.locator('#orcamctl[hidden]').count()==1,'A: retry re-opens the Magic Window')

@@ -17,6 +17,11 @@ async def main():
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required']);errs=[]
     ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg)
     pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and errs.append('404 '+r.url))
+    # Music School step 2: Ancient Echoes (the shipped songbook) join every round and add the pads a tune needs. This suite checks the
+    # Batch F basics, so it plays with an empty songbook (tests/phone_songbook_test.py covers the shipped one).
+    async def nosongbook(r):
+      resp=await r.fetch();j=await resp.json();j['songbook']={'v':1,'held':[],'slyte':[],'whimber':[],'twitchel':[]};await r.fulfill(response=resp,body=json.dumps(j),headers={**resp.headers,'content-type':'application/json'})
+    await pg.route('**/music/tunes.json*',nosongbook)
     async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
     async def pick(label,ms=900):
       c=pg.locator('.choices button',has_text=label).first;await c.click();await c.click();await pg.wait_for_timeout(ms)
@@ -44,7 +49,7 @@ async def main():
     w=await pg.evaluate("""(()=>{const L=Dialogue.lib,tx=[],wx=c=>{const w=c&&c.cond&&c.cond.weather;return !!w&&w!=='any'};for(const k in L.barks)if(!/^weather_/.test(k))for(const l of L.barks[k])if(!wx(l))tx.push(l.text||'');for(const c of L.conversations)if(!wx(c))for(const n of Object.values(c.nodes||{}))tx.push(n.say||'');
       return {rain:tx.filter(t=>/\\b(rain(?!bow)\\w*|puddles?|wind|windy|fog\\w*|drizzl\\w*|breez\\w*)\\b/i.test(t)&&!/Rain is|Pretend|wind chimes/.test(t)),pools:Object.keys(L.barks).filter(k=>/^weather_(drizzle|breezy|rainbow)$/.test(k)),
         nose:tx.filter(t=>/raindrop on my nose/i.test(t)).length,eib:Object.keys(L.barks).filter(k=>k.startsWith('eib_')).length}})()""")
-    check(w['nose']==0,'"A raindrop on my nose" is gone');check(not w['pools'],'dead weather pools gone '+str(w['pools']));check(w['eib']==20,f"20 eib_ pools loaded (Batch G adds 10) ({w['eib']})")
+    check(w['nose']==0,'"A raindrop on my nose" is gone');check(not w['pools'],'dead weather pools gone '+str(w['pools']));check(w['eib']==22,f"22 eib_ pools loaded (Batch G adds 10, Ancient Echoes 2) ({w['eib']})")
     check(len(w['rain'])==0,'no rain/wind/fog/puddle lines the Echo says '+str(w['rain'][:3]))
     await pg.evaluate("__echo.state.bond=100;__echo.glow()")
     s=await pg.evaluate("[Dialogue.ctx().vars.season,Dialogue.eligible('idle').some(c=>c.id==='twitchel_snow_talk')]")
@@ -88,7 +93,7 @@ async def main():
     await pg.wait_for_timeout(4000);cp=await pg.evaluate("EchoBack.cur.lastCopy");check(cp and [EB for EB in cp['n']] and len(cp['n'])==5 and cp['v']==1,'copy-back is a Song v1 of the child\'s 5 notes')
     played=await pg.evaluate("__os.filter(x=>/^notes\\//.test(x)).slice(5)");check(len(played)>=5,f'the Echo sang the child\'s tune back ({len(played)})')
     check(await pg.evaluate("__echo.state.bond")==b0,'v2: no bond mid-round (bond comes with a finished round)');check(await pg.evaluate("EchoBack.cur.round.matches")==2,'same + close count, new does not')
-    sb=await pg.evaluate("JSON.parse(localStorage.getItem('echo-songbook-v1'))");check(sb and sb['v']==2 and list(sb['progress'].values())[0]['len']==4 and list(sb['progress'].values())[0]['band']=='7-8','v2 songbook holds per-child progress + age '+str(sb and sb.get('progress')))
+    sb=await pg.evaluate("JSON.parse(localStorage.getItem('echo-songbook-v1'))");check(sb and sb['v']==3 and list(sb['progress'].values())[0]['len']==4 and list(sb['progress'].values())[0]['band']=='7-8','v3 songbook holds per-child progress + age '+str(sb and sb.get('progress')))
     # multi-finger: two pointers at once, and a slide from one pad onto the next
     check(await wait("EchoBack.cur.phase==='child'",12000),'round 4');await pg.evaluate("__os.length=0")
     mf=await pg.evaluate("""(()=>{const P=[...document.querySelectorAll('.eibpad')],c=e=>{const r=e.getBoundingClientRect();return [r.left+r.width/2,r.top+r.height/2]};

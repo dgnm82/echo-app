@@ -66,7 +66,7 @@ function bubSync(){const b=document.querySelector('#sc>#b'),c=document.getElemen
   if(ta){const rows=[];for(let t=2;t<=H-bb.h-2;t++)rows.push(t);rows.sort((x,y)=>Math.abs(x-bb.t)-Math.abs(y-bb.t));const t=rows.find(t=>free(t,bb.l));if(t!=null)return set(t)}
   const side=cr.l>=bb.w+4?cr.l-bb.w-3:Math.min(180-bb.w-2,cr.r+3);set(Math.max(2,Math.min(H-bb.h-2,cr.t)),side)}
 function thoughtSync(){const t=document.querySelector('#sc .thought'),c=document.getElementById('cr'),sc=document.getElementById('sc');if(!t||!c||!sc)return;if(c.classList.contains('lvmoving')){t.style.visibility='hidden';clearTimeout(thoughtSync._t);return}   // needs v2 P2: hide in flight, show 1 s after landing
-  const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),cr=c.getBoundingClientRect(),cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
+  const R=sc.getBoundingClientRect(),k=R.width/(sc.offsetWidth||1),bt=c.classList.contains('beat');if(bt)c.classList.remove('beat');const cr=c.getBoundingClientRect();if(bt)c.classList.add('beat');const cx=(cr.left-R.left)/k,cy=(cr.top-R.top)/k;
   if(!c.style.left){const tr=t.getBoundingClientRect();THO=[(tr.left-cr.left)/k,(tr.top-cr.top)/k];return}if(!THO)return;
   t.style.left=Math.round(cx+THO[0])+'px';t.style.top=Math.round(cy+THO[1])+'px';t.style.bottom='auto';if(t.style.visibility==='hidden'){clearTimeout(thoughtSync._t);thoughtSync._t=setTimeout(()=>{const u=document.querySelector('#sc .thought');if(u){u.style.visibility='';thoughtSync()}},1000)}}
 // needs v2 §6: corner glows inside #sc (bottom pair sits above the dock); step rises one level per 166 ms, at once under lowFx
