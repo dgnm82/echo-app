@@ -16,6 +16,7 @@ bar_ticks: 24
 source: Joplin, The Entertainer, John Stark & Son, St. Louis 1902, p.2, intro bar 4 pickup + A strain bars 1-4 (Library of Congress copy)
 prov: Joplin (d.1917). The Entertainer, John Stark & Son 1902, p.2. Melody only, own arrangement; not the 1973 film version. PD US + life+70.
 prov_status: ok
+grow: yes
 scan: https://www.loc.gov/item/2023864238/
 read: verified
 # echo: 4.0 bars, 18 notes, 6.32 s at 76 bpm (cap 8 s). Sounding pitches:

@@ -11710,8 +11710,8 @@
     ],
     "mission_give_high": [
       {
-        "text": "Listen out there for a high sound. Like a bird.",
-        "expr": "excited",
+        "text": "Can you find a high sound?",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -11719,42 +11719,47 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       },
       {
-        "text": "Your job: find a high sound out in the world.",
-        "expr": "excited",
+        "text": "Here's a listening card. Can you find a high sound… like a bird way up?",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Here's a listening card.",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       },
       {
-        "text": "Listening mission: catch a high sound somewhere today.",
-        "expr": "excited",
+        "text": "A listening card for you… Somewhere out there is a high, bright sound. Can you catch one?",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "A listening card for you…",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       }
     ],
     "mission_ask_high": [
       {
-        "text": "Did you hear a high sound?",
+        "text": "Did you find a high sound?",
         "expr": "curious",
         "cond": {
           "var": {
@@ -11763,43 +11768,48 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       },
       {
-        "text": "Did a high sound find you?",
+        "text": "Did a high sound find your ears?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did a high sound find your",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       },
       {
-        "text": "Any high sounds out there?",
+        "text": "Remember our high-sound card… Did a high sound find you?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Remember our high-sound card…",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       }
     ],
     "mission_give_low": [
       {
-        "text": "Listen for a low sound. Big and deep.",
-        "expr": "excited",
+        "text": "Can you find a low sound?",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -11807,42 +11817,47 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       },
       {
-        "text": "Your job: find a low, rumbly sound.",
-        "expr": "excited",
+        "text": "Listen for a low, rumbly sound. Lower than your voice.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Listen for a low, rumbly sound.",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       },
       {
-        "text": "Listening mission: catch a deep, low sound.",
-        "expr": "excited",
+        "text": "This card is for a sound lower than your voice… deep, like a big drum.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "This card is for a sound",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "highlow"
       }
     ],
     "mission_ask_low": [
       {
-        "text": "Did you hear a low sound?",
+        "text": "Did you find a low sound?",
         "expr": "curious",
         "cond": {
           "var": {
@@ -11851,43 +11866,48 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       },
       {
-        "text": "Did a low sound find you?",
+        "text": "Did you hear something low and rumbly?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did you hear something low and",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       },
       {
-        "text": "Any low sounds out there?",
+        "text": "Did you find a sound lower than your voice… I'm all ears.",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Did you find a sound lower",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "highlow"
       }
     ],
     "mission_give_beat": [
       {
-        "text": "Listen for a tick, tick, tick. A steady beat.",
-        "expr": "excited",
+        "text": "Can you find a tick, tick, tick?",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -11895,42 +11915,47 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "pulse"
       },
       {
-        "text": "Your job: find something that keeps a beat.",
-        "expr": "excited",
+        "text": "Find something that goes tick, tick, tick, all the same.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Find something that goes tick, tick,",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "pulse"
       },
       {
-        "text": "Listening mission: find a sound with a steady beat.",
-        "expr": "excited",
+        "text": "Find something with a steady beat… like a clock, or your own footsteps.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Find something with a steady beat…",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "pulse"
       }
     ],
     "mission_ask_beat": [
       {
-        "text": "Did you find a beat?",
+        "text": "Did you find a tick, tick, tick?",
         "expr": "curious",
         "cond": {
           "var": {
@@ -11939,43 +11964,48 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "pulse"
       },
       {
-        "text": "Did something keep a beat for you?",
+        "text": "Did something keep a steady beat?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did something keep a steady beat?",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "pulse"
       },
       {
-        "text": "Any steady beats out there?",
+        "text": "Did you find a steady beat out there?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Did you find a steady beat",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "pulse"
       }
     ],
     "mission_give_loudsoft": [
       {
-        "text": "Listen for a sound that gets loud, then soft.",
-        "expr": "excited",
+        "text": "Find a sound. Loud, then soft.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -11983,42 +12013,47 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "loudsoft"
       },
       {
-        "text": "Your job: find a sound that goes loud, then quiet.",
-        "expr": "excited",
+        "text": "Listen for a sound that starts big and gets quiet.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Listen for a sound that starts",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "loudsoft"
       },
       {
-        "text": "Listening mission: a sound that fades loud to soft.",
-        "expr": "excited",
+        "text": "Listen for a sound that starts loud… then fades, softer and softer.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Listen for a sound that starts",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "loudsoft"
       }
     ],
     "mission_ask_loudsoft": [
       {
-        "text": "Did you hear loud, then soft?",
+        "text": "Did a sound go loud, then soft?",
         "expr": "curious",
         "cond": {
           "var": {
@@ -12027,43 +12062,48 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "loudsoft"
       },
       {
-        "text": "Did a sound go loud, then quiet?",
+        "text": "Did a sound start loud and go soft?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did a sound start loud and",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "loudsoft"
       },
       {
-        "text": "Anything fade from loud to soft?",
+        "text": "Did you catch a sound fading from loud to soft?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Did you catch a sound fading",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "loudsoft"
       }
     ],
     "mission_give_fastslow": [
       {
-        "text": "Listen for something fast, and something slow.",
-        "expr": "excited",
+        "text": "Find fast. Then find slow.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -12071,35 +12111,40 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "fastslow"
       },
       {
-        "text": "Your job: find a fast sound and a slow one.",
-        "expr": "excited",
+        "text": "Find a fast sound, like a rabbit… Then a slow one, like a turtle.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Find a fast sound, like a",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "fastslow"
       },
       {
-        "text": "Listening mission: one fast sound, one slow sound.",
-        "expr": "excited",
+        "text": "Two to find… A quick, busy sound and a slow, lazy one.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Two to find…",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "fastslow"
       }
@@ -12115,43 +12160,48 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "fastslow"
       },
       {
-        "text": "Did you find fast and slow?",
+        "text": "Did you find a fast sound and a slow one?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did you find a fast sound",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "fastslow"
       },
       {
-        "text": "Any fast and slow sounds out there?",
+        "text": "Did you find a quick sound and a slow one?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Did you find a quick sound",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "fastslow"
       }
     ],
     "mission_give_songback": [
       {
-        "text": "Listen for a sound that happens again and again.",
-        "expr": "excited",
+        "text": "Find a tune that comes again.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -12159,42 +12209,47 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "form"
       },
       {
-        "text": "Your job: find a sound that keeps returning.",
-        "expr": "excited",
+        "text": "Listen for a little tune that returns, again and again.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Listen for a little tune that",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "form"
       },
       {
-        "text": "Listening mission: catch a little tune that returns.",
-        "expr": "excited",
+        "text": "Listen for a tune that keeps returning… like the best part of a song.",
+        "expr": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Listen for a tune that keeps",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_give"
         },
         "music": "form"
       }
     ],
     "mission_ask_songback": [
       {
-        "text": "Did a sound happen again?",
+        "text": "Did a tune come again?",
         "expr": "curious",
         "cond": {
           "var": {
@@ -12203,43 +12258,49 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "form"
       },
       {
-        "text": "Did a sound keep returning?",
+        "text": "Did you hear a tune return?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "Did you hear a tune return?",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "form"
       },
       {
-        "text": "Did a tune return for you?",
+        "text": "Did you find a tune that kept returning?",
         "expr": "curious",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "Did you find a tune that",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_ask"
         },
         "music": "form"
       }
     ],
     "mission_back": [
       {
-        "text": "Oh, wow. You heard it.",
+        "text": "Oh… you found one. Lovely.",
         "expr": "delighted",
+        "react": "happy",
         "cond": {
           "var": {
             "eib_band": "5-6"
@@ -12247,34 +12308,1037 @@
         },
         "context": {
           "age_band": "5-6",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_back"
         }
       },
       {
-        "text": "You really listened. I love that.",
+        "text": "You listened so carefully… my feathers are fluffing.",
         "expr": "delighted",
+        "react": "happy",
         "cond": {
           "var": {
             "eib_band": "7-8"
           }
         },
+        "short": "You listened so carefully…",
         "context": {
           "age_band": "7-8",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_back"
         }
       },
       {
-        "text": "Great ears. That sounds just right.",
+        "text": "You carried a sound all the way here… that makes my wings feel warm.",
         "expr": "delighted",
+        "react": "happy",
         "cond": {
           "var": {
             "eib_band": "9-10"
           }
         },
+        "short": "You carried a sound all the",
         "context": {
           "age_band": "9-10",
-          "placeholder": "jay_step4_until_cole"
+          "by": "cole_step4",
+          "moment": "mission_back"
         }
+      }
+    ],
+    "mission_not_yet": [
+      {
+        "text": "Not yet… that's okay.",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "mission_not_yet"
+        }
+      },
+      {
+        "text": "Not yet… the card can wait. No hurry.",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Not yet…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "mission_not_yet"
+        }
+      },
+      {
+        "text": "Not yet is lovely too… the card will rest here until it's ready.",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Not yet is lovely too…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "mission_not_yet"
+        }
+      }
+    ],
+    "music_ambient": [
+      {
+        "text": "Drip… drip… slow drops.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Mm… a bell. Round and bright.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "Leaves whisper. Soft, soft.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Tap… tap-tap… tap. A little pattern.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "rhythm"
+      },
+      {
+        "text": "The stream goes up, then down.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "contour"
+      },
+      {
+        "text": "Mm… a sleepy tune in my head.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "mood"
+      },
+      {
+        "text": "Twigs snap high. Logs thump low.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Far away, a bell rang… then softer… and softer…",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Far away, a bell rang…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "The night crickets keep a slow, even beat… I sway along a little.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "The night crickets keep a slow,",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Seeds tap the nest. Tap… tap, tap… like a tiny drum.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Seeds tap the nest.",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "rhythm"
+      },
+      {
+        "text": "High notes feel like stars to me… Low notes feel like the warm ground.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "High notes feel like stars to",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Water over pebbles sounds bubbly. Water in a pond sounds still… so different.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Water over pebbles sounds bubbly.",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "A tune that floats up and drifts back down… my wings want to follow it.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "A tune that floats up and",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "contour"
+      },
+      {
+        "text": "Mm… that gentle tune from before is still resting in my feathers.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Mm…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "song"
+      },
+      {
+        "text": "When the evening gets quiet, every little sound feels bigger… even a leaf landing.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "When the evening gets quiet, every",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Some music walks slowly, like a cozy evening… Some races, like a falling star. Both make my feathers tingle.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Some music walks slowly, like a",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "A tune can feel sleepy without feeling sad… I wonder how music does that.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "A tune can feel sleepy without",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "mood"
+      },
+      {
+        "text": "My favorite lullabies return to the start… like flying home to the nest.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "My favorite lullabies return to the",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "form"
+      },
+      {
+        "text": "A low sound and a high sound together… they feel like a hug.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "A low sound and a high",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "A pinecone lands soft… a pebble lands with a click. I can tell them apart.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "A pinecone lands soft…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_sense"
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "Clink, clink. A bright little sound.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "Knock, knock, knock. All the same.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "A tiny sound. Then a big one.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Splash high. Splosh low.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Quick taps, then slow taps.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "That tune made me feel bouncy.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "mood"
+      },
+      {
+        "text": "Tap, tap… tap-tap-tap. A pattern.",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "rhythm"
+      },
+      {
+        "text": "A spoon on a cup makes a high ting… A pot makes a low bong.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "A spoon on a cup makes",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Steps on leaves go crunch… Steps on grass go soft and hushy.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Steps on leaves go crunch…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "timbre"
+      },
+      {
+        "text": "The bell rang loud, then smaller, then smaller, then gone.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "The bell rang loud, then smaller,",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Some sounds go up and down, like a little hill.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Some sounds go up and down,",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "contour"
+      },
+      {
+        "text": "A clock never hurries… Tick, tick, tick, the same every time.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "A clock never hurries…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "That tune from before keeps playing in my head… In a good way.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "That tune from before keeps playing",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "song"
+      },
+      {
+        "text": "Some music is quick like hopping… Some is slow like floating.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Some music is quick like hopping…",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "A tune can feel happy or sleepy with no words… music is amazing.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "A tune can feel happy or",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "mood"
+      },
+      {
+        "text": "Even quiet places have sounds… tiny ticks and soft whooshes.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Even quiet places have sounds…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Songs are like paths. Some climb, some dip… some stay flat a while.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Songs are like paths.",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "contour"
+      },
+      {
+        "text": "A little pattern can come around again and again… lots of songs work that way.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "A little pattern can come around",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "form"
+      },
+      {
+        "text": "Two friends tapping the same beat… that feels like a dance.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Two friends tapping the same beat…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Even one sound has a color… Some sound shiny, some sound fuzzy, some sound round.",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Even one sound has a color…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_shared",
+          "shared": true
+        },
+        "music": "timbre"
+      }
+    ],
+    "music_after_ancient": [
+      {
+        "text": "Mm… that Ancient Echo is still in my ears.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_react_eib_ancient"
+        },
+        "music": "song"
+      },
+      {
+        "text": "That Ancient Echo is still floating around in my feathers…",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "That Ancient Echo is still floating",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_react_eib_ancient"
+        },
+        "music": "song"
+      },
+      {
+        "text": "I keep thinking about that Ancient Echo… a tune from long ago, resting in our ears now.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "I keep thinking about that Ancient",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_react_eib_ancient"
+        },
+        "music": "song"
+      }
+    ],
+    "music_after_catch": [
+      {
+        "text": "Every star made a note… a whole tune.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_react_catch_hook"
+        },
+        "music": "song"
+      },
+      {
+        "text": "We caught a whole tune, one star at a time… how lovely.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "We caught a whole tune, one",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_react_catch_hook"
+        },
+        "music": "song"
+      }
+    ],
+    "music_after_stack": [
+      {
+        "text": "Our clouds went up… like a little song.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_react_stack_tune"
+        },
+        "music": "contour"
+      },
+      {
+        "text": "Every cloud was one step higher… we built a tune you could float up.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "Every cloud was one step higher…",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_react_stack_tune"
+        },
+        "music": "contour"
+      }
+    ],
+    "music_after_grew": [
+      {
+        "text": "Our song grew… so lovely.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "by": "cole_step4",
+          "moment": "music_react_song_grew"
+        },
+        "music": "song"
+      },
+      {
+        "text": "Our song is a little longer now… I keep thinking of the new part.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "short": "Our song is a little longer",
+        "context": {
+          "age_band": "7-8",
+          "by": "cole_step4",
+          "moment": "music_react_song_grew"
+        },
+        "music": "form"
+      }
+    ],
+    "music_after_mission": [
+      {
+        "text": "The sound you found is still with me… now I listen for one too.",
+        "expr": "happy",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "short": "The sound you found is still",
+        "context": {
+          "age_band": "9-10",
+          "by": "cole_step4",
+          "moment": "music_react_mission_back"
+        },
+        "music": "timbre"
       }
     ]
   },

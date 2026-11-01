@@ -56,7 +56,7 @@ M.ask=function(){if(!DATA||!host||SES.asked||document.querySelector('.msn'))retu
   d.innerHTML=img(m.mini,58,35,'msnm')+`<div class="msnbox msnaskbox"><div class="msnline msnq">${(l&&l.text)||''}</div><div class="msnrow">`+m.answers.slice(0,4).map((a,i)=>btn(i,a.icon,a.id,a.id)).join('')+btn(4,DATA.not_yet.icon,'not_yet','not yet')+'</div></div>';
   sc.appendChild(d);
   d.querySelectorAll('.msnans').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=b.dataset.a;close();
-    if(k==='not_yet'){host.state(st=>M.notYet(st,m.id,Date.now()));return}
+    if(k==='not_yet'){host.state(st=>M.notYet(st,m.id,Date.now()));setTimeout(()=>host.talk(host.line('mission_not_yet')),300);return}
     const a=m.answers.find(x=>x.id===k);host.state(st=>M.answer(st,m.id,k,Date.now()));playAnswer(a);host.event('mission_back');host.react('delighted');
     setTimeout(()=>host.talk(host.line('mission_back')),400)});
   return m.id};

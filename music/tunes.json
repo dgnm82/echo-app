@@ -6832,6 +6832,11 @@
     }
    }
   ],
+  "grow": {
+   "slyte": "hall_mountain_king",
+   "whimber": "ode_to_joy",
+   "twitchel": "the_entertainer"
+  },
   "whimber": [
    {
     "id": "ave_maria",

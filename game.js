@@ -121,7 +121,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   if(!busy){const fc=FWC();let l=null;if(S.bond>=fc.restlessBond&&!sess.restless&&Math.random()<1/6&&!S.released){sess.restless=1;l=B('restless')}
     else if(S.bond>=fc.glanceFromBond&&!sess.glance&&Math.random()<1/6&&!S.released){sess.glance=1;l=B('wild_glance');const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}}
     if(!l&&window.EchoBack&&!sess.eibInvite&&!document.querySelector('.wuinv')&&(sess.ambient||0)>=1&&!S.released&&!document.querySelector('.bondup')&&Math.random()<.2){const cr=$('#cr');if(cr&&cr.parentNode){sess.eibInvite=1;l=B('eib_invite');EchoBack.invite(cr.parentNode,()=>{if(asleep())return;SFX('ui_panel_open');sess.games++;S.needs.rest=clamp(S.needs.rest-5);echoBackGame('invite')},{lowfx:lowFx()})}}
-    const cb=!l&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||cb||needLine());sess.ambient=(sess.ambient||0)+1}
+    const ml=!l?musicBetween():null;const cb=!l&&!ml&&Math.random()<.25?callbackLine():null;if(cb)fwTick('memory');talk(l||ml||cb||needLine());sess.ambient=(sess.ambient||0)+1}
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
 // H9 (final): ctx.weather = the Echo's own seasonal weather from window.WEATHER (device date cycle only; 'off' -> undefined)
 function wxNow(){try{return window.WEATHER&&WEATHER.dialogueCtx?WEATHER.dialogueCtx(S,new Date(now())):undefined}catch(e){return undefined}}
@@ -632,6 +632,15 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
   setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();wuInviteMaybe();setTimeout(missionHome,window.__msnFast?300:2400);
 }
 // ---------- Music School step 4: listening missions (missions.js). Asked once per session on a later session's Home; offered at Home after a game.
+// step 4b (Cole): at a between moment, first a reaction to a music moment of the last 15 min (once per event), else music_ambient
+// with the quota's chance (DialogueEngine.musicTarget on S.chatHistory; 20% until the ring has 8 lines)
+const MUSIC_AFTER={eib_ancient:'ancient',catch_hook:'catch',stack_tune:'stack',song_grew:'grew',mission_back:'mission'};
+function bandVars(){return {vars:Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'})}}
+function musicBetween(){const E=window.DialogueEngine;if(!E||!E.recentEvents||!S)return null;const t=now(),lib=(Dialogue.lib&&Dialogue.lib.barks)||{};
+  const ev=(S.recentMusic||[]).filter(x=>x&&!x.said&&t-x.at>=0&&t-x.at<15*60000).pop();
+  if(ev){(S.recentMusic||[]).forEach(x=>{if(x.e===ev.e)x.said=1});const k='music_after_'+MUSIC_AFTER[ev.e];if(lib[k]){const l=B(k,bandVars());if(l&&l.text!=='…')return l}}
+  if(!lib.music_ambient)return null;const h=S.chatHistory||[],tg=E.musicTarget(E.musicShare(h),h.length);
+  if(Math.random()<(tg==null?0.2:tg)){const l=B('music_ambient',bandVars());if(l&&l.text!=='…')return l}return null}
 function msnCare(){return asleep()||mood()==='sleep'||now()-(sess.careAt||0)<20000}
 function msnHost(){return {sc:()=>document.getElementById('sc'),fam:FID,line:k=>B(k,{vars:Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'})}),talk:l=>talk(l,2400),react:()=>{if(window.react)window.react('excited')},
   state:fn=>{EchoBack.withMl(kidId(),m=>{m.missions=Missions.norm(m.missions);fn(m.missions)},S.ageBand)},level:()=>EchoBack.mlFor(kidId(),S.ageBand).level,sessions:()=>EchoBack.mlFor(kidId(),S.ageBand).sessions,

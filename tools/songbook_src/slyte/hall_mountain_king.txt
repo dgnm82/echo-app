@@ -16,6 +16,7 @@ bar_ticks: 48
 source: Grieg, Peer Gynt Suite No.1 Op.46 No.4, piano solo ed. L. Oesterle, G. Schirmer, New York, c1900, p.12, bars 1-4
 prov: Grieg (d.1907). Peer Gynt Suite No.1 Op.46 (1888). Hook read from Schirmer c1900 piano print p.12. Melody only, own arrangement. PD US + life+70.
 prov_status: ok
+grow: yes
 scan: https://archive.org/details/31761045200615/page/n14
 read: verified
 # echo: 4.0 bars, 26 notes, 7.62 s at 126 bpm (cap 8 s). Sounding pitches:

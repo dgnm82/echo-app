@@ -48,8 +48,13 @@ function session(f,band,day,S){const rnd=lcg(7+day*131+FAMS.indexOf(f)*17+BANDS.
   D.ctx=()=>({history:S.chatHistory,recent:E.recentEvents(S,t),mood:'happy',bond:60,stage:3,memTags:[],talents:[],time:'day',weather:'clear',seen:[],vars:{origin_animal:LOOK[f],eib_band:band,season:'none'}});
   const out=[];const say=k=>{if(!D.lib.barks[k])return;const l=D.bark(k);t+=25000;if(!l||l.text==='…')return;E.recordHistory(E.historyId(k,l.src),S);out.push({k,m:!!(l.src&&l.src.music)})};
   say('hello');say('time_day');const order=Object.keys(GAMES);let gi=day%order.length;
-  while(t<Date.UTC(2026,10,2+day,16,30)){for(let i=0;i<3;i++)say(BETWEEN[Math.floor(rnd()*BETWEEN.length)]);say(CARE[Math.floor(rnd()*CARE.length)]);
-    GAMES[order[gi++%order.length]].forEach(say);say('game_end');say(CARE[Math.floor(rnd()*CARE.length)])}
+  // a between moment, as game.js musicBetween(): a music_after_<event> reaction once per recent event, else music_ambient with the quota's chance
+  const AFTER={eib_ancient:'ancient',catch_hook:'catch',stack_tune:'stack',song_grew:'grew',mission_back:'mission'},GEV={catch:'catch_hook',tower:'stack_tune',eib:'eib_ancient'};
+  const between=()=>{const ev=(S.recentMusic||[]).filter(x=>!x.said&&t-x.at<15*60000).pop();if(ev){S.recentMusic.forEach(x=>{if(x.e===ev.e)x.said=1});const k='music_after_'+AFTER[ev.e];if(D.lib.barks[k]){const n=out.length;say(k);if(out.length>n)return}}
+    if(D.lib.barks.music_ambient){const h=S.chatHistory,tg=E.musicTarget(E.musicShare(h),h.length);if(rnd()<(tg==null?0.2:tg)){const n=out.length;say('music_ambient');if(out.length>n)return}}
+    say(BETWEEN[Math.floor(rnd()*BETWEEN.length)])};
+  while(t<Date.UTC(2026,10,2+day,16,30)){for(let i=0;i<3;i++)between();say(CARE[Math.floor(rnd()*CARE.length)]);
+    const g=order[gi++%order.length];GAMES[g].forEach(say);if(GEV[g])E.noteEvent(S,GEV[g],t);say('game_end');say(CARE[Math.floor(rnd()*CARE.length)])}
   return out}
 const rows=[],awaited=[];let careMusic=0;
 for(const f of FAMS)for(const band of BANDS){D.use(f,corpus.shared,corpus[f]);D.mem={};const S={chatHistory:[]};const shares=[];
