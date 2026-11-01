@@ -1,0 +1,1861 @@
+{
+ "_schema": "echo-batchH-followup-hotspots-proposal-v1",
+ "_owner": "Pixal",
+ "_for": "Jay (scenes.js / pixel.js / scenes_hotspots.json) and Zane (build_packs FAMILY_SCENES_SPEC)",
+ "_status": "PROPOSAL - nothing in scenes_hotspots.json / scenes.js / pixel.js / game.js / index.html / handheld.html was edited. Updated Oct 25 (follow-up 2).",
+ "coords": "x,y,w,h top-left. phone = 180x320 bg px; #sc top = y-57. hh = 60x80. hh_120x160: for baked art (den bell-vine, windows) = phone minus (30,120) clipped to 120x160 (the build_polished_scene_i4 crop); for ground flowers/mushrooms (below the crop) the existing tw_clearing firmware layout positions are reused, where build_packs paints the clusters. null = off-crop",
+ "1_den_bellvine": {
+  "replace": {
+   "scene": "twitchel_clearing (RETIRED)",
+   "dropped_ids": [
+    "tw_clearing_bell",
+    "cushion_3"
+   ],
+   "status_in_jays_file": {
+    "tw_clearing_bell_present": false,
+    "cushion_3_present": false
+   },
+   "note": "Both ids are DROPPED (not re-homed). The bell-vine tw_wild_den_bellvine lives only in twitchel_wild_clearing."
+  },
+  "hotspot": {
+   "id": "tw_wild_den_bellvine",
+   "label": "Den-Mouth Bell-Vine & Reed Chimes",
+   "kind": "bell",
+   "wp": "den_mouth",
+   "x": 124,
+   "y": 231,
+   "w": 18,
+   "h": 18,
+   "phone": {
+    "x": 124,
+    "y": 231,
+    "w": 18,
+    "h": 18
+   },
+   "hh": {
+    "x": 40,
+    "y": 45,
+    "w": 8,
+    "h": 8
+   },
+   "hh_120x160": {
+    "x": 94,
+    "y": 111,
+    "w": 18,
+    "h": 18
+   },
+   "notes": [
+    "c5",
+    "f5"
+   ],
+   "scientific_pitches": [
+    "C5",
+    "F5"
+   ],
+   "midi": [
+    72,
+    77
+   ],
+   "hz": [
+    523.25,
+    698.46
+   ],
+   "degrees": [
+    5,
+    8
+   ],
+   "key": "F major pentatonic",
+   "instrument": "reed_chime",
+   "samples": [
+    "music/notes/twitchel_c5.ogg",
+    "music/notes/twitchel_f5.ogg"
+   ],
+   "fx_strip": "px/scenes/fx/den_bellvine_day.png",
+   "fx_strip_day": "px/scenes/fx/den_bellvine_day.png",
+   "fx_strip_twi": "px/scenes/fx/den_bellvine_twi.png",
+   "frame_wh": [
+    16,
+    16
+   ],
+   "frames": 3,
+   "overlay": true,
+   "replaces": "tw_clearing_bell",
+   "sprite": null,
+   "fx_strip_hh_day": "px/scenes/fx/den_bellvine_hh_day.png",
+   "fx_strip_hh_twi": "px/scenes/fx/den_bellvine_hh_twi.png",
+   "frame_wh_hh": [
+    8,
+    8
+   ],
+   "draw_at": {
+    "phone": [
+     125,
+     232
+    ],
+    "hh": [
+     40,
+     45
+    ],
+    "hh_120x160": [
+     95,
+     112
+    ]
+   },
+   "anim": "overlay:true -> the strip is drawn over the baked frame 0 at draw_at; on tap play frames 1,2,1,0 (110 ms each); 2 notes 140 ms apart",
+   "why": "Kai: no metal bell on a wild den - a natural bell-vine with two hollow reeds, same twitchel notes (C5 sol + F5 high do)"
+  },
+  "tap_rule": {
+   "spot": "tw_wild_den_bellvine",
+   "rule": "A tap plays the vine only: strip frames 1,2,1,0 plus C5 then F5. It never wakes, moves or calls the Echo home, and never starts nap, homeIn or wander.",
+   "if_asleep_inside": {
+    "effect": "small tail twitch on the tail-peek sprite (Cole-owned frame; Pixal only names trigger and anchor)",
+    "trigger": "den_bellvine_tap while the Echo is napping inside the den (.htail.on visible)",
+    "event_name_suggestion": "denpeek_twitch",
+    "anchor": {
+     "den_prop_lip": [
+      19,
+      40
+     ],
+     "phone_lip": [
+      127,
+      258
+     ],
+     "tail_sprite_top_left_phone": [
+      112,
+      245
+     ],
+     "rule": "tail sprite at lip - (15,13), same as homeIn()",
+     "hh": {
+      "den_prop_lip": [
+       6,
+       12
+      ],
+      "hh_lip": [
+       42,
+       53
+      ]
+     }
+    },
+    "frame": "Cole: one-shot twitch frame for px/home/denpeek_twitchel_<look>_<pal>.png (e.g. a 2-frame strip or a _twitch variant), ~240 ms, then back to the resting peek",
+    "fallback_until_frame_exists": "CSS 1px translateY nudge of .htail for 2 x 120 ms (no new art)"
+   },
+   "if_awake_or_away": "vine only; the Echo does not react (no call, no walk to the den)."
+  }
+ },
+ "2_twitchel_wild_clearing": {
+  "scene_id": "twitchel_wild_clearing",
+  "art": {
+   "day": "px/scenes/twitchel_wild_clearing_day.png",
+   "twi": "px/scenes/twitchel_wild_clearing_twi.png",
+   "dawn": "px/scenes/twitchel_wild_clearing_dawn.png",
+   "dusk": "px/scenes/twitchel_wild_clearing_dusk.png",
+   "hh_day": "px/scenes/twitchel_wild_clearing_hh_day.png",
+   "hh_twi": "px/scenes/twitchel_wild_clearing_hh_twi.png"
+  },
+  "no_tw0_tw1": "original twitchel_clearing has no _twi_tw0/_tw1, so neither does the wild variant",
+  "used_by": [
+   "lion",
+   "tiger",
+   "leopard",
+   "cheetah",
+   "snowleopard",
+   "lynx"
+  ],
+  "not_used_by": {
+   "cat": "twitchel_sunbeam_room"
+  },
+  "home": {
+   "k": "den_wild",
+   "x": 108,
+   "y": 218,
+   "hh": {
+    "k": "den_wild_hh",
+    "x": 36,
+    "y": 41
+   },
+   "back_baked_in_scene": true,
+   "files": "px/home/den_wild{,_hh}_{back,front,glow_in,glow_out}.png (+ _back_twi/_front_twi)"
+  },
+  "stage": [
+   90,
+   256
+  ],
+  "stage_hh": [
+   30,
+   56
+  ],
+  "sky": "outdoor: H5 sky band y<145 (#sc) stays on",
+  "hotspots": [
+   {
+    "id": "tw_wild_flower_1",
+    "label": "Wild Rose-Bellflowers",
+    "kind": "flower",
+    "wp": "flower_patch",
+    "x": 42,
+    "y": 276,
+    "w": 18,
+    "h": 18,
+    "phone": {
+     "x": 42,
+     "y": 276,
+     "w": 18,
+     "h": 18
+    },
+    "hh": {
+     "x": 14,
+     "y": 58,
+     "w": 8,
+     "h": 8
+    },
+    "hh_120x160": {
+     "x": 20,
+     "y": 124,
+     "w": 14,
+     "h": 14
+    },
+    "notes": [
+     "f4",
+     "a4"
+    ],
+    "scientific_pitches": [
+     "F4",
+     "A4"
+    ],
+    "midi": [
+     65,
+     69
+    ],
+    "hz": [
+     349.23,
+     440.0
+    ],
+    "degrees": [
+     1,
+     3
+    ],
+    "key": "F major pentatonic",
+    "instrument": "harp",
+    "samples": [
+     "music/notes/twitchel_f4.ogg",
+     "music/notes/twitchel_a4.ogg"
+    ],
+    "fx_strip": "px/scenes/fx/flower_bellflower_day.png",
+    "fx_strip_day": "px/scenes/fx/flower_bellflower_day.png",
+    "fx_strip_twi": "px/scenes/fx/flower_bellflower_twi.png",
+    "frame_wh": [
+     16,
+     16
+    ],
+    "frames": 3
+   },
+   {
+    "id": "tw_wild_flower_2",
+    "label": "Meadow Sun-Daisies",
+    "kind": "flower",
+    "wp": "flower_patch",
+    "x": 76,
+    "y": 292,
+    "w": 16,
+    "h": 16,
+    "phone": {
+     "x": 76,
+     "y": 292,
+     "w": 16,
+     "h": 16
+    },
+    "hh": {
+     "x": 24,
+     "y": 60,
+     "w": 8,
+     "h": 8
+    },
+    "hh_120x160": {
+     "x": 52,
+     "y": 134,
+     "w": 14,
+     "h": 14
+    },
+    "notes": [
+     "g4",
+     "c5"
+    ],
+    "scientific_pitches": [
+     "G4",
+     "C5"
+    ],
+    "midi": [
+     67,
+     72
+    ],
+    "hz": [
+     392.0,
+     523.25
+    ],
+    "degrees": [
+     2,
+     5
+    ],
+    "key": "F major pentatonic",
+    "instrument": "musicbox",
+    "samples": [
+     "music/notes/twitchel_g4.ogg",
+     "music/notes/twitchel_c5.ogg"
+    ],
+    "fx_strip": "px/scenes/fx/flower_sundaisy_day.png",
+    "fx_strip_day": "px/scenes/fx/flower_sundaisy_day.png",
+    "fx_strip_twi": "px/scenes/fx/flower_sundaisy_twi.png",
+    "frame_wh": [
+     16,
+     16
+    ],
+    "frames": 3
+   },
+   {
+    "id": "tw_wild_den_bellvine",
+    "label": "Den-Mouth Bell-Vine & Reed Chimes",
+    "kind": "bell",
+    "wp": "den_mouth",
+    "x": 124,
+    "y": 231,
+    "w": 18,
+    "h": 18,
+    "phone": {
+     "x": 124,
+     "y": 231,
+     "w": 18,
+     "h": 18
+    },
+    "hh": {
+     "x": 40,
+     "y": 45,
+     "w": 8,
+     "h": 8
+    },
+    "hh_120x160": {
+     "x": 94,
+     "y": 111,
+     "w": 18,
+     "h": 18
+    },
+    "notes": [
+     "c5",
+     "f5"
+    ],
+    "scientific_pitches": [
+     "C5",
+     "F5"
+    ],
+    "midi": [
+     72,
+     77
+    ],
+    "hz": [
+     523.25,
+     698.46
+    ],
+    "degrees": [
+     5,
+     8
+    ],
+    "key": "F major pentatonic",
+    "instrument": "reed_chime",
+    "samples": [
+     "music/notes/twitchel_c5.ogg",
+     "music/notes/twitchel_f5.ogg"
+    ],
+    "fx_strip": "px/scenes/fx/den_bellvine_day.png",
+    "fx_strip_day": "px/scenes/fx/den_bellvine_day.png",
+    "fx_strip_twi": "px/scenes/fx/den_bellvine_twi.png",
+    "frame_wh": [
+     16,
+     16
+    ],
+    "frames": 3,
+    "overlay": true,
+    "replaces": "tw_clearing_bell",
+    "sprite": null,
+    "fx_strip_hh_day": "px/scenes/fx/den_bellvine_hh_day.png",
+    "fx_strip_hh_twi": "px/scenes/fx/den_bellvine_hh_twi.png",
+    "frame_wh_hh": [
+     8,
+     8
+    ],
+    "draw_at": {
+     "phone": [
+      125,
+      232
+     ],
+     "hh": [
+      40,
+      45
+     ],
+     "hh_120x160": [
+      95,
+      112
+     ]
+    },
+    "anim": "overlay:true -> the strip is drawn over the baked frame 0 at draw_at; on tap play frames 1,2,1,0 (110 ms each); 2 notes 140 ms apart",
+    "why": "Kai: no metal bell on a wild den - a natural bell-vine with two hollow reeds, same twitchel notes (C5 sol + F5 high do)"
+   },
+   {
+    "id": "tw_wild_mushroom",
+    "label": "Mossy Toadstool Cluster",
+    "kind": "mushroom",
+    "wp": "leaf_pile",
+    "x": 24,
+    "y": 276,
+    "w": 16,
+    "h": 16,
+    "phone": {
+     "x": 24,
+     "y": 276,
+     "w": 16,
+     "h": 16
+    },
+    "hh": {
+     "x": 4,
+     "y": 52,
+     "w": 10,
+     "h": 8
+    },
+    "hh_120x160": {
+     "x": 14,
+     "y": 114,
+     "w": 14,
+     "h": 14
+    },
+    "notes": [
+     "a4",
+     "d5"
+    ],
+    "scientific_pitches": [
+     "A4",
+     "D5"
+    ],
+    "midi": [
+     69,
+     74
+    ],
+    "hz": [
+     440.0,
+     587.33
+    ],
+    "degrees": [
+     3,
+     6
+    ],
+    "key": "F major pentatonic",
+    "instrument": "marimba",
+    "samples": [
+     "music/notes/twitchel_a4.ogg",
+     "music/notes/twitchel_d5.ogg"
+    ],
+    "fx_strip": "px/scenes/fx/flower_crocus_day.png",
+    "fx_strip_day": "px/scenes/fx/flower_crocus_day.png",
+    "fx_strip_twi": "px/scenes/fx/flower_crocus_twi.png",
+    "frame_wh": [
+     16,
+     16
+    ],
+    "frames": 3
+   }
+  ],
+  "removed_vs_twitchel_clearing": {
+   "tw_clearing_bell": "replaced by tw_wild_den_bellvine",
+   "labels": "yarn/rug words dropped from labels; same notes"
+  },
+  "status_in_jays_file": "merged (scenes_hotspots.json has twitchel_wild_clearing with 4 spots; game.js h4Scene routes clearing -> wild_clearing / sunbeam_room)"
+ },
+ "3_indoor_no_sky": {
+  "rule": "scene in indoor list -> no sky band; a tap is: prop hotspot first, else window rect -> window glint (sun/moon by phase), else nothing. Shelves never answer as sky.",
+  "indoor_scenes": [
+   "library",
+   "twitchel_library",
+   "window",
+   "shelf",
+   "twitchel_sunbeam_room",
+   "basket_room"
+  ],
+  "pixel_js_gap": "pixel.js INDOOR (00:33) has library/twitchel_library/twitchel_sunbeam_room/basket_room but not the 'window' and 'shelf' aliases (scenes_hotspots.json reuses library spots under those ids) - add them or map them to library.",
+  "scenes": {
+   "library": {
+    "aliases_in_scenes_hotspots": [
+     "window",
+     "shelf",
+     "twitchel_library"
+    ],
+    "variants": [
+     "day",
+     "twi",
+     "dawn",
+     "dusk",
+     "hh_day",
+     "hh_twi"
+    ],
+    "window": {
+     "phone": {
+      "x": 70,
+      "y": 56,
+      "w": 40,
+      "h": 40
+     },
+     "hh": {
+      "x": 20,
+      "y": 6,
+      "w": 20,
+      "h": 20
+     },
+     "hh_120x160": null,
+     "glint_draw_at": {
+      "phone": [
+       74,
+       60
+      ],
+      "hh": [
+       22,
+       8
+      ]
+     },
+     "what": "round moon-window (p_moonwindow 36 + frame) above the reading nook"
+    },
+    "shelf_no_sky_rects_phone": [
+     {
+      "x": 0,
+      "y": 44,
+      "w": 74,
+      "h": 48
+     },
+     {
+      "x": 106,
+      "y": 44,
+      "w": 74,
+      "h": 48
+     },
+     {
+      "x": 0,
+      "y": 156,
+      "w": 74,
+      "h": 64
+     },
+     {
+      "x": 106,
+      "y": 156,
+      "w": 74,
+      "h": 64
+     }
+    ],
+    "shelf_no_sky_rects_hh": [
+     {
+      "x": 0,
+      "y": 4,
+      "w": 18,
+      "h": 22
+     },
+     {
+      "x": 42,
+      "y": 4,
+      "w": 18,
+      "h": 22
+     }
+    ],
+    "props_stay_tappable": [
+     "library_lantern",
+     "library_bell",
+     "library_flower",
+     "library_mushroom"
+    ],
+    "note": "library_bell (mobile, 120,122) sits in the old H5 sky band; with skyTap off indoors it becomes a normal prop tap again. hh: library_bell (28,14,8,8) overlaps the window rect - props win (hitSpot before inWindow), as pixel.js already does."
+   },
+   "twitchel_sunbeam_room": {
+    "aliases_in_scenes_hotspots": [],
+    "variants": [
+     "day",
+     "twi",
+     "twi_tw0",
+     "twi_tw1",
+     "dawn",
+     "dusk",
+     "hh_day",
+     "hh_twi"
+    ],
+    "window": {
+     "phone": {
+      "x": 20,
+      "y": 92,
+      "w": 48,
+      "h": 72
+     },
+     "hh": {
+      "x": 6,
+      "y": 10,
+      "w": 16,
+      "h": 18
+     },
+     "hh_120x160": {
+      "x": 0,
+      "y": 0,
+      "w": 38,
+      "h": 44
+     },
+     "glint_draw_at": {
+      "phone": [
+       28,
+       112
+      ],
+      "hh": [
+       6,
+       11
+      ],
+      "hh_120x160": [
+       0,
+       0
+      ]
+     },
+     "what": "tie-back attic window glass (curtains x14..73 are NOT window)"
+    },
+    "shelf_no_sky_rects_phone": [
+     {
+      "x": 122,
+      "y": 97,
+      "w": 52,
+      "h": 71
+     }
+    ],
+    "shelf_no_sky_rects_hh": [
+     {
+      "x": 38,
+      "y": 9,
+      "w": 20,
+      "h": 12
+     }
+    ],
+    "props_proposed": {
+     "tw_room_yarn": {
+      "phone": {
+       "x": 28,
+       "y": 288,
+       "w": 14,
+       "h": 12
+      },
+      "hh": {
+       "x": 8,
+       "y": 62,
+       "w": 6,
+       "h": 6
+      },
+      "notes": [
+       "a4",
+       "d5"
+      ],
+      "kind": "mushroom",
+      "instrument": "marimba"
+     },
+     "tw_room_toy": {
+      "phone": {
+       "x": 152,
+       "y": 296,
+       "w": 10,
+       "h": 8
+      },
+      "hh": {
+       "x": 50,
+       "y": 64,
+       "w": 6,
+       "h": 5
+      },
+      "notes": [
+       "g4",
+       "c5"
+      ],
+      "kind": "flower",
+      "instrument": "musicbox"
+     },
+     "tw_room_plant": {
+      "phone": {
+       "x": 2,
+       "y": 220,
+       "w": 14,
+       "h": 18
+      },
+      "hh": {
+       "x": 0,
+       "y": 50,
+       "w": 6,
+       "h": 8
+      },
+      "notes": [
+       "f4",
+       "a4"
+      ],
+      "kind": "flower",
+      "instrument": "harp"
+     },
+     "tw_room_purr_bell": {
+      "phone": {
+       "x": 156,
+       "y": 231,
+       "w": 12,
+       "h": 10
+      },
+      "hh": {
+       "x": 51,
+       "y": 46,
+       "w": 6,
+       "h": 6
+      },
+      "notes": [
+       "c5",
+       "f5"
+      ],
+      "kind": "bell",
+      "instrument": "bell",
+      "note": "the metal purr-bell belongs here (house cat basket), not on the wild den"
+     }
+    },
+    "note": "sconce at (110,146) is decorative (no sky tap)."
+   },
+   "basket_room": {
+    "window": null,
+    "note": "home prop, not a scene; already win:null in pixel.js INDOOR"
+   }
+  },
+  "window_fx": {
+   "phase_rule": {
+    "dawn": "sun",
+    "morning": "sun",
+    "afternoon": "sun",
+    "day": "sun",
+    "dusk": "moon",
+    "night": "moon",
+    "twi": "moon"
+   },
+   "sun": {
+    "strip": "px/scenes/fx/window_glint_sun.png",
+    "hh": "px/scenes/fx/window_glint_sun_hh.png",
+    "frame_wh": [
+     32,
+     32
+    ],
+    "frame_wh_hh": [
+     16,
+     16
+    ],
+    "frames": 3,
+    "spot_id": "window_sunbeam",
+    "notes": "top of the scene scale, 2 notes (as pixel.js skyTap body taps)"
+   },
+   "moon": {
+    "strip": "px/scenes/fx/window_glint_moon.png",
+    "hh": "px/scenes/fx/window_glint_moon_hh.png",
+    "frame_wh": [
+     32,
+     32
+    ],
+    "frame_wh_hh": [
+     16,
+     16
+    ],
+    "frames": 3,
+    "spot_id": "window_moonglint"
+   },
+   "anim": "frames 0,1,2 at 120 ms, drawn at glint_draw_at (fixed on the pane, not at the finger); lowFx: frame 1 only, 400 ms",
+   "note": "pixel.js (00:33) already uses dusk/night -> moon, else sun, with a CSS radial flare at the tap point. These strips are the pixel-art replacement; optional."
+  }
+ },
+ "5_retire_twitchel_clearing": {
+  "decision": "Kai, Oct 25: twitchel_clearing is retired. Wild cats (lion, tiger, leopard, cheetah, snowleopard, lynx) -> twitchel_wild_clearing; house cat -> twitchel_sunbeam_room.",
+  "pixal_done": [
+   "stopped generating it (cat_scenes.py JOBS, bh_h8_tod.py RETIRED)",
+   "removed its tod_blends.json entry",
+   "deleted unreferenced px/scenes/twitchel_clearing_{dawn,dusk,hh_day,hh_twi}.png",
+   "backup of all PNGs + generator entry: ios_design/backup_batchH_before/retired_twitchel_clearing/"
+  ],
+  "px_pngs_kept_until_switch": [
+   "twitchel_clearing_day.png",
+   "twitchel_clearing_twi.png"
+  ],
+  "why_kept": "still referenced: game.js scList falls back to scene \"clearing\" (borrow art prefix twitchel_ -> px/scenes/twitchel_clearing_{day,twi}.png) when S.h4Homes===false or for a cat look outside H4_WILD; build_packs.py FAMILY_SCENES_SPEC twitchel/clearing; tests/phone_purrlings_test.py expects a twitchel_clearing_ load",
+  "delete_when": "all references below are gone -> Pixal deletes twitchel_clearing_day.png / _twi.png (backups already taken)",
+  "references": {
+   "jay": {
+    "scenes_hotspots.json": [
+     {
+      "line": 1450,
+      "match": "twitchel_clearing",
+      "context": "    \"twitchel_clearing\": ["
+     },
+     {
+      "line": 6152,
+      "match": "tw_clearing_bell",
+      "context": "        \"replaces\": \"tw_clearing_bell\","
+     },
+     {
+      "line": 7767,
+      "match": "twitchel_clearing",
+      "context": "  \"twitchel_clearing\": ["
+     },
+     {
+      "line": 12469,
+      "match": "tw_clearing_bell",
+      "context": "      \"replaces\": \"tw_clearing_bell\","
+     }
+    ],
+    "scenes.js": [
+     {
+      "line": 7,
+      "match": "twitchel_clearing",
+      "context": "ern_twi.png\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": false}], \"twitchel_clearing\": [{\"id\": \"tw_clearing_flower_1\", \"label\": \"Sunbeam Rose-Bellflowers\""
+     },
+     {
+      "line": 7,
+      "match": "twitchel_clearing",
+      "context": "ern_twi.png\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": false}], \"twitchel_clearing\": [{\"id\": \"tw_clearing_flower_1\", \"label\": \"Sunbeam Rose-Bellflowers\""
+     },
+     {
+      "line": 7,
+      "match": "tw_clearing_bell",
+      "context": "ng\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": true, \"replaces\": \"tw_clearing_bell\", \"sprite\": null, \"fx_strip_hh_day\": \"px/scenes/fx/den_bellvine_hh_da"
+     },
+     {
+      "line": 7,
+      "match": "tw_clearing_bell",
+      "context": "ng\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": true, \"replaces\": \"tw_clearing_bell\", \"sprite\": null, \"fx_strip_hh_day\": \"px/scenes/fx/den_bellvine_hh_da"
+     }
+    ],
+    "pixel.js": [
+     {
+      "line": 310,
+      "match": "twitchel_clearing",
+      "context": "    twitchel_clearing:'sunbeam_attic',twitchel_grove:'sunbeam_attic',twitchel_meadow:'sunbe"
+     },
+     {
+      "line": 617,
+      "match": "twitchel_clearing",
+      "context": "ern_twi.png\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": false}], \"twitchel_clearing\": [{\"id\": \"tw_clearing_flower_1\", \"label\": \"Sunbeam Rose-Bellflowers\""
+     },
+     {
+      "line": 617,
+      "match": "twitchel_clearing",
+      "context": "ern_twi.png\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": false}], \"twitchel_clearing\": [{\"id\": \"tw_clearing_flower_1\", \"label\": \"Sunbeam Rose-Bellflowers\""
+     },
+     {
+      "line": 617,
+      "match": "tw_clearing_bell",
+      "context": "ng\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": true, \"replaces\": \"tw_clearing_bell\", \"sprite\": null, \"fx_strip_hh_day\": \"px/scenes/fx/den_bellvine_hh_da"
+     },
+     {
+      "line": 617,
+      "match": "tw_clearing_bell",
+      "context": "ng\", \"frame_wh\": [16, 16], \"frames\": 3, \"overlay\": true, \"replaces\": \"tw_clearing_bell\", \"sprite\": null, \"fx_strip_hh_day\": \"px/scenes/fx/den_bellvine_hh_da"
+     },
+     {
+      "line": 648,
+      "match": "'twitchel_'+(sceneId||'clearing')",
+      "context": "      const tk=String(sceneId||'').startsWith('twitchel_')?sceneId:'twitchel_'+(sceneId||'clearing');"
+     }
+    ],
+    "families.js": [
+     {
+      "line": 3,
+      "match": "The basket clearing",
+      "context": "yte\", \"rename\": {\"log_mouth\": \"basket_door\"}, \"titles\": {\"clearing\": \"The basket clearing\"}, \"dropActs\": [\"butterfly_chase\"], \"art\": \"twitchel_\"}}}};"
+     }
+    ],
+    "families/twitchel.json": [
+     {
+      "line": 648,
+      "match": "The basket clearing",
+      "context": "    \"clearing\": \"The basket clearing\""
+     }
+    ],
+    "px/home/homes.json": [
+     {
+      "line": 188,
+      "match": "twitchel_clearing",
+      "context": "    \"scene\": \"twitchel_clearing\","
+     }
+    ],
+    "dialogue_engine.js": [
+     {
+      "line": 75,
+      "match": "twitchel_clearing",
+      "context": "  twitchel_clearing: { '5-6': 'by our basket',       '7-8': 'beside our woven cozy basket"
+     }
+    ],
+    "tools/test-sprite-unification-and-den.js": [
+     {
+      "line": 501,
+      "match": "twitchel_clearing",
+      "context": "d of ['clearing', 'grove', 'meadow', 'branch', 'library', 'hilltop', 'twitchel_clearing', 'twitchel_grove', 'twitchel_meadow', 'twitchel_garden']) {"
+     },
+     {
+      "line": 545,
+      "match": "twitchel_clearing",
+      "context": " mockState, look: 'lion', family: 'twitchel', ageBand: '7-8', scene: 'twitchel_clearing', time: 'evening', need: 'happy' },"
+     }
+    ],
+    "tools/test-batch-h.js": [
+     {
+      "line": 151,
+      "match": "tw_clearing_bell",
+      "context": "  ok(box('library_bell')==='120,122,16,16'&&!box('tw_clearing_bell')&&!box('cushion_3'),'H10: library_bell kept; tw_clearing_bell + cush"
+     },
+     {
+      "line": 151,
+      "match": "tw_clearing_bell",
+      "context": "&!box('tw_clearing_bell')&&!box('cushion_3'),'H10: library_bell kept; tw_clearing_bell + cushion_3 replaced by the den bell-vine');"
+     },
+     {
+      "line": 151,
+      "match": "cushion_3",
+      "context": "ox('library_bell')==='120,122,16,16'&&!box('tw_clearing_bell')&&!box('cushion_3'),'H10: library_bell kept; tw_clearing_bell + cushion_3 replaced by t"
+     },
+     {
+      "line": 151,
+      "match": "cushion_3",
+      "context": "bell')&&!box('cushion_3'),'H10: library_bell kept; tw_clearing_bell + cushion_3 replaced by the den bell-vine');"
+     },
+     {
+      "line": 196,
+      "match": "twitchel_clearing",
+      "context": "ring||[]).length===4&&(S2.twitchel_sunbeam_room||[]).length===4&&!(S2.twitchel_clearing||[]).some(h=>h.id==='tw_clearing_bell'),`follow-up: ${nm} copy in syn"
+     },
+     {
+      "line": 196,
+      "match": "tw_clearing_bell",
+      "context": "eam_room||[]).length===4&&!(S2.twitchel_clearing||[]).some(h=>h.id==='tw_clearing_bell'),`follow-up: ${nm} copy in sync`)}"
+     }
+    ],
+    "tests/phone_purrlings_test.py": [
+     {
+      "line": 53,
+      "match": "The basket clearing",
+      "context": "at and 'log_mouth' not in flat and 'butterfly_chase' not in flat and 'The basket clearing' in flat,'borrowed scenes '+flat[:200])"
+     }
+    ]
+   },
+   "zane": {
+    "/workspace/echo/firmware/echo_fw/tools/build_packs.py": [
+     {
+      "line": 827,
+      "match": "The basket clearing",
+      "context": "        ('clearing', 'The basket clearing',  'twitchel_clearing_day.png', 'twitchel_clearing_twi.png', 'clearin"
+     },
+     {
+      "line": 844,
+      "match": "twitchel_clearing",
+      "context": "# Retired with the old twitchel_clearing den/basket: its bell (and the `cushion` alias's cushion_3). Packed as"
+     },
+     {
+      "line": 844,
+      "match": "cushion_3",
+      "context": "old twitchel_clearing den/basket: its bell (and the `cushion` alias's cushion_3). Packed as an empty"
+     },
+     {
+      "line": 846,
+      "match": "tw_clearing_bell",
+      "context": "RETIRED_HOTSPOT_IDS = {'tw_clearing_bell', 'cushion_3'}"
+     },
+     {
+      "line": 846,
+      "match": "cushion_3",
+      "context": "RETIRED_HOTSPOT_IDS = {'tw_clearing_bell', 'cushion_3'}"
+     },
+     {
+      "line": 851,
+      "match": "twitchel_clearing",
+      "context": "    -> twitchel_sunbeam_room, no look -> twitchel_clearing. Other families: None (their normal 3-scene cycle).\"\"\""
+     },
+     {
+      "line": 855,
+      "match": "twitchel_clearing",
+      "context": "        return 'twitchel_clearing'"
+     },
+     {
+      "line": 1003,
+      "match": "twitchel_clearing",
+      "context": "        ('twitchel', 'clearing'): 'twitchel_clearing',"
+     },
+     {
+      "line": 1583,
+      "match": "twitchel_clearing",
+      "context": "e                                  # art not landed -> firmware keeps twitchel_clearing"
+     }
+    ]
+   }
+  },
+  "suggested_changes": {
+   "scenes_hotspots.json (+ embedded copies in scenes.js line 7 and pixel.js DEFAULT_HOTSPOTS)": "delete the keys scenes.twitchel_clearing, twitchel_clearing, scenes.cushion, cushion (cushion = alias of the retired scene; cushion_3 already gone)",
+   "pixel.js": "SCENE_TO_DEN: drop twitchel_clearing and cushion (add twitchel_wild_clearing:'sunbeam_attic' if the den config should apply); forScene: default twitchel scene 'twitchel_'+(sceneId||'clearing') -> 'twitchel_wild_clearing' or 'twitchel_sunbeam_room' by look",
+   "game.js": "scList/h4Scene: when S.h4Homes===false (or the look is not a known cat) map 'clearing' to sunbeam_room instead of the old clearing art",
+   "families/twitchel.json + families.js": "scene.borrow.titles.clearing 'The basket clearing' and home {k:'basket',x:78,y:225} describe the retired scene; point the first scene at wild_clearing/sunbeam_room (titles 'The wild den clearing' / 'The sunbeam room')",
+   "px/home/homes.json": "entry with scene \"twitchel_clearing\" -> split into twitchel_wild_clearing (den_wild) and twitchel_sunbeam_room (basket_room), or merge px/home/homes_batchH.json placement",
+   "dialogue_engine.js line ~75": "location phrases for twitchel_clearing ('by our basket'...) -> add twitchel_wild_clearing ('by our mossy den') and twitchel_sunbeam_room ('in our sunny room') keys; owner of dialogue copy decides wording",
+   "tools/test-sprite-unification-and-den.js": "scene list: replace 'twitchel_clearing' with 'twitchel_wild_clearing' and 'twitchel_sunbeam_room'; lion test scene 'twitchel_clearing' -> 'twitchel_wild_clearing'",
+   "tools/test-batch-h.js line ~196": "the copy-in-sync check can assert !S2.twitchel_clearing instead of 'no tw_clearing_bell'",
+   "tests/phone_purrlings_test.py line ~78": "expect 'px/scenes/twitchel_wild_clearing_' or 'px/scenes/twitchel_sunbeam_room_' instead of 'px/scenes/twitchel_clearing_'",
+   "build_packs.py (Zane)": "already routes wild looks to wild_clearing and packs tw_clearing_bell/cushion_3 as silent slots. Still on the old scene: FAMILY_SCENES_SPEC['twitchel'] slot 0 ('clearing', 'The basket clearing', 'twitchel_clearing_day.png', ...); home_scene_for_look(no look) -> 'twitchel_clearing'; key_lookup ('twitchel','clearing'):'twitchel_clearing'. Suggest: slot 0 -> ('sunbeam_room', 'The sunbeam room', 'twitchel_sunbeam_room_day.png', 'twitchel_sunbeam_room_twi.png', 'sunbeam_room', <4 hotspots from scenes_hotspots twitchel_sunbeam_room>) with key_lookup ('twitchel','sunbeam_room'):'twitchel_sunbeam_room' and a SCENE_PALETTES['sunbeam_room'] from bh_h4_purr_home.PAL_ROOM; no-look default -> 'twitchel_sunbeam_room'; RETIRED_HOTSPOT_IDS can go once the clearing slot is gone."
+  }
+ },
+ "6_scales": {
+  "decision": "Kai, Oct 25: Cloverkin (farm, was Barnsongs/brumlo) = G major pentatonic G4 A4 B4 D5 E5 G5; Tidelings (ocean, was Splashsongs/finli) = D major pentatonic D4 E4 F#4 A4 B4 D5.",
+  "paste_scales": {
+   "path": "scales (top level of scenes_hotspots.json; also the embedded copies in scenes.js and pixel.js)",
+   "replace_with": {
+    "slyte": [
+     "d4",
+     "e4",
+     "f#4",
+     "a4",
+     "b4",
+     "d5",
+     "e5",
+     "f#5",
+     "a5"
+    ],
+    "whimber": [
+     "f4",
+     "g4",
+     "bb4",
+     "c5",
+     "d5",
+     "f5",
+     "g5",
+     "bb5"
+    ],
+    "twitchel": [
+     "f4",
+     "g4",
+     "a4",
+     "c5",
+     "d5",
+     "f5",
+     "g5",
+     "a5"
+    ],
+    "cloverkin": [
+     "g4",
+     "a4",
+     "b4",
+     "d5",
+     "e5",
+     "g5"
+    ],
+    "tidelings": [
+     "d4",
+     "e4",
+     "f#4",
+     "a4",
+     "b4",
+     "d5"
+    ]
+   }
+  },
+  "paste_ocean_hotspots": {
+   "paths": [
+    "scenes.tidepool_cove",
+    "tidepool_cove",
+    "scenes.kelp_reef",
+    "kelp_reef",
+    "scenes.lighthouse_pier",
+    "lighthouse_pier"
+   ],
+   "note": "each top-level key duplicates scenes.<id>; paste the same list in both. Only notes/scientific_pitches/midi/hz/degrees/key change; ids, boxes and strips are unchanged. Pairs are the old C major pairs moved up a whole step (same intervals), except pier_lighthouse and pier_seaglass: their E5 would be F#5, which is outside the 6-note set, so they become A4+D5 and F#4+B4.",
+   "replace_with": {
+    "tidepool_cove": [
+     {
+      "id": "cove_seaglass",
+      "label": "Archway Driftwood Sea-Glass Mobile",
+      "kind": "bell",
+      "wp": "basking_rock",
+      "x": 20,
+      "y": 136,
+      "w": 18,
+      "h": 18,
+      "phone": {
+       "x": 20,
+       "y": 136,
+       "w": 18,
+       "h": 18
+      },
+      "hh": {
+       "x": 6,
+       "y": 16,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 14,
+       "y": 72,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "a4",
+       "d5"
+      ],
+      "scientific_pitches": [
+       "A4",
+       "D5"
+      ],
+      "midi": [
+       69,
+       74
+      ],
+      "hz": [
+       440.0,
+       587.33
+      ],
+      "key": "D major pentatonic",
+      "instrument": "glass_harp",
+      "sprite": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_seaglass_chime_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "overlay": false,
+      "degrees": [
+       5,
+       8
+      ]
+     },
+     {
+      "id": "cove_pearl_clam",
+      "label": "Glowing Giant Pearl Clam",
+      "kind": "lantern",
+      "wp": "pearl_clam_bed",
+      "x": 120,
+      "y": 232,
+      "w": 18,
+      "h": 16,
+      "phone": {
+       "x": 120,
+       "y": 232,
+       "w": 18,
+       "h": 16
+      },
+      "hh": {
+       "x": 38,
+       "y": 42,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 86,
+       "y": 110,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "f#4",
+       "a4"
+      ],
+      "scientific_pitches": [
+       "F#4",
+       "A4"
+      ],
+      "midi": [
+       66,
+       69
+      ],
+      "hz": [
+       369.99,
+       440.0
+      ],
+      "key": "D major pentatonic",
+      "instrument": "celesta_bell",
+      "sprite": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_pearl_clam_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "overlay": false,
+      "degrees": [
+       3,
+       5
+      ]
+     },
+     {
+      "id": "cove_anemone",
+      "label": "Tidepool Rose Sea-Anemone",
+      "kind": "flower",
+      "wp": "anemone_ledge",
+      "x": 26,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 26,
+       "y": 276,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 6,
+       "y": 56,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 16,
+       "y": 126,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "d4",
+       "f#4"
+      ],
+      "scientific_pitches": [
+       "D4",
+       "F#4"
+      ],
+      "midi": [
+       62,
+       66
+      ],
+      "hz": [
+       293.66,
+       369.99
+      ],
+      "key": "D major pentatonic",
+      "instrument": "water_kalimba",
+      "sprite": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_anemone_wave_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       1,
+       3
+      ]
+     },
+     {
+      "id": "cove_conch",
+      "label": "Singing Spiral Conch Shell",
+      "kind": "mushroom",
+      "wp": "conch_shoal",
+      "x": 58,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 58,
+       "y": 292,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 36,
+       "y": 60,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 42,
+       "y": 136,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "b4",
+       "d5"
+      ],
+      "scientific_pitches": [
+       "B4",
+       "D5"
+      ],
+      "midi": [
+       71,
+       74
+      ],
+      "hz": [
+       493.88,
+       587.33
+      ],
+      "key": "D major pentatonic",
+      "instrument": "shell_marimba",
+      "sprite": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_conch_sing_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       6,
+       8
+      ]
+     }
+    ],
+    "kelp_reef": [
+     {
+      "id": "reef_kelp_l",
+      "label": "Swaying Emerald Kelp Bulb",
+      "kind": "bough",
+      "wp": "kelp_canopy",
+      "x": 24,
+      "y": 168,
+      "w": 16,
+      "h": 18,
+      "phone": {
+       "x": 24,
+       "y": 168,
+       "w": 16,
+       "h": 18
+      },
+      "hh": {
+       "x": 6,
+       "y": 24,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 16,
+       "y": 82,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "d4",
+       "a4"
+      ],
+      "scientific_pitches": [
+       "D4",
+       "A4"
+      ],
+      "midi": [
+       62,
+       69
+      ],
+      "hz": [
+       293.66,
+       440.0
+      ],
+      "key": "D major pentatonic",
+      "instrument": "water_kalimba",
+      "sprite": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_seaglass_chime_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "overlay": false,
+      "degrees": [
+       1,
+       5
+      ]
+     },
+     {
+      "id": "reef_anemone",
+      "label": "Reef Shelf Sea-Anemone",
+      "kind": "flower",
+      "wp": "anemone_reef",
+      "x": 46,
+      "y": 280,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 46,
+       "y": 280,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 10,
+       "y": 56,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 28,
+       "y": 128,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "e4",
+       "a4"
+      ],
+      "scientific_pitches": [
+       "E4",
+       "A4"
+      ],
+      "midi": [
+       64,
+       69
+      ],
+      "hz": [
+       329.63,
+       440.0
+      ],
+      "key": "D major pentatonic",
+      "instrument": "water_kalimba",
+      "sprite": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_anemone_wave_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       2,
+       5
+      ]
+     },
+     {
+      "id": "reef_pearl_clam",
+      "label": "Luminous Reef Pearl Clam",
+      "kind": "lantern",
+      "wp": "reef_floor",
+      "x": 92,
+      "y": 290,
+      "w": 18,
+      "h": 16,
+      "phone": {
+       "x": 92,
+       "y": 290,
+       "w": 18,
+       "h": 16
+      },
+      "hh": {
+       "x": 36,
+       "y": 56,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 62,
+       "y": 134,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "f#4",
+       "b4"
+      ],
+      "scientific_pitches": [
+       "F#4",
+       "B4"
+      ],
+      "midi": [
+       66,
+       71
+      ],
+      "hz": [
+       369.99,
+       493.88
+      ],
+      "key": "D major pentatonic",
+      "instrument": "celesta_bell",
+      "sprite": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_pearl_clam_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       3,
+       6
+      ]
+     },
+     {
+      "id": "reef_conch",
+      "label": "Golden Coral Spiral Conch",
+      "kind": "mushroom",
+      "wp": "coral_east",
+      "x": 134,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 134,
+       "y": 276,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 46,
+       "y": 54,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 94,
+       "y": 126,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "a4",
+       "d5"
+      ],
+      "scientific_pitches": [
+       "A4",
+       "D5"
+      ],
+      "midi": [
+       69,
+       74
+      ],
+      "hz": [
+       440.0,
+       587.33
+      ],
+      "key": "D major pentatonic",
+      "instrument": "shell_marimba",
+      "sprite": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_conch_sing_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       5,
+       8
+      ]
+     }
+    ],
+    "lighthouse_pier": [
+     {
+      "id": "pier_lighthouse",
+      "label": "Starlight Headland Lighthouse Beam",
+      "kind": "lantern",
+      "wp": "headland",
+      "x": 26,
+      "y": 136,
+      "w": 18,
+      "h": 18,
+      "phone": {
+       "x": 26,
+       "y": 136,
+       "w": 18,
+       "h": 18
+      },
+      "hh": {
+       "x": 6,
+       "y": 10,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 18,
+       "y": 68,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "a4",
+       "d5"
+      ],
+      "scientific_pitches": [
+       "A4",
+       "D5"
+      ],
+      "midi": [
+       69,
+       74
+      ],
+      "hz": [
+       440.0,
+       587.33
+      ],
+      "key": "D major pentatonic",
+      "instrument": "celesta_bell",
+      "sprite": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_pearl_clam_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_pearl_clam_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "overlay": false,
+      "degrees": [
+       5,
+       8
+      ]
+     },
+     {
+      "id": "pier_seaglass",
+      "label": "Boardwalk Driftwood Sea-Glass Chime",
+      "kind": "bell",
+      "wp": "pier_post",
+      "x": 134,
+      "y": 198,
+      "w": 18,
+      "h": 18,
+      "phone": {
+       "x": 134,
+       "y": 198,
+       "w": 18,
+       "h": 18
+      },
+      "hh": {
+       "x": 44,
+       "y": 28,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 92,
+       "y": 96,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "f#4",
+       "b4"
+      ],
+      "scientific_pitches": [
+       "F#4",
+       "B4"
+      ],
+      "midi": [
+       66,
+       71
+      ],
+      "hz": [
+       369.99,
+       493.88
+      ],
+      "key": "D major pentatonic",
+      "instrument": "glass_harp",
+      "sprite": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_seaglass_chime_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_seaglass_chime_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "overlay": false,
+      "degrees": [
+       3,
+       6
+      ]
+     },
+     {
+      "id": "pier_conch",
+      "label": "Tide-Line Singing Conch",
+      "kind": "mushroom",
+      "wp": "shore_west",
+      "x": 26,
+      "y": 276,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 26,
+       "y": 276,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 8,
+       "y": 56,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 18,
+       "y": 126,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "d4",
+       "a4"
+      ],
+      "scientific_pitches": [
+       "D4",
+       "A4"
+      ],
+      "midi": [
+       62,
+       69
+      ],
+      "hz": [
+       293.66,
+       440.0
+      ],
+      "key": "D major pentatonic",
+      "instrument": "shell_marimba",
+      "sprite": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_conch_sing_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_conch_sing_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       1,
+       5
+      ]
+     },
+     {
+      "id": "pier_anemone",
+      "label": "Surf-Pool Starfish & Anemone",
+      "kind": "flower",
+      "wp": "shore_center",
+      "x": 78,
+      "y": 292,
+      "w": 16,
+      "h": 16,
+      "phone": {
+       "x": 78,
+       "y": 292,
+       "w": 16,
+       "h": 16
+      },
+      "hh": {
+       "x": 36,
+       "y": 56,
+       "w": 8,
+       "h": 8
+      },
+      "hh_120x160": {
+       "x": 54,
+       "y": 136,
+       "w": 14,
+       "h": 14
+      },
+      "notes": [
+       "e4",
+       "b4"
+      ],
+      "scientific_pitches": [
+       "E4",
+       "B4"
+      ],
+      "midi": [
+       64,
+       71
+      ],
+      "hz": [
+       329.63,
+       493.88
+      ],
+      "key": "D major pentatonic",
+      "instrument": "water_kalimba",
+      "sprite": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_day": "px/scenes/fx/ocean_anemone_wave_day.png",
+      "fx_strip_twi": "px/scenes/fx/ocean_anemone_wave_twi.png",
+      "frame_wh": [
+       16,
+       16
+      ],
+      "frames": 3,
+      "degrees": [
+       2,
+       6
+      ]
+     }
+    ]
+   }
+  },
+  "farm_hotspots": "barn_hayloft / apple_orchard / windmill_pasture already use G major pentatonic; no change.",
+  "missing_note_samples": {
+   "cloverkin": [
+    "music/notes/cloverkin_g4.{ogg,wav}",
+    "music/notes/cloverkin_a4.{ogg,wav}",
+    "music/notes/cloverkin_b4.{ogg,wav}",
+    "music/notes/cloverkin_d5.{ogg,wav}",
+    "music/notes/cloverkin_e5.{ogg,wav}",
+    "music/notes/cloverkin_g5.{ogg,wav}"
+   ],
+   "tidelings": [
+    "music/notes/tidelings_d4.{ogg,wav}",
+    "music/notes/tidelings_e4.{ogg,wav}",
+    "music/notes/tidelings_fs4.{ogg,wav}",
+    "music/notes/tidelings_a4.{ogg,wav}",
+    "music/notes/tidelings_b4.{ogg,wav}",
+    "music/notes/tidelings_d5.{ogg,wav}"
+   ]
+  },
+  "same_pitch_samples_in_other_families": {
+   "cloverkin": {
+    "g4": [
+     "whimber_g4.ogg",
+     "twitchel_g4.ogg"
+    ],
+    "a4": [
+     "slyte_a4.ogg",
+     "twitchel_a4.ogg"
+    ],
+    "b4": [
+     "slyte_b4.ogg"
+    ],
+    "d5": [
+     "slyte_d5.ogg",
+     "whimber_d5.ogg",
+     "twitchel_d5.ogg"
+    ],
+    "e5": [
+     "slyte_e5.ogg"
+    ],
+    "g5": [
+     "whimber_g5.ogg",
+     "twitchel_g5.ogg"
+    ]
+   },
+   "tidelings": {
+    "d4": [
+     "slyte_d4.ogg",
+     "whimber_d4.ogg"
+    ],
+    "e4": [
+     "slyte_e4.ogg"
+    ],
+    "f#4": [
+     "slyte_fs4.ogg"
+    ],
+    "a4": [
+     "slyte_a4.ogg",
+     "twitchel_a4.ogg"
+    ],
+    "b4": [
+     "slyte_b4.ogg"
+    ],
+    "d5": [
+     "slyte_d5.ogg",
+     "whimber_d5.ogg",
+     "twitchel_d5.ogg"
+    ]
+   }
+  },
+  "pixel_js_note": "closestSample(fam) uses SAMPLE_NOTES[fam]||SAMPLE_NOTES.slyte for the pitch list but builds the path 'notes/'+fam+'_'+note, so cloverkin/tidelings taps would request missing files. Until the samples are recorded, map cloverkin->a stand-in voice and tidelings->slyte (same D major pentatonic notes all present), or add SAMPLE_NOTES entries once files land.",
+  "shared_key_note": "Tidelings shares D major pentatonic with slyte, so the ocean voice has to differ by timbre (glass_harp, water_kalimba, shell_marimba, celesta_bell)."
+ },
+ "4_title_note": "title_biomes.json now carries cast.scale for Cloverkin (G major pentatonic) and Tidelings (D major pentatonic); brumlo/finli names are gone from all Pixal files.",
+ "mirror_note": "/workspace/echo/ios_design/scene_hotspots.json is a mirror of Jay's file (and is what build_packs reads). It was NOT edited; re-mirror it after Jay applies sections 5 and 6."
+}

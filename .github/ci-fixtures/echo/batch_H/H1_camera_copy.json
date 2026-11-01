@@ -1,0 +1,29 @@
+{
+  "_note": "H1 Magic Window copy by Cole. Shape matches dialogue/shared.json barks (text/expr/short). Index by age band: [0]=5-6, [1]=7-8, [2]=9-10. If U() isn't band-aware yet, use [1] for everyone. Never mentions photos, pictures or saving.",
+  "ui_or_cam_ask": [
+    {"text": "Show me an animal!", "expr": "happy", "short": "Show me an animal!", "band": "5-6"},
+    {"text": "Hold up a toy or a drawing!", "expr": "happy", "short": "Hold up a toy!", "band": "7-8"},
+    {"text": "Hold up an animal toy or drawing to find its Echo.", "expr": "happy", "short": "Find its Echo.", "band": "9-10"}
+  ],
+  "ui_or_cam_hint": [
+    {"text": "Hold it still…", "expr": "curious", "short": "Hold it still…", "band": "5-6"},
+    {"text": "Hold it still. I'm looking…", "expr": "curious", "short": "I'm looking…", "band": "7-8"},
+    {"text": "Keep it in the window and hold still…", "expr": "curious", "short": "Hold still…", "band": "9-10"}
+  ],
+  "ui_or_cam_found": [
+    {"text": "I found one!", "expr": "happy", "short": "I found one!", "band": "5-6"},
+    {"text": "There's an Echo in there!", "expr": "happy", "short": "An Echo!", "band": "7-8"},
+    {"text": "Found it! An Echo is waking up.", "expr": "happy", "short": "Found it!", "band": "9-10"}
+  ],
+  "ui_or_cam_miss": [
+    {"text": "Hmm… no Echo yet.", "expr": "curious", "short": "No Echo yet.", "band": "5-6"},
+    {"text": "Hmm, I couldn't spot an Echo. Try again, or pick one!", "expr": "curious", "short": "Try again?", "band": "7-8"},
+    {"text": "I couldn't find a match this time. Try another angle, or pick your Echo.", "expr": "curious", "short": "No match this time.", "band": "9-10"}
+  ],
+  "ui_or_cam_retry": [
+    {"text": "Try again", "expr": "happy", "short": "Try again", "band": "all"}
+  ],
+  "ui_or_cam_pick": [
+    {"text": "Pick your Echo", "expr": "happy", "short": "Pick your Echo", "band": "all"}
+  ]
+}
