@@ -88,6 +88,14 @@ jobs:
           set -o pipefail
           bash tools/check.sh 2>&1 | tee /tmp/results/static.log
 
+      - name: Dialogue grammar lint (tools/lint-dialogue-grammar.js; any hit fails; also the last step of check.sh)
+        if: matrix.shard == 'static' && !cancelled()
+        run: |
+          set -o pipefail
+          node tools/lint-dialogue-grammar.js 2>&1 | tee /tmp/results/grammar.log | while IFS= read -r l; do
+            case "$l" in "HIT "*) echo "::error title=dialogue grammar::${l#HIT }";; *) echo "$l";; esac
+          done
+
       - name: Phone tests (tools/check.sh --phone list, shard ${{ matrix.shard }})
         if: matrix.shard != 'static'
         env:
@@ -158,6 +166,8 @@ jobs:
           miss = sorted(set(rd('results/results-static/missing.txt').split()))
           ok = static_ok and not pf and len(ph) > 0
           print(f"## Echo app CI {'✅ green' if ok else '❌ red'}: static {sp} passed / {sf} failed · phone {pp} passed / {len(pf)} failed of {len(ph)} · QUARANTINED phone_catch_test: {(q[0][0].split('-')[1] if q else 'not run')} (non-blocking)\n")
+          gl = [l for l in rd('results/results-static/grammar.log').splitlines() if l.startswith(('dialogue grammar lint:', 'by rule:'))]
+          if gl: print('> 📝 ' + ' · '.join(gl) + '\n')
           if miss: print(f'> ⚠️ MISSING out-of-repo test inputs (add under `.github/ci-fixtures/`): {", ".join(miss)}\n')
           if any('SKIPPED (runs in echo-firmware CI)' in l for l in st): print('> ⏭️ SKIPPED (runs in echo-firmware CI): EDZ1 dialogue_repo.dz compile (tools/compile_dialogue_v2.py needs build_packs from the private echo-firmware repo)\n')
           if not static_ok:

@@ -69,13 +69,38 @@ D.check=check;
 
 // ---- pet phrases & invented words
 function cap(src,w){return src[0]===src[0].toUpperCase()?w[0].toUpperCase()+w.slice(1):w}
+// Nov 1 dialogue fix: fill values get their grammar at substitution time (BRIEF_FIX_NOV1 Jay #2):
+//  - a/an agrees with the value that lands after it ("a {var:origin_animal}" + owl -> "an owl"; "an {treasure}" + pebble -> "a pebble")
+//  - a value at the start of the line / of a sentence is capitalized ("{fav}! My favorite!" -> "Berries! My favorite!")
+//  - {pet_phrase}: single spaces, no space before punctuation, no doubled punctuation ("How lovely.…That's" -> "How lovely. That's")
+const AN_RX=/^(?:[aeiou]|hour|honest|honou?r|heir)/i,A_RX=/^(?:uni|use|usu|ur[aeiou]|eu|ewe|one\b|once\b|u\b)/i;
+D.article=function(word,orig){const w=String(word).replace(/^[^A-Za-z0-9]+/,'');const a=AN_RX.test(w)&&!A_RX.test(w)?'an':'a';return orig&&orig[0]==='A'?a[0].toUpperCase()+a.slice(1):a};
+const sentenceStart=pre=>/^[\s"\u201c'(\u2026]*$/.test(pre)||/[.!?]["\u201d')]?\s+$/.test(pre);
+const capFirst=v=>v.replace(/^([^A-Za-z]*)([a-z])/,(m,p,c)=>p+c.toUpperCase());
+// fix the article at the end of `pre` (the text up to the value) and capitalize the value at a sentence start
+function placeValue(pre,v){if(!v)return [pre,v];const am=/(^|[^A-Za-z'\u2019-])([Aa]n?)(\s+)$/.exec(pre);
+  if(am)pre=pre.slice(0,pre.length-am[2].length-am[3].length)+D.article(v,am[2])+am[3];else if(sentenceStart(pre))v=capFirst(v);return [pre,v]}
+// replace every {key} / {key:arg} slot through resolve(m,k,a); null / the slot itself = leave it for a later pass
+D.subst=function(t,resolve){t=String(t);const re=/\{(\w+)(?::([^}]+))?\}/g;let out='',last=0,m;
+  while((m=re.exec(t))){let pre=out+t.slice(last,m.index),v=resolve(m[0],m[1],m[2]);last=re.lastIndex;
+    if(v==null||v===m[0]){out=pre+m[0];continue}[pre,v]=placeValue(pre,String(v));out=pre+v}
+  return out+t.slice(last)};
+// every {pet_phrase} slot -> phrase (or nothing when the budget says no)
+const PUN=/^[.,;:!?\u2026]/;
+D.joinPet=function(t,phrase){const parts=String(t).split('{pet_phrase}');let out=parts[0];
+  for(let i=1;i<parts.length;i++){const L=out.replace(/\s+$/,'');let R=parts[i].replace(/^\s+/,'');
+    const mid=L&&phrase?L+' '+phrase:(L||phrase||'');
+    if(/[.,;:!?\u2026]$/.test(mid)&&PUN.test(R))R=R.replace(/^[.,;:!?\u2026]+\s*/,'');   // "How lovely." + "…That's" -> "How lovely. That's"
+    out=!R?mid:!mid?R:mid+(PUN.test(R)?'':' ')+R}
+  return out.replace(/\s{2,}/g,' ').trim()};
 D.personalize=function(text){
-  if(!D.persona)return text;let t=text;const p=D.lib.persona;
-  // invented word: {word:shiny} slot, and any sibling invented word from the species list becomes this Echo's word
-  t=t.replace(/\{word:([\w-]+)\}/g,()=>D.persona.word||'');
-  if(D.persona.word&&p.words.length){const re=new RegExp('\\b('+p.words.map(w=>w.replace(/[-]/g,'\\-')).join('|')+')\\b','gi');t=t.replace(re,m=>cap(m,D.persona.word))}
+  const P=D.persona||{petPhrase:'',word:''};const p=(D.lib&&D.lib.persona)||{words:[]};let t=String(text);
+  // invented word: {word:shiny} slot (this Echo's word; the slot's own word if there is no persona yet), and any sibling invented word from the species list becomes this Echo's word
+  t=D.subst(t,(m,k,a)=>k==='word'?(P.word||a||''):null);
+  if(P.word&&(p.words||[]).length){const re=new RegExp('(\\b[Aa]n?\\s+)?\\b('+p.words.map(w=>w.replace(/[-]/g,'\\-')).join('|')+')\\b','gi');
+    t=t.replace(re,(m,art,w)=>{const v=cap(w,P.word);return art?D.article(v,art.trim())+art.slice(art.trim().length)+v:v})}
   // pet phrase slot: at most once per petEvery lines
-  if(t.includes('{pet_phrase}')){const ok=petBudget();t=t.replace(/\{pet_phrase\}/g,ok?D.persona.petPhrase:'').replace(/\s{2,}/g,' ').replace(/^\s+|\s+$/g,'');if(ok)D.mem.petSince=0}
+  if(t.includes('{pet_phrase}')){const ok=!!D.persona&&petBudget();t=D.joinPet(t,ok?P.petPhrase:'');if(ok&&P.petPhrase)D.mem.petSince=0}
   return D.speciesCalls(t,D.lookOf(D.ctx&&D.ctx()));
 };
 // H14: "Hoo" belongs to owls only. Until the rebuilt corpus lands (Cole -> Zane EDZ1), any hoo / hoo-hoo / hoo-hum in a line spoken
@@ -93,9 +118,9 @@ D.countLine=()=>{D.mem.petSince=(D.mem.petSince==null?99:D.mem.petSince)+1};
 D.withPet=function(line){if(!line||!D.persona||!D.persona.petPhrase||!petBudget())return line;D.mem.petSince=0;return {...line,text:D.speciesCalls(D.persona.petPhrase+' '+line.text,D.lookOf(D.ctx&&D.ctx())),pet:true}};
 
 D.fill=function(t,extra){const ctx={...D.ctx(),...(extra||{})};
-  const out=String(t).replace(/\{(\w+)(?::([^}]+))?\}/g,(m,k,a)=>{
-    if(k==='var')return (ctx.vars||{})[a]??'';if(k==='pick')return rand(String(a).split('|'));if(k==='word'||k==='pet_phrase')return m;
-    return extra&&extra[k]!=null?extra[k]:(ctx.fill&&ctx.fill[k]!=null?ctx.fill[k]:m)});
+  const out=D.subst(t,(m,k,a)=>{
+    if(k==='var')return (ctx.vars||{})[a]??'';if(k==='pick')return rand(String(a).split('|'));if(k==='word'||k==='pet_phrase')return null;
+    return extra&&extra[k]!=null?extra[k]:(ctx.fill&&ctx.fill[k]!=null?ctx.fill[k]:null)});
   return D.personalize(out)};
 
 // ---- no-repeat rules (Overhaul B10): exact line 7 days (core reactions 24 h); least-recently-used fallback

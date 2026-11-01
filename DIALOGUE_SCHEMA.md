@@ -55,6 +55,10 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
 `{name} {child} {fav} {treasure} {place} {release} {trust} {quirk} {token} {gift} {memory}`, plus per-call values (`{spot} {hint} {guess} {constellation}`), `{var:key}` for a conversation variable, and `{pick:a|b|c}` for a random choice.
 Variables, memory tags and seen conversations are saved with the Echo (`S.vars`, `S.memTags`, `S.seen`).
 
+Fill grammar (Nov 1, `dialogue.js` `D.subst` / `D.joinPet`, tests `tools/test-fill.js`): an `a`/`an` right before a slot agrees with the value (`a {var:origin_animal}` + owl = "an owl"); a value that starts the line or a sentence is capitalized (`{fav}!` = "Berries!"); `{pet_phrase}` joins with single spaces, no space before punctuation and no doubled punctuation (the phrase's own end mark wins over a following `…`/`,`). Write the slot plainly; do not hand-pick the article or case for it.
+
+Grammar gate: `tools/lint-dialogue-grammar.js` (in check.sh + CI) renders every line per animal with sample fills and fails on: `bond`, "secret song", a/an errors, doubled words (deliberate sentence-initial repeats like "Knock knock." pass) or punctuation, plural body part + singular verb, raw scene ids ("in clearing"), leftover `{...}`/undefined, shorts ending mid-phrase. Genuine false positives only go in `tools/dialogue_grammar_allowlist.json` (id + rule + reason). The clause composer is offline only (`tools/engine_composer.js`); the app speaks only these JSON lines.
+
 ## Engine v3 additions
 - **Kid-reply pools** (`shared.json` → `replyPools`, `intentMap`): a choice can carry `"intent"`. A label of `"@pool:<intent>"`, or a generic label listed in `intentMap` (e.g. "Yes!", "(just listen)"), is swapped for a fresh phrasing each time it's shown. The least-recently-used phrasing is chosen, with no duplicates in one menu. Intents: yes, no, unsure, listen, nod, giggle, ask_more, later, wow, silly.
 - **Fallbacks**: barks `fallback_<intent>` and `fallback_any`. They're used when a choice has neither `reply` nor `goto`, or when a `goto` points nowhere.

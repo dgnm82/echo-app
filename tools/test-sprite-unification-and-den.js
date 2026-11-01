@@ -328,7 +328,9 @@ vm.createContext(W);
 const SCRIPTS = [
   'families.js', 'config.js', 'games_tuning.js', 'difficulty.js', 'needs.js',
   'affection.js', 'pixel.js', 'sound.js', 'musicfx.js', 'echoback.js',
-  'art.js', 'dialogue.js', 'dialogue_engine.js', 'lines.js', 'memory.js',
+  'art.js', 'dialogue.js', 'dialogue_engine.js',
+  'tools/engine_composer.js',   // OFFLINE composer (not in the live app since the Nov 1 dialogue fix); loaded here only for its own checks
+  'lines.js', 'memory.js',
   'runner.js', 'catch.js', 'stack.js', 'notes.js', 'bondup.js',
   'scenes.js', 'postcards.js', 'foods.js', 'need_tags.js', 'need_select.js',
   'alive.js', 'game.js'

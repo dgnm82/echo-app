@@ -1,0 +1,1 @@
+{"_doc":"Genuine false positives of tools/lint-dialogue-grammar.js only, keyed by line id + rule, each with a reason. Never add a real grammar error here: Cole fixes the words.","entries":[]}

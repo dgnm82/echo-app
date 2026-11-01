@@ -10,7 +10,7 @@ const fs=require('fs'),path=require('path'),vm=require('vm');const R=path.join(_
 let n=0,bad=0;const ok=(c,m)=>{n++;if(!c){bad++;console.log('FAIL',m)}};
 const W={console,Date,Math,JSON,addEventListener(){},removeEventListener(){},innerWidth:400,innerHeight:800,setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,clearInterval(){},matchMedia:()=>({matches:false}),performance:{now:()=>0}};W.window=W;W.globalThis=W;
 W.document={createElement:()=>({style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},appendChild(){},remove(){}}),getElementById:()=>null,querySelector:()=>null,querySelectorAll:()=>[]};
-vm.createContext(W);for(const f of ['families.js','scenes.js','pixel.js','weather_engine.js','dialogue.js','dialogue_engine.js','need_tags.js','need_select.js'])vm.runInContext(rd(f),W,{filename:f});
+vm.createContext(W);for(const f of ['families.js','scenes.js','pixel.js','weather_engine.js','dialogue.js','dialogue_engine.js','tools/engine_composer.js','need_tags.js','need_select.js'])vm.runInContext(rd(f),W,{filename:f});
 const game=rd('game.js'),X=W.WEATHER,D=W.Dialogue,NS=W.NeedSelect,E=W.DialogueEngine;const sh=JSON.parse(rd('dialogue/shared.json'));
 const STATES=['clear','cloudy','rain','snow','fog','storm'];
 // ---------------- H9 runtime: weather off -> nothing weather-ish plays

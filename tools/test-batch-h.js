@@ -9,7 +9,7 @@ const W={console,Date,Math,JSON,addEventListener(){},removeEventListener(){},inn
 const els=[];function El(tag){return {tag,children:[],style:{cssText:'',setProperty(){}},dataset:{},classList:{add(){},remove(){},toggle(){}},className:'',textContent:'',
   appendChild(c){this.children.push(c);els.push(c);return c},remove(){},querySelector:()=>null,querySelectorAll:()=>[],insertAdjacentHTML(){},addEventListener(){},getBoundingClientRect:()=>({left:0,top:0,width:180,height:263})}}
 W.document={createElement:El,getElementById:()=>null,querySelector:()=>null,querySelectorAll:()=>[]};W.Music={oneShot:(s,o)=>{(W.__shots=W.__shots||[]).push(s)}};
-vm.createContext(W);for(const f of ['families.js','scenes.js','pixel.js','camera_match.js','weather_engine.js','dialogue.js','dialogue_engine.js'])vm.runInContext(rd(f),W,{filename:f});
+vm.createContext(W);for(const f of ['families.js','scenes.js','pixel.js','camera_match.js','weather_engine.js','dialogue.js','dialogue_engine.js','tools/engine_composer.js'])vm.runInContext(rd(f),W,{filename:f});
 const game=rd('game.js'),css=rd('pixel.css'),pix=rd('pixel.js');
 // ---------------- H1 camera matcher
 {const C=W.CamMatch;ok(!!C,'CamMatch loaded');const w=C.oklab(255,255,255);ok(Math.abs(w[0]-1)<1e-3&&Math.abs(w[1])<1e-3,'OKLab white L=1');
