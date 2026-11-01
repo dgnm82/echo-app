@@ -31,9 +31,15 @@ const SCENES=['clearing','grove','meadow','branch','library','hilltop','garden']
 const SCENE_IDS=Object.keys((j=>j.scenes||j)(JSON.parse(fs.readFileSync(path.join(R,'scenes_hotspots.json'),'utf8')))).filter(k=>!k.startsWith('_'));
 const RAW_SCENE=new RegExp(`\\b(?:[Ii]n|[Aa]t|[Oo]n|[Nn]ear|[Ff]rom|[Ii]nto|loves|by|across) (?:${SCENES.join('|')})\\b(?!\\s+(?:leaves|floor|path|rafters|bench|nook))`,'g');
 const RAW_ID=new RegExp(`\\b(?:${SCENE_IDS.filter(s=>s.includes('_')).join('|')})\\b`,'g');
-// a short that ends on a word no sentence ends on (heuristic_scan.py list minus on / it / fun / sweet / kind, which end real sentences:
-// "Hold on.", "That did it.", "That was fun."), plus possessives / articles
-const TRUNC=/\b(?:in|at|by|the|a|an|of|for|my|your|our|its|to|and|or|but|with|is|this|that's|under|near|after|behind|from|into|about)[.…]+$/i;
+// cut-off shorts: a short that ends on a word no sentence can end on (articles, possessives, conjunctions: "My tail is a.") always hits;
+// one that ends on a preposition / "is" ("The leaf pile is.", "I still think about.") hits unless it is a whole sentence of its full line
+// ("Clouds race by." from "Clouds race by. I could race them!", "I'll settle right in." from "{rows} rows… I'll settle right in.").
+// heuristic_scan.py list minus on / it / fun / sweet / kind, which end ordinary sentences ("Hold on.", "That did it.", "Soft and sweet.").
+const TRUNC_HARD=/\b(?:the|a|an|my|your|our|its|of|and|or|but|to|with|this|that's)[.…]+$/i;
+const TRUNC_SOFT=/\b(?:in|at|by|for|is|under|near|after|behind|from|into|about)[.…]+$/i;
+const words=t=>t.toLowerCase().replace(/[^a-z0-9' ]+/g,' ').split(/\s+/).filter(Boolean).join(' ');
+function cutOff(short,full){const s=short.trim();if(TRUNC_HARD.test(s))return true;if(!TRUNC_SOFT.test(s))return false;
+  return !(full&&String(full).split(/[.!?…:;]+/).some(x=>words(x)&&words(x)===words(s)))}
 const PL='paws|ears|wings|feet|eyes|stripes|tufts|feathers|whiskers|spots|legs|claws|toes|cheeks|pads';
 // deliberate kid-speak reduplication ("Knock knock.", "Night night.", "Hot hot!", "Go go go!"): starts a sentence, ends at punctuation / line end / the
 // same word again, and is not a function word or half of a hyphen compound ("a soft soft-coo" is a seam, not a repeat)
@@ -64,17 +70,17 @@ function render(raw,fam,look,extra){const out=new Set();const lp=(D.lib.persona.
       fill:{...FILL,name:(FAM.animals[look]||{}).default_name||'Pip'}};out.add(D.fill(raw,extra));rendered++}
   return [...out]}
 let ctx={};D.ctx=()=>ctx;let SETVARS={};
-function lintText(id,raw,fam,looks,isShort){if(typeof raw!=='string'||!raw)return;lines++;
-  for(const look of looks)for(const t of render(raw,fam,look)){for(const [rule,fn] of RULES){const m=fn(t);if(m.length)hit(id,rule,t,look,m[0])}
-    if(isShort&&TRUNC.test(t.trim()))hit(id,'cut_off_short',t,look,t.trim().split(/\s+/).slice(-1)[0])}}
+function lintText(id,raw,fam,looks,isShort,fullRaw){if(typeof raw!=='string'||!raw)return;lines++;
+  for(const look of looks){const full=isShort&&fullRaw?render(fullRaw,fam,look)[0]:null;for(const t of render(raw,fam,look)){for(const [rule,fn] of RULES){const m=fn(t);if(m.length)hit(id,rule,t,look,m[0])}
+    if(isShort&&cutOff(t,full))hit(id,'cut_off_short',t,look,t.trim().split(/\s+/).slice(-1)[0])}}}
 const sh=J('shared');
 for(const fam of FAMS){const sp=J(fam);D.use(fam,sh,sp);
   SETVARS={};for(const c of [...(sh.conversations||[]),...(sp.conversations||[])])for(const n of Object.values(c.nodes))for(const o of [n,...(n.choices||[])])for(const [k,v] of Object.entries(o.set||{}))if(!(k in SETVARS))SETVARS[k]=v;
   for(const [file,doc] of [['shared',sh],[fam,sp]]){
     for(const [key,ls] of Object.entries(doc.barks||{}))(ls||[]).forEach((l,i)=>{if(!l||typeof l!=='object')return;if(file==='shared'&&l.family&&l.family!==fam)return;
-      const looks=looksFor(fam,l.cond);const id=`${file}:b:${key}:${i}`;lintText(id,l.text,fam,looks);if(l.short&&l.short!==l.text)lintText(id+':short',l.short,fam,looks,true);if(l.caption)lintText(id+':caption',l.caption,fam,looks)});
+      const looks=looksFor(fam,l.cond);const id=`${file}:b:${key}:${i}`;lintText(id,l.text,fam,looks);if(l.short&&l.short!==l.text)lintText(id+':short',l.short,fam,looks,true,l.text);if(l.caption)lintText(id+':caption',l.caption,fam,looks)});
     for(const c of doc.conversations||[]){if(file==='shared'&&c.family&&c.family!==fam)continue;const cl=c.cond;
-      for(const [nk,n] of Object.entries(c.nodes||{})){const looks=looksFor(fam,cl,n.cond);const id=`${file}:c:${c.id}:${nk}`;lintText(id,n.say,fam,looks);if(n.short)lintText(id+':short',n.short,fam,looks,true);
+      for(const [nk,n] of Object.entries(c.nodes||{})){const looks=looksFor(fam,cl,n.cond);const id=`${file}:c:${c.id}:${nk}`;lintText(id,n.say,fam,looks);if(n.short)lintText(id+':short',n.short,fam,looks,true,n.say);
         (n.choices||[]).forEach((ch,j)=>{const lk=looksFor(fam,cl,n.cond,ch.cond);if(ch.label&&!String(ch.label).startsWith('@pool:'))lintText(`${id}:ch${j}:label`,ch.label,fam,lk);lintText(`${id}:ch${j}:reply`,ch.reply,fam,lk)})}}}}
 D.use('slyte',sh,J('slyte'));for(const [intent,pool] of Object.entries(sh.replyPools||{}))(pool.phrases||[]).forEach((p,i)=>lintText(`shared:pool:${intent}:${i}`,typeof p==='string'?p:p.text,'slyte',['fox']));
 
