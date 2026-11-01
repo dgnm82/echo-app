@@ -92,7 +92,7 @@ const GLOW_MAX=57;function toastPlace(el){const sc=document.getElementById('sc')
 function toast(t){const el=$('#toast');el.textContent=t;toastPlace(el);el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
 function h(html){app.innerHTML=html;app.querySelectorAll('.scene').forEach(sc=>{const k=sc.classList.contains('dusk')?'dusk':sc.classList.contains('owl-bg')?'night':sc.classList.contains('fox-bg')?'day':null;if(k)sc.insertAdjacentHTML('afterbegin',ART.bg(k))});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
 const PET_KEYS=new Set(['hello','fed_fav','game_end','pairs_done','gift_got','reveal_reply']);
-const B=(k,x)=>{const l=Dialogue.bark(k,x);if(l&&S){S.chatHistory=S.chatHistory||[];const lid=l.id||(k+':'+(l.text||'').slice(0,24));if(window.DialogueEngine)DialogueEngine.recordHistory(lid,S);else{S.chatHistory.push(lid);if(S.chatHistory.length>64)S.chatHistory.shift()}}return PET_KEYS.has(k)?Dialogue.withPet(l):l};
+const B=(k,x)=>{const l=Dialogue.bark(k,x);if(l&&S){S.chatHistory=S.chatHistory||[];const lid=(l.src&&l.src.music?'♪':'')+(l.id||(k+':'+(l.text||'').slice(0,24)));if(window.DialogueEngine)DialogueEngine.recordHistory(lid,S);else{S.chatHistory.push(lid);if(S.chatHistory.length>64)S.chatHistory.shift()}}return PET_KEYS.has(k)?Dialogue.withPet(l):l};
 function stage(){return [0,20,70,140,210,290,370,440,500].filter(b=>S.bond>=b).length}
 // H8: time of day follows the real local clock through the solar phase table (pixel.js SOLAR; offline, no location read):
 // dawn+morning -> 'morning', afternoon -> 'day', golden dusk -> 'evening', starlight night -> 'night'. S.devTod pins it (Grown-Ups/dev).
@@ -125,7 +125,7 @@ let ambT=null;function scheduleAmbient(){clearTimeout(ambT);const C2=C;ambT=setT
   scheduleAmbient()},(C2.ambientMin+Math.random()*(C2.ambientMax-C2.ambientMin))*1000*(S&&S.ageBand?obBand().ambientScale:1))}
 // H9 (final): ctx.weather = the Echo's own seasonal weather from window.WEATHER (device date cycle only; 'off' -> undefined)
 function wxNow(){try{return window.WEATHER&&WEATHER.dialogueCtx?WEATHER.dialogueCtx(S,new Date(now())):undefined}catch(e){return undefined}}
-Dialogue.ctx=()=>S&&S.kind?({mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),weather:wxNow(),seen:S.seen||[],
+Dialogue.ctx=()=>S&&S.kind?({history:S.chatHistory||[],recent:window.DialogueEngine&&DialogueEngine.recentEvents?DialogueEngine.recentEvents(S,now()):[],mood:mood(),bond:S.bond,stage:stage(),memTags:S.memTags||[],talents:S.talents,time:tod(),vars:seasonVars(),weather:wxNow(),seen:S.seen||[],
   fill:{name:S.g.name,child:S.child,fav:(S.g.fav||'').split(' ').slice(1).join(' '),treasure:E().treasure,place:E().place,release:E().release,trust:E().trust,quirk:S.g.quirk,token:E().token,gift:S.gift||'',memory:(m=>String((m&&m.text)||m||'the day we met'))(S.memories[Math.floor(Math.random()*S.memories.length)]).replace(/\.$/,'')}}):{};
 const SCR=()=>document.getElementById('screen')||document.body;
 const PI=(e,intent)=>window.PIXEL?PIXEL.icon(PIXEL.iconName(e,intent)):e;
@@ -613,12 +613,12 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
   renderBadge();{const hm=$('#home');if(hm)hm.onclick=e=>{if(homeTap())e.stopPropagation()}}
-  $('#feed').onclick=feed;$('#play').onclick=play;$('#comfort').onclick=comfort;$('#rest').onclick=rest;$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
+  const careTap=f=>()=>{sess.careAt=now();f()};$('#feed').onclick=careTap(feed);$('#play').onclick=play;$('#comfort').onclick=careTap(comfort);$('#rest').onclick=careTap(rest);$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
   if(ready){$('#rel').onclick=fwStartByChild;if($('#path'))$('#path').onclick=fwStartByChild;$('#fwl').onclick=fwList}
   if($('#fwstar')&&!FWALK()&&ready)$('#fwstar').onclick=fwStartByChild;
   // stroke to pet
   let strokes=0;$('#cr').addEventListener('pointermove',ev=>{if(ev.buttons||ev.pointerType==='touch'){strokes++;if(window.MusicFX&&!asleep())MusicFX.petMove(ev,FID());if(strokes%25===0)pet()}});
-  $('#cr').addEventListener('click',pet);
+  $('#cr').addEventListener('click',()=>{sess.careAt=now();pet()});
   {const scEl=document.getElementById('sc');if(scEl){if(window.DEN){DEN.setPreset(tod());if(denOn())DEN.mount(scEl,{fam:FID(),sceneId:curScene().id,tod:tod()});else DEN.syncDom(scEl)}if(window.ENV_HOTSPOTS)ENV_HOTSPOTS.mount(scEl,curScene().id,FID());const so=solarNow();if(so)scEl.dataset.solar=so.phase;if(window.WEATHER&&WEATHER.mount)WEATHER.mount(scEl,{fam:FID(),sceneId:curScene().id});todTick();wxReactSched()}}if(window.Alive)Alive.twinkle();
   if(m==='sleep'){{const b=napBed();if(b&&LIVE.st!=='napgo')lvPlace(b[0],b[1])}talk(B('napping'));setTimeout(()=>{if(S.napUntil<=now()&&!document.getElementById('gs')&&!document.querySelector('.fwscene')){sess.woke=1;home()}},Math.max(500,S.napUntil-now()+200));return}
   if(sess.woke){sess.woke=0;const px=$('#cr .px-echo');if(px&&window.PIXEL){PIXEL.sleep(px,true);wakeUp(px)}}
@@ -629,8 +629,16 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
   thoughtSync();if(LIVE.st!=='found'){const keep=m==='sleep'&&LIVE.pos&&LIVE.pos.slice();lvStart(false);if(keep)lvPlace(keep[0],keep[1])}   // asleep: stay on the bed, never re-place on the stage
   if(sess.holidayStart){sess.holidayStart=0;setTimeout(()=>talk(nvB('holidayStart'),3200),600)}else if(greet&&(sess.holidayBack||sess.awayNote||sess.awayTreasure))setTimeout(()=>{if(document.getElementById('feed'))awayOnHome()},3000);
   if(window.Music)Music.home(S.kind,glowNow());
-  setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();wuInviteMaybe();
+  setTimeout(()=>{if(!maybeBondUp())flushMilestones()},400);scheduleAmbient();wuInviteMaybe();setTimeout(missionHome,window.__msnFast?300:2400);
 }
+// ---------- Music School step 4: listening missions (missions.js). Asked once per session on a later session's Home; offered at Home after a game.
+function msnCare(){return asleep()||mood()==='sleep'||now()-(sess.careAt||0)<20000}
+function msnHost(){return {sc:()=>document.getElementById('sc'),fam:FID,line:k=>B(k,{vars:Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'})}),talk:l=>talk(l,2400),react:()=>{if(window.react)window.react('excited')},
+  state:fn=>{EchoBack.withMl(kidId(),m=>{m.missions=Missions.norm(m.missions);fn(m.missions)},S.ageBand)},level:()=>EchoBack.mlFor(kidId(),S.ageBand).level,sessions:()=>EchoBack.mlFor(kidId(),S.ageBand).sessions,
+  care:msnCare,event:e=>{if(window.DialogueEngine)DialogueEngine.noteEvent(S,e,now())}}}
+window.__msn={sess:()=>sess,home:g=>home(g),S:()=>S,kid:()=>kidId()};   // test hook (phone_missions_test)
+function missionHome(){if(!mlOn()||!window.Missions||!document.getElementById('feed')||ov.innerHTML.trim()||document.querySelector('.book,.full,.g2card,.msn,.msnpage,.bondup'))return;
+  Missions.ready.then(()=>{if(!Missions._init){Missions._init=1;Missions.init(msnHost())}if(!document.getElementById('feed'))return;if(Missions.ask())return;if(sess.afterGame){sess.afterGame=0;Missions.offer()}})}
 
 // ---------- Bond-up scene (bond_up.md v0.1): plays on the next Home, before any milestone card; once per transition per Echo ----------
 // ---------- Per-Echo scenes (echo/scenes/scenes.md v0.2) ----------
@@ -803,7 +811,7 @@ function playBondUp(from,to,live,done){
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX(FAMD().music.bondup_sting,{vol:.9});
-    let growEnd=0;{const st=window.Sound&&Sound.dur&&Sound.dur(FAMD().music.bondup_sting),dl=Math.max(1500,Math.round((st||4.3)*1000)-150),gr=window.MusicFX&&MusicFX.growSong&&MusicFX.growSong(FID(),to,{delay:dl});   // step 3: after the sting, the growing song
+    let growEnd=0;{const st=window.Sound&&Sound.dur&&Sound.dur(FAMD().music.bondup_sting),dl=Math.max(1500,Math.round((st||4.3)*1000)-150),gr=window.MusicFX&&MusicFX.growSong&&MusicFX.growSong(FID(),to,{delay:dl});if(gr&&window.DialogueEngine)DialogueEngine.noteEvent(S,'song_grew',now());   // step 3: after the sting, the growing song
       if(gr){growEnd=performance.now()+dl+gr.ms+300;window.__growsong={id:gr.id,stage:to,full:gr.full,phrases:gr.phrases,ms:gr.ms,delay:dl}}else window.__growsong=null}
     const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:FID(),seed:(S.g.seed||1)*7+to,pal:gpal,
       onTitle:t=>{window.__butitle=t},
@@ -1030,6 +1038,7 @@ function book(){
   <div class="bkportrait">${svg(S.kind,S.g,'happy')}</div><b>${S.g.name}</b> — ${e.name}, ${e.title}<br><small>Quirk: ${S.g.quirk} · ${S.days} day(s) together</small>
   ${S.keepsake?`<h2>Keepsakes</h2><span class="chip"${window.MusicFX?` data-snd="${FAMD().music.pet_motif}"`:''}>${PI(({songleaf:'🍂',songfeather:'💫'})[S.keepsake.type]||(FUI().keepsake||{}).emoji||'💫')}${S.keepsake.name}</span>`:''}
   ${S.firstSong?`<h2>${(wuLine('wu_book_title')||{text:'Our first song'}).text}</h2><button class="bkfirst" id="bkfirst" aria-label="${(wuLine('wu_book_title')||{text:'Our first song'}).text}">${(S.firstSong.notes||[]).slice(0,2).map((s,j)=>`<i class="wunote" style="left:${j?77:53}px;top:13px;width:12px;height:12px;--c:${window.EchoBack?EchoBack.colOf(EchoBack.nameOf(S.firstSong.fam,s)):0}"></i>`).join('')}${(S.firstSong.ticks||[]).map((t,j,a)=>`<i class="wusp wumark" style="left:${50+j*(a.length>4?11:15)}px;top:44px;width:14px;height:6px;background-position:${t>=12?-14:0}px 0"></i>`).join('')}</button>`:''}
+  ${window.Missions&&Missions._init&&Missions.hasTab()?`<p><button class="msntab" id="msntab" aria-label="Listening"></button> Listening</p>`:''}
   ${ancSection()}
   <h2>Stickers</h2>${S.stickers.map(s=>(S.eibSongs||{})[s]?`<button class="chip eibchip" data-eibsong="${s}">${PI('🎵')}${s}</button>`:`<span class="chip"${window.MusicFX?' data-snd="memory_pair_found"':''}>${PI('🌟')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Talents</h2>${S.talents.map(s=>`<span class="chip"${window.MusicFX?' data-snd="care_pet_sparkle"':''}>${PI('✨')}${s}</span>`).join('')||'<i>none yet</i>'}
@@ -1044,7 +1053,7 @@ function book(){
   SFX('ui_panel_open');SCR().appendChild(d);try{lvModal()}catch(e){}obWireLock(null);d.querySelector('#x').onclick=()=>{SFX('ui_back');d.remove();setTimeout(lvModal,50)};
   const pl=d.querySelector('#places');if(pl)pl.onclick=scPicker;
   d.querySelectorAll('[data-replay]').forEach(btn=>btn.onclick=()=>{const m=S.bondMoments[+btn.dataset.replay];d.remove();playBondUp(m.from,m.to,false)});
-  ancWire(d);
+  ancWire(d);{const t=d.querySelector('#msntab');if(t)t.onclick=()=>Missions.page(SCR())}
   {const fb=d.querySelector('#bkfirst');if(fb)fb.onclick=()=>{const f=S.firstSong;if(f&&window.EchoBack)EchoBack.ready.then(()=>{const ms=EchoBack.playSong(f.fam,f.song);if(ms){fb.classList.add('playing');setTimeout(()=>fb.classList.remove('playing'),ms)}})}}   // Music School step 1
   d.querySelectorAll('[data-eibsong]').forEach(btn=>btn.onclick=()=>{const t=(S.eibSongs||{})[btn.dataset.eibsong];if(t&&window.EchoBack)EchoBack.ready.then(()=>{const ms=EchoBack.playSong(t.fam,t.song);if(ms&&!lowFx()){btn.classList.add('playing');setTimeout(()=>btn.classList.remove('playing'),ms)}})});   // Batch G: the tune that earned the sticker
 }
@@ -1069,7 +1078,7 @@ function echoBackGame(mode){if(!window.EchoBack)return;gameShell(EchoBack.title)
   $('#quit').onclick=()=>{EchoBack.stop();endGame(done)};
   EchoBack.ready.then(()=>{if($('#gs')!==gs||!EchoBack.data)return;EchoBack.start({gs,fam:FID(),tier:Math.min(4,glowNow()),lowfx:lowFx(),state:S.eib,save,
     band:S.ageBand||'7-8',kid:kidId(),mode:mode==='invite'?'invite':'play',color:S.g.coat,
-    line:(k,x)=>B(k,eibVars(x)),talk:(l,ms)=>talk(l,ms),react:e=>react(e),
+    line:(k,x)=>{if(/^eib_ancient/.test(k)&&window.DialogueEngine)DialogueEngine.noteEvent(S,'eib_ancient',now());return B(k,eibVars(x))},talk:(l,ms)=>talk(l,ms),react:e=>react(e),
     hasSticker:t=>S.stickers.includes(t),
     onSticker:(t,tune)=>{S.stickers.push(t);(S.eibSongs=S.eibSongs||{})[t]=tune;SFX('memory_pair_found');save()},
     onTune:r=>{S.needs.play=clamp(S.needs.play+C.restore.play);save()},
@@ -1121,7 +1130,7 @@ const GLOW=[0,1].map(i=>{const im=new Image();im.src=`px/fx/glow${i}.png`;return
 function drawGlow(cx,x,y,t){const im=GLOW[lowFx()?0:(t/250|0)%2];if(im.complete&&im.naturalWidth)cx.drawImage(im,Math.round(x-20),Math.round(y-20))}
 function hudBest(gm,l){const b=bestGet(gm,l);return b?`<span class="g2hud" id="g2best"><i></i>${b}</span>`:''}
 const G2TITLE={run:['WHAT A RUN!','WHAT A GLIDE!'],dig:['WHAT A DEN!','WHAT A NEST!'],catch:['WHAT A CATCH!','WHAT A CATCH!'],stack:['WHAT A TOWER!','WHAT A SKY STAIR!']};
-function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;const fox=GROUND(),low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
+function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;sess.afterGame=1;const fox=GROUND(),low=lowFx(),n=gameReward(o.t0);window.__g2rounds=n;
   const bl=o.firstEver?'Our first best!':o.isBest?'NEW BEST!':`Best ${o.best}`;
   gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
   {const cd=gs.querySelector('.g2card'),iv=setInterval(()=>{if(!cd.isConnected)return clearInterval(iv);const b=gs.querySelector('.bubble');if(!b||b.style.display==='none'||!b.textContent.trim())return;const s=cd.getBoundingClientRect().height/cd.offsetHeight||1,ov=b.getBoundingClientRect().bottom+4*s-cd.getBoundingClientRect().top;if(ov>0)cd.style.top=Math.min(gs.offsetHeight-cd.offsetHeight-4,cd.offsetTop+ov/s)+'px'},150)}   // the closing line never covers the results card: a long line nudges the card down
@@ -1271,7 +1280,7 @@ function catchGame(){
   const line=(k,ex)=>{if(g.t-lastLine<6)return false;lastLine=g.t;talk(B(k,ex),1800);return true};
   function step(dt){if(ended)return;aim();CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
     for(const e of CatchEngine.take(g)){
-      if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});const ct=window.MusicFX&&MusicFX.catchHit(FID());if(e.gold){SFX('run_gold',{vol:ct?.5:.8});line('catch_gold')}else{if(!ct)SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(ct&&ct.done&&ct.songs%2===1&&line('catch_song')))say('*')}}
+      if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});const ct=window.MusicFX&&MusicFX.catchHit(FID());if(ct&&ct.done&&window.DialogueEngine)DialogueEngine.noteEvent(S,'catch_hook',now());if(e.gold){SFX('run_gold',{vol:ct?.5:.8});line('catch_gold')}else{if(!ct)SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(ct&&ct.done&&ct.songs%2===1&&line('catch_song')))say('*')}}
       if(e.type==='streak'){SFX('run_treasure_5',{vol:.7});line('catch_streak')}
       if(e.type==='land')SFX('run_tumble_boop',{vol:.5,gap:200});
       if(e.type==='end')finish()}
@@ -1379,7 +1388,7 @@ function stackGame(){
   function stop(){stopLoop();document.removeEventListener('keydown',key)}
   function finish(){if(ended)return;ended=true;const R=StackEngine.result(g),n=R.h;v2Count('stack',n,StackEngine.success(g));const r=bestPut('stack',level,n);
     if(n>=5)remember(`We stacked ${n} ${G.units.stack}`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
-    if(n>0&&window.MusicFX&&MusicFX.stackPlay)setTimeout(()=>MusicFX.stackPlay(FID(),n),1000);   // step 3: the end card plays the tower back as a rising tune
+    if(n>0&&window.MusicFX&&MusicFX.stackPlay){setTimeout(()=>MusicFX.stackPlay(FID(),n),1000);if(window.DialogueEngine)DialogueEngine.noteEvent(S,'stack_tune',now())}   // step 3: the end card plays the tower back as a rising tune
     setTimeout(()=>{draw();stop();endCard({game:'stack',unit:G.units.stack,score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${R.perfects}`],onAgain:stackGame})},900)}
   cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
   function key(e){if(!document.getElementById('stc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}

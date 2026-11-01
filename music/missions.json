@@ -1,0 +1,662 @@
+{
+ "_about": "Music School Phase 1 step 4: the six listening missions (PLAN step 4; art + answer sets from px/missions/manifest.json, Kai approved). give/ask are dialogue bark keys (placeholder lines until Cole's step 4 lines land). Answer sounds are REAL family notes off the dig ladder (notes: [ladder index 0 low..5 high or -1 top, ticks, vol]) or a home animal sound (home: animal); all snd values are Jay's placeholders until Cole picks them (snd_by).",
+ "snd_by": "jay_placeholder_until_cole",
+ "bpm": 96,
+ "not_yet": {
+  "icon": "px/missions/icon_not_yet.png",
+  "button": "px/missions/answer_button.png",
+  "label": "none: the pebble alone, no word (Kai, Nov 1)"
+ },
+ "missions": [
+  {
+   "id": "high_sound",
+   "skill": "highlow",
+   "icons": [
+    "ear",
+    "bird",
+    "up"
+   ],
+   "give": "mission_give_high",
+   "ask": "mission_ask_high",
+   "answers": [
+    {
+     "id": "bird",
+     "icon": "px/missions/icon_bird.png",
+     "snd": {
+      "home": "bird"
+     }
+    },
+    {
+     "id": "whistle",
+     "icon": "px/missions/icon_whistle.png",
+     "snd": {
+      "notes": [
+       [
+        5,
+        2,
+        0.5
+       ],
+       [
+        4,
+        2,
+        0.5
+       ],
+       [
+        5,
+        4,
+        0.5
+       ]
+      ]
+     }
+    },
+    {
+     "id": "bell",
+     "icon": "px/i_bell.png",
+     "snd": {
+      "notes": [
+       [
+        5,
+        6,
+        0.45
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        -1,
+        3,
+        0.5
+       ],
+       [
+        -1,
+        3,
+        0.5
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_high_sound.png",
+   "mini": "px/missions/mini_high_sound.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_bird.png",
+    "px/missions/icon_up.png"
+   ]
+  },
+  {
+   "id": "low_sound",
+   "skill": "highlow",
+   "icons": [
+    "ear",
+    "drum",
+    "down"
+   ],
+   "give": "mission_give_low",
+   "ask": "mission_ask_low",
+   "answers": [
+    {
+     "id": "truck",
+     "icon": "px/missions/icon_truck.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        8,
+        0.55
+       ]
+      ]
+     }
+    },
+    {
+     "id": "thunder",
+     "icon": "px/missions/icon_thunder.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        4,
+        0.6
+       ],
+       [
+        0,
+        8,
+        0.35
+       ]
+      ]
+     }
+    },
+    {
+     "id": "cow",
+     "icon": "px/missions/icon_cow.png",
+     "snd": {
+      "notes": [
+       [
+        1,
+        4,
+        0.5
+       ],
+       [
+        0,
+        8,
+        0.5
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        4,
+        0.5
+       ],
+       [
+        0,
+        4,
+        0.5
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_low_sound.png",
+   "mini": "px/missions/mini_low_sound.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_drum.png",
+    "px/missions/icon_down.png"
+   ]
+  },
+  {
+   "id": "beat_tick",
+   "skill": "pulse",
+   "icons": [
+    "ear",
+    "clock",
+    "beat"
+   ],
+   "give": "mission_give_beat",
+   "ask": "mission_ask_beat",
+   "answers": [
+    {
+     "id": "clock",
+     "icon": "px/i_later.png",
+     "snd": {
+      "notes": [
+       [
+        3,
+        4,
+        0.4
+       ],
+       [
+        3,
+        4,
+        0.4
+       ],
+       [
+        3,
+        4,
+        0.4
+       ],
+       [
+        3,
+        4,
+        0.4
+       ]
+      ]
+     }
+    },
+    {
+     "id": "heart",
+     "icon": "px/i_heart.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        2,
+        0.5
+       ],
+       [
+        0,
+        6,
+        0.4
+       ],
+       [
+        0,
+        2,
+        0.5
+       ],
+       [
+        0,
+        6,
+        0.4
+       ]
+      ]
+     }
+    },
+    {
+     "id": "feet",
+     "icon": "px/missions/icon_feet.png",
+     "snd": {
+      "notes": [
+       [
+        2,
+        4,
+        0.45
+       ],
+       [
+        2,
+        4,
+        0.45
+       ],
+       [
+        2,
+        4,
+        0.45
+       ],
+       [
+        2,
+        4,
+        0.45
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        3,
+        4,
+        0.45
+       ],
+       [
+        3,
+        4,
+        0.45
+       ],
+       [
+        3,
+        4,
+        0.45
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_beat_tick.png",
+   "mini": "px/missions/mini_beat_tick.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/i_later.png",
+    "px/missions/icon_beat.png"
+   ]
+  },
+  {
+   "id": "loud_soft",
+   "skill": "loudsoft",
+   "icons": [
+    "ear",
+    "loud",
+    "soft"
+   ],
+   "give": "mission_give_loudsoft",
+   "ask": "mission_ask_loudsoft",
+   "answers": [
+    {
+     "id": "dog",
+     "icon": "px/missions/icon_dog.png",
+     "snd": {
+      "home": "dog"
+     }
+    },
+    {
+     "id": "car",
+     "icon": "px/missions/icon_car.png",
+     "snd": {
+      "notes": [
+       [
+        2,
+        6,
+        0.7
+       ],
+       [
+        2,
+        6,
+        0.2
+       ]
+      ]
+     }
+    },
+    {
+     "id": "thunder",
+     "icon": "px/missions/icon_thunder.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        6,
+        0.7
+       ],
+       [
+        0,
+        6,
+        0.2
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        3,
+        6,
+        0.7
+       ],
+       [
+        3,
+        6,
+        0.2
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_loud_soft.png",
+   "mini": "px/missions/mini_loud_soft.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_loud.png",
+    "px/missions/icon_soft.png"
+   ]
+  },
+  {
+   "id": "fast_slow",
+   "skill": "fastslow",
+   "icons": [
+    "ear",
+    "rabbit",
+    "turtle"
+   ],
+   "give": "mission_give_fastslow",
+   "ask": "mission_ask_fastslow",
+   "answers": [
+    {
+     "id": "rain",
+     "icon": "px/missions/icon_rain.png",
+     "snd": {
+      "notes": [
+       [
+        4,
+        1,
+        0.4
+       ],
+       [
+        3,
+        1,
+        0.4
+       ],
+       [
+        4,
+        1,
+        0.4
+       ],
+       [
+        3,
+        1,
+        0.4
+       ],
+       [
+        4,
+        6,
+        0.4
+       ],
+       [
+        3,
+        6,
+        0.4
+       ]
+      ]
+     }
+    },
+    {
+     "id": "feet",
+     "icon": "px/missions/icon_feet.png",
+     "snd": {
+      "notes": [
+       [
+        2,
+        1,
+        0.45
+       ],
+       [
+        2,
+        1,
+        0.45
+       ],
+       [
+        2,
+        1,
+        0.45
+       ],
+       [
+        2,
+        6,
+        0.45
+       ],
+       [
+        2,
+        6,
+        0.45
+       ]
+      ]
+     }
+    },
+    {
+     "id": "drum",
+     "icon": "px/missions/icon_drum.png",
+     "snd": {
+      "notes": [
+       [
+        0,
+        1,
+        0.5
+       ],
+       [
+        0,
+        1,
+        0.5
+       ],
+       [
+        0,
+        1,
+        0.5
+       ],
+       [
+        0,
+        6,
+        0.5
+       ],
+       [
+        0,
+        6,
+        0.5
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        3,
+        1,
+        0.4
+       ],
+       [
+        3,
+        1,
+        0.4
+       ],
+       [
+        3,
+        6,
+        0.4
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_fast_slow.png",
+   "mini": "px/missions/mini_fast_slow.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_rabbit.png",
+    "px/missions/icon_turtle.png"
+   ]
+  },
+  {
+   "id": "song_back",
+   "skill": "form",
+   "icons": [
+    "ear",
+    "note",
+    "loop"
+   ],
+   "give": "mission_give_songback",
+   "ask": "mission_ask_songback",
+   "answers": [
+    {
+     "id": "bird",
+     "icon": "px/missions/icon_bird.png",
+     "snd": {
+      "home": "bird"
+     }
+    },
+    {
+     "id": "sing",
+     "icon": "px/missions/icon_sing.png",
+     "snd": {
+      "notes": [
+       [
+        2,
+        2,
+        0.45
+       ],
+       [
+        3,
+        2,
+        0.45
+       ],
+       [
+        4,
+        4,
+        0.45
+       ],
+       [
+        2,
+        2,
+        0.45
+       ],
+       [
+        3,
+        2,
+        0.45
+       ],
+       [
+        4,
+        4,
+        0.45
+       ]
+      ]
+     }
+    },
+    {
+     "id": "bell",
+     "icon": "px/i_bell.png",
+     "snd": {
+      "notes": [
+       [
+        5,
+        3,
+        0.45
+       ],
+       [
+        3,
+        3,
+        0.45
+       ],
+       [
+        5,
+        3,
+        0.45
+       ],
+       [
+        3,
+        3,
+        0.45
+       ]
+      ]
+     }
+    },
+    {
+     "id": "other",
+     "icon": "px/i_sparkle.png",
+     "snd": {
+      "notes": [
+       [
+        1,
+        2,
+        0.45
+       ],
+       [
+        2,
+        4,
+        0.45
+       ],
+       [
+        1,
+        2,
+        0.45
+       ],
+       [
+        2,
+        4,
+        0.45
+       ]
+      ]
+     }
+    }
+   ],
+   "min_ml": 2,
+   "card": "px/missions/card_song_back.png",
+   "mini": "px/missions/mini_song_back.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/i_note.png",
+    "px/missions/icon_loop.png"
+   ]
+  }
+ ]
+}

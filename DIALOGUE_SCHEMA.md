@@ -62,3 +62,17 @@ Variables, memory tags and seen conversations are saved with the Echo (`S.vars`,
 - **Drift / lost thought**: after a conversation, about 1 in 8 end with a `lost_thought` line. Otherwise there's a chance to drift (0.6, then 0.3, then 0) via a `drift_bridge` line into a conversation on a linked topic. Topics are linked by species `topicGroups`; a conversation's topic is `conv.topic` or the second id segment. Drift counts toward the 2-conversations-per-session limit.
 - **No-repeat**: an exact bark line isn't reused within 7 days (24 h for core reaction keys). When every line is recent, the least-recently-used one is picked. A topic isn't offered again within 5 days. Stored in `S.dlg`.
 - **Persona** (species `persona`): 8 `petPhrases` and 6 invented `words`; the Echo's seed picks one of each. `{pet_phrase}` is filled at most once per 10 lines. The game also prepends the pet phrase at approved points (hello, favourite food, game wins, gift). `{word:shiny}` becomes the invented word, and any sibling invented word in a line is replaced with this Echo's word.
+
+## Music tag, recent music events, listening missions (Music School Phase 1 step 4)
+- **`music`** (bark line, optional): one of `pulse | highlow | loudsoft | fastslow | timbre | contour | rhythm | mood | form | song`.
+  Only real listening moments get one (not plain purr / hum filler). Proposals come from `tools/music_autotag.py`
+  (`tools/music_tags/proposals.json`); Cole's reviewed file is applied by `tools/step4_dropin.py`.
+- **Quota** (`DialogueEngine.musicTarget`, used by `Dialogue.bark`): the share of music lines in the last 64 lines
+  (`S.chatHistory`, music entries start with `♪`) is steered to 18-25%. Care / calm / goodbye keys (`fed*`, `food_*`, `pet`, `sit`,
+  `nap*`, `sad`, `need_hungry|sleepy|cuddly`, `farewell`, `goodbye_*`, `thanks*`, ...; `DialogueEngine.isCareKey`) never play a
+  music line unless it has `"lintAllow": ["music_care"]`.
+- **`cond.recent`**: list of recent music events (last 15 min): `eib_ancient`, `catch_hook`, `stack_tune`, `song_grew`, `mission_back`.
+- **Mission keys**: `mission_give_<high|low|beat|loudsoft|fastslow|songback>`, `mission_ask_<…>`, `mission_back`; one line per band,
+  gated by `cond.var.eib_band`. Lines marked `context.placeholder: "jay_step4_until_cole"` are Jay's placeholders.
+- **Lint (both lints)**: no quiz forms ("what note", "which note is", "can you name", …), never "bond", no lyrics / quoted song words,
+  tune titles (and `{var:ancient_tune}`) only in 7-8 / 9-10 lines, `music` must be a known tag.

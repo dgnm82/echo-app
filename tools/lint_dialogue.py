@@ -19,12 +19,12 @@ FAREWELL_KEYS = {"wild_glance","bondup_after_3","bondup_after_4","bondup_after_5
   "thanks_nose","thanks_words","write_a_lot"}   # farewell_arc.md v0.2 (release_invite / release_forced / goodbye_ask / walk_end retired)
 ORIGIN_KEYS = {"name_call","name_changed","invite_hum","invite_yes","invite_not_today","named_reply","named_kept","next_postcards_v2"}   # onboarding v1 + origin_v2.md v0.2
 NEW_KEYS = {"carry_on","drift_bridge","lost_thought","ambient","tangent","callback","time_morning","time_day","time_evening","time_night"}  # wired in game.js (v3): ambient timer, conversation tangents, aged-memory callbacks, time-of-day greeting
-_PFX = ("wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_")
-KEY_PREFIX = {"twitchel": _PFX, "slyte": ("wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "whimber": ("wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "shared": ("wu_","talent_","fallback_","ui_")}
-COND_KEYS = {"mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any","weather"}   # weather: Batch H / H9 (ctx.weather)
+_PFX = ("mission_","music_","wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_")
+KEY_PREFIX = {"twitchel": _PFX, "slyte": ("mission_","music_","wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "whimber": ("mission_","music_","wu_","talent_","bond_up_","found_","routine_","pairs_","fallback_","run_","need_","after_","wake_","look_","weather_","food_","catch_","tower_","aff_","dig_","eib_"), "shared": ("wu_","talent_","fallback_","ui_")}
+COND_KEYS = {"recent","mood","bondMin","bondMax","stageMin","stageMax","time","talent","hasMemory","notMemory","var","varSet","varUnset","notSeen","any","weather"}   # weather: Batch H / H9 (ctx.weather)
 WEATHER = ("clear","cloudy","rain","snow","fog","storm")
 HOO = re.compile(r"\bhoo", re.I)   # Batch H / H14: owl-only
-NODE_KEYS = {"caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond","sing"}
+NODE_KEYS = {"music","caption","voice","gesture","lintAllow","say","expr","react","choices","next","wait","branch","set","memory","memoryTag","bond","sing"}
 CHOICE_KEYS = {"caption","voice","gesture","intent","lintAllow","icon","label","cond","reply","expr","react","set","memory","memoryTag","bond","goto"}
 CONV_KEYS = {"topic","id","trigger","weight","once","cond","start","nodes","privacy","lintAllow","context"}   # context: selector metadata (H9)
 TOKENS = {"name","child","fav","treasure","place","release","trust","quirk","token","gift","memory","spot","hint","guess","constellation","goal","dist","rows","n"}  # games v2: dist/rows/n
@@ -68,6 +68,26 @@ def check_self_owl(text, where, sp, owl):
         err(where, f"H14: non-owl whimber line speaks as an owl (owl-gate or reword bird-neutral): {text!r}")
 def is_lion(c):
     return isinstance(c, dict) and ((c.get("var") or {}).get("origin_animal") == "lion" or any(is_lion(x) for x in c.get("any", [])))
+# Music School Phase 1 step 4: no quiz forms, never "bond", no lyrics / quoted song words; titles only in 7-8 / 9-10
+MUSIC_TAGS = {"pulse","highlow","loudsoft","fastslow","timbre","contour","rhythm","mood","form","song"}
+MUSIC_RE = [("music-quiz", re.compile(r"\b(what note|which note( is)?|can you name|name (that|this|the) (note|song|tune)|what('?s| is) (that|this|the) (song|tune|note) called|guess (the|that|which) (note|song|tune))\b", re.I)),
+  ("bond", re.compile(r"\bbond(s|ed|ing)?\b", re.I)),
+  ("lyrics", re.compile(r"\b(sing|sings|sang|singing|hum|hums|hummed|lyrics?|the words( go)?|song goes|tune goes)\b[,:]?\s*(it )?[\"“'‘][^\"“”'’]*\s[^\"“”'’]*[\"”'’]|[\"“][^\"“”]*\s[^\"“”]*[\"”],? (I|we|you|they|it) (sang|sing|hummed)\b|♪\s*[A-Za-z]+\s+[A-Za-z]+", re.I))]
+def _titles():
+    try:
+        T = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "songbook_src", "ancient_titles.json"), encoding="utf-8"))["titles"]
+        return sorted({re.sub(r"^the ", "", v.get("tune", ""), flags=re.I) for v in T.values()} - {""})
+    except Exception: return []
+TITLE_RE = re.compile(r"\b(" + "|".join(re.escape(t) for t in _titles() if " " in t or "ü" in t) + r")\b|\{var:ancient_tune\}", re.I)
+def line_bands(b):
+    out = set()
+    def v(c):
+        if not isinstance(c, dict): return
+        if isinstance(c.get("var"), dict) and c["var"].get("eib_band"): out.add(c["var"]["eib_band"])
+        for x in c.get("any", []): v(x)
+    v(b.get("cond")); a = (b.get("context") or {}).get("age_band")
+    if a: out.add(a)
+    return out
 BANNED_RE = [(b, re.compile(r"(?<![\w'])" + b + r"(?![\w'])", re.I)) for b in BANNED]
 
 errors, warns = [], []
@@ -94,6 +114,8 @@ def check_tokens(text, where):
 def check_banned(text, where, sp=None, allow=()):
     for b, rx in BANNED_RE:
         if rx.search(text): err(where, f"banned word/phrase /{b}/ in: {text!r}")
+    for i, rx in MUSIC_RE:
+        if rx.search(text) and i not in allow: err(where, f"music rule ({i}) in: {text!r}")
     for i, rx in FAMILY_BANNED_RE.get(sp, []):
         if rx.search(text) and i not in allow: err(where, f"banned for this family ({i}) in: {text!r}")
 
@@ -146,12 +168,15 @@ def lint_file(path, seen_ids, dup_pool):
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
-            extra = set(b) - {"text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow","context"}
+            extra = set(b) - {"music","text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow","context"}
             bowl = is_owl(b.get("cond")); check_hoo(b.get("short"), w + ".short", bowl); check_hoo(b.get("caption"), w + ".caption", bowl)
             if "roar" in b.get("lintAllow", []) and not is_lion(b.get("cond")): err(fn, f"{w} roar allowed only on a lion line (cond var origin_animal 'lion')")
             if "caption" in b: check_banned(b["caption"], w)
             if b.get("voice", "soft") != "soft": err(fn, f"{w} voice must be 'soft'")
             if extra: err(fn, f"{w} unknown fields {extra}")
+            if "music" in b and b["music"] not in MUSIC_TAGS: err(fn, f"{w} unknown music tag {b['music']!r}")
+            if isinstance(b.get("text"), str) and TITLE_RE.search(b["text"]) and (not line_bands(b) or line_bands(b) - {"7-8", "9-10"}):
+                err(fn, f"{w} tune titles only in 7-8 / 9-10 lines: {b['text']!r}")
             if b.get("expr") not in EXPR: err(fn, f"{w} bad expr {b.get('expr')!r}")
             if "react" in b and b["react"] not in REACT: err(fn, f"{w} bad react {b['react']!r}")
             if "cond" in b: check_cond(b["cond"], f"{fn} {w}")

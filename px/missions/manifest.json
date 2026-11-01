@@ -1,0 +1,643 @@
+{
+ "_schema": "echo-px-missions-v1",
+ "_owner": "Pixal",
+ "_step": "Music School Phase 1 step 4 (listening missions)",
+ "_generator": "echo/ios_design/music_phase1/missions/make_missions.py",
+ "_canvas": [
+  180,
+  320
+ ],
+ "_ink": [
+  "#3B2A5C",
+  "#24162C"
+ ],
+ "_rules": "No words, numbers, counts, ticks or grades on any art. Meaning by shape (never colour alone). Nothing animates, so no static frames are needed.",
+ "missions": [
+  {
+   "id": "high_sound",
+   "icons": [
+    "ear",
+    "bird",
+    "up"
+   ],
+   "answers": [
+    "bird",
+    "whistle",
+    "bell",
+    "other"
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_high_sound.png",
+   "mini": "px/missions/mini_high_sound.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_bird.png",
+    "px/missions/icon_up.png"
+   ],
+   "answer_icons": {
+    "bird": "px/missions/icon_bird.png",
+    "whistle": "px/missions/icon_whistle.png",
+    "bell": "px/i_bell.png",
+    "other": "px/i_sparkle.png"
+   }
+  },
+  {
+   "id": "low_sound",
+   "icons": [
+    "ear",
+    "drum",
+    "down"
+   ],
+   "answers": [
+    "truck",
+    "thunder",
+    "cow",
+    "other"
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_low_sound.png",
+   "mini": "px/missions/mini_low_sound.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_drum.png",
+    "px/missions/icon_down.png"
+   ],
+   "answer_icons": {
+    "truck": "px/missions/icon_truck.png",
+    "thunder": "px/missions/icon_thunder.png",
+    "cow": "px/missions/icon_cow.png",
+    "other": "px/i_sparkle.png"
+   }
+  },
+  {
+   "id": "beat_tick",
+   "icons": [
+    "ear",
+    "clock",
+    "beat"
+   ],
+   "answers": [
+    "clock",
+    "heart",
+    "feet",
+    "other"
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_beat_tick.png",
+   "mini": "px/missions/mini_beat_tick.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/i_later.png",
+    "px/missions/icon_beat.png"
+   ],
+   "answer_icons": {
+    "clock": "px/i_later.png",
+    "heart": "px/i_heart.png",
+    "feet": "px/missions/icon_feet.png",
+    "other": "px/i_sparkle.png"
+   }
+  },
+  {
+   "id": "loud_soft",
+   "icons": [
+    "ear",
+    "loud",
+    "soft"
+   ],
+   "answers": [
+    "dog",
+    "car",
+    "thunder",
+    "other"
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_loud_soft.png",
+   "mini": "px/missions/mini_loud_soft.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_loud.png",
+    "px/missions/icon_soft.png"
+   ],
+   "answer_icons": {
+    "dog": "px/missions/icon_dog.png",
+    "car": "px/missions/icon_car.png",
+    "thunder": "px/missions/icon_thunder.png",
+    "other": "px/i_sparkle.png"
+   }
+  },
+  {
+   "id": "fast_slow",
+   "icons": [
+    "ear",
+    "rabbit",
+    "turtle"
+   ],
+   "answers": [
+    "rain",
+    "feet",
+    "drum",
+    "other"
+   ],
+   "min_ml": 1,
+   "card": "px/missions/card_fast_slow.png",
+   "mini": "px/missions/mini_fast_slow.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_rabbit.png",
+    "px/missions/icon_turtle.png"
+   ],
+   "answer_icons": {
+    "rain": "px/missions/icon_rain.png",
+    "feet": "px/missions/icon_feet.png",
+    "drum": "px/missions/icon_drum.png",
+    "other": "px/i_sparkle.png"
+   }
+  },
+  {
+   "id": "song_back",
+   "icons": [
+    "ear",
+    "note",
+    "loop"
+   ],
+   "answers": [
+    "bird",
+    "sing",
+    "bell",
+    "other"
+   ],
+   "min_ml": 2,
+   "card": "px/missions/card_song_back.png",
+   "mini": "px/missions/mini_song_back.png",
+   "icon_paths": [
+    "px/missions/icon_ear.png",
+    "px/i_note.png",
+    "px/missions/icon_loop.png"
+   ],
+   "answer_icons": {
+    "bird": "px/missions/icon_bird.png",
+    "sing": "px/missions/icon_sing.png",
+    "bell": "px/i_bell.png",
+    "other": "px/i_sparkle.png"
+   }
+  }
+ ],
+ "not_yet": {
+  "icon": "px/missions/icon_not_yet.png",
+  "button": "px/missions/answer_button.png",
+  "label": "none: the pebble alone, no word (Kai, Nov 1)"
+ },
+ "answer_sets": "approved as proposed (Kai, Nov 1); Cole may swap one later",
+ "_changelog": [
+  "Nov 1 (Kai): all art accepted; answer sets approved; Not yet = pebble alone, no word."
+ ],
+ "answer_icons": {
+  "bird": "px/missions/icon_bird.png",
+  "whistle": "px/missions/icon_whistle.png",
+  "drum": "px/missions/icon_drum.png",
+  "car": "px/missions/icon_car.png",
+  "truck": "px/missions/icon_truck.png",
+  "rain": "px/missions/icon_rain.png",
+  "thunder": "px/missions/icon_thunder.png",
+  "dog": "px/missions/icon_dog.png",
+  "cow": "px/missions/icon_cow.png",
+  "feet": "px/missions/icon_feet.png",
+  "rabbit": "px/missions/icon_rabbit.png",
+  "turtle": "px/missions/icon_turtle.png",
+  "sing": "px/missions/icon_sing.png",
+  "not_yet": "px/missions/icon_not_yet.png",
+  "bell": "px/i_bell.png",
+  "clock": "px/i_later.png",
+  "heart": "px/i_heart.png",
+  "note": "px/i_note.png",
+  "other": "px/i_sparkle.png"
+ },
+ "reused_existing": {
+  "bell": "px/i_bell.png",
+  "clock": "px/i_later.png",
+  "heart": "px/i_heart.png",
+  "note": "px/i_note.png",
+  "other": "px/i_sparkle.png"
+ },
+ "layout": {
+  "page_on_canvas": [
+   8,
+   52
+  ],
+  "page_pieces": {
+   "top": 34,
+   "row": 30,
+   "bottom": 12
+  },
+  "rows": "one row per GIVEN mission in the order given, then at most ONE 'next' row (listen_next.png) only when no card is still out and a mission is still ungiven. Page height = 34 + 30*rows + 12. Never draw empty rows.",
+  "row_items": {
+   "mini_card": [
+    14,
+    3
+   ],
+   "bubble": [
+    124,
+    2
+   ],
+   "bubble_icon": [
+    129,
+    7
+   ],
+   "next_cue": [
+    14,
+    3
+   ]
+  }
+ },
+ "files": [
+  {
+   "file": "px/missions/icon_ear.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: listen",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_up.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: high",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_down.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: low",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_beat.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: steady beat",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_loud.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: loud (3 waves)",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_soft.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: soft (1 small wave)",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_loop.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "postcard picture: comes back round",
+   "kind": "concept"
+  },
+  {
+   "file": "px/missions/icon_bird.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: bird",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_whistle.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: whistle",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_drum.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: drum",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_car.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: car going by",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_truck.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: big truck",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_rain.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: rain",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_thunder.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: thunder",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_dog.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: dog",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_cow.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: cow (moo)",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_feet.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: footsteps",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_rabbit.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: fast (rabbit)",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_turtle.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: slow (turtle)",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_sing.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: someone singing",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/icon_not_yet.png",
+   "size": [
+    16,
+    16
+   ],
+   "use": "answer icon: 'Not yet' (sleeping pebble)",
+   "kind": "answer"
+  },
+  {
+   "file": "px/missions/card_high_sound.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (high_sound): the 3 pictures ['ear', 'bird', 'up'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_bird.png",
+    "px/missions/icon_up.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_high_sound.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the high_sound card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/card_low_sound.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (low_sound): the 3 pictures ['ear', 'drum', 'down'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_drum.png",
+    "px/missions/icon_down.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_low_sound.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the low_sound card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/card_beat_tick.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (beat_tick): the 3 pictures ['ear', 'clock', 'beat'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/i_later.png",
+    "px/missions/icon_beat.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_beat_tick.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the beat_tick card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/card_loud_soft.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (loud_soft): the 3 pictures ['ear', 'loud', 'soft'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_loud.png",
+    "px/missions/icon_soft.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_loud_soft.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the loud_soft card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/card_fast_slow.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (fast_slow): the 3 pictures ['ear', 'rabbit', 'turtle'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/missions/icon_rabbit.png",
+    "px/missions/icon_turtle.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_fast_slow.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the fast_slow card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/card_song_back.png",
+   "size": [
+    112,
+    40
+   ],
+   "use": "Mission postcard (song_back): the 3 pictures ['ear', 'note', 'loop'] left to right. Shown with Cole's short line + OK! button (HTML).",
+   "icons": [
+    "px/missions/icon_ear.png",
+    "px/i_note.png",
+    "px/missions/icon_loop.png"
+   ]
+  },
+  {
+   "file": "px/missions/mini_song_back.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "Small copy of the song_back card for its Memory Book Listening row."
+  },
+  {
+   "file": "px/missions/listen_next.png",
+   "size": [
+    64,
+    24
+   ],
+   "use": "The ONE gentle 'next' cue on the Listening page: a dotted, face-down card with the sleeping pebble. Same size as a mini card."
+  },
+  {
+   "file": "px/missions/answer_button.png",
+   "size": [
+    48,
+    24
+   ],
+   "use": "Answer button for the return question (4 answers + Not yet): f0 up, f1 pressed. Icon 16x16 at (4,4), pressed (4,5).",
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "f0 up, f1 pressed"
+  },
+  {
+   "file": "px/missions/bubble_found.png",
+   "size": [
+    26,
+    26
+   ],
+   "use": "Listening row: the answer the child picked sits in this bubble (icon at +5,+5)."
+  },
+  {
+   "file": "px/missions/bubble_listening.png",
+   "size": [
+    26,
+    26
+   ],
+   "use": "Listening row for a card that is still out (given, or the child tapped Not yet): a dotted bubble with an ear. A calm 'still listening', never a fail."
+  },
+  {
+   "file": "px/missions/listen_page_top.png",
+   "size": [
+    164,
+    34
+   ],
+   "use": "Memory Book 'Listening' page TOP (ear header; any title is HTML). 164x34."
+  },
+  {
+   "file": "px/missions/listen_page_row.png",
+   "size": [
+    164,
+    30
+   ],
+   "use": "Listening page ROW band 164x30, one per item (plain, nothing baked in)."
+  },
+  {
+   "file": "px/missions/listen_page_bottom.png",
+   "size": [
+    164,
+    12
+   ],
+   "use": "Listening page BOTTOM 164x12."
+  },
+  {
+   "file": "px/missions/listen_tab.png",
+   "size": [
+    40,
+    16
+   ],
+   "use": "Memory Book tab for the Listening page (ear). Show it only once the first card has been given. Selected = taller.",
+   "cell": [
+    20,
+    16
+   ],
+   "frames": "f0 not selected, f1 selected"
+  }
+ ]
+}

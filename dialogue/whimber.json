@@ -11707,6 +11707,575 @@
           "needs": "tune"
         }
       }
+    ],
+    "mission_give_high": [
+      {
+        "text": "Listen out there for a high sound. Like a bird.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Your job: find a high sound out in the world.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Listening mission: catch a high sound somewhere today.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      }
+    ],
+    "mission_ask_high": [
+      {
+        "text": "Did you hear a high sound?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Did a high sound find you?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Any high sounds out there?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      }
+    ],
+    "mission_give_low": [
+      {
+        "text": "Listen for a low sound. Big and deep.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Your job: find a low, rumbly sound.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Listening mission: catch a deep, low sound.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      }
+    ],
+    "mission_ask_low": [
+      {
+        "text": "Did you hear a low sound?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Did a low sound find you?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      },
+      {
+        "text": "Any low sounds out there?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "highlow"
+      }
+    ],
+    "mission_give_beat": [
+      {
+        "text": "Listen for a tick, tick, tick. A steady beat.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Your job: find something that keeps a beat.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Listening mission: find a sound with a steady beat.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      }
+    ],
+    "mission_ask_beat": [
+      {
+        "text": "Did you find a beat?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Did something keep a beat for you?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      },
+      {
+        "text": "Any steady beats out there?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "pulse"
+      }
+    ],
+    "mission_give_loudsoft": [
+      {
+        "text": "Listen for a sound that gets loud, then soft.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Your job: find a sound that goes loud, then quiet.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Listening mission: a sound that fades loud to soft.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      }
+    ],
+    "mission_ask_loudsoft": [
+      {
+        "text": "Did you hear loud, then soft?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Did a sound go loud, then quiet?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      },
+      {
+        "text": "Anything fade from loud to soft?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "loudsoft"
+      }
+    ],
+    "mission_give_fastslow": [
+      {
+        "text": "Listen for something fast, and something slow.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "Your job: find a fast sound and a slow one.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "Listening mission: one fast sound, one slow sound.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      }
+    ],
+    "mission_ask_fastslow": [
+      {
+        "text": "Did you hear fast and slow?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "Did you find fast and slow?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      },
+      {
+        "text": "Any fast and slow sounds out there?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "fastslow"
+      }
+    ],
+    "mission_give_songback": [
+      {
+        "text": "Listen for a sound that happens again and again.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      },
+      {
+        "text": "Your job: find a sound that keeps returning.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      },
+      {
+        "text": "Listening mission: catch a little tune that returns.",
+        "expr": "excited",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      }
+    ],
+    "mission_ask_songback": [
+      {
+        "text": "Did a sound happen again?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      },
+      {
+        "text": "Did a sound keep returning?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      },
+      {
+        "text": "Did a tune return for you?",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        },
+        "music": "form"
+      }
+    ],
+    "mission_back": [
+      {
+        "text": "Oh, wow. You heard it.",
+        "expr": "delighted",
+        "cond": {
+          "var": {
+            "eib_band": "5-6"
+          }
+        },
+        "context": {
+          "age_band": "5-6",
+          "placeholder": "jay_step4_until_cole"
+        }
+      },
+      {
+        "text": "You really listened. I love that.",
+        "expr": "delighted",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "placeholder": "jay_step4_until_cole"
+        }
+      },
+      {
+        "text": "Great ears. That sounds just right.",
+        "expr": "delighted",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "placeholder": "jay_step4_until_cole"
+        }
+      }
     ]
   },
   "conversations": [

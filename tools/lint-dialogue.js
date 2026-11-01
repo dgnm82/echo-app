@@ -47,6 +47,18 @@ const RULES=[
  // gendered assumptions about the child
  ['gender',/\b(good|big) (boy|girl)\b/i,'gender'],
 ];
+// Music School Phase 1 step 4 (dialogue files only, not --js UI strings): no quiz forms, never "bond", no lyrics / quoted song words.
+const MUSIC_RULES=[
+ ['music-quiz',/\b(what note|which note( is)?|can you name|name (that|this|the) (note|song|tune)|what('?s| is) (that|this|the) (song|tune|note) called|guess (the|that|which) (note|song|tune))\b/i,'music: no quiz forms'],
+ ['bond',/\bbond(s|ed|ing)?\b/i,'never say "bond"'],
+ ['lyrics',/\b(sing|sings|sang|singing|hum|hums|hummed|lyrics?|the words( go)?|song goes|tune goes)\b[,:]?\s*(it )?["“'‘][^"“”'’]*\s[^"“”'’]*["”'’]|["“][^"“”]*\s[^"“”]*["”],? (I|we|you|they|it) (sang|sing|hummed)\b|♪\s*[A-Za-z]+\s+[A-Za-z]+/i,'music: no lyrics or quoted song words']];
+const MUSIC_TAGS=['pulse','highlow','loudsoft','fastslow','timbre','contour','rhythm','mood','form','song'];
+// tune titles (and the {var:ancient_tune} slot) only in 7-8 / 9-10 lines. One-word titles (Spring, Summer, Entertainer) are too
+// common to match; the spoken-title file is the source (tools/songbook_src/ancient_titles.json).
+const TITLES=(()=>{try{const T=JSON.parse(fs.readFileSync(path.join(__dirname,'songbook_src','ancient_titles.json'),'utf8')).titles;
+  return [...new Set(Object.values(T).map(v=>String(v.tune||'').replace(/^the /i,'')).filter(t=>/\s/.test(t)||/ü/.test(t)))]}catch(e){return []}})();
+const TITLE_RE=TITLES.length?new RegExp('\\b('+TITLES.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\b|\\{var:ancient_tune\\}','i'):/\{var:ancient_tune\}/;
+const bandsOf=l=>{const b=new Set();const v=x=>{if(!x||typeof x!=='object')return;if(x.var&&x.var.eib_band)b.add(x.var.eib_band);(x.any||[]).forEach(v)};v(l.cond);if(l.context&&l.context.age_band)b.add(l.context.age_band);return b};
 // per-family kid-safety bans (Purrlings v1 §5): on top of RULES, only for that family's file
 const FAMILY_RULES={twitchel:[
  ['claws',/\bclaw(s|ed|ing)?\b/i,'cat-safety'],['fangs',/\bfangs?\b/i,'cat-safety'],['teeth',/\b(teeth|toothy)\b/i,'cat-safety'],
@@ -77,6 +89,7 @@ function scanText(file,where,text,allow,species,look){
   if(species!==null&&HOO.test(text)&&look!=='owl')rep('error',file,where,`H14: "hoo" is owl-only (look: ${look||'any/family-wide'})`,text);
   for(const [id,re,cat] of RULES){if(re.test(text)&&!(allow||[]).includes(id))rep('error',file,where,`banned (${cat}: ${id})`,text)}
   if(species!==null&&/\{(?!var:|pick:)(\w+)\}/.test(text)){const k=text.match(/\{(?!var:|pick:)(\w+)\}/g).map(x=>x.slice(1,-1)).filter(k=>!KNOWN_SLOTS.has(k));if(k.length)rep('warn',file,where,'unknown slot(s) '+k.join(','),text)}
+  if(species!==null)for(const [id,re,cat] of MUSIC_RULES){if(re.test(text)&&!(allow||[]).includes(id))rep('error',file,where,`banned (${cat}: ${id})`,text)}
   for(const [id,re,cat] of (FAMILY_RULES[species]||[])){if(re.test(text)&&!(allow||[]).includes(id))rep('error',file,where,`banned (${cat}: ${id})`,text)}
   if(species==='twitchel'){const ish=(text.match(/\b[A-Za-z]{2,}-?ish\b/g)||[]).filter(w=>!ISH_OK.has(w.toLowerCase()));if(ish.length)rep('warn',file,where,'naive voice: -ish word '+ish.join(','),text)}
   // species voice rules (D4) — warnings
@@ -98,7 +111,10 @@ function walk(file,obj,where,allow,species,look){
 function structure(file,d){
   for(const [key,pool] of Object.entries(d.barks||{})){if(!Array.isArray(pool)||!pool.length)rep('error',file,`barks.${key}`,'empty pool');
     (pool||[]).forEach((l,i)=>{if(!l.text&&!(l.text===''&&l.gesture))rep('error',file,`barks.${key}[${i}]`,'missing text');   // P5: text "" + gesture = act-out only
-      if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);if(l.react&&!REACT.has(l.react))rep('error',file,`barks.${key}[${i}]`,'unknown react '+l.react)})}
+      if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);
+      if(l.music!==undefined&&!MUSIC_TAGS.includes(l.music))rep('error',file,`barks.${key}[${i}]`,'unknown music tag '+l.music+' (DIALOGUE_SCHEMA.md)');
+      if('lyrics' in l)rep('error',file,`barks.${key}[${i}]`,'music: no lyrics field');
+      if(typeof l.text==='string'&&TITLE_RE.test(l.text)){const b=bandsOf(l);if(!b.size||[...b].some(x=>x!=='7-8'&&x!=='9-10'))rep('error',file,`barks.${key}[${i}]`,'music: tune titles only in 7-8 / 9-10 lines (cond var eib_band or context.age_band)',l.text)}if(l.react&&!REACT.has(l.react))rep('error',file,`barks.${key}[${i}]`,'unknown react '+l.react)})}
   if(d.species==='twitchel'||/twitchel/.test(path.basename(file))){
     for(const [key,pool] of Object.entries(d.barks||{}))(pool||[]).forEach((l,i)=>{if((l.lintAllow||[]).includes('roar')&&!isLion(l.cond))rep('error',file,`barks.${key}[${i}]`,'roar allowed only on a lion line (cond var origin_animal "lion")',l.text)});
     for(const c of d.conversations||[]){const lion=isLion(c.cond);const objs=[c,...Object.values(c.nodes||{}),...Object.values(c.nodes||{}).flatMap(n=>n.choices||[])];

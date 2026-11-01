@@ -1,0 +1,3261 @@
+{
+ "_about": "Music Phase 1 step 4: auto-tagger PROPOSALS (tools/music_autotag.py). Not applied to the corpus. Cole: set accept true/false per item (or change tag to one of TAGS); save as cole_out/step4/music_tags_reviewed.json; then tools/step4_dropin.sh applies the accepted tags in one command.",
+ "generated": "2026-11-01",
+ "tags": [
+  "pulse",
+  "highlow",
+  "loudsoft",
+  "fastslow",
+  "timbre",
+  "contour",
+  "rhythm",
+  "mood",
+  "form",
+  "song"
+ ],
+ "summary": {
+  "shared": {
+   "proposed": 1,
+   "bark_lines": 29,
+   "by_tag": {
+    "pulse": 0,
+    "highlow": 0,
+    "loudsoft": 0,
+    "fastslow": 0,
+    "timbre": 0,
+    "contour": 0,
+    "rhythm": 0,
+    "mood": 0,
+    "form": 0,
+    "song": 1
+   }
+  },
+  "slyte": {
+   "proposed": 107,
+   "bark_lines": 1012,
+   "by_tag": {
+    "pulse": 29,
+    "highlow": 6,
+    "loudsoft": 2,
+    "fastslow": 1,
+    "timbre": 2,
+    "contour": 0,
+    "rhythm": 3,
+    "mood": 4,
+    "form": 8,
+    "song": 52
+   }
+  },
+  "whimber": {
+   "proposed": 97,
+   "bark_lines": 1210,
+   "by_tag": {
+    "pulse": 16,
+    "highlow": 7,
+    "loudsoft": 4,
+    "fastslow": 0,
+    "timbre": 3,
+    "contour": 1,
+    "rhythm": 1,
+    "mood": 4,
+    "form": 10,
+    "song": 51
+   }
+  },
+  "twitchel": {
+   "proposed": 148,
+   "bark_lines": 1170,
+   "by_tag": {
+    "pulse": 20,
+    "highlow": 5,
+    "loudsoft": 3,
+    "fastslow": 0,
+    "timbre": 2,
+    "contour": 1,
+    "rhythm": 1,
+    "mood": 3,
+    "form": 9,
+    "song": 104
+   }
+  }
+ },
+ "items": [
+  {
+   "file": "shared.json",
+   "key": "wu_book_title",
+   "i": 0,
+   "text": "Our first song",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "talent_Radar Ears",
+   "i": 0,
+   "text": "Wait… I can hear the treasure jingling! Since when?!",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"hear the treasure jingling\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "time_morning",
+   "i": 1,
+   "text": "The sun is up. It beat me. Next time.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "ambient",
+   "i": 15,
+   "text": "Bees go bzzz. One long, low note.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low note\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_3",
+   "i": 0,
+   "text": "Look at my tail! So fluffy. And my song got bigger!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_5",
+   "i": 0,
+   "text": "Listen to my song! We grew all these notes together.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wild_glance",
+   "i": 2,
+   "text": "Hear that song past the meadow? I think it sang hi to me.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wild_glance",
+   "i": 5,
+   "text": "I'm learning SO much here. My song feels bouncy!",
+   "tag": "mood",
+   "why": "how music feels (matched \"song feels bouncy\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bondup_after_5",
+   "i": 0,
+   "text": "I have so many songs from here. Like a pocket of notes!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "next_postcards",
+   "i": 0,
+   "text": "Here's the plan. I turn into little music notes and float home. Whoosh!",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "next_postcards",
+   "i": 1,
+   "text": "Then I'm home in the wild, where all the songs live. I'll hum yours.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_back",
+   "i": 1,
+   "text": "Every {var:origin_animal} you see? Say hi. It knows my song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "need_content",
+   "i": 4,
+   "text": "Doo, doo, dee! Low, low, high. Happy fox song.",
+   "tag": "mood",
+   "why": "how music feels (matched \"Happy fox song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_snow",
+   "i": 14,
+   "text": "Snow makes the world sound quiet. It soaks up sounds like a sponge.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"sound quiet\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "aff_hum",
+   "i": 1,
+   "text": "A humming song! I'll hum the next bit.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "aff_hum",
+   "i": 2,
+   "text": "Hmm-hmm-hmm. Our song sounds like a sunny day.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"sounds like\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "aff_groom",
+   "i": 1,
+   "text": "Ear scratches! My back leg goes thump-thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_title",
+   "i": 0,
+   "text": "Our song grew!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_title",
+   "i": 1,
+   "text": "My song grew!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_title",
+   "i": 5,
+   "text": "More song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "bond_up_title",
+   "i": 7,
+   "text": "Our song! Bigger!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 0,
+   "text": "That was a song! Again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Again\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 1,
+   "text": "We caught a whole song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 3,
+   "text": "Our snack song! Again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Again\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 5,
+   "text": "After saving songs, my bushy tail did a yip-hum hop!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 6,
+   "text": "After saving songs, my floppy ears did a woof-hum hop!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 7,
+   "text": "After saving songs, my silver ruff did a awoo-hum hop!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "catch_song",
+   "i": 8,
+   "text": "After saving songs, my nimble paws did a yip-trill hop!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "tower_beat",
+   "i": 0,
+   "text": "Right on the beat!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "tower_beat",
+   "i": 1,
+   "text": "Bounce, bounce, plop! On the beat!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_invite",
+   "i": 0,
+   "text": "Psst! A song game? Tap the note!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_invite",
+   "i": 1,
+   "text": "Okay okay. I have a tiny tune. Want it? Tap the note!",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_invite",
+   "i": 2,
+   "text": "My ears have a song in them. Sing with me? Tap the note!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_hello",
+   "i": 1,
+   "text": "Song game! I go first. Then you!",
+   "tag": "song",
+   "why": "a song / tune (matched \"Song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_my_turn",
+   "i": 0,
+   "text": "My turn! Ears up.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_my_turn",
+   "i": 2,
+   "text": "My turn. Tiny song!",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_new",
+   "i": 1,
+   "text": "A new song! I copy you:",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_new",
+   "i": 2,
+   "text": "Ooh! Your song. My turn:",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_breath",
+   "i": 0,
+   "text": "Big song. I'll take a breath.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_sticker",
+   "i": 0,
+   "text": "A sticker for our song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_sixteen",
+   "i": 0,
+   "text": "Sixteen notes! That's a whole song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_fox",
+   "i": 2,
+   "text": "Hear my yip-hum song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_fox",
+   "i": 6,
+   "text": "My fox paws tap a lively beat.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_dog",
+   "i": 2,
+   "text": "Hear my woof-hum song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_dog",
+   "i": 6,
+   "text": "My dog paws tap a lively beat.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_dog",
+   "i": 9,
+   "text": "Fun dog fact! Friendly dogs thump our tails like a happy drum.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_wolf",
+   "i": 2,
+   "text": "Hear my awoo-hum song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_wolf",
+   "i": 6,
+   "text": "My wolf paws tap a lively beat.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_coyote",
+   "i": 2,
+   "text": "Hear my yip-trill song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "look_coyote",
+   "i": 6,
+   "text": "My trotting paws tap a lively beat.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_clear",
+   "i": 6,
+   "text": "The sunshine makes my clearing sparkle like a song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_clear",
+   "i": 17,
+   "text": "Clear sky! My wolf song carries far.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_cloudy",
+   "i": 9,
+   "text": "I think the clouds are humming a slow, sleepy tune.",
+   "tag": "fastslow",
+   "why": "fast / slow (matched \"slow, sleepy tune\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 2,
+   "text": "Rain drums on my log!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drums\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 4,
+   "text": "Cozy in the den. Rain song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 5,
+   "text": "The rain is playing a drum song on the leaves. Tap, tap, tap!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 6,
+   "text": "I tucked my tail in my den. Rain sounds are so cozy.",
+   "tag": "mood",
+   "why": "how music feels (matched \"sounds are so cozy\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 9,
+   "text": "Puddles here make the best splashy music. Splish, splash!",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_rain",
+   "i": 21,
+   "text": "Here the rain is tapping a rhythm on the leaves. What weather do you have today?",
+   "tag": "rhythm",
+   "why": "rhythm pattern (matched \"rhythm\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 0,
+   "text": "Rumble-rumble! Sky drum!",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"Rumble\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 5,
+   "text": "My sky is playing its biggest drum. I'm snug inside my den.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 6,
+   "text": "I built a blanket fort to listen to the rain song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 7,
+   "text": "Far away, the thunder sounds like a giant humming a low note.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low note\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 9,
+   "text": "Every rumble is just the sky's bass note. Boom, then hush.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"rumble\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 10,
+   "text": "Thunder is the sound of air moving very fast. It rolls like a big drum.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 13,
+   "text": "The rain is drumming fast and the wind is whooshing. I'm cozy right here.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drumming\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 14,
+   "text": "A storm song has three parts. Rain patter, wind whoosh, and thunder hum!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 17,
+   "text": "My den is snug. I hum a low wolf song.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low wolf song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 20,
+   "text": "A big storm is drumming outside my den, and I'm warm inside. What's the weather like where you are?",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drumming\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "weather_storm",
+   "i": 21,
+   "text": "Here the storm sings a deep drum song. My den is snug. Do you have a storm too, or something calmer?",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_intro",
+   "i": 0,
+   "text": "My first song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_intro",
+   "i": 1,
+   "text": "Ooh, I don't have a song yet! Help me learn one?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_intro",
+   "i": 2,
+   "text": "Every Echo needs a first song. Mine is still tiny. Will you help me find it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_intro_go",
+   "i": 2,
+   "text": "Yay! A few little sound games, and my song starts growing.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_copy_show",
+   "i": 2,
+   "text": "I'll sing two notes, one high and one low. Ears up!",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"notes, one high\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_copy_new",
+   "i": 1,
+   "text": "Ooh, new notes! I'm keeping those for our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_copy_new",
+   "i": 2,
+   "text": "Those are brand-new notes! I'm tucking them into our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_copy_wait",
+   "i": 2,
+   "text": "Listening is part of music too. Here they are once more.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_next",
+   "i": 1,
+   "text": "My song got a little bigger! Next one!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_next",
+   "i": 2,
+   "text": "I can feel my song starting. On to the next bit!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_show",
+   "i": 0,
+   "text": "My heart goes thump-thump!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_show",
+   "i": 1,
+   "text": "Hear that? My heart goes thump, thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_show",
+   "i": 2,
+   "text": "Every song has a heartbeat underneath. Here's mine. Thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_turn",
+   "i": 1,
+   "text": "Tap along with my heartbeat. Thump, thump!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_turn",
+   "i": 2,
+   "text": "Tap along with my heartbeat, as long as you like.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_with",
+   "i": 2,
+   "text": "Your taps and my heartbeat matched up. We sound like one drum!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_own",
+   "i": 0,
+   "text": "Your own beat! Fun!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_own",
+   "i": 1,
+   "text": "Ooh, you have your own beat! It makes me want to dance.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_own",
+   "i": 2,
+   "text": "You made your own beat on top of mine. That's a real drummer trick!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_wait",
+   "i": 0,
+   "text": "Listen. Thump, thump. Cozy!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"Thump\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_wait",
+   "i": 1,
+   "text": "Listening to my heart? It's a cozy sound, right?",
+   "tag": "mood",
+   "why": "how music feels (matched \"cozy sound\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_beat_wait",
+   "i": 2,
+   "text": "You can just listen too. A heartbeat is the quietest music.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"quietest music\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_high_low",
+   "i": 2,
+   "text": "That's the low one, deep like a drum. Now hear its high friend!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_clap_same",
+   "i": 2,
+   "text": "You played my whole pattern back. My ears are doing a happy dance.",
+   "tag": "rhythm",
+   "why": "rhythm pattern (matched \"pattern\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_clap_new",
+   "i": 1,
+   "text": "Ooh, a whole new pattern! Let's put it in our song.",
+   "tag": "rhythm",
+   "why": "rhythm pattern (matched \"pattern\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_clap_new",
+   "i": 2,
+   "text": "You made up a brand-new pattern. Drummers call that a fill. Fun!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"Drummers\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_clap_wait",
+   "i": 1,
+   "text": "I'll pat it once more. You can just listen!",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_clap_wait",
+   "i": 2,
+   "text": "I'll pat it once more. Listening counts as playing too.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_make",
+   "i": 0,
+   "text": "Your notes make our song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_make",
+   "i": 1,
+   "text": "I'm mixing your notes and your pats into one song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_make",
+   "i": 2,
+   "text": "Now I'll put your notes, your beat and your pats together. Here goes!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_done",
+   "i": 0,
+   "text": "Our first song! I love it!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_done",
+   "i": 1,
+   "text": "That's our first song! It has your notes in it.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_song_done",
+   "i": 2,
+   "text": "Our very first song, and it's made from your music. My tail can't stop!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_invite",
+   "i": 0,
+   "text": "A new song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_invite",
+   "i": 1,
+   "text": "I'm learning a new song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "wu_invite",
+   "i": 2,
+   "text": "I'm learning a brand-new song. Want to help me build it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "slyte.json",
+   "key": "eib_ancient_collection",
+   "i": 8,
+   "text": "That tune is from long, long ago. Now it lives in our Ancient Echoes.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "ambient",
+   "i": 3,
+   "text": "Practicing my hum… low note, high note.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low note, high note\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "ambient",
+   "i": 52,
+   "text": "Birds sing most in the morning… a big sunrise song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "pairs_hint",
+   "i": 0,
+   "text": "I think I heard that one rustle.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"heard that one rustle\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bondup_after_3",
+   "i": 0,
+   "text": "A little song just floated by, far past the branches. I wonder…",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bondup_after_4",
+   "i": 0,
+   "text": "My song feels bigger… it hums with all I learned here.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bondup_after_5",
+   "i": 0,
+   "text": "…My song is so big now. Hum, hum.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "list_play_done",
+   "i": 0,
+   "text": "{var:listGame}… that's a new note for my song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "edge_explain",
+   "i": 1,
+   "text": "It's all in my song… every sound, every story. And you.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "next_postcards",
+   "i": 1,
+   "text": "My wild hollow is under that star… where the bird songs live.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "need_content",
+   "i": 5,
+   "text": "Hm-hm-hmm… low, low, high. A happy song.",
+   "tag": "mood",
+   "why": "how music feels (matched \"happy song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_snow",
+   "i": 14,
+   "text": "Snow soaks up sound like a sponge… that's why it's so hushed.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"sound like\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "invite_hum",
+   "i": 0,
+   "text": "…You saw a {var:origin_animal}. I'm the little song it hums.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "aff_hum",
+   "i": 2,
+   "text": "Hm-hm… I like our hum song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bond_up_title",
+   "i": 0,
+   "text": "Our song grew…",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bond_up_title",
+   "i": 2,
+   "text": "My song grew.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "bond_up_title",
+   "i": 7,
+   "text": "Softly, more song.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"Softly, more song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "catch_song",
+   "i": 0,
+   "text": "That was a song… again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"again\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "catch_song",
+   "i": 1,
+   "text": "A whole little song… mm.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "catch_song",
+   "i": 3,
+   "text": "Our little song… again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"again\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "tower_beat",
+   "i": 0,
+   "text": "On the beat… mm.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "tower_beat",
+   "i": 1,
+   "text": "Plop… right with the music.",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_invite",
+   "i": 0,
+   "text": "…a little tune is in my head. Sing it with me? Tap the note.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_invite",
+   "i": 1,
+   "text": "Ah… shall we pass a song back and forth? Tap the note.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_invite",
+   "i": 2,
+   "text": "…I have a small song. Want it? Tap the note.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_your_turn",
+   "i": 1,
+   "text": "Your turn… softly.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Your turn\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_new",
+   "i": 1,
+   "text": "A new song… I copy you:",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_new",
+   "i": 2,
+   "text": "Ah… your song. My turn:",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_again",
+   "i": 1,
+   "text": "Here it is again… softly.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"again\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_breath",
+   "i": 0,
+   "text": "Big song. I'll take a breath…",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_sticker",
+   "i": 0,
+   "text": "A sticker for our song… lovely.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_sixteen",
+   "i": 0,
+   "text": "Sixteen notes… that's a whole song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "found_branch_v2",
+   "i": 2,
+   "text": "In the branch… my song wings rest on the oak bough.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "found_library_v2",
+   "i": 2,
+   "text": "In the library… my song wings rest on the book nook.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "found_hilltop_v2",
+   "i": 2,
+   "text": "In the hilltop… my song wings rest on the mossy rock.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "look_bird",
+   "i": 3,
+   "text": "My song wings fold neatly now…",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_clear",
+   "i": 8,
+   "text": "Clear air carries songs far… I can hear the meadow.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_clear",
+   "i": 14,
+   "text": "In clear weather, songs travel farther… so I sing a little softer.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_clear",
+   "i": 16,
+   "text": "Chirp-trill… sunshine makes me sing my brightest song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_cloudy",
+   "i": 7,
+   "text": "Cloudy days are calm… perfect for a quiet song.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"quiet song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_rain",
+   "i": 0,
+   "text": "Pitter-pat… rain song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_rain",
+   "i": 5,
+   "text": "The rain is tapping a soft song on the leaves.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"soft song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_rain",
+   "i": 16,
+   "text": "Chirp-trill… after rain, I sing the very first song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_rain",
+   "i": 23,
+   "text": "Kree-kee… rain on the waves sounds like a drum roll.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_rain",
+   "i": 26,
+   "text": "Here the rain is playing soft drum notes on the leaves… what's it like where you are today?",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"soft drum notes\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_fog",
+   "i": 18,
+   "text": "Soft-coo… the fog is gentle like my song.",
+   "tag": "mood",
+   "why": "how music feels (matched \"gentle like my song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 0,
+   "text": "Rumble… sky drum.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"Rumble\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 5,
+   "text": "My sky is playing its deepest drum… I'm snug inside.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 6,
+   "text": "I'm tucked in close… listening to the rain song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 8,
+   "text": "The rumble is just the sky's low note… boom, then hush.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"rumble\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 10,
+   "text": "Thunder is the sound of air moving very fast… it rolls like a drum.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 13,
+   "text": "A storm song has three parts… rain patter, wind whoosh, and thunder hum.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 14,
+   "text": "I hum a low note with the rumble… my own thunder duet.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low note\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 18,
+   "text": "Coo-coo… I nestle close and coo a calm note.",
+   "tag": "mood",
+   "why": "how music feels (matched \"calm note\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 19,
+   "text": "Coo-roo… under the eaves, the rain sounds like music.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"sounds like\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "weather_storm",
+   "i": 26,
+   "text": "Here the storm sings its deepest song… and I'm tucked in snug… is it stormy where you are, or calm?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_intro",
+   "i": 0,
+   "text": "…my first song. Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_intro",
+   "i": 1,
+   "text": "I don't have a song yet… will you help me learn one?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_intro",
+   "i": 2,
+   "text": "Every Echo starts with a first song… mine is still very small. Help me find it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_intro_go",
+   "i": 2,
+   "text": "Oh, wonderful… a few small sound games, and my song will start to grow.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_show",
+   "i": 1,
+   "text": "Here are two notes… one high, one low.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"notes… one high\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_turn",
+   "i": 1,
+   "text": "Your turn… sing them back on the pads.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Your turn\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_same",
+   "i": 2,
+   "text": "That's my high-low exactly… it sounds even softer when you sing it.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"high-low exactly… it sounds\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_shape",
+   "i": 2,
+   "text": "You floated down like my notes did… but with notes all your own.",
+   "tag": "contour",
+   "why": "melody moves up / down (matched \"floated down like my notes\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_new",
+   "i": 1,
+   "text": "Oh, new notes… I'll keep them for our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_new",
+   "i": 2,
+   "text": "What new notes… I'm tucking them under my wing for our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_wait",
+   "i": 1,
+   "text": "Listening is lovely too… here they are once more.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_copy_wait",
+   "i": 2,
+   "text": "We can simply listen… here are my two notes again, slowly.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"again\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_next",
+   "i": 1,
+   "text": "My song is growing a little… on to the next.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_next",
+   "i": 2,
+   "text": "I can feel my song beginning… shall we try the next part?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_show",
+   "i": 0,
+   "text": "My heart goes thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_show",
+   "i": 1,
+   "text": "Listen… my heart goes thump, thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_show",
+   "i": 2,
+   "text": "Under every song there's a heartbeat… here's mine, soft and steady.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_turn",
+   "i": 1,
+   "text": "Tap along with my heartbeat… slow and soft.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_turn",
+   "i": 2,
+   "text": "Tap along with my heartbeat… for as long as you like.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_with",
+   "i": 2,
+   "text": "Your taps settled onto my heartbeat… we sound like one drum.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_own",
+   "i": 0,
+   "text": "Your own beat. I like it.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_own",
+   "i": 1,
+   "text": "You found your own beat… it makes my wings sway.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_own",
+   "i": 2,
+   "text": "You played your own beat over mine… drummers love doing that.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_wait",
+   "i": 1,
+   "text": "Just listening to my heart? It's a cozy sound.",
+   "tag": "mood",
+   "why": "how music feels (matched \"cozy sound\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_beat_wait",
+   "i": 2,
+   "text": "You can simply listen… a heartbeat is the gentlest kind of music.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_high_show",
+   "i": 1,
+   "text": "Two little notes… one up high, one down low.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"notes… one up high\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_clap_new",
+   "i": 1,
+   "text": "Oh, a whole new pattern… let's put it in our song.",
+   "tag": "rhythm",
+   "why": "rhythm pattern (matched \"pattern\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_clap_new",
+   "i": 2,
+   "text": "You made up a brand-new pattern… drummers call that a fill.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drummers\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_clap_wait",
+   "i": 1,
+   "text": "I'll tap it once more… you can just listen.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_clap_wait",
+   "i": 2,
+   "text": "I'll tap it once more… listening counts as playing too.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_make",
+   "i": 0,
+   "text": "Your notes… our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_make",
+   "i": 1,
+   "text": "I'm weaving your notes and taps into one song…",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_make",
+   "i": 2,
+   "text": "Now I'll weave your notes, your beat and your taps together… here it comes.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_done",
+   "i": 0,
+   "text": "Our first song. I love it.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_done",
+   "i": 1,
+   "text": "That's our first song… your notes are in it.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_song_done",
+   "i": 2,
+   "text": "Our very first song… made from your music. My wings feel warm.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_invite",
+   "i": 0,
+   "text": "A new song… help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_invite",
+   "i": 1,
+   "text": "I'm learning a new song… help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "wu_invite",
+   "i": 2,
+   "text": "I'm learning a brand-new song… would you help me build it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_ancient_echo",
+   "i": 4,
+   "text": "Mm… a tune from long, long ago. An Ancient Echo!",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_ancient_echo",
+   "i": 8,
+   "text": "My wings feel tingly… a tune from long, long ago. An Ancient Echo!",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "whimber.json",
+   "key": "eib_ancient_collection",
+   "i": 7,
+   "text": "A tune from long, long ago… and now it lives in our Ancient Echoes.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "talent_Purr Song",
+   "i": 0,
+   "text": "Listen… my purr makes a song now. A sleepy song.",
+   "tag": "mood",
+   "why": "how music feels (matched \"sleepy song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "ambient",
+   "i": 40,
+   "text": "A bumblebee. Bzzz. One long, low note.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low note\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "ambient",
+   "i": 47,
+   "text": "I like the sound of your steps.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"sound of\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "ambient",
+   "i": 48,
+   "text": "I'm keeping your laugh in my song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "ambient",
+   "i": 54,
+   "text": "I heard a song in the grass. Our song?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "ambient",
+   "i": 56,
+   "text": "We have a song now. Me and you.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 2,
+   "text": "After matching cards, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 3,
+   "text": "After matching cards, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 4,
+   "text": "After matching cards, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 6,
+   "text": "After matching cards, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 7,
+   "text": "After matching cards, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "pairs_done",
+   "i": 8,
+   "text": "After matching cards, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "bond_up_5",
+   "i": 0,
+   "text": "Listen to my song! All these notes. We made them.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wild_glance",
+   "i": 2,
+   "text": "Hear that song past the meadow? I think it purred hi.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "bondup_after_5",
+   "i": 0,
+   "text": "I have so many songs from here. My basket of songs!",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "list_play_done",
+   "i": 0,
+   "text": "{var:listGame}, done! That one goes in my song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "next_postcards",
+   "i": 0,
+   "text": "Here's what happens. I turn into little music notes. Then I float home.",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "next_postcards",
+   "i": 1,
+   "text": "Then I'm home in the wild, where the songs live. I'll purr yours.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_back",
+   "i": 1,
+   "text": "Every {var:origin_animal} you see? Say hi. It knows my song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 3,
+   "text": "After hopping fast, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 4,
+   "text": "After hopping fast, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 5,
+   "text": "After hopping fast, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 7,
+   "text": "After hopping fast, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 8,
+   "text": "After hopping fast, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "run_end",
+   "i": 9,
+   "text": "After hopping fast, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "need_content",
+   "i": 4,
+   "text": "Mrr, mrr, mee! Low, low, high. Happy cat song.",
+   "tag": "mood",
+   "why": "how music feels (matched \"Happy cat song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 2,
+   "text": "After catching treats, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 3,
+   "text": "After catching treats, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 4,
+   "text": "After catching treats, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 6,
+   "text": "After catching treats, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 7,
+   "text": "After catching treats, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_end",
+   "i": 8,
+   "text": "After catching treats, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 2,
+   "text": "After stacking blocks, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 3,
+   "text": "After stacking blocks, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 4,
+   "text": "After stacking blocks, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 6,
+   "text": "After stacking blocks, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 7,
+   "text": "After stacking blocks, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_end",
+   "i": 8,
+   "text": "After stacking blocks, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "aff_hum",
+   "i": 1,
+   "text": "A hum song! I'll purr the next bit.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "aff_hum",
+   "i": 2,
+   "text": "Hmm-purr-hmm. Our song sounds like a sunbeam.",
+   "tag": "timbre",
+   "why": "what makes the sound (matched \"sounds like\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 2,
+   "text": "After clearing rows, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 3,
+   "text": "After clearing rows, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 4,
+   "text": "After clearing rows, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 6,
+   "text": "After clearing rows, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 7,
+   "text": "After clearing rows, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "dig_end",
+   "i": 8,
+   "text": "After clearing rows, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "bond_up_title",
+   "i": 0,
+   "text": "Our song grew!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "bond_up_title",
+   "i": 1,
+   "text": "My song grew!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "callback",
+   "i": 33,
+   "text": "We drummed {var:drum}. Thump!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drummed\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "callback",
+   "i": 39,
+   "text": "The music box {var:music}. Ding!",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 0,
+   "text": "That was a song! Again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Again\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 1,
+   "text": "A whole song! Purr!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 3,
+   "text": "Our snack song. Again?",
+   "tag": "form",
+   "why": "part returns / turns (matched \"Again\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 5,
+   "text": "After saving songs, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 6,
+   "text": "After saving songs, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 7,
+   "text": "After saving songs, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 9,
+   "text": "After saving songs, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 10,
+   "text": "After saving songs, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "catch_song",
+   "i": 11,
+   "text": "After saving songs, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"songs\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "tower_beat",
+   "i": 0,
+   "text": "On the beat! Plop!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 2,
+   "text": "After singing notes, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 3,
+   "text": "After tapping petals, I purred a mrrp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 4,
+   "text": "After singing notes, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 5,
+   "text": "After tapping petals, I purred a ruff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 6,
+   "text": "After singing notes, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 7,
+   "text": "After tapping petals, I purred a chuff-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 10,
+   "text": "After singing notes, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 11,
+   "text": "After tapping petals, I purred a chirp-purr tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 12,
+   "text": "After singing notes, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 13,
+   "text": "After tapping petals, I purred a mrrp-trill tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 14,
+   "text": "After singing notes, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_sing",
+   "i": 15,
+   "text": "After tapping petals, I purred a purr-flick tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_invite",
+   "i": 0,
+   "text": "Mrrp! A song game? Tap the note!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_invite",
+   "i": 1,
+   "text": "A tiny tune. Sing with me? Tap the note!",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_hello",
+   "i": 1,
+   "text": "Song game! Me first. Then you!",
+   "tag": "song",
+   "why": "a song / tune (matched \"Song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_my_turn",
+   "i": 0,
+   "text": "My turn! Listen.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_my_turn",
+   "i": 2,
+   "text": "My turn. Little song.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_new",
+   "i": 1,
+   "text": "New song! I copy you:",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_new",
+   "i": 2,
+   "text": "Mrrp! Your song. My turn:",
+   "tag": "form",
+   "why": "part returns / turns (matched \"My turn\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_breath",
+   "i": 0,
+   "text": "Big song. I'll take a breath.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_sticker",
+   "i": 0,
+   "text": "A sticker for our song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_sixteen",
+   "i": 0,
+   "text": "Sixteen notes! That's a whole song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_cat",
+   "i": 2,
+   "text": "Hear my mrrp-purr song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_cat",
+   "i": 6,
+   "text": "My cat tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_lion",
+   "i": 2,
+   "text": "Hear my ruff-purr song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_lion",
+   "i": 6,
+   "text": "My lion tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_tiger",
+   "i": 2,
+   "text": "Hear my chuff-purr song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_tiger",
+   "i": 6,
+   "text": "My tiger tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_tiger",
+   "i": 9,
+   "text": "Tigers make a soft chuff sound to say hello. Chuff-mrrp!",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"soft chuff sound\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_leopard",
+   "i": 2,
+   "text": "Hear my purr-pad song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_leopard",
+   "i": 6,
+   "text": "My balance tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_cheetah",
+   "i": 2,
+   "text": "Hear my chirp-purr song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_cheetah",
+   "i": 6,
+   "text": "My rudder tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_snowleopard",
+   "i": 2,
+   "text": "Hear my mrrp-trill song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_snowleopard",
+   "i": 6,
+   "text": "My muffler tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_lynx",
+   "i": 2,
+   "text": "Hear my purr-flick song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "look_lynx",
+   "i": 6,
+   "text": "My bobbed tail swishes to the tune.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_rain",
+   "i": 0,
+   "text": "Pitter-pat! Rain music.",
+   "tag": "song",
+   "why": "a song / tune (matched \"music\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_rain",
+   "i": 3,
+   "text": "Rain song. Purr-purr.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_rain",
+   "i": 7,
+   "text": "The rain here sounds like tiny drums. Is it raining by you?",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drums\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_rain",
+   "i": 13,
+   "text": "Each raindrop makes a note. Big drops sound lower.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"sound lower\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_rain",
+   "i": 24,
+   "text": "Here the rain is tapping a soft tune. What weather do you have today?",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"soft tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_fog",
+   "i": 13,
+   "text": "Sounds travel softly in fog. Everything feels hushed.",
+   "tag": "loudsoft",
+   "why": "loud / soft (matched \"Sounds travel softly\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 3,
+   "text": "Sky drum! Boom, boom.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 5,
+   "text": "The thunder is humming a low song. I'm cozy here.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"low song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 8,
+   "text": "The rain is drumming fast. My home keeps me dry.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drumming\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 9,
+   "text": "I'll purr along with the thunder-song. Purr-rumble!",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"rumble\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 10,
+   "text": "Thunder is just air moving fast. It rumbles like a drum.",
+   "tag": "highlow",
+   "why": "high / low sound (matched \"rumbles\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 23,
+   "text": "A storm is drumming on my window. I'm warm and snug inside. What's the weather like by you?",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drumming\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "weather_storm",
+   "i": 24,
+   "text": "Here the storm sings a deep drum song. My basket is cozy. Is it stormy where you are, or calm?",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_intro",
+   "i": 0,
+   "text": "A first song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_intro",
+   "i": 1,
+   "text": "I don't have a song yet. Will you help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_intro",
+   "i": 2,
+   "text": "Every Echo needs a first song. Mine is still teeny. Help me find it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_intro_go",
+   "i": 1,
+   "text": "Yay! A few cozy sound games. Whiskers up!",
+   "tag": "mood",
+   "why": "how music feels (matched \"cozy sound\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_intro_go",
+   "i": 2,
+   "text": "Yay! A few little sound games. Then my song starts growing.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_copy_shape",
+   "i": 2,
+   "text": "You slid down like my notes did. But with your own!",
+   "tag": "contour",
+   "why": "melody moves up / down (matched \"slid down like my notes\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_copy_new",
+   "i": 1,
+   "text": "Ooh, new notes! I'm saving those for our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_copy_new",
+   "i": 2,
+   "text": "Brand-new notes! I'm curling them up into our song.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_copy_wait",
+   "i": 1,
+   "text": "Just listening? Cozy! Here they are once more.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_copy_wait",
+   "i": 2,
+   "text": "Listening is music too. Here they come again, slowly.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"again\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_next",
+   "i": 1,
+   "text": "My song got a tiny bit bigger! Next!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_next",
+   "i": 2,
+   "text": "I can feel my song starting. Ready for the next part?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_show",
+   "i": 0,
+   "text": "My heart goes thump, thump!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_show",
+   "i": 1,
+   "text": "Hear that? My heart goes thump, thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"thump\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_show",
+   "i": 2,
+   "text": "Every song has a heartbeat under it. Here's mine. Thump, thump.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_turn",
+   "i": 1,
+   "text": "Tap along with my heartbeat. Nice and steady!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_turn",
+   "i": 2,
+   "text": "Tap along with my heartbeat. Keep going as long as you like.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_with",
+   "i": 2,
+   "text": "Your taps landed on my heartbeat. We sound like one drum!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_own",
+   "i": 0,
+   "text": "Your own beat! I like it!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_own",
+   "i": 1,
+   "text": "You found your own beat! My tail is swaying.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_own",
+   "i": 2,
+   "text": "You played your own beat over mine. Drummers love that!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_beat_wait",
+   "i": 2,
+   "text": "You can just listen. A heartbeat is the softest music.",
+   "tag": "pulse",
+   "why": "steady beat (matched \"heartbeat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_high_low",
+   "i": 2,
+   "text": "That's the low one, deep like a big drum. Now hear its high friend!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"drum\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_clap_new",
+   "i": 1,
+   "text": "Ooh, a brand-new pattern! It goes in our song.",
+   "tag": "rhythm",
+   "why": "rhythm pattern (matched \"pattern\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_clap_new",
+   "i": 2,
+   "text": "You made up a new pattern. Drummers call that a fill!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"Drummers\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_clap_wait",
+   "i": 1,
+   "text": "I'll pat it once more. You can just listen!",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_clap_wait",
+   "i": 2,
+   "text": "I'll pat it once more. Listening counts as playing too.",
+   "tag": "form",
+   "why": "part returns / turns (matched \"once more\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_make",
+   "i": 0,
+   "text": "Your notes! Making our song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_make",
+   "i": 1,
+   "text": "I'm mixing your notes and pats into one song!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_make",
+   "i": 2,
+   "text": "Now your notes, your beat and your pats go together. Here goes!",
+   "tag": "pulse",
+   "why": "steady beat (matched \"beat\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_done",
+   "i": 0,
+   "text": "Our first song! I love it!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_done",
+   "i": 1,
+   "text": "That's our first song! Your notes are in it.",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_song_done",
+   "i": 2,
+   "text": "Our very first song, made from your music. My tail is all fluffy!",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_invite",
+   "i": 0,
+   "text": "A new song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_invite",
+   "i": 1,
+   "text": "I'm learning a new song! Help me?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "wu_invite",
+   "i": 2,
+   "text": "I'm learning a brand-new song. Want to help me build it?",
+   "tag": "song",
+   "why": "a song / tune (matched \"song\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_ancient_echo",
+   "i": 8,
+   "text": "An Ancient Echo! This tune is from long, long ago.",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  },
+  {
+   "file": "twitchel.json",
+   "key": "eib_ancient_collection",
+   "i": 7,
+   "text": "A tune from long, long ago. We found it together!",
+   "tag": "song",
+   "why": "a song / tune (matched \"tune\")",
+   "accept": null
+  }
+ ]
+}

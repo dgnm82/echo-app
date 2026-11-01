@@ -62,6 +62,7 @@ function check(cond,ctx){
   if(c.varUnset&&(c.varUnset in (ctx.vars||{})))return false;
   if(c.notSeen&&(ctx.seen||[]).includes(c.notSeen))return false;
   if(c.any&&!c.any.some(x=>check(x,ctx)))return false;
+  if(c.recent&&!c.recent.some(e=>(ctx.recent||[]).includes(e)))return false;   // step 4: a recent music event (DialogueEngine.MUSIC_EVENTS, last 15 min)
   return true;
 }
 D.check=check;
@@ -106,6 +107,12 @@ D.bark=function(key,extra,filter){
   const at=D.mem.lineAt=D.mem.lineAt||{};const now=D.now(),win=recentWindow(key);
   let pool=all.filter(l=>!(at[lineKey(key,l)]>now-win));
   if(!pool.length){const oldest=Math.min(...all.map(l=>at[lineKey(key,l)]||0));pool=all.filter(l=>(at[lineKey(key,l)]||0)===oldest)}
+  const E=W.DialogueEngine,hist=ctx.history;
+  if(E&&E.musicFactor){   // step 4 music quota (DialogueEngine): never in care/calm keys; elsewhere steer the share of music lines to 18-25%
+    const lru=xs=>{const o=Math.min(...xs.map(l=>at[lineKey(key,l)]||0));return xs.filter(l=>(at[lineKey(key,l)]||0)===o)};
+    const can=l=>E.musicFactor(l,key,0.2,null)>0;if(!pool.every(can)){pool=pool.filter(can);if(!pool.length){const a=all.filter(can);if(!a.length)return {text:'…',expr:'neutral',key};pool=lru(a)}}
+    const tg=hist&&E.musicTarget?E.musicTarget(E.musicShare(hist),hist.length):null,pm=pool.filter(l=>l.music);
+    if(tg!=null&&pm.length){const pp=pool.filter(l=>!l.music);if(pp.length)pool=D.rand()<tg?pm:pp;else if(tg===0){const a=all.filter(l=>!l.music);if(a.length)pool=lru(a)}}}
   const tot=pool.reduce((s,l)=>s+(l.weight||1),0);let r=D.rand()*tot,l=pool[0];for(const x of pool){r-=(x.weight||1);if(r<=0){l=x;break}}
   at[lineKey(key,l)]=now;D.countLine();
   return {text:D.fill(l.text,extra),expr:l.expr||'neutral',react:l.react,key,src:l,gesture:l.gesture,caption:l.caption&&D.fill(l.caption,extra),voice:l.voice};

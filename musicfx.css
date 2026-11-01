@@ -35,3 +35,18 @@
 #sc #cr.beat{transform:translateX(-50%) translateY(-1px)}
 .calm #sc #cr.beat{transform:translateX(-50%)}
 @media (prefers-reduced-motion:reduce){#sc #cr.beat{transform:translateX(-50%)}}
+/* Music School step 4: listening missions (missions.js; art px/missions/, Pixal). Scene px = phone px - 57 (SC_OY). Nothing animates. */
+#sc .msn{position:absolute;inset:0;z-index:60}
+.msn img,.msnpage img{position:absolute;image-rendering:pixelated;pointer-events:none}
+#sc .msnbox{position:absolute;left:34px;width:112px;top:82px;display:flex;flex-direction:column;align-items:center;gap:4px}
+#sc .msnline{position:relative;width:112px;background:#FFF6E6;border:1px solid #3B2A5C;border-radius:2px;padding:3px 4px;box-sizing:border-box;text-align:center;font-size:8px;line-height:10px;color:#3B2A5C}
+#sc .msnbox.msnaskbox{left:0;width:180px;top:62px}#sc .msnline.msnq{width:112px}
+#sc .msnrow{position:relative;width:180px;height:24px}
+#sc .msnok{position:relative;width:24px;height:24px;border:0;padding:0;background:url(px/button.png) 0 0/100% 100% no-repeat;image-rendering:pixelated;font:8px PS2P,monospace;color:#3B2A5C}
+#sc .msnans{position:absolute;width:24px;height:24px;border:0;padding:0;background:url(px/missions/answer_button.png) 0 0/48px 24px no-repeat;image-rendering:pixelated;touch-action:manipulation}
+#sc .msnans:active{background-position:-24px 0}#sc .msnans:active img{top:5px!important}
+.msnpage{position:absolute;inset:0;z-index:25;background:#FFF6E6}
+.msnpage .msnx{position:absolute;right:6px;top:6px}
+.msnpage .msntitle{position:absolute;left:8px;top:32px;font-size:8px;color:#3B2A5C}
+.book .msntab{width:20px;height:16px;border:0;padding:0;background:url(px/missions/listen_tab.png) 0 0/40px 16px no-repeat;image-rendering:pixelated;vertical-align:middle}
+.book .msntab:active{background-position:-20px 0}
