@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Project Echo: handheld 60x80 grid view</title><link rel="icon" href="data:,"><script src="pixel.js?v=9854d0c0"></script>
+<title>Project Echo: handheld 60x80 grid view</title><link rel="icon" href="data:,"><script src="pixel.js?v=e7deba26"></script>
 <style>
 @font-face{font-family:PS2P;src:url(px/PressStart2P.ttf)}
 html,body{margin:0;background:#2E2452;color:#FFF6E6;font:12px PS2P,monospace;text-align:center}
@@ -13,7 +13,7 @@ button{font:10px PS2P,monospace;padding:8px 10px;margin:4px;background:#FFD27A;c
 </style></head><body>
 <p>Handheld grid view: the 60×80 virtual canvas from the hardware addendum, drawn at a whole-number scale (the real 240×320 panel is 4×). Rows: 8 status, 52 stage, 20 choice bar with four 15×20 cells (12×12 icons), one per physical button. Keys 1 to 4 or tap a cell.</p>
 <div id="wrap"><div class="panel"><canvas id="c" width="60" height="80"></canvas><canvas id="grid"></canvas></div><div class="keys"><span></span><span></span><span></span><span></span></div></div>
-<div><button id="g">Show pixel grid</button><button id="s">Next bond stage</button><button id="v">New seed</button></div>
+<div><button id="g">Show pixel grid</button><button id="s">Next song stage</button><button id="v">New seed</button></div>
 <script>
 (()=>{const c=document.getElementById('c'),x=c.getContext('2d');x.imageSmoothingEnabled=false;
 const q=new URLSearchParams(location.search);let save=null;try{save=JSON.parse(localStorage.getItem('echo-proto-v1'))}catch(e){}

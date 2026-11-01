@@ -75,7 +75,7 @@ async def home(b,p,kind,errs):
   i,j=await pg.evaluate("(()=>{const c=__mem.cards;return [0,MemoryEngine.partner(__mem,0)]})()")
   await pg.evaluate(f"__memTap({i})");await pg.wait_for_timeout(200);await pg.evaluate(f"__memTap({j})");await pg.wait_for_timeout(500)
   os_=await pg.evaluate("__os");sp=await pg.evaluate("__sp")
-  check(len([n for n in os_ if n.startswith(f'notes/{fam}_')])==4 and 'memory_pair_found' not in sp,f'pairs: flip+flip+match chime = 4 notes ({os_})')
+  check(len([n for n in os_ if n.startswith(f'notes/{fam}_')])==6 and 'memory_pair_found' not in sp,f'pairs: each card sings its own 2-note tune (LIST2 #5) + match chime = 6 notes ({os_})')
   await leave()
   dw=G('Dig|Weave|Tumble')
   if dw:

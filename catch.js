@@ -22,8 +22,16 @@ function spawn(g){const R=ramp(g.L,g.n),P=g.P;g.made++;const gold=g.made>=g.next
   if(same(bin(x))){const b=bin(x),a=Math.max(12,b*BIN-1),c=Math.min(F.W-12,(b+1)*BIN);x=(b*BIN-1>=12&&(px-a<=c-px||(b+1)*BIN>F.W-12))?a:c}   // a tight window: step just over the spot edge
   h.push(bin(x));if(h.length>3)h.shift();
   const it={x,x0:x,y:F.Y0,v,gold,id:g.made,sway:g.lowfx?0:R.sway,ph:g.r()*6.28};g.items.push(it);g.ev.push({type:'spawn',gold});}
+// LIST2 #4 (Daniel, Oct 26): smooth, free movement under the finger. The Echo follows its target with a critically damped spring
+// (no snap, no stop-start when the finger turns), capped at FOLLOW.vMax, which is well above echoV (echoV still sets what the spawner
+// treats as reachable, so fairness only gets easier). Any whole-pixel x in [EDGE, W-EDGE] can be reached: no columns, no grid.
+const FOLLOW={omega:22,vMax:600,aMax:9000,EDGE:4};   // aMax: a turn eases through (~4 frames from full speed), never a snap
+function follow(g,dt){const w=FOLLOW.omega,d=g.tx-g.x,v0=g.vx||0;let a=w*w*d-2*w*v0;a=Math.max(-FOLLOW.aMax,Math.min(FOLLOW.aMax,a));
+  let v=Math.max(-FOLLOW.vMax,Math.min(FOLLOW.vMax,v0+a*dt));
+  let nx=g.x+v*dt;if((g.tx-nx)*d<0){nx=g.tx;v=0}   // never overshoot past the finger
+  if(Math.abs(g.tx-nx)<.05&&Math.abs(v)<2){nx=g.tx;v=0}g.x=nx;g.vx=v}
 function step(g,dt){if(g.done)return g;g.t+=dt;const L=g.L;
-  const d=g.tx-g.x,mv=L.echoV*dt;g.x+=Math.abs(d)<=mv?d:Math.sign(d)*mv;
+  follow(g,dt);
   g.spawnT-=dt;const R=ramp(L,g.n);if(g.spawnT<=0&&g.items.length<R.simul){spawn(g);g.spawnT=R.int}
   for(const it of g.items.slice()){it.y+=it.v*dt;
     if(!it.gold&&it.sway)it.x=Math.max(8,Math.min(F.W-8,it.x0+it.sway*Math.sin(it.ph+g.t*6.28*.6)*Math.min(1,(F.LINE-it.y)/60)));
@@ -38,8 +46,8 @@ function step(g,dt){if(g.done)return g;g.t+=dt;const L=g.L;
   return g}
 // playtest: only a hit on the Echo's head counts (head ~ basket width minus the item overhang)
 const HEAD={easy:22,standard:16,bigkid:14};function headR(g){return (HEAD[g.level]||16)/2+g.L.magnet}
-function moveTo(g,x){g.tx=Math.max(10,Math.min(F.W-10,x))}
+function moveTo(g,x){g.tx=Math.max(FOLLOW.EDGE,Math.min(F.W-FOLLOW.EDGE,x))}
 function nudge(g,dir){moveTo(g,g.x+dir*30)}
 function score(g){return g.n}
 function take(g){const e=g.ev;g.ev=[];return e}
-W.CatchEngine={create,step,moveTo,nudge,take,score,ramp,F,landT,headR};if(typeof module!=='undefined')module.exports=W.CatchEngine})(typeof window!=='undefined'?window:globalThis);
+W.CatchEngine={create,step,moveTo,nudge,take,score,ramp,F,landT,headR,FOLLOW};if(typeof module!=='undefined')module.exports=W.CatchEngine})(typeof window!=='undefined'?window:globalThis);

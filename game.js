@@ -567,7 +567,7 @@ function pcReset(set){const R=UA('ui_pc_reset');const d=full(`<div class="obpane
   d.querySelector('#pcrx').onclick=()=>d.remove();const b=d.querySelector('#pchold');let t=null;
   b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('hold');t=setTimeout(()=>{window.__wiped=1;localStorage.removeItem(KEY);localStorage.removeItem('echo-pc-cool');localStorage.removeItem('echo-songbook-v1');d.innerHTML=`<div class="obpanel">${R[2]}</div>`;setTimeout(()=>location.reload(),1600)},OBC.gate.holdMs)});
   const up=()=>{clearTimeout(t);b.classList.remove('hold')};b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up)}
-function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Bond '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
+function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&&S.bond>renderBadge.b)SFX('bond_meter_tick',{gap:800,vol:.5});renderBadge.b=S.bond;const f=S.bond/500;el.setAttribute('aria-label','Song '+S.bond+' of 500');el.innerHTML=`<i class="pxheart"></i>`+[0,1,2,3,4].map(i=>`<i class="seg${f>i/5+.001?' on':''}"></i>`).join('')}
 function home(greet){if(window.EchoBack)EchoBack.stop();
   ov.innerHTML='';if(S.left)return leaveScreen();
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
@@ -764,7 +764,7 @@ function playBondUp(from,to,live,done){
   const R=scr.getBoundingClientRect(),z=R.width/180,r=cr.getBoundingClientRect(),echo={x:Math.round((r.left-R.left)/z),y:Math.round((r.top-R.top)/z)};
   const sheet=new Image();sheet.src=PIXEL.sheet(SPR(),S.g);
   const line=B('bond_up_'+to)||{text:'…'};const lineObj=typeof line==='string'?{text:line}:line;
-  const tt=B('bond_up_title'),titleObj=typeof tt==='string'?{text:tt}:(tt||{text:'Closer!'});   // A3: Cole's bond_up_title lines (empty text = wordless cheer)
+  const tt=B('bond_up_title'),titleObj=typeof tt==='string'?{text:tt}:(tt||{text:'Our song grew!'});   // A3: Cole's bond_up_title lines (empty text = wordless cheer)
   if(live){S.bondShown=to;(S.bondMoments=S.bondMoments||[]).push({from,to,day:S.days});save()}   // the bond and the Memory Book entry are saved even if skipped
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
@@ -910,7 +910,7 @@ function humNotes(){const sc=$('#sc'),pe=$('#cr .px-echo');if(!sc||lowFx())retur
   const x0=r?Math.round((r.left-R.left)/z+24):90,y0=r?Math.round((r.top-R.top)/z):200;
   for(let i=0;i<5;i++)setTimeout(()=>{const n=document.createElement('i');n.className='env-note humnote';n.textContent=i%2?'♫':'♪';n.style.left=(x0-10+Math.round(Math.random()*20))+'px';n.style.top=(y0-4)+'px';sc.appendChild(n);setTimeout(()=>n.remove(),1600)},i*380)}
 function sitTogether(){
-    const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';if(window.Alive)Alive.sit(true);talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices"><div class="hint">…sitting together…</div></div>';
+    const sc=$('#sc');sc.style.filter='brightness(.75) saturate(1.2)';if(window.Alive)Alive.sit(true);talk(B('sit'),C.sitSeconds*1000);ov.innerHTML='<div class="choices sitting"><div class="hint">…sitting together…</div></div>';
     setTimeout(()=>{ov.innerHTML='';sc.style.filter='';if(window.Alive)Alive.sit(false);needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.sit);addBond(0,false,'sit');S.sits=(S.sits||0)+1;fwTick('cozy');SFX('care_pet_sparkle');hop();maybeChat()},C.sitSeconds*1000)}
 function kind(id,quiet){if(asleep())return;const touch=id==='groom',hf=touch&&S.needs.comfort>=NeedsV2.full;if(!quiet)SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');if(!lowFx())hop();if(touch&&window.Alive)Alive.petFx();talk(B(hf?'hug_full':'aff_'+id),2000);save()}
 function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
@@ -950,12 +950,12 @@ function how(){
   const rows=[['food','feed','Food'],['play','play','Play'],['rest','sleep','Rest'],['comfort','pet','Hugs']];
   const d=document.createElement('div');d.className='panel howpanel';d.setAttribute('role','dialog');d.setAttribute('aria-label','How am I?');
   d.innerHTML=`<div class="ptitle">How am I?</div>`+rows.map(([k,ic,lb])=>`<div class="hrow">${window.PIXEL?PIXEL.icon(ic):''}<span class="hl">${lb}</span><span class="hbar">${seg(n[k])}</span></div>`).join('')+
-   `<div class="hfoot">${window.PIXEL?PIXEL.icon('heart'):''}<span>Bond ${S.bond}/500</span></div><div class="hfoot"><span>Day ${S.days}</span></div><div class="hint2">Tap to close</div>`;
+   `<div class="hfoot">${window.PIXEL?PIXEL.icon('heart'):''}<span>Song ${S.bond}/500</span></div><div class="hfoot"><span>Day ${S.days}</span></div><div class="hint2">Tap to close</div>`;
   SFX('ui_panel_open');app.appendChild(d);d.onclick=()=>{SFX('ui_back');d.remove()};
 }
 function dev(){
   const d=full(`<h1>Playtest tools</h1><p>For trying the whole arc quickly.</p><div class="row">
-  <button class="btn" id="b1">+60 bond</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short bond-ups ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Dig level: ${S.digLevel||'auto'}</button>${['run','catch','stack'].map(k=>`<button class="btn" id="bl_${k}">${k} level: ${S[k+'Level']||'auto'}</button>`).join('')}<button class="btn" id="b6">Close</button></div>`);
+  <button class="btn" id="b1">+60 song</button><button class="btn" id="b2">Jump to Ready</button><button class="btn" id="b3">New session</button><button class="btn" id="b7">+1 day</button><button class="btn" id="b9">Calm effects ${S.lowfx?'on':'off'}</button><button class="btn" id="b10">Short song moments ${S.shortBondUp?'on':'off'}</button><button class="btn" id="b11">Music ${S.music===false?'off':'on'}</button><button class="btn" id="b4">Sound ${S.voice?'on':'off'}</button><button class="btn" id="b14">Grown-ups corner</button><button class="btn" id="b5">Delete everything</button><button class="btn" id="b9">Pairs level: ${S.pairsLevel||'auto'}</button><button class="btn" id="b8">Dig level: ${S.digLevel||'auto'}</button>${['run','catch','stack'].map(k=>`<button class="btn" id="bl_${k}">${k} level: ${S[k+'Level']||'auto'}</button>`).join('')}<button class="btn" id="b6">Close</button></div>`);
   const cl=()=>d.remove();
   d.querySelector('#b9').onclick=()=>{S.lowfx=!S.lowfx;save();cl();dev()};d.querySelector('#b10').onclick=()=>{S.shortBondUp=!S.shortBondUp;save();cl();dev()};
   d.querySelector('#b11').onclick=()=>{S.music=S.music===false;save();if(window.Music)Music.refresh();cl();dev()};
@@ -981,7 +981,7 @@ function book(){
   <h2>Foods discovered</h2>${S.foods.map(s=>{const f=foodByLabel(s),t=f?foodTaste(f):(s===S.g.fav?'favorite':'like');   // heart = favourite, star = love, leaf = not my favourite (never an X)
     return `<span class="chip">${f?foodIcon(f):PI(s.split(' ')[0])}${s.split(' ').slice(1).join(' ')}${t==='favorite'?PI('❤️'):t==='love'?PI('⭐'):t==='not_for_me'?PI('🍃'):''}</span>`}).join('')||'<i>none yet</i>'}
   ${S.kind?`<h2>Our ${FUI().homeTitle}</h2><div class="homebook">${homeProp('book')}</div>${S.dig&&S.dig.games?`<p class="digline">${GG().digLabel}: ${S.dig.best||0} rows · best ${Math.max(0,...Object.values((S.best&&S.best.dig)||{}).map(o=>o.score||0))} points</p>`:''}`:''}
-  ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Bond moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Closer! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
+  ${(S.bondMoments||[]).length?`<h2>${PI('✨')} Song moments</h2>`+S.bondMoments.map((m,i)=>`<div class="chip bmom">Our song grew! ${BondUp.NAMES[m.to]} · day ${m.day||1} <button class="btn small" data-replay="${i}">Replay</button></div>`).join(''):''}
   <h2>Treasures</h2>${S.treasures.map(s=>`<span class="chip"${window.MusicFX?' data-snd="run_treasure_1"':''}>${PI('💎')}${s}</span>`).join('')||'<i>none yet</i>'}
   <h2>Things we figured out</h2>${S.memories.slice(-12).map(s=>`<div class="chip">${s}</div>`).join('')||'<i>none yet</i>'}
   ${(S.wild||[]).length?`<h2>${PI('🍃')} Friends in the wild</h2>`+S.wild.map(w=>`<p class="mline">${w.name} · ${w.family||''} · ${'★'.repeat(Math.max(1,Math.min(9,w.stage||1)))}</p>`).join(''):''}
@@ -1241,7 +1241,7 @@ function catchGame(){
     if(n>=5)remember(`We caught ${n} ${G.units.catch}`,'catch_'+n);react('happy');setExpr('happy');
     g2Banner(gs,G.catchBanner);talk(B(r.isBest&&!firstEver?'catch_best':'catch_end',{n}),2400);
     setTimeout(()=>{draw();stop();endCard({game:'catch',unit:G.units.catch,score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`longest streak ${g.longest}`,`goldens ${g.golds}`],onAgain:catchGame})},900)}
-  const xOf=e=>{const r=cv.getBoundingClientRect();return (e.clientX-r.left)*180/r.width};
+  const xOf=e=>{const r=cv.getBoundingClientRect();return Math.max(0,Math.min(180,(e.clientX-r.left)*180/r.width))};   // LIST2 #4: edge to edge
   // C4 touch: the head follows ONE finger (the newest; other/stale pointer ids are ignored) and the target is re-aimed every frame from it.
   // Facing mirrors the fox's head offset (~15px), so it must not depend on the target (that loop made turns jitter): a touch faces the side
   // the finger lands on (past the head by more than the offset), a drag faces the way the finger travels (after 10px back from its turn point).
@@ -1249,10 +1249,11 @@ function catchGame(){
   // after a drag turn the body holds (never steps back against the drag) until the finger is past the mirrored head
   function aim(){if(fx==null)return;let t=fx-hdx(face);if(hold){if((t-g.x)*face>=0)hold=false;else t=g.x}CatchEngine.moveTo(g,t)}
   const turn=(f,drag)=>{if(f&&f!==face){face=f;hold=fox&&!!drag}};
-  const pdn=e=>{e.preventDefault();pid=e.pointerId;hold=false;fx=ext=xOf(e);const d=fx-(g.x+hdx(face));if(Math.abs(d)>Math.abs(g.headDX||0)+4)turn(Math.sign(d));try{cv.setPointerCapture(e.pointerId)}catch(_){}aim()};
+  const pdn=e=>{if(e.target.closest&&e.target.closest('button,.top,.g2card'))return;e.preventDefault();pid=e.pointerId;hold=false;fx=ext=xOf(e);const d=fx-(g.x+hdx(face));if(Math.abs(d)>Math.abs(g.headDX||0)+4)turn(Math.sign(d));try{gs.setPointerCapture(e.pointerId)}catch(_){}aim()};
   const pmv=e=>{if(e.pointerId!==pid)return;fx=xOf(e);if((fx-ext)*face>0)ext=fx;else if(Math.abs(fx-ext)>=10){turn(-face,1);ext=fx}aim()};
   const pup=e=>{if(e.pointerId===pid){pid=null;fx=null}};
-  cv.addEventListener('pointerdown',pdn);cv.addEventListener('pointermove',pmv);['pointerup','pointercancel','lostpointercapture'].forEach(n=>cv.addEventListener(n,pup));
+  // LIST2 #4: the whole game area takes the finger (not just the canvas), so a touch at the very edge of the screen still steers
+  gs.addEventListener('pointerdown',pdn);gs.addEventListener('pointermove',pmv);['pointerup','pointercancel','lostpointercapture'].forEach(n=>gs.addEventListener(n,pup));
   function key(e){if(!document.getElementById('cc')){stop();return}const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')CatchEngine.nudge(g,-1);else if(k==='arrowright'||k==='d')CatchEngine.nudge(g,1);else return;e.preventDefault()}
   document.addEventListener('keydown',key);
   $('#quit').onclick=()=>{if(ended){stop();return endGame(true)}finish()};
@@ -1321,27 +1322,37 @@ function stackGame(){
   window.__stack=g;window.__stackPress=press;window.__stackStep=dt=>{step(dt||1/60);draw()};window.__stackEcho=()=>({col:stCol,dy:stDy,react:stReact,reactKind:stReactKind,F,f12:(F/5)|0,colsSeen:stColsSeen.slice(),auraDraws:stAuraDraws,flySrc:FR.fly});window.__stackBits=()=>bits.map(b=>({wy:b.wy,a:b.a}));talk(B('tower_start'),2000)}
 // ---------- Shiny Pairs (Memory card game, game spec v0.3 §1): Slyte's signature game, replaces Shiny Search ----------
 const PAIR_NAMES=new Proxy({},{get:(o,k)=>{for(const f of (window.FAMILIES||{order:[]}).order){const n=FAMILIES[f].games.pairNames[k];if(n)return n}}});   // manifest games.pairNames (every family's deck + token)
-function pairsState(){return S.pairs=S.pairs||{games:0,slow:0,boards:0}}
+function pairsState(){const p=S.pairs=S.pairs||{games:0,slow:0,boards:0};if(p.stage==null)Object.assign(p,{stage:0,good:0,bad:0,clean:0});return p}   // LIST2 #5: + sound-matching stage
 function pairsLevel(){const p=pairsState(),set=S.pairsLevel||'auto';if(window.Difficulty)return Difficulty.level('pairs',{band:S.ageBand,set,games:p.games,autoEasy:p.slow>=2});if(p.games===0)return 'easy';if(set!=='auto')return set;return p.slow>=2?'easy':'standard'}
 function memoryGame(){
   const fox=GROUND(),SP=SPR(),G=GG(),TITLE=G.titles.pairs,NEXT=MEM_NEXT;
-  const p=pairsState(),level=pairsLevel(),g=MemoryEngine.create({species:FID(),deck:G.memoryDeck,token:G.token,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:S.talents.includes('Master of Disguise')});
+  const p=pairsState(),level=pairsLevel(),SND=(window.MusicFX&&MusicFX.pairsData&&MusicFX.pairsData(FID()))||null,stage=SND?MemoryEngine.morphOf(p):0;   // no note data -> pictures only
+  const g=MemoryEngine.create({species:FID(),deck:G.memoryDeck,token:G.token,level,seed:(S.g.seed||1)*17+p.games*13+1,disguise:S.talents.includes('Master of Disguise'),morph:stage,clean:p.clean,sounds:SND});
+  const MF=g.morph,pic=MF.face==='picture';
   const total=g.L.pairs,img=it=>`px/mem/${SP}_${it}`;let nightVision=S.talents.includes('Night Vision');let misses=0,pairsSaid=0,alive=true,kbd=false,backT=null;
   gameShell(`${TITLE} · 0/${total}`);const gs=$('#gs');gs.classList.add('memgame');$('#toast').classList.remove('on');
   gs.insertAdjacentHTML('beforeend',`<div class="memgrid c${g.cols}" id="mg" role="grid" aria-label="Cards">${g.cards.map((c,i)=>`<button class="mcardbtn" data-i="${i}" aria-label="Card ${i+1}"></button>`).join('')}</div>
-    <div class="memecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div><div class="memside"><span id="mcount">0/${total}</span><div id="mstars"></div>${level==='standard'?'':`<div class="fblvl">${level==='easy'?'Easy':'Big-kid'}</div>`}</div>`);
-  const B_=[...gs.querySelectorAll('.mcardbtn')];
-  function face(i){const c=g.cards[i],el=B_[i];el.style.backgroundImage=`url(${c.up||c.paired?img(c.item)+(c.paired?'_glow':''):img('back')}.png)`;el.classList.toggle('paired',c.paired);el.classList.toggle('cur',g.cursor===i&&kbd);
-    el.setAttribute('aria-label',c.up||c.paired?(PAIR_NAMES[c.item]||c.item):'Face-down card')}
-  function flipAnim(i){const el=B_[i],c=g.cards[i];el.style.backgroundImage=`url(${img('flip_back')}.png)`;setTimeout(()=>{el.style.backgroundImage=`url(${img(c.item)}_flip.png)`;setTimeout(()=>face(i),83)},83)}
+    <div class="memecho creature" id="cr">${svg(S.kind,S.g,'happy')}</div><div class="memside"><span id="mcount">0/${total}</span><div id="mstars"></div>${level==='standard'||stage?'':`<div class="fblvl">${level==='easy'?'Easy':'Big-kid'}</div>`}${stage?`<div class="fblvl memlisten">Listen!</div>`:''}</div>`);
+  gs.classList.add('mem-'+MF.face);gs.dataset.stage=MF.id;
+  const B_=[...gs.querySelectorAll('.mcardbtn')];if(!pic)B_.forEach(b=>b.insertAdjacentHTML('beforeend','<i class="mveil" aria-hidden="true"></i>'));
+  // LIST2 #5 faces: picture | ghost (picture fades under a note card) | alike (every open card is the same note card) | none (sound only:
+  // the card stays face down and rings while it sings). A pair always turns to its glowing picture.
+  function face(i){const c=g.cards[i],el=B_[i],open=c.up&&!c.paired,showPic=c.paired||(c.up&&MF.face!=='none');
+    el.style.backgroundImage=`url(${showPic?img(c.item)+(c.paired?'_glow':''):img('back')}.png)`;el.classList.toggle('paired',c.paired);el.classList.toggle('cur',g.cursor===i&&kbd);
+    if(!pic){const v=el.querySelector('.mveil');if(v){v.style.opacity=open&&MF.face!=='none'?String(MF.face==='ghost'?1-MF.ghost:1):'0'}el.classList.toggle('hear',open&&MF.face==='none')}
+    el.setAttribute('aria-label',c.paired||(c.up&&pic)?(PAIR_NAMES[c.item]||c.item):c.up?'Sound card':'Face-down card')}
+  function flipAnim(i){const el=B_[i],c=g.cards[i];if(MF.face==='none')return face(i);el.style.backgroundImage=`url(${img('flip_back')}.png)`;
+    setTimeout(()=>{if(pic)el.style.backgroundImage=`url(${img(c.item)}_flip.png)`;else face(i);setTimeout(()=>face(i),83)},83)}
+  const cardSound=i=>{const c=g.cards[i];return !!(c.snd&&window.MusicFX&&MusicFX.pairsSound&&MusicFX.pairsSound(FID(),c.snd))};
   const all=()=>B_.forEach((_,i)=>face(i));all();
   function tap(i){if(!alive)return;MemoryEngine.flip(g,i);handle()}
   function handle(){for(const e of MemoryEngine.take(g)){
-    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(window.MusicFX)MusicFX.pairsFlip(FID(),g.cards[e.i].item===G.token?'token':g.cards[e.i].item,g.open.length!==1);if(g.cards[e.i].item===G.token){react('excited');talk(B('pairs_disguise'),1800)}
+    if(e.type==='flip'){SFX('memory_card_flip',{gap:20,vol:fox?.7:.45,rate:fox?1:.85});flipAnim(e.i);if(!cardSound(e.i)&&window.MusicFX)MusicFX.pairsFlip(FID(),g.cards[e.i].item===G.token?'token':g.cards[e.i].item,g.open.length!==1);if(g.cards[e.i].item===G.token){react('excited');talk(B('pairs_disguise'),1800)}
       // Night Vision (spec v0.3 §1): the partner of the first flipped card shimmers faintly once (once per board, default)
       if(nightVision&&g.open.length===1){nightVision=false;const pi=MemoryEngine.partner(g,e.i);if(pi>=0){SFX('whimber_night_vision_glint',{vol:.5});B_[pi].classList.add('shimmer');setTimeout(()=>B_[pi].classList.remove('shimmer'),1200)}}}
     if(e.type==='back'){clearTimeout(backT);SFX('memory_card_flip',{gap:20,vol:.4,rate:.8});e.cards.forEach(i=>face(i))}
-    if(e.type==='pair'){if(!(window.MusicFX&&MusicFX.pairsMatch(FID(),e.item===G.token?'token':e.item)))SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
+    if(e.type==='pair'){if(MF.sound==='pitch'){const sn=g.cards[e.a].snd;setTimeout(()=>{if(!(sn&&window.MusicFX&&MusicFX.pairsSound(FID(),sn,{vol:.5})))SFX('memory_pair_found')},380)}
+      else if(!(window.MusicFX&&MusicFX.pairsMatch(FID(),e.item===G.token?'token':e.item)))SFX('memory_pair_found');react('happy');pairsSaid++;setTimeout(()=>{face(e.a);face(e.b)},200);
       if(pairsSaid%2===0)talk(Math.random()<.5?(fox?{text:`Two ${PAIR_NAMES[e.item]||e.item}!`,expr:'delighted',key:'pairs_pair'}:{text:Dialogue.speciesCalls(`Two ${PAIR_NAMES[e.item]||e.item}… hoo.`,Dialogue.lookOf(Dialogue.ctx())),expr:'happy',key:'pairs_pair'}):B('pairs_pair'),1800);else say('*')}
     if(e.type==='miss'){misses++;react('curious');setExpr('curious');backT=setTimeout(()=>{if(alive){MemoryEngine.resolve(g);handle()}},2000);
       if(misses%3===0)talk(B('pairs_miss'),1800);
@@ -1354,7 +1365,8 @@ function memoryGame(){
     if(e.type==='done')finish()}
     $('#mcount').textContent=`${g.pairs}/${total}`;const tb=$('.top b');if(tb)tb.textContent=`${TITLE} · ${g.pairs}/${total}`;
     if(g.L.stars)$('#mstars').innerHTML=Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('');}
-  function finish(){alive=false;p.games++;p.boards++;if(level!=='bigkid'){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
+  function finish(){alive=false;p.games++;p.boards++;if(level!=='bigkid'&&!stage){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
+    if(SND)p.lastMorph=MemoryEngine.morphAfter(p,{slow:MemoryEngine.slow(g),hints:g.hints});   // LIST2 #5: 2 good boards -> more by sound; 2 slow -> a step back
     SFX('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
     gs.insertAdjacentHTML('beforeend',`<div class="fbdone memdone">${PI('✨')}<span>All ${total} pairs!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
     setTimeout(()=>{roundDone(2,NEXT);lullaby()},600);document.removeEventListener('keydown',key)}

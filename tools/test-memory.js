@@ -25,4 +25,27 @@ T('riddle) every DECK.slyte item has one pairs_riddle line keyed by cond.var.rid
   for(const it of M.DECK.slyte){const ls=L.filter(l=>l.cond&&l.cond.var&&l.cond.var.riddle===it);assert.ok(ls.length>=1,it);for(const l of ls)assert.ok(l.text.length<=42,'fits 3 rows: '+l.text)}});
 T('riddle) twitchel: every pairs_riddle names a memoryDeck item, every deck item has one',()=>{const L=require('../dialogue/twitchel.json').barks.pairs_riddle,D=require('../families/twitchel.json').games.memoryDeck;
   for(const l of L)assert.ok(D.includes(l.cond.var.riddle),'not in deck: '+l.cond.var.riddle);for(const it of D)assert.ok(L.some(l=>l.cond.var.riddle===it),it)});
+// LIST2 #5: Pairs morphs into matching by sound (pictures + sound -> fading / alike pictures -> sound only), hints fade, real notes only
+const TUNES=require('../music/tunes.json'),fs=require('fs'),path=require('path');
+const realNote=(f,n)=>fs.existsSync(path.join(__dirname,'..','music','notes',f+'_'+n.replace('#','s')+'.ogg'));
+T('morph) stage order: picture -> fade -> alike -> sound-only pitch -> sound-only tune',()=>{assert.deepEqual(M.MORPH.map(x=>x.face),['picture','ghost','ghost','alike','none','none']);
+  assert(M.MORPH[1].ghost>M.MORPH[2].ghost,'the picture fades');assert.equal(M.MORPH[4].sound,'pitch');assert.equal(M.MORPH[5].sound,'tune')});
+T('morph) every card has its own sound, both cards of a pair sound the same, all pairs sound different, every note is a real sample',()=>{
+  for(const f of ['slyte','whimber','twitchel'])for(let st=0;st<M.MORPH.length;st++){const snd=TUNES.families[f].pairs,g=M.create({species:f,level:'standard',seed:3+st,morph:st,sounds:snd});
+    const by={};for(const c of g.cards){assert(c.snd&&c.snd.length,f+' st'+st+' '+c.item+' has a sound');by[c.item]=by[c.item]||[];by[c.item].push(c.snd.join())}
+    for(const k in by)assert.equal(new Set(by[k]).size,1,'pair sounds the same '+k);assert.equal(new Set(Object.values(by).map(v=>v[0])).size,Object.keys(by).length,f+' st'+st+' every pair sounds different');
+    for(const c of g.cards)for(const n of c.snd){assert(!isNaN(M.MIDI(n)),'note name '+n);assert(realNote(f,n),'real sample '+f+' '+n)}
+    if(M.MORPH[st].sound==='pitch')assert(g.cards.every(c=>c.snd.length===1),'sound only: one pitch a pair')}});
+T('morph) stage boards: 6 pairs in 3x4 past stage 0; stage 0 keeps the level board',()=>{const s=TUNES.families.slyte.pairs;assert.equal(M.create({morph:0,seed:1,sounds:s}).cards.length,20);
+  for(let st=1;st<M.MORPH.length;st++){const g=M.create({morph:st,seed:1,sounds:s,level:'standard'});assert.equal(g.cards.length,12);assert.equal(g.cols,3);assert.equal(g.stage,st)}});
+T('morph) hints fade: higher threshold each stage, +1 per clean board (max +2), none at the last stage',()=>{assert.equal(M.morphHint(1,0),3);assert(M.morphHint(4,0)>M.morphHint(1,0));
+  assert.equal(M.morphHint(2,1),M.morphHint(2,0)+1);assert.equal(M.morphHint(2,9),M.morphHint(2,0)+2);assert.equal(M.morphHint(5,0),0);
+  const g=M.create({morph:5,seed:2,sounds:TUNES.families.slyte.pairs});const miss=()=>{let a=g.cards.findIndex(c=>!c.paired);let b=g.cards.findIndex((c,j)=>j!==a&&!c.paired&&c.item!==g.cards[a].item);M.flip(g,a);M.flip(g,b);M.resolve(g)};
+  for(let i=0;i<8;i++)miss();M.take(g);M.flip(g,0);assert(!M.take(g).some(e=>e.type==='hint'),'no hints at the last stage')});
+T('morph) progress: 2 good boards step up, 2 slow boards step back, never past the ends; a hinted board resets the clean run',()=>{const p={};
+  assert.equal(M.morphAfter(p,{slow:false}),null);assert.equal(M.morphAfter(p,{slow:false}),'up');assert.equal(p.stage,1);
+  M.morphAfter(p,{slow:false,hints:0});assert.equal(p.clean,1);M.morphAfter(p,{slow:true});assert.equal(p.clean,0);assert.equal(M.morphAfter(p,{slow:true}),'down');assert.equal(p.stage,0);
+  M.morphAfter(p,{slow:true});assert.equal(M.morphAfter(p,{slow:true}),null);assert.equal(p.stage,0);
+  const q={stage:5};for(let i=0;i<6;i++)M.morphAfter(q,{slow:false});assert.equal(q.stage,5)});
+T('morph) no sound data -> pictures only, nothing throws',()=>{const g=M.create({morph:3,seed:1});assert(g.cards.every(c=>c.snd===null))});
 console.log(ok+'/'+n+' memory tests passed');if(ok!==n)process.exit(1);

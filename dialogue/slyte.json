@@ -5015,16 +5015,16 @@
     ],
     "bond_up_title": [
       {
-        "text": "We're closer!",
+        "text": "Our song grew!",
         "expr": "delighted",
         "gesture": "spin",
-        "short": "We're closer!"
+        "short": "Our song grew!"
       },
       {
-        "text": "Best buds!",
+        "text": "My song grew!",
         "expr": "excited",
         "gesture": "pounce",
-        "short": "Best buds!"
+        "short": "My song grew!"
       },
       {
         "text": "Tail wags!",
@@ -5033,10 +5033,10 @@
         "short": "Tail wags!"
       },
       {
-        "text": "Yip yip! Closer!",
+        "text": "Yip yip! New notes!",
         "expr": "excited",
         "gesture": "pounce",
-        "short": "Yip yip! Closer!"
+        "short": "Yip yip! New notes!"
       },
       {
         "text": "Pawsome!",
@@ -5045,10 +5045,10 @@
         "short": "Pawsome!"
       },
       {
-        "text": "So close!",
+        "text": "More song!",
         "expr": "love",
         "gesture": "settle",
-        "short": "So close!"
+        "short": "More song!"
       },
       {
         "text": "Happy hop!",
@@ -5057,10 +5057,10 @@
         "short": "Happy hop!"
       },
       {
-        "text": "Us! Closer!",
+        "text": "Our song! Bigger!",
         "expr": "delighted",
         "gesture": "spin",
-        "short": "Us! Closer!"
+        "short": "Our song! Bigger!"
       },
       {
         "text": "",

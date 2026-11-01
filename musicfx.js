@@ -32,6 +32,9 @@ let LD={i:0};MFX.digStart=()=>{LD={i:0}};
 MFX.digClear=function(f,rows){const F=fam(f);if(!F)return null;const L=F.dig_ladder,r=ladderStep(LD,L.length,rows||1);
   r.steps.forEach((s,k)=>setTimeout(()=>note(f,L[s],{vol:.5}),k*95));if(r.top)setTimeout(()=>note(f,L[L.length-1],{vol:.4,rate:2}),r.steps.length*95+60);return r};   // top: an octave sparkle
 MFX.pairsFlip=function(f,item,second){const F=fam(f);const d=F&&F.pairs[item];if(!d)return null;return note(f,d[second?1:0],{vol:.4})};
+// LIST2 #5: a card's own sound (both cards of a pair sound the same): a tune = its notes one after another, a pitch = one note
+MFX.pairsData=f=>{const F=fam(f);return F&&F.pairs||null};
+MFX.pairsSound=function(f,snd,o){if(!fam(f)||!snd||!snd.length)return null;o=o||{};const gap=o.gap||170;snd.forEach((n,k)=>setTimeout(()=>note(f,n,{vol:o.vol||.42}),k*gap));return snd.length*gap};
 MFX.pairsMatch=function(f,item){const F=fam(f);const d=F&&F.pairs[item];if(!d)return null;note(f,d[0],{vol:.42});note(f,d[1],{vol:.42});return true};   // 2 voices: the chime rings together
 // Cushion Tower beat sparkle: px/stack/beat_sparkle.png, 5 frames of 24x24, 2 ticks each; reduced motion: frame 2 held, no growth
 const SPK=new Image();if(D)SPK.src='px/stack/beat_sparkle.png';

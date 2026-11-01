@@ -194,7 +194,12 @@ const VW=180,VH=320;
 function fit(){const sc=document.getElementById('screen');if(!sc)return;const d=W.devicePixelRatio||1;
   const k=Math.max(1,Math.floor(Math.min(innerWidth*d/VW,innerHeight*d/VH)));const s=k/d;
   const x=Math.round((innerWidth*d-VW*k)/2)/d,y=Math.round((innerHeight*d-VH*k)/2)/d;
-  sc.style.transform=`translate(${x}px,${y}px) scale(${s})`;sc.dataset.k=k;document.documentElement.style.setProperty('--px-k',k)}
+  sc.style.transform=`translate(${x}px,${y}px) scale(${s})`;sc.dataset.k=k;document.documentElement.style.setProperty('--px-k',k);
+  // LIST2 #9: the part of the bottom safe area (home indicator) that falls inside the letterboxed screen, in virtual px (usually 0)
+  const sb=safeBottom(),lb=innerHeight-y-VH*s;document.documentElement.style.setProperty('--px-safe-b',Math.max(0,Math.ceil((sb-lb)/s))+'px')}
+function safeBottom(){try{let p=document.getElementById('pxsafe');if(!p){p=document.createElement('div');p.id='pxsafe';
+  p.style.cssText='position:fixed;left:0;bottom:0;width:0;height:0;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(p)}
+  return parseFloat(getComputedStyle(p).paddingBottom)||0}catch(e){return 0}}
 function wrap(){if(document.getElementById('screen')||!document.getElementById('app'))return;const sc=document.createElement('div');sc.id='screen';
   ['app','overlay','toast'].forEach(id=>{const e=document.getElementById(id);if(e)sc.appendChild(e)});document.body.appendChild(sc);fit()}
 addEventListener('resize',fit);

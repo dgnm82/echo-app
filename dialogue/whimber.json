@@ -5886,22 +5886,22 @@
     ],
     "bond_up_title": [
       {
-        "text": "Closer now…",
+        "text": "Our song grew…",
         "expr": "love",
         "gesture": "slowblink",
-        "short": "Closer now..."
+        "short": "Our song grew..."
       },
       {
-        "text": "Oh… closer.",
+        "text": "Oh… new notes.",
         "expr": "happy",
         "gesture": "hum",
-        "short": "Oh... closer."
+        "short": "Oh... new notes."
       },
       {
-        "text": "Cozy friends.",
+        "text": "My song grew.",
         "expr": "love",
         "gesture": "settle",
-        "short": "Cozy friends."
+        "short": "My song grew."
       },
       {
         "text": "Snug as moss.",
@@ -5928,10 +5928,10 @@
         "short": "You and me..."
       },
       {
-        "text": "Softly closer.",
+        "text": "Softly, more song.",
         "expr": "happy",
         "gesture": "settle",
-        "short": "Softly closer."
+        "short": "Softly, more song."
       },
       {
         "text": "",

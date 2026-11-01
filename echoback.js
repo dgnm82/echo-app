@@ -160,7 +160,11 @@ function PadInput(root,opt){const live=new Map(),doc=root.ownerDocument||documen
 let TOK=0,cur=null;
 const msPerTick=bpm=>60000/bpm/TPB;
 function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn${ticks>=18?' long':ticks<=6?' short':''}${cls?' '+cls:''}" style="--c:${colOf(n)}" data-note="${n}"></i>`}
-const dotsHTML=n=>`<span class="eibdots" style="--n:${Math.min(8,n)}">${'<i></i>'.repeat(n)}</span>`;   // lengths are dots, never numbers
+// LIST2 #3 (Daniel, Oct 28): a row longer than 4 notes splits into two even rows (6 = 3+3, 8 = 4+4, odd: the top row gets the extra one);
+// 4 or fewer stay on one row. Same rule for the length dots on the start tiles. rowCols(n) = columns of the grid.
+const rowCols=n=>n>4?Math.ceil(n/2):Math.max(1,n);
+function layoutRow(row,n){row.classList.toggle('two',n>4);row.style.setProperty('--cols',rowCols(n))}
+const dotsHTML=n=>`<span class="eibdots" style="--n:${rowCols(n)}">${'<i></i>'.repeat(n)}</span>`;   // lengths are dots, never numbers
 // api: {gs, fam, tier, lowfx, state, save, line, talk, react, band, kid, mode:'play'|'invite', color, hasSticker(t), onSticker(t,{fam,song}), onTune(r), onRound(info), onDone(finished)}
 function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier|0)),RM=!!api.lowfx,st=api.state||{},V=DATA.v2,band=api.band||'7-8',kid=api.kid||'kid';
   st.rounds=st.rounds||0;st.heard=st.heard||[];
@@ -185,11 +189,11 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     const res=pickFresh({hand:tunes,len,seen:R?R.seen:[],lastSeq:st.lastSeq||null,seed,gen:sd=>gen(fam,tier,len,sd)});
     const k=seqKey(res.tune.n);if(R)R.seen.push(k);st.lastSeq=k;lastId=res.tune.id;api.save&&api.save();return res.tune}
   function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const k=msPerTick(bpm)*(o.slow?1.15:1);
-    const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
+    const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);layoutRow(row,notes.length);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
     const e=echoEl();if(e)e.classList.add('eibsing');let t=350;const my=++singing;
     notes.forEach((x,i)=>{const s=step(x),d=Math.max(V.tempo.min_note_ms,x[2]*k);later(t,()=>{play(fam,s,{vol:o.soft?.8:1});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');light(s,Math.min(420,d*.8));els.forEach(z=>z.classList.remove('lit'));if(els[i])els[i].classList.add('lit')});t+=d});
     later(t+250,()=>{if(my===singing){els.forEach(z=>z.classList.remove('lit'));const e2=echoEl();if(e2)e2.classList.remove('eibsing')}done&&done()})}
-  function yourTurn(){phase='child';answer=[];ans.innerHTML='';padBox.classList.remove('listen');padBox.classList.add('turn');if(ph<=0)say('eib_your_turn',1500);
+  function yourTurn(){phase='child';answer=[];ans.innerHTML='';ans.classList.remove('many');layoutRow(ans,asked.length);padBox.classList.remove('listen');padBox.classList.add('turn');if(ph<=0)say('eib_your_turn',1500);
     clearTimeout(waitT);waitT=later(DATA.timing.answer_wait_ms,idle)}
   function idle(){if(phase!=='child'||answer.length)return;idles++;
     if(idles===1){say('eib_again',2000);later(1300,()=>sing(curNotes,tune.bpm,yourTurn,{slow:true,soft:true}))}
@@ -253,7 +257,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
       (lit<P.len?`<button class="eibtile small" id="eiblittle" aria-label="A little one">${dotsHTML(lit)}<span>A little one</span></button>`:'');
     tiles.hidden=false;tiles.querySelector('#eibsame').onclick=()=>newRound(P.len,false);const b=tiles.querySelector('#eiblittle');if(b)b.onclick=()=>newRound(lit,true)}
   const input=PadInput(padBox,{down(s){play(fam,s);const p=padEl(s);if(p)p.classList.add('on');
-      if(phase!=='child')return;answer.push({s,t:Date.now()});ans.insertAdjacentHTML('beforeend',noteHTML(fam,s,TPB,'lit'));const kids=ans.children;if(kids.length>1)kids[kids.length-2].classList.remove('lit');
+      if(phase!=='child')return;answer.push({s,t:Date.now()});layoutRow(ans,Math.max(asked.length,answer.length));ans.insertAdjacentHTML('beforeend',noteHTML(fam,s,TPB,'lit'));const kids=ans.children;if(kids.length>1)kids[kids.length-2].classList.remove('lit');
       clearTimeout(waitT);clearTimeout(gapT);
       if(answer.length>=asked.length+DATA.timing.extra_notes)return finish();
       gapT=later(eq(asked,answer.map(a=>a.s))?900:DATA.timing.answer_gap_ms,finish)},
@@ -274,7 +278,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
 Object.assign(EB,{start,stop,invite,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
-  _pure:{matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
+  _pure:{rowCols,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;
 })(typeof window!=='undefined'?window:globalThis);

@@ -6,6 +6,7 @@
 //  - feeds ctx.weather to the dialogue (game.js Dialogue.ctx / needCtx, dialogue_engine resolveContext) and the Echo's weather
 //    reactions (catch a flake, shake off water, cozy up).
 //  - never touches character sprite pixels: one canvas layer behind the Echo (z-index 5), pointer-events none, whole pixels only.
+//    Cloudy = sky layer inside the den above L0 (LIST2 #7: clouds behind the trees, props and the Echo).
 (function(){'use strict';const W=typeof window!=='undefined'?window:globalThis;
 const STATES=['clear','cloudy','rain','snow','fog','storm'];
 const SEASON_W={   // weights per season (snow only in winter, Dec-Feb, matching game.js snowSeason())
@@ -47,10 +48,17 @@ function stop(){if(raf&&W.cancelAnimationFrame)W.cancelAnimationFrame(raf);raf=0
 API.mount=function(scEl,opts){if(!scEl||!scEl.querySelector)return null;const S=(W.__echo&&W.__echo.state)||{};cur=current(S,opts&&opts.date);
   const old=scEl.querySelector('canvas.wx-layer');if(old)old.remove();stop();scEl.dataset.weather=cur.state;
   if(cur.state==='off'||cur.state==='clear'){el=null;return null}   // clear: the den's own sunbeam/firefly motes already show it
+  // LIST2 #7: clouds live in the sky. A cloudy sky goes INSIDE the den, right above the L0 sky plane (z 1, under the L1 vista, L2 trees +
+  // props, L3 stage, the Echo and every prop), lined up with #sc (the den wrap sits DEN_OY px higher). Flat / indoor scenes have no
+  // separate sky plane (the trees are baked into one picture), so no cloud bands are drawn there at all; the weather itself is unchanged.
+  // Rain / snow / storm / fog fall or lie in front of the scene as before (z 5, still behind the Echo).
+  let host=scEl,z=5,top=-8;
+  if(cur.state==='cloudy'){const wrap=scEl.querySelector('.den-wrap');if(!wrap){el=null;return null}
+    host=wrap;z=1;top=-8-(parseFloat(wrap.style.top||W.getComputedStyle(wrap).top)||0)}
   el=W.document.createElement('canvas');el.className='wx-layer wx-'+cur.state;el.width=196;el.height=336;el.setAttribute('aria-hidden','true');
-  el.style.cssText='position:absolute;left:-8px;top:-8px;width:196px;height:336px;z-index:5;pointer-events:none;image-rendering:pixelated';
-  scEl.appendChild(el);seed(cur.state);lastT=0;draw(1/60);if(!lowFx()&&W.requestAnimationFrame)raf=W.requestAnimationFrame(loop);return el};
-API.refresh=function(scEl){const S=(W.__echo&&W.__echo.state)||{},n=current(S);if(!cur||n.state!==cur.state)return API.mount(scEl);return el};
+  el.style.cssText=`position:absolute;left:-8px;top:${top}px;width:196px;height:336px;z-index:${z};pointer-events:none;image-rendering:pixelated`;
+  if(host!==scEl){const l0=host.querySelector('.den-l0');if(l0&&l0.nextSibling)host.insertBefore(el,l0.nextSibling);else host.appendChild(el)}else scEl.appendChild(el);seed(cur.state);lastT=0;draw(1/60);if(!lowFx()&&W.requestAnimationFrame)raf=W.requestAnimationFrame(loop);return el};
+API.refresh=function(scEl){const S=(W.__echo&&W.__echo.state)||{},n=current(S);if(!cur||n.state!==cur.state||(n.state==='cloudy'&&(!el||!el.isConnected)))return API.mount(scEl);return el};   // a re-mounted den drops its sky clouds
 API.stop=stop;API.now=()=>cur;
 // Echo weather reactions (H9 final, the Echo's own world). Returns the reaction name or null. Gestures reuse existing frames.
 API.react=function(state){const kind=API.reactionFor(state||(cur&&cur.state));if(!kind)return null;const doc=W.document;if(!doc)return kind;

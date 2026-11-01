@@ -1,4 +1,4 @@
-# Catch phone test (games_v2 §6): unlock at bond 20 (not 19), carrier follows at <= echoV, 3 landings -> PICNIC/STARGAZE TIME -> end card,
+# Catch phone test (games_v2 §6): unlock at bond 20 (not 19), carrier follows the finger smoothly edge to edge (LIST2 #4), 3 landings -> PICNIC/STARGAZE TIME -> end card,
 # flat reward, NEW BEST on the second game, lowFx = no sway. Usage: python3 tests/phone_catch_test.py [base-url]
 import asyncio,sys
 from playwright.async_api import async_playwright
@@ -42,8 +42,13 @@ async def main():
       rev=len([r for r in runs if abs(r)>=4])-1;head=L[-1][0]+L[-1][1]   # body direction changes (runs >= 4px; following a 2px finger wobble is fine)
       print(kind,'touch switch',{'flips':flips,'reversals':rev,'head':head,'stale':st})
       assert flips<=2 and rev<=1 and abs(head-127)<=(2 if kind=='fox' else 3) and st[0]==st[1],(flips,rev,head,st)
-      v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x;CatchEngine.moveTo(g,170);setTimeout(()=>r([g.x-x0,g.L.echoV]),500)})")
-      assert 0<v[0]<=v[1]*0.5+12,v
+      # LIST2 #4: smooth free follow (critically damped, fast, no speed snap) that reaches the target, any whole pixel, edges included
+      v=await pg.evaluate("new Promise(r=>{const g=__catch,x0=g.x,vs=[];CatchEngine.moveTo(g,170);const iv=setInterval(()=>vs.push(g.vx||0),16);setTimeout(()=>{clearInterval(iv);let j=0;for(let i=1;i<vs.length;i++)j=Math.max(j,Math.abs(vs[i]-vs[i-1]));r([g.x,j,CatchEngine.FOLLOW.aMax])},600)})")
+      print(kind,'follow',v);assert abs(v[0]-170)<=1 and v[1]<=v[2]*0.05+5,v
+      ed=[]
+      for u in (0.5,179.5):
+        await tch('touchStart',u);await pg.wait_for_timeout(700);ed.append(await pg.evaluate("[__catch.x,__catch.x+(__catch.headDX||0)]"));await tch('touchEnd',0);await pg.wait_for_timeout(50)
+      print(kind,'edges',ed);assert ed[0][1]<=8 and ed[1][1]>=172,ed
       # head-touch v1: caught the moment the item touches the head top (well above the ground/nest line), head-only
       hv=await pg.evaluate("""new Promise(r=>{const g=__catch,A=CatchEngine.F;let it=null,last=0,n0=g.n;const iv=setInterval(()=>{if(g.headY==null)return;
         if(!it){it=g.items.find(i=>!i.gold&&i.y<120);if(!it)return;n0=g.n;g.tx=g.x;it.sway=0}

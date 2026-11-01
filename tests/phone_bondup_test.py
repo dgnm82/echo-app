@@ -35,7 +35,7 @@ async def main():
     # A3 (bondup_lines_v1): the banner shows a bond_up_title line (never the old words) or the wordless cheer
     bt=await pg.evaluate("(()=>{const b=document.querySelector('.bubanner b');return b&&[b.textContent,!!b.querySelector('.buhearts'),b.scrollWidth<=b.clientWidth+1]})()")
     pool=await pg.evaluate("Dialogue.lib.barks.bond_up_title.map(l=>l.text)")
-    print('slyte title',bt);assert bt and 'BOND UP' not in bt[0].upper() and (bt[0] in pool or (bt[1] and '' in pool)) and bt[2],bt
+    print('slyte title',bt);assert bt and 'BOND' not in bt[0].upper() and 'BOND' not in (await pg.inner_text('.bubanner')).upper() and (bt[0] in pool or (bt[1] and '' in pool)) and bt[2],bt
     assert await pg.evaluate("__echo.state.bondShown")==2 and await pg.evaluate("__echo.state.bondMoments.length")==1
     # skip guard: a tap right away does nothing; later it jumps to the end state
     await pg.mouse.click(200,300);assert await pg.evaluate("!!window.__bondup")
@@ -45,7 +45,8 @@ async def main():
     await pg.screenshot(path=f'{OUT}/bondup-slyte-after.png')
     # Memory Book replay
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove())");await pg.click('#book');await pg.wait_for_timeout(300)
-    chip=await pg.inner_text('.book .bmom');assert chip.startswith('Closer! ') and 'Bond up' not in chip,chip
+    chip=await pg.inner_text('.book .bmom');assert chip.startswith('Our song grew! First notes') and 'bond' not in chip.lower(),chip   # LIST2 #10: song stages, never 'bond'
+    assert 'Song moments' in await pg.inner_text('.book') and 'bond' not in (await pg.inner_text('.book')).lower()
     await pg.locator('.book [data-replay]').first.scroll_into_view_if_needed();await pg.screenshot(path=f'{OUT}/bondup-memory-book.png')
     await pg.locator('.book [data-replay]').first.click();await pg.wait_for_timeout(1500);assert await pg.evaluate("!!window.__bondup");assert await pg.evaluate("__echo.state.bondMoments.length")==1
     await pg.wait_for_timeout(1000);await pg.mouse.click(200,300);await pg.wait_for_timeout(300);await pg.mouse.click(200,300);await pg.wait_for_timeout(500)
@@ -59,7 +60,7 @@ async def main():
     # Whimber 3 -> 4 and the 4 -> 5 celebration (release untouched)
     pg=await newecho(b,p,'owl',errs)
     # every title fits the banner at 180x320, both families (render each into a banner)
-    for fam in ('slyte','whimber'):
+    for fam in ('slyte','whimber','twitchel'):
       fit=await pg.evaluate("""f=>fetch('dialogue/'+f+'.json').then(r=>r.json()).then(d=>d.barks.bond_up_title.map(l=>{const u=document.createElement('div');u.className='bondup-ui';u.innerHTML='<div class="bubanner"><b></b><span>Growing</span></div>';document.getElementById('screen').appendChild(u);const b=u.querySelector('b');b.textContent=l.text;const ok=[l.text,b.scrollWidth<=b.clientWidth+1,b.getBoundingClientRect().height/(u.querySelector('.bubanner').getBoundingClientRect().width/140)];u.remove();return ok}))""",fam)
       assert len(fit)==9 and sum(1 for f in fit if f[0]=='')==1 and all(f[1] for f in fit),(fam,fit);print(fam,'titles fit',len(fit))
     # the wordless cheer: 3 pixel hearts + a chirp

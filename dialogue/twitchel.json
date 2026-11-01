@@ -5537,16 +5537,16 @@
     ],
     "bond_up_title": [
       {
-        "text": "Closer now!",
+        "text": "Our song grew!",
         "expr": "happy",
         "gesture": "spin",
-        "short": "Closer now!"
+        "short": "Our song grew!"
       },
       {
-        "text": "Best friends!",
+        "text": "My song grew!",
         "expr": "delighted",
         "gesture": "pounce",
-        "short": "Best friends!"
+        "short": "My song grew!"
       },
       {
         "text": "Happy purr!",
@@ -5555,10 +5555,10 @@
         "short": "Happy purr!"
       },
       {
-        "text": "Mrrp! Closer!",
+        "text": "Mrrp! New notes!",
         "expr": "delighted",
         "gesture": "pounce",
-        "short": "Mrrp! Closer!"
+        "short": "Mrrp! New notes!"
       },
       {
         "text": "Purr-purr!",

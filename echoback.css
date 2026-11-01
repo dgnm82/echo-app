@@ -67,3 +67,10 @@
 .eibrm .eibbeads i.on,.eibrm .eibpuff.go{animation:none}
 .eibrm .eibpuff.go{opacity:.7}
 @media (prefers-reduced-motion:reduce){.eibbeads i.on,.eibpuff.go{animation:none}.eibpuff.go{opacity:.7}}
+/* LIST2 #3: more than 4 notes = two even rows (grid, --cols = ceil(n/2), set by echoback.js layoutRow). Notes shrink a little so both
+   rows of the Echo's tune and both rows of the answer stay above the Echo on the 180x320 screen (phone and the 240x320 device panel alike). */
+.eibrow.two{display:grid;grid-template-columns:repeat(var(--cols,3),auto);justify-content:center;align-items:center;column-gap:4px;row-gap:3px;max-width:100%}
+.eibrow.two .eibn{width:24px;height:24px}
+.eibrow.two .eibn.short{width:20px;height:20px}
+.eibrow.two .eibn.long::after{top:8px}
+.eibrow.two.many .eibn{width:20px;height:20px}

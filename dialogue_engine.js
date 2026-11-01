@@ -131,7 +131,7 @@ const EVENT_CLAUSES = {
   fav_food: {
     '5-6': 'Yum, favorite treat!',
     '7-8': 'you remembered my absolute favorite snack!',
-    '9-10': 'sharing my favorite food again makes our bond glow even brighter!'
+    '9-10': 'sharing my favorite food again makes our song glow even brighter!'
   },
   songbook: {
     '5-6': 'I love our song!',
