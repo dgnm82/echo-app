@@ -24,7 +24,7 @@
 .wubub{width:164px;box-sizing:border-box;background:#FFF6E6;color:#3B2A5C;border:1px solid #3B2A5C;box-shadow:0 2px 0 #23183a;padding:4px 5px;font:8px/10px PS2P,monospace;border-radius:2px;text-align:left}
 .wudim{background:rgba(36,22,44,.43)}
 .wucard{background:url(px/warmup/firstsong_card.png) no-repeat;cursor:pointer}.wucard>*{position:absolute}.wucard.lit{background-image:url(px/warmup/firstsong_card_lit.png)}
-.wunote{display:block;background:url(px/notes/notes_shaped.png) no-repeat;background-size:900% 200%;background-position:calc(var(--c) * 12.5%) 100%;image-rendering:pixelated}
+.wunote{display:block;background:url(px/notes/notes_shaped.png?v=10col) no-repeat;background-size:1000% 200%;background-position:calc(var(--c) * 100% / 9) 100%;image-rendering:pixelated}
 .wumark{background-image:url(px/warmup/beat_marks.png)}
 .wu.rm .wuchirp.hop{animation:none}
 @media (prefers-reduced-motion:reduce){.wuchirp.hop{animation:none}}

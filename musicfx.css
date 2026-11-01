@@ -24,7 +24,7 @@
 .chip[data-snd]::after{content:"";display:inline-block;width:9px;height:9px;margin-left:3px;vertical-align:middle;background:url(px/ui/note_badge.png);image-rendering:pixelated}
 .pctune.mfxsnd::after{content:"";position:absolute;right:-3px;top:-3px;width:9px;height:9px;background:url(px/ui/note_badge.png);image-rendering:pixelated}
 /* A9 play-off: each note pops above the Echo as its coloured, shaped note (12x12 from notes_shaped.png row 1 = lit) */
-.mfx-pnote{position:absolute;width:12px;height:12px;background-image:url(px/notes/notes_shaped.png);background-position-y:-12px!important;image-rendering:pixelated;pointer-events:none;z-index:5;animation:mfxrise .9s steps(9) forwards}
+.mfx-pnote{position:absolute;width:12px;height:12px;background-image:url(px/notes/notes_shaped.png?v=10col);background-position-y:-12px!important;image-rendering:pixelated;pointer-events:none;z-index:5;animation:mfxrise .9s steps(9) forwards}
 .mfx-pnote.calm{animation:mfxfade .9s steps(3) forwards}
 @keyframes mfxrise{0%{transform:translateY(0);opacity:1}70%{opacity:1}100%{transform:translateY(-18px);opacity:0}}
 @keyframes mfxfade{0%,60%{opacity:1}100%{opacity:0}}

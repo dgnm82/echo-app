@@ -18,7 +18,8 @@
 const ML=(typeof MusicLevel!=='undefined'?MusicLevel:(W.MusicLevel||(typeof require!=='undefined'?require('./musiclevel.js'):null)));
 const EB={title:'Echo It Back',v:2};const MAJ=[0,2,4,5,7,9,11],TPB=12;
 const SHARP=['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'],FLAT=['c','db','d','eb','e','f','gb','g','ab','a','bb','b'];
-const COLS=['c','d','e','f','g','a','b','f#','bb'];   // sprite columns (Batch D notes_shaped.png order): C red ... B violet, then F#, Bb
+const COLS=['c','d','e','f','g','a','b','c5','f#','bb'];   // sprite columns (px/eib/pads.png + px/notes/notes_shaped.png, Pixal Nov 1): C red ... B violet, C5 high do (pink hexagon), then F#, Bb
+const COLS9=['c','d','e','f','g','a','b','f#','bb'];        // the older 9-column sheets (px/eib/hold.png, px/warmup/copy_pads.png, px/beat/stack_note_sparkle.png): no C5 column
 let DATA=null,INST=null;
 // ---------------------------------------------------------------- pure core (tools/test-echoback.js)
 const step=x=>Array.isArray(x)?(x[0]-1)+7*(x[1]||0):x;            // [degree 1-7, octave, ticks] -> diatonic step (do 0, do' 7, low sol -3)
@@ -39,7 +40,8 @@ const fileOfMidi=(fam,m)=>spell(fam,m).replace('#','s');
 function spell(fam,m){return (fam==='slyte'?SHARP:FLAT)[((m%12)+12)%12]+(Math.floor(m/12)-1)}   // tunes.json style: f#4, bb4
 const nameOf=(fam,s)=>spell(fam,midiOf(fam,s));
 const fileOf=(fam,s)=>nameOf(fam,s).replace('#','s');                   // music/notes/<fam>_<file>
-const colOf=n=>{const k=n.replace(/\d+$/,'');const i=COLS.indexOf(k);return i>=0?i:COLS.indexOf(k[0])};
+const colOf=n=>{if(n==='c5')return 7;const k=n.replace(/\d+$/,'');const i=COLS.indexOf(k);return i>=0?i:COLS.indexOf(k[0])};   // octave-5 C = its own column; every other C = do's
+const colOf9=n=>{const k=n.replace(/\d+$/,'');const i=COLS9.indexOf(k);return i>=0?i:COLS9.indexOf(k[0])};
 function padsFor(fam,tier,data){const D=data||DATA,t=Math.max(1,Math.min(4,tier|0)),out=[];
   for(let i=1;i<=t;i++){const L=(i===4&&D.unlock_t4&&D.unlock_t4[fam])||D.unlock[String(i)];for(const p of L)out.push(step(p))}
   return out.sort((a,b)=>a-b)}
@@ -213,7 +215,7 @@ function PadInput(root,opt){const live=new Map(),doc=root.ownerDocument||documen
 let TOK=0,cur=null;
 const msPerTick=bpm=>60000/bpm/TPB;
 const SOLN=['do','re','mi','fa','sol','la','ti'];
-function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn${ticks>=18?' long':ticks<=6?' short':''}${cls?' '+cls:''}" style="--c:${colOf(n)}" data-note="${n}" data-sol="${SOLN[((s%7)+7)%7]}"></i>`}
+function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn${ticks>=18?' long':ticks<=6?' short':''}${cls?' '+cls:''}" style="--c:${colOf(n)};--h:${colOf9(n)}" data-note="${n}" data-sol="${SOLN[((s%7)+7)%7]}"></i>`}
 // LIST2 #3 (Daniel, Oct 28): a row longer than 4 notes splits into two even rows (6 = 3+3, 8 = 4+4, odd: the top row gets the extra one);
 // 4 or fewer stay on one row. Same rule for the length dots on the start tiles. rowCols(n) = columns of the grid.
 const rowCols=n=>n>4?Math.ceil(n/2):Math.max(1,n);
@@ -383,7 +385,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   host.appendChild(b);const ms=(DATA&&DATA.timing.invite_fade_ms)||10000;let done=false;
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
-Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
+Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,colOf9,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
   sbTunes,sbById,sbChild,sbPick,sbSlots,sbEchoNotes,sbHeard,sbList,midiOfNote,fileOfMidi,
   _pure:{rowCols,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)

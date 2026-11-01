@@ -17,7 +17,8 @@ const nm=(f,st)=>EB.nameOf(f,st);
 ok(nm('slyte',0)==='d4'&&nm('slyte',2)==='f#4'&&nm('slyte',9)==='f#5','slyte D: do d4, mi f#4, mi\' f#5');
 ok(nm('whimber',0)==='bb4'&&nm('whimber',-3)==='f4'&&nm('whimber',7)==='bb5','whimber Bb: do bb4, low sol f4, do\' bb5');
 ok(nm('twitchel',0)==='f4'&&nm('twitchel',4)==='c5'&&nm('twitchel',9)==='a5','twitchel F: do f4, sol c5, mi\' a5');
-ok(EB.fileOf('slyte',2)==='fs4','file name f#->fs');ok(EB.colOf('f#4')===7&&EB.colOf('bb4')===8&&EB.colOf('c5')===0&&EB.colOf('b4')===6,'sprite columns');
+ok(EB.fileOf('slyte',2)==='fs4','file name f#->fs');ok(EB.colOf('f#4')===8&&EB.colOf('bb4')===9&&EB.colOf('c5')===7&&EB.colOf('c4')===0&&EB.colOf('c6')===0&&EB.colOf('b4')===6&&EB.colOf('d5')===1,'sprite columns (10: C D E F G A B C5 F# Bb)');
+ok(EB.colOf9('f#4')===7&&EB.colOf9('bb4')===8&&EB.colOf9('c5')===0,'9-column sheets (hold, warm-up pads, stack sparkle)');
 // pads + unlocks (decision 5)
 const P=(f,t)=>EB.padsFor(f,t).map(x=>nm(f,x)).join(' ');
 ok(P('slyte',1)==='d4 f#4 a4','slyte T1 do mi sol');ok(P('slyte',2)==='d4 e4 f#4 a4 b4','slyte T2 + re la');ok(P('slyte',3)==='d4 e4 f#4 a4 b4 d5','T3 + do\'');

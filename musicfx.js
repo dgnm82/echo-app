@@ -31,7 +31,7 @@ function growChoice(tunes,heard,pick){const L=tunes||[];if(!L.length)return null
 function growPlan(t,stage,top){top=top||5;if(!t||!(stage>=2))return null;if(stage>=top)return {full:true,n:hookNotes(t),bpm:t.echo.bpm};   // stage 2 = 1 phrase ... last stage = the whole hook
   const ph=(t.child||[]).slice(0,stage-1);if(!ph.length)return null;const n=[];ph.forEach((p,i)=>{if(i)n.push([0,0,6]);p.n.forEach(x=>n.push(x))});return {full:false,phrases:ph.length,n,bpm:(ph[0].bpm||t.echo.bpm)}}
 function stackStep(k,len){return {i:((k%len)+len)%len,top:k>0&&k%len===0}}   // layer k plays ladder note k (wraps to the bottom after the top)
-function noteCol(n){return n.startsWith('f#')?7:n.startsWith('bb')?8:'cdefgab'.indexOf(n[0])}   // echoback.js COLS order: c d e f g a b f# bb
+function noteCol(n){return n.startsWith('f#')?7:n.startsWith('bb')?8:'cdefgab'.indexOf(n[0])}   // the 9-column stack_note_sparkle.png order (echoback.js COLS9): c d e f g a b f# bb
 function beatOn(b,tw,holdS){if(!b)return false;if(tw&&(b.beat%b.bpb)!==0)return false;return b.phase*b.spb<(holdS||.166)}   // day: every beat; twilight: beat 1 of each bar; 2 ticks
 function swayFrame(b,tw,holdS){if(!beatOn(b,tw,holdS))return 0;const n=tw?Math.floor(b.beat/b.bpb):b.beat;return n%2?2:1}   // f1 then f2 on alternate beats (twilight: alternate bars)
 function seqMs(n,bpm,minMs){const k=60000/(bpm||96)/TPB;return n.reduce((a,x)=>a+Math.max(minMs||0,x[2]*k),0)}
@@ -109,7 +109,7 @@ let homeSaid=false;MFX.homeSound=function(animal,o){if(!TUNES){READY.then(()=>{i
     D.addEventListener('pointerdown',()=>setTimeout(()=>{if(Date.now()-t0<20000)play()},120),{capture:true,once:true,passive:true})}};
 // ---------------- A9 farewell play-off: one tap = one note = one step; untouched, each note plays by itself after 1.6 s
 MFX.playoff=function(o){return new Promise(res=>{const F=fam(o.fam);if(!F)return res(false);const P=F.playoff,el=o.tapEl||D.body;let i=0,t=null,done=false;
-  const pop=()=>{if(!o.noteEl)return;const n=P.notes[i],c='cdefgab'.indexOf(n[0]),col=n.startsWith('f#')?7:n.startsWith('bb')?8:c,e=D.createElement('i');e.className='mfx-pnote'+(RM()?' calm':'');
+  const pop=()=>{if(!o.noteEl)return;const n=P.notes[i],c='cdefgab'.indexOf(n[0]),col=n==='c5'?7:n.startsWith('f#')?8:n.startsWith('bb')?9:c,e=D.createElement('i');e.className='mfx-pnote'+(RM()?' calm':'');
     e.style.backgroundPosition=`${-12*col}px 0`;const r=o.noteEl.getBoundingClientRect(),R=(o.tapEl||D.body).getBoundingClientRect(),z=(o.zoom||1);
     e.style.left=Math.round((r.left-R.left)/z+r.width/z/2-6)+'px';e.style.top=Math.round((r.top-R.top)/z-10)+'px';(o.tapEl||D.body).appendChild(e);setTimeout(()=>e.remove(),900)};
   const next=()=>{if(done)return;clearTimeout(t);note(o.fam,P.notes[i],{vol:.55});pop();try{o.onNote&&o.onNote(i)}catch(e){}i++;

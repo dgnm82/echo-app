@@ -79,7 +79,8 @@ function start(api){stop();const fam=api.fam,RM=!!api.lowfx,sp=Math.max(.05,+api
   function talk(k,ms){const l=api.line&&api.line(k);if(!l||!l.text){bub.hidden=true;return null}bub.textContent=l.text;bub.hidden=false;if(api.say)try{api.say(l.text,l.expr)}catch(e){}
     clearTimeout(talk.t);talk.t=later(ms||2600,()=>{bub.hidden=true});return l}
   const note=(s,v)=>{try{if(EB&&EB.playNote)EB.playNote(fam,s,{vol:v==null?1:v})}catch(e){}};
-  const colOf=s=>EB&&EB.colOf&&EB.nameOf?EB.colOf(EB.nameOf(fam,s)):0;
+  const colOf=s=>EB&&EB.colOf&&EB.nameOf?EB.colOf(EB.nameOf(fam,s)):0;   // notes_shaped.png (10 cols, C5 own column)
+  const colOf9=s=>EB&&EB.colOf9&&EB.nameOf?EB.colOf9(EB.nameOf(fam,s)):0;   // copy_pads.png is still 9 cols (no C5)
   // a motif / song: [[degree, octave, ticks]...] at bpm; each(i, step) on every note; returns its length (ms)
   function sing(seq,bpm,each,gains){let t=0;seq.forEach((x,i)=>{const s=stepOf(x);later(t,()=>{note(s,gains?gains[i%gains.length]:1);if(each)each(i,s)});t+=x[2]*60000/bpm/TPB});return t}
   const yay=()=>sing(M().yay.by_family[fam]||M().yay.by_family.slyte,M().yay.bpm,null,[.8]);
@@ -94,8 +95,8 @@ function start(api){stop();const fam=api.fam,RM=!!api.lowfx,sp=Math.max(.05,+api
   // ---- 1. copy two notes (sol-mi, Cole's motif)
   function mCopy(next){pip(0);clearStage();const mo=M().copy,seq=mo.by_family[fam]||mo.by_family.slyte,ask=seq.map(stepOf),pads={};
     [['mi',2,'copy_pad_mi',[30,252]],['sol',4,'copy_pad_sol',[102,242]]].forEach(([n,s,k,d])=>{const p=P(k,d),t=TAP[k]||[p[0]-4,p[1]-4,56,56];
-      const pad=el('i','wusp wupad',p[0],p[1],48,48);frame(pad,colOf(s),0,48,48);stage.appendChild(pad);hitBox(t,n,n==='sol'?'High note':'Low note');pads[s]=pad});
-    const lit=s=>{const p=pads[s];if(!p)return;frame(p,colOf(s),1,48,48);setTimeout(()=>frame(p,colOf(s),0,48,48),350/sp)};
+      const pad=el('i','wusp wupad',p[0],p[1],48,48);frame(pad,colOf9(s),0,48,48);stage.appendChild(pad);hitBox(t,n,n==='sol'?'High note':'Low note');pads[s]=pad});
+    const lit=s=>{const p=pads[s];if(!p)return;frame(p,colOf9(s),1,48,48);setTimeout(()=>frame(p,colOf9(s),0,48,48),350/sp)};
     setCue('ear');talk('wu_copy_show',T.say+800);
     later(T.say,()=>{const d=sing(seq,mo.bpm,(i,s)=>lit(s));later(d,()=>{setCue('turn');talk('wu_copy_turn',2400);const ans=[];let gt=null;const at=later(T.auto,()=>end(true));
       tapH=(k,t)=>{const s=k==='sol'?4:k==='mi'?2:null;if(s==null)return;clearTimeout(at);clearTimeout(gt);note(s);lit(s);ans.push(s);res.taps++;
