@@ -1,0 +1,234 @@
+{
+ "_schema": "echo-px-beat-v1",
+ "_owner": "Pixal",
+ "_step": "Music School Phase 1 step 3 (beat)",
+ "_generator": "echo/ios_design/music_phase1/beat/make_beat.py",
+ "_ink": [
+  "#3B2A5C",
+  "#24162C"
+ ],
+ "echo_bounce": {
+  "art": "none (whole-sprite offset of the existing #cr sprite; Cole owns frames)",
+  "offset_px": -1,
+  "day_96_in_4": "translateY(-1px) on every beat for 2 ticks (166 ms, steps, no easing), then 0",
+  "twilight_80_in_3": "translateY(-1px) on beat 1 of each bar only, 2 ticks (confirmed, Kai Nov 1)",
+  "off": "reduced motion, .calm, games, modals, sleeping/nap, when no loop plays",
+  "shadow": "none (Kai, Nov 1): same bounce for all families"
+ },
+ "flower_sway": {
+  "pattern_day": "beat n: f1 for 2 ticks then f0; beat n+1: f2 for 2 ticks then f0 (alternate)",
+  "pattern_twilight": "beat 1 of each bar only, alternate f1/f2 (confirmed, Kai Nov 1)",
+  "tap_wins": "a tap plays the existing fx_strip (1,2,1,0) and pauses the sway for that hotspot until it ends",
+  "lookup": "hotspot fx_strip_<tod> flower_<type>_<tod>.png -> px/beat/sway_<type>_<tod>.png"
+ },
+ "run_mark": {
+  "old": "px/run/beat_pulse.png at centre (84,450), drawn before obstacles",
+  "new": "px/beat/run_beat_mark.png at centre (84,474), drawn after obstacles (confirmed, Kai Nov 1; Jay moves it)"
+ },
+ "_changelog": [
+  "Nov 1 (Kai): twilight bounce/sway on beat 1 of each bar confirmed; echo_beat_shadow.png removed (no shadow, all families same); Run mark move to (84,474) after obstacles confirmed."
+ ],
+ "files": [
+  {
+   "file": "px/beat/sway_bellflower_day.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_day is flower_bellflower_day.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "bellflower",
+   "tod": "day"
+  },
+  {
+   "file": "px/beat/sway_bellflower_twi.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_twi is flower_bellflower_twi.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "bellflower",
+   "tod": "twi"
+  },
+  {
+   "file": "px/beat/sway_sundaisy_day.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_day is flower_sundaisy_day.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "sundaisy",
+   "tod": "day"
+  },
+  {
+   "file": "px/beat/sway_sundaisy_twi.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_twi is flower_sundaisy_twi.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "sundaisy",
+   "tod": "twi"
+  },
+  {
+   "file": "px/beat/sway_starbloom_day.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_day is flower_starbloom_day.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "starbloom",
+   "tod": "day"
+  },
+  {
+   "file": "px/beat/sway_starbloom_twi.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_twi is flower_starbloom_twi.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "starbloom",
+   "tod": "twi"
+  },
+  {
+   "file": "px/beat/sway_crocus_day.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_day is flower_crocus_day.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "crocus",
+   "tod": "day"
+  },
+  {
+   "file": "px/beat/sway_crocus_twi.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_twi is flower_crocus_twi.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "crocus",
+   "tod": "twi"
+  },
+  {
+   "file": "px/beat/sway_windowbox_day.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_day is flower_windowbox_day.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "windowbox",
+   "tod": "day"
+  },
+  {
+   "file": "px/beat/sway_windowbox_twi.png",
+   "size": [
+    48,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "f0 rest (= existing frame 0), f1 lean right 1px, f2 lean left 1px (16x16 cells)",
+   "use": "Den flower sway on the beat for every hotspot whose fx_strip_twi is flower_windowbox_twi.png. Same frame_wh [16,16] and position as the hotspot.",
+   "reduced_motion": "f0 only (no sway)",
+   "flower": "windowbox",
+   "tod": "twi"
+  },
+  {
+   "file": "px/beat/stack_note_sparkle.png",
+   "size": [
+    144,
+    48
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "cols c d e f g a b f# bb (echoback.js COLS); rows f0 pop (small), f1 full (note colour + rays), f2 fade (16x16 cells)",
+   "use": "Cushion Tower / Cloud Steps: when layer k lands and plays its note, pop that note's SHAPE at the layer's right end. Shape = pitch name, same as EIB pads; colour is secondary.",
+   "reduced_motion": "stack_note_sparkle_static.png"
+  },
+  {
+   "file": "px/beat/stack_note_sparkle_static.png",
+   "size": [
+    144,
+    16
+   ],
+   "cell": [
+    16,
+    16
+   ],
+   "frames": "cols c d e f g a b f# bb (16x16 cells), single frame",
+   "use": "Reduced motion: show the full frame for ~400 ms beside the layer, no pop/fade frames."
+  },
+  {
+   "file": "px/beat/run_beat_mark.png",
+   "size": [
+    84,
+    6
+   ],
+   "cell": [
+    28,
+    6
+   ],
+   "frames": "f0 beat (phase<.15), f1 (<.3), f2 fade (<.45) (28x6 cells); hidden after .45",
+   "use": "Meadow Dash beat mark, REPLACEMENT for px/run/beat_pulse.png: draw AFTER the obstacles at centre (84, 474) on the 360x640 run canvas (just below FEET 470, in front of obstacle bases). Plum rim so it reads on grass.",
+   "reduced_motion": "off (as today)"
+  }
+ ]
+}

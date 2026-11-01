@@ -32,4 +32,36 @@ for(const [k,v] of Object.entries(TP)){if(k[0]==='_')continue;ok(v.bpm>=56&&v.bp
 for(const f of ['slyte','whimber','twitchel'])for(const band of ['day','twilight'])for(const t of ['','_t1','_t2','_t3'])ok(TP[`bg_${f}_${band}${t}_loop`],`tempo bg_${f}_${band}${t}`);
 ok(TP.title_welcome_loop&&TP.title_welcome_loop.bpm===72&&TP.title_welcome_loop.beatsPerBar===3,'title 72/3');
 ok(T.home_sounds.length===20&&T.home_sounds.every(a=>fs.existsSync(path.join(R,'music',`home_${a}.ogg`))),'home sounds');
+// ---------------- Music School step 3: songbook hooks (Catch / Dig floor / growing song), Stack ladder, beat gates, art
+{const SB=T.songbook,FX=JSON.parse(fs.readFileSync(path.join(R,'tools/fixtures/songbook_fixture.json'))),all=['slyte','whimber','twitchel'].flatMap(f=>SB[f].map(t=>Object.assign({fam:f},t)));
+ const ms=(t,n)=>n.reduce((a,x)=>a+x[2]*60000/t.echo.bpm/12,0);
+ for(const t of all){const h=P.hookNotes(t);ok(h.length>=3&&h.every(x=>x[0]>0),t.id+' hook = real notes, no rests');ok(ms(t,h)<=8000+1e-6,t.id+' hook <= 8 s');
+   const hn=t.echo.n.filter(x=>x[0]);ok(h.every((x,i)=>x===hn[i]),t.id+' hook = the start of the Echo version, in order (nothing made up)');
+   const o=P.openingNotes(t);ok(o.length>=1&&o.length<=h.length&&o.every((x,i)=>x===h[i]),t.id+' dig opening = the hook\'s first notes');
+   for(let st=2;st<=5;st++){const g=P.growPlan(t,st);if(st===5){ok(g&&g.full&&g.n.length===h.length,t.id+' growing song stage 5 = the whole hook');continue}
+     const want=Math.min(st-1,t.child.length);ok(g&&!g.full&&g.phrases===want,t.id+` stage ${st} plays ${want} phrase(s)`);ok(g.n.filter(x=>x[0]).length===t.child.slice(0,want).reduce((a,p)=>a+p.n.length,0),t.id+' phrases are the child phrases, unchanged')}
+   ok(P.growPlan(t,1)===null,'stage 1: no growing song')}
+ ok(P.growPlan(null,3)===null&&P.hookNotes(null).length===0&&P.catchOrder([],[],3).length===0,'zero tunes: nothing to play (the game keeps today\'s sound)');
+ const sl=SB.slyte;if(sl.length>=3){const o=P.catchOrder(sl,[{id:sl[2].id},{id:sl[1].id}],1);ok(o[0].id===sl[2].id&&o[1].id===sl[1].id,'Catch: met tunes first, in heard order');
+   ok(o.slice(2).every(t=>(t.min_ml||1)<=1),'Catch: then only tunes at the child\'s level');ok(P.catchOrder(sl,[],5).length===sl.length,'Catch: every tune at a high level')}
+ if(sl.length>=2){ok(P.growChoice(sl,[{id:sl[1].id,heard:{h:3}},{id:sl[0].id,heard:{h:1}}]).id===sl[1].id,'growing song: the most-met tune');ok(P.growChoice(sl,[]).id===sl[0].id,'growing song: else the first ok tune');
+   ok(P.growChoice(sl,[{id:sl[1].id,heard:{h:3}}],sl[0].id).id===sl[0].id,"growing song: Cole's grow pick wins")}
+ ok(!SB.grow||Object.entries(SB.grow).every(([f,id])=>SB[f].some(t=>t.id===id)),'grow picks are shipped tunes')}
+// Stack ladder: layer k = ladder note k (rising), wraps after the top; the sparkle column follows the note (COLS c d e f g a b f# bb)
+for(const [f,F] of Object.entries(T.families)){const L=F.dig_ladder;const ks=[0,1,2,3,4,5,6,7].map(k=>P.stackStep(k,L.length).i);ok(ks.join()==='0,1,2,3,4,5,0,1',f+' stack ladder rises and wraps');
+  L.forEach(n=>{const c=P.noteCol(n);ok(c>=0&&c<=8,f+' sparkle column for '+n)})}
+ok(P.noteCol('f#4')===7&&P.noteCol('bb4')===8&&P.noteCol('d5')===1&&P.noteCol('a4')===5,'COLS order');
+// beat gates: day = every beat (2 ticks), twilight = beat 1 of each bar only; sway alternates f1/f2
+{const d=k=>P.beatAt(k*.625+.05,96,4,64),w=k=>P.beatAt(k*.75+.05,80,3,48);ok([0,1,2,3].every(k=>P.beatOn(d(k),false)),'day: every beat');ok(!P.beatOn(P.beatAt(.3,96,4,64),false),'day: off after 2 ticks');
+ ok(P.beatOn(w(0),true)&&!P.beatOn(w(1),true)&&!P.beatOn(w(2),true)&&P.beatOn(w(3),true),'twilight: beat 1 of the bar only');
+ ok(P.swayFrame(d(0),false)===1&&P.swayFrame(d(1),false)===2&&P.swayFrame(P.beatAt(.3,96,4,64),false)===0,'day sway f1, f2, rest f0');ok(P.swayFrame(w(0),true)===1&&P.swayFrame(w(3),true)===2&&P.swayFrame(w(1),true)===0,'twilight sway on downbeats, alternating bars');ok(!P.beatOn(null),'no loop: no beat')}
+// Pixal's beat art (px/beat): sizes as in the manifest, no pure black
+{const png=f=>{const b=fs.readFileSync(path.join(R,'px/beat',f));return [b.readUInt32BE(16),b.readUInt32BE(20)]};const M=JSON.parse(fs.readFileSync(path.join(R,'px/beat/manifest.json')));
+ const want={'run_beat_mark.png':[84,6],'stack_note_sparkle.png':[144,48],'stack_note_sparkle_static.png':[144,16]};for(const ty of ['bellflower','sundaisy','starbloom','crocus','windowbox'])for(const tod of ['day','twi'])want[`sway_${ty}_${tod}.png`]=[48,16];
+ for(const [f,wh] of Object.entries(want)){ok(fs.existsSync(path.join(R,'px/beat',f))&&png(f).join()===wh.join(),'beat art '+f+' '+wh)}ok(!fs.existsSync(path.join(R,'px/beat/echo_beat_shadow.png')),'no bounce shadow art');
+ {const {execFileSync}=require('child_process');const same=execFileSync('python3',['-c',"from PIL import Image\nfor t in ['bellflower','sundaisy','starbloom','crocus','windowbox']:\n for d in ['day','twi']:\n  a=Image.open(f'px/beat/sway_{t}_{d}.png').convert('RGBA').crop((0,0,16,16));b=Image.open(f'px/scenes/fx/flower_{t}_{d}.png').convert('RGBA').crop((0,0,16,16));print(int(a.tobytes()==b.tobytes()),end='')\na=Image.open('px/beat/sway_sundaisy_day.png').convert('RGBA').crop((0,0,16,16));b=Image.open('px/scenes/fx/flower_bloom.png').convert('RGBA').crop((0,0,16,16));print(int(a.tobytes()==b.tobytes()))"],{cwd:R,encoding:'utf8'}).trim();
+  ok(same==='11111111111','sway f0 = the art shown today (every strip, and flower_bloom = sundaisy day) '+same)}
+ const mf=fs.readFileSync(path.join(R,'musicfx.js'),'utf8');ok(/run_beat_mark\.png/.test(mf)&&!/px\/run\/beat_pulse\.png/.test(mf),'Run uses the new gold dash');
+ const gj=fs.readFileSync(path.join(R,'game.js'),'utf8');ok(/drawObs\(\);if\(fox&&window\.MusicFX\)MusicFX\.drawRunPulse\(cx,84,474\)/.test(gj),'the beat mark is drawn after the obstacles at (84,474)');
+ const css=fs.readFileSync(path.join(R,'musicfx.css'),'utf8');ok(/#sc #cr\.beat\{transform:translateX\(-50%\) translateY\(-1px\)\}/.test(css)&&/prefers-reduced-motion:reduce\)\{#sc #cr\.beat\{transform:translateX\(-50%\)\}/.test(css),'bounce = 1 px, none in reduced motion')}
 console.log(`musicfx OK (${n} checks)`);

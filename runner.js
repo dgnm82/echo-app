@@ -17,7 +17,7 @@ function rng(s){let a=s>>>0||1;return()=>{a^=a<<13;a>>>=0;a^=a>>17;a^=a<<5;a>>>=
 // Music School step 1: o.L = blended params (Difficulty.blend(RunnerEngine.table(kind), dial)); without it, lvFor(kind, level) as before
 function table(kind,o){const t={};for(const lv of ['easy','standard','bigkid'])t[lv]=lvFor(kind,lv,o);return t}
 function create(o){const kind=o.kind||'jump',level=o.level||'standard',L=o.L||lvFor(kind,level,o),P=((o&&o.T)||TUN).PICKUPS;
-  const g={kind,level,L,r:rng(o.seed||1),talents:o.talents||[],evening:!!o.evening,t:0,dist:0,base:L.v0,mult:1,speed:L.v0,
+  const g={T:(o&&o.T)||null,beat:o.beat||null,kind,level,L,r:rng(o.seed||1),talents:o.talents||[],evening:!!o.evening,t:0,dist:0,base:L.v0,mult:1,speed:L.v0,
     y:kind==='jump'?G.FEET:280,vy:0,air:false,airT:0,lastGround:0,buffer:-9,hops:0,held:false,heldT:0,
     obs:[],tre:[],nextObs:G.W+120,nextTre:G.W+60,treasures:0,gold:0,bumps:0,cleared:0,stretchBumps:[0],stretch:0,stretchT:0,
     tumble:0,haul:0,float:0,moon:0,saved:0,streak:0,P,DM:((o&&o.T)||TUN).TALENTS.disguiseEveryM,disguiseAt:-1e9,grace:0,pending:null,disguised:false,disguiseUsed:-1,phase:'run',restT:0,ev:[],chimeT:0,best:o.best||0,nTre:0};
@@ -48,6 +48,17 @@ function spawnTre(g,at){const gold=g.streak>=g.P.streakGlow||g.r()<1/g.P.goldEve
   if(g.kind==='jump')y=G.FEET-(g.r()<.5?20:52);else y=G.TOP+30+Math.floor(g.r()*(G.HILL-G.TOP-80));
   // keep treasure away from obstacles
   if(g.obs.some(o=>Math.abs(o.x+o.w/2-at)<40))at+=60;g.tre.push({x:at,y,gold,id:++g.nTre})}
+// Music School step 3: beat-lock (Meadow Dash). g.beat = {spb, off} is set by the game each frame from the playing loop
+// (beat k at game time k*spb - off); null = no loop playing = today's spawns. The obstacle's centre reaches the runner's
+// centre (x EX+12) on the nearest beat, moved at most maxShiftPx; the shift never brings it closer to the previous
+// obstacle than the spacing floor (max(spacing x speed, 104 px)). No random numbers are drawn, so off = today's spawns exactly.
+const RX=G.EX+12;
+function beatCfg(g){const T=g.T||TUN,b=T&&T.RUN&&T.RUN.beatLock;return b&&b.on?b:null}
+function arrival(g,x){const L=g.L,d=x-g.dist-RX;if(d<=0)return g.t;const v0=Math.max(1,speedAt(L,g.dist/16)),v1=Math.max(1,speedAt(L,(g.dist+d)/16));return g.t+2*d/(v0+v1)}
+function beatLock(g,o){const B=beatCfg(g),b=g.beat;if(!B||!b||!(b.spb>0))return 0;const max=B.maxShiftPx||24,c=o.x+o.w/2,ta=arrival(g,c),k=(ta+(b.off||0))/b.spb,
+    v=Math.max(1,(c-g.dist-RX)/Math.max(.05,ta-g.t)),prev=g.obs.length>1?g.obs[g.obs.length-2]:null,floor=Math.max(two(g.L,g.dist/16,'sMax','sMin','sOver')*g.speed,104);
+  const cand=[Math.round(k),Math.round(k)+(k-Math.round(k)>0?1:-1)].map(n=>(n*b.spb-(b.off||0)-ta)*v).filter(dx=>(dx<0?-dx<=max:dx<=Math.max(max,B.maxForwardPx||0))&&(!prev||o.x+dx-prev.x>=floor-1e-6));
+  if(!cand.length)return 0;const dx=cand[0];o.x+=dx;o.beat=1;return dx}
 function press(g){g.held=true;g.heldT=0;if(g.phase!=='run'||g.tumble>0)return;
   if(g.kind==='glide'){if(g.pending){g.pending.o.passed=1;g.pending=null}return}
   const canCoyote=!g.air||(g.t-g.lastGround)<=g.L.coyote;
@@ -71,7 +82,7 @@ function step(g,dt){g.t+=dt;const L=g.L;
   else{if(g.tumble>0)g.vy=40;else g.vy=g.held?-L.rise:L.fall*(has(g,'Silent Flight')?.75:1)*(g.float>0?.4:1);   // A5: a star extends the glide (slow fall)
     g.y=Math.max(G.TOP,Math.min(G.HILL-2,g.y+g.vy*dt));if(g.held)g.ev.push({type:'flap'})}
   // spawn ahead (spacing in seconds at the current speed)
-  const ahead=g.dist+G.W+40;while(g.nextObs<ahead){spawnObs(g,g.nextObs);const sp=two(L,g.dist/16,'sMax','sMin','sOver')*g.speed*(1+g.r()*.5),dn=g.kind==='glide'?1-.3*Math.min(1,g.dist/16/800):1;g.nextObs+=Math.max(sp*dn,g.kind==='glide'?140*dn:104)}   // A5: glide hazards get denser with distance
+  const ahead=g.dist+G.W+40;while(g.nextObs<ahead){const n0=g.obs.length;spawnObs(g,g.nextObs);if(g.kind==='jump'&&g.obs.length>n0)g.nextObs+=beatLock(g,g.obs[g.obs.length-1]);const sp=two(L,g.dist/16,'sMax','sMin','sOver')*g.speed*(1+g.r()*.5),dn=g.kind==='glide'?1-.3*Math.min(1,g.dist/16/800):1;g.nextObs+=Math.max(sp*dn,g.kind==='glide'?140*dn:104)}   // A5: glide hazards get denser with distance
   while(g.nextTre<ahead){spawnTre(g,g.nextTre);g.nextTre+=g.base*(g.P.treasureEvery[0]+g.r()*(g.P.treasureEvery[1]-g.P.treasureEvery[0]))}
   for(const o of g.obs)if(!o.counted&&!o.pushed&&o.x+o.w-g.dist<G.EX){o.counted=1;g.cleared++}   // an obstacle met and got past (for the dial)
   g.obs=g.obs.filter(o=>o.x-g.dist>-80);for(const t of g.tre)if(!t.got&&t.x-g.dist<=-40)g.streak=0;g.tre=g.tre.filter(t=>t.x-g.dist>-40&&!t.got);
@@ -92,5 +103,5 @@ function haul(g){return g.treasures+3*g.gold}
 // success for the dial: obstacles cleared / obstacles met (a bump or a moon-saved bump is met, not cleared)
 function success(g){const met=g.cleared+g.bumps+g.saved;return met?g.cleared/met:1}
 function take(g){const e=g.ev;g.ev=[];return e}
-W.RunnerEngine={speedAt,two,lvFor,haul,create,step,press,release,score,take,core,obox,LV,G,table,success}
+W.RunnerEngine={beatLock,arrival,RX,speedAt,two,lvFor,haul,create,step,press,release,score,take,core,obox,LV,G,table,success}
 if(typeof module!=='undefined')module.exports=W.RunnerEngine})(typeof window!=='undefined'?window:globalThis);

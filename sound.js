@@ -37,7 +37,7 @@ function chirp(text,kind,expr){
   let i=1+Math.floor(Math.random()*3);if(i===lastVar[m])i=i%3+1;lastVar[m]=i;
   let lk=null;try{const F=W.FAMILIES,S=W.__echo&&W.__echo.state,c=F&&S&&S.g&&((F.of(kind).sound||{}).lookChirps||{})[S.g.look];if(c&&!pet&&c.moods.includes(m)&&Math.random()<c.chance&&buf[c.sample])lk=c.sample}catch(e){}   // e.g. the lion's silly little roar (lion look only)
   const nm=lk||(pet?sp+'_pet_motif':sp+'_'+m+'_'+i),ok=play(nm,{voice:true,vol:.7,gap:120});if(ok&&W.Music)Music.talk(buf[nm]?buf[nm].duration:.6);return ok}
-W.Sound={get ctx(){return ctx},play,chirp,preload,unlock,get unlocked(){return unlocked},get loaded(){return Object.keys(buf)},MOOD};
+W.Sound={get ctx(){return ctx},play,dur:n=>buf[n]?buf[n].duration:null,chirp,preload,unlock,get unlocked(){return unlocked},get loaded(){return Object.keys(buf)},MOOD};
 // ---- Music v2 (sound_design/v2): gapless loops (OGG Vorbis, sample-exact; 8-bit WAV fallback if OGG can't be decoded), never MP3.
 // Home: bg_<echo>_day / _twilight (evening + night), 4 s crossfade on change; games: their own theme. Ducks -6 dB under Echo voices.
 const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duckT=null,ducked=false,out=false;

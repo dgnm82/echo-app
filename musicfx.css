@@ -29,3 +29,9 @@
 @keyframes mfxrise{0%{transform:translateY(0);opacity:1}70%{opacity:1}100%{transform:translateY(-18px);opacity:0}}
 @keyframes mfxfade{0%,60%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.mfx-pnote{animation:mfxfade .9s steps(3) forwards}}
+/* Music School step 3 (Pixal/Kai, Nov 1): the Echo bobs 1 px on the beat at Home (musicfx.js beatTick: day every beat, twilight beat 1 of the bar).
+   Instant, no easing: .mfxb (a loop is playing at Home) keeps the creature's transition off transform. Same for every family, no shadow. */
+#sc #cr.mfxb{transition-property:left,bottom,width,height,opacity}
+#sc #cr.beat{transform:translateX(-50%) translateY(-1px)}
+.calm #sc #cr.beat{transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){#sc #cr.beat{transform:translateX(-50%)}}

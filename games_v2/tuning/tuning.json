@@ -101,6 +101,12 @@
     "fall": 80,
     "coyote": 0.08
    }
+  },
+  "beatLock": {
+   "on": true,
+   "maxShiftPx": 24,
+   "maxForwardPx": 52,
+   "_about": "Music School step 3: Meadow Dash obstacles reach the runner on the music's beat. Closer by at most maxShiftPx (and never under the spacing floor), farther by at most maxForwardPx (more room is never harder). on:false = today's spawns exactly."
   }
  },
  "RUN_PATTERNS": {

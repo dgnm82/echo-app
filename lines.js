@@ -55,7 +55,7 @@ function settle(g){const p=g.piece,h0=holes(g.grid);p.cells.forEach(([cx,cy],i)=
   const rows=[];for(let y=0;y<g.h;y++)if(g.grid[y].every(c=>c))rows.push(y);
   if(rows.length){const n=rows.length,pts=T().score[n]*g.lv,cells=rows.map(y=>g.grid[y].slice());
     for(const y of rows){g.grid.splice(y,1);g.grid.unshift(Array(g.w).fill(null))}
-    g.lines+=n;g.score+=pts;g.clears[n]++;if(n===4)g.big++;g.events.push({type:'clear',rows,n,pts,cells,big:n===4});
+    g.lines+=n;g.score+=pts;g.clears[n]++;if(n===4)g.big++;g.events.push({type:'clear',rows,n,pts,cells,big:n===4});if(Math.floor(g.lines/3)>Math.floor((g.lines-n)/3))g.events.push({type:'floor',floor:Math.floor(g.lines/3)});   // Music School step 3: every 3 rows = a floor
     const lv=Math.min(g.C.levelMax,1+Math.floor(g.lines/g.C.perLevel));if(lv>g.lv){g.lv=lv;g.events.push({type:'level',level:lv})}}
   g.holesMade+=Math.max(0,holes(g.grid)-h0);
   if(p.y<0||p.cells.some(([,cy])=>p.y+cy<0)){full(g);return 'full'}   // settled above the top line: the den / nest is full

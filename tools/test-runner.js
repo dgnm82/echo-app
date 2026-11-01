@@ -34,4 +34,18 @@ const pilot=(g)=>{const c=R.core(g);for(const o of g.obs){const sx=o.x-g.dist;if
 {const g=R.create({kind:'jump',seed:1,talents:['Super Jumper']});g.nextObs=1e9;R.press(g);R.release(g);for(let i=0;i<10;i++)R.step(g,1/60);R.press(g);ok(g.hops===2,'double hop')}
 {const [g,ev]=run({kind:'jump',seed:4,talents:['Master of Disguise']},40);ok(ev.filter(e=>e.type==='disguise').length===1,'disguise once per 500 m')}
 {const [g,ev]=run({kind:'jump',seed:2,talents:['Radar Ears']},120);ok(ev.some(e=>e.type==='radar')===ev.some(e=>e.type==='gold')||ev.some(e=>e.type==='radar'),'radar')}
+// Music School step 3: beat-lock (Meadow Dash). 126 bpm = game_meadow_dash_loop.
+{const T=require('../games_tuning.js'),B=T.RUN.beatLock,spb=60/126;ok(B&&B.on===true&&B.maxShiftPx===24,'tuning RUN.beatLock on, maxShiftPx 24');
+ const sim=(level,s,beat,secs)=>{const g=R.create({kind:'jump',level,seed:s,beat});const arr=[],gaps=[];let prev=null;
+  for(let i=0;i<60*secs&&g.phase==='run';i++){pilot(g);R.step(g,1/60);R.take(g);for(const o of g.obs){if(!o.sp){o.sp=1;if(prev)gaps.push([o.x-prev.x,Math.max(R.two(g.L,g.dist/16,'sMax','sMin','sOver')*g.speed,104)]);prev=o}
+    if(!o.arr&&o.x+o.w/2-g.dist<=R.RX){o.arr=1;arr.push(g.t)}}}return {g,arr,gaps}};
+ for(const level of ['easy','standard','bigkid']){let n=0,hit=0,bad=0,far=0;for(let s=1;s<=10;s++){const r=sim(level,s,{spb,off:.13},120);
+   r.arr.forEach(t=>{n++;const ph=((t+.13)/spb)%1;if(Math.min(ph,1-ph)*spb<=.06+1/60)hit++});r.gaps.forEach(([d,f])=>{if(d<f-.5)bad++});if(r.g.dist/16>=400)far++}
+  ok(hit/n>=.8,level+' beat-lock: '+(100*hit/n).toFixed(1)+'% of arrivals within 60 ms of a beat (>= 80%)');ok(bad===0,level+' spacing floor holds with beat-lock ('+bad+')');if(level==='standard')ok(far>=9,'autopilot 400 m with beat-lock '+far+'/10')}
+ // off = today's spawns exactly (no loop playing, or the switch off)
+ const pos=r=>r.g.obs.map(o=>o.type+o.x).join()+'|'+r.arr.length+'|'+r.g.dist;let same=true;
+ for(let s=1;s<=5;s++){const a=pos(sim('standard',s,null,60));B.on=false;const b=pos(sim('standard',s,{spb,off:.13},60));B.on=true;const c=R.create({kind:'jump',level:'standard',seed:s});if(a!==b)same=false}
+ ok(same,'beat-lock off (switch off or no loop) = identical spawns');
+ {B.on=true;const a=sim('standard',3,{spb,off:0},60),b=sim('standard',3,{spb,off:0},60);ok(pos(a)===pos(b),'beat-lock seeded replay')}
+ {const g=R.create({kind:'glide',seed:2,beat:{spb,off:0}}),h=R.create({kind:'glide',seed:2});for(let i=0;i<1800;i++){R.step(g,1/60);R.step(h,1/60)}ok(g.obs.map(o=>o.x).join()===h.obs.map(o=>o.x).join(),'Moonlight Glide is not beat-locked')}}
 console.log(`${pass}/${pass+fail} runner tests passed`);if(fail)process.exit(1)

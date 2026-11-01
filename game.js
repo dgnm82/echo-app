@@ -803,11 +803,13 @@ function playBondUp(from,to,live,done){
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
     cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX(FAMD().music.bondup_sting,{vol:.9});
+    let growEnd=0;{const st=window.Sound&&Sound.dur&&Sound.dur(FAMD().music.bondup_sting),dl=Math.max(1500,Math.round((st||4.3)*1000)-150),gr=window.MusicFX&&MusicFX.growSong&&MusicFX.growSong(FID(),to,{delay:dl});   // step 3: after the sting, the growing song
+      if(gr){growEnd=performance.now()+dl+gr.ms+300;window.__growsong={id:gr.id,stage:to,full:gr.full,phrases:gr.phrases,ms:gr.ms,delay:dl}}else window.__growsong=null}
     const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:FID(),seed:(S.g.seed||1)*7+to,pal:gpal,
       onTitle:t=>{window.__butitle=t},
       onLine:o=>{say(o.text,o.expr);if(o.react)setTimeout(()=>react(o.react),50)},
       onDone:()=>{window.__bondup=null;{const t=window.__butitle;if(t&&t.gesture&&window.Alive&&Alive.act)setTimeout(()=>{try{Alive.act(t.gesture)}catch(e){}},400)}   // the title's gesture plays after the scene
-        if(window.Music)Music.duck(false);cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
+        if(window.Music){const w=Math.max(0,growEnd-performance.now());if(w)setTimeout(()=>Music.duck(false),w);else Music.duck(false)}cr.style.visibility='';if(live&&!document.getElementById('gs')){renderBadge();SFX('bond_meter_tick');home();if(to>=3&&to<=5)setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full,.bondup')){const px=document.querySelector('#cr .px-echo');if(px){px.classList.add('fwglance');setTimeout(()=>px.classList.remove('fwglance'),1200)}talk(B('bondup_after_'+to),3600)}},2000)}done&&done()}})})}
 // H13: young-reader pacing (same formula as Dialogue.readMs) + tap the bubble to advance/dismiss (450 ms accidental-tap guard)
 function readMs(t){const n=typeof t==='string'?t.length:((t&&t.text)||'').length,f={'5-6':1.35,'7-8':1.15,'9-10':1.0}[(S&&S.ageBand)||'7-8']||1.15;return Math.round(Math.max(6500,n*120)*f)}
 function bubTap(){const b=$('#b');if(!b||b.style.display==='none')return false;if(now()-(talk.at||0)<450)return false;
@@ -1011,6 +1013,7 @@ const ANC_FAMS=['slyte','whimber','twitchel'];
 // step 2b (Cole's lines): eib_ancient_* pick their band by var eib_band; 7-8 / 9-10 title lines need ancient_tune / ancient_composer (spoken titles, no digits)
 function eibVars(x){if(!x||!x.ancient)return undefined;const sp=x.ancient.spoken||{},v=Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'});if(sp.tune){v.ancient_tune=sp.tune;v.ancient_composer=sp.composer||''}return {vars:v}}   // extra.vars replaces ctx.vars, so S.vars is spread in
 function ancHeard(f){try{return window.EchoBack&&EchoBack.ancientHeard?EchoBack.ancientHeard(kidId(),f):[]}catch(e){return []}}
+if(window.MusicFX)MusicFX.ctx={heard:f=>ancHeard(f),level:()=>{const m=mlGet();return (m&&m.level)||1}};   // step 3: Catch / Dig floor / growing song pick the child's met Ancient Echoes first
 function ancPage(f){const H=ancHeard(f),more=window.EchoBack&&EchoBack.ancientTunes(f).length>H.length,items=H.length+(more?1:0),rows=Math.max(1,Math.ceil(items/4)),ht=46+42*rows+12;
   const at=k=>`left:${18+(k%4)*34}px;top:${53+Math.floor(k/4)*42}px`;
   return `<div class="bkanc" style="height:${ht}px" data-fam="${f}"><i class="bkancp" style="top:0;height:46px;background-image:url(px/songbook/ancient_page_top.png)"></i>${Array.from({length:rows},(_,r)=>`<i class="bkancp" style="top:${46+42*r}px;height:42px;background-image:url(px/songbook/ancient_page_row.png)"></i>`).join('')}<i class="bkancp" style="top:${46+42*rows}px;height:12px;background-image:url(px/songbook/ancient_page_bottom.png)"></i>
@@ -1216,6 +1219,7 @@ function linesGame(){
       if(e.type==='settle'){if(!quiet)SFX('blocks_land',{vol:.6});react('happy')}
       if(e.type==='clear'){const dc=window.MusicFX&&MusicFX.digClear(FID(),e.n);if(!dc)SFX('blocks_row_glow');else if(dc.top)setTimeout(()=>talk(B('dig_climb'),1800),700);glow={rows:e.rows,cells:e.cells,t:now()};clears++;react('happy');if(!low)hop();if(g.lines%12===0||Math.floor(g.lines/12)>Math.floor((g.lines-e.n)/12))wrapT=now();
         if(e.big){g2Banner(gs,DW.big);talk(B('dig_big'),UI.bigBannerMs);SFX('blocks_floor_done')}else if(clears%2===0)talk(B('dig_row'),1800);chirp()}
+      if(e.type==='floor'&&window.MusicFX&&MusicFX.digFloor)MusicFX.digFloor(FID(),700);   // step 3: a floor (3 rows) plays the opening of a family tune
       if(e.type==='level'){g2Banner(gs,'Level '+e.level);talk(B('dig_level'),UI.bannerMs)}
       if(e.type==='disguise'){react('excited');talk(B('dig_disguise'),2000)}}
     if(g.done&&alive)finish();draw()}
@@ -1255,7 +1259,7 @@ const BIRD_TOP=172;   // H18: 48 px bird sprite top -> body centre 196 (bob +/-3
 function catchGame(){
   const fox=GROUND(),G=GG(),PZ=v2Params('catch',S.catchLevel,()=>v2Level('catch','catchLevel')),level=PZ.level,st=v2State('catch'),t0=now(),best0=bestGet('catch',level),firstEver=!st.games&&!best0,TITLE=G.titles.catch;
   const g=CatchEngine.create({level,L:PZ.L,seed:(S.g.seed||1)*37+st.games*11+1,fam:FID(),lowfx:lowFx()}),A=CatchEngine.F,FR=g2Frames(fox);
-  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');if(window.MusicFX)MusicFX.catchStart();
+  gameShell(TITLE);const gs=$('#gs');gs.classList.add('rungame','g2game','catchgame');if(window.MusicFX)MusicFX.catchStart(FID());
   gs.insertAdjacentHTML('beforeend',`<canvas id="cc" width="180" height="300" aria-label="${TITLE}"></canvas>`);
   const ITEMS=fox?['berry','strawberry','apple','raspberry']:['star','water','moon','glowleaf'];
   $('.top b').innerHTML=`<i class="pxi" style="background-image:url(px/i_${ITEMS[0]}.png)"></i><span id="cn">0</span> <span id="cs"></span> ${hudBest('catch',level)} <span id="cg"></span>`;
@@ -1326,7 +1330,7 @@ function stackGame(){
   const IM={};g2Img(IM,'bg',fox?SCART('meadow','day'):'px/scenes/hilltop_twi.png');g2Img(IM,'base',GG().stackBase||(fox?'px/stack/plate.png':'px/run/bench.png'));
   ['','_perfect'].forEach(p=>['l','m','r'].forEach(s=>g2Img(IM,p+s,`px/stack/${M}${p}_${s}.png`)));[0,1,2,3].forEach(i=>g2Img(IM,'burst'+i,`px/items/burst${i}.png`));
   if(fox)g2Img(IM,'home',PIXEL.sheet(SPR(),S.g));else g2Img(IM,'fly',FR.fly);
-  let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0,spk=[],beatN=0,beatT=0,stReact=0,stReactKind='happy',stCol=0,stDy=0,stAuraDraws=0,stColsSeen=[];const perf=new Set();
+  let ended=false,cheered=false,cam=0,F=0,bits=[],plop=null,perfN=0,spk=[],nsp=[],beatN=0,beatT=0,stReact=0,stReactKind='happy',stCol=0,stDy=0,stAuraDraws=0,stColsSeen=[];const perf=new Set();
   const cv=$('#stc'),cx=cv.getContext('2d');cx.imageSmoothingEnabled=false;
   function layer(x,y,w,p){x=Math.round(x);w=Math.max(6,Math.round(w));const P=p?'_perfect':'';if(!g2ok(IM[P+'m']))return;cx.drawImage(IM[P+'l'],x,y);let i=x+3;while(i<x+w-3){const c=Math.min(6,x+w-3-i);cx.drawImage(IM[P+'m'],0,0,c,8,i,y,c,8);i+=c}cx.drawImage(IM[P+'r'],x+w-3,y)}
   const yOf=h=>BASE-LH*(h+1)+cam;
@@ -1337,6 +1341,7 @@ function stackGame(){
     for(const e of StackEngine.take(g)){
       if(e.type==='place'&&onBeat){spk.push({x:g.top+g.w/2,h:g.h,t:0});if(++beatN%4===1&&now()-beatT>20000){beatT=now();setTimeout(()=>talk(B('tower_beat'),1600),300)}}
       if(e.type==='perfect'){wasPerf=true;stReact=6;stReactKind='excited';perf.add(g.h+1);SFX('blocks_row_glow',{vol:.6});perfN++;if(perfN%3===1)talk(B('tower_perfect'),1600)}
+      if(e.type==='place'&&window.MusicFX){const sn=MusicFX.stackNote(FID(),g.h-1);if(sn)nsp.push({col:sn.col,x:g.top+g.w,h:g.h,t0:performance.now()});if(e.trimL||e.trimR)MusicFX.stackSlide(FID(),g.h-1)}   // step 3: each layer a step up the ladder; a cut slides down
       if(e.type==='place'){stReact=6;stReactKind=(wasPerf||onBeat)?'excited':'happy';SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,wy:yOf(g.h)-cam,vy:1,a:1,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,wy:yOf(g.h)-cam,vy:1,a:1,t:8})}
       if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
     if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
@@ -1346,6 +1351,7 @@ function stackGame(){
     if(!ended)layer(g.sx,yOf(g.h)-LH-2,g.w,false);
     for(const b of bits){if(b.a<1){cx.globalAlpha=Math.max(0,b.a);layer(b.x,Math.round(b.wy+cam),b.w,false);cx.globalAlpha=1}else if(fox||b.t%2)layer(b.x,Math.round(b.wy+cam),b.w,false)}
     if(spk.length&&window.MusicFX)spk=spk.filter(s=>MusicFX.drawSparkle(cx,s.x,yOf(s.h)+4,s.t++));
+    if(nsp.length&&window.MusicFX&&MusicFX.drawNoteSparkle)nsp=nsp.filter(s=>MusicFX.drawNoteSparkle(cx,s.col,s.x,yOf(s.h-1)-2,performance.now()-s.t0));   // Pixal's note sparkle: centred on the layer's right end, 2 px above its top
     if(plop&&plop.t<16){const im=IM['burst'+Math.min(3,lowFx()?0:plop.t>>2)];if(g2ok(im))cx.drawImage(im,Math.round(plop.x+plop.w/2-12),BASE+4,24,24);plop.t++}
     if(best0>0){const y=yOf(best0-1);cx.fillStyle='#FFD27A';for(let x=0;x<180;x+=4)cx.fillRect(x,y,2,1);cx.beginPath();cx.moveTo(170,y-6);cx.lineTo(178,y-3);cx.lineTo(170,y);cx.fill()}
     const f12=(F/5)|0,low=lowFx(),stg=glowNow(),pal=(S.g&&S.g.pal)||FR.pal;
@@ -1373,6 +1379,7 @@ function stackGame(){
   function stop(){stopLoop();document.removeEventListener('keydown',key)}
   function finish(){if(ended)return;ended=true;const R=StackEngine.result(g),n=R.h;v2Count('stack',n,StackEngine.success(g));const r=bestPut('stack',level,n);
     if(n>=5)remember(`We stacked ${n} ${G.units.stack}`,'stack_'+n);react('happy');setExpr('happy');talk(B(r.isBest&&!firstEver?'tower_best':'tower_end',{n}),2400);
+    if(n>0&&window.MusicFX&&MusicFX.stackPlay)setTimeout(()=>MusicFX.stackPlay(FID(),n),1000);   // step 3: the end card plays the tower back as a rising tune
     setTimeout(()=>{draw();stop();endCard({game:'stack',unit:G.units.stack,score:n,was:r.was,best:Math.max(n,r.was),isBest:r.isBest&&!firstEver,firstEver,t0,extra:[`perfect drops ${R.perfects}`],onAgain:stackGame})},900)}
   cv.addEventListener('pointerdown',e=>{e.preventDefault();press()});
   function key(e){if(!document.getElementById('stc')){stop();return}const k=e.key.toLowerCase();if((k===' '||k==='a'||k==='enter')&&!e.repeat){press();e.preventDefault()}}
@@ -1476,7 +1483,7 @@ function runGame(){
   const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
   function bg(){const d=g.dist;
     if(fox){cx.drawImage(IM.meadow_sky,0,0);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
-      cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448);if(window.MusicFX)MusicFX.drawRunPulse(cx,84,450)}
+      cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448)}
     else{cx.drawImage(IM.hill_sky,0,0);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
       [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud_far&&IM.cloud_far.naturalWidth?IM.cloud_far:IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
   function drawObs(){const d=g.dist;for(const o of g.obs){const x=Math.round(o.x-d);if(x>370||x<-60)continue;const wob=o.pushed?Math.round(Math.sin(g.t*30)*2):0;
@@ -1501,9 +1508,10 @@ function runGame(){
     for(const p of pops){cx.fillStyle=p.c;cx.font='8px PS2P';cx.fillText(p.s,p.x,p.y-(1-p.t)*20)}}
   function hud(){const m=Math.floor(g.dist/16);$('#rm').textContent=m+'m';$('#rt').textContent='×'+RunnerEngine.haul(g);{const mo=$('#rmoon');if(mo)mo.style.visibility=g.moon?'visible':'hidden'}if(cheered)$('#rm').classList.add('gold')}
   function tick(now){if(!alive)return;if(!document.getElementById('rc')){stop();return}
-    acc+=Math.min(.1,(now-last)/1000);last=now;while(acc>=1/60){RunnerEngine.step(g,1/60);acc-=1/60;if(happy>0)happy-=1/60;pops.forEach(p=>p.t-=1/60);pops=pops.filter(p=>p.t>0);
+    acc+=Math.min(.1,(now-last)/1000);last=now;if(fox&&window.MusicFX&&MusicFX.beatGrid)g.beat=MusicFX.beatGrid(g.t);   // step 3 beat-lock: the playing loop's beat grid (null = no loop = today's spawns)
+    while(acc>=1/60){RunnerEngine.step(g,1/60);acc-=1/60;if(happy>0)happy-=1/60;pops.forEach(p=>p.t-=1/60);pops=pops.filter(p=>p.t>0);
 handle()}
-    bg();drawObs();echo();hud();requestAnimationFrame(tick)}
+    bg();drawObs();if(fox&&window.MusicFX)MusicFX.drawRunPulse(cx,84,474);echo();hud();requestAnimationFrame(tick)}   // step 3: the beat mark sits in the foreground grass, after the obstacles
   function handle(){for(const e of RunnerEngine.take(g)){
       if(e.type==='jump'||e.type==='hop2'){SFX('run_hop_'+(1+Math.floor(Math.random()*3)),{vol:.6,gap:100})}
       if(e.type==='flap'&&g.t-lastFlap>=.25){lastFlap=g.t;SFX('run_flap_'+(1+Math.floor(Math.random()*3)),{vol:.5})}   // one shared 0.25 s throttle for the 3 variants
