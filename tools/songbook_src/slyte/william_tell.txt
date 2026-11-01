@@ -1,0 +1,31 @@
+# tools/songbook_src/slyte/william_tell.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: william_tell
+title: William Tell Overture
+composer: Gioachino Rossini
+home: do
+meter: 2
+# written meter 2/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 144
+mood: galloping
+skills: fastslow
+min_ml: 1
+family: slyte
+icon: px/songbook/william_tell.png
+bar_ticks: 24
+source: Rossini, Guillaume Tell, vocal score (overture for piano), L. Grus, Paris, c1870, p.6, finale (Allegro vivace) gallop, first forte statement
+prov: Rossini (d.1868). Guillaume Tell (1829). Gallop read from the Grus c1870 vocal score p.6. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://archive.org/details/guillaumetellop00ross/page/n15
+read: verified
+# echo: 4.25 bars, 22 notes, 3.54 s at 144 bpm (cap 8 s). Sounding pitches:
+#   a4:3 a4:3 | a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 | d5:6 e5:6 f#5:6 a4:3 a4:3 | a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 | d5:6
+#   e5:6 f#5:12
+echo: sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:6 sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:12
+# child phrase, sounding: a4:6 a4:3 a4:3 d5:6 e5:6 f#5:12
+child: sol4:6 sol4:3 sol4:3 do5:6 re5:6 mi5:12
+# child phrase, sounding: a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 d5:6 f#5:12
+child: sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 do5:6 mi5:12
+# note: Grus prints the gallop in E (sol = B, do re mi = E F# G#); moved down a step to D. Echo = pickup + 2-bar call
+# note: twice, last bar held (my ending, on mi). The phrase-2 ti/fa from PLAN are not in this 4-bar Echo, so nothing to
+# note: replace.

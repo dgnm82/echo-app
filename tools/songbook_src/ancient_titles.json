@@ -1,0 +1,115 @@
+{
+ "_about": "Spoken titles for {var:ancient_tune}/{var:ancient_composer} in the 7-8 and 9-10 eib_ancient_* lines (no digits; never shown to 5-6).",
+ "titles": {
+  "hall_mountain_king": {
+   "family": "slyte",
+   "tune": "the Mountain King",
+   "composer": "Grieg"
+  },
+  "william_tell": {
+   "family": "slyte",
+   "tune": "the William Tell Overture",
+   "composer": "Rossini"
+  },
+  "toccata_fugue": {
+   "family": "slyte",
+   "tune": "Toccata and Fugue",
+   "composer": "Bach"
+  },
+  "overture_1812": {
+   "family": "slyte",
+   "tune": "the Eighteen-Twelve Overture",
+   "composer": "Tchaikovsky"
+  },
+  "ride_valkyries": {
+   "family": "slyte",
+   "tune": "Ride of the Valkyries",
+   "composer": "Wagner"
+  },
+  "night_bald_mountain": {
+   "family": "slyte",
+   "tune": "Night on Bald Mountain",
+   "composer": "Mussorgsky"
+  },
+  "minute_waltz": {
+   "family": "slyte",
+   "tune": "the Minute Waltz",
+   "composer": "Chopin"
+  },
+  "summer_storm": {
+   "family": "slyte",
+   "tune": "Summer",
+   "composer": "Vivaldi"
+  },
+  "spring": {
+   "family": "whimber",
+   "tune": "Spring",
+   "composer": "Vivaldi"
+  },
+  "ode_to_joy": {
+   "family": "whimber",
+   "tune": "Ode to Joy",
+   "composer": "Beethoven"
+  },
+  "swan_lake": {
+   "family": "whimber",
+   "tune": "Swan Lake",
+   "composer": "Tchaikovsky"
+  },
+  "flight_bumblebee": {
+   "family": "whimber",
+   "tune": "Flight of the Bumblebee",
+   "composer": "Rimsky-Korsakov"
+  },
+  "jesu_joy": {
+   "family": "whimber",
+   "tune": "Jesu, Joy of Man's Desiring",
+   "composer": "Bach"
+  },
+  "hallelujah": {
+   "family": "whimber",
+   "tune": "the Hallelujah Chorus",
+   "composer": "Handel"
+  },
+  "ave_maria": {
+   "family": "whimber",
+   "tune": "Ave Maria",
+   "composer": "Schubert"
+  },
+  "fur_elise": {
+   "family": "twitchel",
+   "tune": "Für Elise",
+   "composer": "Beethoven"
+  },
+  "rondo_alla_turca": {
+   "family": "twitchel",
+   "tune": "Rondo alla Turca",
+   "composer": "Mozart"
+  },
+  "sugar_plum_fairy": {
+   "family": "twitchel",
+   "tune": "the Sugar Plum Fairy",
+   "composer": "Tchaikovsky"
+  },
+  "the_entertainer": {
+   "family": "twitchel",
+   "tune": "the Entertainer",
+   "composer": "Joplin"
+  },
+  "danse_macabre": {
+   "family": "twitchel",
+   "tune": "Danse Macabre",
+   "composer": "Saint-Saëns"
+  },
+  "largo_al_factotum": {
+   "family": "twitchel",
+   "tune": "Largo al Factotum",
+   "composer": "Rossini"
+  },
+  "moonlight_sonata": {
+   "family": "twitchel",
+   "tune": "the Moonlight Sonata",
+   "composer": "Beethoven"
+  }
+ }
+}

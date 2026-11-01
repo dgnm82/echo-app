@@ -1,0 +1,31 @@
+# tools/songbook_src/twitchel/danse_macabre.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: danse_macabre
+title: Danse Macabre
+composer: Camille Saint-Saens
+home: la
+meter: 3
+# written meter 3/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 132
+mood: playful-spooky
+skills: loudsoft fastslow
+min_ml: 2
+family: twitchel
+icon: px/songbook/danse_macabre.png
+bar_ticks: 36
+source: Saint-Saens, Danse macabre Op.40, piano transcription by H. Cramer, A. Durand & Fils, Paris 1890, p.1, bars 1-12 (strikes) and the waltz entry (p, bars 37-39)
+prov: Saint-Saens (d.1921). Op.40 (Durand 1874). Read from Durand 1890 piano transcription p.1. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://archive.org/details/31761041546243/page/n7
+read: partial
+# echo: 5.67 bars, 23 notes, 7.73 s at 132 bpm (cap 8 s). Sounding pitches:
+#   a4:12 a4:12 a4:12 a4:12 a4:12 a4:12 | d5:12 d5:6 f5:6 d5:6 e5:6 | f5:12 e5:6 f5:6 d5:6 f5:6 | e5:6 d5:6 d5:6
+#   f5:6 d5:6 e5:6 | d5:24
+echo: mi4:12 mi4:12 mi4:12 mi4:12 mi4:12 mi4:12 | la4:12 la4:6 do5:6 la4:6 ti4:6 | do5:12 ti4:6 do5:6 la4:6 do5:6 | ti4:6 la4:6 la4:6 do5:6 la4:6 ti4:6 | la4:24
+# child phrase, sounding: a4:12 a4:12 a4:12 a4:12 a4:12 a4:12
+child: mi4:12 mi4:12 mi4:12 mi4:12 mi4:12 mi4:12
+# child phrase, sounding: d5:12 d5:6 f5:6 d5:6 f5:12
+child: la4:12 la4:6 do5:6 la4:6 do5:12
+# note: The 12 strikes are 6 here (and quarter notes, not dotted halves) to fit 8 s; then the waltz as I read it (G
+# note: minor up a 5th to D minor). Waltz pitches read at medium confidence from the scan - ear check wanted. Child
+# note: phrase 2 changed from PLAN (d5 f5 g5 a5) to the waltz shape I read (la la do la do).

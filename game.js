@@ -1008,6 +1008,8 @@ function dev(){
 // ---------- Music School step 2: the Memory Book "Ancient Echoes" page (art px/songbook, Pixal). Only the tunes this child has heard
 // (order heard) + ONE sleeping pebble while that family still has an unheard tune; rows grow from top/row/bottom pieces (no fixed grid).
 const ANC_FAMS=['slyte','whimber','twitchel'];
+// step 2b (Cole's lines): eib_ancient_* pick their band by var eib_band; 7-8 / 9-10 title lines need ancient_tune / ancient_composer (spoken titles, no digits)
+function eibVars(x){if(!x||!x.ancient)return undefined;const sp=x.ancient.spoken||{},v=Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'});if(sp.tune){v.ancient_tune=sp.tune;v.ancient_composer=sp.composer||''}return {vars:v}}   // extra.vars replaces ctx.vars, so S.vars is spread in
 function ancHeard(f){try{return window.EchoBack&&EchoBack.ancientHeard?EchoBack.ancientHeard(kidId(),f):[]}catch(e){return []}}
 function ancPage(f){const H=ancHeard(f),more=window.EchoBack&&EchoBack.ancientTunes(f).length>H.length,items=H.length+(more?1:0),rows=Math.max(1,Math.ceil(items/4)),ht=46+42*rows+12;
   const at=k=>`left:${18+(k%4)*34}px;top:${53+Math.floor(k/4)*42}px`;
@@ -1064,7 +1066,7 @@ function echoBackGame(mode){if(!window.EchoBack)return;gameShell(EchoBack.title)
   $('#quit').onclick=()=>{EchoBack.stop();endGame(done)};
   EchoBack.ready.then(()=>{if($('#gs')!==gs||!EchoBack.data)return;EchoBack.start({gs,fam:FID(),tier:Math.min(4,glowNow()),lowfx:lowFx(),state:S.eib,save,
     band:S.ageBand||'7-8',kid:kidId(),mode:mode==='invite'?'invite':'play',color:S.g.coat,
-    line:k=>B(k),talk:(l,ms)=>talk(l,ms),react:e=>react(e),
+    line:(k,x)=>B(k,eibVars(x)),talk:(l,ms)=>talk(l,ms),react:e=>react(e),
     hasSticker:t=>S.stickers.includes(t),
     onSticker:(t,tune)=>{S.stickers.push(t);(S.eibSongs=S.eibSongs||{})[t]=tune;SFX('memory_pair_found');save()},
     onTune:r=>{S.needs.play=clamp(S.needs.play+C.restore.play);save()},

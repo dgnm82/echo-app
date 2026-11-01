@@ -11337,37 +11337,374 @@
     ],
     "eib_ancient_echo": [
       {
-        "text": "An Ancient Echo! Listen!",
-        "short": "An Ancient Echo!",
-        "expr": "excited",
+        "text": "Shh… An Ancient Echo!",
+        "short": "Shh… An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
         "context": {
-          "placeholder": "jay_step2_until_cole"
+          "age_band": "5-6",
+          "moment": "ancient_echo"
         }
       },
       {
-        "text": "Ooh! An Ancient Echo! Listen close.",
-        "short": "An Ancient Echo!",
-        "expr": "excited",
+        "text": "Oh… An Ancient Echo!",
+        "short": "Oh… An Ancient Echo!",
+        "expr": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
         "context": {
-          "placeholder": "jay_step2_until_cole"
+          "age_band": "5-6",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "Mm… An Ancient Echo!",
+        "short": "Mm… An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "My feathers are fluffing up… An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "Mm… a tune from long, long ago. An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "Shh… it floated into my ears. An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "An Ancient Echo! I think it's called {var:ancient_tune}…",
+        "short": "An Ancient Echo!",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          },
+          "varSet": "ancient_tune"
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_echo",
+          "needs": "tune"
+        }
+      },
+      {
+        "text": "Something from long ago is drifting into my ears… An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "My wings feel tingly… a tune from long, long ago. An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "Shh… let's listen very softly. An Ancient Echo!",
+        "short": "An Ancient Echo!",
+        "expr": "curious",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_echo"
+        }
+      },
+      {
+        "text": "An Ancient Echo! This one is {var:ancient_tune}, by {var:ancient_composer}…",
+        "short": "An Ancient Echo!",
+        "expr": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          },
+          "varSet": "ancient_tune"
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_echo",
+          "needs": "tune"
         }
       }
     ],
     "eib_ancient_collection": [
       {
-        "text": "It's in our Ancient Echoes now!",
-        "short": "In our Ancient Echoes!",
+        "text": "It's in our Ancient Echoes.",
+        "short": "It's in our Ancient Echoes.",
         "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
         "context": {
-          "placeholder": "jay_step2_until_cole"
+          "age_band": "5-6",
+          "moment": "ancient_collection"
         }
       },
       {
-        "text": "That one stays in our Ancient Echoes.",
-        "short": "In our Ancient Echoes!",
+        "text": "Ours to keep now… lovely.",
+        "short": "Ours to keep now… lovely.",
         "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
         "context": {
-          "placeholder": "jay_step2_until_cole"
+          "age_band": "5-6",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "Into our Ancient Echoes…",
+        "short": "Into our Ancient Echoes…",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "any": [
+            {
+              "varUnset": "eib_band"
+            },
+            {
+              "var": {
+                "eib_band": "5-6"
+              }
+            }
+          ]
+        },
+        "context": {
+          "age_band": "5-6",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "We heard it together… now it's in our Ancient Echoes.",
+        "short": "In our Ancient Echoes.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "Lovely… that one rests in our Ancient Echoes now.",
+        "short": "In our Ancient Echoes.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "My feathers are glowing… we keep this Ancient Echo.",
+        "short": "We keep this one.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          }
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "That was {var:ancient_tune}… now it's one of ours.",
+        "short": "In our Ancient Echoes.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "7-8"
+          },
+          "varSet": "ancient_tune"
+        },
+        "context": {
+          "age_band": "7-8",
+          "moment": "ancient_collection",
+          "needs": "tune"
+        }
+      },
+      {
+        "text": "A tune from long, long ago… and now it lives in our Ancient Echoes.",
+        "short": "In our Ancient Echoes.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "We found it together… one more Ancient Echo for our collection.",
+        "short": "One more Ancient Echo.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "I'll keep that one under my wing… in our Ancient Echoes.",
+        "short": "Under my wing…",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          }
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_collection"
+        }
+      },
+      {
+        "text": "That was {var:ancient_tune}, by {var:ancient_composer}… now it's in our Ancient Echoes.",
+        "short": "In our Ancient Echoes.",
+        "expr": "delighted",
+        "react": "happy",
+        "cond": {
+          "var": {
+            "eib_band": "9-10"
+          },
+          "varSet": "ancient_tune"
+        },
+        "context": {
+          "age_band": "9-10",
+          "moment": "ancient_collection",
+          "needs": "tune"
         }
       }
     ]

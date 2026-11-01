@@ -191,7 +191,7 @@ const Songbook={KEY:'echo-songbook-v1',   // key kept from v1 (store v:3 inside)
 EB.ready=(W.fetch&&W.document)?Promise.all([fetch('music/tunes.json').then(r=>r.json()).then(j=>{DATA=j.echo_it_back||null;SB=j.songbook||null}),
   fetch('music/instruments.json').then(r=>r.json()).then(j=>{INST=j})]).catch(()=>{}):Promise.resolve();
 EB.setData=(eib,inst)=>{DATA=eib;if(inst)INST=inst};
-EB.setSongbook=sb=>{SB=sb||null;return SB};
+EB.setSongbook=sb=>{SB=sb||null;return SB};EB.songbook=()=>SB;
 // ---------------------------------------------------------------- voices (cap from instruments.json, 3 on the speaker)
 const voices=[];
 function play(fam,s,o){o=o||{};if(!W.Music||!Music.oneShot)return;const I=(INST&&INST.instruments&&INST.instruments[o.inst||INST.default])||{sample:'notes/{fam}_{note}',gain:.5};
@@ -237,7 +237,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     beads=[...root.querySelectorAll('.eibbeads i')],slots=root.querySelector('.eibslots'),puff=root.querySelector('.eibpuff'),tiles=root.querySelector('.eibtiles');
   const padEl=s=>padBox.querySelector(`[data-pad="${s}"]`);
   const light=(s,ms)=>{const p=padEl(s);if(!p)return;p.classList.add('on');setTimeout(()=>p.classList.remove('on'),ms||260)};
-  const say=(k,ms)=>{const l=api.line&&api.line(k);if(l)api.talk(l,ms||2200)};
+  const say=(k,ms,x)=>{const l=api.line&&api.line(k,x);if(l)api.talk(l,ms||2200)};   // x = {ancient: tune} for eib_ancient_* (the shell adds eib_band + the spoken title)
   const echoEl=()=>document.getElementById('cr');const saveBook=()=>Songbook.save(book);
   // ---- Ancient Echoes: the flourish over the Echo's head, the Echo version (real notes, half-steps included), the pads a tune needs
   const flo=root.querySelector('.eibflo');
@@ -294,7 +294,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   // after an Ancient Echo: a match -> the Echo sings the whole hook again with the pads glowing; the first time -> it joins Ancient Echoes
   function ancEpilogue(a,next){padBox.querySelectorAll('.need').forEach(z=>z.classList.remove('need'));
     if(a.matched){if(P.ml&&P.ml.met&&P.ml.met[a.t.id])P.ml.met[a.t.id].m=1;saveBook()}
-    const go=()=>{if(a.first){flourish();say('eib_ancient_collection',2400);later(2600,next)}else next()};
+    const go=()=>{if(a.first){flourish();say('eib_ancient_collection',2400,{ancient:a.t});later(2600,next)}else next()};
     if(a.matched){root.classList.add('duet');padBox.classList.add('duet');later(400,()=>singEcho(a.t.echo,()=>{root.classList.remove('duet');padBox.classList.remove('duet');go()}))}else go()}
   function ancTune(a){const t=a.t,c=a.c;let first=false;if(P.ml){first=sbHeard(P.ml,t,fam);saveBook()}api.onAncient&&api.onAncient({id:t.id,first});
     return Object.assign({id:'anc:'+t.id,n:c.n,phrases:c.phrases,labels:c.labels},{bpm:bpmAt(P.tempoStep,t.bpm),ancient:t,first})}
@@ -304,7 +304,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     const A=R.anc&&R.anc[R.tunes-1];
     if(A){tune=ancTune(A);const k=seqKey(tune.n);R.seen.push(k);st.lastSeq=k;st.lastAnc=A.t.id;lastId=tune.id;api.save&&api.save();ans.innerHTML='';slots.innerHTML=tune.phrases?tune.labels.map(()=>'<i></i>').join(''):'';
       const need=new Set(tune.n.map(x=>step(x)));padBox.querySelectorAll('.eibpad').forEach(z=>z.classList.toggle('need',need.has(+z.dataset.pad)));
-      flourish();say('eib_ancient_echo',2200);
+      flourish();say('eib_ancient_echo',2200,{ancient:A.t});
       return later(1500,()=>singEcho(A.t.echo,()=>{say('eib_my_turn',1400);if(tune.phrases)return later(900,()=>phrase(0));curNotes=tune.n;asked=norm(tune.n);later(700,()=>sing(tune.n,tune.bpm,yourTurn))}))}
     const t=pick(R.len);tune=Object.assign({},t,{bpm:bpmAt(P.tempoStep,t.bpm)});ans.innerHTML='';
     slots.innerHTML=tune.phrases?tune.labels.map((l,i)=>`<i class="${tune.labels.indexOf(l)<i?'rep':''}"></i>`).join(''):'';

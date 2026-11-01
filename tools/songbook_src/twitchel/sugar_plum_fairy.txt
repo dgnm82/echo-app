@@ -1,0 +1,29 @@
+# tools/songbook_src/twitchel/sugar_plum_fairy.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: sugar_plum_fairy
+title: Dance of the Sugar Plum Fairy
+composer: Pyotr Ilyich Tchaikovsky
+home: la
+meter: 2
+# written meter 2/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 72
+mood: sparkly
+skills: highlow
+min_ml: 1
+family: twitchel
+icon: px/songbook/sugar_plum_fairy.png
+bar_ticks: 24
+source: Tchaikovsky, The Nutcracker Suite Op.71a, piano solo, G. Schirmer, New York 1922, "Dance of the Candy Fairy" p.16, bars 5-8
+prov: Tchaikovsky (d.1893). Nutcracker (1892). Celesta tune checked against Schirmer 1922 piano suite p.16. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://archive.org/details/nutcrackersuiteo00tcha/page/n21
+read: partial
+# echo: 3.75 bars, 17 notes, 6.25 s at 72 bpm (cap 8 s). Sounding pitches:
+#   a5:3 f5:3 a5:6 g5:6 | f5:6 e5:6 e5:3 e5:3 e5:6 | eb5:6 d5:6 d5:3 d5:3 d5:6 | c#5:6 e5:6 d5:12
+echo: mi5:3 do5:3 mi5:6 re5:6 | do5:6 ti4:6 ti4:3 ti4:3 ti4:6 | tib4:6 la4:6 la4:3 la4:3 la4:6 | lab4:6 ti4:6 la4:12
+# child phrase, sounding: a5:3 f5:3 a5:6 g5:12
+child: mi5:3 do5:3 mi5:6 re5:12
+# child phrase, sounding: f5:6 d5:6 d5:3 d5:3 d5:12
+child: do5:6 la4:6 la4:3 la4:3 la4:12
+# note: Rhythm and register checked on the scan (E minor, down a step to D minor); the octave chords made single pitches
+# note: hard to read, so the falling half-steps are the standard tune and bar 4 is my landing on la. Ear check wanted.

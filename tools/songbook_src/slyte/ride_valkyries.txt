@@ -1,0 +1,31 @@
+# tools/songbook_src/slyte/ride_valkyries.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: ride_valkyries
+title: Ride of the Valkyries
+composer: Richard Wagner
+home: la
+meter: 3
+# written meter 9/8; bpm counts quarter notes (12 ticks = 1 quarter); meter = dotted beats a bar
+bpm: 144
+mood: galloping
+skills: fastslow highlow
+min_ml: 1
+family: slyte
+icon: px/songbook/ride_valkyries.png
+bar_ticks: 54
+source: Wagner, Die Walkuere, vocal score (Kleinmichel), B. Schott's Soehne, Mainz / G. Schirmer, New York 1904, Act III Scene 1, p.184-185
+prov: Wagner (d.1883). Die Walkuere (1870). Theme read from the Schott/Schirmer 1904 vocal score p.184. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://archive.org/details/valkyrie00wagn_0/page/n195
+read: verified
+# echo: 4.11 bars, 20 notes, 7.71 s at 144 bpm (cap 8 s). Sounding pitches:
+#   f#4:6 | b4:9 f#4:3 b4:6 d5:30 b4:6 | d5:9 b4:3 d5:6 f#5:30 d5:6 | f#5:9 d5:3 f#5:6 a5:30 f#4:6 | b4:9 f#4:3
+#   b4:6 d5:36
+echo: mi4:6 | la4:9 mi4:3 la4:6 do5:30 la4:6 | do5:9 la4:3 do5:6 mi5:30 do5:6 | mi5:9 do5:3 mi5:6 sol5:30 mi4:6 | la4:9 mi4:3 la4:6 do5:36
+# child phrase, sounding: f#4:6 b4:9 f#4:3 b4:6 d5:30
+child: mi4:6 la4:9 mi4:3 la4:6 do5:30
+# child phrase, sounding: b4:6 d5:9 b4:3 d5:6 f#5:30
+child: la4:6 do5:9 la4:3 do5:6 mi5:30
+# note: Rising la-do-mi steps (B F# B D / D B D F# / F# D F# A) as printed; bar 4 goes back to bar 1 (as the first
+# note: statement does) because the next step (A F# A C#) would need c#6, above c6. 9/8 written as 18 ticks a dotted
+# note: beat. PLAN child kept.

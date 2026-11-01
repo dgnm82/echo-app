@@ -16,7 +16,13 @@ Source format (one file per tune, tools/songbook_src/<fam>/<id>.txt; '#' starts 
   skills: fastslow loudsoft          optional, space separated
   min_ml: 1                          optional (default 1)
   source: Grieg (d.1907). Peer Gynt Suite No.1 Op.46, Peters, Leipzig 1888, p.3 (IMSLP). Melody only, own arrangement.   (-> prov, < 200 chars)
-  prov_status: ok                    ok | edition_check (edition_check tunes are held back: never shipped)
+  prov_status: ok                    ok | edition_check | blocked (edition_check/blocked tunes are held back: never shipped)
+  prov: ...                          optional short credit shipped as prov (< 200 chars); else source: is used
+  family/scan/read/icon/bar_ticks:   optional, informational (family must match the folder, icon must be px/songbook/<id>.png)
+  meter: 4 or 3/4                    beats per bar (the numerator is kept; 6/8, 9/8, 3/8: Cole writes dotted beats 2/3/1 + bar_ticks)
+  bar_ticks: 36                      optional, the bar length in ticks for compound meters (bpm always counts quarter notes); kept in the record
+Spoken titles: tools/songbook_src/ancient_titles.json {titles:{id:{family,tune,composer}}} -> record.spoken (no digits).
+  grow: yes                          optional, one tune per family: the 'Our song grew!' growing song (step 3); else the most-met tune, else the first
   echo: la4:12 ti4:12 do5:12 re5:12 | mi5:12 do5:12 mi5:24      the Echo's version; more echo: lines are appended; '|' = bar line (ignored)
   child: la4:12 do5:12 re5:6 mi5:6 do5:12 mi5:24                  one child: line per phrase (3-8 notes, on the family pads, pentatonic)
 Notes: <do|re|mi|fa|sol|la|ti>[#|b]<octave>:<ticks>   (12 ticks = 1 beat); r:<ticks> = rest (echo only).
@@ -30,7 +36,10 @@ SOL = {'do': 1, 're': 2, 'mi': 3, 'fa': 4, 'sol': 5, 'la': 6, 'ti': 7}
 MAJ = [0, 2, 4, 5, 7, 9, 11]
 SHARP = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b']
 FLAT = ['c', 'db', 'd', 'eb', 'e', 'f', 'gb', 'g', 'ab', 'a', 'bb', 'b']
-KEYS = {'id', 'title', 'composer', 'home', 'meter', 'bpm', 'mood', 'skills', 'min_ml', 'source', 'prov_status', 'echo', 'child', 'fixture'}
+KEYS = {'id', 'title', 'composer', 'home', 'meter', 'bpm', 'mood', 'skills', 'min_ml', 'source', 'prov_status', 'echo', 'child', 'fixture',
+        'family', 'scan', 'read', 'prov', 'icon', 'bar_ticks', 'grow'}   # Cole's step-2 files also carry family/scan/read/prov/icon/bar_ticks
+HELD = ('edition_check', 'blocked')
+COMMENT = re.compile(r'(^|\s)#.*$')   # '#' starts a comment only at the line start or after a space (fa#4 is a sharp)
 TOK = re.compile(r'^(do|re|mi|fa|sol|la|ti|r)(#|b)?(\d)?:(\d+)$')
 
 def spell(fam, m): return (SHARP if fam == 'slyte' else FLAT)[m % 12] + str(m // 12 - 1)
@@ -67,7 +76,7 @@ def parse(path, fam, E, canon, fixture, errs):
     def err(m): errs.append(f'{os.path.relpath(path, ROOT)}: {m}')
     kv, echo, child = {}, [], []
     for i, raw in enumerate(open(path, encoding='utf-8'), 1):
-        line = raw.split('#', 1)[0].strip() if not raw.lstrip().startswith('source:') else raw.strip()
+        line = COMMENT.sub('', raw).strip() if not raw.lstrip().startswith(('source:', 'prov:', 'scan:')) else raw.strip()
         if not line: continue
         if ':' not in line: err(f'line {i}: expected "key: value"'); continue
         k, v = line.split(':', 1); k, v = k.strip(), v.strip()
@@ -82,9 +91,14 @@ def parse(path, fam, E, canon, fixture, errs):
     for k in ('title', 'composer', 'home', 'meter', 'bpm', 'source', 'prov_status'):
         if not kv.get(k): err(f'missing "{k}:"')
     st = kv.get('prov_status', '')
-    if st not in ('ok', 'edition_check'): err(f'prov_status must be ok or edition_check, not "{st}"')
-    prov = kv.get('source', '')
-    if len(prov) >= 200: err(f'source line is {len(prov)} chars (must be < 200)')
+    if st not in ('ok',) + HELD: err(f'prov_status must be ok, edition_check or blocked, not "{st}"')
+    if kv.get('family') and kv['family'] != fam: err(f'family "{kv["family"]}" but the file is in {fam}/')
+    if kv.get('icon') and kv['icon'] != f'px/songbook/{tid}.png' and not fixture: err(f'icon must be px/songbook/{tid}.png')
+    prov = kv.get('prov') or kv.get('source', '')   # prov: is the short shipped credit; source: the edition citation
+    if len(prov) >= 200: err(f'prov/source line is {len(prov)} chars (must be < 200)')
+    m = re.match(r'^(\d+)(?:/(\d+))?$', kv.get('meter', '4'))
+    if not m: err(f'meter "{kv.get("meter")}" must be like 4 or 3/4')
+    meter = int(m.group(1)) if m else 4
     bpm = int(kv.get('bpm', '0') or 0)
     if not 40 <= bpm <= 200: err(f'bpm {bpm} out of 40-200')
     if not echo: err('no echo: notes')
@@ -100,16 +114,23 @@ def parse(path, fam, E, canon, fixture, errs):
             elif step(x[0], x[1]) not in P: err(f'child phrase {j}: {x} is not on the {fam} pads')
             if not 60 <= midi(fam, E, x) <= 84: err(f'child phrase {j}: {x} outside c4-c6')
         if len({step(x[0], x[1]) for x in ph}) > 4: err(f'child phrase {j}: more than 4 different notes')
-    t = dict(id=tid, title=kv.get('title', ''), composer=kv.get('composer', ''), home=kv.get('home', 'do'), meter=int(kv.get('meter', '4') or 4), bpm=bpm,
+    t = dict(id=tid, title=kv.get('title', ''), composer=kv.get('composer', ''), home=kv.get('home', 'do'), meter=meter, bpm=bpm,
              mood=kv.get('mood', ''), skills=kv.get('skills', '').split(), echo=dict(v=2, bpm=bpm, tpb=12, n=echo),
              child=[dict(v=1, bpm=bpm, tpb=12, n=ph) for ph in child], min_ml=int(kv.get('min_ml', '1') or 1),
              icon=f'px/songbook/{tid}.png' if not fixture else 'px/songbook/ancient_emblem.png', prov=prov, prov_status=st)
+    if kv.get('bar_ticks'):
+        try: t['bar_ticks'] = int(kv['bar_ticks'])
+        except ValueError: err('bar_ticks must be a number')
     if fixture: t['fixture'] = True
+    if kv.get('grow') not in (None, '', 'yes', 'no'): err('grow must be yes or no')
+    if kv.get('grow') == 'yes': t['_grow'] = True
     t['_echo_seconds'] = round(sec, 2)
     return t
 
 def build(src, fixture=False, include_held=False):
     E = eib(); errs = []
+    tp = os.path.join(src, 'ancient_titles.json')   # Cole: spoken titles for {var:ancient_tune}/{var:ancient_composer} (7-8 / 9-10 lines only)
+    titles = json.load(open(tp, encoding='utf-8')).get('titles', {}) if os.path.exists(tp) else {}
     man = json.load(open(os.path.join(ROOT, 'px/songbook/manifest.json')))
     canon = {t['id']: t['family'] for t in man['tunes'] if t.get('canonical')}
     out = {'v': 1, '_about': 'Ancient Echoes (Music School step 2). Built by tools/build_songbook.py from tools/songbook_src/<fam>/<id>.txt (Cole). '
@@ -121,7 +142,16 @@ def build(src, fixture=False, include_held=False):
         for f in sorted(os.listdir(d)) if os.path.isdir(d) else []:
             if not f.endswith('.txt'): continue
             t = parse(os.path.join(d, f), fam, E, canon, fixture, errs)
-            if t['prov_status'] != 'ok' and not include_held: out['held'].append({'id': t['id'], 'fam': fam, 'why': t['prov_status']}); continue
+            if t['prov_status'] in HELD and not include_held:
+                t.pop('_grow', None); out['held'].append({'id': t['id'], 'fam': fam, 'why': t['prov_status']}); continue
+            sp = titles.get(t['id'])
+            if sp and sp.get('tune'):
+                if sp.get('family', fam) != fam: errs.append(f"ancient_titles.json: {t['id']} family {sp.get('family')} != {fam}")
+                if re.search(r'\d', sp.get('tune', '') + sp.get('composer', '')): errs.append(f"ancient_titles.json: {t['id']} has digits (say them as words)")
+                t['spoken'] = {'tune': sp['tune'], 'composer': sp.get('composer', '')}
+            if t.pop('_grow', False):
+                if out.setdefault('grow', {}).get(fam): errs.append(f'{fam}: more than one tune says "grow: yes"')
+                out['grow'][fam] = t['id']
             out[fam].append(t)
     return out, errs
 
@@ -131,7 +161,7 @@ def main(a):
     sb, errs = build(src, fixture='--fixture' in a, include_held='--include-held' in a)
     n = sum(len(sb[f]) for f in FAMS)
     for e in errs: print('ERROR', e)
-    print(f'songbook: {n} tune(s) ' + ', '.join(f'{f} {len(sb[f])}' for f in FAMS) + f'; held back (edition_check): {len(sb["held"])}; {len(errs)} error(s)')
+    print(f'songbook: {n} tune(s) ' + ', '.join(f'{f} {len(sb[f])}' for f in FAMS) + f'; held back (edition_check/blocked): {len(sb["held"])}; {len(errs)} error(s)')
     if errs: sys.exit(1)
     if '--check' in a: return
     if dst:

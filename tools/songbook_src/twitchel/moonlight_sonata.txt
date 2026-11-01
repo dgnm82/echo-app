@@ -1,0 +1,29 @@
+# tools/songbook_src/twitchel/moonlight_sonata.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: moonlight_sonata
+title: Moonlight Sonata
+composer: Ludwig van Beethoven
+home: la
+meter: 4
+# written meter 4/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 72
+mood: calm
+skills: loudsoft
+min_ml: 1
+family: twitchel
+icon: px/songbook/moonlight_sonata.png
+bar_ticks: 48
+source: Beethoven, Sonata quasi una fantasia Op.27 No.2, Aug. Cranz, Hamburg (after 1814), p.1, bars 1 and 5-7
+prov: Beethoven (d.1827). Op.27 No.2 (Cappi 1802). Read from the Cranz Hamburg print p.1. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://archive.org/details/b10272173/page/n1
+read: verified
+# echo: 2.25 bars, 12 notes, 7.5 s at 72 bpm (cap 8 s). Sounding pitches:
+#   a4:4 d5:4 f5:4 a4:4 d5:4 f5:4 | a4:9 a4:3 | a4:36 a4:9 a4:3 | bb4:24
+echo: mi4:4 la4:4 do5:4 mi4:4 la4:4 do5:4 | mi4:9 mi4:3 | mi4:36 mi4:9 mi4:3 | fa4:24
+# child phrase, sounding: a4:4 d5:4 f5:4 a4:4 d5:4 f5:4
+child: mi4:4 la4:4 do5:4 mi4:4 la4:4 do5:4
+# child phrase, sounding: a4:9 a4:3 a4:24 a4:12
+child: mi4:9 mi4:3 mi4:24 mi4:12
+# note: Two triplet groups, then the dotted melody (C# minor up a half step to D minor; triplets an octave up so they
+# note: stay above c4). Shortened to fit 8 s. PLAN child kept.

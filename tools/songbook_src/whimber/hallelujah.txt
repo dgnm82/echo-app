@@ -1,0 +1,29 @@
+# tools/songbook_src/whimber/hallelujah.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: hallelujah
+title: Hallelujah Chorus
+composer: George Frideric Handel
+home: do
+meter: 4
+# written meter 4/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 96
+mood: grand
+skills: loudsoft
+min_ml: 1
+family: whimber
+icon: px/songbook/hallelujah.png
+bar_ticks: 48
+source: Handel, Messiah, full score, J. Walsh, London 1767 (BnF copy on Commons, btv1b9067631r) - located, but the Hallelujah page was not matched this run
+prov: Handel (d.1759). Messiah (Walsh 1767). The opening call only, melody only, no words, own arrangement. PD US + life+70.
+prov_status: edition_check
+scan: https://commons.wikimedia.org/wiki/File:Messiah_an_oratorio_in_score_as_it_was_originally_perform%27d_._Composed_by_Mr_Handel_to_which_are_added_his_additional_alterations._-_btv1b9067631r_(001_of_236).jpg
+read: none
+# echo: 3.0 bars, 13 notes, 7.5 s at 96 bpm (cap 8 s). Sounding pitches:
+#   bb4:12 f4:9 g4:3 f4:24 | bb4:12 f4:9 g4:3 f4:24 | bb4:12 f4:9 g4:3 f4:12 bb4:12
+echo: do4:12 sol3:9 la3:3 sol3:24 | do4:12 sol3:9 la3:3 sol3:24 | do4:12 sol3:9 la3:3 sol3:12 do4:12
+# child phrase, sounding: bb4:12 f4:9 g4:3 f4:24
+child: do4:12 sol3:9 la3:3 sol3:24
+# child phrase, sounding: bb4:12 f4:9 g4:3 f4:12 bb4:12
+child: do4:12 sol3:9 la3:3 sol3:12 do4:12
+# note: The call (do, low sol, low la, low sol) twice, then once more landing on do. Confirmed it is all pads (PLAN
+# note: asked). edition_check until Kai finds the page in the Walsh scan.

@@ -9,7 +9,7 @@ const TJ=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'),'utf8')),E=T
 let n=0,bad=0;const ok=(c,m)=>{n++;if(!c){bad++;console.log('FAIL',m)}};
 const FAMS=['slyte','whimber','twitchel'],MAN=JSON.parse(fs.readFileSync(path.join(R,'px/songbook/manifest.json'),'utf8'));
 const CANON={};MAN.tunes.filter(t=>t.canonical).forEach(t=>CANON[t.id]=t.family);
-const KEYS=new Set(['id','title','composer','home','meter','bpm','mood','skills','echo','child','min_ml','icon','prov','prov_status','fixture','_echo_seconds']);
+const KEYS=new Set(['id','title','composer','home','meter','bpm','mood','skills','echo','child','min_ml','icon','prov','prov_status','fixture','_echo_seconds','bar_ticks','spoken']);
 const MAJ=[0,2,4,5,7,9,11],midi=(f,x)=>E.do_midi[f]+MAJ[x[0]-1]+12*x[1]+(x[3]||0),sample=f=>m=>path.join(R,'music/notes',`${f}_${EB._pure.spell(f,m).replace('#','s')}.ogg`);
 // validate a built songbook block; returns the error list (so the fixture can prove the gate catches things)
 function validate(sb,o){o=o||{};const errs=[],e=(t,m)=>errs.push(`${t&&t.id}: ${m}`);
@@ -43,7 +43,8 @@ ok(validate(FX).some(x=>/not a canonical/.test(x)),'non-canonical ids are reject
 {const bad=JSON.parse(JSON.stringify(FX)),bt=bad.slyte.find(t=>t.id==='fixture_steps');bt.lyrics='la la';bt.child[0].n[0]=[4,0,12];bt.child[1].n.push([6,0,12],[1,1,12],[2,1,12],[3,1,12],[5,1,12]);
   const be=validate(bad,{fixture:true});ok(be.some(x=>/no lyrics/.test(x)),'lyrics field rejected');ok(be.some(x=>/fa\/ti/.test(x)),'fa in a child phrase rejected');ok(be.some(x=>/3-8|> 4 different/.test(x)),'long / wide child phrase rejected')}
 // the Python builder agrees (held back by default; errors on a bad source)
-{const out=cp.execFileSync('python3',[path.join(R,'tools/build_songbook.py'),'--src',path.join(R,'tools/fixtures/songbook_src'),'--check','--fixture'],{encoding:'utf8'});ok(/1 tune\(s\).*held back \(edition_check\): 1; 0 error/.test(out),'build_songbook.py holds edition_check back ('+out.trim()+')')}
+{const out=cp.execFileSync('python3',[path.join(R,'tools/build_songbook.py'),'--src',path.join(R,'tools/fixtures/songbook_src'),'--check','--fixture'],{encoding:'utf8'});ok(/1 tune\(s\).*held back \(edition_check\/blocked\): 1; 0 error/.test(out),'build_songbook.py holds edition_check back ('+out.trim()+')')}
+{const out=cp.execFileSync('python3',['-c',"import sys;sys.path.insert(0,'tools');import build_songbook as b;print(b.COMMENT.sub('','echo: fa#4:3 sol4:3 # c#5 note').strip())"],{cwd:R,encoding:'utf8'}).trim();ok(out==='echo: fa#4:3 sol4:3','a sharp (fa#4) is a note, not a comment ('+out+')')}
 // Song v2
 const S=EB.Song,v2=S.make2(96,[[6,0,12],[7,0,6,1],[1,1,12,-1],[0,0,6],[5,-1,24]]);ok(S.valid(v2)&&v2.v===2,'Song v2 valid');
 const u=S.unpack(S.pack(v2));ok(JSON.stringify(u.n)===JSON.stringify(v2.n)&&u.v===2&&u.bpm===96,'Song v2 pack/unpack round-trips (acc included)');
@@ -79,4 +80,6 @@ const corpus=['game.js','echoback.js','echoback.css','dialogue/shared.json','dia
 ok(!/secret song|secret_song/i.test(corpus),'never "secret song"');
 // firmware vectors unchanged (the Ancient Echo slot takes no generator seed)
 {const tmp=path.join(require('os').tmpdir(),'eibvec_'+process.pid+'.json');cp.execFileSync('node',[path.join(R,'tools/export_eib_vectors.js'),tmp]);ok(fs.readFileSync(tmp,'utf8')===fs.readFileSync(path.join(R,'host/eib_dedupe_vectors.json'),'utf8'),'host/eib_dedupe_vectors.json unchanged');fs.unlinkSync(tmp)}
+{const SBk=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'))).songbook;const L=['slyte','whimber','twitchel'].flatMap(f=>SBk[f]);ok(L.every(t=>t.spoken&&t.spoken.tune&&!/\d/.test(t.spoken.tune+t.spoken.composer)),'every shipped tune has a spoken title (no digits) for the 7-8 / 9-10 lines');
+ ok(L.every(t=>!t.bar_ticks||t.bar_ticks%12===0||t.bar_ticks%6===0),'bar_ticks are whole eighths');ok(!L.some(t=>(SBk.held||[]).some(h=>h.id===t.id)),'held tunes never ship')}
 console.log(`songbook: ${n} checks, ${bad} failed`);process.exit(bad?1:0)

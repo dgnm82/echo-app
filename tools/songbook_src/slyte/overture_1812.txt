@@ -1,0 +1,29 @@
+# tools/songbook_src/slyte/overture_1812.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: overture_1812
+title: 1812 Overture
+composer: Pyotr Ilyich Tchaikovsky
+home: do
+meter: 3
+# written meter 3/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 100
+mood: grand
+skills: loudsoft highlow
+min_ml: 2
+family: slyte
+icon: px/songbook/overture_1812.png
+bar_ticks: 36
+source: Tchaikovsky, Ouverture solennelle 1812 Op.49, P. Jurgenson, Moscow 1882, finale (Largo) - NOT READ: no pre-1931 scan reachable this run
+prov: Tchaikovsky (d.1893). Op.49, Jurgenson 1882. Finale scale, melody only, own arrangement. PD US + life+70.
+prov_status: edition_check
+read: none
+# echo: 4.0 bars, 11 notes, 7.2 s at 100 bpm (cap 8 s). Sounding pitches:
+#   f#5:12 e5:12 d5:12 | c#5:12 b4:12 a4:12 | g4:24 f#4:12 | d4:6 d4:6 d4:24
+echo: mi5:12 re5:12 do5:12 | ti4:12 la4:12 sol4:12 | fa4:24 mi4:12 | do4:6 do4:6 do4:24
+# child phrase, sounding: f#5:12 e5:12 d5:12 b4:24
+child: mi5:12 re5:12 do5:12 la4:24
+# child phrase, sounding: b4:12 a4:12 f#4:24
+child: la4:12 sol4:12 mi4:24
+# note: The falling major scale of the finale (mi down to mi), then three low d4 "cannon" taps. Jay may swap the taps
+# note: for a drum hit. Read from memory of the PD tune only: Kai must check it against the Jurgenson score
+# note: (edition_check).

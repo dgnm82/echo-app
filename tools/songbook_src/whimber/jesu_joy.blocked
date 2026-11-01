@@ -1,0 +1,10 @@
+# tools/songbook_src/whimber/jesu_joy.blocked - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+# BLOCKED - not transcribed, saved as <id>.blocked (not .txt), so build_songbook.py never reads it.
+# id: jesu_joy  family: whimber
+# title: Jesu, Joy of Man's Desiring (J. S. Bach)
+# BLOCKED: PLAN allows only the Bach-Gesellschaft edition vol.30 (Leipzig 1884). Not reachable this run (IMSLP bot
+# check; not on IA/Commons). The only copy found on IA is the 1926 OUP Myra Hess arrangement, which must not be
+# used. Not transcribed.
+# Not transcribed from memory on purpose (memory = Hess). Unblock: Kai downloads BGA vol.30 (BWV 147 No.6/10) into
+# scans/.

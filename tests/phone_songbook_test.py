@@ -1,6 +1,7 @@
 # Music School step 2: an Ancient Echo in Echo It Back, the Ancient Echoes tile, the Memory Book page (phone, touch).
-# Until Cole's transcriptions land, the round uses the TEST FIXTURE (tools/fixtures/songbook_fixture.json: scale walks, not real tunes),
-# injected by intercepting music/tunes.json (nothing in the app ships it). Also checks the shipped build with zero tunes degrades quietly.
+# A) the SHIPPED songbook (Cole's real tunes, step 2b): one Ancient Echo a round, a shipped (never held) tune, "An Ancient Echo!" said.
+# Z) zero tunes (an empty songbook injected): nothing Ancient shows. B) the TEST FIXTURE (tools/fixtures/songbook_fixture.json: scale walks,
+# not real tunes, injected by intercepting music/tunes.json) for the tile / Memory Book flow. SB_ONLY=shipped|zero|fixture runs one part.
 # Usage: python3 tests/phone_songbook_test.py [URL] [SHOTDIR]
 import asyncio,sys,os,json,time
 from playwright.async_api import async_playwright
@@ -22,11 +23,13 @@ async def wait(pg,js,ms):
     if await pg.evaluate(f"(()=>{{try{{return !!({js})}}catch(e){{return false}}}})()"):return True
     await pg.wait_for_timeout(80)
   return False
+SHIP=json.load(open(os.path.join(R,'music/tunes.json')))['songbook'];SHIP_IDS={t['id'] for f in ('slyte','whimber','twitchel') for t in SHIP[f]};HELD={h['id'] for h in SHIP.get('held',[])}
+ONLY=os.environ.get('SB_ONLY','')
 async def setup(b,p,inject):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   if inject:
     async def route(r):
-      resp=await r.fetch();j=await resp.json();j['songbook']=FX;await r.fulfill(response=resp,body=json.dumps(j),headers={**resp.headers,'content-type':'application/json'})
+      resp=await r.fetch();j=await resp.json();j['songbook']=inject;await r.fulfill(response=resp,body=json.dumps(j),headers={**resp.headers,'content-type':'application/json'})
     await pg.route('**/music/tunes.json*',route)
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-dev-wu','0')");await pg.reload();await pg.wait_for_timeout(600)
   await T(pg,'#obgo',400)
@@ -38,11 +41,14 @@ async def setup(b,p,inject):
   await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());CONFIG.ambientMin=999;CONFIG.ambientMax=999")
   return ctx,pg,errs
 async def play_round(pg,tag,shots):   # answer every tune with the asked notes (touch taps on the pads); returns the ancient tune count
-  anc=[];seen=set();t0=time.time();shot_done=False
+  anc=[];seen=set();t0=time.time();shot_done=False;pg.__bub=set()
   while time.time()-t0<150:
     ph=await pg.evaluate("EchoBack.cur?EchoBack.cur.phase:'gone'")
     if ph in ('end','done','gone','tiles'):break
     tid=await pg.evaluate("EchoBack.cur.tune&&EchoBack.cur.tune.id")
+    if tid and tid.startswith('anc:'):
+      bt=await pg.evaluate("(document.getElementById('b')||{}).textContent||''")
+      if bt:pg.__bub.add(bt)
     if tid and tid.startswith('anc:') and await pg.evaluate("!document.querySelector('.eibflo').hidden") and shots and not shot_done:
       await pg.screenshot(path=f'{SHOT}/{tag}_ancient_flourish.png');shot_done=True
     if ph=='child':
@@ -51,7 +57,7 @@ async def play_round(pg,tag,shots):   # answer every tune with the asked notes (
         seen.add(key)
         if tid and tid.startswith('anc:'):
           need=await pg.evaluate("[...document.querySelectorAll('.eibpad.need')].map(p=>+p.dataset.pad)");asked=await pg.evaluate("EchoBack.cur.asked")
-          anc.append(dict(slot=key,len=len(asked),need_ok=set(asked)<=set(need)))
+          anc.append(dict(slot=key,id=tid[4:],len=len(asked),need_ok=set(asked)<=set(need)))
           if shots:await pg.screenshot(path=f'{SHOT}/{tag}_ancient_your_turn.png')
       asked=await pg.evaluate("EchoBack.cur.asked")
       for s in asked:
@@ -62,9 +68,17 @@ async def play_round(pg,tag,shots):   # answer every tune with the asked notes (
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])
-    # A) zero shipped tunes: no Ancient Echo, no tile, no Memory Book page
-    if os.environ.get('SB_ONLY')!='fixture':
-     ctx,pg,errs=await setup(b,p,False)
+    # A) the shipped songbook (real tunes)
+    if ONLY in ('','shipped') and SHIP['slyte']:
+     ctx,pg,errs=await setup(b,p,None)
+     await pg.evaluate("__echo.eib('play')");check(await wait(pg,"EchoBack.cur&&EchoBack.cur.phase==='child'",15000),'shipped: round starts')
+     anc=await play_round(pg,'shipped',True)
+     check(len(anc)==1 and anc[0]['slot']>1,f'shipped: exactly one Ancient Echo, never first ({anc})');check(all(a['id'] in SHIP_IDS and a['id'] not in HELD for a in anc),'shipped: a real shipped tune, never a held one')
+     check(any('An Ancient Echo!' in t for t in pg.__bub),f'shipped: the Echo says "An Ancient Echo!" ({sorted(pg.__bub)[:3]})');check(all('secret song' not in t.lower() for t in pg.__bub),'shipped: never "secret song"')
+     check(not errs,f'shipped: no page errors {errs[:2]}');await ctx.close()
+    # Z) zero tunes: no Ancient Echo, no tile, no Memory Book page
+    if ONLY in ('','zero'):
+     ctx,pg,errs=await setup(b,p,{'v':1,'held':[],'slyte':[],'whimber':[],'twitchel':[]})
      await pg.evaluate("__echo.eib('play')");check(await wait(pg,"EchoBack.cur&&EchoBack.cur.phase==='child'",15000),'zero tunes: round starts')
      anc=await play_round(pg,'zero',False);check(not anc,'zero tunes: no Ancient Echo in the round')
      await wait(pg,"!EchoBack.cur",20000);await pg.evaluate("__echo.eib('play')");await pg.wait_for_timeout(1500)
@@ -72,7 +86,8 @@ async def main():
      await pg.evaluate("__echo.book()");await pg.wait_for_timeout(500);check(not await pg.locator('.bkanc').count(),'zero tunes: no Ancient Echoes page');check(not errs,f'zero tunes: no page errors {errs[:2]}')
      await ctx.close()
     # B) the fixture songbook: one Ancient Echo a round, never the first tune, pads it needs lit, it joins Ancient Echoes
-    ctx,pg,errs=await setup(b,p,True)
+    if ONLY not in ('','fixture'):await b.close();print(f'songbook phone test: {len(fails)} failed');sys.exit(1 if fails else 0)
+    ctx,pg,errs=await setup(b,p,FX)
     await pg.evaluate("__echo.eib('play')");check(await wait(pg,"EchoBack.cur&&EchoBack.cur.phase",8000),'fixture: Echo It Back opens')
     anc=await play_round(pg,'r1',True)
     check(len(anc)==1,f'round 1: exactly one Ancient Echo ({anc})');check(all(a['slot']>1 for a in anc),'never the first tune')

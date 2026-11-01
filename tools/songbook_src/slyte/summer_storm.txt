@@ -1,0 +1,32 @@
+# tools/songbook_src/slyte/summer_storm.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: summer_storm
+title: The Four Seasons: Summer (storm)
+composer: Antonio Vivaldi
+home: la
+meter: 3
+# written meter 3/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 150
+mood: stormy-fun
+skills: fastslow loudsoft
+min_ml: 1
+family: slyte
+icon: px/songbook/summer_storm.png
+bar_ticks: 36
+source: Vivaldi, Il cimento dell'armonia e dell'inventione Op.8 libro primo, Le Cene, Amsterdam 1725, Violino principale p.8, Concerto II, Presto (BnF via Commons)
+prov: Vivaldi (d.1741). Op.8 (Le Cene 1725), Summer Presto, violino principale p.8. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://commons.wikimedia.org/wiki/File:Il_cimento_dell%27armonia_e_delle_inventione_._Concerti_a_4_e_5_consacrati_all%27illustrissimo_signore_il_Signor_Venceslao_conte_di_Marzin..._da_Antonio_Vivaldi..._Opera_ottava._Libro_primo_-_bpt6k320397r_(22_of_40).jpg
+read: partial
+# echo: 4.0 bars, 36 notes, 4.8 s at 150 bpm (cap 8 s). Sounding pitches:
+#   b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 | f#5:3 e5:3 d5:3 c#5:3 b4:3 a#4:3 b4:6 b4:12 |
+#   b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:3 b4:12 | f#5:3 e5:3 d5:3 c#5:3 b4:3 a#4:3 b4:18
+echo: la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 | mi5:3 re5:3 do5:3 ti4:3 la4:3 lab4:3 la4:6 la4:12 | la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:3 la4:12 | mi5:3 re5:3 do5:3 ti4:3 la4:3 lab4:3 la4:18
+# child phrase, sounding: b4:3 b4:3 b4:3 b4:6
+child: la4:3 la4:3 la4:3 la4:6
+# child phrase, sounding: f#5:3 e5:3 d5:3 b4:12
+child: mi5:3 re5:3 do5:3 la4:12
+# note: Repeated-note storm bursts then the falling G-minor run from the 5th with the raised 7th (Le Cene p.8, line 2),
+# note: moved to B minor. I could not read the pitch of each bar's first (accented) note on the scan, so all burst notes
+# note: are la. Child phrase 2 changed from PLAN (a4 f#4 e4) to f#5 e5 d5 b4: the real run falls from mi to la, not
+# note: below la.

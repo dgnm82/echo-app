@@ -1,0 +1,30 @@
+# tools/songbook_src/whimber/spring.txt - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: spring
+title: The Four Seasons: Spring
+composer: Antonio Vivaldi
+home: do
+meter: 4
+# written meter 4/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 120
+mood: bright
+skills: highlow
+min_ml: 1
+family: whimber
+icon: px/songbook/spring.png
+bar_ticks: 48
+source: Vivaldi, Il cimento dell'armonia e dell'inventione Op.8 libro primo, Le Cene, Amsterdam 1725, Violino principale p.2, Concerto I La Primavera, Allegro bars 1-3 (BnF via Commons)
+prov: Vivaldi (d.1741). Op.8 (Le Cene 1725), Spring Allegro, violino principale p.2. Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+scan: https://commons.wikimedia.org/wiki/File:Il_cimento_dell%27armonia_e_delle_inventione_._Concerti_a_4_e_5_consacrati_all%27illustrissimo_signore_il_Signor_Venceslao_conte_di_Marzin..._da_Antonio_Vivaldi..._Opera_ottava._Libro_primo_-_bpt6k320397r_(16_of_40).jpg
+read: verified
+# echo: 3.79 bars, 35 notes, 7.58 s at 120 bpm (cap 8 s). Sounding pitches:
+#   bb4:6 | d5:6 d5:6 d5:6 c5:3 bb4:3 f5:18 f5:3 eb5:3 | d5:6 d5:6 d5:6 c5:3 bb4:3 f5:18 f5:3 eb5:3 | d5:6 eb5:3
+#   f5:3 eb5:6 d5:6 c5:6 a4:6 f4:6 bb4:6 | bb5:2 c6:2 bb5:2 c6:2 bb5:2 c6:2 bb5:2 c6:2 bb5:16
+echo: do4:6 | mi4:6 mi4:6 mi4:6 re4:3 do4:3 sol4:18 sol4:3 fa4:3 | mi4:6 mi4:6 mi4:6 re4:3 do4:3 sol4:18 sol4:3 fa4:3 | mi4:6 fa4:3 sol4:3 fa4:6 mi4:6 re4:6 ti3:6 sol3:6 do4:6 | do5:2 re5:2 do5:2 re5:2 do5:2 re5:2 do5:2 re5:2 do5:16
+# child phrase, sounding: bb4:6 d5:6 d5:6 d5:6 c5:3 bb4:3 f5:18
+child: do4:6 mi4:6 mi4:6 mi4:6 re4:3 do4:3 sol4:18
+# child phrase, sounding: d5:6 f5:6 d5:6 c5:6 bb4:12
+child: mi4:6 sol4:6 mi4:6 re4:6 do4:12
+# note: Bars 1-3 as printed (E major, down to Bb), then my little birdsong trill on high do-re (the birds come in at bar
+# note: 7 in Vivaldi). Child phrase 1 = PLAN; phrase 2 = the bar-3 cadence without fa/ti (mi sol mi re do).

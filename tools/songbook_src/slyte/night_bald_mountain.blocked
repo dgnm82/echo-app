@@ -1,0 +1,9 @@
+# tools/songbook_src/slyte/night_bald_mountain.blocked - Cole, Nov 1 2026 (Music School step 2, Ancient Echoes).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+# BLOCKED - not transcribed, saved as <id>.blocked (not .txt), so build_songbook.py never reads it.
+# id: night_bald_mountain  family: slyte
+# title: Night on Bald Mountain (Modest Mussorgsky / N. Rimsky-Korsakov)
+# BLOCKED: PLAN allows only the Bessel Rimsky-Korsakov score (St. Petersburg 1886/87, plate 1538; IMSLP #139196).
+# IMSLP downloads sit behind a bot check; no other copy of that edition found (IA, Commons). Not transcribed.
+# Not transcribed from memory on purpose (the version people know is Fantasia 1940). Unblock: Kai downloads IMSLP
+# #139196 (or the Bessel 4-hand Artsybushev print #59100, if Kai accepts it) into scans/, then I transcribe.
