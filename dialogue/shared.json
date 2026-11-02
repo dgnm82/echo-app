@@ -7,14 +7,14 @@
       {
         "text": "My tummy's full! Let's play instead?",
         "expr": "happy",
-        "short": "My tummy's full."
+        "short": "My tummy's full!"
       }
     ],
     "not_sleepy_play": [
       {
         "text": "I'm not sleepy yet! Let's play?",
         "expr": "happy",
-        "short": "I'm not sleepy yet."
+        "short": "I'm not sleepy yet!"
       }
     ],
     "napping": [
@@ -38,21 +38,21 @@
       {
         "text": "Tomorrow I'll go home. Let's make today a really good one.",
         "expr": "love",
-        "short": "Tomorrow I'll go."
+        "short": "Tomorrow I'll go home."
       }
     ],
     "stay_more": [
       {
-        "text": "I can stay a little longer. A few more days. Then I really should go live my wild life.",
+        "text": "I can stay a little longer… just a few more days. Then I'll go back to my wild home.",
         "expr": "love",
         "react": "happy",
-        "short": "I can stay a."
+        "short": "I can stay a little longer."
       },
       {
         "text": "A few more days together. Then home, to my wild life.",
         "expr": "love",
         "react": "happy",
-        "short": "A few more days."
+        "short": "A few more days together."
       }
     ],
     "hug_more": [
@@ -60,13 +60,13 @@
         "text": "Mmm. Okay, one more is allowed.",
         "expr": "love",
         "react": "pet",
-        "short": "Mmm."
+        "short": "Okay, one more is allowed."
       },
       {
         "text": "That one was the best one yet.",
         "expr": "love",
         "react": "pet",
-        "short": "That one was the."
+        "short": "That one was."
       },
       {
         "text": "That one was extra warm.",
@@ -79,7 +79,7 @@
       {
         "text": "Before I go… can I take something with me? Something to remember you by.",
         "expr": "curious",
-        "short": "Before I go."
+        "short": "Before I go..."
       }
     ],
     "gift_got": [
@@ -87,13 +87,13 @@
         "text": "The {gift}! I'll keep it always. Always always.",
         "expr": "excited",
         "react": "excited",
-        "short": "The friend."
+        "short": "I'll keep it always."
       },
       {
         "text": "I'll keep the {gift} somewhere safe. Somewhere special.",
         "expr": "love",
         "react": "happy",
-        "short": "I'll keep the friend."
+        "short": "Somewhere special."
       }
     ],
     "farewell": [
@@ -101,7 +101,7 @@
         "text": "I'm so excited and a tiny bit sad, both at once. You helped me grow strong. Thank you, {child}.",
         "expr": "love",
         "caption": "{name} {trust}.",
-        "short": "I'm so excited and."
+        "short": "You helped me grow strong."
       }
     ],
     "look_back": [
@@ -118,35 +118,35 @@
     ],
     "walk_memory": [
       {
-        "text": "Remember? {memory}.",
+        "text": "Remember this one: {memory}.",
         "expr": "happy",
-        "short": "Remember."
+        "short": "Remember?"
       },
       {
         "text": "I still think about it: {memory}.",
         "expr": "love",
-        "short": "I still think about."
+        "short": "I remember!"
       }
     ],
     "first_gift": [
       {
         "text": "{name} gives you a {treasure} it was saving. \"For you. Keep it safe.\"",
         "expr": "love",
-        "short": "friend gives you a."
+        "short": "\"For you."
       }
     ],
     "favplace": [
       {
         "text": "{name} shows you its {place}. Naps there are extra cozy now.",
         "expr": "happy",
-        "short": "friend shows you its."
+        "short": "Naps there are extra."
       }
     ],
     "trust": [
       {
         "text": "{name} {trust}.",
         "expr": "love",
-        "short": "friend friend."
+        "short": "Hi friend!"
       }
     ],
     "time_morning": [
@@ -170,7 +170,7 @@
             "evening"
           ]
         },
-        "short": "The day is winding."
+        "short": "The day is winding down."
       }
     ],
     "fallback_any": [
@@ -185,7 +185,7 @@
         "short": "That made me smile."
       },
       {
-        "text": "Good answer. A very good one.",
+        "text": "That's a good answer!",
         "expr": "happy",
         "short": "Good answer."
       }
@@ -194,19 +194,19 @@
       {
         "text": "{name}'s farewell list",
         "expr": "happy",
-        "short": "friend's farewell."
+        "short": "Friend's farewell list."
       }
     ],
     "ui_list_items": [
       {
         "text": "Play {var:listGame} together",
         "expr": "happy",
-        "short": "Play friend together."
+        "short": "Hi friend!"
       },
       {
         "text": "Share {fav}",
         "expr": "happy",
-        "short": "Share friend."
+        "short": "Hi friend!"
       },
       {
         "text": "Build one more floor",
@@ -243,7 +243,7 @@
       {
         "text": "Walk together to the meadow's edge",
         "expr": "neutral",
-        "short": "Walk together to the."
+        "short": "Walk together."
       }
     ],
     "ui_choice_ask": [
@@ -318,7 +318,7 @@
       {
         "text": "This walk is for {child} and {name}. Is {child} here?",
         "expr": "happy",
-        "short": "This walk is for."
+        "short": "Is friend here?"
       },
       {
         "text": "Yes, I'm here!",
@@ -335,7 +335,7 @@
       {
         "text": "{name} is home in the wild, carrying your world.",
         "expr": "happy",
-        "short": "friend is home in."
+        "short": "Friend is home in the wild."
       },
       {
         "text": "You helped its song grow big and brave.",
@@ -352,38 +352,38 @@
       {
         "text": "{name} is home in the wild. The first postcard comes after one sleep.",
         "expr": "happy",
-        "short": "friend is home in."
+        "short": "Friend is home in the wild."
       }
     ],
     "ui_after_later": [
       {
         "text": "{name} is home in the wild. Postcards arrive now and then.",
         "expr": "happy",
-        "short": "friend is home in."
+        "short": "Friend is home in the wild."
       }
     ],
     "ui_keepsake": [
       {
         "text": "Song-leaf from {name}",
         "expr": "happy",
-        "short": "Song-leaf from."
+        "short": "Song-leaf from friend."
       },
       {
         "text": "Song feather from {name}",
         "expr": "happy",
-        "short": "Song feather from."
+        "short": "Song feather from friend."
       },
       {
         "text": "Purr bell from {name}",
         "expr": "neutral",
-        "short": "Purr bell from."
+        "short": "Purr bell from friend."
       }
     ],
     "ui_tagline": [
       {
         "text": "ECHO: Every creature has a song to share. Can you hear it?",
         "expr": "happy",
-        "short": "ECHO: Every creature."
+        "short": "Can you hear it?"
       }
     ],
     "ui_ob_tap_start": [
@@ -407,7 +407,7 @@
       {
         "text": "It's a listening star. It carries names to new friends.",
         "expr": "happy",
-        "short": "It's a listening."
+        "short": "It's a listening star."
       }
     ],
     "ui_ob_name_ask": [
@@ -419,14 +419,14 @@
       {
         "text": "What should your friend call you?",
         "expr": "happy",
-        "short": "What should your."
+        "short": "What should."
       }
     ],
     "ui_ob_name_hint": [
       {
         "text": "A first name or a nickname. A grown-up can help!",
         "expr": "happy",
-        "short": "A first name or."
+        "short": "A first name or a nickname."
       }
     ],
     "ui_ob_name_presets": [
@@ -479,7 +479,7 @@
       {
         "text": "{child}? Is that right?",
         "expr": "happy",
-        "short": "friend."
+        "short": "Is that right?"
       }
     ],
     "ui_ob_yes_change": [
@@ -498,7 +498,7 @@
       {
         "text": "Hmm, let's pick a different name.",
         "expr": "happy",
-        "short": "Hmm, let's pick a."
+        "short": "Hmm, let's pick."
       }
     ],
     "ui_ob_name_short": [
@@ -530,19 +530,19 @@
       {
         "text": "The star landed in the meadow. Something is moving… Tap one!",
         "expr": "happy",
-        "short": "The star landed in."
+        "short": "Something is moving..."
       },
       {
         "text": "Something is moving… Pick one!",
         "expr": "happy",
-        "short": "Something is moving."
+        "short": "Something is moving..."
       }
     ],
     "ui_title_hint": [
       {
         "text": "{name} is playing nearby!",
         "expr": "happy",
-        "short": "friend is playing."
+        "short": "Friend is playing nearby!"
       }
     ],
     "ui_pc_hold": [
@@ -568,7 +568,7 @@
       {
         "text": "That one's for grown-ups. Back to play!",
         "expr": "happy",
-        "short": "That one's for."
+        "short": "That one's for grown-ups."
       }
     ],
     "ui_pc_title": [
@@ -582,7 +582,7 @@
       {
         "text": "The name and age range stay on this device. Nothing is sent anywhere. No accounts, no ads, no birthdays.",
         "expr": "happy",
-        "short": "The name and age."
+        "short": "Nothing is sent anywhere."
       }
     ],
     "ui_pc_items": [
@@ -629,7 +629,7 @@
       {
         "text": "Let {name} stay a while",
         "expr": "happy",
-        "short": "Let friend stay a."
+        "short": "Let friend stay a while."
       },
       {
         "text": "Shared device",
@@ -651,7 +651,7 @@
       {
         "text": "This erases the name, the age range, {name} and every memory on this device. It can't be undone.",
         "expr": "happy",
-        "short": "This erases the."
+        "short": "It can't be undone."
       },
       {
         "text": "Hold to erase",
@@ -661,7 +661,7 @@
       {
         "text": "Erased. A new friend is on its way.",
         "expr": "happy",
-        "short": "Erased."
+        "short": "A new friend is on its way."
       }
     ],
     "ui_pc_done": [
@@ -675,12 +675,12 @@
       {
         "text": "Every animal hums a little song. Echoes are made of those songs.",
         "expr": "happy",
-        "short": "Every animal hums a."
+        "short": "Every animal hums."
       },
       {
         "text": "When you find an animal, you can invite its Echo to come along.",
         "expr": "happy",
-        "short": "When you find an."
+        "short": "When you find an animal."
       }
     ],
     "ui_or_seen_ask": [
@@ -694,7 +694,7 @@
       {
         "text": "What colour was your {var:origin_animal}?",
         "expr": "happy",
-        "short": "What colour was your."
+        "short": "What colour was."
       }
     ],
     "ui_or_colours_hint": [
@@ -722,14 +722,14 @@
       {
         "text": "Shh... listen. Something is humming the song of the {var:origin_animal} you saw.",
         "expr": "happy",
-        "short": "Shh."
+        "short": "Shh..."
       }
     ],
     "ui_or_invite_ask": [
       {
         "text": "Do you want to ask it to come with you?",
         "expr": "happy",
-        "short": "Do you want to."
+        "short": "Do you want."
       }
     ],
     "ui_or_invite_btn": [
@@ -743,14 +743,14 @@
       {
         "text": "Your {var:origin_animal} is glowing with its song! The more you play together, the bigger and brighter its song will glow!",
         "expr": "happy",
-        "short": "Your friend is."
+        "short": "The more you play together."
       }
     ],
     "ui_or_family": [
       {
         "text": "I'm {var:family_a}! {var:family_echo}",
         "expr": "happy",
-        "short": "I'm friend."
+        "short": "Hi friend!"
       }
     ],
     "ui_or_song_heard": [
@@ -792,7 +792,7 @@
       {
         "text": "Just \"{var:default_name}\"",
         "expr": "happy",
-        "short": "Just \"friend\"."
+        "short": "Just \"."
       }
     ],
     "ui_or_cam_ask": [
@@ -1354,7 +1354,7 @@
             {
               "icon": "🌈",
               "label": "All of them",
-              "reply": "All of them? A rainbow me. Wow.",
+              "reply": "All of them? I'd be a rainbow! Wow.",
               "expr": "happy",
               "goto": "c",
               "set": {
@@ -2058,7 +2058,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Look… a bright flower sang two notes.",
+          "say": "Look, a bright flower sang two notes.",
           "expr": "curious",
           "choices": [
             {
@@ -2082,12 +2082,12 @@
           ]
         },
         "b1": {
-          "say": "Tap-tap… the petals glowed so warm.",
+          "say": "Tap-tap. The petals glow so warm.",
           "expr": "delighted",
           "next": "c"
         },
         "b2": {
-          "say": "Listen… the melody floats up high.",
+          "say": "Listen. The tune floats up high.",
           "expr": "happy",
           "next": "c"
         },
@@ -2158,7 +2158,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "I set up a picnic… what treat sounds best?",
+          "say": "I set up a picnic. What treat sounds best?",
           "expr": "curious",
           "choices": [
             {
@@ -2182,17 +2182,17 @@
           ]
         },
         "b1": {
-          "say": "Sweet berries and cake… make a great snack.",
+          "say": "Sweet berries and cake make a great snack.",
           "expr": "delighted",
           "next": "c"
         },
         "b2": {
-          "say": "Cool water and slices… taste so refreshing.",
+          "say": "Cool water and fruit slices taste so fresh.",
           "expr": "happy",
           "next": "c"
         },
         "c": {
-          "say": "Every picnic is better… when we share it.",
+          "say": "Every picnic is better when we share it.",
           "expr": "love",
           "react": "happy",
           "bond": 1
@@ -2208,7 +2208,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Our Songbook has room… for a brand new melody.",
+          "say": "Our Songbook has room for a brand new melody.",
           "expr": "curious",
           "choices": [
             {
@@ -2232,17 +2232,17 @@
           ]
         },
         "b1": {
-          "say": "A bouncy rhythm… makes the clearing dance.",
+          "say": "A bouncy rhythm makes everything dance.",
           "expr": "delighted",
           "next": "c"
         },
         "b2": {
-          "say": "A gentle lullaby note… sounds like twilight.",
+          "say": "A gentle lullaby note sounds like twilight.",
           "expr": "happy",
           "next": "c"
         },
         "c": {
-          "say": "Let us remember that tune… for our next game.",
+          "say": "Let's remember that tune for our next game.",
           "expr": "love",
           "react": "happy",
           "bond": 1
@@ -2258,7 +2258,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "Nature riddle… what wears green then autumn gold?",
+          "say": "Here is a nature riddle. What is green in spring and gold in autumn?",
           "expr": "curious",
           "choices": [
             {
@@ -2282,17 +2282,17 @@
           ]
         },
         "b1": {
-          "say": "Yes… the big oak tree turns gold in autumn.",
+          "say": "Yes, the big oak tree turns gold in autumn.",
           "expr": "delighted",
           "next": "c"
         },
         "b2": {
-          "say": "Underground… the tree roots stay warm and snug.",
+          "say": "Under the ground, the tree roots stay warm and snug.",
           "expr": "happy",
           "next": "c"
         },
         "c": {
-          "say": "Watching seasons change with you… is wonderful.",
+          "say": "Watching the seasons change with you is wonderful.",
           "expr": "love",
           "react": "happy",
           "bond": 1
@@ -2308,7 +2308,7 @@
       "start": "a",
       "nodes": {
         "a": {
-          "say": "At night… we can connect the bright stars.",
+          "say": "At night, we can connect the bright stars.",
           "expr": "curious",
           "choices": [
             {
@@ -2332,17 +2332,17 @@
           ]
         },
         "b1": {
-          "say": "Tracing a star bridge… feels like drawing light.",
+          "say": "Tracing a star bridge feels like drawing with light.",
           "expr": "delighted",
           "next": "c"
         },
         "b2": {
-          "say": "Every bright star… shines like a friendly lantern.",
+          "say": "Every bright star shines like a friendly lantern.",
           "expr": "happy",
           "next": "c"
         },
         "c": {
-          "say": "Thank you for stargazing with me… {child}.",
+          "say": "Thank you for stargazing with me, {child}.",
           "expr": "love",
           "react": "happy",
           "bond": 1
@@ -2476,7 +2476,7 @@
           "text": "Hee hee!"
         },
         {
-          "text": "(snort-laugh)"
+          "text": "Hee-hee!"
         },
         {
           "text": "Ha!"
