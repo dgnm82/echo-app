@@ -27,8 +27,8 @@ const fs=require('fs'),path=require('path');const R=process.argv[2]||path.join(_
   console.log(nbad?`${nbad} weather network issue(s)`:`no weather network OK (${loaded.size} scripts)`);if(nbad)process.exitCode=1}
 // ---- Part 2: Batch F corpus rule
 const RX=/\b(rain(?!bow)\w*|drizzl\w*|thunder\w*|puddles?|wind|windy|breez\w*|fog\w*|mist\w*|weather)\b/i,SNOW=/\b(snow\w*|frost\w*)\b/i;
-const ALLOW=[/Puddle paws/,/Pretend rain hat/,/tiny breeze came out/,/raindrops just roll off/,/What sound does the wind make/,/Rain rolls right off/,/wind chimes/,/The wind would be a very/];
-const FACT=/\b(arctic|foxes|snow leopards?|snowshoes|lynx|deep snow)\b/i;
+const ALLOW=[/Puddle paws/,/Pretend rain hat/,/tiny breeze came out/,/raindrops just roll off/,/What sound does the wind make/,/Rain rolls right off/,/wind chimes/,/The wind would be a very/,/I ride the wind over the waves/];   // + Phase B gull lore fact
+const FACT=/\b(arctic|foxes|snow leopards?|snowshoes?|lynx|deep snow)\b/i;
 let bad=0;const hit=(f,w,t,why)=>{bad++;console.log(`${f}:${w} (${why}) ${t}`)};
 const season=c=>!!c&&((c.var&&c.var.season==='snow')||(c.any||[]).some(season));
 const wgated=c=>!!c&&(Array.isArray(c.weather)&&c.weather.length>0);   // H9: cond.weather-gated = weather engine content

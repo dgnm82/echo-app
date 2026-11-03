@@ -34,10 +34,10 @@ T('b) drift follows a linked topic (0.6 → 0.3 → 0); ~1 in 8 lose the thought
   let k=0;D.rand=()=>[0.5,0.2][k++%2]??0.1;r=D.afterConversation(conv,0);assert.equal(r&&r.type,'drift');assert.equal(D.lib.groupOf[D.topic(r.conv)],D.lib.groupOf['puddle']);assert.notEqual(D.topic(r.conv),'puddle');
   D.rand=()=>0.5;assert.equal(D.afterConversation(conv,1),null,'0.3 at depth 1');D.rand=()=>0.2;k=0;D.rand=()=>[0.5,0.2][k++%2];assert(D.afterConversation(conv,1));
   D.rand=()=>0.15;assert.equal(D.afterConversation(conv,2),null,'no drift at depth 2');});
-T('c) no-repeat: a line is not reused within 7 days (core reactions 24 h)',()=>{fresh('slyte');const n=J('slyte').barks.ambient.length;const got=new Set();
+T('c) no-repeat: a line is not reused within 7 days (core reactions 24 h)',()=>{fresh('slyte');const n=J('slyte').barks.ambient.filter(l=>!l.cut).length;const got=new Set();
   for(let i=0;i<n;i++)got.add(D.bark('ambient').src);assert.equal(got.size,n,'all distinct before any repeat');
   const again=D.bark('ambient');assert(again.src);clock+=7*864e5+1;const g2=new Set();for(let i=0;i<n;i++)g2.add(D.bark('ambient').src);assert.equal(g2.size,n);
-  fresh('slyte');const pn=J('slyte').barks.pet.length;const a=new Set();for(let i=0;i<pn;i++)a.add(D.bark('pet').src);assert.equal(a.size,pn);
+  fresh('slyte');const pn=J('slyte').barks.pet.filter(l=>!l.cut).length   // Phase B tombstones (cut:true) are dropped at load;const a=new Set();for(let i=0;i<pn;i++)a.add(D.bark('pet').src);assert.equal(a.size,pn);
   clock+=25*36e5;const b=new Set();for(let i=0;i<pn;i++)b.add(D.bark('pet').src);assert.equal(b.size,pn,'core lines free again after 24 h');});
 T('c) no-repeat: a topic is not offered again within 5 days',()=>{fresh('slyte');ctx.memTags=[];
   const c=D.pickConversation('idle',v=>!v.once);const topic=D.topic(c);D.run(c,ui([]),()=>{});q=[];

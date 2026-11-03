@@ -29,7 +29,11 @@ D.load=async function(species){
 };
 D.use=function(species,sh,sp){
   // playtest (family leak): a shared line or conversation may carry family:"slyte"|"whimber"; the other family never gets it
-  const own=x=>!x||!x.family||x.family===species,shB={};for(const k in sh.barks||{})shB[k]=Array.isArray(sh.barks[k])?sh.barks[k].filter(own):sh.barks[k];sh={...sh,barks:shB,conversations:(sh.conversations||[]).filter(own)};
+  // Phase B (Nov 3): a cut line stays in the JSON as the tombstone {"text":"","cut":true} so the ids after it (<key>:<index>) never
+  // shift; it is dropped here, once, so every picker (bark, orLine, wuLine, UB, ...) only ever sees live lines.
+  const live=a=>Array.isArray(a)?a.filter(l=>!(l&&l.cut)):a,liveB=b=>{const o={};for(const k in b||{})o[k]=live(b[k]);return o};
+  const own=x=>!x||!x.family||x.family===species,shB={};for(const k in sh.barks||{})shB[k]=Array.isArray(sh.barks[k])?live(sh.barks[k]).filter(own):sh.barks[k];sh={...sh,barks:shB,conversations:(sh.conversations||[]).filter(own)};
+  sp={...sp,barks:liveB(sp.barks)};
   const barks={...sh.barks,...sp.barks};
   for(const k of ['time_morning','time_day','time_evening','time_night'])if(sh.barks[k]&&sp.barks[k])barks[k]=sp.barks[k].concat(sh.barks[k]);
   const convs=[...(sh.conversations||[]),...(sp.conversations||[])];

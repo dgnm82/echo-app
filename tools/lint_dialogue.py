@@ -166,8 +166,12 @@ def lint_file(path, seen_ids, dup_pool):
         if key not in KNOWN_KEYS and key not in NEW_KEYS and key not in FAREWELL_KEYS and key not in ORIGIN_KEYS and not key.startswith(KEY_PREFIX.get(sp, ())):
             err(fn, f"unknown bark key {key!r}")
         if not isinstance(lines, list) or not lines: err(fn, f"bark {key} must be a non-empty list"); continue
+        if all(b.get("cut") for b in lines): err(fn, f"bark {key}: every line is cut")
         for i, b in enumerate(lines):
             w = f"bark {key}[{i}]"
+            if b.get("cut"):   # Phase B tombstone: keeps the ids after it stable; dialogue.js D.use drops it at load
+                if b != {"text": "", "cut": True}: err(fn, f'{w} a cut line must be exactly {{"text": "", "cut": true}}')
+                continue
             extra = set(b) - {"music","text","expr","react","cond","weight","gesture","short","caption","voice","lintAllow","context"}
             bowl = is_owl(b.get("cond")); check_hoo(b.get("short"), w + ".short", bowl); check_hoo(b.get("caption"), w + ".caption", bowl)
             if "roar" in b.get("lintAllow", []) and not is_lion(b.get("cond")): err(fn, f"{w} roar allowed only on a lion line (cond var origin_animal 'lion')")

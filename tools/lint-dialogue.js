@@ -109,8 +109,8 @@ function walk(file,obj,where,allow,species,look){
   scanText(file,where,obj,allow,species,look);
 }
 function structure(file,d){
-  for(const [key,pool] of Object.entries(d.barks||{})){if(!Array.isArray(pool)||!pool.length)rep('error',file,`barks.${key}`,'empty pool');
-    (pool||[]).forEach((l,i)=>{if(!l.text&&!(l.text===''&&l.gesture))rep('error',file,`barks.${key}[${i}]`,'missing text');   // P5: text "" + gesture = act-out only
+  for(const [key,pool] of Object.entries(d.barks||{})){if(!Array.isArray(pool)||!pool.filter(l=>!(l&&l.cut)).length)rep('error',file,`barks.${key}`,'empty pool');
+    (pool||[]).forEach((l,i)=>{if(l&&l.cut){if(JSON.stringify(l)!=='{"text":"","cut":true}')rep('error',file,`barks.${key}[${i}]`,'a cut line must be exactly {"text":"","cut":true}');return}   // Phase B tombstone (stable ids); D.use drops itif(!l.text&&!(l.text===''&&l.gesture))rep('error',file,`barks.${key}[${i}]`,'missing text');   // P5: text "" + gesture = act-out only
       if(l.expr&&!EXPR.has(l.expr))rep('error',file,`barks.${key}[${i}]`,'unknown expr '+l.expr);
       if(l.music!==undefined&&!MUSIC_TAGS.includes(l.music))rep('error',file,`barks.${key}[${i}]`,'unknown music tag '+l.music+' (DIALOGUE_SCHEMA.md)');
       if('lyrics' in l)rep('error',file,`barks.${key}[${i}]`,'music: no lyrics field');
