@@ -133,7 +133,47 @@ async def caret_part(b):
           rc=await pg.evaluate("(()=>{const r=document.getElementById('rc').getBoundingClientRect();return [r.left,r.top,r.width/360]})()")
           await pg.screenshot(path=f'{SHOT}/09_run_echo.png',clip={'x':rc[0],'y':rc[1]+400*rc[2],'width':140*rc[2],'height':100*rc[2]})
     check(not errs,f'caret {animal}: no page errors {errs[:2]}');await ctx.close()
-PARTS={'eib':eib_part,'needs':needs_part,'caret':caret_part}
+# ---------------------------------------------------------------- 11: an Ancient Echo's intro plays at the tune's own tempo (also after the speed-up steps)
+# the start time is when the sample really starts (Music.oneShot resolves with the source), not when it was asked for
+OSPY="""(()=>{window.__on=[];const _o=Music.oneShot;Music.oneShot=(n,o)=>{const c=EchoBack.cur,r={n,t:performance.now(),ph:c&&c.phase,id:c&&c.tune&&c.tune.id,ask:document.querySelectorAll('.eibask .eibn').length};__on.push(r);
+  const p=_o(n,o);if(p&&p.then)p.then(s=>{if(s)r.st=performance.now()});return p}})()"""
+async def slow_notes(pg):   # a phone's first fetch of a note sample: 120-420 ms (deterministic per file); a cached replay never waits
+  async def route(r):
+    u=r.request.url;await asyncio.sleep((120+(sum(map(ord,u))*37)%300)/1000);await r.continue_()
+  await pg.route('**/music/notes/**',route)
+async def tempo_part(b):
+  for step in (0,4):
+    ctx,pg,errs=await setup(b,PH)
+    await pg.evaluate("__echo.eib('play')");await wait(pg,"EchoBack.cur",8000);await pg.wait_for_timeout(300)
+    await pg.evaluate("""(st=>{EchoBack.stop();const b=JSON.parse(localStorage.getItem('echo-songbook-v1'));for(const k in b.progress){b.progress[k].tempoStep=st}localStorage.setItem('echo-songbook-v1',JSON.stringify(b))})(%d)"""%step)
+    await slow_notes(pg);await pg.evaluate(OSPY);await pg.evaluate("__echo.eib('invite')")
+    t0=time.time();anc=None;shot=0
+    while time.time()-t0<120:
+      c=await pg.evaluate("EchoBack.cur?[EchoBack.cur.phase,EchoBack.cur.tune&&EchoBack.cur.tune.id]:['gone',null]")
+      if c[0] in ('end','done','gone'):break
+      if c[0]=='echo' and c[1] and c[1].startswith('anc:') and not shot:shot=1;await pg.wait_for_timeout(900);await pg.screenshot(path=f'{SHOT}/11_anc_intro_step{step}.png')
+      if c[0]=='child':
+        if c[1] and c[1].startswith('anc:'):anc=c[1];break
+        for s_ in await pg.evaluate("EchoBack.cur.asked"):
+          await pg.locator(f'.eibpad[data-pad="{s_}"]').first.tap();await pg.wait_for_timeout(90)
+        await wait(pg,"EchoBack.cur.phase!=='child'",4000)
+      await pg.wait_for_timeout(100)
+    check(anc is not None,f'tempo step {step}: an Ancient Echo came up ({anc})')
+    if anc:
+      r=await pg.evaluate("""(id=>{const t=EchoBack.sbById(id.slice(4)),V=EchoBack.data.v2.tempo,on=__on.filter(x=>x.id===id),ch=on.filter(x=>x.ask>0),ec=on.filter(x=>x.ask===0);
+        const n=EchoBack.cur.asked.length,cn=EchoBack.cur.tune.n.slice(0,n),dur=(x,bpm)=>Math.max(V.min_note_ms,x[2]*60000/bpm/12);
+        const T=x=>x.st||1e12,exp=cn.slice(0,-1).reduce((a,x)=>a+dur(x,t.bpm),0),got=ch.length>=n?T(ch[n-1])-T(ch[0]):-1;
+        const gaps=(L,ex)=>L.slice(1).map((x,i)=>Math.round(T(x)-T(L[i])));
+        const en=EchoBack.sbEchoNotes(t.echo),ei=en.map((x,i)=>i).filter(i=>en[i][0]),eexp=en.slice(ei[0],ei[ei.length-1]).reduce((a,x)=>a+dur(x,t.echo.bpm),0),egot=ec.length?T(ec[ec.length-1])-T(ec[0]):-1;
+        return {tune:t.id,bpm:t.bpm,echoBpm:t.echo.bpm,curBpm:EchoBack.cur.tune.bpm,child:[Math.round(got),Math.round(exp)],echo:[Math.round(egot),Math.round(eexp)],nc:ch.length,ne:ec.length,echoGaps:gaps(ec),childGaps:gaps(ch.slice(0,n)),
+          echoScore:en.slice(ei[0]).map(x=>Math.round(dur(x,t.echo.bpm)))}})(%s)"""%json.dumps(anc))
+      json.dump(r,open(f'{SHOT}/11_anc_intro_step{step}_timing.json','w'))
+      ok_c=r['child'][1]>0 and abs(r['child'][0]/r['child'][1]-1)<.06;ok_e=r['echo'][1]>0 and abs(r['echo'][0]/r['echo'][1]-1)<.06
+      check(r['curBpm']==r['bpm']==r['echoBpm'],f'tempo step {step}: the intro tune runs at the tune\'s own bpm {r}')
+      check(ok_e,f'tempo step {step}: the Echo version plays at its natural tempo (span {r["echo"][0]} ms, score {r["echo"][1]} ms; gaps {r["echoGaps"][:10]})')
+      check(ok_c,f'tempo step {step}: the child\'s part plays at the tune\'s natural tempo (span {r["child"][0]} ms, score {r["child"][1]} ms)')
+    check(not errs,f'tempo step {step}: no page errors {errs[:2]}');await ctx.close()
+PARTS={'eib':eib_part,'needs':needs_part,'caret':caret_part,'tempo':tempo_part}
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])

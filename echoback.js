@@ -196,11 +196,23 @@ EB.setData=(eib,inst)=>{DATA=eib;if(inst)INST=inst};
 EB.setSongbook=sb=>{SB=sb||null;return SB};EB.songbook=()=>SB;
 // ---------------------------------------------------------------- voices (cap from instruments.json, 3 on the speaker)
 const voices=[];
-function play(fam,s,o){o=o||{};if(!W.Music||!Music.oneShot)return;const I=(INST&&INST.instruments&&INST.instruments[o.inst||INST.default])||{sample:'notes/{fam}_{note}',gain:.5};
+const instOf=o=>(INST&&INST.instruments&&INST.instruments[(o&&o.inst)||INST.default])||{sample:'notes/{fam}_{note}',gain:.5};
+const sampleOf=(fam,s,o)=>{const I=instOf(o);return I.sample?I.sample.replace('{fam}',fam).replace('{note}',o&&o.midi!=null?fileOfMidi(fam,o.midi):fileOf(fam,s)):null};
+function play(fam,s,o){o=o||{};if(!W.Music||!Music.oneShot)return;const I=instOf(o);
   if(!I.sample)return;const cap=(INST&&INST.voices)||3;
-  const p=Music.oneShot(I.sample.replace('{fam}',fam).replace('{note}',o.midi!=null?fileOfMidi(fam,o.midi):fileOf(fam,s)),{vol:(o.vol||1)*(I.gain||.5)});
+  const p=Music.oneShot(sampleOf(fam,s,o),{vol:(o.vol||1)*(I.gain||.5)});
   if(p&&p.then)p.then(src=>{if(!src)return;voices.push(src);while(voices.length>cap){const v=voices.shift();try{v.stop()}catch(e){}}
     src.onended=()=>{const i=voices.indexOf(src);if(i>=0)voices.splice(i,1)}})}
+// Nov 3 (LIST #11): a tune is scheduled only once its note samples are decoded. Music.oneShot fetches a sample the first time it
+// is asked for and starts it when it lands, so a tune with notes never heard before (an Ancient Echo's first intro: half-steps and
+// octaves outside the pads) started late and bunched up, i.e. sounded rushed; a replay (all cached) was fine. Never waits > 2.5 s.
+const echoSamples=(fam,notes)=>notes.filter(x=>x[0]).map(x=>sampleOf(fam,0,{midi:midiOfNote(fam,x)})).filter(Boolean);
+const padSamples=(fam,notes)=>notes.map(x=>sampleOf(fam,step(x))).filter(Boolean);
+function whenLoaded(list){if(!W.Music||!Music.prime||!list.length)return Promise.resolve();return Promise.race([Music.prime(list).catch(()=>{}),new Promise(r=>setTimeout(r,2500))])}
+// Nov 3 (LIST #11): an Ancient Echo's one tempo, from its score: the intro (Echo version + the child's part), the round-end duet and the
+// Memory Book replay all read sbBpm. The round speed-up (bpmAt / tempoStep) is for the generated tunes only.
+const sbBpm=t=>(t&&t.echo&&t.echo.bpm)||(t&&t.bpm)||96;
+const sbTune=(t,c)=>({id:'anc:'+t.id,n:c.n,phrases:c.phrases,labels:c.labels,bpm:sbBpm(t),ancient:t});   // the round's Ancient Echo tune (pure: tools/test-songbook.js)
 // ---------------------------------------------------------------- PadInput (lock 3): several fingers, one live pad per pointer
 function PadInput(root,opt){const live=new Map(),doc=root.ownerDocument||document;
   const padAt=(x,y)=>{const el=doc.elementFromPoint(x,y),p=el&&el.closest?el.closest('[data-pad]'):null;return p&&root.contains(p)?p:null};
@@ -247,8 +259,10 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   const flo=root.querySelector('.eibflo');
   function flourish(){const e=echoEl(),g=api.gs.getBoundingClientRect();if(e){const a=e.getBoundingClientRect();flo.style.left=(a.left-g.left+a.width/2)+'px';flo.style.top=(a.top-g.top)+'px'}
     flo.hidden=false;flo.className='eibflo'+(RM?' static':'');void flo.offsetWidth;flo.classList.add('go');later(RM?1000:600,()=>{flo.hidden=true;flo.classList.remove('go')})}
-  function singEcho(song,done){phase='echo';padBox.classList.add('listen');padBox.classList.remove('turn');ask.innerHTML='';ans.innerHTML='';const k=msPerTick(song.bpm),e=echoEl();if(e)e.classList.add('eibsing');
-    let t=300;const my=++singing;sbEchoNotes(song).forEach(x=>{const d=Math.max(V.tempo.min_note_ms,x[2]*k);if(x[0])later(t,()=>{play(fam,0,{midi:midiOfNote(fam,x)});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');
+  function singEcho(at,done){const song=at.echo,notes=sbEchoNotes(song);phase='echo';padBox.classList.add('listen');padBox.classList.remove('turn');ask.innerHTML='';ans.innerHTML='';
+    const tk=TOK;whenLoaded(echoSamples(fam,notes)).then(()=>{if(tk===TOK)singEchoNow(at,notes,done)})}
+  function singEchoNow(at,notes,done){const k=msPerTick(sbBpm(at)),e=echoEl();if(e)e.classList.add('eibsing');
+    let t=300;const my=++singing;notes.forEach(x=>{const d=Math.max(V.tempo.min_note_ms,x[2]*k);if(x[0])later(t,()=>{play(fam,0,{midi:midiOfNote(fam,x)});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');
       const s=step(x);if(!x[3]&&padEl(s))light(s,Math.min(420,d*.8))});t+=d});
     later(t+300,()=>{if(my===singing){const e2=echoEl();if(e2)e2.classList.remove('eibsing')}done&&done()});return t}
   function setPads(L){pads=L;padsLayout(padBox,L.length);padBox.innerHTML=padsHTML(L)}
@@ -259,7 +273,9 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   function pick(len){P.seed=(P.seed||0)+1;saveBook();const seed=(P.seed*7919+kid.length*104729+ptier)>>>0;
     const res=pickFresh({hand:tunes,len,seen:R?R.seen:[],lastSeq:st.lastSeq||null,seed,gen:sd=>gen(fam,ptier,len,sd)});
     const k=seqKey(res.tune.n);if(R)R.seen.push(k);st.lastSeq=k;lastId=res.tune.id;api.save&&api.save();return res.tune}
-  function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const k=msPerTick(bpm)*(o.slow?1.15:1);
+  function sing(notes,bpm,done,o){o=o||{};phase=o.phase||'echo';padBox.classList.add('listen');padBox.classList.remove('turn');const tk=TOK;
+    whenLoaded(padSamples(fam,notes)).then(()=>{if(tk===TOK)singNow(notes,bpm,done,o)})}
+  function singNow(notes,bpm,done,o){const k=msPerTick(bpm)*(o.slow?1.15:1);
     const row=o.row||ask;row.classList.toggle('many',notes.length>V.rhythm_shown_to);layoutRow(row,notes.length);row.innerHTML=notes.map(x=>noteHTML(fam,step(x),notes.length>V.rhythm_shown_to?TPB:x[2])).join('');const els=[...row.children];
     const e=echoEl();if(e)e.classList.add('eibsing');let t=350;const my=++singing;
     notes.forEach((x,i)=>{const s=step(x),d=Math.max(V.tempo.min_note_ms,x[2]*k);later(t,()=>{play(fam,s,{vol:o.soft?.8:1});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');light(s,Math.min(420,d*.8));els.forEach(z=>z.classList.remove('lit'));if(els[i])els[i].classList.add('lit')});t+=d});
@@ -299,9 +315,9 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
   function ancEpilogue(a,next){padBox.querySelectorAll('.need').forEach(z=>z.classList.remove('need'));
     if(a.matched){if(P.ml&&P.ml.met&&P.ml.met[a.t.id])P.ml.met[a.t.id].m=1;saveBook()}
     const go=()=>{if(a.first){flourish();say('eib_ancient_collection',2400,{ancient:a.t});later(2600,next)}else next()};
-    if(a.matched){root.classList.add('duet');padBox.classList.add('duet');later(400,()=>singEcho(a.t.echo,()=>{root.classList.remove('duet');padBox.classList.remove('duet');go()}))}else go()}
+    if(a.matched){root.classList.add('duet');padBox.classList.add('duet');later(400,()=>singEcho(a.t,()=>{root.classList.remove('duet');padBox.classList.remove('duet');go()}))}else go()}
   function ancTune(a){const t=a.t,c=a.c;let first=false;if(P.ml){first=sbHeard(P.ml,t,fam);saveBook()}api.onAncient&&api.onAncient({id:t.id,first});
-    return Object.assign({id:'anc:'+t.id,n:c.n,phrases:c.phrases,labels:c.labels},{bpm:bpmAt(P.tempoStep,t.bpm),ancient:t,first})}
+    return Object.assign(sbTune(t,c),{first})}
   function nextTune(){if(R.pendingAnc){const a=R.pendingAnc;R.pendingAnc=null;return ancEpilogue(a,nextTune)}
     if(R.matches>=V.round)return roundEnd();if(R.tunes>=V.soft_stop_tunes)return softStop();
     R.tunes++;retried=false;ph=-1;pres=[];
@@ -309,7 +325,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     if(A){tune=ancTune(A);const k=seqKey(tune.n);R.seen.push(k);st.lastSeq=k;st.lastAnc=A.t.id;lastId=tune.id;api.save&&api.save();ans.innerHTML='';slots.innerHTML=tune.phrases?tune.labels.map(()=>'<i></i>').join(''):'';
       const need=new Set(tune.n.map(x=>step(x)));padBox.querySelectorAll('.eibpad').forEach(z=>z.classList.toggle('need',need.has(+z.dataset.pad)));
       flourish();say('eib_ancient_echo',2200,{ancient:A.t});
-      return later(1500,()=>singEcho(A.t.echo,()=>{say('eib_my_turn',1400);if(tune.phrases)return later(900,()=>phrase(0));curNotes=tune.n;asked=norm(tune.n);later(700,()=>sing(tune.n,tune.bpm,yourTurn))}))}
+      return later(1500,()=>singEcho(A.t,()=>{say('eib_my_turn',1400);if(tune.phrases)return later(900,()=>phrase(0));curNotes=tune.n;asked=norm(tune.n);later(700,()=>sing(tune.n,tune.bpm,yourTurn))}))}
     const t=pick(R.len);tune=Object.assign({},t,{bpm:bpmAt(P.tempoStep,t.bpm)});ans.innerHTML='';
     slots.innerHTML=tune.phrases?tune.labels.map((l,i)=>`<i class="${tune.labels.indexOf(l)<i?'rep':''}"></i>`).join(''):'';
     let k='eib_my_turn';if(R.tunes===1&&R.intro)k=R.intro;else if(R.sayLittle){R.sayLittle=false;k='eib_little'}
@@ -379,7 +395,8 @@ EB.playNote=(fam,s,o)=>play(fam,s,o);
 // Ancient Echoes for game.js (Memory Book page): the heard tunes (order heard), the shipped tunes of a family, and the Echo version
 EB.ancientHeard=(kid,fam)=>{const b=Songbook.load(),p=(b.progress||{})[kid];return sbList(p&&p.ml,fam).map(e=>Object.assign(sbById(e.id),{heard:e}))};
 EB.ancientTunes=fam=>sbTunes(fam);
-EB.playEcho=id=>{const t=sbById(id);if(!t)return 0;const k=msPerTick(t.echo.bpm);let ms=0;sbEchoNotes(t.echo).forEach(x=>{if(x[0]){const m=midiOfNote(t.fam,x);setTimeout(()=>play(t.fam,0,{midi:m,vol:.8}),ms)}ms+=Math.max(V2().tempo.min_note_ms,x[2]*k)});return ms};
+EB.playEcho=id=>{const t=sbById(id);if(!t)return 0;const k=msPerTick(sbBpm(t)),N=sbEchoNotes(t.echo);let ms=0;const at=[];N.forEach(x=>{at.push(ms);ms+=Math.max(V2().tempo.min_note_ms,x[2]*k)});
+  whenLoaded(echoSamples(t.fam,N)).then(()=>N.forEach((x,i)=>{if(x[0]){const m=midiOfNote(t.fam,x);setTimeout(()=>play(t.fam,0,{midi:m,vol:.8}),at[i])}}));return ms};   // Nov 3: same tempo (sbBpm) + samples first, like the intro
 EB.playSong=(fam,song)=>{if(!Song.valid(song))return 0;const k=msPerTick(song.bpm);let t=0;song.n.forEach(x=>{if(x[0]){const s=step(x);setTimeout(()=>play(fam,s,{vol:.8}),t)}t+=Math.max(DATA?V2().tempo.min_note_ms:120,x[2]*k)});return t};
 function stop(){TOK++;if(cur){cur.input.off();if(cur.root.parentNode)cur.root.remove();cur=null}voices.splice(0).forEach(v=>{try{v.stop()}catch(e){}})}
 // ---------------------------------------------------------------- the Echo-started invite: a note chip by the Echo, gone after 10 s, never repeated
@@ -388,7 +405,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   const t=setTimeout(()=>{if(done)return;done=true;b.classList.add('fade');setTimeout(()=>b.remove(),o.lowfx?0:600)},ms);
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
 Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,colOf9,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
-  sbTunes,sbById,sbChild,sbPick,sbSlots,sbEchoNotes,sbHeard,sbList,midiOfNote,fileOfMidi,
+  sbTunes,sbById,sbChild,sbPick,sbSlots,sbEchoNotes,sbHeard,sbList,sbBpm,sbTune,midiOfNote,fileOfMidi,
   _pure:{rowCols,padsLayout,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;

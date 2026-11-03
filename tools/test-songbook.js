@@ -82,4 +82,8 @@ ok(!/secret song|secret_song/i.test(corpus),'never "secret song"');
 {const tmp=path.join(require('os').tmpdir(),'eibvec_'+process.pid+'.json');cp.execFileSync('node',[path.join(R,'tools/export_eib_vectors.js'),tmp]);ok(fs.readFileSync(tmp,'utf8')===fs.readFileSync(path.join(R,'host/eib_dedupe_vectors.json'),'utf8'),'host/eib_dedupe_vectors.json unchanged');fs.unlinkSync(tmp)}
 {const SBk=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'))).songbook;const L=['slyte','whimber','twitchel'].flatMap(f=>SBk[f]);ok(L.every(t=>t.spoken&&t.spoken.tune&&!/\d/.test(t.spoken.tune+t.spoken.composer)),'every shipped tune has a spoken title (no digits) for the 7-8 / 9-10 lines');
  ok(L.every(t=>!t.bar_ticks||t.bar_ticks%12===0||t.bar_ticks%6===0),'bar_ticks are whole eighths');ok(!L.some(t=>(SBk.held||[]).some(h=>h.id===t.id)),'held tunes never ship')}
+// Nov 3 (LIST #11): an Ancient Echo's intro (Echo version + child's part), duet and Memory Book replay share one tempo = the tune's own bpm
+{const SBk=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'))).songbook;const L=['slyte','whimber','twitchel'].flatMap(f=>SBk[f]);const c={n:[[1,0,12]],phrases:null,labels:null};
+ ok(L.every(t=>EB.sbBpm(t)===t.bpm&&EB.sbTune(t,c).bpm===t.bpm&&(!t.echo||!t.echo.bpm||t.echo.bpm===t.bpm)),'intro tempo == tune tempo (sbTune/sbBpm, no round speed-up)');
+ const src=fs.readFileSync(path.join(R,'echoback.js'),'utf8');ok(!/bpmAt\([^)]*\bt\.bpm\)\s*,\s*ancient/.test(src)&&/return Object\.assign\(sbTune\(t,c\)/.test(src),'the round speed-up (bpmAt) never touches an Ancient Echo')}
 console.log(`songbook: ${n} checks, ${bad} failed`);process.exit(bad?1:0)

@@ -71,6 +71,7 @@ const Music=(function(){let cur=null,want=null,mbuf={},mload={},master=null,duck
       s.buffer=b;s.playbackRate.value=o.rate||1;g.gain.value=(o.vol==null?.5:o.vol)*vf();s.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+.01);
       if(o.duck&&!out){level(o.duck,.05);clearTimeout(duckT);duckT=setTimeout(()=>{if(!out)level(1,.25)},Math.min(1200,b.duration*1000/(o.rate||1)))}return s}).catch(()=>null)},
     stop(){want=null;stopAll()},
+    prime(L){if(!unlocked||!ctx||!enabled())return Promise.resolve([]);return Promise.all([...new Set(L||[])].map(n=>get(n)))},   // Nov 3 (LIST #11): fetch + decode one-shots before a tune is scheduled
     get playing(){return cur&&cur.n},get buffers(){return mbuf}}})();
 W.Music=Music;W.addEventListener('pointerdown',()=>setTimeout(()=>{if(want_())Music.refresh()},50),{capture:true,passive:true});
 function want_(){return true}
