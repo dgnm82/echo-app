@@ -5,76 +5,74 @@
   "barks": {
     "hello": [
       {
-        "text": "You're back! I was— okay I wasn't hiding. Maybe a little.",
+        "text": "You're back! I was hiding behind a leaf. It was a very see-through leaf.",
         "expr": "excited",
         "react": "excited",
         "short": "You're back!"
       },
       {
-        "text": "Guess what— no, don't guess. Hi!",
+        "text": "I was going to tell you a joke. Then I forgot the punchline. BOOP!",
         "expr": "excited",
         "react": "happy",
-        "short": "Guess what- no, don't guess."
+        "short": "Then I forgot the punchline."
       },
       {
-        "text": "You came back! YAY! My tail did a whole circle. Two circles!",
+        "text": "You came back! My tail did a happy circle. Then it made me do one too.",
         "expr": "happy",
         "react": "happy",
         "short": "You came back!"
       },
       {
-        "text": "{child}! Over here! Okay, you found me.",
+        "text": "Over here, {child}! I'm hiding in plain sight. That's the hardest kind!",
         "expr": "happy",
         "cond": {
           "bondMin": 140
         },
-        "short": "Over here!"
+        "short": "Over here, {child}!"
       },
       {
-        "text": "Morning! My ears have been flicking since sunrise.",
+        "text": "Good morning! I already found three shiny things. One of them was the sun.",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Morning!"
+        "short": "Good morning!"
       },
       {
-        "text": "I feel cozy and sleepy today. Sit with me?",
+        "text": "Hi! It's nearly bedtime, so I'm being extra sneaky-quiet. Shh… that was loud.",
         "expr": "curious",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "Sit with me?"
+        "short": "Hi!"
       },
       {
         "text": "You're back! I did eleven jumps. Okay, I counted to four.",
         "expr": "excited",
         "react": "excited",
-        "short": "You're back!"
+        "short": "I did eleven jumps!"
       },
       {
-        "text": "Hi! My ears went up before my eyes opened.",
-        "expr": "excited",
-        "react": "happy",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "Hi! I tried to sneak up on my shadow. It followed me home.",
+        "expr": "happy",
         "short": "Hi!"
       },
       {
-        "text": "Hi. I was practicing my sneaky face. Did it work?",
-        "expr": "happy",
-        "short": "Did it work?"
-      },
-      {
-        "text": "Hi hi hi! Okay, calm. I'm calm!",
+        "text": "I can be quiet as a mouse. Watch… Oops, I sneezed!",
         "expr": "excited",
         "react": "excited",
-        "short": "Hi hi hi!"
+        "short": "I can be quiet as a mouse."
       },
       {
-        "text": "Morning! The grass is {word:shiny}. I already sniffed most of it.",
+        "text": "Morning! The grass is all {word:shiny}. I sniffed it, and now my nose is wet.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -84,26 +82,26 @@
         "short": "Morning!"
       },
       {
-        "text": "Evening! The sky went orange. I tried to pounce it.",
+        "text": "Evening! I tried to pounce on the orange sky. I missed by a lot.",
         "expr": "happy",
         "cond": {
           "time": [
             "evening"
           ]
         },
-        "short": "The sky went orange."
+        "short": "Evening!"
       }
     ],
     "grace_hello": [
       {
-        "text": "Extra day! Extra days are the best kind of days.",
+        "text": "We get an extra day! Extra days are the best kind of days.",
         "expr": "excited",
-        "short": "Extra day!"
+        "short": "We get an extra day!"
       },
       {
         "text": "Hi! Let's make today a leaf-pile kind of day.",
         "expr": "happy",
-        "short": "Hi!"
+        "short": "Let's play in leaves!"
       }
     ],
     "ready_hint": [
@@ -149,22 +147,20 @@
     ],
     "fed": [
       {
-        "text": "Crunchy! More crunchy? No? Okay.",
+        "text": "That was so crunchy! Is there more, or is that all?",
         "expr": "eating",
         "react": "eat",
-        "short": "More crunchy?"
+        "short": "That was crunchy!"
       },
       {
-        "text": "— sorry, talking with my mouth full. NOM.",
+        "text": "Sorry, I'm talking with my mouth full. NOM!",
         "expr": "eating",
         "react": "eat",
-        "short": "NOM."
+        "short": "Sorry, my mouth is full!"
       },
       {
-        "text": "Crunch! Good crunch. My ears wiggle.",
-        "expr": "eating",
-        "react": "eat",
-        "short": "Good crunch."
+        "text": "",
+        "cut": true
       },
       {
         "text": "I'm doing a happy tail wiggle. Can you tell?",
@@ -173,30 +169,30 @@
         "short": "Can you tell?"
       },
       {
-        "text": "Snack! Snacks are the best surprise.",
+        "text": "Ooh! You brought a snack! Snacks are the best surprise.",
         "expr": "eating",
         "react": "eat",
-        "short": "Snack!"
+        "short": "You brought a snack!"
       }
     ],
     "fed_fav": [
       {
-        "text": "THAT one! How did you know?! Are you a {var:family} too?",
+        "text": "You picked my favorite! How did you know? Did my tail tell you?",
         "expr": "excited",
         "react": "excited",
-        "short": "THAT one!"
+        "short": "You picked my favorite!"
       },
       {
-        "text": "Ooh, {fav}! My favorite-favorite! My tail is going all by itself!",
+        "text": "Ooh, {fav} is my favorite-favorite! My tail is wagging all by itself!",
         "expr": "excited",
         "react": "excited",
-        "short": "My favorite-favorite!"
+        "short": "That's my favorite!"
       },
       {
-        "text": "Yum, {fav}! My nose knew before you even opened it!",
+        "text": "I smelled {fav} before you even opened it! Yum!",
         "expr": "excited",
         "react": "excited",
-        "short": "My nose knew."
+        "short": "I smelled it first!"
       },
       {
         "text": "I did a happy pounce! So many tasty treats!",
@@ -245,38 +241,37 @@
     ],
     "full": [
       {
-        "text": "All done! My tummy says thank you.",
+        "text": "I'm all done! My tummy says thank you.",
         "expr": "happy",
-        "short": "All done!"
+        "short": "I'm all done!"
       },
       {
-        "text": "All done for now! My tummy says thanks.",
-        "expr": "happy",
-        "short": "All done for now!"
+        "text": "",
+        "cut": true
       },
       {
-        "text": "All done! That was perfect. Thank you!",
+        "text": "That was perfect. Thank you for the yummy snack!",
         "expr": "happy",
-        "short": "All done!"
+        "short": "That was perfect!"
       },
       {
-        "text": "No more for now. My tummy is doing a happy hum.",
+        "text": "No more for now, please. My tummy is humming a happy tune.",
         "expr": "happy",
-        "short": "No more for now."
+        "short": "My tummy is full!"
       }
     ],
     "pet": [
       {
-        "text": "Mmm… right there.",
+        "text": "Mmm… right there. You found the perfect spot.",
         "expr": "love",
         "react": "pet",
-        "short": "Mmm... right there."
+        "short": "You found the spot!"
       },
       {
-        "text": "That tickles behind my ears!",
+        "text": "Hehe, that tickles behind my ears!",
         "expr": "happy",
         "react": "pet",
-        "short": "That tickles behind my ears!"
+        "short": "That tickles!"
       },
       {
         "text": "",
@@ -285,10 +280,8 @@
         "gesture": "slowblink"
       },
       {
-        "text": "Right there. Yes. Right there.",
-        "expr": "love",
-        "react": "pet",
-        "short": "Right there."
+        "text": "",
+        "cut": true
       },
       {
         "text": "",
@@ -297,25 +290,25 @@
         "gesture": "settle"
       },
       {
-        "text": "{pet_phrase} Ear scratches! My favorite. Tied with berries.",
+        "text": "{pet_phrase} Ear scratches are my favorite. Well, tied with berries.",
         "expr": "happy",
         "react": "pet",
-        "short": "Ear scratches!"
+        "short": "I love ear scratches!"
       }
     ],
     "sit": [
       {
-        "text": "…quiet is nice. I didn't know that.",
+        "text": "Sitting quietly is nice. I didn't know that before!",
         "expr": "love",
         "short": "Quiet is nice."
       },
       {
-        "text": "…quiet sitting. I'm doing it. Look at me sit.",
+        "text": "Look, I'm sitting so still. I'm really good at this!",
         "expr": "love",
-        "short": "Quiet sitting."
+        "short": "Look, I'm sitting still!"
       },
       {
-        "text": "This is a good spot.",
+        "text": "This is a good spot. Let's stay right here a while.",
         "expr": "love",
         "gesture": "settle",
         "short": "This is a good spot."
@@ -323,23 +316,23 @@
     ],
     "nap": [
       {
-        "text": "Into my log… zzz… psst… zzz.",
+        "text": "I'm going into my log… psst, good night… zzz.",
         "expr": "sleepy",
         "react": "sleepy",
-        "short": "Into my log..."
+        "short": "Night-night!"
       },
       {
-        "text": "Nap time. I'm putting my tail over my nose. Goodnight, nose.",
+        "text": "It's nap time. I'm putting my tail over my nose. Goodnight, nose.",
         "expr": "sleepy",
         "react": "sleepy",
-        "short": "Nap time."
+        "short": "It's nap time."
       },
       {
-        "text": "Turn, turn, turn, turn. Okay. Nap.",
+        "text": "Turn, turn, turn… okay, I found the comfy spot.",
         "expr": "sleepy",
         "react": "sleepy",
         "gesture": "spin",
-        "short": "Turn, turn, turn, turn."
+        "short": "I found the comfy spot."
       }
     ],
     "not_sleepy": [
@@ -378,22 +371,20 @@
     ],
     "game_end": [
       {
-        "text": "Best. Game. EVER. My tail is still wiggling.",
+        "text": "That was the best game EVER! My tail is still wiggling.",
         "expr": "excited",
         "react": "excited",
-        "short": "My tail is still wiggling."
+        "short": "That was the best game!"
       },
       {
-        "text": "That was so fun. Fwip!",
-        "expr": "excited",
-        "react": "excited",
-        "short": "That was so fun. Fwip!"
+        "text": "",
+        "cut": true
       },
       {
-        "text": "{pet_phrase} Good game! Ten points to both of us.",
+        "text": "{pet_phrase} We both played so well. We both get ten points!",
         "expr": "happy",
         "react": "happy",
-        "short": "Good game!"
+        "short": "We both played so well!"
       }
     ],
     "talent_Radar Ears": [
@@ -433,44 +424,38 @@
     ],
     "time_morning": [
       {
-        "text": "Morning! Everything is {word:shiny}. Dewdrops everywhere!",
+        "text": "Morning! Everything is {word:shiny}, and there are dewdrops everywhere!",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Dewdrops everywhere!"
+        "short": "Look at the dewdrops!"
       },
       {
-        "text": "The sun is up. It beat me. Next time.",
+        "text": "The sun got up before me again. Next time, I'll win!",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "The sun is up."
+        "short": "The sun beat me!"
       },
       {
-        "text": "Breakfast? Berries! More berries!",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "morning"
-          ]
-        },
-        "short": "More berries!"
+        "text": "",
+        "cut": true
       },
       {
-        "text": "Morning stretch! Tail first. Then the rest.",
+        "text": "Time for my morning stretch! Tail first, then the rest of me.",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Morning stretch!"
+        "short": "Time for my stretch!"
       },
       {
         "text": "Good morning! Yip-yip! I love the sunrise.",
@@ -579,44 +564,38 @@
     ],
     "time_day": [
       {
-        "text": "Afternoon! Good time for pouncing.",
+        "text": "It's the afternoon, and that's the best time for pouncing!",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "Good time for pouncing."
+        "short": "Let's pounce!"
       },
       {
-        "text": "Sunny! My fur is warm on one side. Turning.",
+        "text": "The sun warmed one side of me. Now I'm turning over!",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "My fur is warm on one side."
+        "short": "I'm turning over!"
       },
       {
-        "text": "Afternoon nap? No. Afternoon zoomies!",
+        "text": "Should I nap? Nope, I'd rather do zoomies!",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "Afternoon nap?"
+        "short": "I want zoomies!"
       },
       {
-        "text": "The shadows got short. Sneaky shadows.",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "day"
-          ]
-        },
-        "short": "The shadows got short."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Hello, sunny day! Yip-yip! I love the warm sun.",
@@ -725,27 +704,21 @@
     ],
     "time_evening": [
       {
-        "text": "Evening! The sky is doing orange. Fancy.",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "The fireflies are coming out! I'll only pounce a tiny bit.",
         "expr": "happy",
         "cond": {
           "time": [
             "evening"
           ]
         },
-        "short": "The sky is doing orange."
+        "short": "The fireflies are out!"
       },
       {
-        "text": "The fireflies are coming. I'll pounce gently.",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "evening"
-          ]
-        },
-        "short": "The fireflies are coming."
-      },
-      {
-        "text": "Evening is cozy time. I'm getting cozy. Fwip.",
+        "text": "Evening is cozy time. I'm fluffing up my spot in the log.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -755,7 +728,7 @@
         "short": "Evening is cozy time."
       },
       {
-        "text": "The lanterns are on. The hollow log looks {word:shiny}.",
+        "text": "The lanterns are on, and our hollow log looks so {word:shiny}.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -871,44 +844,38 @@
     ],
     "time_night": [
       {
-        "text": "Night! The stars came out to play.",
+        "text": "The stars came out to play. Can I play too?",
         "expr": "sleepy",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "The stars came out to play."
+        "short": "The stars came out!"
       },
       {
-        "text": "Shh. Night voice. This is my night voice.",
+        "text": "Shh… this is my night voice. Do you like it?",
         "expr": "sleepy",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "Night voice."
+        "short": "This is my night voice."
       },
       {
-        "text": "Nighttime ears are extra big. Everything is loud.",
+        "text": "At night I can hear everything. A beetle just tiptoed by!",
         "expr": "sleepy",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "Everything is loud."
+        "short": "I can hear everything!"
       },
       {
-        "text": "Night-night soon. My tail is getting heavy.",
-        "expr": "sleepy",
-        "cond": {
-          "time": [
-            "night"
-          ]
-        },
-        "short": "Night-night soon."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Hello, starry night! Yip-yip! I love the starlight.",
@@ -2060,16 +2027,14 @@
     ],
     "pairs_done": [
       {
-        "text": "ALL the pairs! Best card game ever.",
+        "text": "We found ALL the pairs! That was the best card game ever.",
         "expr": "delighted",
         "react": "excited",
-        "short": "ALL the pairs!"
+        "short": "We found all the pairs!"
       },
       {
-        "text": "Every pair found. We make a good team.",
-        "expr": "proud",
-        "react": "happy",
-        "short": "Every pair found."
+        "text": "",
+        "cut": true
       },
       {
         "text": "We found every pair! I did a happy pounce.",
@@ -2358,20 +2323,20 @@
     ],
     "almost_hello": [
       {
-        "text": "Hi hi! The path got another flower. Sneaky path.",
+        "text": "Hi! Look, our path grew another flower. I didn't even see it happen!",
         "expr": "excited",
         "gesture": "hops beside the glowing path",
-        "short": "Hi hi!"
+        "short": "Our path grew a flower!"
       },
       {
-        "text": "List day! Or snack day. Or both!",
+        "text": "Is it a list day or a snack day? Let's do both!",
         "expr": "happy",
-        "short": "List day!"
+        "short": "Let's do both!"
       },
       {
-        "text": "Hi! I was practicing my walking-day walk. Fancy, right?",
+        "text": "Hi! I was practicing my walking-day walk. Isn't it fancy?",
         "expr": "proud",
-        "short": "Fancy, right?"
+        "short": "Isn't it fancy?"
       }
     ],
     "list_nudge": [
@@ -2475,16 +2440,16 @@
     ],
     "hug_more": [
       {
-        "text": "Okay, one more is allowed. Two is also allowed.",
+        "text": "Okay, one more hug is allowed. Two is also allowed!",
         "expr": "love",
         "gesture": "big squeeze",
-        "short": "Okay, one more is allowed."
+        "short": "One more is allowed!"
       },
       {
         "text": "That one was the best one yet. I'm keeping it.",
         "expr": "love",
         "gesture": "tail-scarf hug",
-        "short": "I'm keeping it."
+        "short": "I'm keeping that one!"
       }
     ],
     "walk_start": [
@@ -2575,14 +2540,14 @@
     ],
     "thanks": [
       {
-        "text": "Thank you, {child}. For snacks. For games. For finding me every time.",
+        "text": "Thank you, {child}! I love our snacks and games, and you always find me.",
         "expr": "love",
-        "short": "Thank you, friend."
+        "short": "Thank you, friend!"
       },
       {
-        "text": "You helped my song grow SO big. Best friend in any world.",
+        "text": "You helped our song grow SO big. You're my best friend in any world.",
         "expr": "love",
-        "short": "Best friend in any world."
+        "short": "Our song grew!"
       }
     ],
     "next_postcards": [
@@ -2851,37 +2816,34 @@
     ],
     "need_hungry": [
       {
-        "text": "My tummy is doing a drum roll. Bum-bum-bum.",
+        "text": "Sniff-sniff. I think my nose knows something my brain doesn't. Snack?",
         "expr": "curious",
-        "short": "Bum-bum-bum."
+        "short": "Sniff-sniff."
       },
       {
-        "text": "Is that a snack smell? Could be a snack smell.",
+        "text": "Sniff-sniff. Is that a snack I smell?",
         "expr": "curious",
         "gesture": "curious",
-        "short": "Is that a snack smell?"
+        "short": "Is that a snack?"
       },
       {
-        "text": "My tummy did a tiny yip. Snack time?",
-        "expr": "giggling",
-        "short": "My tummy did a tiny yip."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "I'm thinking about berries. Big ones.",
+        "text": "I'm thinking about berries, big juicy ones as big as my nose!",
         "expr": "thinking",
         "gesture": "tap",
         "short": "I'm thinking about berries."
       },
       {
-        "text": "Snack idea! Something crunchy. Or squishy. Or both!",
+        "text": "I want something crunchy… or squishy… or both!",
         "expr": "excited",
-        "short": "Snack idea!"
+        "short": "I want a snack!"
       },
       {
-        "text": "Rumble-rumble. It's a happy rumble.",
-        "expr": "giggling",
-        "gesture": "tap",
-        "short": "It's a happy rumble."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Yip-yip! My tummy wants a snack right now.",
@@ -2930,71 +2892,69 @@
     ],
     "need_cuddly": [
       {
-        "text": "In the wild, {var:family_plural} nap in one big fluffy pile.",
+        "text": "I like napping in a big, fluffy pile. A pile of two counts!",
         "expr": "happy",
-        "short": "In the wild."
+        "short": "Let's make a cozy pile!"
       },
       {
-        "text": "Hugs feel warm. Like a sunny spot.",
+        "text": "Can I have a hug? I'll give you one back, plus a tail swish for free.",
         "expr": "love",
-        "short": "Hugs feel warm."
+        "short": "Can I have a hug?"
       },
       {
-        "text": "Hi. Just scooting. Scooting is nice.",
+        "text": "I'm just scooting a little closer to you. Scoot, scoot.",
         "expr": "shy",
         "gesture": "wait",
-        "short": "Just scooting."
+        "short": "I'm scooting closer."
       },
       {
-        "text": "My tail is extra fluffy right now. Good for snuggles.",
-        "expr": "love",
-        "short": "Good for snuggles."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "I was thinking about my star home. It's cozy here too.",
+        "text": "I was thinking about my star home. It's cozy here with you, too.",
         "expr": "happy",
-        "short": "It's cozy here too."
+        "short": "It's cozy here."
       },
       {
-        "text": "Ear scratches? I like ear scratches.",
+        "text": "Can I have ear scratches? They're my favorite.",
         "expr": "shy",
         "gesture": "pounce",
-        "short": "Ear scratches?"
+        "short": "Can I have ear scratches?"
       }
     ],
     "need_playful": [
       {
-        "text": "My paws are extra bouncy. Boing. Boing. Boing!",
+        "text": "I'm extra bouncy today. Boing, boing, boing!",
         "expr": "excited",
         "react": "excited",
-        "short": "My paws are extra bouncy."
+        "short": "I'm so bouncy!"
       },
       {
-        "text": "My tail wants a game. It told me.",
+        "text": "Quick, make a silly face! I'll try to make mine even sillier.",
         "expr": "giggling",
-        "short": "My tail wants a game."
+        "short": "Quick, make a silly face!"
       },
       {
-        "text": "Zoomies are coming. I can feel them in my ears.",
+        "text": "Zoomies are coming. I can feel them in my ears!",
         "expr": "excited",
-        "short": "Zoomies are coming."
+        "short": "Zoomies are coming!"
       },
       {
-        "text": "Ready… set… pounce!",
+        "text": "I challenged a butterfly to a race. It won, but only barely!",
         "expr": "excited",
         "react": "happy",
         "gesture": "pounce",
-        "short": "Ready... set... pounce!"
+        "short": "I challenged a butterfly to a race."
       },
       {
-        "text": "I have so much bounce today. Where does it all go?",
-        "expr": "curious",
-        "short": "I have so much bounce today."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "Game idea! You pick. I'll do the bouncing.",
+        "text": "Let's play a game! You pick, and I'll do the bouncing.",
         "expr": "happy",
-        "short": "Game idea!"
+        "short": "Let's play a game!"
       },
       {
         "text": "Yip-yip! I want to play right now.",
@@ -3043,37 +3003,33 @@
     ],
     "need_sleepy": [
       {
-        "text": "My ears are getting floppy.",
+        "text": "My ears are getting all floppy. That means nap time is coming.",
         "expr": "sleepy",
         "gesture": "yawn",
-        "short": "My ears are getting floppy."
+        "short": "My ears are floppy."
       },
       {
-        "text": "My tail is a pillow. I'm checking. Yep, still a pillow.",
+        "text": "I'm testing my tail as a pillow. It's soft, and it doesn't snore.",
         "expr": "sleepy",
-        "short": "My tail is a pillow."
+        "short": "I'm testing my tail as a pillow."
       },
       {
-        "text": "My blinks are getting longer. Blink… blink.",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "A cozy nap would be nice. Can we make it a leafy one?",
         "expr": "sleepy",
-        "gesture": "slowblink",
-        "short": "Blink..."
+        "short": "A nap would be nice."
       },
       {
-        "text": "A cozy nap would be nice. A leafy one.",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "I'm all out of bounces. I looked everywhere, and there's not even one hop left.",
         "expr": "sleepy",
-        "short": "A cozy nap would be nice."
-      },
-      {
-        "text": "Oops. Sleepy squeak.",
-        "expr": "giggling",
-        "gesture": "yawn",
-        "short": "Oops. Sleepy squeak."
-      },
-      {
-        "text": "My paws are done bouncing for now. Snooze mode.",
-        "expr": "sleepy",
-        "short": "Snooze mode."
+        "short": "I'm all out of bounces."
       },
       {
         "text": "Yip-yip! I feel so sleepy right now.",
@@ -3122,36 +3078,33 @@
     ],
     "need_content": [
       {
-        "text": "Everything is just right. Even my whiskers.",
+        "text": "Everything feels just right today. Even my whiskers are happy.",
         "expr": "happy",
         "short": "Everything is just right."
       },
       {
-        "text": "Good day to be a fox.",
+        "text": "I made a giant leaf pile. Then I forgot where I put myself.",
         "expr": "love",
-        "short": "Good day to be a fox."
+        "short": "I made a giant leaf pile."
       },
       {
-        "text": "Tummy good. Paws good. Ears good.",
-        "expr": "proud",
-        "gesture": "settle",
-        "short": "Tummy good."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "I'm so happy my tail is wagging by itself.",
+        "text": "I'm so happy that my tail is wagging all by itself!",
         "expr": "delighted",
-        "short": "I'm so happy."
+        "short": "I'm so happy!"
       },
       {
-        "text": "Doo, doo, dee! Low, low, high. Happy fox song.",
+        "text": "I'm humming my happy tune… it goes low, low, then high!",
         "expr": "happy",
         "gesture": "hum",
-        "short": "Doo, doo, dee!"
+        "short": "I'm humming my tune."
       },
       {
-        "text": "Right now is really good.",
-        "expr": "love",
-        "short": "Right now is really good."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Yip-yip! I feel so happy right now.",
@@ -3200,20 +3153,20 @@
     ],
     "after_hug": [
       {
-        "text": "That did it. I'm warm from ears to tail.",
+        "text": "That did it. I'm warm from my ears to my tail.",
         "expr": "love",
         "short": "That did it."
       },
       {
-        "text": "Pile of two. Best pile.",
+        "text": "We made a pile of two. That's the best kind of pile!",
         "expr": "love",
-        "short": "Pile of two. Best pile."
+        "short": "We made a pile of two!"
       },
       {
-        "text": "I'm extra fluffy now. Thanks to you.",
+        "text": "Your hug made me extra fluffy. Thank you!",
         "expr": "happy",
         "gesture": "groom",
-        "short": "I'm extra fluffy now."
+        "short": "I'm extra fluffy now!"
       }
     ],
     "after_play": [
@@ -4350,22 +4303,20 @@
     ],
     "run_end": [
       {
-        "text": "{dist} metres. My paws are still zooming!",
+        "text": "We ran {dist} metres! My paws are still zooming.",
         "expr": "delighted",
         "react": "excited",
-        "short": "My paws are still zooming!"
+        "short": "We ran so far!"
       },
       {
-        "text": "A tumble! {dist} metres. SO speedy.",
+        "text": "Oops, I tumbled! But we still ran {dist} metres, super fast.",
         "expr": "delighted",
         "react": "excited",
-        "short": "A tumble!"
+        "short": "Oops, I tumbled!"
       },
       {
-        "text": "Ta-da! {dist} metres of bounding. Tail high!",
-        "expr": "proud",
-        "react": "excited",
-        "short": "Tail high!"
+        "text": "",
+        "cut": true
       },
       {
         "text": "What a fast run! Now I hum a bouncy little tune.",
@@ -4478,16 +4429,16 @@
     ],
     "catch_end": [
       {
-        "text": "Picnic time! {n} berries in my basket.",
+        "text": "We caught {n} berries! Let's have a picnic.",
         "expr": "delighted",
         "react": "excited",
-        "short": "Picnic time!"
+        "short": "Let's have a picnic!"
       },
       {
-        "text": "{n} berries! Some for the grass, most for us.",
+        "text": "Look, we got {n} berries! Let's save a few for the birds.",
         "expr": "happy",
         "react": "excited",
-        "short": "Some for the grass, most."
+        "short": "We got so many berries!"
       },
       {
         "text": "I did a happy pounce! We caught so many treats!",
@@ -4570,16 +4521,14 @@
     ],
     "tower_end": [
       {
-        "text": "Plop! {n} pancakes tall. Snack break!",
+        "text": "Plop! Our pancake tower is {n} pancakes tall. Can we have a snack break?",
         "expr": "delighted",
         "react": "excited",
-        "short": "Snack break!"
+        "short": "Our tower is so tall!"
       },
       {
-        "text": "{n} pancakes! That's a tower for a fox.",
-        "expr": "proud",
-        "react": "excited",
-        "short": "That's a tower for a fox."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Our tower got so tall! Now I hum a bouncy little tune.",
@@ -4648,9 +4597,9 @@
     ],
     "hug_full": [
       {
-        "text": "Full of hugs! …One more fits.",
+        "text": "I'm full of hugs! Oh wait, one more fits.",
         "expr": "love",
-        "short": "Full of hugs!"
+        "short": "I'm full of hugs!"
       }
     ],
     "play_full": [
@@ -4941,16 +4890,16 @@
     ],
     "dig_end": [
       {
-        "text": "Den's full! {rows} rows deep. Cozy!",
+        "text": "Our den is full! We dug {rows} rows, and it's so cozy.",
         "expr": "happy",
         "gesture": "settle",
-        "short": "Den's full!"
+        "short": "Our den is full!"
       },
       {
-        "text": "Ta-da! We dug {rows} rows. I'm curling up.",
+        "text": "Ta-da! We dug {rows} rows. Now I'm curling up inside.",
         "expr": "proud",
         "gesture": "settle",
-        "short": "I'm curling up."
+        "short": "Ta-da! We dug it!"
       },
       {
         "text": "I did a happy pounce! We built such a cozy spot!",
@@ -5076,25 +5025,25 @@
         "short": "That was a song! Again?"
       },
       {
-        "text": "We caught a whole song!",
+        "text": "We caught a whole song! Can you hear it?",
         "expr": "excited",
         "gesture": "pounce",
         "short": "We caught a whole song!"
       },
       {
-        "text": "La-la! The snacks sang!",
+        "text": "Listen, the snacks sang a tune!",
         "expr": "giggling",
         "gesture": "spin",
-        "short": "La-la! The snacks sang!"
+        "short": "The snacks sang!"
       },
       {
-        "text": "Our snack song! Again?",
+        "text": "That's our snack song! Shall we catch it again?",
         "expr": "love",
         "gesture": "tap",
         "cond": {
           "bondMin": 210
         },
-        "short": "Our snack song! Again?"
+        "short": "That's our snack song!"
       },
       {
         "text": "",
@@ -5181,16 +5130,14 @@
     ],
     "look_sing": [
       {
-        "text": "Tap, and I hop. Or just listen.",
+        "text": "Tap a flower, and I'll hop. Or you can just listen.",
         "expr": "happy",
         "gesture": "tap",
-        "short": "Tap, and I hop."
+        "short": "Tap, and I'll hop!"
       },
       {
-        "text": "One tap, one hop. Or just listen.",
-        "expr": "love",
-        "gesture": "settle",
-        "short": "One tap, one hop."
+        "text": "",
+        "cut": true
       },
       {
         "text": "You echoed every note! I hummed a bouncy little tune for you.",
@@ -5578,8 +5525,8 @@
         }
       },
       {
-        "text": "Fun fox fact! We red foxes curl our bushy tails like a warm scarf.",
-        "short": "Cool fox fact!",
+        "text": "Guess what? I curl my tail around me like a warm, bushy scarf.",
+        "short": "I have a scarf tail!",
         "expr": "curious",
         "cond": {
           "var": {
@@ -5946,8 +5893,8 @@
         }
       },
       {
-        "text": "Fun dog fact! We friendly dogs thump our tails like a happy drum.",
-        "short": "Cool dog fact!",
+        "text": "Guess what? When I'm happy, I thump my tail like a drum.",
+        "short": "I thump my tail!",
         "expr": "curious",
         "cond": {
           "var": {
@@ -6068,8 +6015,8 @@
         }
       },
       {
-        "text": "Fun wolf fact! We wolves sing together in harmony across the hills.",
-        "short": "Cool wolf fact!",
+        "text": "Guess what? I love singing with my family across the hills.",
+        "short": "I love singing together!",
         "expr": "curious",
         "cond": {
           "var": {
@@ -6190,8 +6137,8 @@
         }
       },
       {
-        "text": "Fun coyote fact! Coyotes like me can jump over tall bushes in one leap.",
-        "short": "Cool coyote fact!",
+        "text": "Guess what? I can jump over a tall bush in one leap!",
+        "short": "I can jump so high!",
         "expr": "curious",
         "cond": {
           "var": {

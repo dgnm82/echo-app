@@ -5,28 +5,28 @@
   "barks": {
     "hello": [
       {
-        "text": "…There you are. I was thinking about you.",
+        "text": "…There you are. I was just thinking about you… and here you are.",
         "expr": "happy",
         "react": "happy",
-        "short": "There you are."
+        "short": "…There you are."
       },
       {
-        "text": "…Hello. The sky was so pretty today. I'm glad you're here.",
+        "text": "…Hello. I found a feather… it looks like a tiny question mark. I wonder what it wants to know.",
         "expr": "love",
-        "short": "The sky was so pretty today."
+        "short": "…Hello."
       },
       {
-        "text": "Good morning. My feathers are still waking up.",
+        "text": "Good morning… a dewdrop landed on my head. I think it wanted a ride.",
         "expr": "sleepy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Good morning."
+        "short": "Good morning…"
       },
       {
-        "text": "It's getting dark. My favorite part.",
+        "text": "The moon looks like it's smiling tonight… I think it saw you coming.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -34,31 +34,29 @@
             "night"
           ]
         },
-        "short": "It's getting dark."
+        "short": "The moon looks like it's smiling tonight…"
       },
       {
-        "text": "Hello, {child}… I saved you the comfiest spot on the branch.",
+        "text": "Hello, {child}… I saved you the coziest spot on my branch. I only sat on it a little.",
         "expr": "love",
         "cond": {
           "bondMin": 140
         },
-        "short": "Hello, friend..."
+        "short": "Hello, {child}…"
       },
       {
-        "text": "…There you are. Hello by the window.",
-        "expr": "love",
-        "react": "happy",
-        "short": "There you are."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "…Hello. I was just looking at a cloud. It looked like a teacup.",
+        "text": "…Hello. I saw a cloud shaped like a teacup. I think the sky was having tea.",
         "expr": "happy",
-        "short": "It looked like a teacup."
+        "short": "…Hello."
       },
       {
-        "text": "Well… hello. The crickets said it was going to be a nice day.",
+        "text": "Well… hello. The crickets said it would be nice today… crickets always know.",
         "expr": "happy",
-        "short": "Well..."
+        "short": "Well…"
       },
       {
         "text": "…Good morning. One eye is awake. The other is catching up.",
@@ -71,26 +69,26 @@
         "short": "Good morning."
       },
       {
-        "text": "Hello… the sky is going purple. Ooh.",
+        "text": "I saw the first star twinkle… I think it was saying hello.",
         "expr": "love",
         "cond": {
           "time": [
             "evening"
           ]
         },
-        "short": "The sky is going purple."
+        "short": "I saw the first star twinkle…"
       }
     ],
     "grace_hello": [
       {
-        "text": "An extra day together… yay.",
+        "text": "We get an extra day together… how lovely.",
         "expr": "love",
-        "short": "An extra day together..."
+        "short": "We get an extra day."
       },
       {
         "text": "…Hello. Let's look at the sky together today, the way we like.",
         "expr": "happy",
-        "short": "Hello."
+        "short": "Let's look at the sky."
       }
     ],
     "ready_hint": [
@@ -135,43 +133,41 @@
     ],
     "fed": [
       {
-        "text": "Thank you. That was… very kind.",
+        "text": "Thank you… that was very kind of you.",
         "expr": "eating",
         "react": "eat",
         "short": "Thank you."
       },
       {
-        "text": "Mm. Yummy.",
-        "expr": "eating",
-        "react": "eat",
-        "short": "Mm. Yummy."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "…Thank you. I'll eat it slowly. Mm.",
+        "text": "…Thank you. I'll eat it slowly, to make it last.",
         "expr": "eating",
         "react": "eat",
-        "short": "Thank you."
+        "short": "I'll eat it slowly."
       },
       {
-        "text": "A {word:soft} snack. Slowly, slowly.",
+        "text": "What a {word:soft} snack… I'm nibbling it slowly, slowly.",
         "expr": "eating",
         "react": "eat",
-        "short": "Slowly, slowly."
+        "short": "I'm nibbling slowly."
       }
     ],
     "fed_fav": [
       {
-        "text": "…My favorite. You remembered.",
+        "text": "…That's my favorite. You remembered.",
         "expr": "love",
         "react": "happy",
-        "short": "My favorite."
+        "short": "You remembered."
       },
       {
-        "text": "Oh… {fav}… my favorite.",
+        "text": "Oh… {fav} is my very favorite.",
         "expr": "excited",
         "react": "excited",
         "gesture": "pounce",
-        "short": "My favorite."
+        "short": "That's my favorite."
       },
       {
         "text": "I puffed up, round and fluffy… so many tasty treats.",
@@ -275,14 +271,14 @@
     ],
     "full": [
       {
-        "text": "I'm all done, thank you… My tummy is humming a happy hum.",
+        "text": "I'm all done, thank you… my tummy is humming a happy tune.",
         "expr": "happy",
-        "short": "I'm all done, thank you..."
+        "short": "I'm all done."
       },
       {
-        "text": "All done… thank you. That was just right.",
+        "text": "That was just right… thank you.",
         "expr": "happy",
-        "short": "All done..."
+        "short": "That was just right."
       }
     ],
     "pet": [
@@ -293,17 +289,17 @@
         "gesture": "preen"
       },
       {
-        "text": "That's nice.",
+        "text": "Mm… that's nice. You're so gentle.",
         "expr": "love",
         "react": "pet",
         "gesture": "slowblink",
         "short": "That's nice."
       },
       {
-        "text": "Right there, by the ear tufts.",
+        "text": "Right there… you found my favorite spot.",
         "expr": "love",
         "react": "pet",
-        "short": "Right there..."
+        "short": "You found my spot."
       },
       {
         "text": "",
@@ -312,56 +308,55 @@
         "gesture": "preen"
       },
       {
-        "text": "Mm. My feathers like that.",
+        "text": "Mm… my feathers like that very much.",
         "expr": "love",
         "react": "pet",
-        "short": "Mm. My feathers like that."
+        "short": "My feathers like that."
       },
       {
-        "text": "How lovely… that's a thank you.",
+        "text": "That's lovely… I'll hum you a thank-you.",
         "expr": "love",
         "react": "pet",
         "gesture": "slowblink",
-        "short": "That's a thank you."
+        "short": "Thank you."
       }
     ],
     "sit": [
       {
-        "text": "…we don't have to talk. Just sit. Mm.",
+        "text": "…we don't have to talk. We can just sit together.",
         "expr": "love",
-        "short": "We don't have to talk."
+        "short": "We can just sit."
       },
       {
-        "text": "We can just sit… I like this.",
-        "expr": "love",
-        "short": "We can just sit..."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "There.",
+        "text": "There… this is a good spot.",
         "expr": "love",
         "gesture": "wait",
-        "short": "There."
+        "short": "This is a good spot."
       }
     ],
     "nap": [
       {
-        "text": "Into the hollow… I'll dream of stars.",
+        "text": "I'm going into my hollow… I'll dream of stars.",
         "expr": "sleepy",
         "react": "sleepy",
-        "short": "Into the hollow..."
+        "short": "I'll dream of stars."
       },
       {
-        "text": "I think I'll close one eye… the other one will keep you company.",
+        "text": "I'll close one eye… The other one will keep you company.",
         "expr": "sleepy",
         "react": "sleepy",
-        "short": "I think I'll close..."
+        "short": "I'll close one eye."
       },
       {
-        "text": "A small nap. A soft one.",
+        "text": "I'll take a small nap… a soft one.",
         "expr": "sleepy",
         "react": "sleepy",
         "gesture": "preen",
-        "short": "A small nap. A soft one."
+        "short": "I'll take a small nap."
       }
     ],
     "not_sleepy": [
@@ -385,16 +380,14 @@
     ],
     "game_end": [
       {
-        "text": "That was a {word:soft} sky. Thank you.",
+        "text": "That was a {word:soft} game… thank you for playing with me.",
         "expr": "love",
         "react": "happy",
-        "short": "Thank you."
+        "short": "Thank you for playing."
       },
       {
-        "text": "{pet_phrase} Mm… that was lovely. Thank you for playing.",
-        "expr": "happy",
-        "react": "happy",
-        "short": "That was lovely."
+        "text": "",
+        "cut": true
       }
     ],
     "talent_Night Vision": [
@@ -435,44 +428,38 @@
     ],
     "time_morning": [
       {
-        "text": "Morning. So bright. I'm squinting.",
+        "text": "Good morning… it's so bright that I'm squinting.",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "So bright."
+        "short": "It's so bright."
       },
       {
-        "text": "…the sun is up. So bright and big.",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "morning"
-          ]
-        },
-        "short": "The sun is up."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "Morning… my favorite time to be sleepy.",
+        "text": "Mornings are my favorite time… to be a little bit sleepy.",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Morning..."
+        "short": "I'm still sleepy."
       },
       {
-        "text": "…good morning, dew. Good morning, grass.",
+        "text": "…I'm saying good morning to the dew… and to the grass.",
         "expr": "happy",
         "cond": {
           "time": [
             "morning"
           ]
         },
-        "short": "Good morning, dew."
+        "short": "I'm saying good morning."
       },
       {
         "text": "Good morning… I watch the sunrise… Hoo-hoo.",
@@ -711,44 +698,38 @@
     ],
     "time_day": [
       {
-        "text": "…the afternoon is long and soft.",
+        "text": "…the afternoon feels long and soft today.",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "The afternoon is long..."
+        "short": "The afternoon is soft."
       },
       {
-        "text": "A good time for a {word:soft} perch.",
+        "text": "This is a good time for a {word:soft} perch… Want to join me?",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "A good time..."
+        "short": "Want to perch with me?"
       },
       {
-        "text": "…the clouds are slow today. Slow like me.",
+        "text": "…the clouds are slow today, just like me.",
         "expr": "happy",
         "cond": {
           "time": [
             "day"
           ]
         },
-        "short": "The clouds are slow today."
+        "short": "The clouds are slow."
       },
       {
-        "text": "…the light is golden now. Pretty.",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "day"
-          ]
-        },
-        "short": "The light is golden now."
+        "text": "",
+        "cut": true
       },
       {
         "text": "A gentle afternoon… I watch the warm sun… Hoo-hoo.",
@@ -987,27 +968,21 @@
     ],
     "time_evening": [
       {
-        "text": "…dusk. Getting dim. I like it.",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "Dusk is here… the sky is painting itself purple.",
         "expr": "happy",
         "cond": {
           "time": [
             "evening"
           ]
         },
-        "short": "Getting dim."
+        "short": "The sky is purple."
       },
       {
-        "text": "The sky is going purple.",
-        "expr": "happy",
-        "cond": {
-          "time": [
-            "evening"
-          ]
-        },
-        "short": "The sky is going purple."
-      },
-      {
-        "text": "…the crickets are tuning up.",
+        "text": "…listen, the crickets are tuning up for their song.",
         "expr": "happy",
         "cond": {
           "time": [
@@ -1017,14 +992,14 @@
         "short": "The crickets are tuning up."
       },
       {
-        "text": "…the first star. Hello, little one.",
+        "text": "…there's the first star. Hello, little one.",
         "expr": "happy",
         "cond": {
           "time": [
             "evening"
           ]
         },
-        "short": "The first star."
+        "short": "There's the first star."
       },
       {
         "text": "Good evening… I watch the twilight… Hoo-hoo.",
@@ -1263,14 +1238,14 @@
     ],
     "time_night": [
       {
-        "text": "…the night is very quiet.",
+        "text": "…the night is so quiet that I can hear the leaves.",
         "expr": "sleepy",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "...the night is very quiet."
+        "short": "The night is quiet."
       },
       {
         "text": "The moon is keeping the sky company.",
@@ -1280,27 +1255,21 @@
             "night"
           ]
         },
-        "short": "The moon is keeping..."
+        "short": "The moon is out."
       },
       {
-        "text": "…night sounds. Soft ones.",
+        "text": "",
+        "cut": true
+      },
+      {
+        "text": "…on {word:soft} nights like this, I love watching the sky with you.",
         "expr": "sleepy",
         "cond": {
           "time": [
             "night"
           ]
         },
-        "short": "...night sounds. Soft ones."
-      },
-      {
-        "text": "…the {word:soft} night. I watch the sky.",
-        "expr": "sleepy",
-        "cond": {
-          "time": [
-            "night"
-          ]
-        },
-        "short": "I watch the sky."
+        "short": "I'm watching the sky."
       },
       {
         "text": "A quiet night… I watch the starlight… Hoo-hoo.",
@@ -2522,13 +2491,13 @@
         "text": "Every card has its twin now… I like that.",
         "expr": "proud",
         "react": "happy",
-        "short": "I like that."
+        "short": "Every card has its twin."
       },
       {
         "text": "All the pairs are home… we did that quietly, together.",
         "expr": "love",
         "react": "happy",
-        "short": "All the pairs are home..."
+        "short": "All the pairs are home."
       },
       {
         "text": "We found every pair… I puffed up, round and fluffy.",
@@ -2872,17 +2841,17 @@
         "text": "Hello. Another little star came out, right near mine.",
         "expr": "happy",
         "gesture": "perched on the branch; a new star in the trail",
-        "short": "Hello."
+        "short": "Another star came out."
       },
       {
         "text": "…There you are. Shall we pick something from our list?",
         "expr": "love",
-        "short": "There you are."
+        "short": "Shall we pick from our list?"
       },
       {
         "text": "Well… hello. I was practicing a gentle flying-day hum.",
         "expr": "happy",
-        "short": "Well..."
+        "short": "I was practicing my hum."
       }
     ],
     "list_nudge": [
@@ -2986,16 +2955,16 @@
     ],
     "hug_more": [
       {
-        "text": "One more is always allowed.",
+        "text": "One more hug is always allowed.",
         "expr": "love",
         "gesture": "wing wrap",
-        "short": "One more is always allowed."
+        "short": "One more is allowed."
       },
       {
         "text": "That one was extra soft. I'll keep it.",
         "expr": "love",
         "gesture": "slow blink, wing wrap",
-        "short": "That one was extra soft."
+        "short": "I'll keep that one."
       }
     ],
     "walk_start": [
@@ -3090,12 +3059,12 @@
       {
         "text": "Thank you, {child}… for listening, and for letting me listen to you.",
         "expr": "love",
-        "short": "Thank you, friend..."
+        "short": "Thank you, friend."
       },
       {
-        "text": "You helped my song grow… slowly, and so warmly. Thank you.",
+        "text": "You helped our song grow… slowly and warmly. Thank you.",
         "expr": "love",
-        "short": "You helped my song grow..."
+        "short": "Our song grew."
       }
     ],
     "next_postcards": [
@@ -3347,36 +3316,34 @@
     ],
     "need_hungry": [
       {
-        "text": "…my tummy made a tiny rumble. Oops.",
+        "text": "…my tummy made a tiny rumble. Oops, excuse me.",
         "expr": "shy",
-        "short": "My tummy made a tiny rumble."
+        "short": "My tummy rumbled."
       },
       {
         "text": "I'm thinking about something warm to nibble.",
         "expr": "thinking",
-        "short": "Something warm to nibble..."
+        "short": "I'd like a nibble."
       },
       {
-        "text": "Something smells nice. Snack time?",
+        "text": "Something smells nice… I'm pretending not to notice. It isn't working.",
         "expr": "curious",
         "gesture": "curious",
-        "short": "Something smells nice."
+        "short": "Something smells nice…"
       },
       {
-        "text": "…a little snack would be nice.",
-        "expr": "happy",
-        "short": "a little snack would..."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "A small rumble. A polite one.",
+        "text": "My tummy gave a tiny rumble… it said please, though.",
         "expr": "giggling",
         "gesture": "preen",
-        "short": "A small rumble."
+        "short": "My tummy gave a tiny rumble…"
       },
       {
-        "text": "I keep dreaming of crispy things.",
-        "expr": "thinking",
-        "short": "I keep dreaming..."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Hoo-hoo… my tummy wants a snack now.",
@@ -3480,14 +3447,14 @@
     ],
     "need_cuddly": [
       {
-        "text": "…in the wild, birds sit wing to wing. Very snug.",
+        "text": "…I like sitting wing to wing with someone. It's very snug.",
         "expr": "love",
-        "short": "Very snug."
+        "short": "Let's sit close."
       },
       {
         "text": "…My home sky hums softly. Hugs sound a bit like that.",
         "expr": "happy",
-        "short": "My home sky hums softly."
+        "short": "Hugs sound like my sky."
       },
       {
         "text": "",
@@ -3495,55 +3462,49 @@
         "gesture": "wait"
       },
       {
-        "text": "…I was thinking of my star nest. It's warm here too.",
+        "text": "…I was thinking of my star nest. It's warm here with you, too.",
         "expr": "happy",
         "short": "It's warm here too."
       },
       {
-        "text": "…my feathers are extra soft right now. Good for hugs.",
+        "text": "…my feathers are extra soft today. I fluffed them up just for a hug.",
         "expr": "love",
-        "short": "Good for hugs."
+        "short": "…my feathers are extra soft today."
       },
       {
-        "text": "Hello. Mm.",
-        "expr": "shy",
-        "gesture": "settle",
-        "short": "Hello. Mm."
+        "text": "",
+        "cut": true
       }
     ],
     "need_playful": [
       {
-        "text": "…my wings feel fluttery. A game?",
+        "text": "…my wings feel all fluttery. Shall we play a game?",
         "expr": "curious",
-        "short": "My wings feel fluttery."
+        "short": "Shall we play?"
       },
       {
-        "text": "I could do a loop. A small, careful loop.",
+        "text": "Let's listen for the tiniest sound in the world… Shh… was that you?",
         "expr": "happy",
-        "short": "I could do a loop."
+        "short": "Was that you?"
       },
       {
-        "text": "Hop. Hop-hop.",
-        "expr": "giggling",
-        "react": "happy",
-        "gesture": "pounce",
-        "short": "Hop. Hop-hop."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "…I feel like counting something. Stars, or games.",
+        "text": "Let's count the clouds… until we lose count.",
         "expr": "curious",
-        "short": "Stars, or games."
+        "short": "Let's count the clouds…"
       },
       {
         "text": "That's my ready-for-fun wiggle.",
         "expr": "giggling",
         "gesture": "pounce",
-        "short": "My ready-for-fun wiggle..."
+        "short": "That's my ready wiggle."
       },
       {
-        "text": "…a little play would be fun.",
-        "expr": "happy",
-        "short": "A little play would be fun."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Hoo-hoo… I want to play now.",
@@ -3647,36 +3608,34 @@
     ],
     "need_sleepy": [
       {
-        "text": "…my eyes are getting heavy. One… then the other.",
+        "text": "…my eyes are getting heavy… one, then the other.",
         "expr": "sleepy",
-        "short": "My eyes are getting heavy."
+        "short": "My eyes are heavy."
       },
       {
-        "text": "A nap would be soft right now.",
+        "text": "A soft nap would be lovely right now.",
         "expr": "sleepy",
-        "short": "A nap would be..."
+        "short": "A nap would be lovely."
       },
       {
-        "text": "That means sleepy, in bird.",
+        "text": "That big yawn means I'm sleepy… in bird talk.",
         "expr": "sleepy",
         "gesture": "settle",
-        "short": "That means sleepy, in bird."
+        "short": "I'm getting sleepy."
       },
       {
-        "text": "…yawns are visiting. Three so far.",
+        "text": "…the yawns are visiting me. Three came… and one brought a friend.",
         "expr": "sleepy",
-        "short": "Yawns are visiting."
+        "short": "…the yawns are visiting me."
       },
       {
-        "text": "Mm. Cozy.",
-        "expr": "sleepy",
-        "gesture": "slowblink",
-        "short": "Mm. Cozy."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "…my hollow looks so cozy.",
+        "text": "…my hollow looks so cozy right now.",
         "expr": "sleepy",
-        "short": "...my hollow looks so cozy."
+        "short": "My hollow looks cozy."
       },
       {
         "text": "Hoo-hoo… I feel so sleepy now.",
@@ -3780,36 +3739,34 @@
     ],
     "need_content": [
       {
-        "text": "…everything is good. The leaves are nice.",
+        "text": "…everything feels good today. Even the leaves look happy.",
         "expr": "happy",
-        "short": "Everything is good."
+        "short": "Everything feels good."
       },
       {
-        "text": "Calm and happy.",
+        "text": "I feel calm and happy, right here with you.",
         "expr": "love",
-        "short": "Calm and happy."
+        "short": "I feel calm and happy."
       },
       {
-        "text": "Just right.",
-        "expr": "happy",
-        "gesture": "settle",
-        "short": "Just right."
+        "text": "",
+        "cut": true
       },
       {
-        "text": "…tummy cozy, feathers tidy, heart warm.",
+        "text": "…my tummy is cozy, and my feathers are tidy. My heart feels warm.",
         "expr": "proud",
-        "short": "Tummy cozy, feathers tidy..."
+        "short": "My heart feels warm."
       },
       {
         "text": "…I could stay on this branch a long, happy while.",
         "expr": "love",
-        "short": "I could stay..."
+        "short": "I could stay right here."
       },
       {
-        "text": "Hm-hm-hmm… low, low, high. A happy song.",
+        "text": "I hummed a little tune… I think the crickets joined in.",
         "expr": "happy",
         "gesture": "hum",
-        "short": "Low, low, high."
+        "short": "I hummed a little tune…"
       },
       {
         "text": "Hoo-hoo… I feel so happy now.",
@@ -3913,20 +3870,20 @@
     ],
     "after_hug": [
       {
-        "text": "…there. Snug again. Thank you.",
+        "text": "…there. I feel snug again. Thank you.",
         "expr": "love",
-        "short": "Snug again."
+        "short": "I feel snug again."
       },
       {
-        "text": "Wing to wing. Just right.",
+        "text": "We're wing to wing… just right.",
         "expr": "love",
-        "short": "Wing to wing. Just right."
+        "short": "We're wing to wing."
       },
       {
-        "text": "That warmed every feather.",
+        "text": "That hug warmed every one of my feathers.",
         "expr": "happy",
         "gesture": "preen",
-        "short": "That warmed every feather."
+        "short": "That warmed me up."
       }
     ],
     "after_play": [
@@ -5008,16 +4965,16 @@
     ],
     "run_end": [
       {
-        "text": "A soft bump. {dist} metres… what a glide.",
+        "text": "Oh… a soft bump. We still glided {dist} metres, though.",
         "expr": "happy",
         "react": "excited",
-        "short": "A soft bump."
+        "short": "We still glided far."
       },
       {
-        "text": "{dist} metres under the stars. Lovely.",
+        "text": "We flew {dist} metres under the stars… how lovely.",
         "expr": "happy",
         "react": "excited",
-        "short": "Lovely."
+        "short": "We flew under the stars."
       },
       {
         "text": "Well… we drifted {dist} metres. My wings are humming.",
@@ -5185,13 +5142,13 @@
     ],
     "catch_end": [
       {
-        "text": "Stargazing time. {n} stars in the nest.",
+        "text": "We caught {n} stars… now it's stargazing time.",
         "expr": "happy",
         "react": "excited",
-        "short": "Stargazing time."
+        "short": "We caught the stars."
       },
       {
-        "text": "{n} stars. The nest is glowing.",
+        "text": "Look… {n} stars, and the whole nest is glowing.",
         "expr": "happy",
         "react": "excited",
         "short": "The nest is glowing."
@@ -5331,16 +5288,14 @@
     ],
     "tower_end": [
       {
-        "text": "{n} clouds tall. The moon looks closer.",
+        "text": "Our cloud tower is {n} clouds tall… the moon looks closer now.",
         "expr": "happy",
         "react": "excited",
         "short": "The moon looks closer."
       },
       {
-        "text": "Well… {n} cloud steps. What a climb.",
-        "expr": "proud",
-        "react": "excited",
-        "short": "What a climb."
+        "text": "",
+        "cut": true
       },
       {
         "text": "Our tower got so tall… now I sing low and soft.",
@@ -5464,9 +5419,9 @@
     ],
     "hug_full": [
       {
-        "text": "Full of hugs… one more fits.",
+        "text": "I'm full of hugs… but one more still fits.",
         "expr": "love",
-        "short": "Full of hugs..."
+        "short": "I'm full of hugs."
       }
     ],
     "play_full": [
@@ -5757,16 +5712,16 @@
     ],
     "dig_end": [
       {
-        "text": "The nest is full… {rows} rows woven. So cozy.",
+        "text": "The nest is full… we wove {rows} rows, and it's so cozy.",
         "expr": "love",
         "gesture": "settle",
-        "short": "The nest is full..."
+        "short": "The nest is full."
       },
       {
-        "text": "{rows} rows… I'll settle right in.",
+        "text": "We wove {rows} rows… I'll settle right in.",
         "expr": "sleepy",
         "gesture": "settle",
-        "short": "So cozy now..."
+        "short": "I'll settle right in."
       },
       {
         "text": "I puffed up, round and fluffy… we built such a cozy spot.",
@@ -5956,28 +5911,28 @@
         "text": "That was a song… again?",
         "expr": "delighted",
         "gesture": "hum",
-        "short": "That was a song... again?"
+        "short": "That was a song… again?"
       },
       {
-        "text": "A whole little song… mm.",
+        "text": "We caught a whole little song… mm.",
         "expr": "happy",
         "gesture": "settle",
-        "short": "A whole little song... mm."
+        "short": "We caught a song."
       },
       {
-        "text": "The stars sang… softly.",
+        "text": "The stars sang to us… so softly.",
         "expr": "love",
         "gesture": "slowblink",
-        "short": "The stars sang... softly."
+        "short": "The stars sang."
       },
       {
-        "text": "Our little song… again?",
+        "text": "That's our little song… shall we catch it again?",
         "expr": "love",
         "gesture": "hum",
         "cond": {
           "bondMin": 210
         },
-        "short": "Our little song... again?"
+        "short": "That's our little song."
       },
       {
         "text": "",
@@ -6119,16 +6074,14 @@
     ],
     "look_sing": [
       {
-        "text": "Tap… and I fly a little. Or just listen.",
+        "text": "Tap a flower… and I'll fly a little. Or you can just listen.",
         "expr": "love",
         "gesture": "hum",
-        "short": "And I fly a little."
+        "short": "Tap, and I'll fly."
       },
       {
-        "text": "One note… one little flap. Or just listen.",
-        "expr": "happy",
-        "gesture": "settle",
-        "short": "One note..."
+        "text": "",
+        "cut": true
       },
       {
         "text": "You echoed every note… I sang low and soft for you.",
@@ -6711,8 +6664,8 @@
         }
       },
       {
-        "text": "In nature… soft fringes on our wingtips… help us glide without a sound.",
-        "short": "Wild owl fact...",
+        "text": "Listen… I have soft fringes on my wings. They help me glide without a sound.",
+        "short": "I glide without a sound.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7379,8 +7332,8 @@
         }
       },
       {
-        "text": "In nature… songbirds can sing two notes… at the very same time.",
-        "short": "Wild bird fact...",
+        "text": "Listen… I can sing two notes… at the very same time.",
+        "short": "I can sing two notes.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7501,8 +7454,8 @@
         }
       },
       {
-        "text": "In nature… ducks like me clean our feathers… so water rolls right off.",
-        "short": "Wild duck fact...",
+        "text": "Mm… I clean my feathers… so water rolls right off me.",
+        "short": "Water rolls right off me.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7623,8 +7576,8 @@
         }
       },
       {
-        "text": "In nature… doves fan our feathers wide… when we land on a branch.",
-        "short": "Wild dove fact...",
+        "text": "Listen… when I land on a branch… I fan my feathers wide.",
+        "short": "I fan my feathers wide.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7745,8 +7698,8 @@
         }
       },
       {
-        "text": "In nature… pigeons have neck feathers… that shimmer in the sun.",
-        "short": "Wild pigeon fact...",
+        "text": "Mm… my neck feathers shimmer… when the sun shines on them.",
+        "short": "My neck feathers shimmer.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7867,8 +7820,8 @@
         }
       },
       {
-        "text": "In nature… clever crows collect shiny pebbles… and keep them in cozy nooks.",
-        "short": "Wild crow fact...",
+        "text": "Listen… I collect shiny pebbles… and keep them in a cozy nook.",
+        "short": "I collect shiny pebbles.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -7989,8 +7942,8 @@
         }
       },
       {
-        "text": "In nature… eagles like me can soar for hours… and hardly flap at all.",
-        "short": "Wild eagle fact...",
+        "text": "Mm… I can soar for hours… and hardly flap at all.",
+        "short": "I can soar for hours.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -8111,8 +8064,8 @@
         }
       },
       {
-        "text": "In nature… chickens hum a soft trill… when we settle into our nest.",
-        "short": "Wild chicken fact...",
+        "text": "Listen… I hum a soft trill… when I settle into my nest.",
+        "short": "I hum when I nest.",
         "expr": "curious",
         "cond": {
           "var": {
@@ -8233,8 +8186,8 @@
         }
       },
       {
-        "text": "In nature… gulls can glide over the waves… without flapping at all.",
-        "short": "Wild gull fact...",
+        "text": "Mm… I ride the wind over the waves. My wings stay still.",
+        "short": "I ride the wind.",
         "expr": "curious",
         "cond": {
           "var": {
