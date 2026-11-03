@@ -408,7 +408,11 @@ function orCamStop(){if(orCamera.sess){try{orCamera.sess.stop()}catch(e){}orCame
 const OR_BANDS=['5-6','7-8','9-10'];
 const OR_ALIAS={ui_or_cam_pick:'ui_or_seen_ask'};   // Cole's 'Pick your Echo' is already ui_or_seen_ask (the lint bans duplicate text)
 const bandOf=v=>v.band||(v.context&&v.context.age_band);
-function UB(k,x){const B=(OBL&&OBL[k])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k]),L=(B&&B.length?B:(OR_ALIAS[k]&&((OBL&&OBL[OR_ALIAS[k]])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[OR_ALIAS[k]]))))||[];if(!L.length)return '';const b=(S&&S.ageBand)||'7-8';
+// Phase B (Nov 3): ALL dialogue is one 7-8 band, no band switching. Every dialogue pick (camera copy, origin lines, warm-up, bye, Ancient
+// Echo / mission / music lines via var eib_band) uses DLG_BAND; 5-6 shorts are not swapped in. S.ageBand (grown-up pick + reading growth) still
+// sets only game things: difficulty / Easy levels, Echo It Back length, typing speed, conversations per session, ambient gap, read pace.
+const DLG_BAND='7-8';
+function UB(k,x){const B=(OBL&&OBL[k])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k]),L=(B&&B.length?B:(OR_ALIAS[k]&&((OBL&&OBL[OR_ALIAS[k]])||(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[OR_ALIAS[k]]))))||[];if(!L.length)return '';const b=DLG_BAND;
   const l=L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[OR_BANDS.indexOf(b)]||L[1]||L[0];return l?obFill(l.text,x):''}
 function orCamera(){const F=FAM();orCamStop();
   obScene('orcam',`<div class="obpanel small"><b id="orcamask">${UB('ui_or_cam_ask')}</b></div>
@@ -466,7 +470,7 @@ async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await D
   let armed=false;$('#orinv').onclick=()=>{SFX('ui_tap');if(!armed){armed=true;$('#orinv').classList.add('sel');say(U('ui_or_invite_btn'));return}
     if(orDeclines())orNotToday();else orYes()}}
 function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
-  if(!l)return null;const short=obBand()===OBC.bands['5-6']&&l.short;return {text:obFill(short||l.text),expr:l.expr||'happy',react:l.react}}
+  if(!l)return null;return {text:obFill(l.text),expr:l.expr||'happy',react:l.react}}
 function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
 // C2: the Echo arrives as notes that converge and resolve it paws-up (NoteFX.arrive); without NoteFX it just appears
 function obArrive(el,kind){window.__arrive=0;const go=()=>{window.__arrive=1;if(window.NoteFX&&NoteFX.arrive)NoteFX.arrive({el,fam:FID(kind),pal:el.dataset.pal,seed:(S.g&&S.g.seed||1)*3+1,lowfx:lowFx(),onDone:()=>{window.__arrive=2}});else window.__arrive=2};requestAnimationFrame(go)}
@@ -522,8 +526,8 @@ function mlReport(gm,s){if(!mlOn()||typeof s!=='number'||!isFinite(s))return;try
 function mlMigrate(){if(!mlOn()||!S||S.mlSeeded)return;S.mlSeeded=1;try{EchoBack.seedMl(kidId(),S.ageBand||'7-8')}catch(e){}
   if(S.bandEasy){S.bandEasy.forEach(k=>{if(S[k]==='easy')S[k]='auto'});delete S.bandEasy}save()}
 function mlSession(){if(!mlOn()||sess.mlCounted)return;sess.mlCounted=1;try{EchoBack.withMl(kidId(),m=>{m.sessions=(m.sessions|0)+1},S.ageBand)}catch(e){}readingGrow()}
-function wuLine(k){const L=(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k])||[];if(!L.length)return null;const b=(S&&S.ageBand)||'5-6';
-  const l=L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[0];return {text:obFill(b==='5-6'&&l.short?l.short:l.text),expr:l.expr||'happy',react:l.react}}
+function wuLine(k){const L=(window.Dialogue&&Dialogue.lib&&Dialogue.lib.barks[k])||[];if(!L.length)return null;const b=DLG_BAND;
+  const l=L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[0];return {text:obFill(l.text),expr:l.expr||'happy',react:l.react}}
 let WU_MAN=null;
 function wuRun(mode,done){if(!wuOn()||!window.Warmup||!mlOn()||!S||!S.g)return done();
   const m=mlGet();mode=mode||(m&&m.warm?'copy':'full');   // a second Echo for the same child: moment 1 only, the level is unchanged
@@ -636,14 +640,14 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
 // step 4b (Cole): at a between moment, first a reaction to a music moment of the last 15 min (once per event), else music_ambient
 // with the quota's chance (DialogueEngine.musicTarget on S.chatHistory; 20% until the ring has 8 lines)
 const MUSIC_AFTER={eib_ancient:'ancient',catch_hook:'catch',stack_tune:'stack',song_grew:'grew',mission_back:'mission'};
-function bandVars(){return {vars:Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'})}}
+function bandVars(){return {vars:Object.assign({},S.vars||{},{eib_band:DLG_BAND})}}
 function musicBetween(){const E=window.DialogueEngine;if(!E||!E.recentEvents||!S)return null;const t=now(),lib=(Dialogue.lib&&Dialogue.lib.barks)||{};
   const ev=(S.recentMusic||[]).filter(x=>x&&!x.said&&t-x.at>=0&&t-x.at<15*60000).pop();
   if(ev){(S.recentMusic||[]).forEach(x=>{if(x.e===ev.e)x.said=1});const k='music_after_'+MUSIC_AFTER[ev.e];if(lib[k]){const l=B(k,bandVars());if(l&&l.text!=='…')return l}}
   if(!lib.music_ambient)return null;const h=S.chatHistory||[],tg=E.musicTarget(E.musicShare(h),h.length);
   if(Math.random()<(tg==null?0.2:tg)){const l=B('music_ambient',bandVars());if(l&&l.text!=='…')return l}return null}
 function msnCare(){return asleep()||mood()==='sleep'||now()-(sess.careAt||0)<20000}
-function msnHost(){return {sc:()=>document.getElementById('sc'),fam:FID,line:k=>B(k,{vars:Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'})}),talk:l=>talk(l,2400),react:()=>{if(window.react)window.react('excited')},
+function msnHost(){return {sc:()=>document.getElementById('sc'),fam:FID,line:k=>B(k,{vars:Object.assign({},S.vars||{},{eib_band:DLG_BAND})}),talk:l=>talk(l,2400),react:()=>{if(window.react)window.react('excited')},
   state:fn=>{EchoBack.withMl(kidId(),m=>{m.missions=Missions.norm(m.missions);fn(m.missions)},S.ageBand)},level:()=>EchoBack.mlFor(kidId(),S.ageBand).level,sessions:()=>EchoBack.mlFor(kidId(),S.ageBand).sessions,
   care:msnCare,event:e=>{if(window.DialogueEngine)DialogueEngine.noteEvent(S,e,now())}}}
 window.__msn={sess:()=>sess,home:g=>home(g),S:()=>S,kid:()=>kidId()};   // test hook (phone_missions_test)
@@ -979,12 +983,12 @@ function rest(){
 addBond(0,true,'nap');SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
 }
 // Nov 3 (LIST #3) "Bye for now": the child can take a break any time. The Echo waves, says one short warm line (shared bark bye_for_now,
-// its short for the 5-6 band) and curls up asleep where it is (the in-place curl_nap / nap). No countdown, no pressure, no stat or bond
+// one 7-8 band for all dialogue, Phase B) and curls up asleep where it is (the in-place curl_nap / nap). No countdown, no pressure, no stat or bond
 // change; it is a normal nap (S.napUntil, napSeconds) and wakes the way a nap does.
 function byeForNow(){if(asleep())return;ov.innerHTML='';lvStop();clearTimeout(LIVE.actT2);LIVE.st='present';   // a wander's end timer (actT2) would lvStop() = wake the sleeper
   S.napUntil=now()+C.napSeconds*1000;save();
   document.querySelectorAll('#sc .thought').forEach(t=>t.remove());if(window.Alive)Alive.act('wave');
-  const l=B('bye_for_now'),sh=S.ageBand==='5-6'&&l&&l.src&&l.src.short;talk(sh?Object.assign({},l,{text:Dialogue.fill(sh)}):l,3000);
+  const l=B('bye_for_now');talk(l,3000);
   setTimeout(()=>{if(!document.getElementById('feed')||S.napUntil<=now())return;if(LIVE.pos)lvDo(GROUND()?'curl_nap':'nap',0);else{const px=$('#cr .px-echo');if(px&&window.PIXEL)PIXEL.sleep(px,true)}},2400);
   setTimeout(()=>{if(S.napUntil<=now()&&document.getElementById('feed')&&!document.getElementById('gs')&&!document.querySelector('.fwscene')){sess.woke=1;home()}},C.napSeconds*1000+200)}
 // v1.1 nap option A (aliveness/v1_1_motion): yawn, trot / fly off the right-most exit, 6-step curtain wipe, enter home from the
@@ -1038,7 +1042,7 @@ function dev(){
 // (order heard) + ONE sleeping pebble while that family still has an unheard tune; rows grow from top/row/bottom pieces (no fixed grid).
 const ANC_FAMS=['slyte','whimber','twitchel'];
 // step 2b (Cole's lines): eib_ancient_* pick their band by var eib_band; 7-8 / 9-10 title lines need ancient_tune / ancient_composer (spoken titles, no digits)
-function eibVars(x){if(!x||!x.ancient)return undefined;const sp=x.ancient.spoken||{},v=Object.assign({},S.vars||{},{eib_band:S.ageBand||'5-6'});if(sp.tune){v.ancient_tune=sp.tune;v.ancient_composer=sp.composer||''}return {vars:v}}   // extra.vars replaces ctx.vars, so S.vars is spread in
+function eibVars(x){if(!x||!x.ancient)return undefined;const sp=x.ancient.spoken||{},v=Object.assign({},S.vars||{},{eib_band:DLG_BAND});if(sp.tune){v.ancient_tune=sp.tune;v.ancient_composer=sp.composer||''}return {vars:v}}   // extra.vars replaces ctx.vars, so S.vars is spread in
 function ancHeard(f){try{return window.EchoBack&&EchoBack.ancientHeard?EchoBack.ancientHeard(kidId(),f):[]}catch(e){return []}}
 if(window.MusicFX)MusicFX.ctx={heard:f=>ancHeard(f),level:()=>{const m=mlGet();return (m&&m.level)||1}};   // step 3: Catch / Dig floor / growing song pick the child's met Ancient Echoes first
 function ancPage(f){const H=ancHeard(f),more=window.EchoBack&&EchoBack.ancientTunes(f).length>H.length,items=H.length+(more?1:0),rows=Math.max(1,Math.ceil(items/4)),ht=46+42*rows+12;
@@ -1049,7 +1053,7 @@ function ancSection(){const F=ANC_FAMS.filter(f=>ancHeard(f).length);if(!F.lengt
   return `<h2 class="bkanch"><i class="bkance"></i>Ancient Echoes</h2><div class="bkancw">${F.length>1?`<div class="bkanct">${F.map(f=>`<button class="bkanctab${f===f0?' sel':''}" data-anctab="${f}" style="--k:${ANC_FAMS.indexOf(f)}" aria-label="${(window.FAMILIES&&FAMILIES[f]&&(FAMILIES[f].plural||FAMILIES[f].label))||f}"></button>`).join('')}</div>`:''}<div id="bkancpg">${ancPage(f0)}</div><p class="bkanccap" id="bkanccap" aria-live="polite"></p></div>`}
 function ancWire(d){const pg=d.querySelector('#bkancpg');if(!pg)return;
   const wire=()=>pg.querySelectorAll('[data-ancplay]').forEach(b=>b.onclick=()=>{if(!window.EchoBack)return;EchoBack.ready.then(()=>{const ms=EchoBack.playEcho(b.dataset.ancplay);pg.querySelectorAll('.playing').forEach(z=>z.classList.remove('playing'));
-    if(ms){b.classList.add('playing');setTimeout(()=>b.classList.remove('playing'),ms)}const cap=d.querySelector('#bkanccap');if(cap)cap.textContent=(S.ageBand&&S.ageBand!=='5-6')?b.getAttribute('aria-label'):''})});   // titles for 7-8 / 9-10 only
+    if(ms){b.classList.add('playing');setTimeout(()=>b.classList.remove('playing'),ms)}const cap=d.querySelector('#bkanccap');if(cap)cap.textContent=DLG_BAND!=='5-6'?b.getAttribute('aria-label'):''})});   // titles for 7-8 / 9-10 dialogue only (one 7-8 band: always)
   wire();d.querySelectorAll('[data-anctab]').forEach(t=>t.onclick=()=>{d.querySelectorAll('[data-anctab]').forEach(z=>z.classList.toggle('sel',z===t));pg.innerHTML=ancPage(t.dataset.anctab);wire()})}
 function book(){
   const e=E(),d=document.createElement('div');d.className='book';
