@@ -16,6 +16,8 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
 - `expr`: facial expression cue. The 13 Overhaul expressions are `neutral, happy, delighted, curious, thinking, surprised, giggling, proud, shy, sleepy, wistful, sad` (gentle sad) and `concentrating`. `excited`, `eating` and `love` are also accepted.
 - `react`: optional body animation. One of `happy, excited, pet, eat, sad, sleepy`.
 - `lintAllow`: optional list of lint rule ids allowed on this line, node or choice (see tools/lint-dialogue.js).
+- `cut: true` (Phase B, Nov 3): a cut line stays in its pool as exactly `{"text":"","cut":true}` so the ids after it (`<key>:<index>`, used by the review CSVs, lint/allowlist ids and the generator overrides) never shift. `dialogue.js` `D.use` drops tombstones at load; both lints check the exact shape and that a pool keeps at least one live line. Source: `/workspace/echo/dialogue_v2/cole_overrides_phaseB.json` (generator + `tools/apply_phaseB.py`).
+- Band: all dialogue is one 7-8 band (`game.js` `DLG_BAND`). `short` and band-tagged variants stay in the data but the phone app does not swap them in by age.
 - `privacy: "feelings…"` on a conversation: the lint then rejects any memory or variable writes in it. Feelings answers are never stored.
 - Keys the game uses: hello, grace_hello, last_day, ready_hint, ask_ready, stay_more, reveal, reveal_reply, fed, fed_fav, full, pet, sit, nap, napping, not_sleepy, game_tired, game_end, talent_<Talent Name>, first_gift, favplace, trust, hunt_*/camo_*/seek_* (Slyte), sky_* (Whimber), release_invite, release_forced, hug_more, walk_memory, walk_end, gift_ask, gift_got, goodbye_ask, farewell, look_back.
 

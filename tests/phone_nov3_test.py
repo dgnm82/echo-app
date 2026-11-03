@@ -201,7 +201,7 @@ async def bye_part(b):
     r=await pg.evaluate("""(()=>{const S=__echo.state,L=Dialogue.lib.barks.bye_for_now,b=document.getElementById('b');return {txt:b.textContent.trim(),shown:b.style.display!=='none',L,wave:Alive.log.includes('act:wave'),
       nap:(S.napUntil-Date.now()-(S.clockOffset||0))/1000,napS:CONFIG.napSeconds,thought:!!document.querySelector('#sc .thought')}})()""")
     L=r['L'];check(isinstance(L,list) and len(L)==1,f'bye {band}: exactly one shared line bye_for_now {L}')
-    want=L[0]['short'] if band=='5-6' else L[0]['text']
+    want=L[0]['text']   # Phase B: all dialogue is one 7-8 band, the age pick no longer swaps in the 5-6 short
     check(r['shown'] and r['txt']==want,f'bye {band}: the Echo says {want!r} (got {r["txt"]!r})')
     check(len(L[0]['short'].split())<=7,f'bye: the 5-6 short has <= 7 words ({L[0]["short"]!r})')
     low=(L[0]['text']+' '+L[0]['short']).lower()

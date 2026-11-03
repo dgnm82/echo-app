@@ -41,16 +41,16 @@ async def main():
     # A) fake camera, no vision model: the window opens first; a miss offers retry + pick
     ctx,pg=await to_origin(b,p,errs,reqs)
     check(await pg.locator('#orvid').count()==1 and await pg.locator('.orfamcard').count()==0,'A: the Magic Window opens first (camera-first Origin)')
-    check((await pg.inner_text('#orcamask')).strip()==band('ui_or_cam_ask','5-6'),'A: ask copy is the 5-6 band line')
-    check((await pg.inner_text('#orcamhint')).strip()==band('ui_or_cam_hint','5-6'),'A: hint copy is the 5-6 band line')
+    check((await pg.inner_text('#orcamask')).strip()==band('ui_or_cam_ask','7-8'),'A: ask copy is the 7-8 line (Phase B: one 7-8 dialogue band, even for a new 5-6 child)')
+    check((await pg.inner_text('#orcamhint')).strip()==band('ui_or_cam_hint','7-8'),'A: hint copy is the 7-8 line (one band)')
     await pg.wait_for_timeout(1500);live=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return !!(v&&v.srcObject&&v.srcObject.getTracks().some(t=>t.readyState==='live'))})()")
     check(live,'A: the fake camera stream is live in the window');await pg.locator('#screen').screenshot(path=f'{OUT}/a-window.png')
     await common(pg,'A window')
     try:await pg.wait_for_selector('#orcamctl:not([hidden]),#orinv',timeout=20000)
     except Exception:pass
     if await pg.locator('#orcamctl:not([hidden])').count():
-      check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','5-6'),'A: miss copy (5-6)')
-      check(band('ui_or_cam_retry','5-6') in await pg.inner_text('#orretry') and 'Pick' in await pg.inner_text('#orpick'),'A: retry + pick buttons')
+      check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','7-8'),'A: miss copy (7-8, one band)')
+      check(band('ui_or_cam_retry','7-8') in await pg.inner_text('#orretry') and 'Pick' in await pg.inner_text('#orpick'),'A: retry + pick buttons')
       st=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return v?!!v.srcObject:false})()");check(not st,'A: the camera is stopped after a miss')
       await pg.locator('#screen').screenshot(path=f'{OUT}/a-miss.png');await common(pg,'A miss')
       await T(pg,'#orretry',800);check(await pg.locator('#orvid').count()==1 and await pg.locator('#orcamctl[hidden]').count()==1,'A: retry re-opens the Magic Window')
