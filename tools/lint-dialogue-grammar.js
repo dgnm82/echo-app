@@ -8,10 +8,10 @@
 // Ids match the review CSVs: <file>:b:<key>:<i>[:short], <file>:c:<conv>:<node>[:ch<j>:label|reply], shared:pool:<intent>:<i>.
 // Allowlist: tools/dialogue_grammar_allowlist.json {"entries":[{"id":..,"rule":..,"reason":..}]}; GENUINE false positives only,
 // every entry needs a reason. Stale entries are reported (warning).
-// Usage: node tools/lint-dialogue-grammar.js [dialogue dir] [--allow <file>] [--max-examples N] [--quiet]
+// Usage: node tools/lint-dialogue-grammar.js [dialogue dir] [--allow <file>] [--max-examples N] [--quiet] [--s2 [id prefix]]
 const fs=require('fs'),path=require('path');const R=path.join(__dirname,'..');
 const args=process.argv.slice(2);const opt=(k,d)=>{const i=args.indexOf(k);return i>=0?args[i+1]:d};
-const DIR=args.find((a,i)=>!a.startsWith('--')&&!['--allow','--max-examples'].includes(args[i-1]))||path.join(R,'dialogue');
+const DIR=args.find((a,i)=>!a.startsWith('--')&&!['--allow','--max-examples','--s2'].includes(args[i-1]))||path.join(R,'dialogue');
 const ALLOW=opt('--allow',path.join(__dirname,'dialogue_grammar_allowlist.json'));const QUIET=args.includes('--quiet');
 global.window=global;require(path.join(R,'families.js'));const FAM=global.FAMILIES;delete global.window;
 const D=require(path.join(R,'dialogue.js'));
@@ -58,6 +58,20 @@ const RULES=[
   ['leftover_placeholder',t=>all(/\{[^}]*\}|\bundefined\b|\bnull\b|\bNaN\b|\[object Object\]/g,t)],
 ];
 
+// ---- S2 verbless-fragment check (Cole's Phase B rule, make_csv.py lint S2). ADVISORY ONLY: run with --s2 [id-prefix]; it prints
+// "S2? <id> :: <sentence>" for sentences with no verb that are not an interjection, call or sound, and never changes the exit code
+// (the regex verb list hits ~half the legacy corpus, so it is not a gate). Formula greetings count as interjections (Phase B).
+const S2=args.includes('--s2'),S2_PREFIX=(i=>i>=0&&args[i+1]&&!args[i+1].startsWith('--')?args[i+1]:'')(args.indexOf('--s2'));
+const S2_INTERJ=new Set(['hi','hi again','hello','yay','ooh','oh','mm','mmm','wow','oops','ta-da','boop','good','great','night-night','okay','yes','no','again',
+  'shh','hehe','mrrp','purrrr','yum','flop','plop','uh-oh','listen','well','look','nope','goodnight',
+  'good morning','morning','good afternoon','afternoon','good evening','evening','good night','night','thank you','thank you, friend','thanks','welcome back']);   // + greetings (Phase B)
+const S2_VERBS=new RegExp("\\b(\\w+'(s|re|m|ll|ve|d|t)|is|are|was|were|am|be|do|did|does|have|has|had|can|could|would|should|shall|will|want|feel|feels|like|love|look|looks|looked|came|come|went|got|get|found|find|heard|hear|saw|see|sing|sang|caught|ran|run|flew|fly|tap|pick|play|let's|make|made|said|told|thinking|smell|smelled|smells|sniff|know|knew|says|turn|curl|sit|stay|nibble|eat|save|stretched|stretch|washed|walked|moved|popped|purred|tried|pounce|set|counted|dug|wove|glided|drifted|tumbled|thump|jump|knead|give|say|steer|wrap|collect|keep|soar|hum|hums|land|fan|clean|rolls|shimmer|shines|grew|glowing|humming|watching|sleepy|fits|counts|scratch|warmed|brought|picked|testing|putting|fluffing|zooming|practicing|tuning|keeping|catching|waking|getting|going|doing|scooting|dreaming|purring|nibbling|wagging|sniffing|painting|sticking|ride|helps|balance|guess|try|join|hug|tickles|tiptoed|opened|sat|nap|catch|remembered|wiggling|wants|thank|beat|sniffed|won|played|watch|sneezed|hummed)\\b",'i');   // + sneezed, hummed (Phase B)
+const S2_SOUND=new Set(['zzz','psst','nom','bum-bum-bum','purr-purr','rumble-rumble','purrrr','again','night','good','mrrp-ruff','chuff-mrrp','purr-mrrp','chirp-mrrp','mrrp-fluff','mrrp-tuft','mrrp-mrrp',
+  'turn','slowly','boing','scoot','wiggle','lick','crunch','sniff','blink','purr','okay','low']);
+const s2hits=[];function s2(id,t){if(!S2||!id.startsWith(S2_PREFIX)||id.endsWith(':short'))return;
+  for(const x of t.split(/(?<=[.!?…])\s+/)){const sn=x.trim();if(!/\w/.test(sn))continue;const core=sn.toLowerCase().replace(/[^\w\s',-]/g,'').trim(),ws=core.split(/\s+/).map(w=>w.replace(/,$/,''));
+    if(S2_VERBS.test(sn)||S2_INTERJ.has(core)||S2_INTERJ.has(core.replace(/,/g,''))||(sn.endsWith('?')&&ws.length===1)||ws.every(w=>S2_INTERJ.has(w)||S2_SOUND.has(w)))continue;s2hits.push(`S2? ${id} :: ${sn}`)}}
+
 // ---- collect + render
 const hits=new Map();let rendered=0,lines=0;
 function hit(id,rule,text,look,match){const k=id+'|'+rule;if(!hits.has(k))hits.set(k,{id,rule,text,look,match});}
@@ -71,7 +85,7 @@ function render(raw,fam,look,extra){const out=new Set();const lp=(D.lib.persona.
   return [...out]}
 let ctx={};D.ctx=()=>ctx;let SETVARS={};
 function lintText(id,raw,fam,looks,isShort,fullRaw){if(typeof raw!=='string'||!raw)return;lines++;
-  for(const look of looks){const full=isShort&&fullRaw?render(fullRaw,fam,look)[0]:null;for(const t of render(raw,fam,look)){for(const [rule,fn] of RULES){const m=fn(t);if(m.length)hit(id,rule,t,look,m[0])}
+  for(const look of looks){const full=isShort&&fullRaw?render(fullRaw,fam,look)[0]:null;for(const t of render(raw,fam,look)){for(const [rule,fn] of RULES){const m=fn(t);if(m.length)hit(id,rule,t,look,m[0])}if(look===looks[0])s2(id,t);
     if(isShort&&cutOff(t,full))hit(id,'cut_off_short',t,look,t.trim().split(/\s+/).slice(-1)[0])}}}
 const sh=J('shared');
 for(const fam of FAMS){const sp=J(fam);D.use(fam,sh,sp);
@@ -95,6 +109,7 @@ const byRule={};for(const [r] of RULES.concat([['cut_off_short']]))byRule[r]=0;f
 if(!QUIET)for(const h of real.sort((a,b)=>a.rule.localeCompare(b.rule)||a.id.localeCompare(b.id)))console.log(`HIT ${h.rule}  ${h.id}  [${h.look}]  «${h.match}»  :: ${h.text}`);
 for(const e of bad)console.log(`ALLOWLIST ERROR: entry needs id, rule and a real reason: ${JSON.stringify(e)}`);
 for(const e of stale)console.log(`allowlist warning: stale entry (no such hit now): ${e.id} ${e.rule}`);
+if(S2){for(const h of [...new Set(s2hits)])console.log(h);console.log(`S2 advisory (verbless fragments, not a gate): ${new Set(s2hits).size} sentence(s)`)}
 console.log('by rule: '+Object.entries(byRule).map(([r,n])=>`${r} ${n}`).join(', '));
 console.log(`dialogue grammar lint: ${lines} lines, ${rendered} renders, ${real.length} hits (${hits.size-real.length} allowlisted), ${new Set(real.map(h=>h.id)).size} lines hit${real.length||bad.length?' - FAILED':' - OK'}`);
 process.exit(real.length||bad.length?1:0);
