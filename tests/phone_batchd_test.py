@@ -97,7 +97,7 @@ async def home(b,p,kind,errs):
   await leave()
   if kind=='fox':
     await open_game(G('Dash'),'#rc');await pg.evaluate("window.__rp=0;const _r=MusicFX.drawRunPulse;MusicFX.drawRunPulse=(...a)=>{__rp++;return _r(...a)}");await pg.wait_for_timeout(600)
-    check(await pg.evaluate("__rp")>5,'runner: the ground pulse is drawn every frame');await pg.screenshot(path=f'{OUT}/run_pulse.png');await leave()
+    check(await pg.evaluate("__rp")>5,'runner: the beat-mark hook still runs every frame (drawing is off since Nov 3, LIST #9)');await pg.screenshot(path=f'{OUT}/run_pulse.png');await leave()
   # postcards + Memory Book sounds
   stamp=await pg.evaluate(f"MusicFX.stampHTML('{fam}','pond')")
   check('data-tune' in stamp and f'pc_tune/{fam}_pond.png' in stamp,f'postcard stamp html ({stamp[:80]})')

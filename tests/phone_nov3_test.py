@@ -108,7 +108,32 @@ async def needs_part(b):
   await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800);await done_game(pg)
   nd2=await pg.evaluate("Object.assign({},__echo.state.needs)");check(nd['rest']-nd2['rest']<1.5,f'needs: a few seconds of play costs next to nothing {nd2}')
   check(not errs,f'needs: no page errors {errs[:2]}');await ctx.close()
-PARTS={'eib':eib_part,'needs':needs_part}
+# ---------------------------------------------------------------- 9: nothing that blinks like a text cursor in or over the Echo, in any game
+AUD="""(()=>{const bad=[];for(const e of document.querySelectorAll('body *')){const cs=getComputedStyle(e),txt=[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+  if(e.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(e.tagName)||(txt&&cs.userSelect!=='none'&&cs.webkitUserSelect!=='none')||(e.tabIndex>=0&&!/^(BUTTON|A)$/.test(e.tagName)&&e.getAttribute('role')!=='button'))bad.push(e.tagName+'#'+e.id+'.'+(typeof e.className==='string'?e.className:''))}
+  const a=document.activeElement;return {bad,act:a?a.tagName:'',design:document.designMode,sel:getSelection().rangeCount}})()"""
+SPY="""(()=>{window.__bm=0;const d=CanvasRenderingContext2D.prototype.drawImage;if(d.__spy)return;const f=function(im){if(im&&im.src&&/run_beat_mark/.test(im.src))window.__bm++;return d.apply(this,arguments)};f.__spy=1;CanvasRenderingContext2D.prototype.drawImage=f})()"""
+async def caret_part(b):
+  for animal in ('dog','owl'):
+    ctx,pg,errs=await setup(b,PH,animal)
+    await pg.evaluate(SPY)
+    for gm in ['runGame','catchGame','stackGame','memoryGame','linesGame','eib']:
+      if not await pg.evaluate(f"typeof __echo.{gm}==='function'"):continue
+      await pg.evaluate(f"document.getElementById('overlay').innerHTML='';__echo.home();window.__bm=0;__echo.{gm}()");await pg.wait_for_timeout(1200)
+      r=await pg.evaluate("(()=>{const r=(document.getElementById('gs')||document.body).getBoundingClientRect();return [r.left+r.width/2,r.top+r.height*.7]})()")
+      for _ in range(3):
+        await pg.touchscreen.tap(r[0],r[1]);await pg.wait_for_timeout(200)
+      await pg.wait_for_timeout(1500)
+      a=await pg.evaluate(AUD)
+      check(not a['bad'] and a['act'] in ('BODY','BUTTON') and a['design']=='off' and a['sel']==0,f'caret {animal} {gm}: no editable / focusable / selectable text, no selection {a}')
+      if gm=='runGame':
+        bm=await pg.evaluate("window.__bm");check(bm==0,f'caret {animal} run: the blinking beat dash at the Echo\'s feet is never drawn ({bm} draws in ~2 s)')
+        if animal=='dog':
+          await wait(pg,"MusicFX.beat()&&MusicFX.beat().phase<.12",3000)
+          rc=await pg.evaluate("(()=>{const r=document.getElementById('rc').getBoundingClientRect();return [r.left,r.top,r.width/360]})()")
+          await pg.screenshot(path=f'{SHOT}/09_run_echo.png',clip={'x':rc[0],'y':rc[1]+400*rc[2],'width':140*rc[2],'height':100*rc[2]})
+    check(not errs,f'caret {animal}: no page errors {errs[:2]}');await ctx.close()
+PARTS={'eib':eib_part,'needs':needs_part,'caret':caret_part}
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])

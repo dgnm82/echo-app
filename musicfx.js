@@ -93,7 +93,10 @@ MFX.drawNoteSparkle=function(cx,col,x,y,ms){if(col<0)return false;const rm=RM(),
   const f=Math.floor(ms/83);if(f>2)return false;cx.drawImage(im,col*16,f*16,16,16,Math.round(x-8),Math.round(y-8),16,16);return true};
 // Meadow Dash: a gold dash in the foreground grass flashes on each beat (step 3: px/beat/run_beat_mark.png, 3 frames of 28x6, drawn AFTER the obstacles at 84,474). Off in reduced motion.
 const BP=new Image();if(D)BP.src='px/beat/run_beat_mark.png';
-MFX.runPulse=true;   // Meadow Dash beat mark: the one switch (false = off everywhere)
+MFX.runPulse=false;   // Meadow Dash beat mark: the one switch (false = off everywhere). Nov 3 (LIST #9): OFF. Its gold 28x6 dash flashes
+// ~2x a second at (84,474), right at the Echo's front foot (sprite x 16-64, aura to 77, feet 470): that was the "blinking text cursor
+// on the Echo". No DOM caret exists in any game (no input/contenteditable/focusable text, user-select:none everywhere: phone_nov3_test caret).
+// Obstacles stay beat-locked (beatGrid); a beat cue that can't read as a caret belongs in the music plan (LIST #5).
 MFX.drawRunPulse=function(cx,x,y,scale){if(!MFX.runPulse||RM()||!BP.complete||!BP.naturalWidth)return;const b=MFX.beat();if(!b)return;const f=b.phase<.15?0:b.phase<.3?1:b.phase<.45?2:-1;if(f<0)return;const k=scale||1;
   cx.drawImage(BP,f*28,0,28,6,Math.round(x-14*k),Math.round(y-3*k),28*k,6*k)};
 // Step 3 beat-lock: the playing loop's beat grid in game time (beat k at k*spb - off); null when no loop plays (= today's spawns)

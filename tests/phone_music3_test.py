@@ -81,7 +81,7 @@ async def main():
     check(ok and abs(bt['spb']-60/126)<1e-6,f'Run: the beat grid comes from game_meadow_dash_loop ({bt})')
     await wait(pg,"__rg.obs.some(o=>o.beat&&o.x-__rg.dist<300)&&MusicFX.beat().phase<.12",5000);await pg.screenshot(path=f'{SHOT}/run_beat_mark.png')
     nb=await pg.evaluate("[__rg.obs.filter(o=>o.beat).length,__rg.obs.length]");check(nb[0]>=1,f'Run: obstacles were moved onto the beat ({nb[0]}/{nb[1]})')
-    pm=await pg.evaluate("__pm.slice(-1)[0]");check(pm==[84,474],f'Run: the beat mark is drawn at (84,474) ({pm})')
+    pm=await pg.evaluate("__pm.slice(-1)[0]");check(pm==[84,474],f'Run: the beat-mark hook is called at (84,474) ({pm}; drawing off since Nov 3, LIST #9)')
     await pg.evaluate("document.querySelectorAll('#gs,.full').forEach(e=>e.remove());__echo.home()");await pg.wait_for_timeout(600)
     # 5) Dig: a floor plays the opening of a family tune
     df=await pg.evaluate("MusicFX.digFloor('slyte')");check(df and df['id'] in IDS and df['ms']>0,f'Dig floor: the opening of {df and df["id"]} ({df and df["ms"]} ms)')
