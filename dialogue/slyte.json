@@ -25809,7 +25809,7 @@
           ]
         },
         "b1": {
-          "say": "Wild cousin fact! We red foxes curl our bushy tails like a warm scarf.",
+          "say": "Wild cousin fact! I curl my tail around me like a warm, bushy scarf.",
           "expr": "proud",
           "choices": [
             {
@@ -27003,7 +27003,7 @@
           ]
         },
         "b1": {
-          "say": "Wild cousin fact! We friendly dogs thump our tails like a happy drum.",
+          "say": "Wild cousin fact! When I'm happy, I thump my tail like a drum.",
           "expr": "proud",
           "choices": [
             {
@@ -28197,7 +28197,7 @@
           ]
         },
         "b1": {
-          "say": "Wild cousin fact! We wolves sing together in harmony across the hills.",
+          "say": "Wild cousin fact! I love singing with my family across the hills.",
           "expr": "proud",
           "choices": [
             {
@@ -29391,7 +29391,7 @@
           ]
         },
         "b1": {
-          "say": "Wild cousin fact! Coyotes like me can jump over tall bushes in one leap.",
+          "say": "Wild cousin fact! I can jump over a tall bush in one leap!",
           "expr": "proud",
           "choices": [
             {
