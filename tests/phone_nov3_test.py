@@ -196,8 +196,18 @@ async def bye_part(b):
         await pg.wait_for_timeout(250)
       await pg.evaluate("document.getElementById('b').style.display='none';CONFIG.livingSpeed=.05;__echo.living.start(false)")
       check(await wait(pg,"__echo.living.st==='wander'&&__echo.living.act&&!__echo.living.dbg().timer",15000),f'bye {band}: the Echo is busy at a wander spot {await pg.evaluate("[__echo.living.st,__echo.living.act,__echo.living.dbg()]")}')
+    # a tip already showing when bye is tapped, plus tips pending for the wave (0.6 s), the line (1.8 s) and the sleep (5 s, 9 s);
+    # a 50 ms watcher records any toast bubble that is visible (#toast.on: a tip, or the missions check's "Shh… napping") from the tap until the Feed tap below
+    tip0=await pg.evaluate("""(()=>{__echo.tip('Tip: tap the buttons below to care for '+__echo.state.g.name);const t=document.getElementById('toast');return t.classList.contains('on')&&t.textContent.startsWith('Tip')})()""")
+    check(tip0,f'bye {band}: a tip is showing just before the tap (the test can see one)')
+    await pg.evaluate("""(()=>{const T='Tip: tap the buttons below to care for '+__echo.state.g.name;window.__tipSeen=[];const t0=Date.now();
+      document.getElementById('bye').addEventListener('click',()=>{[600,1800,5000,9000].forEach(ms=>setTimeout(()=>__echo.tip(T),ms));
+        window.__tipW=setInterval(()=>{const e=document.getElementById('toast');if(e.classList.contains('on'))__tipSeen.push((Date.now()-t0)+' '+e.textContent)},50)},{once:true,capture:true})})()""")
     await pg.evaluate("Alive.log.length=0;document.getElementById('overlay').innerHTML=''");await pg.locator('#bye').click()   # an open choice list eats the first outside tap (by design);await pg.wait_for_timeout(700)
     if band=='7-8':await pg.screenshot(path=f'{SHOT}/03_bye_wave.png')
+    if band=='7-8':
+      await pg.wait_for_timeout(1300)   # the line is up and the 0.6 s / 1.8 s tips have fired
+      os.makedirs('/workspace/echo/pm/review_nov8/jay',exist_ok=True);await pg.screenshot(path='/workspace/echo/pm/review_nov8/jay/03_bye_after_notip.png')
     r=await pg.evaluate("""(()=>{const S=__echo.state,L=Dialogue.lib.barks.bye_for_now,b=document.getElementById('b');return {txt:b.textContent.trim(),shown:b.style.display!=='none',L,wave:Alive.log.includes('act:wave'),
       nap:(S.napUntil-Date.now()-(S.clockOffset||0))/1000,napS:CONFIG.napSeconds,thought:!!document.querySelector('#sc .thought')}})()""")
     L=r['L'];check(isinstance(L,list) and len(L)==1,f'bye {band}: exactly one shared line bye_for_now {L}')
@@ -214,6 +224,9 @@ async def bye_part(b):
     if band=='5-6':
       await pg.wait_for_timeout(12000);sl=await pg.evaluate("!!(document.querySelector('#cr .px-echo')||{})._sleep");check(sl,f'bye {band}: still asleep 16 s later (a wander in progress never wakes it)')
     if band=='7-8':await pg.screenshot(path=f'{SHOT}/03_bye_asleep.png')
+    if band=='7-8':await pg.wait_for_timeout(5000)   # past the 9 s pending tip, still asleep
+    seen=await pg.evaluate("(clearInterval(__tipW),{seen:__tipSeen.slice(0,5),asleep:__echo.state.napUntil>Date.now()+(__echo.state.clockOffset||0)})")
+    check(not seen['seen'] and seen['asleep'],f'bye {band}: no tip / toast bubble visible during the wave, the line or the sleep (seen at ms {seen["seen"]}, still asleep {seen["asleep"]})')
     nd=await pg.evaluate("Object.assign({},__echo.state.needs)");await pg.locator('#feed').click();await pg.wait_for_timeout(300)
     nd2=await pg.evaluate("Object.assign({},__echo.state.needs)");check(nd==nd2,f'bye {band}: a sleeping Echo is not fed/woken by Feed')
     body=await pg.evaluate("document.body.innerText.toLowerCase()");check('see you' not in body and 'bond' not in body,f'bye {band}: nothing banned on screen')
