@@ -220,6 +220,8 @@ function noteHTML(fam,s,ticks,cls){const n=nameOf(fam,s);return `<i class="eibn$
 // 4 or fewer stay on one row. Same rule for the length dots on the start tiles. rowCols(n) = columns of the grid.
 const rowCols=n=>n>4?Math.ceil(n/2):Math.max(1,n);
 function layoutRow(row,n){row.classList.toggle('two',n>4);row.style.setProperty('--cols',rowCols(n))}
+// Nov 3 (LIST #1): the pads are one even row (--n equal shares), 6px labels once there are more than 6 pads (crowd), an even 2-row grid past 8
+function padsLayout(box,n){box.style.setProperty('--n',n);box.style.setProperty('--c',Math.ceil(n/2));box.classList.toggle('crowd',n>6);box.classList.toggle('two',n>8)}
 const dotsHTML=n=>`<span class="eibdots" style="--n:${rowCols(n)}">${'<i></i>'.repeat(n)}</span>`;   // lengths are dots, never numbers
 // api: {gs, fam, tier, lowfx, state, save, line, talk, react, band, kid, mode:'play'|'invite', color, hasSticker(t), onSticker(t,{fam,song}), onTune(r), onRound(info), onDone(finished)}
 function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier|0)),RM=!!api.lowfx,st=api.state||{},V=DATA.v2,band=api.band||'7-8',kid=api.kid||'kid';
@@ -237,7 +239,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     <div class="eibtiles" hidden></div><i class="eibflo" hidden aria-hidden="true"></i>`;
   api.gs.appendChild(root);if(RM)api.gs.classList.add('eibrm');const ask=root.querySelector('.eibask'),ans=root.querySelector('.eibans'),padBox=root.querySelector('.eibpads'),spark=root.querySelector('.eibspark'),
     beads=[...root.querySelectorAll('.eibbeads i')],slots=root.querySelector('.eibslots'),puff=root.querySelector('.eibpuff'),tiles=root.querySelector('.eibtiles');
-  const padEl=s=>padBox.querySelector(`[data-pad="${s}"]`);
+  padsLayout(padBox,pads.length);const padEl=s=>padBox.querySelector(`[data-pad="${s}"]`);
   const light=(s,ms)=>{const p=padEl(s);if(!p)return;p.classList.add('on');setTimeout(()=>p.classList.remove('on'),ms||260)};
   const say=(k,ms,x)=>{const l=api.line&&api.line(k,x);if(l)api.talk(l,ms||2200)};   // x = {ancient: tune} for eib_ancient_* (the shell adds eib_band + the spoken title)
   const echoEl=()=>document.getElementById('cr');const saveBook=()=>Songbook.save(book);
@@ -249,7 +251,7 @@ function start(api){stop();const fam=api.fam,tier=Math.max(1,Math.min(4,api.tier
     let t=300;const my=++singing;sbEchoNotes(song).forEach(x=>{const d=Math.max(V.tempo.min_note_ms,x[2]*k);if(x[0])later(t,()=>{play(fam,0,{midi:midiOfNote(fam,x)});if(W.PIXEL&&W.PIXEL.react&&!RM)W.PIXEL.react('sing');
       const s=step(x);if(!x[3]&&padEl(s))light(s,Math.min(420,d*.8))});t+=d});
     later(t+300,()=>{if(my===singing){const e2=echoEl();if(e2)e2.classList.remove('eibsing')}done&&done()});return t}
-  function setPads(L){pads=L;padBox.innerHTML=padsHTML(L)}
+  function setPads(L){pads=L;padsLayout(padBox,L.length);padBox.innerHTML=padsHTML(L)}
   function needPads(list){const need=new Set();list.forEach(c=>c.n.forEach(x=>need.add(step(x))));const L=[...new Set(basePads.concat([...need]))].sort((a,b)=>a-b);if(L.length!==pads.length||L.some((x,i)=>x!==pads[i]))setPads(L);return need}
   let phase='echo',tune=null,asked=[],answer=[],gapT=null,waitT=null,idles=0,retried=false,lastId=null,n=0,singing=0,R=null,curNotes=[],ph=-1,pres=[];
   // H16: never the same note sequence back-to-back (st.lastSeq, kept across rounds) or twice in one round (R.seen); spec + vectors:
@@ -387,7 +389,7 @@ function invite(host,onYes,o){if(!host)return null;o=o||{};const b=document.crea
   b.onclick=e=>{e.stopPropagation();if(done)return;done=true;clearTimeout(t);b.remove();onYes&&onYes()};return b}
 Object.assign(EB,{start,stop,invite,noteHTML,matchTune,padsFor,tunesFor,nameOf,fileOf,colOf,colOf9,midiOf,step,fromStep,Song,Songbook,PadInput,Progress,gen,
   sbTunes,sbById,sbChild,sbPick,sbSlots,sbEchoNotes,sbHeard,sbList,midiOfNote,fileOfMidi,
-  _pure:{rowCols,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
+  _pure:{rowCols,padsLayout,matchTune,contour,norm,step,fromStep,spell,padsFor,tunesFor,Song,startLen,rampLen,phrasesFor,gen,bpmAt,noteMs,matchPhrased,Progress,stickersFor,rng,seqKey,pickFresh,simulateRounds,STABLE,CONTOURS,GEN_TRIES,FALLBACK_TRIES}});
 Object.defineProperties(EB,{cur:{get:()=>cur},data:{get:()=>DATA},inst:{get:()=>INST}});   // live getters (Object.assign would copy today's value)
 W.EchoBack=EB;if(typeof module!=='undefined')module.exports=EB;
 })(typeof window!=='undefined'?window:globalThis);

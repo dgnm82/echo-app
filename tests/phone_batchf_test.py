@@ -64,7 +64,7 @@ async def main():
     check(await wait("!!document.querySelector('#gs.eibgame #eib .eibpads')",5000),'game screen')
     pl=await pg.evaluate("(()=>{for(const o of [window.Music,window.Sound])if(o&&typeof o.playing==='function')return o.playing()||null;return null})()");check(pl is None,'no game loop under the tune '+str(pl))
     pads=await pg.evaluate("[...document.querySelectorAll('.eibpad')].map(p=>p.dataset.pad)");check(pads==['0','1','2','4','5'],'T2: 5 pads do re mi sol la '+str(pads))
-    st=await pg.evaluate("[...document.querySelectorAll('.eibpad')].map(p=>parseFloat(getComputedStyle(p).marginBottom))");check(st==sorted(st) and st[-1]>st[0],'staircase '+str(st))
+    st=await pg.evaluate("[...document.querySelectorAll('.eibpad')].map(p=>Math.round(p.getBoundingClientRect().bottom))");check(len(set(st))==1 and pads==sorted(pads,key=float),'Nov 3 (LIST #1): one even row, low to high left to right (the old staircase is gone) '+str(st))
     check(await wait("EchoBack.cur&&EchoBack.cur.phase==='child'",12000),'your turn comes');n_echo=await pg.evaluate("__os.filter(x=>/^notes\\/twitchel_/.test(x)).length")
     asked=await pg.evaluate("EchoBack.cur.asked");check(len(asked)==4 and n_echo>=4,f'v2: age 7-8 starts at 4 notes; the Echo sang {len(asked)} ({n_echo} one-shots)')
     names=await pg.evaluate("EchoBack.cur.tune.n.map(x=>EchoBack.nameOf('twitchel',EchoBack.step(x)))");check(all(x in ('f4','g4','a4','c5','d5') for x in names),'twitchel F pentatonic '+str(names))
