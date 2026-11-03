@@ -76,7 +76,39 @@ async def eib_part(b):
     g3=json.loads(json.dumps(await pg.evaluate(GEO)))
     check(g2['rows']==2 and g2['per']==[5,5] and not g2['ov'] and not g3['labelsOverlap'] and not g3['beadsHitPads'] and g3['labelsIn'],f'{name}: 10 pads -> even 5+5 grid, no overlaps {g2}')
     check(not errs,f'{name}: no page errors {errs[:2]}');await ctx.close()
-PARTS={'eib':eib_part}
+# ---------------------------------------------------------------- 2+6: one needs rule for the bubble and Rest/Feed; games cost rest + food
+PH=VP[1][1]
+async def done_game(pg):   # Done mid-run -> the results card -> its Done (endGame)
+  await T(pg,'#quit',900)
+  if await wait(pg,"document.getElementById('g2done')",4000):await T(pg,'#g2done',1200)
+async def needs_part(b):
+  ctx,pg,errs=await setup(b,PH)
+  async def state(js):await pg.evaluate("(()=>{const S=__echo.state,ss=__echo.sess();S.napUntil=0;%s;__echo.home()})()"%js);await pg.wait_for_timeout(900)
+  moon="(document.querySelector('#sc .thought')||{dataset:{}}).dataset.w==='🛏️'"
+  # the bug: the moon shows after this session's nap, Rest said "not sleepy"
+  await state("Object.assign(S.needs,{food:90,play:90,comfort:90,rest:40});ss.naps=1")
+  check(await pg.evaluate(moon),'needs: rest 40 -> the moon bubble shows')
+  await T(pg,'#rest',600);await pg.screenshot(path=f'{SHOT}/02_rest_after_moon.png')
+  check(await pg.evaluate("__echo.state.napUntil>Date.now()"),'needs: moon showing + the session nap used -> Rest still naps (no "not sleepy")')
+  await state("Object.assign(S.needs,{food:90,play:90,comfort:90,rest:80});ss.naps=1")
+  check(not await pg.evaluate(moon),'needs: rest 80 -> no moon')
+  await T(pg,'#rest',600);check(await pg.evaluate("!(__echo.state.napUntil>Date.now())"),'needs: no moon + nap used -> Rest declines (unchanged)')
+  await state("Object.assign(S.needs,{food:40,play:90,comfort:90,rest:90});ss.feeds=3")
+  check(await pg.evaluate("(document.querySelector('#sc .thought')||{dataset:{}}).dataset.w==='🍎'"),'needs: food 40 -> the food bubble')
+  await T(pg,'#feed',500);check(await pg.locator('#overlay .choices button').count()>=2,'needs: food bubble + 3 feeds used -> the food menu still opens')
+  await pg.evaluate("document.getElementById('overlay').innerHTML=''")
+  # item 6: a long run costs rest + food
+  await state("Object.assign(S.needs,{food:90,play:90,comfort:90,rest:90});ss.naps=0;ss.games=0")
+  await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800)
+  await pg.evaluate("__echo.state.clockOffset=(__echo.state.clockOffset||0)+6*60e3");await done_game(pg)
+  nd=await pg.evaluate("Object.assign({},__echo.state.needs)")
+  check(abs(nd['rest']-42)<1.5 and abs(nd['food']-60)<1.5,f'needs: a 6-minute run -> rest ~42, food ~60 {nd}')
+  check(await wait(pg,moon,4000),'needs: after the long run the moon bubble shows')
+  await pg.screenshot(path=f'{SHOT}/06_after_long_run.png')
+  await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800);await done_game(pg)
+  nd2=await pg.evaluate("Object.assign({},__echo.state.needs)");check(nd['rest']-nd2['rest']<1.5,f'needs: a few seconds of play costs next to nothing {nd2}')
+  check(not errs,f'needs: no page errors {errs[:2]}');await ctx.close()
+PARTS={'eib':eib_part,'needs':needs_part}
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])

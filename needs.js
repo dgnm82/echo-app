@@ -10,8 +10,11 @@ const N={rate:{food:5,play:4,comfort:3,rest:3},quiet:[20,7],floor:1,show:50,hide
 function awakeHours(t0,t1,q){q=q||N.quiet;if(t1<=t0)return 0;let h=0,t=t0;const quiet=d=>{const x=d.getHours();return q[0]>q[1]?(x>=q[0]||x<q[1]):(x>=q[0]&&x<q[1])};
   while(t<t1){const d=new Date(t),nx=Math.min(t1,new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()+1).getTime());if(!quiet(d))h+=(nx-t)/36e5;t=nx}return h}
 function drain(needs,t0,t1,q,cap){const h=Math.min(awakeHours(t0,t1,q),cap||1e9);for(const k in N.rate)needs[k]=Math.max(Math.min(needs[k],N.floor),Math.min(100,needs[k]-N.rate[k]*h));return h}
+// Nov 3 (LIST #2): ONE rule for "the Echo wants this": < show (50), or < hide (60) while that bubble is up. The thought bubble (want),
+// the Rest gate and the Feed gate in game.js all ask wants(), with the same needs and the same shown key, so a moon bubble always naps.
+function wants(needs,k,shown){return needs[k]<N.show||(k===shown&&needs[k]<N.hide)}
 // the bubble: a need < 50 (stays until 60 once shown); lowest wins, a tie goes to the one met longest ago
-function want(needs,metAt,shown){metAt=metAt||{};const c=Object.keys(N.rate).filter(k=>needs[k]<N.show||(k===shown&&needs[k]<N.hide));
+function want(needs,metAt,shown){metAt=metAt||{};const c=Object.keys(N.rate).filter(k=>wants(needs,k,shown));
   c.sort((a,b)=>needs[a]-needs[b]||(metAt[a]||0)-(metAt[b]||0));return c[0]||null}
 const step=v=>v<25?1:v<50?2:v<75?3:4;
 // handheld light: the lowest need's hue at its step (PWM duty = level^2.2); cream at 100 % when all >= 75
@@ -29,8 +32,14 @@ function bondGrant(st,sess,src,day,amt){const b=st.bondDay=st.bondDay&&st.bondDa
   let n=src==='choice'?(amt||0):(N.bond[src]||0);if(!n)return 0;const key=N.group[src]||src;
   if(N.perDay[key]!=null&&(b.c[key]||0)>=N.perDay[key])return 0;if(N.perSess[src]!=null&&(sess.c[src]||0)>=N.perSess[src])return 0;
   n=Math.max(0,Math.min(n,N.capSess-sess.bond,N.capDay-b.n));if(!n)return 0;b.c[key]=(b.c[key]||0)+1;sess.c[src]=(sess.c[src]||0)+1;b.n+=n;sess.bond+=n;return n}
+// Nov 3 (LIST #6): play costs energy and food in proportion to how long a game ran (a long run, or game after game in one session,
+// adds up). Per minute of a game: rest -8, food -5 (hunger up); one game counts at most 6 minutes (a paused/hidden tab can't drain more);
+// play never takes a need below 20, so it leads to "wants a rest / a snack" (< 50, the bubble) but never on its own to sad (< 25).
+// Examples: a 1 min run -8 rest / -5 food; a 5 min run -40 / -25; three 2 min games from 90 -> rest 42 (moon), food 60.
+N.cost={rest:8,food:5,capMin:6,floor:20};   // the play-cost tuning (NeedsV2.cost)
+function playCost(needs,ms){const P=N.cost,m=Math.max(0,Math.min(P.capMin,(+ms||0)/6e4));for(const k of ['rest','food'])if(needs[k]>P.floor)needs[k]=Math.max(P.floor,needs[k]-P[k]*m);return m}
 // away timeline (clock frozen during holiday): 0 normal, 1 treasure, 2 note, 3 kind leave
 function awayStage(h){return h>=72?3:h>=48?2:h>=24?1:0}
 const awayFloor=[0,50,60,0];
-W.NeedsV2=Object.assign(N,{led,awakeHours,drain,want,meter,step,reqCap,reqGapMs,bondGrant,awayStage,awayFloor});
+W.NeedsV2=Object.assign(N,{led,awakeHours,drain,wants,playCost,want,meter,step,reqCap,reqGapMs,bondGrant,awayStage,awayFloor});
 if(typeof module!=='undefined')module.exports=W.NeedsV2})(typeof window!=='undefined'?window:globalThis);

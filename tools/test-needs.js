@@ -19,4 +19,14 @@ st={};se={};A([1,2,3,4].map((_,i)=>N.bondGrant(st,se,i%2?'feedFav':'feed','d2'))
 st={};se={bond:28};A(N.bondGrant(st,se,'choice','d3',5)===2,'choice counts toward caps');
 A(N.led({food:10,play:80,comfort:80,rest:80}).hex==='#FFB070'&&N.led({food:10,play:80,comfort:80,rest:80}).level===.2&&N.led({food:30,play:80,comfort:80,rest:80}).level===.4&&N.led({food:60,play:80,comfort:80,rest:80}).level===.7&&N.led({food:80,play:80,comfort:80,rest:80}).hex==='#FFF6E6','led');
 A([24,25,49,50,74,75].map(N.step).join()==='1,2,2,3,3,4','step boundaries');
+// Nov 3 (LIST #2): one rule for the bubble and the Rest/Feed gates
+A(N.wants({food:80,play:80,comfort:80,rest:49},'rest')&&!N.wants({food:80,play:80,comfort:80,rest:55},'rest')&&N.wants({food:80,play:80,comfort:80,rest:55},'rest','rest')&&!N.wants({rest:60},'rest','rest'),'wants: < 50, or < 60 while shown');
+for(const v of [10,30,49,50,55,59,60,80])for(const sh of [null,'rest']){const nd={food:90,play:90,comfort:90,rest:v};A((N.want(nd,{},sh)==='rest')===N.wants(nd,'rest',sh),`bubble == gate at rest ${v} shown ${sh}`)}
+// Nov 3 (LIST #6): play costs rest + food by minutes played
+s={food:90,play:90,comfort:90,rest:90};A(N.playCost(s,60e3)===1&&s.rest===82&&s.food===85&&s.play===90&&s.comfort===90,'1 min: rest -8, food -5, others untouched');
+s={food:90,play:90,comfort:90,rest:90};N.playCost(s,5*60e3);A(s.rest===50&&s.food===65,'5 min run: rest 50, food 65 '+JSON.stringify(s));
+s={food:90,play:90,comfort:90,rest:90};N.playCost(s,60*60e3);A(s.rest===42&&s.food===60,'capped at 6 min a game '+JSON.stringify(s));
+s={food:90,play:90,comfort:90,rest:90};for(let i=0;i<3;i++)N.playCost(s,2*60e3);A(s.rest===42&&N.want(s)==='rest','three 2-min games -> the moon');
+s={food:18,play:90,comfort:90,rest:30};N.playCost(s,6*60e3);A(s.rest===20&&s.food===18,'never below 20 from play (and never lifts a low one)');
+s={food:90,play:90,comfort:90,rest:90};N.playCost(s,-5);N.playCost(s,undefined);A(s.rest===90,'no time, no cost');
 console.log(`${ok}/${n} needs tests passed`);if(ok<n)process.exit(1)
