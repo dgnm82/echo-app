@@ -173,7 +173,52 @@ async def tempo_part(b):
       check(ok_e,f'tempo step {step}: the Echo version plays at its natural tempo (span {r["echo"][0]} ms, score {r["echo"][1]} ms; gaps {r["echoGaps"][:10]})')
       check(ok_c,f'tempo step {step}: the child\'s part plays at the tune\'s natural tempo (span {r["child"][0]} ms, score {r["child"][1]} ms)')
     check(not errs,f'tempo step {step}: no page errors {errs[:2]}');await ctx.close()
-PARTS={'eib':eib_part,'needs':needs_part,'caret':caret_part,'tempo':tempo_part}
+# ---------------------------------------------------------------- 3: "Bye for now": wave, one short warm line, curl up asleep; no countdown, no pressure
+BANNED=['bond','see you','come back','miss you','parent','grown-up','minute','second']
+async def bye_part(b):
+  for band in ('7-8','5-6'):
+    ctx,pg,errs=await setup(b,PH)
+    await pg.evaluate(f"__echo.sess().chats=99;__echo.state.ageBand='{band}';__echo.state.needs.rest=90;document.getElementById('overlay').innerHTML='';__echo.home()");await pg.wait_for_timeout(1500)
+    if band=='7-8':await pg.screenshot(path=f'{SHOT}/03_bye_home.png')
+    check(await pg.locator('#bye').count()==1,f'bye {band}: a "Bye for now" button on the home screen')
+    if not await pg.locator('#bye').count():await ctx.close();continue
+    lab=await pg.get_attribute('#bye','aria-label');check(lab=='Bye for now',f'bye {band}: labelled {lab!r}')
+    if band=='5-6':   # tapped while the Echo is busy at a wander spot (the wander's end timer must not wake the sleeper)
+      quiet=0   # let the first-day origin talk finish (answer it like a kid), so the Echo is free to wander
+      for _ in range(150):
+        if await pg.locator('.choices button').count():
+          try:
+            c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
+          except Exception:pass
+        elif await pg.evaluate("!!(Dialogue.waiting&&Dialogue.waiting())"):await pg.evaluate("Dialogue.advance()")
+        quiet=quiet+1 if await pg.evaluate("!document.getElementById('overlay').innerHTML.trim()&&!(Dialogue.waiting&&Dialogue.waiting())") else 0
+        if quiet>=12:break
+        await pg.wait_for_timeout(250)
+      await pg.evaluate("document.getElementById('b').style.display='none';CONFIG.livingSpeed=.05;__echo.living.start(false)")
+      check(await wait(pg,"__echo.living.st==='wander'&&__echo.living.act&&!__echo.living.dbg().timer",15000),f'bye {band}: the Echo is busy at a wander spot {await pg.evaluate("[__echo.living.st,__echo.living.act,__echo.living.dbg()]")}')
+    await pg.evaluate("Alive.log.length=0;document.getElementById('overlay').innerHTML=''");await pg.locator('#bye').click()   # an open choice list eats the first outside tap (by design);await pg.wait_for_timeout(700)
+    if band=='7-8':await pg.screenshot(path=f'{SHOT}/03_bye_wave.png')
+    r=await pg.evaluate("""(()=>{const S=__echo.state,L=Dialogue.lib.barks.bye_for_now,b=document.getElementById('b');return {txt:b.textContent.trim(),shown:b.style.display!=='none',L,wave:Alive.log.includes('act:wave'),
+      nap:(S.napUntil-Date.now()-(S.clockOffset||0))/1000,napS:CONFIG.napSeconds,thought:!!document.querySelector('#sc .thought')}})()""")
+    L=r['L'];check(isinstance(L,list) and len(L)==1,f'bye {band}: exactly one shared line bye_for_now {L}')
+    want=L[0]['short'] if band=='5-6' else L[0]['text']
+    check(r['shown'] and r['txt']==want,f'bye {band}: the Echo says {want!r} (got {r["txt"]!r})')
+    check(len(L[0]['short'].split())<=7,f'bye: the 5-6 short has <= 7 words ({L[0]["short"]!r})')
+    low=(L[0]['text']+' '+L[0]['short']).lower()
+    check(not any(w in low for w in BANNED) and not any(c.isdigit() for c in low) and '?' not in low,f'bye: no banned words, numbers, questions or pressure in {low!r}')
+    check(r['wave'],f'bye {band}: the Echo waves');check(not r['thought'],f'bye {band}: no need bubble over the sleeper')
+    check(0<r['nap']<=r['napS']+1,f'bye {band}: asleep as a normal nap ({r["nap"]:.1f} s of {r["napS"]} s), nothing counts down on screen')
+    await pg.wait_for_timeout(3600)
+    sl=await pg.evaluate("(()=>{const px=document.querySelector('#cr .px-echo');return {sleep:!!(px&&px._sleep),mood:document.querySelector('#cr')&&true,feed:!!document.getElementById('feed')}})()")
+    check(sl['sleep'],f'bye {band}: curled up asleep {sl}')
+    if band=='5-6':
+      await pg.wait_for_timeout(12000);sl=await pg.evaluate("!!(document.querySelector('#cr .px-echo')||{})._sleep");check(sl,f'bye {band}: still asleep 16 s later (a wander in progress never wakes it)')
+    if band=='7-8':await pg.screenshot(path=f'{SHOT}/03_bye_asleep.png')
+    nd=await pg.evaluate("Object.assign({},__echo.state.needs)");await pg.locator('#feed').click();await pg.wait_for_timeout(300)
+    nd2=await pg.evaluate("Object.assign({},__echo.state.needs)");check(nd==nd2,f'bye {band}: a sleeping Echo is not fed/woken by Feed')
+    body=await pg.evaluate("document.body.innerText.toLowerCase()");check('see you' not in body and 'bond' not in body,f'bye {band}: nothing banned on screen')
+    check(not errs,f'bye {band}: no page errors {errs[:2]}');await ctx.close()
+PARTS={'eib':eib_part,'needs':needs_part,'caret':caret_part,'tempo':tempo_part,'bye':bye_part}
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])

@@ -10,6 +10,13 @@
         "short": "My tummy's full!"
       }
     ],
+    "bye_for_now": [
+      {
+        "text": "Okay! I'll curl up and dream about our games.",
+        "expr": "happy",
+        "short": "Okay! I'll curl up and dream."
+      }
+    ],
     "not_sleepy_play": [
       {
         "text": "I'm not sleepy yet! Let's play?",

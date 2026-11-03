@@ -537,7 +537,8 @@ function wuRun(mode,done){if(!wuOn()||!window.Warmup||!mlOn()||!S||!S.g)return d
       onDone:r=>{if(r&&r.song){S.firstSong={fam:FID(),song:{v:1,bpm:r.song.bpm,tpb:12,n:r.song.n},notes:r.song.notes,ticks:r.song.ticks,at:now()};save()}done()}})})}
 // existing children without a warm-up: an ignorable chip by the Echo on a Home visit, once a session, gone after 10 s
 function wuInviteMaybe(){if(!wuOn()||!mlOn()||sess.wuInvite||S.released||!S.setupDone)return;const m=mlGet();if(!m||m.warm)return;
-  setTimeout(()=>{if(sess.wuInvite||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup,.eibinv')||asleep())return;const cr=$('#cr');if(!cr||!cr.parentNode)return;
+  setTimeout(()=>{if(sess.wuInvite||!document.getElementById('feed')||document.querySelector('.full,.book,.bondup,.eibinv')||S.napUntil>now())return;   // Nov 3: a quiet check (asleep() toasts "Shh… napping" over a sleeping Echo)
+  const cr=$('#cr');if(!cr||!cr.parentNode)return;
     sess.wuInvite=1;const l=wuLine('wu_invite');if(l)talk(l,3200);const b=document.createElement('button');b.className='eibinv wuinv'+(lowFx()?' rm':'');b.setAttribute('aria-label',(l&&l.text)||'Help me learn a song');
     cr.parentNode.appendChild(b);let gone=false;const t=setTimeout(()=>{if(gone)return;gone=true;b.classList.add('fade');setTimeout(()=>b.remove(),lowFx()?0:600)},10000);
     b.onclick=e=>{e.stopPropagation();if(gone)return;gone=true;clearTimeout(t);b.remove();SFX('ui_panel_open');wuRun('full',()=>home())}},2500)}
@@ -605,7 +606,7 @@ function renderBadge(){const el=$('#bond');if(!el)return;if(renderBadge.b!=null&
 function home(greet){if(window.EchoBack)EchoBack.stop();
   ov.innerHTML='';if(S.left)return leaveScreen();
   const e=E(), m=mood(), w=want(), ready=fwShowPath();
-  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
+  h(`<div class="top"><button class="badge" id="bond" style="border:0;color:#fff"></button><b>${S.g.name}</b><div class="row">${ready?`<button class="btn small ico" id="fwl" aria-label="Farewell list">${PI('📜')}</button>`:''}<button class="btn small ico" id="bye" aria-label="Bye for now">${PI('👋')}</button><button class="btn small ico" id="book" aria-label="Memory Book">${PI('📖')}</button><button class="btn small ico" id="how" aria-label="How am I?">${PI('🤔')}</button></div></div>
    <div class="scene ${e.bg} pxscene sc-${curScene().id}" id="sc" style="${scStyle()}">${fwHomeBits()}
    ${curScene()===scHome()?homeProp():''}   ${meterHTML()}<div class="creature idle" id="cr">${svg(S.kind,S.g,m)}</div>${w&&m!=='sleep'?thoughtHTML(w):''}
    <div class="bubble" id="b" style="display:none"></div>
@@ -613,7 +614,7 @@ function home(greet){if(window.EchoBack)EchoBack.stop();
    <div class="dock"><button class="btn" id="feed">${window.PIXEL?PIXEL.icon('feed'):'🍎'}Feed</button><button class="btn" id="play">${window.PIXEL?PIXEL.icon('play'):'🎲'}Play</button><button class="btn" id="comfort">${window.PIXEL?PIXEL.icon('pet'):'💗'}Hug</button><button class="btn" id="rest">${window.PIXEL?PIXEL.icon('sleep'):'🛏️'}Rest</button></div>
    <div class="dbg"><button class="btn small" id="dbg" style="min-height:28px">dev</button></div>`);
   renderBadge();{const hm=$('#home');if(hm)hm.onclick=e=>{if(homeTap())e.stopPropagation()}}
-  const careTap=f=>()=>{sess.careAt=now();f()};$('#feed').onclick=careTap(feed);$('#play').onclick=play;$('#comfort').onclick=careTap(comfort);$('#rest').onclick=careTap(rest);$('#book').onclick=book;$('#how').onclick=how;$('#dbg').onclick=dev;
+  const careTap=f=>()=>{sess.careAt=now();f()};$('#feed').onclick=careTap(feed);$('#play').onclick=play;$('#comfort').onclick=careTap(comfort);$('#rest').onclick=careTap(rest);$('#book').onclick=book;$('#bye').onclick=byeForNow;$('#how').onclick=how;$('#dbg').onclick=dev;
   if(ready){$('#rel').onclick=fwStartByChild;if($('#path'))$('#path').onclick=fwStartByChild;$('#fwl').onclick=fwList}
   if($('#fwstar')&&!FWALK()&&ready)$('#fwstar').onclick=fwStartByChild;
   // stroke to pet
@@ -890,13 +891,13 @@ function maybeChat(){
   const n=S.needs;
   if(fwCalm())return;
   if(sess.chats>=obMaxConv()||Math.random()<.35)return;
-  if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;fwTick('memory');sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full'))talk(cb)},1800)}}
+  if(!sess.cb&&Math.random()<.3){const cb=callbackLine();if(cb){sess.cb=1;fwTick('memory');sess.chats++;return setTimeout(()=>{if(document.getElementById('feed')&&!document.querySelector('.full')&&!(S.napUntil>now()))talk(cb)},1800)}}
   const conv=window.NeedSelect?NeedSelect.pickConversation(needCtx()):Dialogue.pickConversation('idle'); if(!conv)return; sess.chats++;
   setTimeout(()=>{if(!document.getElementById('feed')||document.querySelector('.full'))return;runConv(conv)},1800);
 }
 function initDialogue(){needInit();Dialogue.now=now;S.dlg=S.dlg||{};Dialogue.mem=S.dlg;Dialogue.cfg.carryOnMs=C.carryOnSeconds*1000;Dialogue.setPersona(S.g.seed,(S.origin&&S.origin.animal)||(S.g&&S.g.look));Dialogue.prune()}   // Cole H14: lookPetPhrases by look
-function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv)return done&&done();
-  Dialogue.run(conv,{sing:()=>{if(window.MusicFX&&MusicFX.sing)MusicFX.sing(FID())},cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs'))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs'))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
+function runConv(conv,done,depth){depth=depth||0;if(typeof conv==='string')conv=Dialogue.lib.conversations.find(c=>c.id===conv);if(!conv||S.napUntil>now())return done&&done();   // Nov 3 (LIST #3): a sleeping Echo starts no talk (a chat queued before "Bye for now" / Rest)
+  Dialogue.run(conv,{sing:()=>{if(window.MusicFX&&MusicFX.sing)MusicFX.sing(FID())},cancelChoices:()=>{ov.innerHTML=''},tangent:()=>B('tangent'),tangentRate:0.10+0.20*Math.max(0,Math.min(1,((S.g.playful||.75)-.5)/.5)),say:(l,ms)=>{if(!document.getElementById('gs')&&!(S.napUntil>now()))talk(l,ms)},choose:(list,cb,o)=>{if(!document.getElementById('gs')&&!(S.napUntil>now()))choices(list,cb,o)},   // a game opened mid-talk: the talk just ends
     setVar:(k,v)=>{(S.vars=S.vars||{})[k]=v;save()},
     remember:(t,tag)=>remember(t,tag),bond:n=>addBond(n,false,'choice'),react:k=>react(k),seen:id=>{(S.seen=S.seen||[]).push(id);save()}},(info)=>{addBond(0,false,'reply');save();
     // drift to a linked topic or lose the thought (Overhaul B7); session limit still applies
@@ -977,6 +978,15 @@ function rest(){
   S.napUntil=now()+C.napSeconds*1000;const from=curScene();S.scene=scHome().id;   // bedtime: the Echo goes home (scenes.md §6); saved at once, shown after the wipe
 addBond(0,true,'nap');SFX('care_nap_tuck');save();talk(B('nap'));napTravel(from);
 }
+// Nov 3 (LIST #3) "Bye for now": the child can take a break any time. The Echo waves, says one short warm line (shared bark bye_for_now,
+// its short for the 5-6 band) and curls up asleep where it is (the in-place curl_nap / nap). No countdown, no pressure, no stat or bond
+// change; it is a normal nap (S.napUntil, napSeconds) and wakes the way a nap does.
+function byeForNow(){if(asleep())return;ov.innerHTML='';lvStop();clearTimeout(LIVE.actT2);LIVE.st='present';   // a wander's end timer (actT2) would lvStop() = wake the sleeper
+  S.napUntil=now()+C.napSeconds*1000;save();
+  document.querySelectorAll('#sc .thought').forEach(t=>t.remove());if(window.Alive)Alive.act('wave');
+  const l=B('bye_for_now'),sh=S.ageBand==='5-6'&&l&&l.src&&l.src.short;talk(sh?Object.assign({},l,{text:Dialogue.fill(sh)}):l,3000);
+  setTimeout(()=>{if(!document.getElementById('feed')||S.napUntil<=now())return;if(LIVE.pos)lvDo(GROUND()?'curl_nap':'nap',0);else{const px=$('#cr .px-echo');if(px&&window.PIXEL)PIXEL.sleep(px,true)}},2400);
+  setTimeout(()=>{if(S.napUntil<=now()&&document.getElementById('feed')&&!document.getElementById('gs')&&!document.querySelector('.fwscene')){sess.woke=1;home()}},C.napSeconds*1000+200)}
 // v1.1 nap option A (aliveness/v1_1_motion): yawn, trot / fly off the right-most exit, 6-step curtain wipe, enter home from the
 // opposite edge and settle on the bed waypoint (Slyte: log_mouth curl, Whimber: hollow_sill). Reduced motion keeps the old cut.
 function napBed(){return scWp(FAMD().profile.bed||'stage')||scWp('stage')}   // manifest profile.bed: the scene waypoint the Echo naps at
