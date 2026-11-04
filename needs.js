@@ -33,10 +33,11 @@ function bondGrant(st,sess,src,day,amt){const b=st.bondDay=st.bondDay&&st.bondDa
   if(N.perDay[key]!=null&&(b.c[key]||0)>=N.perDay[key])return 0;if(N.perSess[src]!=null&&(sess.c[src]||0)>=N.perSess[src])return 0;
   n=Math.max(0,Math.min(n,N.capSess-sess.bond,N.capDay-b.n));if(!n)return 0;b.c[key]=(b.c[key]||0)+1;sess.c[src]=(sess.c[src]||0)+1;b.n+=n;sess.bond+=n;return n}
 // Nov 3 (LIST #6): play costs energy and food in proportion to how long a game ran (a long run, or game after game in one session,
-// adds up). Per minute of a game: rest -8, food -5 (hunger up); one game counts at most 6 minutes (a paused/hidden tab can't drain more);
+// adds up). Per minute of a game: rest -4, food -2.5 (hunger up; kept exact, needs are not integers here, meter() rounds for display); one game counts at most 6 minutes (a paused/hidden tab can't drain more);
 // play never takes a need below 20, so it leads to "wants a rest / a snack" (< 50, the bubble) but never on its own to sad (< 25).
-// Examples: a 1 min run -8 rest / -5 food; a 5 min run -40 / -25; three 2 min games from 90 -> rest 42 (moon), food 60.
-N.cost={rest:8,food:5,capMin:6,floor:20};   // the play-cost tuning (NeedsV2.cost)
+// Examples from 90: a 1 min run -> rest 86 / food 87.5; a 5 min run -> 70 / 77.5; three 2 min games -> rest 66, food 75 (no bubble yet).
+// A long session still gets sleepy: the moon (rest < 50) after 2 capped games (12 min) -> rest 42; food asks after 3 (18 min) -> 45.
+N.cost={rest:4,food:2.5,capMin:6,floor:20};   // the play-cost tuning (NeedsV2.cost)
 function playCost(needs,ms){const P=N.cost,m=Math.max(0,Math.min(P.capMin,(+ms||0)/6e4));for(const k of ['rest','food'])if(needs[k]>P.floor)needs[k]=Math.max(P.floor,needs[k]-P[k]*m);return m}
 // away timeline (clock frozen during holiday): 0 normal, 1 treasure, 2 note, 3 kind leave
 function awayStage(h){return h>=72?3:h>=48?2:h>=24?1:0}

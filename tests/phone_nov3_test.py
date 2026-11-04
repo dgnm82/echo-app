@@ -102,9 +102,18 @@ async def needs_part(b):
   await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800)
   await pg.evaluate("__echo.state.clockOffset=(__echo.state.clockOffset||0)+6*60e3");await done_game(pg)
   nd=await pg.evaluate("Object.assign({},__echo.state.needs)")
-  check(abs(nd['rest']-42)<1.5 and abs(nd['food']-60)<1.5,f'needs: a 6-minute run -> rest ~42, food ~60 {nd}')
-  check(await wait(pg,moon,4000),'needs: after the long run the moon bubble shows')
+  check(abs(nd['rest']-66)<1.5 and abs(nd['food']-75)<1.5,f'needs: a 6-minute run (capped) -> rest ~66 (-4/min), food ~75 (-2.5/min) {nd}')
+  check(not await pg.evaluate(moon),'needs: one capped run from 90 -> no moon yet (gentler drain)')
+  # a long session still brings the sleepy moon: count capped runs from 90 until wants() says rest (< 50)
+  runs=1
+  while not await pg.evaluate("NeedsV2.wants(__echo.state.needs,'rest')") and runs<6:
+    await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800)
+    await pg.evaluate("__echo.state.clockOffset=(__echo.state.clockOffset||0)+6*60e3");await done_game(pg);runs+=1
+  nd=await pg.evaluate("Object.assign({},__echo.state.needs)")
+  check(runs==2 and abs(nd['rest']-42)<1.5 and abs(nd['food']-60)<1.5,f'needs: the moon threshold (rest < 50) is reached after {runs} capped runs (12 min) -> rest ~42, food ~60 {nd}')
+  check(await wait(pg,moon,4000),'needs: after the long session the moon bubble shows')
   await pg.screenshot(path=f'{SHOT}/06_after_long_run.png')
+  await pg.evaluate("document.querySelectorAll('.full.milestone').forEach(d=>d.remove())")   # the longer session can queue a card (e.g. the walk list); clear it before the short run
   await pg.evaluate("__echo.runGame()");await pg.wait_for_timeout(800);await done_game(pg)
   nd2=await pg.evaluate("Object.assign({},__echo.state.needs)");check(nd['rest']-nd2['rest']<1.5,f'needs: a few seconds of play costs next to nothing {nd2}')
   check(not errs,f'needs: no page errors {errs[:2]}');await ctx.close()

@@ -23,10 +23,16 @@ A([24,25,49,50,74,75].map(N.step).join()==='1,2,2,3,3,4','step boundaries');
 A(N.wants({food:80,play:80,comfort:80,rest:49},'rest')&&!N.wants({food:80,play:80,comfort:80,rest:55},'rest')&&N.wants({food:80,play:80,comfort:80,rest:55},'rest','rest')&&!N.wants({rest:60},'rest','rest'),'wants: < 50, or < 60 while shown');
 for(const v of [10,30,49,50,55,59,60,80])for(const sh of [null,'rest']){const nd={food:90,play:90,comfort:90,rest:v};A((N.want(nd,{},sh)==='rest')===N.wants(nd,'rest',sh),`bubble == gate at rest ${v} shown ${sh}`)}
 // Nov 3 (LIST #6): play costs rest + food by minutes played
-s={food:90,play:90,comfort:90,rest:90};A(N.playCost(s,60e3)===1&&s.rest===82&&s.food===85&&s.play===90&&s.comfort===90,'1 min: rest -8, food -5, others untouched');
-s={food:90,play:90,comfort:90,rest:90};N.playCost(s,5*60e3);A(s.rest===50&&s.food===65,'5 min run: rest 50, food 65 '+JSON.stringify(s));
-s={food:90,play:90,comfort:90,rest:90};N.playCost(s,60*60e3);A(s.rest===42&&s.food===60,'capped at 6 min a game '+JSON.stringify(s));
-s={food:90,play:90,comfort:90,rest:90};for(let i=0;i<3;i++)N.playCost(s,2*60e3);A(s.rest===42&&N.want(s)==='rest','three 2-min games -> the moon');
+A(N.cost.rest===4&&N.cost.food===2.5&&N.cost.capMin===6&&N.cost.floor===20,'tuning: rest -4/min, food -2.5/min (exact, no rounding), cap 6 min, floor 20');
+s={food:90,play:90,comfort:90,rest:90};A(N.playCost(s,60e3)===1&&s.rest===86&&s.food===87.5&&s.play===90&&s.comfort===90,'1 min: rest -4, food -2.5, others untouched '+JSON.stringify(s));
+s={food:90,play:90,comfort:90,rest:90};N.playCost(s,5*60e3);A(s.rest===70&&s.food===77.5,'5 min run: rest 70, food 77.5 '+JSON.stringify(s));
+s={food:90,play:90,comfort:90,rest:90};N.playCost(s,60*60e3);A(s.rest===66&&s.food===75,'capped at 6 min a game '+JSON.stringify(s));
+s={food:90,play:90,comfort:90,rest:90};for(let i=0;i<3;i++)N.playCost(s,2*60e3);A(s.rest===66&&s.food===75&&N.want(s)===null,'three 2-min games -> rest 66, food 75, no bubble yet '+JSON.stringify(s));
+// a long session still brings the sleepy moon: count capped games / minutes from 90 until wants() says rest (and food)
+{let g=0;s={food:90,play:90,comfort:90,rest:90};while(!N.wants(s,'rest')&&g<20){N.playCost(s,60*60e3);g++}A(g===2&&s.rest===42&&s.food===60&&N.want(s)==='rest','moon after 2 capped games (12 min): rest 42 '+JSON.stringify(s));
+ let f=0;s={food:90,play:90,comfort:90,rest:90};while(!N.wants(s,'food')&&f<20){N.playCost(s,60*60e3);f++}A(f===3&&s.food===45&&s.rest===20,'food asks after 3 capped games (18 min): food 45, rest held at the floor 20 '+JSON.stringify(s));
+ let m=0;s={food:90,play:90,comfort:90,rest:90};while(!N.wants(s,'rest')&&m<100){N.playCost(s,60e3);m++}A(m===11&&s.rest===46,'minute by minute: the moon at minute 11 (rest 46; 10 min = 50, not yet) '+JSON.stringify(s));
+ let mf=0;s={food:90,play:90,comfort:90,rest:90};while(!N.wants(s,'food')&&mf<100){N.playCost(s,60e3);mf++}A(mf===17&&s.food===47.5,'minute by minute: food asks at minute 17 (food 47.5) '+JSON.stringify(s))}
 s={food:18,play:90,comfort:90,rest:30};N.playCost(s,6*60e3);A(s.rest===20&&s.food===18,'never below 20 from play (and never lifts a low one)');
 s={food:90,play:90,comfort:90,rest:90};N.playCost(s,-5);N.playCost(s,undefined);A(s.rest===90,'no time, no cost');
 console.log(`${ok}/${n} needs tests passed`);if(ok<n)process.exit(1)
