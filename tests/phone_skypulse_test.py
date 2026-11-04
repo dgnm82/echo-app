@@ -35,7 +35,7 @@ async def setup(b,animal):
   return ctx,pg,errs
 # per frame, right after the sky pulse is drawn: the raw loop clock + the pulse it drew; grab the canvas on a beat / off a beat
 HOOK="""(()=>{window.__sl=[];window.__shot={};const d=MusicFX.drawSkyPulse;MusicFX.drawSkyPulse=function(cx,im){const r=d.apply(this,arguments);const c=Music.clock(),L=MusicFX.skyLast;
-  __sl.push({pn:performance.now(),loop:c&&c.name,t:c&&c.t,env:L?L.env:null,scale:L?L.scale:null,glow:L?L.glow:null,kind:L?L.kind:null,beat:L?L.beat:null});
+  __sl.push({pn:performance.now(),loop:c&&c.name,t:c&&c.t,at:L?L.t:null,env:L?L.env:null,scale:L?L.scale:null,glow:L?L.glow:null,kind:L?L.kind:null,beat:L?L.beat:null});
   const b=MusicFX.beat(),ms=b?b.phase*b.spb*1000:-1;if(window.__grab&&b&&/_loop$/.test(b.name)&&/(dash|glide)/.test(b.name)){
     if(!__shot.on&&ms>=0&&ms<12)__shot.on={png:cx.canvas.toDataURL(),ms,beat:b.beat};
     if(!__shot.off&&ms>b.spb*750&&ms<b.spb*750+20)__shot.off={png:cx.canvas.toDataURL(),ms,beat:b.beat}}return r}})()"""
@@ -57,7 +57,11 @@ async def run_part(b,animal,label,has_body):
   tol=max(fr*1.5,20)   # ~1 frame
   rows=[]
   for x in log:
-    since=(x['t']%spb)*1000;k=int(x['t']//spb)%nb;rows.append(dict(x,since_beat_ms=round(since,2),beat_calc=k))
+    # Time each frame by the loop-clock sample the app itself drew with (MusicFX.skyLast.t), not by our own Music.clock() read after
+    # drawSkyPulse returns: that second read is a later sample of the audio clock (ctx.currentTime ticks on its own thread), so a frame the
+    # app drew at 249 ms could log as >=250 ms (CI flake: '1 outside'). Same sample on both sides -> the 250 ms check can stay strict.
+    tt=x['at'] if x.get('at') is not None else x['t'];x['t_after']=x['t'];x['t']=tt
+    since=(tt%spb)*1000;k=int(x['t']//spb)%nb;rows.append(dict(x,since_beat_ms=round(since,2),beat_calc=k))
   json.dump({'run':label,'loop':loop,'bpm':tp.get('bpm'),'spb_ms':spb*1000,'frame_ms_median':fr,'tolerance_ms':tol,
     'params':{'scale_bump':.05,'halo_alpha_peak':.3,'ease_ms':250,'ease':'quadratic ease-out (1-t/250)^2','halo_radius':'1.6 x body radius'},'frames':rows},open(f'{OUT}/{label}_sky_pulse_log.json','w'),indent=0)
   with open(f'{OUT}/{label}_sky_pulse_log.tsv','w') as f:
