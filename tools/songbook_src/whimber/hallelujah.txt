@@ -18,9 +18,8 @@ prov: Handel (d.1759). Messiah (1742). Call read from the Schirmer 1912 vocal sc
 prov_status: ok
 scan: https://archive.org/details/messiah0000gfha_i7y1
 read: verified
-# echo: 3.0 bars, 16 notes, 7.5 s at 96 bpm (cap 8 s). Sounding pitches:
-#   bb4:18 f4:6 g4:6 f4:18 | bb4:18 f4:6 g4:6 f4:12 bb4:3 bb4:3 | bb4:6 bb4:12 bb4:3 bb4:3 bb4:6 bb4:18
-echo: do4:18 sol3:6 la3:6 sol3:18 | do4:18 sol3:6 la3:6 sol3:12 do4:3 do4:3 | do4:6 do4:12 do4:3 do4:3 do4:6 do4:18
+# echo: 21 notes, 10.0 s at 96 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: do4:18 sol3:6 la3:6 sol3:18 | do4:18 sol3:6 la3:6 sol3:12 do4:3 do4:3 | do4:6 do4:12 do4:3 do4:3 do4:6 do4:12 do4:6 | ti3:6 do4:12 ti3:6 do4:24
 # child phrase, sounding: bb4:18 f4:6 g4:6 f4:18
 child: do4:18 sol3:6 la3:6 sol3:18
 # child phrase, sounding: bb4:3 bb4:3 bb4:6 bb4:12
@@ -28,3 +27,4 @@ child: do4:3 do4:3 do4:6 do4:12
 # note: Pass 3: read from the Schirmer 1912 vocal score (IA, PDF p.205; open item, not lending). Rhythm CHANGED from the
 # note: draft: the call is dotted quarter + 8th + 8th + dotted quarter (was quarter, dotted 8th, 16th, half), and bar 6
 # note: adds the quick repeated-do answer. In D, moved to B-flat. Walsh 1767 not used (page not matched).
+# note: Nov 4 final-19 pass: FIX + extend: bar 3 had dropped the last 'Hal-' pickup (D8 on beat 4.5). Added bar 4 (C#-D, C#-D: 'Hal-le-lu-jah'), so it's now the whole opening soprano statement, bars 4-7

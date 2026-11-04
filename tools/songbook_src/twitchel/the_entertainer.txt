@@ -19,9 +19,8 @@ prov_status: ok
 grow: yes
 scan: https://www.loc.gov/item/2023864238/
 read: verified
-# echo: 4.0 bars, 18 notes, 6.32 s at 76 bpm (cap 8 s). Sounding pitches:
-#   g4:3 g#4:3 | a4:3 f5:6 a4:3 f5:6 a4:3 f5:18 | f5:3 g5:3 g#5:3 | a5:3 f5:3 g5:3 a5:6 e5:3 g5:6 | f5:18
-echo: re4:3 mib4:3 | mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:18 | do5:3 re5:3 mib5:3 | mi5:3 do5:3 re5:3 mi5:6 ti4:3 re5:6 | do5:18
+# echo: 36 notes, 12.63 s at 76 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: re4:3 mib4:3 | mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:18 | do5:3 re5:3 mib5:3 | mi5:3 do5:3 re5:3 mi5:6 ti4:3 re5:6 | do5:18 re4:3 mib4:3 | mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:21 la4:3 sol4:3 | solb4:3 la4:3 do5:3 mi5:6 re5:3 do5:3 la4:3 | re5:18
 # child phrase, sounding: g4:3 a4:3 f5:6 a4:3 f5:6 a4:3 f5:18
 child: re4:3 mi4:3 do5:6 mi4:3 do5:6 mi4:3 do5:18
 # child phrase, sounding: f5:3 g5:3 a5:3 f5:3 g5:3 a5:6
@@ -32,3 +31,4 @@ child: la4:3 re5:6 do5:18
 # note: 16th-8th-16th | 8th-16th-16th tied (E C E | C E C~), and the last C is held through bar 2 beat 1 plus a 16th (18
 # note: ticks) before C D D#; the first pass had the tied C at 15 ticks. C, up a 4th to F; the high answer is an octave
 # note: down so it stays under c6. PLAN phrase 2 was 9 notes, so it is split into 2 phrases (6 + 3).
+# note: Nov 4 final-19 pass: extended from A-strain bars 5-8 to bars 5-12 (the second phrase, A-G-F#-A-C-E-D-C-A-D); it ends on the half-cadence D, as printed

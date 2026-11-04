@@ -1,0 +1,24 @@
+# tools/songbook_src/twitchel/nutcracker_march.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: nutcracker_march
+title: Nutcracker March
+composer: Pyotr Ilyich Tchaikovsky
+home: do
+meter: 4
+# written meter 4/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 120
+mood: march-fun
+skills: fastslow
+min_ml: 1
+family: twitchel
+icon: px/songbook/nutcracker_march.png
+bar_ticks: 48
+source: Tchaikovsky, The Nutcracker Suite Op.71a, piano solo, G. Schirmer, New York c1922 (Schirmer's Library), archive.org nutcrackersuiteo00tcha, 'March', scan n15 ...
+prov: Pyotr Ilyich Tchaikovsky (d.1893). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 49 notes, 16.0 s at 120 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: sol4:6 r:6 sol4:4 sol4:4 sol4:4 sol4:6 r:6 sol4:6 r:6 | ti4:6 r:6 sol4:6 r:6 la4:24 | sol4:6 r:6 sol4:4 sol4:4 sol4:4 sol4:6 r:6 sol4:6 r:6 | ti4:6 r:6 sol4:6 r:6 la4:18 r:3 la3:3 | fa4:6 r:3 sol4:3 fa4:6 r:3 mi4:3 re4:6 r:3 do4:3 ti3:6 r:3 sol3:3 | mi4:6 r:3 fa4:3 mi4:6 r:3 re4:3 do4:6 r:3 ti3:3 la3:6 r:3 do4:3 | ti3:6 r:3 la3:3 lab3:6 r:3 re4:3 do4:6 r:3 ti3:3 la3:6 r:3 mi4:3 | fa4:6 r:3 mi4:3 re4:6 r:3 do4:3 re4:6 r:6 sol5:6 r:6
+child: sol4:6 sol4:4 sol4:4 sol4:4 sol4:6 sol4:6 la4:24
+child: la4:6 sol4:6 mi4:6 re4:6 mi4:24
+# note: Answer added (bars 5-8, the descending staccato figure C-D C-B A-G F#-D | B-C B-A G-F# E-G | F#-E D#-A G-F# E-B | C-B A-G, chord, top D). Bar 1's triplet corrected to three equal sols (the piano score shows D-D-D, not D-E-D)

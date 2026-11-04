@@ -18,9 +18,8 @@ prov: Tchaikovsky (d.1893). Swan Lake Op.20, Jurgenson piano score (Kashkin, 187
 prov_status: ok
 scan: https://commons.wikimedia.org/wiki/Category:Swan_Lake
 read: verified
-# echo: 3.5 bars, 16 notes, 7.5 s at 112 bpm (cap 8 s). Sounding pitches:
-#   d5:24 g4:6 a4:6 bb4:6 c5:6 | d5:18 bb4:6 d5:18 bb4:6 | d5:18 g4:6 bb4:6 g4:6 eb4:6 bb4:6 | g4:24
-echo: mi4:24 la3:6 ti3:6 do4:6 re4:6 | mi4:18 do4:6 mi4:18 do4:6 | mi4:18 la3:6 do4:6 la3:6 fa3:6 do4:6 | la3:24
+# echo: 36 notes, 16.61 s at 112 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: mi4:24 la3:6 ti3:6 do4:6 re4:6 | mi4:18 do4:6 mi4:18 do4:6 | mi4:18 la3:6 do4:6 la3:6 fa3:6 do4:6 | la3:24 la3:6 re4:6 do4:6 ti3:6 | mi4:24 la3:6 ti3:6 do4:6 re4:6 | mi4:18 do4:6 mi4:18 do4:6 | mi4:18 la3:6 do4:6 la3:6 fa3:6 do4:6 | la3:36
 # child phrase, sounding: d5:24 g4:6 bb4:6 c5:6
 child: mi4:24 la3:6 do4:6 re4:6
 # child phrase, sounding: d5:18 bb4:6 d5:18 bb4:6 d5:24
@@ -29,3 +28,4 @@ child: mi4:18 do4:6 mi4:18 do4:6 mi4:24
 # note: ... bpt6k1913424b (068 of 172).jpg", printed p.64 (Act II No.1 = No.10 Scene), plate 2950. The draft matched
 # note: note for note (F# | B C# D E | F#. D F#. D | F#. B D B G D | B); no change. B minor moved to G minor. Last note
 # note: shortened (8 s cap).
+# note: Nov 4 final-19 pass: extended from bars 2-5 to bars 2-9: the theme, its lead-in (B-E-D-C#) and the full restatement

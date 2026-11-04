@@ -18,10 +18,8 @@ prov: Rossini (d.1868). Guillaume Tell (1829). Gallop read from the Grus c1870 v
 prov_status: ok
 scan: https://archive.org/details/guillaumetellop00ross/page/n15
 read: verified
-# echo: 4.25 bars, 22 notes, 3.54 s at 144 bpm (cap 8 s). Sounding pitches:
-#   a4:3 a4:3 | a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 | d5:6 e5:6 f#5:6 a4:3 a4:3 | a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 | d5:6
-#   e5:6 f#5:12
-echo: sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:6 sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:12
+# echo: 52 notes, 9.38 s at 144 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:6 sol4:3 sol4:3 | sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 | do5:6 re5:6 mi5:12 | mi5:6 la5:6 mi5:6 la5:6 | mi5:6 la5:6 mi5:6 re5:6 | do5:6 tib4:6 la4:6 mi5:3 mi5:3 | mi5:6 mi5:3 mi5:3 mi5:6 mi5:3 mi5:3 | mi5:6 la5:6 mi5:6 la5:6 | mi5:6 la5:6 sol5:6 solb5:6 | sol5:6 fa5:6 sol5:12
 # child phrase, sounding: a4:6 a4:3 a4:3 d5:6 e5:6 f#5:12
 child: sol4:6 sol4:3 sol4:3 do5:6 re5:6 mi5:12
 # child phrase, sounding: a4:6 a4:3 a4:3 a4:6 a4:3 a4:3 d5:6 f#5:12
@@ -29,3 +27,4 @@ child: sol4:6 sol4:3 sol4:3 sol4:6 sol4:3 sol4:3 do5:6 mi5:12
 # note: Grus prints the gallop in E (sol = B, do re mi = E F# G#); moved down a step to D. Echo = pickup + 2-bar call
 # note: twice, last bar held (my ending, on mi). The phrase-2 ti/fa from PLAN are not in this 4-bar Echo, so nothing to
 # note: replace.
+# note: Nov 4 final-19 pass: added the answer (30 notes) after the call: now call + answer, 52 notes

@@ -19,9 +19,8 @@ prov_status: ok
 grow: yes
 scan: https://archive.org/details/imslp-no9-op125-beethoven-ludwig-van
 read: verified
-# echo: 4.0 bars, 13 notes, 7.62 s at 126 bpm (cap 8 s). Sounding pitches:
-#   d5:24 eb5:12 f5:12 | f5:12 eb5:12 d5:12 c5:12 | bb4:24 c5:12 d5:12 | d5:18 c5:6 c5:24
-echo: mi4:24 fa4:12 sol4:12 | sol4:12 fa4:12 mi4:12 re4:12 | do4:24 re4:12 mi4:12 | mi4:18 re4:6 re4:24
+# echo: 30 notes, 15.24 s at 126 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: mi4:12 mi4:12 fa4:12 sol4:12 | sol4:12 fa4:12 mi4:12 re4:12 | do4:12 do4:12 re4:12 mi4:12 | mi4:18 re4:6 re4:24 | mi4:12 mi4:12 fa4:12 sol4:12 | sol4:12 fa4:12 mi4:12 re4:12 | do4:12 do4:12 re4:12 mi4:12 | re4:18 do4:6 do4:24
 # child phrase, sounding: bb4:24 c5:12 d5:12 d5:18 c5:6 c5:24
 child: do4:24 re4:12 mi4:12 mi4:18 re4:6 re4:24
 # child phrase, sounding: bb4:24 c5:12 d5:12 c5:18 bb4:6 bb4:24
@@ -29,3 +28,4 @@ child: do4:24 re4:12 mi4:12 re4:18 do4:6 do4:24
 # note: Pass 3: read from the B&H 19th-c. 4-hand print (IA mirror of IMSLP PMLP01607, Pf4h PDF p.70; Horn d.1893). This
 # note: first (bass) statement prints the repeated notes as one half note (bars 1 and 3: d d -> d half, bb bb -> bb
 # note: half), so the Echo and PLAN children follow the print. Printed in D, moved to B-flat. Bars 1-4 (8 s cap).
+# note: Nov 4 final-19 pass: FIX: bar 1 'mi4:24' and bar 3 'do4:24' were wrong; the theme repeats them as two quarter notes (mi mi, do do). Added the answering phrase (bars 5-8, cadence on do): 30 notes in all

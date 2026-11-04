@@ -1,0 +1,25 @@
+# tools/songbook_src/whimber/toreador.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: toreador
+title: Toreador Song
+composer: Georges Bizet
+home: do
+meter: 2
+# written meter 2/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 104
+mood: grand
+skills: loudsoft
+min_ml: 1
+family: whimber
+icon: px/songbook/toreador.png
+bar_ticks: 24
+source: Bizet, Carmen, Prélude, piano, G. Schirmer, New York 1895: Mutopia typesetting https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=635 (prelude.ly, top voice, 'marcato' section = the Toreador ...
+prov: Georges Bizet (d.1875). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 28 notes, 13.85 s at 104 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: sol4:12 la4:9 sol4:3 | mi4:12 mi4:12 | mi4:9 re4:3 mi4:9 fa4:3 | mi4:18 r:6 | fa4:12 re4:9 sol4:3 | mi4:18 r:6 | do4:12 la3:9 re4:3 | sol3:18 r:6 | re4:24 | re4:6 la4:6 sol4:6 fa4:6 | mi4:6 re4:6 mi4:6 fa4:6 | mi4:18 r:6
+child: sol4:12 la4:9 sol4:3 mi4:12 mi4:12
+child: re4:24 la4:6 sol4:6 mi4:6 re4:6 mi4:18
+# note: NEW (Wingsongs slot B). The full 'Toréador, en garde' refrain (12 bars), melody only
+# note: FLAG CLASH: opens sol-la-sol(-mi), the same first 3 notes as the Howlings motif sol-la-sol-re (4th note differs). Acciaccatura grace notes (bars 3 and 11) left out.

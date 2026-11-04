@@ -110,6 +110,46 @@
    "family": "twitchel",
    "tune": "the Moonlight Sonata",
    "composer": "Beethoven"
+  },
+  "can_can": {
+   "family": "slyte",
+   "tune": "the Can-Can",
+   "composer": "Offenbach"
+  },
+  "eine_kleine_nachtmusik": {
+   "family": "slyte",
+   "tune": "Eine kleine Nachtmusik",
+   "composer": "Mozart"
+  },
+  "blue_danube": {
+   "family": "slyte",
+   "tune": "the Blue Danube",
+   "composer": "Strauss"
+  },
+  "morning_mood": {
+   "family": "whimber",
+   "tune": "Morning Mood",
+   "composer": "Grieg"
+  },
+  "toreador": {
+   "family": "whimber",
+   "tune": "the Toreador Song",
+   "composer": "Bizet"
+  },
+  "nutcracker_march": {
+   "family": "twitchel",
+   "tune": "the Nutcracker March",
+   "composer": "Tchaikovsky"
+  },
+  "stars_and_stripes": {
+   "family": "twitchel",
+   "tune": "the Stars and Stripes Forever",
+   "composer": "Sousa"
+  },
+  "hungarian_dance_5": {
+   "family": "twitchel",
+   "tune": "Hungarian Dance Number Five",
+   "composer": "Brahms"
   }
  }
 }

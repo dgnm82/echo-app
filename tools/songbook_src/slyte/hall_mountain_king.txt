@@ -19,10 +19,8 @@ prov_status: ok
 grow: yes
 scan: https://archive.org/details/31761045200615/page/n14
 read: verified
-# echo: 4.0 bars, 26 notes, 7.62 s at 126 bpm (cap 8 s). Sounding pitches:
-#   b4:6 c#5:6 d5:6 e5:6 f#5:6 d5:6 f#5:12 | e#5:6 c#5:6 e#5:12 e5:6 c5:6 e5:12 | b4:6 c#5:6 d5:6 e5:6 f#5:6 d5:6
-#   f#5:6 b5:6 | a5:6 f#5:6 d5:6 f#5:6 a5:24
-echo: la4:6 ti4:6 do5:6 re5:6 mi5:6 do5:6 mi5:12 | mib5:6 ti4:6 mib5:12 re5:6 tib4:6 re5:12 | la4:6 ti4:6 do5:6 re5:6 mi5:6 do5:6 mi5:6 la5:6 | sol5:6 mi5:6 do5:6 mi5:6 sol5:24
+# echo: 50 notes, 15.24 s at 126 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: la4:6 ti4:6 do5:6 re5:6 mi5:6 do5:6 mi5:12 | mib5:6 ti4:6 mib5:12 re5:6 tib4:6 re5:12 | la4:6 ti4:6 do5:6 re5:6 mi5:6 do5:6 mi5:6 la5:6 | sol5:6 mi5:6 do5:6 mi5:6 sol5:24 | mi4:6 solb4:6 lab4:6 la4:6 ti4:6 lab4:6 ti4:12 | do5:6 lab4:6 do5:12 ti4:6 lab4:6 ti4:12 | mi4:6 solb4:6 lab4:6 la4:6 ti4:6 lab4:6 ti4:12 | do5:6 lab4:6 do5:12 ti4:24
 # child phrase, sounding: b4:6 d5:6 e5:6 f#5:6 d5:6 f#5:12
 child: la4:6 do5:6 re5:6 mi5:6 do5:6 mi5:12
 # child phrase, sounding: a4:6 f#4:6 d4:6 f#4:6 a4:24
@@ -30,3 +28,4 @@ child: sol4:6 mi4:6 do4:6 mi4:6 sol4:24
 # note: Echo = bars 1-4 exactly as printed (B minor, an octave up so it sits in c4-c6). Child phrase 1 = PLAN (ti
 # note: dropped). Added phrase 2 = bar 4 an octave down on pads (a4 f#4 d4 f#4 a4). Tempo 126 (score: 138) so 4 bars fit
 # note: the 8 s cap.
+# note: Nov 4 final-19 pass: extended: bars 1-4 plus the next new statement, bars 9-12 on the dominant (F#-G#-A#-B-C#...). Bars 5-8, a literal octave repeat of 1-4, are skipped. Bars 9-12 sit an octave below the score so they stay inside c4-c6

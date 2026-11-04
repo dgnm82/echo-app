@@ -1,0 +1,24 @@
+# tools/songbook_src/twitchel/stars_and_stripes.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: stars_and_stripes
+title: The Stars and Stripes Forever
+composer: John Philip Sousa
+home: do
+meter: 2
+# written meter 2/2; bpm counts quarter notes (12 ticks = 1 quarter); meter = half-note beats a bar
+bpm: 200
+mood: march-fun
+skills: loudsoft
+min_ml: 1
+family: twitchel
+icon: px/songbook/stars_and_stripes.png
+bar_ticks: 48
+source: Sousa, The Stars and Stripes Forever, piano, trio (bars 39-50): Mutopia #626, typeset from The John Church Company, Cincinnati, 1897
+prov: John Philip Sousa (d.1932). Melody only, own arrangement. PD US (90+ years).
+prov_status: ok
+read: verified
+# echo: 27 notes, 14.4 s at 200 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: sol4:24 fa4:12 mi4:12 | mi4:24 mib4:12 mi4:12 | mi4:72 mib4:12 mi4:12 | mi4:24 mib4:12 mi4:12 | sol4:24 mi4:18 sol4:6 | fa4:48 | re4:24 re4:24 | re4:24 reb4:12 re4:12 | re4:24 reb4:12 re4:12 | fa4:72 mi4:12 re4:12
+child: sol4:24 mi4:12 mi4:12 mi4:24
+child: sol4:24 mi4:18 sol4:6 re4:48
+# note: NEW. Trio melody transcribed note for note (Ab major, relative). 12 bars

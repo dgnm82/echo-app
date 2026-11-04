@@ -1,0 +1,24 @@
+# tools/songbook_src/slyte/eine_kleine_nachtmusik.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: eine_kleine_nachtmusik
+title: Eine kleine Nachtmusik
+composer: Wolfgang Amadeus Mozart
+home: do
+meter: 4
+# written meter 4/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 132
+mood: bright
+skills: highlow
+min_ml: 1
+family: slyte
+icon: px/songbook/eine_kleine_nachtmusik.png
+bar_ticks: 48
+source: Mozart, Eine kleine Nachtmusik K.525 i, violin I, bars 1-8: Mutopia #2230, typeset from Breitkopf & Härtel 1883 (Mozarts Werke)
+prov: Wolfgang Amadeus Mozart (d.1791). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 41 notes, 14.55 s at 132 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: do5:12 r:6 sol4:6 do5:12 r:6 sol4:6 | do5:6 sol4:6 do5:6 mi5:6 sol5:12 r:12 | fa5:12 r:6 re5:6 fa5:12 r:6 re5:6 | fa5:6 re5:6 ti4:6 re5:6 sol4:12 r:12 | do5:6 r:6 do5:18 mi5:6 re5:6 do5:6 | do5:6 ti4:6 ti4:18 re5:6 fa5:6 ti4:6 | re5:6 do5:6 do5:18 mi5:6 re5:6 do5:6 | do5:6 ti4:6 ti4:18 re5:6 fa5:6 ti4:6
+child: do5:12 sol4:6 do5:12 sol4:6 do5:6 sol4:6 do5:6 mi5:6
+child: mi5:6 do5:6 sol4:6 do5:24
+# note: NEW. Corrected from memory: bars 1 and 3 are quarter-note calls with rests (do5 . sol4 do5 . sol4), not running 8ths; bars 5-8 (the trilled answer) added from the score. Trills are left out (melody only)

@@ -1,0 +1,25 @@
+# tools/songbook_src/whimber/morning_mood.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: morning_mood
+title: Morning Mood
+composer: Edvard Grieg
+home: do
+meter: 2
+# written meter 6/8; bpm counts quarter notes (12 ticks = 1 quarter); meter = dotted beats a bar
+bpm: 90
+mood: calm
+skills: loudsoft
+min_ml: 1
+family: whimber
+icon: px/songbook/morning_mood.png
+bar_ticks: 36
+source: Grieg, Peer Gynt Suite No.1 Op.46, I. Morgenstimmung, version for 2 pianos, 1. Clavier PRIMO, Edition Peters, Leipzig [1895], plate 8235, p.3, bars 1-4 and A1-A4 (melody, top voice); Sibley ...
+prov: Edvard Grieg (d.1907). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 48 notes, 16.0 s at 90 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: sol4:6 mi4:6 re4:6 do4:6 re4:6 mi4:6 | sol4:6 mi4:6 re4:6 do4:6 re4:3 mi4:3 re4:3 mi4:3 | sol4:6 mi4:6 sol4:6 la4:6 mi4:6 la4:6 | sol4:6 mi4:6 re4:6 do4:12 r:6 | ti4:6 lab4:6 solb4:6 mi4:6 solb4:6 lab4:6 | ti4:6 lab4:6 solb4:6 mi4:6 solb4:3 lab4:3 solb4:3 lab4:3 | ti4:6 lab4:6 ti4:6 reb5:6 lab4:6 reb5:6 | ti4:6 lab4:6 solb4:6 mi4:12 r:6
+child: sol4:6 mi4:6 re4:6 do4:6 re4:6 mi4:6
+child: sol4:6 mi4:6 sol4:6 la4:6 mi4:6 la4:6 sol4:12
+# note: NEW (Wingsongs slot A). 8 bars: the flute call in E major, then its restatement a third higher, as in the score
+# note: FLAG Opens on the Wingsongs motif sol-mi-re-do (deliberate echo, approved). Bars A1-A4 restate the tune a major third up (G# major: ti-lab-solb-mi...), as printed. Grace notes in bars 2-3 and A2-A3 left out (assumed ornament)

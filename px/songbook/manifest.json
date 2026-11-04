@@ -149,6 +149,54 @@
    "family": "twitchel",
    "icon": "px/songbook/moonlight_sonata.png",
    "canonical": true
+  },
+  {
+   "id": "can_can",
+   "family": "slyte",
+   "icon": "px/songbook/can_can.png",
+   "canonical": true
+  },
+  {
+   "id": "eine_kleine_nachtmusik",
+   "family": "slyte",
+   "icon": "px/songbook/eine_kleine_nachtmusik.png",
+   "canonical": true
+  },
+  {
+   "id": "blue_danube",
+   "family": "slyte",
+   "icon": "px/songbook/blue_danube.png",
+   "canonical": true
+  },
+  {
+   "id": "morning_mood",
+   "family": "whimber",
+   "icon": "px/songbook/morning_mood.png",
+   "canonical": true
+  },
+  {
+   "id": "toreador",
+   "family": "whimber",
+   "icon": "px/songbook/toreador.png",
+   "canonical": true
+  },
+  {
+   "id": "nutcracker_march",
+   "family": "twitchel",
+   "icon": "px/songbook/nutcracker_march.png",
+   "canonical": true
+  },
+  {
+   "id": "stars_and_stripes",
+   "family": "twitchel",
+   "icon": "px/songbook/stars_and_stripes.png",
+   "canonical": true
+  },
+  {
+   "id": "hungarian_dance_5",
+   "family": "twitchel",
+   "icon": "px/songbook/hungarian_dance_5.png",
+   "canonical": true
   }
  ],
  "layout": {
@@ -806,6 +854,142 @@
    ],
    "frames": "single",
    "use": "Page BOTTOM piece, 164x12 (border + shadow)."
+  },
+  {
+   "file": "px/songbook/can_can.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a dancing high-kick shoe with a frilly ribbon. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/minute_waltz.png.",
+   "id": "can_can",
+   "family": "slyte",
+   "title": "Can-Can (Galop infernal)",
+   "composer": "Offenbach"
+  },
+  {
+   "file": "px/songbook/eine_kleine_nachtmusik.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a little lantern under a starry night. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/moonlight_sonata.png.",
+   "id": "eine_kleine_nachtmusik",
+   "family": "slyte",
+   "title": "Eine kleine Nachtmusik",
+   "composer": "Mozart"
+  },
+  {
+   "file": "px/songbook/blue_danube.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a blue river curling in a swirl. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/jesu_joy.png.",
+   "id": "blue_danube",
+   "family": "slyte",
+   "title": "The Blue Danube",
+   "composer": "Strauss II"
+  },
+  {
+   "file": "px/songbook/morning_mood.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a sun peeking up over hills. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/ave_maria.png.",
+   "id": "morning_mood",
+   "family": "whimber",
+   "title": "Morning Mood",
+   "composer": "Grieg"
+  },
+  {
+   "file": "px/songbook/toreador.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a red cape with a tassel. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/largo_al_factotum.png.",
+   "id": "toreador",
+   "family": "whimber",
+   "title": "Toreador Song",
+   "composer": "Bizet"
+  },
+  {
+   "file": "px/songbook/nutcracker_march.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a toy nutcracker soldier. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/overture_1812.png.",
+   "id": "nutcracker_march",
+   "family": "twitchel",
+   "title": "Nutcracker March",
+   "composer": "Tchaikovsky"
+  },
+  {
+   "file": "px/songbook/stars_and_stripes.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a parade flag with a star. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/summer_storm.png.",
+   "id": "stars_and_stripes",
+   "family": "twitchel",
+   "title": "The Stars and Stripes Forever",
+   "composer": "Sousa"
+  },
+  {
+   "file": "px/songbook/hungarian_dance_5.png",
+   "size": [
+    24,
+    24
+   ],
+   "cell": [
+    24,
+    24
+   ],
+   "frames": "single",
+   "use": "Tune icon: a twirling ribbon dancer. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/flight_bumblebee.png.",
+   "id": "hungarian_dance_5",
+   "family": "twitchel",
+   "title": "Hungarian Dance No.5",
+   "composer": "Brahms"
   }
  ]
 }

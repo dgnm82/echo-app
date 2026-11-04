@@ -1,0 +1,24 @@
+# tools/songbook_src/slyte/can_can.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: can_can
+title: Can-Can (Galop infernal)
+composer: Jacques Offenbach
+home: do
+meter: 2
+# written meter 2/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 144
+mood: bouncy
+skills: fastslow
+min_ml: 1
+family: slyte
+icon: px/songbook/can_can.png
+bar_ticks: 24
+source: Offenbach, Orphée aux enfers (1874 version), No.28 Menuet et Galop infernal, vocal score, Heugel, Paris n.d.[1874], plate H.4425, p.288 (pdf p.304), 'Ce bal est original' unison line; Sibley hdl ...
+prov: Jacques Offenbach (d.1880). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 51 notes, 14.17 s at 144 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: do4:24 | re4:6 fa4:6 mi4:6 re4:6 | sol4:12 sol4:12 | sol4:6 la4:6 mi4:6 fa4:6 | re4:12 re4:12 | re4:6 fa4:6 mi4:6 re4:6 | do4:6 do5:6 ti4:6 la4:6 | sol4:6 fa4:6 mi4:6 re4:6 | do4:24 | re4:6 fa4:6 mi4:6 re4:6 | sol4:12 sol4:12 | sol4:6 la4:6 mi4:6 fa4:6 | re4:12 re4:12 | re4:6 fa4:6 mi4:6 re4:6 | do4:6 do5:6 ti4:6 la4:6 | sol4:6 fa4:6 mi4:6 re4:6 | do4:24
+child: do4:24 re4:6 mi4:6 sol4:12 sol4:12
+child: sol4:6 la4:6 mi4:6 re4:12 re4:12
+# note: NEW. Memory phrase confirmed by the scan; galop theme played twice

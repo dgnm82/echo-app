@@ -18,13 +18,12 @@ prov: Mozart (d.1791). K.331 (Artaria 1784). Old text, read from Peters c1900 So
 prov_status: ok
 scan: https://archive.org/details/31761034110379/page/n199
 read: verified
-# echo: 4.5 bars, 25 notes, 4.5 s at 120 bpm (cap 8 s). Sounding pitches:
-#   e4:3 d4:3 c#4:3 d4:3 | f4:12 g4:3 f4:3 e4:3 f4:3 | a4:12 bb4:3 a4:3 g#4:3 a4:3 | e5:1 d5:5 c#5:3 d5:3 e5:1
-#   d5:5 c#5:3 d5:3 | f5:12 d5:6 f5:6
-echo: ti3:3 la3:3 lab3:3 la3:3 | do4:12 re4:3 do4:3 ti3:3 do4:3 | mi4:12 fa4:3 mi4:3 mib4:3 mi4:3 | ti4:1 la4:5 lab4:3 la4:3 ti4:1 la4:5 lab4:3 la4:3 | do5:12 la4:6 do5:6
+# echo: 44 notes, 8.0 s at 120 bpm (Nov 4 final-19 pass; the app plays the first 8 s).
+echo: ti3:3 la3:3 lab3:3 la3:3 | do4:12 re4:3 do4:3 ti3:3 do4:3 | mi4:12 fa4:3 mi4:3 mib4:3 mi4:3 | ti4:1 la4:5 lab4:3 la4:3 ti4:1 la4:5 lab4:3 la4:3 | do5:12 la4:6 do5:6 | sol4:1 la4:1 ti4:4 la4:6 sol4:6 la4:6 | sol4:1 la4:1 ti4:4 la4:6 sol4:6 la4:6 | sol4:1 la4:1 ti4:4 la4:6 sol4:6 solb4:6 | mi4:12
 # child phrase, sounding: d5:6 c5:3 d5:3 f5:12
 child: la4:6 sol4:3 la4:3 do5:12
 # child phrase, sounding: f5:12 d5:6 f5:12
 child: do5:12 la4:6 do5:12
 # note: Bars 1-4 as Peters prints them (graces = 1-tick flicks), A minor down a 5th to D minor so bar 4 stays under c6.
 # note: PLAN child phrase 2 ended on a5, which the Echo never plays, so it is now f5 d5 f5 (do la do) as in bar 4.
+# note: Nov 4 final-19 pass: extended from bars 1-4 to bars 1-8 (B-A-G-A twice, B-A-G-F#, E) with the printed grace notes

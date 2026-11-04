@@ -1,0 +1,24 @@
+# tools/songbook_src/slyte/blue_danube.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: blue_danube
+title: The Blue Danube
+composer: Johann Strauss II
+home: do
+meter: 3
+# written meter 3/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 190
+mood: spinning
+skills: highlow
+min_ml: 1
+family: slyte
+icon: px/songbook/blue_danube.png
+bar_ticks: 36
+source: J. Strauss II, An der schönen blauen Donau Op.314: bars 1-16 from Mutopia #519 (C. Mondrup piano reduction, Werner Icking archive; edition not named). Bars 1-5 also checked against G. Schirmer, ...
+prov: Johann Strauss II (d.1899). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 36 notes, 15.47 s at 190 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: do4:12 | do4:12 mi4:12 sol4:12 | sol4:24 sol5:12 | sol5:24 mi5:12 | mi5:24 do4:12 | do4:12 mi4:12 sol4:12 | sol4:24 sol5:12 | sol5:24 fa5:12 | fa5:24 ti3:12 | ti3:12 re4:12 la4:12 | la4:24 la5:12 | la5:24 fa5:12 | fa5:24 ti3:12 | ti3:12 re4:12 la4:12 | la4:24 la5:12 | la5:24 mi5:12 | mi5:36
+child: do4:12 do4:12 mi4:12 sol4:12 sol4:24
+child: do4:12 mi4:12 sol4:12 do5:24
+# note: NEW. Corrected from memory: the answer is sol5 sol5 | mi5 mi5 (repeated notes across the barline), then the second phrase goes sol5 sol5 | fa5 fa5 on ti3-re4-la4, then la5 la5 | fa5 fa5, la5 la5 | mi5 mi5. Bars 17-20 left out because they reach do6, above c6 in D

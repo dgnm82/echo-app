@@ -1,0 +1,25 @@
+# tools/songbook_src/twitchel/hungarian_dance_5.txt - Cole, Nov 4 2026 (Ancient Echoes, final 19).
+# Grammar: tools/build_songbook.py docstring. Half-steps are spelled as flats on purpose (see Cole step2 README).
+id: hungarian_dance_5
+title: Hungarian Dance No.5
+composer: Johannes Brahms
+home: la
+meter: 2
+# written meter 2/4; bpm counts quarter notes (12 ticks = 1 quarter)
+bpm: 100
+mood: bouncy
+skills: fastslow loudsoft
+min_ml: 1
+family: twitchel
+icon: px/songbook/hungarian_dance_5.png
+bar_ticks: 24
+source: Brahms, Ungarische Tänze No.5, piano solo, N. Simrock, Berlin n.d., plate 8250, vol.1, p.18, right-hand melody bars 1-16 (system 1 bars 1-6, system 2 bars 7-12, system 3 bars 13-16, cadence ...
+prov: Johannes Brahms (d.1897). Melody only, own arrangement. PD US + life+70.
+prov_status: ok
+read: verified
+# echo: 52 notes, 19.2 s at 100 bpm (the app plays the first 8 s: echoback.js ANC_ECHO_MS / musicfx.js HOOK_MS).
+echo: mi4:18 la4:6 | do5:18 la4:6 | lab4:18 la4:3 ti4:3 | la4:24 | fa4:6 r:12 sol4:3 la4:3 | mi4:6 r:18 | re4:3 do4:3 do4:3 ti3:3 ti3:9 mi4:3 | la3:24 | mi4:18 la4:3 do5:3 | mi5:18 do5:6 | ti4:18 do5:3 re5:3 | do5:24 | fa4:3 sol4:3 la4:3 fa4:3 mi4:3 fa4:3 sol4:3 mi4:3 | re4:3 mi4:3 fa4:3 re4:3 do4:3 re4:3 mi4:3 do4:3 | re4:3 do4:3 do4:3 ti3:3 ti3:9 mi4:3 | la3:12 la4:6 r:6
+child: mi4:18 la4:6 do5:18 la4:6 la4:24
+child: mi4:18 la4:3 do5:3 mi5:18 do5:6 do5:24
+# note: NEW (Purrlings). Bars 1-16: the 8-bar opening phrase and its 8-bar answer through the cadence
+# note: FLAG Bars 9-16 are printed an octave higher (up to C#6 written); to stay in C4-C6 they are sounded an octave lower than bars 1-8's mapping (same register as bars 1-8). Octave doublings and inner chord notes left out; top voice used. Bar 7/15 2nd-3rd notes are A natural (key sig 3 sharps, no accidental). Bar 5 16ths are E natural-F# (no accidental). Last bar: F# quarter plus the chord's top F# an octave up, eighth.
