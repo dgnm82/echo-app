@@ -39,8 +39,9 @@ async def main():
       assert await until(pg,L+".act==='"+('moon_yip' if kind=='fox' else 'stargaze')+"'",6000),await pg.evaluate(L+".act")
       await pg.wait_for_timeout(400);await pg.screenshot(path=f'{OUT}/living-{nm}-routine-night.png')
       # Found: reopen after 30 min away -> mid-activity at a waypoint, notices after 1.5 s with a found_* line, then comes over
-      await pg.evaluate("__echo.state.last=Date.now()-30*6e4;__echo.state.napUntil=0;localStorage.setItem('echo-proto-v1',JSON.stringify(__echo.state));window.__wiped=1");await pg.reload();await pg.wait_for_timeout(1500)
-      assert await pg.evaluate(L+".st")=='found',await pg.evaluate(L+".st");act=await pg.evaluate(L+".foundAct");await pg.screenshot(path=f'{OUT}/living-{nm}-found-{act}.png')
+      await pg.evaluate("__echo.state.last=Date.now()-30*6e4;__echo.state.napUntil=0;localStorage.setItem('echo-proto-v1',JSON.stringify(__echo.state));window.__wiped=1");await pg.reload()
+      # wait on the condition, not a fixed sleep: lvFound sets foundAct and arms its own 1.5 s notice timer, so a fixed 1.5 s wait raced it (CI: st=='noticed')
+      assert await until(pg,"!!"+L+".foundAct",5000),'found on reopen';st=await pg.evaluate(L+".st");assert st in('found','noticed'),st;act=await pg.evaluate(L+".foundAct");await pg.screenshot(path=f'{OUT}/living-{nm}-found-{act}.png')
       assert await until(pg,"document.getElementById('b').style.display==='block'",3000);txt=await pg.inner_text('#b');print(nm,'found',act,'|',txt);assert not BAD.search(txt)
       await pg.screenshot(path=f'{OUT}/living-{nm}-found-noticed.png')
       assert await until(pg,L+".st==='present'&&JSON.stringify("+L+".pos)==="+repr(str(HP).replace(' ','')),8000),'came over after noticing'
