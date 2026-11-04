@@ -10,9 +10,9 @@ let n=0,bad=0;const ok=(c,m)=>{n++;if(!c){bad++;console.log('FAIL',m)}};
 const FAMS=['slyte','whimber','twitchel'],MAN=JSON.parse(fs.readFileSync(path.join(R,'px/songbook/manifest.json'),'utf8'));
 const CANON={};MAN.tunes.filter(t=>t.canonical).forEach(t=>CANON[t.id]=t.family);
 const KEYS=new Set(['id','title','composer','home','meter','bpm','mood','skills','echo','child','min_ml','icon','prov','prov_status','fixture','_echo_seconds','bar_ticks','spoken']);
-const MAJ=[0,2,4,5,7,9,11],midi=(f,x)=>E.do_midi[f]+MAJ[x[0]-1]+12*x[1]+(x[3]||0),sample=f=>m=>path.join(R,'music/notes',`${f}_${EB._pure.spell(f,m).replace('#','s')}.ogg`);
+const MAJ=[0,2,4,5,7,9,11],midi=(f,x)=>E.do_midi[f]+MAJ[x[0]-1]+12*x[1]+(x[3]||0),NOTES=path.join(R,'music/notes'),sampleIn=d=>f=>m=>path.join(d,`${f}_${EB._pure.spell(f,m).replace('#','s')}.ogg`);
 // validate a built songbook block; returns the error list (so the fixture can prove the gate catches things)
-function validate(sb,o){o=o||{};const errs=[],e=(t,m)=>errs.push(`${t&&t.id}: ${m}`);
+function validate(sb,o){o=o||{};const errs=[],e=(t,m)=>errs.push(`${t&&t.id}: ${m}`),sample=sampleIn(o.notes||NOTES);   // o.notes: a samples dir (the fixture uses a temp copy)
   if(!sb||sb.v!==1)errs.push('songbook block missing or not v1');
   for(const f of FAMS){const L=(sb&&sb[f])||[];if(!Array.isArray(L)){errs.push(f+' not a list');continue}const pads=new Set(Q.padsFor(f,4,E)),seen=new Set();
     for(const t of L){if(seen.has(t.id))e(t,'duplicate id');seen.add(t.id);
@@ -37,7 +37,12 @@ const errs=validate(SHIP,{fixture:tp>0});errs.forEach(x=>console.log('SONGBOOK',
 const shipped=FAMS.reduce((a,f)=>a+((SHIP&&SHIP[f])||[]).length,0);console.log(`shipped Ancient Echoes: ${shipped} (${FAMS.map(f=>f+' '+((SHIP&&SHIP[f])||[]).length).join(', ')}); held back: ${((SHIP&&SHIP.held)||[]).length}`);
 // the gate catches what it must (fixture, built with --include-held)
 const FX=JSON.parse(fs.readFileSync(path.join(R,'tools/fixtures/songbook_fixture.json'),'utf8'));
-const fe=validate(FX,{fixture:true});ok(fe.some(x=>/fixture_held: prov_status edition_check/.test(x)),'gate blocks an edition_check tune');
+// the missing-sample case never depends on what has been rendered: a temp copy of music/notes without fixture_held's fa/ti samples
+const FXN=fs.mkdtempSync(path.join(require('os').tmpdir(),'sbnotes_'));fs.readdirSync(NOTES).forEach(x=>fs.copyFileSync(path.join(NOTES,x),path.join(FXN,x)));
+{const used=new Set(),gone=new Set(),fn=(f,x)=>path.basename(sampleIn(FXN)(f)(midi(f,x)));
+ for(const f of FAMS)for(const t of FX[f]||[])for(const x of [...t.echo.n,...t.child.flatMap(p=>p.n)])if(x[0])(t.id==='fixture_held'&&[4,7].includes(x[0])?gone:used).add(f+'/'+fn(f,x));
+ [...gone].filter(k=>!used.has(k)).forEach(k=>{const q=path.join(FXN,k.split('/')[1]);if(fs.existsSync(q))fs.unlinkSync(q)});ok([...gone].some(k=>!used.has(k)),'fixture: fixture_held has a fa/ti sample to remove')}
+const fe=validate(FX,{fixture:true,notes:FXN});fs.rmSync(FXN,{recursive:true,force:true});ok(fe.some(x=>/fixture_held: prov_status edition_check/.test(x)),'gate blocks an edition_check tune');
 ok(fe.some(x=>/fixture_held: no sample/.test(x)),'gate catches a missing fa/ti sample');ok(!fe.some(x=>/^fixture_steps/.test(x)),'the ok fixture passes');
 ok(validate(FX).some(x=>/not a canonical/.test(x)),'non-canonical ids are rejected outside fixtures');
 {const bad=JSON.parse(JSON.stringify(FX)),bt=bad.slyte.find(t=>t.id==='fixture_steps');bt.lyrics='la la';bt.child[0].n[0]=[4,0,12];bt.child[1].n.push([6,0,12],[1,1,12],[2,1,12],[3,1,12],[5,1,12]);
