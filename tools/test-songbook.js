@@ -87,6 +87,16 @@ ok(!/secret song|secret_song/i.test(corpus),'never "secret song"');
 {const tmp=path.join(require('os').tmpdir(),'eibvec_'+process.pid+'.json');cp.execFileSync('node',[path.join(R,'tools/export_eib_vectors.js'),tmp]);ok(fs.readFileSync(tmp,'utf8')===fs.readFileSync(path.join(R,'host/eib_dedupe_vectors.json'),'utf8'),'host/eib_dedupe_vectors.json unchanged');fs.unlinkSync(tmp)}
 {const SBk=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'))).songbook;const L=['slyte','whimber','twitchel'].flatMap(f=>SBk[f]);ok(L.every(t=>t.spoken&&t.spoken.tune&&!/\d/.test(t.spoken.tune+t.spoken.composer)),'every shipped tune has a spoken title (no digits) for the 7-8 / 9-10 lines');
  ok(L.every(t=>!t.bar_ticks||t.bar_ticks%12===0||t.bar_ticks%6===0),'bar_ticks are whole eighths');ok(!L.some(t=>(SBk.held||[]).some(h=>h.id===t.id)),'held tunes never ship')}
+// Nov 4: tune icons = exactly the shipped tunes (one each, real art from px/songbook/manifest.json), nothing else referenced; icons are never tinted
+{const SBk=TJ.songbook,ids=FAMS.flatMap(f=>(SBk[f]||[]).map(t=>t.id)).sort(),L=FAMS.flatMap(f=>SBk[f]||[]),eq=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
+ ok(L.every(t=>t.icon===`px/songbook/${t.id}.png`&&fs.existsSync(path.join(R,t.icon))),'every shipped tune has its own icon file');
+ const UI=new Set(MAN.files.filter(x=>!x.id).map(x=>path.basename(x.file))),pngs=fs.readdirSync(path.join(R,'px/songbook')).filter(x=>x.endsWith('.png')&&!UI.has(x)).map(x=>x.slice(0,-4));
+ ok(eq(pngs,ids),`tune icons in px/songbook = the ${ids.length} shipped tunes (extra: ${pngs.filter(x=>!ids.includes(x))}; missing: ${ids.filter(x=>!pngs.includes(x))})`);
+ ok(eq(MAN.files.filter(x=>x.id).map(x=>x.id),ids)&&MAN.files.filter(x=>x.id).every(x=>x.file===`px/songbook/${x.id}.png`),'manifest tune icon files = the shipped tunes');
+ ok(MAN.tunes.filter(t=>t.icon).every(t=>ids.includes(t.id)),'no manifest icon for a tune that does not ship');
+ const code=['game.js','echoback.js','echoback.css','style.css','index.html'].map(f=>fs.readFileSync(path.join(R,f),'utf8')).join('\n'),refs=[...code.matchAll(/px\/songbook\/(\w+)\.png/g)].map(m=>m[1]+'.png');
+ ok(refs.every(x=>UI.has(x)||ids.includes(x.slice(0,-4))),'app code references no other tune icon');
+ const css=fs.readFileSync(path.join(R,'echoback.css'),'utf8').split('}').filter(r=>/\.(eibanci|bkancs|bkance)\b/.test(r));ok(css.length&&css.every(r=>!/filter|mix-blend|hue-rotate|tint/.test(r)),'tune icons are never tinted (no filter / blend on the icon rules)')}
 // Nov 3 (LIST #11): an Ancient Echo's intro (Echo version + child's part), duet and Memory Book replay share one tempo = the tune's own bpm
 {const SBk=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'))).songbook;const L=['slyte','whimber','twitchel'].flatMap(f=>SBk[f]);const c={n:[[1,0,12]],phrases:null,labels:null};
  ok(L.every(t=>EB.sbBpm(t)===t.bpm&&EB.sbTune(t,c).bpm===t.bpm&&(!t.echo||!t.echo.bpm||t.echo.bpm===t.bpm)),'intro tempo == tune tempo (sbTune/sbBpm, no round speed-up)');

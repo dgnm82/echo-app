@@ -15,7 +15,8 @@
  "tune_ids_canonical": true,
  "_changelog": [
   "Nov 1 (Kai): tune ids canonical.",
-  "Nov 1 (Kai): Ancient Echoes page shows only heard tunes + ONE sleeping pebble; ancient_page.png replaced by top/row/bottom pieces, no fixed grid."
+  "Nov 1 (Kai): Ancient Echoes page shows only heard tunes + ONE sleeping pebble; ancient_page.png replaced by top/row/bottom pieces, no fixed grid.",
+  "Nov 4 (Pixal/Jay): final 19. The 8 new tune icons are the real art; the 8 dropped tunes and the 3 never-shipping ones (night_bald_mountain, jesu_joy blocked; overture_1812 held) have no icon. Tune icons = exactly the 19 shipped tunes (tools/test-songbook.js)."
  ],
  "tunes": [
   {
@@ -31,16 +32,10 @@
    "canonical": true
   },
   {
-   "id": "toccata_fugue",
-   "family": "slyte",
-   "icon": "px/songbook/toccata_fugue.png",
-   "canonical": true
-  },
-  {
    "id": "overture_1812",
    "family": "slyte",
-   "icon": "px/songbook/overture_1812.png",
-   "canonical": true
+   "canonical": true,
+   "icon_note": "no icon: never ships (blocked/held); the 19 shipped tunes are the only tune icons"
   },
   {
    "id": "ride_valkyries",
@@ -51,20 +46,8 @@
   {
    "id": "night_bald_mountain",
    "family": "slyte",
-   "icon": "px/songbook/night_bald_mountain.png",
-   "canonical": true
-  },
-  {
-   "id": "minute_waltz",
-   "family": "slyte",
-   "icon": "px/songbook/minute_waltz.png",
-   "canonical": true
-  },
-  {
-   "id": "summer_storm",
-   "family": "slyte",
-   "icon": "px/songbook/summer_storm.png",
-   "canonical": true
+   "canonical": true,
+   "icon_note": "no icon: never ships (blocked/held); the 19 shipped tunes are the only tune icons"
   },
   {
    "id": "spring",
@@ -85,27 +68,15 @@
    "canonical": true
   },
   {
-   "id": "flight_bumblebee",
-   "family": "whimber",
-   "icon": "px/songbook/flight_bumblebee.png",
-   "canonical": true
-  },
-  {
    "id": "jesu_joy",
    "family": "whimber",
-   "icon": "px/songbook/jesu_joy.png",
-   "canonical": true
+   "canonical": true,
+   "icon_note": "no icon: never ships (blocked/held); the 19 shipped tunes are the only tune icons"
   },
   {
    "id": "hallelujah",
    "family": "whimber",
    "icon": "px/songbook/hallelujah.png",
-   "canonical": true
-  },
-  {
-   "id": "ave_maria",
-   "family": "whimber",
-   "icon": "px/songbook/ave_maria.png",
    "canonical": true
   },
   {
@@ -130,24 +101,6 @@
    "id": "the_entertainer",
    "family": "twitchel",
    "icon": "px/songbook/the_entertainer.png",
-   "canonical": true
-  },
-  {
-   "id": "danse_macabre",
-   "family": "twitchel",
-   "icon": "px/songbook/danse_macabre.png",
-   "canonical": true
-  },
-  {
-   "id": "largo_al_factotum",
-   "family": "twitchel",
-   "icon": "px/songbook/largo_al_factotum.png",
-   "canonical": true
-  },
-  {
-   "id": "moonlight_sonata",
-   "family": "twitchel",
-   "icon": "px/songbook/moonlight_sonata.png",
    "canonical": true
   },
   {
@@ -332,40 +285,6 @@
    "composer": "Rossini"
   },
   {
-   "file": "px/songbook/toccata_fugue.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: pipe organ + little bat. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "toccata_fugue",
-   "family": "slyte",
-   "title": "Toccata and Fugue in D minor",
-   "composer": "Bach"
-  },
-  {
-   "file": "px/songbook/overture_1812.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a cannon going BOOM + a bell. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "overture_1812",
-   "family": "slyte",
-   "title": "1812 Overture",
-   "composer": "Tchaikovsky"
-  },
-  {
    "file": "px/songbook/ride_valkyries.png",
    "size": [
     24,
@@ -381,57 +300,6 @@
    "family": "slyte",
    "title": "Ride of the Valkyries",
    "composer": "Wagner"
-  },
-  {
-   "file": "px/songbook/night_bald_mountain.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a friendly swirly ghost over a bare hill at night. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "night_bald_mountain",
-   "family": "slyte",
-   "title": "Night on Bald Mountain",
-   "composer": "Mussorgsky / Rimsky-Korsakov"
-  },
-  {
-   "file": "px/songbook/minute_waltz.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a puppy chasing its tail in a circle. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "minute_waltz",
-   "family": "slyte",
-   "title": "Minute Waltz",
-   "composer": "Chopin"
-  },
-  {
-   "file": "px/songbook/summer_storm.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a storm cloud, lightning and rain. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "summer_storm",
-   "family": "slyte",
-   "title": "The Four Seasons: Summer (storm)",
-   "composer": "Vivaldi"
   },
   {
    "file": "px/songbook/spring.png",
@@ -485,40 +353,6 @@
    "composer": "Tchaikovsky"
   },
   {
-   "file": "px/songbook/flight_bumblebee.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a bumblebee with a zigzag path. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "flight_bumblebee",
-   "family": "whimber",
-   "title": "Flight of the Bumblebee",
-   "composer": "Rimsky-Korsakov"
-  },
-  {
-   "file": "px/songbook/jesu_joy.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a little sailboat on rolling waves. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "jesu_joy",
-   "family": "whimber",
-   "title": "Jesu, Joy of Man's Desiring",
-   "composer": "Bach"
-  },
-  {
    "file": "px/songbook/hallelujah.png",
    "size": [
     24,
@@ -534,23 +368,6 @@
    "family": "whimber",
    "title": "Hallelujah Chorus",
    "composer": "Handel"
-  },
-  {
-   "file": "px/songbook/ave_maria.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a calm glowing candle. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "ave_maria",
-   "family": "whimber",
-   "title": "Ave Maria",
-   "composer": "Schubert"
   },
   {
    "file": "px/songbook/fur_elise.png",
@@ -619,57 +436,6 @@
    "family": "twitchel",
    "title": "The Entertainer",
    "composer": "Joplin"
-  },
-  {
-   "file": "px/songbook/danse_macabre.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a clock at midnight (no numerals) + a little bat. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "danse_macabre",
-   "family": "twitchel",
-   "title": "Danse Macabre",
-   "composer": "Saint-Saëns"
-  },
-  {
-   "file": "px/songbook/largo_al_factotum.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: the barber's scissors and comb. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "largo_al_factotum",
-   "family": "twitchel",
-   "title": "Largo al factotum",
-   "composer": "Rossini"
-  },
-  {
-   "file": "px/songbook/moonlight_sonata.png",
-   "size": [
-    24,
-    24
-   ],
-   "cell": [
-    24,
-    24
-   ],
-   "frames": "single",
-   "use": "Tune icon: a full moon over still water. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
-   "id": "moonlight_sonata",
-   "family": "twitchel",
-   "title": "Moonlight Sonata (1st mvt)",
-   "composer": "Beethoven"
   },
   {
    "file": "px/songbook/ancient_emblem.png",
@@ -866,7 +632,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a dancing high-kick shoe with a frilly ribbon. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/minute_waltz.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a high kick: a big pink frilly skirt with white lace hem, one leg kicked high in a red heeled shoe, kick swoosh. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "can_can",
    "family": "slyte",
    "title": "Can-Can (Galop infernal)",
@@ -883,7 +649,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a little lantern under a starry night. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/moonlight_sonata.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a little glowing lantern with a soft dotted glow ring and stars, on the night badge. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "eine_kleine_nachtmusik",
    "family": "slyte",
    "title": "Eine kleine Nachtmusik",
@@ -900,7 +666,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a blue river curling in a swirl. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/jesu_joy.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a blue river curling into a swirl with white foam, a ripple at its foot. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "blue_danube",
    "family": "slyte",
    "title": "The Blue Danube",
@@ -917,7 +683,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a sun peeking up over hills. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/ave_maria.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a half sun rising over two green hills, soft rays, no face. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "morning_mood",
    "family": "whimber",
    "title": "Morning Mood",
@@ -934,7 +700,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a red cape with a tassel. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/largo_al_factotum.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a swirling red cape on a stick with gold trim and a gold tassel; no bull, no people. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "toreador",
    "family": "whimber",
    "title": "Toreador Song",
@@ -951,7 +717,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a toy nutcracker soldier. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/overture_1812.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a toy nutcracker soldier bust: tall hat with gold band, big grin, red coat with gold buttons. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "nutcracker_march",
    "family": "twitchel",
    "title": "Nutcracker March",
@@ -968,7 +734,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a parade flag with a star. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/summer_storm.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a parade firework: gold star centre bursting into red, plum and blue sparks with a launch trail; no flag. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "stars_and_stripes",
    "family": "twitchel",
    "title": "The Stars and Stripes Forever",
@@ -985,7 +751,7 @@
     24
    ],
    "frames": "single",
-   "use": "Tune icon: a twirling ribbon dancer. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML). PLACEHOLDER until art lands: a copy of px/songbook/flight_bumblebee.png.",
+   "use": "Tune icon (Pixal, Nov 4: pm/ancient_accuracy/icons): a red dance ribbon on a stick swirling in one big loop with a wavy tail, whoosh lines; no figure. Shown on the Ancient Echoes tile and page; title text only for 7-8/9-10 (in HTML).",
    "id": "hungarian_dance_5",
    "family": "twitchel",
    "title": "Hungarian Dance No.5",
