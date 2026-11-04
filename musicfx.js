@@ -35,7 +35,12 @@ function noteCol(n){return n.startsWith('f#')?7:n.startsWith('bb')?8:'cdefgab'.i
 function beatOn(b,tw,holdS){if(!b)return false;if(tw&&(b.beat%b.bpb)!==0)return false;return b.phase*b.spb<(holdS||.166)}   // day: every beat; twilight: beat 1 of each bar; 2 ticks
 function swayFrame(b,tw,holdS){if(!beatOn(b,tw,holdS))return 0;const n=tw?Math.floor(b.beat/b.bpb):b.beat;return n%2?2:1}   // f1 then f2 on alternate beats (twilight: alternate bars)
 function seqMs(n,bpm,minMs){const k=60000/(bpm||96)/TPB;return n.reduce((a,x)=>a+Math.max(minMs||0,x[2]*k),0)}
-MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs};
+// Nov 3 (Daniel via Kai): the run's sky body pulses to the beat instead of the (off) dash. Same beat clock as drawRunPulse (MFX.beat()).
+// env = 1 on the beat, easing out (quadratic) to 0 over SKY.ms; twilight loops: only beat 1 of each bar (beatOn's rule; the run loops are never twilight)
+const SKY={scale:.05,glow:.3,ms:250,halo:1.6};
+function skyEnv(b,P){P=P||SKY;if(!b)return 0;if(/twilight/.test(b.name||'')&&(b.beat%b.bpb)!==0)return 0;const t=b.phase*b.spb*1000;if(!(t>=0&&t<P.ms))return 0;const u=1-t/P.ms;return u*u}
+MFX.SKY=SKY;
+MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs,skyEnv};
 if(typeof module!=='undefined'){module.exports=MFX;return}
 // ---------------- sound
 function note(f,n,o){const M=W.Music;if(!M||!M.oneShot)return null;return M.oneShot(nfile(f,n),Object.assign({vol:.5,duck:.75},o||{}))}
@@ -99,6 +104,19 @@ MFX.runPulse=false;   // Meadow Dash beat mark: the one switch (false = off ever
 // Obstacles stay beat-locked (beatGrid); a beat cue that can't read as a caret belongs in the music plan (LIST #5).
 MFX.drawRunPulse=function(cx,x,y,scale){if(!MFX.runPulse||RM()||!BP.complete||!BP.naturalWidth)return;const b=MFX.beat();if(!b)return;const f=b.phase<.15?0:b.phase<.3?1:b.phase<.45?2:-1;if(f<0)return;const k=scale||1;
   cx.drawImage(BP,f*28,0,28,6,Math.round(x-14*k),Math.round(y-3*k),28*k,6*k)};
+// Nov 3 (Daniel via Kai): the sun (or moon) in the run sky pulses gently on the beat: a soft ~5% scale bump + a faint halo BEHIND it, easing back
+// over 250 ms. The sprite itself is never tinted: the body is cut out of the sky art (its sky colour keyed out) and redrawn whole, a little bigger,
+// over a separate radial glow. Off in reduced motion / Calm effects, like every beat visual. Only sky art listed in SKY_BODY has a body:
+// meadow_sky (Meadow Dash: the sun); hill_sky (Moonlight Glide: stars only) and garden_sky (Twitchel's Meadow Dash) have none, so nothing pulses there.
+MFX.skyPulse=true;   // the one switch
+MFX.SKY_BODY={meadow_sky:{x:250,y:90,w:25,h:25,kind:'sun',rgb:'255,248,218'}};
+const SKC={};function skyCut(im,r,key){if(SKC[key])return SKC[key];const c=D.createElement('canvas');c.width=r.w;c.height=r.h;const g=c.getContext('2d');g.drawImage(im,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+  const d=g.getImageData(0,0,r.w,r.h),p=d.data,k=[p[0],p[1],p[2]];for(let i=0;i<p.length;i+=4)if(p[i]===k[0]&&p[i+1]===k[1]&&p[i+2]===k[2])p[i+3]=0;g.putImageData(d,0,0);return SKC[key]=c}
+MFX.skyLast=null;   // the last frame's pulse {t,beat,phase,spb,env,scale,glow,kind} (proof/test hook)
+MFX.drawSkyPulse=function(cx,im){MFX.skyLast=null;if(!MFX.skyPulse||!im||!im.complete||!im.naturalWidth)return;const m=/([a-z_]+)\.png/.exec(im.src||''),r=m&&MFX.SKY_BODY[m[1]];if(!r)return;
+  const b=MFX.beat(),e=RM()?0:skyEnv(b),s=1+SKY.scale*e,gl=SKY.glow*e;MFX.skyLast={t:b?b.t:null,beat:b?b.beat:null,phase:b?b.phase:null,spb:b?b.spb:null,name:b?b.name:null,env:e,scale:s,glow:gl,kind:r.kind};if(!(e>0))return;
+  const X=r.x+r.w/2,Y=r.y+r.h/2,R=r.w/2*SKY.halo,G=cx.createRadialGradient(X,Y,r.w*.25,X,Y,R);G.addColorStop(0,`rgba(${r.rgb},${gl.toFixed(3)})`);G.addColorStop(1,`rgba(${r.rgb},0)`);
+  cx.save();cx.fillStyle=G;cx.beginPath();cx.arc(X,Y,R,0,Math.PI*2);cx.fill();cx.restore();const w=r.w*s,h=r.h*s;cx.drawImage(skyCut(im,r,m[1]),X-w/2,Y-h/2,w,h)};
 // Step 3 beat-lock: the playing loop's beat grid in game time (beat k at k*spb - off); null when no loop plays (= today's spawns)
 MFX.beatGrid=function(gt){const b=MFX.beat();if(!b)return null;const off=((b.t-(gt||0))%b.spb+b.spb)%b.spb;return {spb:b.spb,off,bpm:b.bpm}};
 // ---------------- A7 petting hum: one soft hum per ~1.1 s while stroking; pitch follows speed, no target

@@ -65,4 +65,13 @@ ok(P.noteCol('f#4')===7&&P.noteCol('bb4')===8&&P.noteCol('d5')===1&&P.noteCol('a
  ok(/MFX\.runPulse=false;/.test(mf),'Nov 3 (LIST #9): the Meadow Dash beat mark (the blinking dash at the Echo\'s feet) is off');
  const gj=fs.readFileSync(path.join(R,'game.js'),'utf8');ok(/drawObs\(\);if\(fox&&window\.MusicFX\)MusicFX\.drawRunPulse\(cx,84,474\)/.test(gj),'the beat mark is drawn after the obstacles at (84,474)');
  const css=fs.readFileSync(path.join(R,'musicfx.css'),'utf8');ok(/#sc #cr\.beat\{transform:translateX\(-50%\) translateY\(-1px\)\}/.test(css)&&/prefers-reduced-motion:reduce\)\{#sc #cr\.beat\{transform:translateX\(-50%\)\}/.test(css),'bounce = 1 px, none in reduced motion')}
+// Nov 3 (Daniel via Kai): the run's sky body pulses on the beat (same clock), ~5% scale + a faint halo, easing back over 250 ms; the dash stays off
+{const mf=fs.readFileSync(path.join(R,"musicfx.js"),"utf8"),gj=fs.readFileSync(path.join(R,"game.js"),"utf8"),E=P.skyEnv,S=MFX.SKY,bb=(beat,phase,name)=>Object.assign(P.beatAt(0,126,4,64),{beat,phase,name:name||'game_meadow_dash_loop'});
+ ok(S.scale===.05&&S.ms===250&&S.glow===.3,'sky pulse: 5% scale, 0.3 halo, 250 ms');
+ ok(E(bb(0,0))===1&&E(bb(5,0))===1,'sky pulse: full on every beat (day)');const t=x=>x/1000/(60/126);
+ ok(E(bb(0,t(125)))>.2&&E(bb(0,t(125)))<.3&&E(bb(0,t(249)))>0&&E(bb(0,t(250)))===0&&E(bb(0,.9))===0,'sky pulse: eases back to 0 by 250 ms, off-beat = 0');
+ ok(E(bb(4,0,'bg_slyte_twilight_loop'))===1&&E(bb(5,0,'bg_slyte_twilight_loop'))===0&&E(null)===0,'sky pulse: twilight = beat 1 of each bar only; no clock = no pulse');
+ ok(/MFX\.skyPulse=true;/.test(mf)&&/SKY_BODY=\{meadow_sky:\{x:250,y:90,w:25,h:25,kind:'sun'/.test(mf)&&!/hill_sky:|garden_sky:/.test(mf.split('MFX.SKY_BODY=')[1].split('\n')[0]),'sky body: the meadow sun only (Moonlight Glide / garden skies have none)');
+ ok(!/filter|globalCompositeOperation/.test(mf.split('MFX.drawSkyPulse=')[1].split('\n// Step 3 beat-lock')[0]),'sky pulse never tints the sprite (no filter / composite op)');
+ ok(/cx\.drawImage\(IM\.meadow_sky,0,0\);if\(window\.MusicFX&&MusicFX\.drawSkyPulse\)MusicFX\.drawSkyPulse\(cx,IM\.meadow_sky\)/.test(gj)&&/MusicFX\.drawSkyPulse\(cx,IM\.hill_sky\)/.test(gj),'both runs call the sky pulse right after the sky')}
 console.log(`musicfx OK (${n} checks)`);

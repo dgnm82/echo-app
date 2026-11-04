@@ -1518,10 +1518,10 @@ function runGame(){
   let alive=true,acc=0,last=performance.now(),happy=0,pops=[],frame=0;
   const lineOK=()=>g.t-lastLine>=6;const line=(k,ms)=>{if(!lineOK())return false;lastLine=g.t;talk(B(k),ms||1800);return true};
   const giggle=()=>SFX(SP+'_silly_'+(1+Math.floor(Math.random()*3)),{voice:true,vol:.7,gap:300});
-  function bg(){const d=g.dist;
-    if(fox){cx.drawImage(IM.meadow_sky,0,0);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
+  function bg(){const d=g.dist;   // Nov 3: MusicFX.drawSkyPulse = the sky body's soft beat pulse, right after the sky so clouds still pass in front (none in Moonlight Glide's sky)
+    if(fox){cx.drawImage(IM.meadow_sky,0,0);if(window.MusicFX&&MusicFX.drawSkyPulse)MusicFX.drawSkyPulse(cx,IM.meadow_sky);const c=IM.cloud_day;[[30,150],[200,220],[300,120]].forEach(([x,y],i)=>cx.drawImage(c,Math.round(((x-d*.05*(i+1))%420+420)%420-40),y));
       cx.drawImage(IM.meadow_far,-Math.round(d*.3%960),416);cx.drawImage(IM.meadow_gnd,-Math.round(d%960),448)}
-    else{cx.drawImage(IM.hill_sky,0,0);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
+    else{cx.drawImage(IM.hill_sky,0,0);if(window.MusicFX&&MusicFX.drawSkyPulse)MusicFX.drawSkyPulse(cx,IM.hill_sky);cx.drawImage(IM['hill_stars'+((performance.now()/500|0)%2)],0,0);
       [[60,200],[250,320]].forEach(([x,y],i)=>cx.drawImage(IM.cloud_far&&IM.cloud_far.naturalWidth?IM.cloud_far:IM.cloud,Math.round(((x-d*.08*(i+1))%420+420)%420-40),y));cx.drawImage(IM.hill_gnd,-Math.round(d%960),512)}}
   function drawObs(){const d=g.dist;for(const o of g.obs){const x=Math.round(o.x-d);if(x>370||x<-60)continue;const wob=o.pushed?Math.round(Math.sin(g.t*30)*2):0;
       if(nv&&!o.pushed&&x<360+g.speed*.5){cx.fillStyle='rgba(255,227,154,.25)';cx.fillRect(x-2,o.y-2,o.w+4,Math.min(o.h+4,640))}
