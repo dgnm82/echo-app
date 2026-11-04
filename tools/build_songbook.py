@@ -21,6 +21,7 @@ Source format (one file per tune, tools/songbook_src/<fam>/<id>.txt; '#' starts 
   family/scan/read/icon/bar_ticks:   optional, informational (family must match the folder, icon must be px/songbook/<id>.png)
   meter: 4 or 3/4                    beats per bar (the numerator is kept; 6/8, 9/8, 3/8: Cole writes dotted beats 2/3/1 + bar_ticks)
   bar_ticks: 36                      optional, the bar length in ticks for compound meters (bpm always counts quarter notes); kept in the record
+  echo: ... | ...                    the '|' bar lines are kept as bars: [tick offsets] (a short first bar = a pickup); the phrase cuts land on them
 Spoken titles: tools/songbook_src/ancient_titles.json {titles:{id:{family,tune,composer}}} -> record.spoken (no digits).
   grow: yes                          optional, one tune per family: the 'Our song grew!' growing song (step 3); else the most-met tune, else the first
   echo: la4:12 ti4:12 do5:12 re5:12 | mi5:12 do5:12 mi5:24      the Echo's version; more echo: lines are appended; '|' = bar line (ignored)
@@ -74,14 +75,18 @@ def notes(line, where, err, child=False):
 
 def parse(path, fam, E, canon, fixture, errs):
     def err(m): errs.append(f'{os.path.relpath(path, ROOT)}: {m}')
-    kv, echo, child = {}, [], []
+    kv, echo, child, bars = {}, [], [], []
     for i, raw in enumerate(open(path, encoding='utf-8'), 1):
         line = COMMENT.sub('', raw).strip() if not raw.lstrip().startswith(('source:', 'prov:', 'scan:')) else raw.strip()
         if not line: continue
         if ':' not in line: err(f'line {i}: expected "key: value"'); continue
         k, v = line.split(':', 1); k, v = k.strip(), v.strip()
         if k not in KEYS: err(f'line {i}: unknown field "{k}" (lyrics/words are never allowed)'); continue
-        if k == 'echo': echo += notes(v, f'line {i}', err)
+        if k == 'echo':
+            at = sum(x[2] for x in echo)   # the source's bar lines '|' (tick offsets), kept for the phrase cuts (a pickup = a short first bar)
+            if echo: bars.append(at)   # a new echo: line starts a bar
+            for seg in v.split('|')[:-1]: at += sum(x[2] for x in notes(seg, f'line {i}', lambda m: None)); bars.append(at)
+            echo += notes(v, f'line {i}', err)
         elif k == 'child': child.append(notes(v, f'line {i}', err, child=True))
         else: kv[k] = v
     tid = kv.get('id', '')
@@ -121,6 +126,7 @@ def parse(path, fam, E, canon, fixture, errs):
     if kv.get('bar_ticks'):
         try: t['bar_ticks'] = int(kv['bar_ticks'])
         except ValueError: err('bar_ticks must be a number')
+    t['bars'] = sorted({b for b in bars if 0 < b < sum(x[2] for x in echo)})
     if fixture: t['fixture'] = True
     if kv.get('grow') not in (None, '', 'yes', 'no'): err('grow must be yes or no')
     if kv.get('grow') == 'yes': t['_grow'] = True
@@ -131,8 +137,12 @@ def build(src, fixture=False, include_held=False):
     E = eib(); errs = []
     tp = os.path.join(src, 'ancient_titles.json')   # Cole: spoken titles for {var:ancient_tune}/{var:ancient_composer} (7-8 / 9-10 lines only)
     titles = json.load(open(tp, encoding='utf-8')).get('titles', {}) if os.path.exists(tp) else {}
+    pp = os.path.join(src, 'phrase_ends.json')   # Jay: where each tune's phrases end (ticks), for the phrase cuts (musicfx.js cutAtPhrase)
+    ends = json.load(open(pp, encoding='utf-8')).get('ends', {}) if os.path.exists(pp) else {}
     man = json.load(open(os.path.join(ROOT, 'px/songbook/manifest.json')))
     canon = {t['id']: t['family'] for t in man['tunes'] if t.get('canonical')}
+    for k in ends:
+        if not fixture and k not in canon: errs.append(f'phrase_ends.json: "{k}" is not a canonical tune')
     out = {'v': 1, '_about': 'Ancient Echoes (Music School step 2). Built by tools/build_songbook.py from tools/songbook_src/<fam>/<id>.txt (Cole). '
            'echo = Song v2 (the real hook the Echo sings, acc = half-steps), child = Song v1 phrases on the family pads. Only prov_status ok ships.',
            'held': []}
@@ -149,6 +159,14 @@ def build(src, fixture=False, include_held=False):
                 if sp.get('family', fam) != fam: errs.append(f"ancient_titles.json: {t['id']} family {sp.get('family')} != {fam}")
                 if re.search(r'\d', sp.get('tune', '') + sp.get('composer', '')): errs.append(f"ancient_titles.json: {t['id']} has digits (say them as words)")
                 t['spoken'] = {'tune': sp['tune'], 'composer': sp.get('composer', '')}
+            pe = ends.get(t['id'])
+            if pe is None and not fixture: errs.append(f"phrase_ends.json: no phrase ends for {t['id']}")
+            if pe is not None:
+                at, cut = 0, set()
+                for x in t['echo']['n']: at += x[2]; cut.add(at)
+                if pe != sorted(set(pe)) or not all(e in cut for e in pe):
+                    errs.append(f"phrase_ends.json: {t['id']} ends {[e for e in pe if e not in cut]} fall mid-note (or are not in order)")
+                t['phrases'] = pe
             if t.pop('_grow', False):
                 if out.setdefault('grow', {}).get(fam): errs.append(f'{fam}: more than one tune says "grow: yes"')
                 out['grow'][fam] = t['id']

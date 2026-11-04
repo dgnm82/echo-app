@@ -5827,11 +5827,43 @@
     "prov": "Johann Strauss II (d.1899). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 36,
+    "bars": [
+     12,
+     48,
+     84,
+     120,
+     156,
+     192,
+     228,
+     264,
+     300,
+     336,
+     372,
+     408,
+     444,
+     480,
+     516,
+     552
+    ],
     "_echo_seconds": 15.47,
     "spoken": {
      "tune": "the Blue Danube",
      "composer": "Strauss"
-    }
+    },
+    "phrases": [
+     72,
+     108,
+     144,
+     216,
+     252,
+     288,
+     360,
+     396,
+     432,
+     504,
+     540,
+     588
+    ]
    },
    {
     "id": "can_can",
@@ -6177,11 +6209,37 @@
     "prov": "Jacques Offenbach (d.1880). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     24,
+     48,
+     72,
+     96,
+     120,
+     144,
+     168,
+     192,
+     216,
+     240,
+     264,
+     288,
+     312,
+     336,
+     360,
+     384
+    ],
     "_echo_seconds": 14.17,
     "spoken": {
      "tune": "the Can-Can",
      "composer": "Offenbach"
-    }
+    },
+    "phrases": [
+     72,
+     120,
+     216,
+     264,
+     312,
+     408
+    ]
    },
    {
     "id": "eine_kleine_nachtmusik",
@@ -6522,11 +6580,28 @@
     "prov": "Wolfgang Amadeus Mozart (d.1791). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144,
+     192,
+     240,
+     288,
+     336
+    ],
     "_echo_seconds": 14.55,
     "spoken": {
      "tune": "Eine kleine Nachtmusik",
      "composer": "Mozart"
-    }
+    },
+    "phrases": [
+     36,
+     84,
+     132,
+     180,
+     288,
+     384
+    ]
    },
    {
     "id": "hall_mountain_king",
@@ -6885,11 +6960,28 @@
     "prov": "Grieg (d.1907). Peer Gynt Suite No.1 Op.46 (1888). Hook read from Schirmer c1900 piano print p.12. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144,
+     192,
+     240,
+     288,
+     336
+    ],
     "_echo_seconds": 15.24,
     "spoken": {
      "tune": "the Mountain King",
      "composer": "Grieg"
-    }
+    },
+    "phrases": [
+     48,
+     96,
+     192,
+     240,
+     288,
+     384
+    ]
    },
    {
     "id": "ride_valkyries",
@@ -7081,11 +7173,23 @@
     "prov": "Wagner (d.1883). Die Walkuere (1870). Theme read from the Schott/Schirmer 1904 vocal score p.184. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 54,
+    "bars": [
+     6,
+     60,
+     114,
+     168
+    ],
     "_echo_seconds": 7.71,
     "spoken": {
      "tune": "Ride of the Valkyries",
      "composer": "Wagner"
-    }
+    },
+    "phrases": [
+     54,
+     108,
+     162,
+     222
+    ]
    },
    {
     "id": "william_tell",
@@ -7458,11 +7562,30 @@
     "prov": "Rossini (d.1868). Guillaume Tell (1829). Gallop read from the Grus c1870 vocal score p.6. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     6,
+     30,
+     54,
+     78,
+     102,
+     126,
+     150,
+     174,
+     198,
+     222,
+     246
+    ],
     "_echo_seconds": 9.38,
     "spoken": {
      "tune": "the William Tell Overture",
      "composer": "Rossini"
-    }
+    },
+    "phrases": [
+     48,
+     102,
+     168,
+     270
+    ]
    }
   ],
   "grow": {
@@ -7655,11 +7778,23 @@
     "prov": "Handel (d.1759). Messiah (1742). Call read from the Schirmer 1912 vocal score p.193. Melody only, no words, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144
+    ],
     "_echo_seconds": 10.0,
     "spoken": {
      "tune": "the Hallelujah Chorus",
      "composer": "Handel"
-    }
+    },
+    "phrases": [
+     48,
+     90,
+     114,
+     138,
+     192
+    ]
    },
    {
     "id": "morning_mood",
@@ -8031,11 +8166,30 @@
     "prov": "Edvard Grieg (d.1907). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 36,
+    "bars": [
+     36,
+     72,
+     108,
+     144,
+     180,
+     216,
+     252
+    ],
     "_echo_seconds": 16.0,
     "spoken": {
      "tune": "Morning Mood",
      "composer": "Grieg"
-    }
+    },
+    "phrases": [
+     36,
+     72,
+     108,
+     138,
+     180,
+     216,
+     252,
+     282
+    ]
    },
    {
     "id": "ode_to_joy",
@@ -8286,11 +8440,26 @@
     "prov": "Beethoven (d.1827). Symphony No.9 Op.125 (1826). Theme read from Breitkopf & Haertel 4-hand ed. (arr. Horn) p.240. Melody only, no words, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144,
+     192,
+     240,
+     288,
+     336
+    ],
     "_echo_seconds": 15.24,
     "spoken": {
      "tune": "Ode to Joy",
      "composer": "Beethoven"
-    }
+    },
+    "phrases": [
+     96,
+     192,
+     288,
+     384
+    ]
    },
    {
     "id": "spring",
@@ -8666,11 +8835,28 @@
     "prov": "Vivaldi (d.1741). Op.8 (Le Cene 1725), Spring Allegro, violino principale p.2. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     6,
+     54,
+     102,
+     150,
+     198,
+     246,
+     294
+    ],
     "_echo_seconds": 12.75,
     "spoken": {
      "tune": "Spring",
      "composer": "Vivaldi"
-    }
+    },
+    "phrases": [
+     48,
+     96,
+     150,
+     192,
+     240,
+     306
+    ]
    },
    {
     "id": "swan_lake",
@@ -8936,11 +9122,24 @@
     "prov": "Tchaikovsky (d.1893). Swan Lake Op.20, Jurgenson piano score (Kashkin, 1877) p.64. Oboe theme, melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144,
+     192,
+     240,
+     288,
+     336
+    ],
     "_echo_seconds": 16.61,
     "spoken": {
      "tune": "Swan Lake",
      "composer": "Tchaikovsky"
-    }
+    },
+    "phrases": [
+     168,
+     372
+    ]
    },
    {
     "id": "toreador",
@@ -9196,11 +9395,32 @@
     "prov": "Georges Bizet (d.1875). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     24,
+     48,
+     72,
+     96,
+     120,
+     144,
+     168,
+     192,
+     216,
+     240,
+     264
+    ],
     "_echo_seconds": 13.85,
     "spoken": {
      "tune": "the Toreador Song",
      "composer": "Bizet"
-    }
+    },
+    "phrases": [
+     48,
+     90,
+     138,
+     186,
+     216,
+     282
+    ]
    }
   ],
   "twitchel": [
@@ -9483,11 +9703,29 @@
     "prov": "Beethoven (d.1827). WoO 59, first ed. Nohl 1867 (Neue Briefe Beethovens). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 18,
+    "bars": [
+     6,
+     24,
+     42,
+     60,
+     78,
+     96,
+     114,
+     132
+    ],
     "_echo_seconds": 9.87,
     "spoken": {
      "tune": "Für Elise",
      "composer": "Beethoven"
-    }
+    },
+    "phrases": [
+     33,
+     51,
+     69,
+     105,
+     123,
+     150
+    ]
    },
    {
     "id": "hungarian_dance_5",
@@ -9860,11 +10098,35 @@
     "prov": "Johannes Brahms (d.1897). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     24,
+     48,
+     72,
+     96,
+     120,
+     144,
+     168,
+     192,
+     216,
+     240,
+     264,
+     288,
+     312,
+     336,
+     360
+    ],
     "_echo_seconds": 19.2,
     "spoken": {
      "tune": "Hungarian Dance Number Five",
      "composer": "Brahms"
-    }
+    },
+    "phrases": [
+     96,
+     126,
+     192,
+     288,
+     378
+    ]
    },
    {
     "id": "nutcracker_march",
@@ -10346,11 +10608,27 @@
     "prov": "Pyotr Ilyich Tchaikovsky (d.1893). Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     144,
+     192,
+     240,
+     288,
+     336
+    ],
     "_echo_seconds": 16.0,
     "spoken": {
      "tune": "the Nutcracker March",
      "composer": "Tchaikovsky"
-    }
+    },
+    "phrases": [
+     42,
+     96,
+     138,
+     186,
+     378
+    ]
    },
    {
     "id": "rondo_alla_turca",
@@ -10651,11 +10929,27 @@
     "prov": "Mozart (d.1791). K.331 (Artaria 1784). Old text, read from Peters c1900 Sonaten p.194. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     12,
+     36,
+     60,
+     84,
+     108,
+     132,
+     156,
+     180
+    ],
     "_echo_seconds": 8.0,
     "spoken": {
      "tune": "Rondo alla Turca",
      "composer": "Mozart"
-    }
+    },
+    "phrases": [
+     24,
+     48,
+     96,
+     192
+    ]
    },
    {
     "id": "stars_and_stripes",
@@ -10876,11 +11170,28 @@
     "prov": "John Philip Sousa (d.1932). Melody only, own arrangement. PD US (90+ years).",
     "prov_status": "ok",
     "bar_ticks": 48,
+    "bars": [
+     48,
+     96,
+     192,
+     240,
+     288,
+     336,
+     384,
+     432,
+     480
+    ],
     "_echo_seconds": 14.4,
     "spoken": {
      "tune": "the Stars and Stripes Forever",
      "composer": "Sousa"
-    }
+    },
+    "phrases": [
+     168,
+     336,
+     552,
+     576
+    ]
    },
    {
     "id": "sugar_plum_fairy",
@@ -11184,11 +11495,28 @@
     "prov": "Tchaikovsky (d.1893). Nutcracker (1892). Celesta tune checked against Schirmer 1922 piano suite p.16. Melody only, own arrangement. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     18,
+     42,
+     66,
+     90,
+     108,
+     132,
+     156
+    ],
     "_echo_seconds": 12.5,
     "spoken": {
      "tune": "the Sugar Plum Fairy",
      "composer": "Tchaikovsky"
-    }
+    },
+    "phrases": [
+     42,
+     66,
+     84,
+     132,
+     156,
+     174
+    ]
    },
    {
     "id": "the_entertainer",
@@ -11500,11 +11828,26 @@
     "prov": "Joplin (d.1917). The Entertainer, John Stark & Son 1902, p.2. Melody only, own arrangement; not the 1973 film version. PD US + life+70.",
     "prov_status": "ok",
     "bar_ticks": 24,
+    "bars": [
+     6,
+     45,
+     54,
+     78,
+     102,
+     150,
+     174
+    ],
     "_echo_seconds": 12.63,
     "spoken": {
      "tune": "the Entertainer",
      "composer": "Joplin"
-    }
+    },
+    "phrases": [
+     45,
+     96,
+     144,
+     192
+    ]
    }
   ]
  }

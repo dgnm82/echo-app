@@ -1,0 +1,24 @@
+{
+  "_about": "Where each approved tune's phrases (and sub-phrases) end: the tick (12 per quarter, from the first note) just after the landing note. Read by tools/build_songbook.py into each record as phrases: [...]; musicfx.js cutAtPhrase cuts the Catch hook (8 s) and the Dig opening (2.6 s) at the last one that fits. Counted from the first note, so a pickup is already inside. Every end must fall between two notes. Jay, ancient-19, for Kai's review (cut_points.md).",
+  "ends": {
+    "blue_danube": [72, 108, 144, 216, 252, 288, 360, 396, 432, 504, 540, 588],
+    "can_can": [72, 120, 216, 264, 312, 408],
+    "eine_kleine_nachtmusik": [36, 84, 132, 180, 288, 384],
+    "hall_mountain_king": [48, 96, 192, 240, 288, 384],
+    "ride_valkyries": [54, 108, 162, 222],
+    "william_tell": [48, 102, 168, 270],
+    "hallelujah": [48, 90, 114, 138, 192],
+    "morning_mood": [36, 72, 108, 138, 180, 216, 252, 282],
+    "ode_to_joy": [96, 192, 288, 384],
+    "spring": [48, 96, 150, 192, 240, 306],
+    "swan_lake": [168, 372],
+    "toreador": [48, 90, 138, 186, 216, 282],
+    "fur_elise": [33, 51, 69, 105, 123, 150],
+    "hungarian_dance_5": [96, 126, 192, 288, 378],
+    "nutcracker_march": [42, 96, 138, 186, 378],
+    "rondo_alla_turca": [24, 48, 96, 192],
+    "stars_and_stripes": [168, 336, 552, 576],
+    "sugar_plum_fairy": [42, 66, 84, 132, 156, 174],
+    "the_entertainer": [45, 96, 144, 192]
+  }
+}

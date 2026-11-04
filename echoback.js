@@ -114,7 +114,6 @@ function simulateRounds(o){const out=[];let last=o.lastSeq||null,seed=o.seed0||0
 // echo: Song v2 (the real hook the Echo sings), child: [Song v1 phrases on the family pads], min_ml, icon, prov, prov_status}.
 // Only prov_status "ok" tunes ever play (build_songbook.py holds back edition_check; test-songbook.js fails if one ships).
 let SB=null;
-const ANC_ECHO_MS=8000;
 function sbTunes(fam,sb){const B=sb||SB;const L=(B&&Array.isArray(B[fam]))?B[fam]:[];return L.filter(t=>t&&t.id&&t.prov_status==='ok'&&Song.valid(t.echo)&&Array.isArray(t.child)&&t.child.length&&t.child.every(Song.valid))}
 const sbById=(id,sb)=>{const B=sb||SB;if(!B)return null;for(const f of ['slyte','whimber','twitchel'])for(const t of sbTunes(f,B))if(t.id===id)return Object.assign({fam:f},t);return null};
 // the child's part, cut to the length they're on: the first `len` notes of the allowed phrases joined (ML: songbook.phrases, max_distinct).
@@ -130,7 +129,7 @@ function sbPick(o){const L=sbTunes(o.fam,o.sb).filter(t=>sbChild(t,o.len,o.lv,o.
 // where in the round (0-based tune index): a seeded position, never the first tune. k slots (a chosen tune: 2) are distinct.
 function sbSlots(seed,round,k){const r=rng((seed>>>0)||1),out=[];k=Math.min(k||1,Math.max(1,round-1));while(out.length<k){const i=1+Math.floor(r()*(round-1));if(!out.includes(i))out.push(i)}return out.sort((a,b)=>a-b)}
 // the Echo version, cut at a note boundary to at most 8 s
-function sbEchoNotes(song,maxMs){const k=60000/song.bpm/TPB;let t=0;const out=[];for(const x of song.n){const d=x[2]*k;if(out.length&&t+d>(maxMs||ANC_ECHO_MS))break;out.push(x);t+=d}return out}
+function sbEchoNotes(song){return song.n.slice()}   // an Ancient Echo (EIB intro + replay, Memory Book) = the whole approved phrase, never cut (Daniel)
 // heard / matched (ml.met[id] = {h: times heard, m: 1 after the first match, o: order first heard, l: last heard, f: family})
 function sbHeard(ml,t,fam){ml.met=ml.met||{};ml.metN=(ml.metN|0)+1;const e=ml.met[t.id]||(ml.met[t.id]={h:0,m:0,o:ml.metN,f:fam});const first=!e.h;e.h++;e.l=ml.metN;return first}
 const sbList=(ml,fam)=>Object.keys((ml&&ml.met)||{}).map(id=>Object.assign({id},ml.met[id])).filter(e=>e.h>0&&(!fam||e.f===fam)&&sbById(e.id)).sort((a,b)=>a.o-b.o);
@@ -395,7 +394,8 @@ EB.playNote=(fam,s,o)=>play(fam,s,o);
 // Ancient Echoes for game.js (Memory Book page): the heard tunes (order heard), the shipped tunes of a family, and the Echo version
 EB.ancientHeard=(kid,fam)=>{const b=Songbook.load(),p=(b.progress||{})[kid];return sbList(p&&p.ml,fam).map(e=>Object.assign(sbById(e.id),{heard:e}))};
 EB.ancientTunes=fam=>sbTunes(fam);
-EB.playEcho=id=>{const t=sbById(id);if(!t)return 0;const k=msPerTick(sbBpm(t)),N=sbEchoNotes(t.echo);let ms=0;const at=[];N.forEach(x=>{at.push(ms);ms+=Math.max(V2().tempo.min_note_ms,x[2]*k)});
+EB.playEcho=(id,cut)=>{const t=sbById(id);if(!t)return 0;const k=msPerTick(sbBpm(t)),N=cut||sbEchoNotes(t.echo);   // cut: the Catch hum's phrase cut (musicfx cutAtPhrase)
+  let ms=0;const at=[];N.forEach(x=>{at.push(ms);ms+=Math.max(V2().tempo.min_note_ms,x[2]*k)});
   whenLoaded(echoSamples(t.fam,N)).then(()=>N.forEach((x,i)=>{if(x[0]){const m=midiOfNote(t.fam,x);setTimeout(()=>play(t.fam,0,{midi:m,vol:.8}),at[i])}}));return ms};   // Nov 3: same tempo (sbBpm) + samples first, like the intro
 EB.playSong=(fam,song)=>{if(!Song.valid(song))return 0;const k=msPerTick(song.bpm);let t=0;song.n.forEach(x=>{if(x[0]){const s=step(x);setTimeout(()=>play(fam,s,{vol:.8}),t)}t+=Math.max(DATA?V2().tempo.min_note_ms:120,x[2]*k)});return t};
 function stop(){TOK++;if(cur){cur.input.off();if(cur.root.parentNode)cur.root.remove();cur=null}voices.splice(0).forEach(v=>{try{v.stop()}catch(e){}})}

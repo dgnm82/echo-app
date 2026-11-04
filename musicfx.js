@@ -21,14 +21,22 @@ function hummRate(speed){return Math.max(.89,Math.min(1.12,.89+(.23*Math.min(1,s
 // A songbook tune is a tunes.json "songbook" record (Song v2 echo = the real hook, child = Song v1 phrases). Nothing here makes up notes:
 // with no shipped tunes every helper returns null/[] and the game keeps today's sound.
 const TPB=12,HOOK_MS=8000;
-function hookNotes(t,maxMs){if(!t||!t.echo||!Array.isArray(t.echo.n))return [];const k=60000/(t.echo.bpm||96)/TPB;let ms=0,started=false;const out=[];
-  for(const x of t.echo.n){const d=x[2]*k;if(started&&ms+d>(maxMs||HOOK_MS))break;if(x[0])out.push(x);started=true;ms+=d}return out}   // the 8 s hook (same cut as EIB), rests dropped
+// ONE phrase cut for every short excerpt (Catch hook + its hum, Dig floor) -> {n: the notes (rests inside kept), ticks, by}. Only ever between
+// two notes: the last phrase end at or under maxMs (phrases: tools/songbook_src/phrase_ends.json, counted from the first note, so a pickup
+// is inside) if it keeps at least half, else the last source bar line (bars:, the '|' in Cole's file, never a grid from tick 0) that falls
+// between notes and keeps half, else the last note end. Whole ticks, so no float drift (an 8.00 s tune plays whole).
+function cutAtPhrase(t,maxMs){const N=(t&&t.echo&&Array.isArray(t.echo.n))?t.echo.n:[];if(!N.length)return {n:[],ticks:0,by:'none'};
+  const lim=(maxMs||HOOK_MS)*(t.echo.bpm||96)*TPB/60000+1e-6,E=[];let at=0;N.forEach(x=>{at+=x[2];E.push(at)});   // E[i] = the end of note i
+  const fit=L=>L.filter(k=>k<=lim&&E.indexOf(k)>=0&&k>=lim/2).pop(),ph=fit(t.phrases||[]),bar=ph===undefined?fit(t.bars||[]):undefined;
+  const k=at<=lim?at:ph!==undefined?ph:bar!==undefined?bar:Math.max(E[0],E.filter(k=>k<=lim).pop()||0),by=at<=lim?'end':ph!==undefined?'phrase':bar!==undefined?'bar':'note';
+  let n=N.slice(0,E.indexOf(k)+1);while(n.length>1&&!n[n.length-1][0])n=n.slice(0,-1);return {n,ticks:n.reduce((a,x)=>a+x[2],0),by}}
+function hookNotes(t,maxMs){return cutAtPhrase(t,maxMs).n.filter(x=>x[0])}   // the Catch hook: the 8 s phrase cut, rests dropped (one note per catch)
 function openingNotes(t,maxMs){return hookNotes(t,maxMs||2600)}   // Dig floor: the first ~2.6 s of the hook
 function catchOrder(tunes,heard,level){const L=(tunes||[]).slice(),H=(heard||[]).map(e=>e.id||e),lv=level||1;   // met tunes first (most recently met first), then the ones at the child's music level
   const met=H.map(id=>L.find(t=>t.id===id)).filter(Boolean),rest=L.filter(t=>H.indexOf(t.id)<0&&(t.min_ml||1)<=lv);return met.concat(rest)}
 function growChoice(tunes,heard,pick){const L=tunes||[];if(!L.length)return null;if(pick){const p=L.find(t=>t.id===pick);if(p)return p}   // Cole's pick, else the most-met tune, else the first
   let best=null,bh=0;(heard||[]).forEach(e=>{const t=L.find(x=>x.id===e.id),h=(e.heard&&e.heard.h)||e.h||0;if(t&&h>bh){best=t;bh=h}});return best||L[0]}
-function growPlan(t,stage,top){top=top||5;if(!t||!(stage>=2))return null;if(stage>=top)return {full:true,n:hookNotes(t),bpm:t.echo.bpm};   // stage 2 = 1 phrase ... last stage = the whole hook
+function growPlan(t,stage,top){top=top||5;if(!t||!(stage>=2))return null;if(stage>=top)return {full:true,n:t.echo.n,bpm:t.echo.bpm};   // stage 2 = 1 phrase ... last stage = the whole approved phrase (Kai: A)
   const ph=(t.child||[]).slice(0,stage-1);if(!ph.length)return null;const n=[];ph.forEach((p,i)=>{if(i)n.push([0,0,6]);p.n.forEach(x=>n.push(x))});return {full:false,phrases:ph.length,n,bpm:(ph[0].bpm||t.echo.bpm)}}
 function stackStep(k,len){return {i:((k%len)+len)%len,top:k>0&&k%len===0}}   // layer k plays ladder note k (wraps to the bottom after the top)
 function noteCol(n){return n.startsWith('f#')?7:n.startsWith('bb')?8:'cdefgab'.indexOf(n[0])}   // the 9-column stack_note_sparkle.png order (echoback.js COLS9): c d e f g a b f# bb
@@ -53,7 +61,7 @@ function humShape(M,k){const R=(M&&M.hums&&M.hums.rotate)||['full'];return R[((k
 function motifOk(M,f,where,ctx){if(!M||!M.families||!M.families[f]||MOTIF_WHERE.indexOf(where)<0)return false;const C=ctx||[];
   const g=M.context_guard&&M.context_guard[f];if(g&&(g.never_in||[]).some(c=>C.indexOf(c)>=0))return false;
   const w=M.warmup_guard;if(w&&(w.families||[]).indexOf(f)>=0&&(C.indexOf('warmup')>=0||C.indexOf('after_yay')>=0))return false;return true}
-MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs,skyEnv,motifShape,humShape,motifOk};
+MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,cutAtPhrase,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs,skyEnv,motifShape,humShape,motifOk};
 if(typeof module!=='undefined'){module.exports=MFX;return}
 // ---------------- sound
 function note(f,n,o){const M=W.Music;if(!M||!M.oneShot)return null;return M.oneShot(nfile(f,n),Object.assign({vol:.5,duck:.75},o||{}))}
@@ -72,12 +80,12 @@ function playSeq(f,n,bpm,o){const E=EBW();if(!E||!n||!n.length)return 0;o=o||{};
   n.forEach(x=>{const d=Math.max(mn,x[2]*k);if(x[0]){const m=E.midiOfNote(f,x),id=setTimeout(()=>{try{E.playNote(f,0,{midi:m,vol:o.vol||.8})}catch(e){}},t);if(o.timers)o.timers.push(id)}t+=d});return t}
 MFX.playSeq=playSeq;
 let CT=catchState(),CS=null;   // CS: {order, k, tune, n, hum} when the family has shipped songbook tunes; null = today's family tune
-MFX.catchStart=f=>{CT=catchState();CS=null;const L=f?sbOrder(f):[];if(L.length){const t=L[0];CS={f,order:L,k:0,tune:t,n:hookNotes(t),hum:0}}return CS&&CS.tune.id};
+MFX.catchStart=f=>{CT=catchState();CS=null;const L=f?sbOrder(f):[];if(L.length){const t=L[0];CS={f,order:L,k:0,tune:t,c:cutAtPhrase(t),hum:0};CS.n=CS.c.n.filter(x=>x[0])}return CS&&CS.tune.id};
 MFX.catchHit=function(f){
   if(CS&&CS.f===f&&CS.n.length){if(performance.now()<CS.hum)return null;   // the Echo is humming the hook: the catch keeps today's sound
     const r=catchStep(CT,CS.n.length),x=CS.n[r.i],E=EBW();if(E)E.playNote(f,0,{midi:E.midiOfNote(f,x),vol:.65});r.tune=CS.tune.id;
-    if(r.done){const t=CS.tune;setTimeout(()=>{const ms=E&&E.playEcho?E.playEcho(t.id):0;CS.hum=performance.now()+ms},380);CS.hum=performance.now()+400;r.hum=true;   // a whole hook caught: the Echo hums it, then the next tune
-      CS.k=(CS.k+1)%CS.order.length;CS.tune=CS.order[CS.k];CS.n=hookNotes(CS.tune);CT=Object.assign(catchState(),{songs:r.songs})}
+    if(r.done){const t=CS.tune,c=CS.c;setTimeout(()=>{const ms=E&&E.playEcho?E.playEcho(t.id,c.n):0;CS.hum=performance.now()+ms},380);CS.hum=performance.now()+400;r.hum=true;r.cut=c.ticks;   // a whole hook caught: the Echo hums that same cut, then the next tune
+      CS.k=(CS.k+1)%CS.order.length;CS.tune=CS.order[CS.k];CS.c=cutAtPhrase(CS.tune);CS.n=CS.c.n.filter(x=>x[0]);CT=Object.assign(catchState(),{songs:r.songs})}
     return r}
   const F=fam(f);if(!F)return null;const c=F.catch,r=catchStep(CT,c.notes.length);note(f,c.notes[r.i],{vol:.5});return r};   // {i,done,songs}
 MFX.catchTune=()=>CS&&{id:CS.tune.id,i:CT.i,len:CS.n.length,humming:performance.now()<CS.hum};

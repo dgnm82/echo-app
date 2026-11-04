@@ -9,7 +9,7 @@ const TJ=JSON.parse(fs.readFileSync(path.join(R,'music/tunes.json'),'utf8')),E=T
 let n=0,bad=0;const ok=(c,m)=>{n++;if(!c){bad++;console.log('FAIL',m)}};
 const FAMS=['slyte','whimber','twitchel'],MAN=JSON.parse(fs.readFileSync(path.join(R,'px/songbook/manifest.json'),'utf8'));
 const CANON={};MAN.tunes.filter(t=>t.canonical).forEach(t=>CANON[t.id]=t.family);
-const KEYS=new Set(['id','title','composer','home','meter','bpm','mood','skills','echo','child','min_ml','icon','prov','prov_status','fixture','_echo_seconds','bar_ticks','spoken']);
+const KEYS=new Set(['id','title','composer','home','meter','bpm','mood','skills','echo','child','min_ml','icon','prov','prov_status','fixture','_echo_seconds','bar_ticks','bars','phrases','spoken']);
 const MAJ=[0,2,4,5,7,9,11],midi=(f,x)=>E.do_midi[f]+MAJ[x[0]-1]+12*x[1]+(x[3]||0),NOTES=path.join(R,'music/notes'),sampleIn=d=>f=>m=>path.join(d,`${f}_${EB._pure.spell(f,m).replace('#','s')}.ogg`);
 // validate a built songbook block; returns the error list (so the fixture can prove the gate catches things)
 function validate(sb,o){o=o||{};const errs=[],e=(t,m)=>errs.push(`${t&&t.id}: ${m}`),sample=sampleIn(o.notes||NOTES);   // o.notes: a samples dir (the fixture uses a temp copy)

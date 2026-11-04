@@ -35,12 +35,36 @@ ok(T.home_sounds.length===20&&T.home_sounds.every(a=>fs.existsSync(path.join(R,'
 // ---------------- Music School step 3: songbook hooks (Catch / Dig floor / growing song), Stack ladder, beat gates, art
 {const SB=T.songbook,FX=JSON.parse(fs.readFileSync(path.join(R,'tools/fixtures/songbook_fixture.json'))),all=['slyte','whimber','twitchel'].flatMap(f=>SB[f].map(t=>Object.assign({fam:f},t)));
  const ms=(t,n)=>n.reduce((a,x)=>a+x[2]*60000/t.echo.bpm/12,0);
- for(const t of all){const h=P.hookNotes(t);ok(h.length>=3&&h.every(x=>x[0]>0),t.id+' hook = real notes, no rests');ok(ms(t,h)<=8000+1e-6,t.id+' hook <= 8 s');
-   const hn=t.echo.n.filter(x=>x[0]);ok(h.every((x,i)=>x===hn[i]),t.id+' hook = the start of the Echo version, in order (nothing made up)');
+ // B (short excerpts): ONE helper, cutAtPhrase. Cut only between notes, on the tune's own phrase ends (phrase_ends.json, counted from the
+ // first note so a pickup is inside) or a source bar line, never a grid from tick 0; an Echo version that fits plays whole (no float drift).
+ // Pinned cuts [hook 8 s, dig 2.6 s] = /workspace/echo/phone_app_review/ancient19/cut_points.md (Kai reviews these before Daniel hears them).
+ const CUT={blue_danube:[288,72],can_can:[216,72],eine_kleine_nachtmusik:[180,36],hall_mountain_king:[192,48],ride_valkyries:[222,54],william_tell:[168,48],
+   hallelujah:[138,48],morning_mood:[138,36],ode_to_joy:[192,48],spring:[192,48],swan_lake:[168,48],toreador:[138,48],
+   fur_elise:[105,33],hungarian_dance_5:[126,48],nutcracker_march:[186,42],rondo_alla_turca:[192,48],stars_and_stripes:[168,96],sugar_plum_fairy:[84,36],the_entertainer:[96,27]};
+ ok(all.length===19&&all.every(t=>CUT[t.id]),'every one of the 19 tunes has a pinned cut');
+ for(const t of all){const N=t.echo.n,E=[];N.reduce((a,x)=>(E.push(a+x[2]),a+x[2]),0);const full=E[E.length-1];
+   for(const [j,max] of [[0,8000],[1,2600]]){const c=P.cutAtPhrase(t,max),w=t.id+(j?' dig':' hook');
+     ok(c.ticks===CUT[t.id][j],`${w} cut at ${c.ticks} (pinned ${CUT[t.id][j]}, ${c.by})`);
+     ok(c.n.every((x,i)=>x===N[i])&&c.ticks===c.n.reduce((a,x)=>a+x[2],0)&&E.includes(c.ticks),w+' = the start of the Echo version, cut between two notes (never mid-note)');
+     ok(c.n.length&&c.n[c.n.length-1][0]>0,w+' ends on a sounding note');ok(ms(t,c.n)<=max+1e-6,w+` <= ${max/1000} s`);
+     ok(c.by==='end'?c.ticks===full:c.by==='phrase'?t.phrases.includes(c.ticks):c.by==='bar'?t.bars.includes(c.ticks):c.by==='note','by '+c.by+' is what it says');
+     if(c.by!=='end')ok(!(t.phrases||[]).some(e=>e>c.ticks&&e*60000/t.echo.bpm/12<=max+1e-6),w+': no later phrase end fits');
+     const bar=t.bar_ticks||t.meter*12,pu=t.bars[0]<bar?t.bars[0]:0;if(pu)ok(c.ticks>pu,w+` (pickup ${pu}) keeps more than the pickup`)}
+   ok((t.phrases||[]).every(e=>E.includes(e)),t.id+' phrase ends all fall between notes');
+   const h=P.hookNotes(t);ok(h.length>=3&&h.every(x=>x[0]>0),t.id+' hook = real notes, no rests');
+   ok(JSON.stringify(h)===JSON.stringify(P.cutAtPhrase(t,8000).n.filter(x=>x[0])),t.id+' Catch hook = the 8 s phrase cut, rests dropped');
    const o=P.openingNotes(t);ok(o.length>=1&&o.length<=h.length&&o.every((x,i)=>x===h[i]),t.id+' dig opening = the hook\'s first notes');
-   for(let st=2;st<=5;st++){const g=P.growPlan(t,st);if(st===5){ok(g&&g.full&&g.n.length===h.length,t.id+' growing song stage 5 = the whole hook');continue}
+   if(full*60000/t.echo.bpm/12<=8000+1e-6)ok(P.cutAtPhrase(t,8000).by==='end'&&h.length===N.filter(x=>x[0]).length,t.id+' fits in 8 s: the hook is the whole Echo version (last note kept)');
+   for(let st=2;st<=5;st++){const g=P.growPlan(t,st);if(st===5){ok(g&&g.full&&g.n===N,t.id+' growing song stage 5 = the whole approved phrase (A)');continue}
      const want=Math.min(st-1,t.child.length);ok(g&&!g.full&&g.phrases===want,t.id+` stage ${st} plays ${want} phrase(s)`);ok(g.n.filter(x=>x[0]).length===t.child.slice(0,want).reduce((a,p)=>a+p.n.length,0),t.id+' phrases are the child phrases, unchanged')}
    ok(P.growPlan(t,1)===null,'stage 1: no growing song')}
+ {// pickups + ties (synthetic, 120 bpm, 2/4 = 24 ticks): the cut uses the source bar lines, never bar lines counted from tick 0, and never splits a note
+  const pk={echo:{bpm:120,n:[[5,0,6],[1,1,6],[2,1,6],[3,1,6],[5,0,6],[1,1,18],[5,0,6],[2,1,6],[3,1,12]]},bars:[6,30,54],meter:2};   // pickup 6
+  ok(P.cutAtPhrase(pk,2000).ticks===30&&P.cutAtPhrase(pk,2000).by==='bar','pickup tune: the bar line after the pickup (30), not tick 24 (mid-phrase)');
+  ok(P.cutAtPhrase(Object.assign({phrases:[48]},pk),2400).ticks===48,'pickup tune: a phrase end wins over a later bar line');
+  const tie={echo:{bpm:120,n:[[1,0,6],[2,0,6],[3,0,30],[5,0,6]]},bars:[24],meter:2};   // bar 24 falls inside the held mi
+  const c=P.cutAtPhrase(tie,1500);ok(c.ticks===12&&c.by==='note','a bar line inside a held note is never a cut: the cut falls back to the last note end');
+  const fl={echo:{bpm:120,n:[[1,0,48],[2,0,48],[3,0,96]]}};ok(P.cutAtPhrase(fl,8000).by==='end'&&P.hookNotes(fl,8000).length===3,'exactly maxMs (8.000 s): plays whole, no float drift')}
  ok(P.growPlan(null,3)===null&&P.hookNotes(null).length===0&&P.catchOrder([],[],3).length===0,'zero tunes: nothing to play (the game keeps today\'s sound)');
  const sl=SB.slyte;if(sl.length>=3){const o=P.catchOrder(sl,[{id:sl[2].id},{id:sl[1].id}],1);ok(o[0].id===sl[2].id&&o[1].id===sl[1].id,'Catch: met tunes first, in heard order');
    ok(o.slice(2).every(t=>(t.min_ml||1)<=1),'Catch: then only tunes at the child\'s level');ok(P.catchOrder(sl,[],5).length===sl.length,'Catch: every tune at a high level')}
