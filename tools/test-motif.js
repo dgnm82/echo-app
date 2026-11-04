@@ -33,9 +33,10 @@ const gjNoDef=gj.replace(/function SFXm\(n,o\)\{[^\n]*/,''),pre=[...gjNoDef.matc
 ok(pre.length===(gjNoDef.match(/SFXm\(/g)||[]).length&&pre.length===7&&pre.every(x=>/^'(run_finale|memory_all_cleared|run_treasure_5)'$/.test(x)||x==='FAMD().music.bondup_sting'),'game.js: the motif pre-roll is only on the 3 jingles + the grow-up sting ('+pre.join(' | ')+')');
 ok(/\(treN%5===0\?SFXm:SFX\)/.test(gj),'run_treasure_1 keeps its plain sfx');
 ok(/const pre=SFXm\(FAMD\(\)\.music\.bondup_sting[^\n]*\n[^\n]*dl=pre\+/.test(gj),'the growing song waits for motif + sting');
-ok(!/MusicFX\.(hum|preroll|motif)/.test(gjNoDef),'game.js calls the motif only through SFXm');
+ok(!/MusicFX\.(hum|preroll|motif(?!Stop))/.test(gjNoDef),'game.js calls the motif only through SFXm');
 ok((al.match(/MusicFX\.hum/g)||[]).length===2&&/if\(g==='hum'\)\{[^\n]*W\.MusicFX\.hum\(\)/.test(al),'alive.js: the hum gesture is the only hum caller');
 const fwBody=gj.slice(gj.indexOf('// ---------- Farewell arc'),gj.indexOf('// ---------- Farewell arc')+20000);ok(!/SFXm|preroll|MusicFX\.hum/.test(fwBody),'no motif call written in the farewell arc');
 ok(!/preroll|motifPlay|MusicFX\.hum/.test(rd('sound.js'))&&!/preroll|motifPlay|MusicFX\.hum/.test(rd('warmup.js')),'home loops (sound.js) and the warm-up never call the motif');
 ok(/MFX\.playoff=function\(o\)\{PLAYOFF=1;/.test(mf)&&/\.then\(v=>\{PLAYOFF=0;return v\}\)/.test(mf),'the play-off marks its context');
+ok(/function gameShell\(title\)\{GT\+\+;if\(window\.MusicFX&&MusicFX\.motifStop\)MusicFX\.motifStop\(\);/.test(gj)&&(mf.match(/timers:MT\}/g)||[]).length===2,'opening a game stops a pending motif, pre-rolled sfx and growing song (no tail into the game)');
 console.log(`motif: ${n} checks, ${bad} failed`);process.exit(bad?1:0)

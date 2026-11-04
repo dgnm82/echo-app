@@ -69,7 +69,7 @@ function ctxHeard(f){try{return (MFX.ctx.heard&&MFX.ctx.heard(f))||[]}catch(e){r
 function ctxLevel(){try{return (MFX.ctx.level&&MFX.ctx.level())||1}catch(e){return 1}}
 function sbOrder(f){return catchOrder(sbList(f),ctxHeard(f),ctxLevel())}
 function playSeq(f,n,bpm,o){const E=EBW();if(!E||!n||!n.length)return 0;o=o||{};const k=60000/(bpm||96)/TPB,mn=o.minMs||110;let t=o.delay||0;   // through EchoBack's sampler (3-voice cap, half-step samples)
-  n.forEach(x=>{const d=Math.max(mn,x[2]*k);if(x[0]){const m=E.midiOfNote(f,x);setTimeout(()=>{try{E.playNote(f,0,{midi:m,vol:o.vol||.8})}catch(e){}},t)}t+=d});return t}
+  n.forEach(x=>{const d=Math.max(mn,x[2]*k);if(x[0]){const m=E.midiOfNote(f,x),id=setTimeout(()=>{try{E.playNote(f,0,{midi:m,vol:o.vol||.8})}catch(e){}},t);if(o.timers)o.timers.push(id)}t+=d});return t}
 MFX.playSeq=playSeq;
 let CT=catchState(),CS=null;   // CS: {order, k, tune, n, hum} when the family has shipped songbook tunes; null = today's family tune
 MFX.catchStart=f=>{CT=catchState();CS=null;const L=f?sbOrder(f):[];if(L.length){const t=L[0];CS={f,order:L,k:0,tune:t,n:hookNotes(t),hum:0}}return CS&&CS.tune.id};
@@ -94,20 +94,22 @@ MFX.stackSlide=function(f,k){const L=MFX.stackLadder(f);if(!L)return null;const 
 MFX.stackPlay=function(f,h,gap){const L=MFX.stackLadder(f);if(!L||!(h>0))return 0;const n=Math.min(h,24),g=gap||150;for(let k=0;k<n;k++)setTimeout(()=>capNote(f,L[stackStep(k,L.length).i],{vol:.42}),k*g);return n*g};
 // Our song grew! (step 3): after the sting, the Echo plays its growing song: stage 2 = 1 phrase ... the last stage = the whole hook
 MFX.growTune=f=>{const L=sbList(f);const B=W.EchoBack&&W.EchoBack.songbook&&W.EchoBack.songbook();return growChoice(L,ctxHeard(f),B&&B.grow&&B.grow[f])};
-MFX.growSong=function(f,stage,o){const t=MFX.growTune(f),p=growPlan(t,stage,(o&&o.top)||5);if(!p||!p.n.length)return null;return {id:t.id,full:p.full,phrases:p.phrases||0,ms:playSeq(f,p.n,p.bpm,{delay:(o&&o.delay)||0,vol:.8})}};
+MFX.growSong=function(f,stage,o){const t=MFX.growTune(f),p=growPlan(t,stage,(o&&o.top)||5);if(!p||!p.n.length)return null;return {id:t.id,full:p.full,phrases:p.phrases||0,ms:playSeq(f,p.n,p.bpm,{delay:(o&&o.delay)||0,vol:.8,timers:MT})}};
 // the family motif (pure rules above): MFX.motifCtx() = the contexts the guards read; every play is logged in MFX.motifLog (tests)
-let MOT=null,PLAYOFF=0,HUMK=0;if(W.fetch&&D)fetch('music/motif.json').then(r=>r.json()).then(j=>{MOT=j}).catch(()=>{});
+let MOT=null,PLAYOFF=0,HUMK=0,MT=[];if(W.fetch&&D)fetch('music/motif.json').then(r=>r.json()).then(j=>{MOT=j}).catch(()=>{});
 MFX.setMotif=j=>{MOT=j||null;return MOT};MFX.motifLog=[];
 MFX.motifCtx=function(){const c=[];try{if(MFX.ctx.farewell&&MFX.ctx.farewell())c.push('farewell','goodbye');if(MFX.ctx.release&&MFX.ctx.release())c.push('release')}catch(e){}
   if(PLAYOFF)c.push('playoff');const U=W.Warmup;if(U&&U.cur)c.push('warmup');const ms=(MOT&&MOT.warmup_guard&&MOT.warmup_guard.after_yay_ms)||0;if(U&&U.yayUntil&&performance.now()<U.yayUntil+ms)c.push('after_yay');return c};
-function motifPlay(f,where,shape,mult,vol,delay){if(!motifOk(MOT,f,where,MFX.motifCtx()))return -1;const n=motifShape(MOT.families[f].motif,shape,mult),ms=playSeq(f,n,MOT.bpm||88,{vol,delay:delay||0});
+function motifPlay(f,where,shape,mult,vol,delay){if(!motifOk(MOT,f,where,MFX.motifCtx()))return -1;const n=motifShape(MOT.families[f].motif,shape,mult),ms=playSeq(f,n,MOT.bpm||88,{vol,delay:delay||0,timers:MT});
   if(ms)MFX.motifLog.push({f,where,shape,ms,t:Math.round(performance.now())});return ms||-1}
 const twilight=()=>{const M=W.Music,c=M&&M.clock&&M.clock();return !!(c&&/twilight/.test(c.name||''))};
 MFX.hum=function(f){f=f||(MFX.ctx.fam&&MFX.ctx.fam());const sh=humShape(MOT,HUMK);const ms=motifPlay(f,'hum',sh,1,.6);if(ms>0)HUMK++;return ms>0?ms:0};
 // a jingle / the grow-up sting with the motif just before it: play(name, o) = the game's SFX; returns the delay before the sfx starts (0 = no motif)
 MFX.preroll=function(f,name,o,play){const J=(MOT&&MOT.jingles)||{},sting=/^bondup_sting_/.test(name||''),jin=(J.preroll||[]).indexOf(name)>=0;let ms=-1;
   if(sting)ms=motifPlay(f,'sting','full_do',1,.7);else if(jin)ms=motifPlay(f,'jingle','full',J.ticks_mult||.5,twilight()?.35:.7);   // twilight: -6 dB
-  const d=ms>0?ms+(J.gap_ms||60):0;if(d)setTimeout(()=>play(name,o),d);else play(name,o);return d};
+  const d=ms>0?ms+(J.gap_ms||60):0;if(d)MT.push(setTimeout(()=>play(name,o),d));else play(name,o);return d};
+// the motif belongs to its moment: a game opening (game.js gameShell) stops any motif notes, a pre-rolled sfx and the growing song still pending
+MFX.motifStop=function(){MT.splice(0).forEach(clearTimeout)};
 MFX.pairsFlip=function(f,item,second){const F=fam(f);const d=F&&F.pairs[item];if(!d)return null;return note(f,d[second?1:0],{vol:.4})};
 // LIST2 #5: a card's own sound (both cards of a pair sound the same): a tune = its notes one after another, a pitch = one note
 MFX.pairsData=f=>{const F=fam(f);return F&&F.pairs||null};

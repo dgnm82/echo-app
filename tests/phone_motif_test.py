@@ -18,7 +18,8 @@ JS="""async()=>{await EchoBack.ready;for(let i=0;i<60&&!(MusicFX.motifCtx&&(awai
   Warmup.yayUntil=performance.now();out.yay={twitchel:run('twitchel','run_finale'),hum:MusicFX.hum('twitchel'),slyte:run('slyte','run_finale')};Warmup.yayUntil=-1e9;
   const h0=L();for(let k=0;k<3;k++)MusicFX.hum('slyte');out.hums=MusicFX.motifLog.slice(h0).map(e=>e.shape+':'+e.where);
   const h1=L();MusicFX.ctx=Object.assign({},keep,{fam:()=>'twitchel',farewell:()=>false,release:()=>false});let fake=null;if(!document.querySelector('#cr .px-echo')){fake=document.createElement('div');fake.id='cr';fake.innerHTML='<i class="px-echo"></i>';document.body.appendChild(fake)}Alive.act('hum');if(fake)fake.remove();out.gesture=MusicFX.motifLog.slice(h1).map(e=>e.f+':'+e.where);
-  MusicFX.ctx=keep;await new Promise(r=>setTimeout(r,2500));return out}"""
+  const n0=MusicFX.motifLog.length;let late=0;MusicFX.preroll('whimber','bondup_sting_whimber',{},()=>{late++});MusicFX.motifStop();await new Promise(r=>setTimeout(r,4000));out.stop={late,logged:MusicFX.motifLog.length-n0};
+  MusicFX.ctx=keep;return out}"""
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox','--autoplay-policy=no-user-gesture-required'])
@@ -37,6 +38,7 @@ async def main():
     check(o['yay']['twitchel']['d']==0 and o['yay']['hum']==0 and o['yay']['slyte']['d']>0,'right after the warm-up yay: no Purrlings motif (Howlings unaffected)')
     check(sorted(o['hums'])==['fragment_tail:hum','full:hum','rhythm_flip:hum'],'hums rotate full / fragment_tail / rhythm_flip: '+json.dumps(o['hums']))
     check(o['gesture']==['twitchel:hum'],'the hum gesture (Alive.act) hums the family motif: '+json.dumps(o['gesture']))
+    check(o['stop']['late']==0 and o['stop']['logged']==1,'motifStop cancels the pending motif + its sting (nothing leaks into the next moment)')
     check(not errs,'no page errors '+str(errs[:2]))
     await b.close()
   print('motif phone:',len(fails),'failed');sys.exit(1 if fails else 0)
