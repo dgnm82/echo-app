@@ -1,0 +1,143 @@
+{
+ "_about": "Family motifs for hums and jingles only (pm/ancient_accuracy/PLAN_MOTIF_HUMS_JINGLES.md, Daniel Nov 3-4 2026). Trimmed copy of Cole's parked pm/music_step1/weave.json: home, quotes and woven removed (no weave, no quotes, home loops untouched), levelup.quote_at_tier dropped. Notes = [degree 1-7, octave (0 = do octave), ticks @ tpb] in the family key, played at runtime by musicfx.js from music/notes/<fam>_<note> samples (no rendered audio). Plays ONLY in: the hum gesture (rotating hums), the 3 jingle pre-rolls, just before the grow-up sting.",
+ "v": 1,
+ "tpb": 12,
+ "bpm": 88,
+ "_bpm": "Echo It Back base tempo (tunes.json echo_it_back.v2.tempo.bpm)",
+ "families": {
+  "slyte": {
+   "name": "Peekaboo",
+   "do_midi": 62,
+   "motif": {
+    "n": [
+     [
+      5,
+      0,
+      6
+     ],
+     [
+      6,
+      0,
+      6
+     ],
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      2,
+      0,
+      12
+     ]
+    ],
+    "_fix": "Nov 3 clash check: sol-la-sol-MI was note-for-note the Minute Waltz opening (slyte tune). Last note moved one step, mi -> re (A4 B4 A4 E4). Rhythm unchanged.",
+    "_status": "approved by Daniel, Nov 3 2026 (original sol-la-sol-mi clashed with the Minute Waltz opening)"
+   }
+  },
+  "whimber": {
+   "name": "Starfall",
+   "do_midi": 70,
+   "motif": {
+    "n": [
+     [
+      5,
+      0,
+      12
+     ],
+     [
+      3,
+      0,
+      12
+     ],
+     [
+      2,
+      0,
+      12
+     ],
+     [
+      1,
+      0,
+      24
+     ]
+    ],
+    "_note": "Kept as sol-mi-re-do (Kai, Nov 3). Jay flagged it as a rotation of the farewell playoff and goodbye figure mi-re-do-sol, so it is kept out of those contexts (see context_guard)."
+   }
+  },
+  "twitchel": {
+   "name": "Sunbeam Stretch",
+   "do_midi": 65,
+   "motif": {
+    "n": [
+     [
+      3,
+      0,
+      12
+     ],
+     [
+      5,
+      0,
+      6
+     ],
+     [
+      6,
+      0,
+      6
+     ],
+     [
+      5,
+      0,
+      12
+     ]
+    ]
+   }
+  }
+ },
+ "hums": {
+  "rotate": [
+   "full",
+   "fragment_tail",
+   "rhythm_flip"
+  ],
+  "no_repeat": true,
+  "fragment_tail": "first 3 notes + do",
+  "rhythm_flip": "ticks reversed"
+ },
+ "jingles": {
+  "preroll": [
+   "run_finale",
+   "memory_all_cleared",
+   "run_treasure_5"
+  ],
+  "ticks_mult": 0.5,
+  "gap_ms": 60,
+  "twilight_gain_db": -6
+ },
+ "levelup": {
+  "sting": "bondup_sting_<fam>",
+  "motif": "full, ending on do",
+  "_note": "Daniel: only the existing grow-up sting; no Echo It Back 85% jingle (Step 4)."
+ },
+ "warmup_guard": {
+  "families": [
+   "twitchel"
+  ],
+  "_why": "Jay flag: the Sunbeam opening mi-sol-la sits one note from the wu 'yay' sparkle mi-sol-do'.",
+  "no_hum_or_motif_during_warmup": true,
+  "after_yay": "wait until the yay sparkle has finished, then start on the next downbeat",
+  "_note": "Applied to twitchel per Kai; harmless to apply to all families if Jay prefers one rule.",
+  "after_yay_ms": 2800,
+  "_after_yay_ms": "about one bar at 88 bpm after the yay sparkle ends"
+ },
+ "context_guard": {
+  "whimber": {
+   "never_in": [
+    "farewell",
+    "goodbye",
+    "release",
+    "playoff"
+   ],
+   "_why": "Jay CLASH_CHECK.md: Starfall is a rotation of the mi-re-do-sol playoff and goodbye figure."
+  }
+ }
+}

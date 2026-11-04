@@ -83,7 +83,7 @@ function start(api){stop();const fam=api.fam,RM=!!api.lowfx,sp=Math.max(.05,+api
   const colOf9=s=>EB&&EB.colOf9&&EB.nameOf?EB.colOf9(EB.nameOf(fam,s)):0;   // copy_pads.png is still 9 cols (no C5)
   // a motif / song: [[degree, octave, ticks]...] at bpm; each(i, step) on every note; returns its length (ms)
   function sing(seq,bpm,each,gains){let t=0;seq.forEach((x,i)=>{const s=stepOf(x);later(t,()=>{note(s,gains?gains[i%gains.length]:1);if(each)each(i,s)});t+=x[2]*60000/bpm/TPB});return t}
-  const yay=()=>sing(M().yay.by_family[fam]||M().yay.by_family.slyte,M().yay.bpm,null,[.8]);
+  const yay=()=>{const d=sing(M().yay.by_family[fam]||M().yay.by_family.slyte,M().yay.bpm,null,[.8]);API.yayUntil=performance.now()+d;return d};   // yayUntil: musicfx.js keeps the Purrlings motif off right after it
   let tapH=null;const input=W.Press.on(cv,{down(e,info){if(tapH)tapH(e.getAttribute('data-press'),info.t,e)}},{sel:'[data-press]'});
   const res={r:{copy:0,beat:0,pitch:0,rhythm:0},notes:null,ticks:null,beatTaps:[],mode,taps:0};
   const clearStage=()=>{stage.innerHTML='';tapH=null};

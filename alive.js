@@ -54,7 +54,7 @@ A.act=function(g){const e=px(),c=cr();if(!e||!g)return;A.log.push('act:'+g);
   PIXEL.queue(e,Q[g]||[],true);if(g==='sneeze')setTimeout(A.sparkle,250);
   if(g==='pounce')setTimeout(()=>W.react&&W.react('excited'),330);
   if(g==='tap'&&c&&!(W.__echo&&W.__echo.state&&W.__echo.state.lowfx)){c.classList.add('altap');setTimeout(()=>c.classList.remove('altap'),700)}
-  if(g==='hum'){const s=sc(),p=scenePos&&scenePos();if(s&&p){const n=document.createElement('i');n.className='lvfx alnote';n.textContent='♪';n.style.cssText=`left:${p.x+14}px;top:${p.feet-44}px`;s.appendChild(n);setTimeout(()=>n.remove(),1200)}}
+  if(g==='hum'){const s=sc(),p=scenePos&&scenePos();if(s&&p){const n=document.createElement('i');n.className='lvfx alnote';n.textContent='♪';n.style.cssText=`left:${p.x+14}px;top:${p.feet-44}px`;s.appendChild(n);setTimeout(()=>n.remove(),1200)}try{if(W.MusicFX&&W.MusicFX.hum)W.MusicFX.hum()}catch(e){}}   // Nov 4: the hum sings the family motif (rotating shapes, musicfx.js guards)
   if(g==='spin'){let k=0;const t=setInterval(()=>{const e2=px();if(e2)e2.classList.toggle('lvflip');if(++k>=2){clearInterval(t);W.react&&W.react('happy')}},250)}};
 A.onTalk=function(o){if(!o)return;if(o.expr==='love'){const e=px();if(e)PIXEL.blink(e,true)}const g=A.gestureOf(o);if(g&&!o.react)setTimeout(()=>A.act(g),120)};
 // ---- G1: need cues in body language (top need only, one every 8-15 s, none in the first 20 s; never droopy or "waiting")

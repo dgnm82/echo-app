@@ -40,7 +40,20 @@ function seqMs(n,bpm,minMs){const k=60000/(bpm||96)/TPB;return n.reduce((a,x)=>a
 const SKY={scale:.05,glow:.3,ms:250,halo:1.6};
 function skyEnv(b,P){P=P||SKY;if(!b)return 0;if(/twilight/.test(b.name||'')&&(b.beat%b.bpb)!==0)return 0;const t=b.phase*b.spb*1000;if(!(t>=0&&t<P.ms))return 0;const u=1-t/P.ms;return u*u}
 MFX.SKY=SKY;
-MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs,skyEnv};
+// Nov 4 (PLAN_MOTIF_HUMS_JINGLES.md): the family's 4-note motif (music/motif.json), built at runtime from the note samples. It plays ONLY in
+// a hum, a jingle pre-roll (run_finale / memory_all_cleared / run_treasure_5) and just before the grow-up sting; never in a loop, a quote or a weave.
+// Guards: context_guard (Wingsongs never in farewell / goodbye / release / playoff), warmup_guard (Purrlings never in a warm-up or right after its yay).
+const MOTIF_WHERE=['hum','jingle','sting'];
+function motifShape(m,shape,mult){const n=m.n.map(x=>[x[0],x[1],x[2]]);let o=n;
+  if(shape==='fragment_tail')o=n.slice(0,3).concat([[1,0,n[n.length-1][2]]]);   // first 3 notes + do
+  else if(shape==='rhythm_flip'){const t=n.map(x=>x[2]).reverse();o=n.map((x,i)=>[x[0],x[1],t[i]])}   // ticks reversed
+  else if(shape==='full_do'){const z=n[n.length-1];o=(z[0]===1&&z[1]===0)?n:n.concat([[1,0,24]])}   // the full motif, ending on do (grow-up sting)
+  return o.map(x=>[x[0],x[1],Math.max(1,Math.round(x[2]*(mult||1)))])}
+function humShape(M,k){const R=(M&&M.hums&&M.hums.rotate)||['full'];return R[((k|0)%R.length+R.length)%R.length]}   // rotation k = 0,1,2,...: never the same shape twice in a row
+function motifOk(M,f,where,ctx){if(!M||!M.families||!M.families[f]||MOTIF_WHERE.indexOf(where)<0)return false;const C=ctx||[];
+  const g=M.context_guard&&M.context_guard[f];if(g&&(g.never_in||[]).some(c=>C.indexOf(c)>=0))return false;
+  const w=M.warmup_guard;if(w&&(w.families||[]).indexOf(f)>=0&&(C.indexOf('warmup')>=0||C.indexOf('after_yay')>=0))return false;return true}
+MFX._pure={beatAt,nearBeat,catchState,catchStep,ladderStep,hummRate,hookNotes,openingNotes,catchOrder,growChoice,growPlan,stackStep,noteCol,beatOn,swayFrame,seqMs,skyEnv,motifShape,humShape,motifOk};
 if(typeof module!=='undefined'){module.exports=MFX;return}
 // ---------------- sound
 function note(f,n,o){const M=W.Music;if(!M||!M.oneShot)return null;return M.oneShot(nfile(f,n),Object.assign({vol:.5,duck:.75},o||{}))}
@@ -82,6 +95,19 @@ MFX.stackPlay=function(f,h,gap){const L=MFX.stackLadder(f);if(!L||!(h>0))return 
 // Our song grew! (step 3): after the sting, the Echo plays its growing song: stage 2 = 1 phrase ... the last stage = the whole hook
 MFX.growTune=f=>{const L=sbList(f);const B=W.EchoBack&&W.EchoBack.songbook&&W.EchoBack.songbook();return growChoice(L,ctxHeard(f),B&&B.grow&&B.grow[f])};
 MFX.growSong=function(f,stage,o){const t=MFX.growTune(f),p=growPlan(t,stage,(o&&o.top)||5);if(!p||!p.n.length)return null;return {id:t.id,full:p.full,phrases:p.phrases||0,ms:playSeq(f,p.n,p.bpm,{delay:(o&&o.delay)||0,vol:.8})}};
+// the family motif (pure rules above): MFX.motifCtx() = the contexts the guards read; every play is logged in MFX.motifLog (tests)
+let MOT=null,PLAYOFF=0,HUMK=0;if(W.fetch&&D)fetch('music/motif.json').then(r=>r.json()).then(j=>{MOT=j}).catch(()=>{});
+MFX.setMotif=j=>{MOT=j||null;return MOT};MFX.motifLog=[];
+MFX.motifCtx=function(){const c=[];try{if(MFX.ctx.farewell&&MFX.ctx.farewell())c.push('farewell','goodbye');if(MFX.ctx.release&&MFX.ctx.release())c.push('release')}catch(e){}
+  if(PLAYOFF)c.push('playoff');const U=W.Warmup;if(U&&U.cur)c.push('warmup');const ms=(MOT&&MOT.warmup_guard&&MOT.warmup_guard.after_yay_ms)||0;if(U&&U.yayUntil&&performance.now()<U.yayUntil+ms)c.push('after_yay');return c};
+function motifPlay(f,where,shape,mult,vol,delay){if(!motifOk(MOT,f,where,MFX.motifCtx()))return -1;const n=motifShape(MOT.families[f].motif,shape,mult),ms=playSeq(f,n,MOT.bpm||88,{vol,delay:delay||0});
+  if(ms)MFX.motifLog.push({f,where,shape,ms,t:Math.round(performance.now())});return ms||-1}
+const twilight=()=>{const M=W.Music,c=M&&M.clock&&M.clock();return !!(c&&/twilight/.test(c.name||''))};
+MFX.hum=function(f){f=f||(MFX.ctx.fam&&MFX.ctx.fam());const sh=humShape(MOT,HUMK);const ms=motifPlay(f,'hum',sh,1,.6);if(ms>0)HUMK++;return ms>0?ms:0};
+// a jingle / the grow-up sting with the motif just before it: play(name, o) = the game's SFX; returns the delay before the sfx starts (0 = no motif)
+MFX.preroll=function(f,name,o,play){const J=(MOT&&MOT.jingles)||{},sting=/^bondup_sting_/.test(name||''),jin=(J.preroll||[]).indexOf(name)>=0;let ms=-1;
+  if(sting)ms=motifPlay(f,'sting','full_do',1,.7);else if(jin)ms=motifPlay(f,'jingle','full',J.ticks_mult||.5,twilight()?.35:.7);   // twilight: -6 dB
+  const d=ms>0?ms+(J.gap_ms||60):0;if(d)setTimeout(()=>play(name,o),d);else play(name,o);return d};
 MFX.pairsFlip=function(f,item,second){const F=fam(f);const d=F&&F.pairs[item];if(!d)return null;return note(f,d[second?1:0],{vol:.4})};
 // LIST2 #5: a card's own sound (both cards of a pair sound the same): a tune = its notes one after another, a pitch = one note
 MFX.pairsData=f=>{const F=fam(f);return F&&F.pairs||null};
@@ -129,14 +155,14 @@ let homeSaid=false;MFX.homeSound=function(animal,o){if(!TUNES){READY.then(()=>{i
   const play=()=>M.oneShot('home_'+animal,{vol:.55,duck:.4});if(play()===null&&o&&o.once&&D){const t0=Date.now();   // audio not unlocked yet (a fresh app open): the hello cue waits for the first tap, up to 20 s
     D.addEventListener('pointerdown',()=>setTimeout(()=>{if(Date.now()-t0<20000)play()},120),{capture:true,once:true,passive:true})}};
 // ---------------- A9 farewell play-off: one tap = one note = one step; untouched, each note plays by itself after 1.6 s
-MFX.playoff=function(o){return new Promise(res=>{const F=fam(o.fam);if(!F)return res(false);const P=F.playoff,el=o.tapEl||D.body;let i=0,t=null,done=false;
+MFX.playoff=function(o){PLAYOFF=1;return new Promise(res=>{const F=fam(o.fam);if(!F)return res(false);const P=F.playoff,el=o.tapEl||D.body;let i=0,t=null,done=false;
   const pop=()=>{if(!o.noteEl)return;const n=P.notes[i],c='cdefgab'.indexOf(n[0]),col=n==='c5'?7:n.startsWith('f#')?8:n.startsWith('bb')?9:c,e=D.createElement('i');e.className='mfx-pnote'+(RM()?' calm':'');
     e.style.backgroundPosition=`${-12*col}px 0`;const r=o.noteEl.getBoundingClientRect(),R=(o.tapEl||D.body).getBoundingClientRect(),z=(o.zoom||1);
     e.style.left=Math.round((r.left-R.left)/z+r.width/z/2-6)+'px';e.style.top=Math.round((r.top-R.top)/z-10)+'px';(o.tapEl||D.body).appendChild(e);setTimeout(()=>e.remove(),900)};
   const next=()=>{if(done)return;clearTimeout(t);note(o.fam,P.notes[i],{vol:.55});pop();try{o.onNote&&o.onNote(i)}catch(e){}i++;
     if(i>=P.notes.length){done=true;el.removeEventListener('pointerdown',next);setTimeout(()=>res(true),Math.round((P.beats[P.beats.length-1]||1)*500));return}
     t=setTimeout(next,(P.autoplay_after_s||1.6)*1000)};
-  el.addEventListener('pointerdown',next);t=setTimeout(next,(P.autoplay_after_s||1.6)*1000)})};
+  el.addEventListener('pointerdown',next);t=setTimeout(next,(P.autoplay_after_s||1.6)*1000)}).then(v=>{PLAYOFF=0;return v})};
 // ---------------- A10 postcard tune stamps (+ A8 Memory Book sounds): event delegation, works on every screen that shows them
 MFX.stampHTML=function(f,scene){const F=fam(f);if(!F||!F.postcards[scene])return '';return `<i class="pctune mfxsnd" role="button" aria-label="Play the postcard tune" data-tune="${f}:${scene}" style="background-image:url(px/pc_tune/${f}_${scene}.png)"></i>`};
 MFX.sing=function(f){const F=fam(f),T=F&&F.catch;if(!T)return 0;let t=0;const spb=60/(T.bpm||100);T.notes.forEach((n,k)=>{setTimeout(()=>note(f,n,{vol:.5}),t*1000);t+=T.beats[k]*spb});return t};   // E5 'Can you sing me your song?': the family tune

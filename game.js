@@ -828,8 +828,8 @@ function playBondUp(from,to,live,done){
   if(live){S.bondShown=to;(S.bondMoments=S.bondMoments||[]).push({from,to,day:S.days});save()}   // the bond and the Memory Book entry are saved even if skipped
   clearTimeout(talk.t);const b=$('#b');if(b)b.style.display='none';
   Promise.all([bondBg(),new Promise(res=>{if(sheet.complete)res();else{sheet.onload=res;sheet.onerror=res}})]).then(([bg])=>{
-    cr.style.visibility='hidden';if(window.Music)Music.duck(true);SFX(FAMD().music.bondup_sting,{vol:.9});
-    let growEnd=0;{const st=window.Sound&&Sound.dur&&Sound.dur(FAMD().music.bondup_sting),dl=Math.max(1500,Math.round((st||4.3)*1000)-150),gr=window.MusicFX&&MusicFX.growSong&&MusicFX.growSong(FID(),to,{delay:dl});if(gr&&window.DialogueEngine)DialogueEngine.noteEvent(S,'song_grew',now());   // step 3: after the sting, the growing song
+    cr.style.visibility='hidden';if(window.Music)Music.duck(true);const pre=SFXm(FAMD().music.bondup_sting,{vol:.9});
+    let growEnd=0;{const st=window.Sound&&Sound.dur&&Sound.dur(FAMD().music.bondup_sting),dl=pre+Math.max(1500,Math.round((st||4.3)*1000)-150),gr=window.MusicFX&&MusicFX.growSong&&MusicFX.growSong(FID(),to,{delay:dl});if(gr&&window.DialogueEngine)DialogueEngine.noteEvent(S,'song_grew',now());   // step 3: after the sting, the growing song
       if(gr){growEnd=performance.now()+dl+gr.ms+300;window.__growsong={id:gr.id,stage:to,full:gr.full,phrases:gr.phrases,ms:gr.ms,delay:dl}}else window.__growsong=null}
     const gl=glowNow(),gpal=cr.dataset.pal;window.__bondup=BondUp.play({parent:scr,sheet,bg,echo,from,to,aura:c=>PIXEL.aura(sheet,c*48,0,gl,gpal,{seed:S.g.seed}),line:lineObj,title:titleObj,chirp:()=>{try{window.Chirp&&Chirp.play('*',S.kind)}catch(e){}},lowfx:lowFx(),short:!!S.shortBondUp,fam:FID(),seed:(S.g.seed||1)*7+to,pal:gpal,
       onTitle:t=>{window.__butitle=t},
@@ -1048,7 +1048,10 @@ const ANC_FAMS=['slyte','whimber','twitchel'];
 // step 2b (Cole's lines): eib_ancient_* pick their band by var eib_band; 7-8 / 9-10 title lines need ancient_tune / ancient_composer (spoken titles, no digits)
 function eibVars(x){if(!x||!x.ancient)return undefined;const sp=x.ancient.spoken||{},v=Object.assign({},S.vars||{},{eib_band:DLG_BAND});if(sp.tune){v.ancient_tune=sp.tune;v.ancient_composer=sp.composer||''}return {vars:v}}   // extra.vars replaces ctx.vars, so S.vars is spread in
 function ancHeard(f){try{return window.EchoBack&&EchoBack.ancientHeard?EchoBack.ancientHeard(kidId(),f):[]}catch(e){return []}}
-if(window.MusicFX)MusicFX.ctx={heard:f=>ancHeard(f),level:()=>{const m=mlGet();return (m&&m.level)||1}};   // step 3: Catch / Dig floor / growing song pick the child's met Ancient Echoes first
+if(window.MusicFX)MusicFX.ctx={heard:f=>ancHeard(f),level:()=>{const m=mlGet();return (m&&m.level)||1},fam:()=>FID(),   // step 3: Catch / Dig floor / growing song pick the child's met Ancient Echoes first; Nov 4 motif guards: the farewell flow (walk + ceremony) and the release
+  farewell:()=>!!(S&&S.fw&&(S.fw.state==='walking'||S.fw.state==='ceremony')),release:()=>!!(S&&(S.released||S.releasePath))};
+// Nov 4: a jingle / the grow-up sting with the family motif just before it (musicfx.js preroll; plain SFX when MusicFX or the motif is missing). Returns the delay (ms)
+function SFXm(n,o){if(window.MusicFX&&MusicFX.preroll)return MusicFX.preroll(FID(),n,o,SFX);SFX(n,o);return 0}
 function ancPage(f){const H=ancHeard(f),more=window.EchoBack&&EchoBack.ancientTunes(f).length>H.length,items=H.length+(more?1:0),rows=Math.max(1,Math.ceil(items/4)),ht=46+42*rows+12;
   const at=k=>`left:${18+(k%4)*34}px;top:${53+Math.floor(k/4)*42}px`;
   return `<div class="bkanc" style="height:${ht}px" data-fam="${f}"><i class="bkancp" style="top:0;height:46px;background-image:url(px/songbook/ancient_page_top.png)"></i>${Array.from({length:rows},(_,r)=>`<i class="bkancp" style="top:${46+42*r}px;height:42px;background-image:url(px/songbook/ancient_page_row.png)"></i>`).join('')}<i class="bkancp" style="top:${46+42*rows}px;height:12px;background-image:url(px/songbook/ancient_page_bottom.png)"></i>
@@ -1162,7 +1165,7 @@ function endCard(o){const gs=$('#gs');if(!gs||$('.g2card'))return;sess.afterGame
   const bl=o.firstEver?'Our first best!':o.isBest?'NEW BEST!':`Best ${o.best}`;
   gs.insertAdjacentHTML('beforeend',`<div class="g2card${low?' low':''}" role="dialog" aria-label="${G2TITLE[o.game][fox?0:1]}"><b>${G2TITLE[o.game][fox?0:1]}</b><div class="g2num"><span id="g2n">${o.score}</span> ${o.unit}</div><div class="g2bl${o.isBest||o.firstEver?' gold':''}">${bl}</div>${(o.extra||[]).map(x=>`<div class="g2x">${x}</div>`).join('')}<div class="g2btns"><button class="btn" id="g2again">Again</button><button class="btn" id="g2done">Done</button></div></div>`);
   {const cd=gs.querySelector('.g2card'),iv=setInterval(()=>{if(!cd.isConnected)return clearInterval(iv);const b=gs.querySelector('.bubble');if(!b||b.style.display==='none'||!b.textContent.trim())return;const s=cd.getBoundingClientRect().height/cd.offsetHeight||1,ov=b.getBoundingClientRect().bottom+4*s-cd.getBoundingClientRect().top;if(ov>0)cd.style.top=Math.min(gs.offsetHeight-cd.offsetHeight-4,cd.offsetTop+ov/s)+'px'},150)}   // the closing line never covers the results card: a long line nudges the card down
-  SFX('run_finale',{vol:.7});save();
+  SFXm('run_finale',{vol:.7});save();
   $('#g2done').onclick=()=>endGame(true);
   $('#g2again').onclick=()=>{fwTick(null,curGame);sess.games++;S.needs.rest=clamp(S.needs.rest-5);save();o.onAgain()}}
 
@@ -1309,10 +1312,10 @@ function catchGame(){
   function step(dt){if(ended)return;aim();CatchEngine.step(g,dt);F++;if(happy>0)happy-=dt;pops.forEach(p=>p.t-=dt);pops=pops.filter(p=>p.t>0);
     for(const e of CatchEngine.take(g)){
       if(e.type==='catch'){happy=.25;pops.push({s:e.gold?'+5':'+1',x:g.x,t:1});const ct=window.MusicFX&&MusicFX.catchHit(FID());if(ct&&ct.done&&window.DialogueEngine)DialogueEngine.noteEvent(S,'catch_hook',now());if(e.gold){SFX('run_gold',{vol:ct?.5:.8});line('catch_gold')}else{if(!ct)SFX(g.n%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(ct&&ct.done&&ct.songs%2===1&&line('catch_song')))say('*')}}
-      if(e.type==='streak'){SFX('run_treasure_5',{vol:.7});line('catch_streak')}
+      if(e.type==='streak'){SFXm('run_treasure_5',{vol:.7});line('catch_streak')}
       if(e.type==='land')SFX('run_tumble_boop',{vol:.5,gap:200});
       if(e.type==='end')finish()}
-    if(!cheered&&!firstEver&&best0>0&&g.n>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
+    if(!cheered&&!firstEver&&best0>0&&g.n>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFXm('run_finale',{vol:.6})}}
   function draw(){if(!document.getElementById('cc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);if(g2ok(IM.canopy))cx.drawImage(IM.canopy,-8,6);const low=lowFx();
     for(const it of g.items){const im=it.gold?IM.gold:IM[ITEMS[it.id%4]],x=Math.round(it.x-8),y=Math.round(it.y-8);if(it.gold)drawGlow(cx,x+8,y+8,performance.now());if(g2ok(im))cx.drawImage(im,x,y,16,16)}
     g.lands.forEach((x,i)=>{const im=IM[ITEMS[i%4]];if(g2ok(im))cx.drawImage(im,Math.round(x-6),A.LINE+34,12,12)});
@@ -1381,7 +1384,7 @@ function stackGame(){
       if(e.type==='place'&&window.MusicFX){const sn=MusicFX.stackNote(FID(),g.h-1);if(sn)nsp.push({col:sn.col,x:g.top+g.w,h:g.h,t0:performance.now()});if(e.trimL||e.trimR)MusicFX.stackSlide(FID(),g.h-1)}   // step 3: each layer a step up the ladder; a cut slides down
       if(e.type==='place'){stReact=6;stReactKind=(wasPerf||onBeat)?'excited':'happy';SFX('blocks_land',{vol:.6});if(e.trimL)bits.push({x:sx,w:e.trimL,wy:yOf(g.h)-cam,vy:1,a:1,t:8});if(e.trimR)bits.push({x:sx+w0-e.trimR,w:e.trimR,wy:yOf(g.h)-cam,vy:1,a:1,t:8})}
       if(e.type==='end'){plop={x:sx,w:w0,t:0};SFX('run_tumble_boop',{vol:.6});finish()}}
-    if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFX('run_finale',{vol:.6})}}
+    if(!cheered&&!firstEver&&best0>0&&g.h>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');g2Banner(gs,'NEW BEST!');SFXm('run_finale',{vol:.6})}}
   function draw(){if(!document.getElementById('stc'))return;cx.clearRect(0,0,180,300);if(g2ok(IM.bg))cx.drawImage(IM.bg,0,-20);
     if(g2ok(IM.base))fox?cx.drawImage(IM.base,47,BASE+cam):cx.drawImage(IM.base,79,BASE+cam,22,8);
     g.layers.forEach((l,i)=>{if(i>0)layer(l.x,yOf(i-1),l.w,perf.has(i))});
@@ -1471,7 +1474,7 @@ function memoryGame(){
   function finish(){alive=false;p.games++;p.boards++;mlReport('pairs',g.turns?Math.min(1,g.pairs/g.turns):0);   // Pairs keeps its own stage logic and only reports
    if(level!=='bigkid'&&!stage){if(MemoryEngine.slow(g))p.slow++;else p.slow=0}
     if(SND)p.lastMorph=MemoryEngine.morphAfter(p,{slow:MemoryEngine.slow(g),hints:g.hints});   // LIST2 #5: 2 good boards -> more by sound; 2 slow -> a step back
-    SFX('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
+    SFXm('memory_all_cleared');setExpr('delighted');react('excited');talk(B('pairs_done'),2400);remember(`We found all ${total} pairs`,'pairs_'+total);save();
     gs.insertAdjacentHTML('beforeend',`<div class="fbdone memdone">${PI('✨')}<span>All ${total} pairs!</span>${PI('✨')}${g.L.stars?`<div>${Array.from({length:MemoryEngine.stars(g)},()=>PI('🌟')).join('')}</div>`:''}</div>`);
     setTimeout(()=>{roundDone(2,NEXT);lullaby()},600);document.removeEventListener('keydown',key)}
   B_.forEach((b,i)=>b.onclick=()=>{kbd=false;if(g.pending){MemoryEngine.resolve(g);handle();return}tap(i)});
@@ -1554,7 +1557,7 @@ handle()}
       if(e.type==='flap'&&g.t-lastFlap>=.25){lastFlap=g.t;SFX('run_flap_'+(1+Math.floor(Math.random()*3)),{vol:.5})}   // one shared 0.25 s throttle for the 3 variants
       if(e.type==='treasure'||e.type==='gold'){treN++;happy=.3;pops.push({s:e.type==='gold'?'+3':'+1',x:60,y:g.y-50,t:1,c:'#FFD27A'});
         if(e.type==='gold'){SFX('run_gold',{vol:.8});setExpr('delighted');lastLine=-9;if(!line('run_glow',1800))line('run_gold',1800)}
-        else{lastTre=(g.t-lastTre>8)?1:lastTre+1;SFX(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
+        else{lastTre=(g.t-lastTre>8)?1:lastTre+1;(treN%5===0?SFXm:SFX)(treN%5===0?'run_treasure_5':'run_treasure_1',{vol:.6});if(!(treN%3===0&&line('run_treasure',1600)))say('*')}}
       if(e.type==='bump'){bumpN++;if(!silent)SFX('run_tumble_boop',{gap:400,vol:.5})}
       if(e.type==='saved'){if(!silent)SFX('run_tumble_boop',{gap:400,vol:.4});happy=.4;lastLine=-9;line('run_saved',1800)}   // A5: the moon piece caught the bump
       if(e.type==='giggle')giggle();
@@ -1563,7 +1566,7 @@ handle()}
       if(e.type==='chime')SFX('whimber_radar_hearing_chime',{pan:0,vol:.4,rate:1+(320-e.y)/900,gap:300});
       if(e.type==='cue'){const c=$('#rcue');if(c){c.classList.remove('on');void c.offsetWidth;c.classList.add('on')}}
       if(e.type==='end')finish()}
-    if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');happy=1.2;SFX('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
+    if(!cheered&&!firstEver&&best0>0&&RunnerEngine.score(g)>best0){cheered=true;const hb=$('#g2best');if(hb)hb.classList.add('gold');happy=1.2;SFXm('run_finale',{vol:.7});react('excited');lastLine=-9;line('run_best',2200);
       gs.insertAdjacentHTML('beforeend',`<div class="runbest">${PI('✨')}<span>NEW BEST!</span>${PI('✨')}</div>`);setTimeout(()=>{const b=$('.runbest');if(b)b.remove()},2200);
       if(!fox)S.hillStars=Math.min(12,(S.hillStars||0)+1)}}
   function finish(){if(ended)return;ended=true;const m=RunnerEngine.score(g),n=RunnerEngine.haul(g);rs.runs++;v2Count('run',m,RunnerEngine.success(g));
