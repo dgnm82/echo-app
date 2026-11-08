@@ -4,6 +4,23 @@ Current build: **v0.1.2**. Hold Power about 1 second to wake; the speaker (I2S a
 
 Board: Waveshare ESP32-S3-Touch-LCD-2 in case v2/v3, board rotated 180°, camera unplugged (Option B). Pins come from Nya's `echo_pins_poc_v01.h`. This firmware has not run on real hardware yet, so the hardware test screen is how to check the wiring.
 
+## 3.5-inch board (Waveshare ESP32-S3-Touch-LCD-3.5-C), test build ll81_c10r
+Each button flashes separate parts (ESP32-S3), never one whole-flash image:
+
+| Button | Parts (offset: file) |
+|---|---|
+| Echo companion | 0x0 `echo_35c_c10r_bootloader.bin`, 0x8000 `echo_35c_c10r_partitions.bin`, 0x20000 `echo_35c_c10r_app.bin`, 0x330000 `echo_35c_c10r_core.bin` |
+| Start fresh (erases the Echo) | the four companion parts plus 0xF80000 `echo_35c_blank_saves.bin` (blank saves partition) |
+| Bench check | 0x0 `echo_35c_bench_bootloader.bin`, 0x8000 `echo_35c_bench_partitions.bin`, 0x20000 `echo_35c_bench_app.bin` |
+
+Updating keeps the Echo: no part touches `nvs` (0x9000, device settings and radio calibration) or `saves` (0xF80000: the Echo, its name, progress, memory book and settings). There's no erase prompt. "Start fresh" is the only button that clears the saves, and it leaves `nvs` alone.
+
+Use the board's single USB-C port. Download mode: hold BOOT, tap RESET, release BOOT. Holding PWR about 6 s powers the board off.
+
+Manual update: `esptool.py --chip esp32s3 write_flash 0x0 echo_35c_c10r_bootloader.bin 0x8000 echo_35c_c10r_partitions.bin 0x20000 echo_35c_c10r_app.bin 0x330000 echo_35c_c10r_core.bin`
+
+The rest of this note is for the 2-inch board.
+
 ## Flash (one click)
 1. Open https://dgnm82.github.io/echo-app/flash/ in **Chrome or Edge on a computer**.
 2. Plug in the USB-C on the top edge with a **data** cable. Click **Connect**, pick **USB JTAG/serial debug unit**, and allow the erase the first time.

@@ -8,14 +8,47 @@
  ol{padding-left:1.2rem} li{margin:6px 0}
  .box{background:#3B2A5C;border-radius:12px;padding:16px 18px;margin:18px 0}
  esp-web-install-button button{font-size:1.1rem;padding:12px 22px;border-radius:10px;border:0;background:#FFD45A;color:#3B2A5C;font-weight:700;cursor:pointer}
+ h2{font-size:1.15rem;margin:0 0 6px} .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px} .lab{font-size:.9rem;opacity:.8;margin:4px 0 0}
  a{color:#FFD45A} .warn{color:#FFB3B3}
 </style>
 <script type="module" src="ewt/install-button.js"></script>
 </head><body><main>
 <h1>Echo handheld firmware</h1>
+<p class="v">Pick your board below. Each button installs a complete image for that board only.</p>
+
+<div class="box" id="b35">
+<h2>3.5-inch board: Waveshare ESP32-S3-Touch-LCD-3.5-C</h2>
+<p class="v">Test build (ll81_c10r) for the Waveshare ESP32-S3-Touch-LCD-3.5-C.</p>
+<ol>
+ <li>Use <b>Chrome or Edge on a desktop or laptop</b> (not Safari, Firefox, a phone or a tablet).</li>
+ <li>Plug a <b>USB-C data cable</b> into the board's only USB-C port. Charge-only cables don't work: if nothing shows up, try another cable.</li>
+ <li>Click a button below, then <b>Connect</b>, and pick the port called <b>USB JTAG/serial debug unit</b> (or "ESP32-S3").</li>
+ <li><b>Won't connect?</b> Put the board in download mode: hold <b>BOOT</b>, tap <b>RESET</b>, let go of BOOT, then click Connect again. (Don't hold <b>PWR</b>: holding it about 6 seconds switches the board off.)</li>
+ <li>Installing takes a few minutes. Keep the cable in until it says <b>"Installation complete"</b>. If the screen doesn't come on by itself, tap <b>RESET</b> (or unplug and plug back in).</li>
+</ol>
+<p><b>Updating keeps your Echo.</b> "Echo companion" installs the new version and keeps the Echo, its name, progress, the memory book and settings. It never asks to erase.</p>
+<p><b>Starting fresh:</b> "Start fresh" installs the same version and <b>erases the Echo</b> (its name, progress and memory book), so onboarding starts again. Only use it if you really want a new Echo; it can't be undone.</p>
+<div class="row">
+<div><esp-web-install-button manifest="manifest_35c_companion.json"><button slot="activate">Echo companion</button>
+ <span slot="unsupported" class="warn">This browser can't flash devices. Please open this page in Chrome or Edge on a computer.</span>
+ <span slot="not-allowed" class="warn">Flashing needs a secure page (https). Open the GitHub Pages address, not a local file.</span>
+</esp-web-install-button><p class="lab">Install or update. Keeps the Echo.</p></div>
+<div><esp-web-install-button manifest="manifest_35c_bench.json"><button slot="activate">Bench check</button>
+ <span slot="unsupported" class="warn">This browser can't flash devices.</span>
+ <span slot="not-allowed" class="warn">Needs https.</span>
+</esp-web-install-button><p class="lab">A hardware test screen, not the Echo. Keeps the Echo for later.</p></div>
+<div><esp-web-install-button manifest="manifest_35c_fresh.json"><button slot="activate">Start fresh (erases the Echo)</button>
+ <span slot="unsupported" class="warn">This browser can't flash devices.</span>
+ <span slot="not-allowed" class="warn">Needs https.</span>
+</esp-web-install-button><p class="lab">Erases the Echo and starts onboarding again.</p></div>
+</div>
+</div>
+
+<div class="box" id="b2">
+<h2>2-inch board: Waveshare ESP32-S3-Touch-LCD-2</h2>
 <p class="v">v6 test build (c265026) for the Waveshare ESP32-S3-Touch-LCD-2, v6 streamlined case (touch + Power + speaker + haptic)</p>
 <p>Touch only: hold the &times; in the top-right about 1 second to quit a game. Volume and <b>Test buzz</b> are in Grown-Ups. Flashing erases saves.</p>
-<div class="box">
+
 <ol>
  <li>Use <b>Chrome or Edge on a computer</b> (Web Serial; not Safari, Firefox or a phone).</li>
  <li>Plug the handheld in with a <b>data</b> USB-C cable (the port on the top edge).</li>

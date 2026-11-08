@@ -1,0 +1,33 @@
+{
+  "name": "Echo handheld (Waveshare ESP32-S3-Touch-LCD-3.5-C)",
+  "version": "3.5C companion test build ll81_c10r, start fresh",
+  "home_assistant_domain": "",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "echo_35c_c10r_bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "echo_35c_c10r_partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "echo_35c_c10r_app.bin",
+          "offset": 131072
+        },
+        {
+          "path": "echo_35c_c10r_core.bin",
+          "offset": 3342336
+        },
+        {
+          "path": "echo_35c_blank_saves.bin",
+          "offset": 16252928
+        }
+      ]
+    }
+  ]
+}
