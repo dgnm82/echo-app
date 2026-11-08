@@ -1,23 +1,28 @@
 # Echo handheld firmware: flashing and troubleshooting
 
-Current build: **v0.1.2**. Hold Power about 1 second to wake; the speaker (I2S amp on BCLK 44, LRCLK 18, DIN 43, SD on GPIO17) switches on only while playing. Logs are over USB only.
+Legacy 2-inch build: **v0.1.2**. Hold Power about 1 second to wake; the speaker (I2S amp on BCLK 44, LRCLK 18, DIN 43, SD on GPIO17) switches on only while playing. Logs are over USB only.
 
-Board: Waveshare ESP32-S3-Touch-LCD-2 in case v2/v3, board rotated 180°, camera unplugged (Option B). Pins come from Nya's `echo_pins_poc_v01.h`. This firmware has not run on real hardware yet, so the hardware test screen is how to check the wiring.
+Legacy 2-inch board: Waveshare ESP32-S3-Touch-LCD-2 in case v2/v3, board rotated 180°, camera unplugged (Option B). Pins come from Nya's `echo_pins_poc_v01.h`. This firmware has not run on real hardware yet, so the hardware test screen is how to check the wiring.
 
-## 3.5-inch board (Waveshare ESP32-S3-Touch-LCD-3.5-C), test build ll81_c10r
-Each button flashes separate parts (ESP32-S3), never one whole-flash image:
+## 3.5-inch board — care/home preview (413bd29)
 
-| Button | Parts (offset: file) |
+Recommend **UPDATE — care/home preview**, four parts, preserving saves/NVS. Production linked; matching engine QEMU/HAL-stub boot; **not board verified**. Instructions, SHA256s, evidence, timing access, gaps and board checklist: [FLASH.md](../FLASH.md).
+
+| Button | Parts |
 |---|---|
-| Echo companion | 0x0 `echo_35c_c10r_bootloader.bin`, 0x8000 `echo_35c_c10r_partitions.bin`, 0x20000 `echo_35c_c10r_app.bin`, 0x330000 `echo_35c_c10r_core.bin` |
-| Start fresh (erases the Echo) | the four companion parts plus 0xF80000 `echo_35c_blank_saves.bin` (blank saves partition) |
-| Bench check | 0x0 `echo_35c_bench_bootloader.bin`, 0x8000 `echo_35c_bench_partitions.bin`, 0x20000 `echo_35c_bench_app.bin` |
+| UPDATE (recommended) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_core_preview_{bootloader,partitions,app,core}.bin` |
+| Start fresh (ERASES ALL SAVES) | Four parts plus`0xF80000 echo_35c_blank_saves.bin`; erases child/Echo/music/book/progress, not just one Echo; keeps NVS |
+| Bench check | Unchanged separate hardware-test build, not preview; saves/NVS kept |
 
-Updating keeps the Echo: no part touches `nvs` (0x9000, device settings and radio calibration) or `saves` (0xF80000: the Echo, its name, progress, memory book and settings). There's no erase prompt. "Start fresh" is the only button that clears the saves, and it leaves `nvs` alone.
+UPDATE never touches NVS`0x9000..0x19000` or saves`0xF80000..0x1000000`; W4 partition bytes unchanged. Never update with the full16MiB factory image: it blanks NVS/saves. Book/release/recorded sound and visuals/settings remain incomplete; music/quiet/chirp/3D-den/stay/shared rows are read-only preview information. No games/mission offers, data kept.
 
-Use the board's single USB-C port. Download mode: hold BOOT, tap RESET, release BOOT. Holding PWR about 6 s powers the board off.
+No-UART timing: **Home/Origin Lock hold3s → release → multiplication → Next → Touch timing**; last completed5s software maxima, not physical finger-to-pixel.
 
-Manual update: `esptool.py --chip esp32s3 write_flash 0x0 echo_35c_c10r_bootloader.bin 0x8000 echo_35c_c10r_partitions.bin 0x20000 echo_35c_c10r_app.bin 0x330000 echo_35c_c10r_core.bin`
+USB-C data cable; download mode: hold BOOT, tap RESET, release BOOT. PWR about6s turns off. Manual update from this folder:
+
+```sh
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_core_preview_bootloader.bin 0x8000 echo_35c_core_preview_partitions.bin 0x20000 echo_35c_core_preview_app.bin 0x330000 echo_35c_core_preview_core.bin
+```
 
 The rest of this note is for the 2-inch board.
 

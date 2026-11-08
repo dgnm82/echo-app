@@ -1,6 +1,6 @@
 {
-  "name": "Echo handheld (Waveshare ESP32-S3-Touch-LCD-3.5-C)",
-  "version": "3.5C companion test build w4",
+  "name": "Echo handheld \u2014 care/home preview \u2014 UPDATE (keeps saves/NVS)",
+  "version": "3.5C care/home preview 413bd29",
   "home_assistant_domain": "",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,19 +8,19 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "echo_35c_w4_bootloader.bin",
+          "path": "echo_35c_core_preview_bootloader.bin",
           "offset": 0
         },
         {
-          "path": "echo_35c_w4_partitions.bin",
+          "path": "echo_35c_core_preview_partitions.bin",
           "offset": 32768
         },
         {
-          "path": "echo_35c_w4_app.bin",
+          "path": "echo_35c_core_preview_app.bin",
           "offset": 131072
         },
         {
-          "path": "echo_35c_w4_core.bin",
+          "path": "echo_35c_core_preview_core.bin",
           "offset": 3342336
         }
       ]

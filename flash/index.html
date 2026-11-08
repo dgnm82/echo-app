@@ -14,11 +14,11 @@
 <script type="module" src="ewt/install-button.js"></script>
 </head><body><main>
 <h1>Echo handheld firmware</h1>
-<p class="v">Pick your board below. Each button installs a complete image for that board only.</p>
+<p class="v">Pick your exact board below. The 3.5C UPDATE installs four parts, not a whole-flash image.</p>
 
 <div class="box" id="b35">
 <h2>3.5-inch board: Waveshare ESP32-S3-Touch-LCD-3.5-C</h2>
-<p class="v">Test build (w4, completed base; board verification pending) for the Waveshare ESP32-S3-Touch-LCD-3.5-C.</p>
+<p class="v">Care/home preview (413bd29) for the Waveshare ESP32-S3-Touch-LCD-3.5-C. Production linked; matching engine booted in QEMU with HAL stubs; not verified on a physical board.</p>
 <ol>
  <li>Use <b>Chrome or Edge on a desktop or laptop</b> (not Safari, Firefox, a phone or a tablet).</li>
  <li>Plug a <b>USB-C data cable</b> into the board's only USB-C port. Charge-only cables don't work: if nothing shows up, try another cable.</li>
@@ -26,17 +26,18 @@
  <li><b>Won't connect?</b> Put the board in download mode: hold <b>BOOT</b>, tap <b>RESET</b>, let go of BOOT, then click Connect again. (Don't hold <b>PWR</b>: holding it about 6 seconds switches the board off.)</li>
  <li>Installing takes a few minutes. Keep the cable in until it says <b>"Installation complete"</b>. If the screen doesn't come on by itself, tap <b>RESET</b> (or unplug and plug back in).</li>
 </ol>
-<p><b>Updating keeps your Echo.</b> "Echo companion" installs the new version and keeps the Echo, its name, progress, the memory book and settings. It never asks to erase.</p>
+<p><b>Recommended: UPDATE — care/home preview.</b> Four parts update the bootloader, partition table, app and core assets. No part or sector touches saves or NVS. Existing child, Echo, music and mission data are retained; no erase prompt. A successful new Echo clears its old memory book as on the phone. In-firmware Echo-only delete keeps the child and music.</p>
+<p><b>Preview, not complete phone parity:</b> no games or mission offers (data kept). Book/release/recorded sound and authored visuals remain incomplete. Music/quiet/chirp/3D-den/stay/shared controls are read-only preview information, not working switches. See <a href="../FLASH.md">build evidence, gaps and checksums</a>.</p>
 <p><b>Starting fresh:</b> "Start fresh" installs the same version and <b>erases all child and Echo saves</b> (including child music, names, progress and memory book), so onboarding starts again. This is not the firmware's Echo-only delete. Only use it to erase everything; it can't be undone.</p>
 <div class="row">
-<div><esp-web-install-button manifest="manifest_35c_companion.json"><button slot="activate">Echo companion</button>
+<div><esp-web-install-button manifest="manifest_35c_companion.json"><button slot="activate">UPDATE — care/home preview</button>
  <span slot="unsupported" class="warn">This browser can't flash devices. Please open this page in Chrome or Edge on a computer.</span>
  <span slot="not-allowed" class="warn">Flashing needs a secure page (https). Open the GitHub Pages address, not a local file.</span>
-</esp-web-install-button><p class="lab">Install or update. Keeps the Echo.</p></div>
+</esp-web-install-button><p class="lab">Recommended four-part update. Keeps saves and NVS.</p></div>
 <div><esp-web-install-button manifest="manifest_35c_bench.json"><button slot="activate">Bench check</button>
  <span slot="unsupported" class="warn">This browser can't flash devices.</span>
  <span slot="not-allowed" class="warn">Needs https.</span>
-</esp-web-install-button><p class="lab">A hardware test screen, not the Echo. Keeps the Echo for later.</p></div>
+</esp-web-install-button><p class="lab">Unchanged separate hardware test, not the preview. Keeps saves/NVS for later.</p></div>
 <div><esp-web-install-button manifest="manifest_35c_fresh.json"><button slot="activate">Start fresh (erases all saves)</button>
  <span slot="unsupported" class="warn">This browser can't flash devices.</span>
  <span slot="not-allowed" class="warn">Needs https.</span>
@@ -60,7 +61,8 @@
  <span slot="not-allowed" class="warn">Flashing needs a secure page (https). Open the GitHub Pages address, not a local file.</span>
 </esp-web-install-button>
 </div>
-<p><b>After flashing:</b> finish onboarding, then open Grown-Ups for Volume, Test buzz and Device test.</p>
+<p><b>3.5C touch timing without UART:</b> hold Lock on Home or Origin for 3 seconds, release, solve the multiplication gate, tap Next to Touch timing and open it. Values refresh every 5 seconds; software timing, not measured finger-to-pixel latency.</p>
+<p><b>2-inch after flashing:</b> finish onboarding, then open Grown-Ups for Volume, Test buzz and Device test.</p>
 <p>Not connecting, blank screen or no sound? See the <a href="README.md">flash and troubleshooting note</a>.</p>
 <p style="opacity:.6;font-size:.85rem">Installer: <a href="https://github.com/esphome/esp-web-tools">ESP Web Tools</a> 10.4.0 (Apache-2.0), served from this site.</p>
 </main></body></html>
