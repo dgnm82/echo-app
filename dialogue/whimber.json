@@ -34,7 +34,7 @@
             "night"
           ]
         },
-        "short": "The moon looks like it's smiling tonight…"
+        "short": "The moon is smiling. At you?"
       },
       {
         "text": "Hello, {child}… I saved you the coziest spot on my branch. I only sat on it a little.",
@@ -76,7 +76,7 @@
             "evening"
           ]
         },
-        "short": "I saw the first star twinkle…"
+        "short": "First star winked… at us."
       }
     ],
     "grace_hello": [
@@ -3339,7 +3339,7 @@
         "text": "My tummy gave a tiny rumble… it said please, though.",
         "expr": "giggling",
         "gesture": "preen",
-        "short": "My tummy gave a tiny rumble…"
+        "short": "My tummy said please…"
       },
       {
         "text": "",
@@ -3469,7 +3469,7 @@
       {
         "text": "…my feathers are extra soft today. I fluffed them up just for a hug.",
         "expr": "love",
-        "short": "…my feathers are extra soft today."
+        "short": "Extra soft feathers… hug?"
       },
       {
         "text": "",
@@ -3626,7 +3626,7 @@
       {
         "text": "…the yawns are visiting me. Three came… and one brought a friend.",
         "expr": "sleepy",
-        "short": "…the yawns are visiting me."
+        "short": "A yawn brought a friend…"
       },
       {
         "text": "",
@@ -11750,7 +11750,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Remember our high-sound card…",
+        "short": "High sound? Did it squeak?",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -11783,7 +11783,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a low, rumbly sound.",
+        "short": "Find a sound lower than you.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11832,7 +11832,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Did you hear something low and",
+        "short": "Hear a rumble? Not tummies.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11881,7 +11881,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Find something that goes tick, tick,",
+        "short": "Find a tick-tick. No tocks.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11897,7 +11897,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Find something with a steady beat…",
+        "short": "Steady beat? Try your feet.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -11930,7 +11930,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Did something keep a steady beat?",
+        "short": "Steady beat? Even your feet?",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11979,7 +11979,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a sound that starts",
+        "short": "Find big sounds that shrink.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11995,7 +11995,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Listen for a sound that starts",
+        "short": "Loud, softer, softest. Shh.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12175,7 +12175,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a little tune that",
+        "short": "Find a tune that boomerangs.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12523,7 +12523,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "The night crickets keep a slow,",
+        "short": "Crickets: tiny drummers…",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12555,7 +12555,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "High notes feel like stars to",
+        "short": "High: starry. Low: cozy.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12571,7 +12571,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Water over pebbles sounds bubbly.",
+        "short": "Brooks giggle. Ponds shush.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12619,7 +12619,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "When the evening gets quiet, every",
+        "short": "Quiet night? Loud leaves…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12635,7 +12635,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Some music walks slowly, like a",
+        "short": "Some tunes stroll. Some zip.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12651,7 +12651,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "A tune can feel sleepy without",
+        "short": "Sleepy tunes still smile…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12667,7 +12667,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "My favorite lullabies return to the",
+        "short": "Lullabies always fly home…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12910,7 +12910,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "The bell rang loud, then smaller,",
+        "short": "Bell: loud, small, then shy.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12961,7 +12961,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "That tune from before keeps playing",
+        "short": "Stuck tune… in a good way.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12978,7 +12978,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Some music is quick like hopping…",
+        "short": "Songs hop. Or float. Or nap.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -13012,7 +13012,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Even quiet places have sounds…",
+        "short": "Quiet isn't quiet. Listen.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -13046,7 +13046,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "A little pattern can come around",
+        "short": "Songs love a good rerun.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -13063,7 +13063,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Two friends tapping the same beat…",
+        "short": "Same beat? That's a dance.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -13080,7 +13080,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Even one sound has a color…",
+        "short": "Sounds come in fuzzy too…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -13123,7 +13123,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "That Ancient Echo is still floating",
+        "short": "An old tune in my fluff…",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -13140,7 +13140,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "I keep thinking about that Ancient",
+        "short": "A long-ago tune, ours now…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -13224,7 +13224,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Every cloud was one step higher…",
+        "short": "Cloud stairs made a tune…",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",

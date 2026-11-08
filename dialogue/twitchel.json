@@ -1589,7 +1589,7 @@
         "text": "A round pebble! I bat it around.",
         "expr": "neutral",
         "gesture": "pounce",
-        "short": "A round pebble! I bat it around."
+        "short": "A pebble! Now it's my ball."
       },
       {
         "text": "Snack smell! …No. Just flowers.",
@@ -3029,7 +3029,7 @@
         "text": "I'm dreaming about crunchy fish. Even my dream is hungry.",
         "expr": "thinking",
         "gesture": "tap",
-        "short": "I'm dreaming about crunchy fish."
+        "short": "Even my dream is hungry."
       },
       {
         "text": "",
@@ -3279,7 +3279,7 @@
       {
         "text": "I have a very important nap planned. I'm already late for it.",
         "expr": "sleepy",
-        "short": "I have a very important nap planned."
+        "short": "Big nap plan. I'm late!"
       },
       {
         "text": "",
@@ -11066,7 +11066,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Remember our high-sound card?",
+        "short": "High sound? Did it squeak?",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -11099,7 +11099,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a low, rumbly sound.",
+        "short": "Find a sound lower than you.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11148,7 +11148,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Did you hear something low and",
+        "short": "Hear a rumble? Not tummies.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11197,7 +11197,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Find something that goes tick, tick,",
+        "short": "Find a tick-tick. No tocks.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11213,7 +11213,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Find something with a steady beat…",
+        "short": "Steady beat? Try your feet.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -11246,7 +11246,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Did something keep a steady beat?",
+        "short": "Steady beat? Even your feet?",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11295,7 +11295,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a sound that starts",
+        "short": "Find big sounds that shrink.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11311,7 +11311,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Listen for a sound that starts",
+        "short": "Loud, softer, softest. Shh.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -11491,7 +11491,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Listen for a little tune that",
+        "short": "Find a tune that boomerangs.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11823,7 +11823,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "My whiskers wiggle when a sound",
+        "short": "Loud then soft? Whisker jig!",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11887,7 +11887,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "That bouncy tune is still dancing",
+        "short": "That tune dances. Show-off!",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11919,7 +11919,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "When I stretch, my head music",
+        "short": "Big stretch, slow tune. Ahh.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -11999,7 +11999,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Low sounds rumble in my tummy.",
+        "short": "High sounds tickle. Hee hee!",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12226,7 +12226,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "The bell rang loud, then smaller,",
+        "short": "Bell: loud, small, then shy.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12277,7 +12277,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "That tune from before keeps playing",
+        "short": "Stuck tune! In a good way.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12294,7 +12294,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "Some music is quick like hopping.",
+        "short": "Songs hop. Or float. Or nap.",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12328,7 +12328,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Even quiet places have sounds…",
+        "short": "Quiet isn't quiet. Listen.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12362,7 +12362,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "A little pattern can come around",
+        "short": "Songs love a good rerun.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12379,7 +12379,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Two friends tapping the same beat…",
+        "short": "Same beat together? A dance!",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12439,7 +12439,7 @@
             "eib_band": "7-8"
           }
         },
-        "short": "That Ancient Echo is still dancing",
+        "short": "My whiskers hum an old tune!",
         "context": {
           "age_band": "7-8",
           "by": "cole_step4",
@@ -12456,7 +12456,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "I keep thinking about that Ancient",
+        "short": "An old tune naps in my ear.",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
@@ -12540,7 +12540,7 @@
             "eib_band": "9-10"
           }
         },
-        "short": "Each cushion went one step higher.",
+        "short": "A cushion tune with stairs!",
         "context": {
           "age_band": "9-10",
           "by": "cole_step4",
