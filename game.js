@@ -317,11 +317,31 @@ function titleCast(b,Fm,day,opt){const S2=(Fm&&Fm.strips)||[];if(!b)return [];co
   if(water&&duck)put(duck,'water',water.xy,{perch:water.id},TITLE_FLOAT_SINK);
   // sky: a bird perches on a branch / fence post / rock ledge below the tagline (never hovering, never over the words)
   const bird=nth(idle.filter(x=>x.look!=='duck'&&okLook(x.look,C.sky)),2);
-  if(bird){const sky=P.filter(q=>(q.kinds||[]).includes('sky')).filter(q=>{const p=at(bird,q.xy);return clear(ink(bird,p.left,p.top))}),per=nth(sky);if(per)put(bird,'perch',per.xy,{perch:per.id})}
+  // opt.seat(st,xy) (titleRun, from the rendered bg+fg art) moves the perch to where the bird feet really rest on bark / fence wood /
+  // rock (a fence post 2 px wide -> its top rail) or returns null (no surface there -> no perch); without it the Pixal anchor is used as is
+  const onArt=opt.seat||((st,xy)=>xy);
+  // ... and never behind the returning player own Echo (its feet would be hidden, so it would seem to sit on the Echo)
+  const OB=opt.own&&path?(()=>{const q=opt.own.box||[0,0,48,48],foot=opt.own.foot!=null?opt.own.foot:q[3]-1,l=TITLE_OWN_X-24,t=path.y-foot;return [l+q[0],t+q[1],l+q[2],t+q[3]]})():null;
+  if(bird){const sky=P.filter(q=>(q.kinds||[]).includes('sky')).map(q=>({id:q.id,xy:onArt(bird,q.xy)})).filter(q=>{if(!q.xy)return false;const p=at(bird,q.xy),r=ink(bird,p.left,p.top);return clear(r)&&!(OB&&r[0]<OB[2]&&r[2]>OB[0]&&r[1]<OB[3]&&r[3]>OB[1])}),per=nth(sky);if(per)put(bird,'perch',per.xy,{perch:per.id})}
   // a returning player's own Echo: in front, grounded on the ground path (feet = its lowest opaque row)
   if(opt.own&&path){const o=opt.own,q=o.box||[0,0,48,48],foot=o.foot!=null?o.foot:q[3]-1,left=TITLE_OWN_X-24,top=path.y-foot;
     cast.push({own:true,st:{file:'own',anchor:[24,foot]},kind:'own',surf:path.y,x:TITLE_OWN_X,y:top,left,dir:1,moving:false,box:[left+q[0],top+q[1],left+q[2],top+q[3]]})}
   return cast}
+// PM round 2b: a perched bird sits ON art. titleFeet: frame-0 foot row Y (lowest opaque row) and the columns whose lowest opaque pixel is in
+// the bottom two rows. titleSurf: the variant bg+fg composite; wood(x,y) = Pixal palette slots 10-12 (bark / fence wood / rock).
+// titleSeat drops a perch anchor up to TITLE_SEAT_DROP px until >= half the foot columns (>= 2) stand on a top surface (wood right below the
+// foot, not wood two rows up), else null.
+const TITLE_SEAT_DROP=8;
+function titleFeet(url,fw,fh){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas');c.width=fw;c.height=fh;const x=c.getContext('2d');x.drawImage(im,0,0);
+  const D=x.getImageData(0,0,fw,fh).data,low={};for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++)if(D[(y*fw+xx)*4+3]>0)low[xx]=y;
+  const Y=Math.max(-1,...Object.values(low));res(Y<0?null:{Y,cols:Object.keys(low).map(Number).filter(c=>low[c]>=Y-1)})}catch(e){res(null)}};im.onerror=()=>res(null);im.src=url})}
+function titleSurf(v){const L=u=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=u});
+  return Promise.all([L(v.bg),v.fg?L(v.fg):null]).then(([a,b])=>{if(!a)return null;try{const c=document.createElement('canvas');c.width=180;c.height=320;const x=c.getContext('2d');x.drawImage(a,0,0);if(b)x.drawImage(b,0,0);
+    const D=x.getImageData(0,0,180,320).data,W=new Set((v.palette||[]).slice(10,13).map(h=>h.toUpperCase()));
+    return (px,py)=>{if(px<0||py<0||px>=180||py>=320)return false;const i=(py*180+px)*4;return W.has('#'+[D[i],D[i+1],D[i+2]].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase())}}catch(e){return null}})}
+function titleSeat(wood,feet){return (st,xy)=>{const f=feet[st.file];if(!wood||!f)return null;const left=xy[0]-st.anchor[0];
+  for(let d=0;d<=TITLE_SEAT_DROP;d++){const y=xy[1]-st.anchor[1]+f.Y+d,n=f.cols.filter(c=>wood(left+c,y+1)&&!wood(left+c,y-1)).length;if(n>=2&&2*n>=f.cols.length)return [xy[0],xy[1]+d]}
+  return null}}
 // opaque bbox of frame 0..n-1 (union) of a strip / sheet, [l,t,r,b) in frame px; null if the image cannot be read
 function titleBox(url,frames,fw,fh){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas'),W=fw*frames;c.width=W;c.height=fh;const x=c.getContext('2d');x.drawImage(im,0,0);
   const D=x.getImageData(0,0,W,fh).data;let U=null;for(let f=0;f<frames;f++)for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++){if(D[(y*W+f*fw+xx)*4+3]>0){if(!U)U=[xx,y,xx+1,y+1];else{U[0]=Math.min(U[0],xx);U[1]=Math.min(U[1],y);U[2]=Math.max(U[2],xx+1);U[3]=Math.max(U[3],y+1)}}}
@@ -335,11 +355,12 @@ function titleKeep(sc){const t=sc.querySelector('.obtag'),R=sc.getBoundingClient
 function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
   const mk=st=>{const e=document.createElement('i');e.className='ttspr';e.style.backgroundImage=`url(${st.file})`;e.style.backgroundSize=`${st.frames*48}px 48px`;sp.appendChild(e);return e};
   let ownEl=null;if(own){ownEl=document.createElement('div');ownEl.className='ttown';ownEl.innerHTML=svg(S.kind,S.g,'neutral');(fg||sp).after(ownEl)}   // in front of the wild cast and the fg plants
-  const strips=(Fm.strips||[]).filter(x=>x.anchor_kind==='foot'&&/^(walk|peek|perch_idle)$/.test(x.anim)),box={};
+  const strips=(Fm.strips||[]).filter(x=>x.anchor_kind==='foot'&&/^(walk|peek|perch_idle)$/.test(x.anim)),box={},feet={};
   const ownPx=ownEl&&ownEl.querySelector('.px-echo'),ownUrl=ownPx&&(ownPx.style.backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1];
-  Promise.all([...strips.map(st=>titleBox(st.file,st.frames,48,48).then(q=>{if(q)box[st.file]=q})),ownUrl?titleBox(ownUrl,1,48,48):Promise.resolve(null)]).then(r=>{if(!sc.isConnected)return;
+  let wood=null;
+  Promise.all([titleSurf(v).then(w=>{wood=w}),...strips.filter(st=>st.anim==='perch_idle').map(st=>titleFeet(st.file,48,48).then(f=>{if(f)feet[st.file]=f})),...strips.map(st=>titleBox(st.file,st.frames,48,48).then(q=>{if(q)box[st.file]=q})),ownUrl?titleBox(ownUrl,1,48,48):Promise.resolve(null)]).then(r=>{if(!sc.isConnected)return;
   const ob=r[r.length-1];
-  const actors=titleCast(b,Fm,Math.floor(Date.now()/864e5),{box,keep:titleKeep(sc),own:ownEl?{box:ob||[0,0,48,48]}:null}).map(a=>a.own?Object.assign(a,{el:ownEl}):Object.assign(a,{el:mk(a.st),f:0,t:0}));
+  const actors=titleCast(b,Fm,Math.floor(Date.now()/864e5),{box,keep:titleKeep(sc),seat:titleSeat(wood,feet),own:ownEl?{box:ob||[0,0,48,48]}:null}).map(a=>a.own?Object.assign(a,{el:ownEl}):Object.assign(a,{el:mk(a.st),f:0,t:0}));
   if(ownEl&&!actors.some(a=>a.own))ownEl.remove();
   const place=a=>{a.el.style.left=Math.round(a.left!=null&&!a.moving?a.left:a.x-24)+'px';a.el.style.top=a.y+'px';a.el.dataset.surface=a.kind;if(a.own){a.el.dataset.surf=a.surf;return}
     a.el.style.backgroundPosition=`${-a.f*48}px 0`;a.el.classList.toggle('flip',PIXEL.flipFor(a.st.look,a.dir));a.el.dataset.dir=a.dir};

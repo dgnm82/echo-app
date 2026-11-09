@@ -4,6 +4,10 @@
 # sprite overlaps the tagline (its ink box, measured from the rendered text). The bird perches below the tagline. Returning player: their
 # own Echo is on the title, in front (z above the wild cast and the fg plants), grounded on the ground path, with wild Echoes around it;
 # a new player (no save) sees only wild ones.
+# PM round 2b (Oct 25): a perched bird must SIT on art, not float. With the cast hidden, the rendered background under each perched
+# bird's feet (its lowest opaque row, both lowest rows' columns) must be a top surface of bark / fence wood / rock (Pixal palette
+# slots 10-12 of the biome variant): the art pixel right below a foot is that colour and the pixel two rows up is not. At least half
+# the foot columns (and >= 2) must be held. Checked for the new and the returning title.
 import asyncio,sys,os,io,json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image,ImageChops
@@ -42,6 +46,28 @@ async def ink(pg):
     bb=d.crop((int(R[0]*R[3]),int((R[1]/R[3]*0+R[1])*R[3]+t*k),int((R[0]+R[2])*R[3]),int(R[1]*R[3]+b*k))).getbbox()
     if bb:out.append([bb[0]/k,t+bb[1]/k,bb[2]/k,t+bb[3]/k])
   return out
+TB=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','px','title','title_biomes.json')))['biomes']
+FEET="""async()=>{const sc=document.querySelector('.scene.ttl');const R=sc.getBoundingClientRect(),k=R.width/180;const C=window.__tC||(window.__tC={});
+ const load=u=>C[u]||(C[u]=new Promise(res=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);res({w:c.width,h:c.height,d:x.getImageData(0,0,c.width,c.height).data})};im.onerror=()=>res(null);im.src=u}));
+ const out=[];for(const e of sc.querySelectorAll('.ttspr')){if(e.dataset.surface!=='perch')continue;const cs=getComputedStyle(e),u=(cs.backgroundImage.match(/url\\("?([^")]+)"?\\)/)||[])[1];const I=u&&await load(u);if(!I)continue;
+  const bp=cs.backgroundPosition.split(' ').map(parseFloat),r=e.getBoundingClientRect(),l=Math.round((r.left-R.left)/k),t=Math.round((r.top-R.top)/k),flip=(e.classList.contains('flip')||/matrix\\(-1/.test(cs.transform));
+  const low={};for(let y=0;y<48;y++)for(let x=0;x<48;x++){const sx=x-bp[0],sy=y-bp[1];if(sx<0||sy<0||sx>=I.w||sy>=I.h)continue;if(I.d[(sy*I.w+sx)*4+3]>0){const X=flip?47-x:x;low[X]=Math.max(low[X]??-1,y)}}
+  const Y=Math.max(...Object.values(low));out.push({file:u.split('/').pop(),l,t,Y,cols:Object.keys(low).map(Number).filter(c=>low[c]>=Y-1)})}
+ return {bg:(sc.querySelector('.ttbio.bg').style.backgroundImage.match(/biome_(\\w+?)_(\\w+?)\\.png/)||[]).slice(1),birds:out}}"""
+async def perch_on_art(pg,label,need):
+  F=await pg.evaluate(FEET);bio,tod=(F['bg']+[None,None])[:2]
+  check(bio in TB,f'{label}: biome variant read ({F["bg"]})')
+  if bio not in TB:return
+  wood=set(TB[bio]['variants'][tod]['palette'][10:13])
+  if need:check(len(F['birds'])>=1,f'{label}: a bird perches on the {bio} title')
+  R=await pg.evaluate("(()=>{const r=document.querySelector('.scene.ttl').getBoundingClientRect();return [r.left,r.top,r.width,window.devicePixelRatio]})()");k=R[2]/180*R[3]
+  await pg.add_style_tag(content='.ttsprites,.ttown,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel{visibility:hidden!important}')
+  im=Image.open(io.BytesIO(await pg.screenshot())).convert('RGB')
+  await pg.evaluate("document.querySelectorAll('style').forEach(s=>{if(s.textContent.includes('.ttsprites,.ttown,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel'))s.remove()})")
+  px=lambda x,y:'#%02X%02X%02X'%im.getpixel((int(R[0]*R[3]+(x+.5)*k),int(R[1]*R[3]+(y+.5)*k)))[:3]
+  for b in F['birds']:
+    y=b['t']+b['Y'];held=[c for c in b['cols'] if px(b['l']+c,y+1) in wood and px(b['l']+c,y-1) not in wood]
+    check(len(held)>=2 and 2*len(held)>=len(b['cols']),f"{label}: perched {b['file']} sits on {bio} bark/wood art: {len(held)}/{len(b['cols'])} foot columns on a top surface (feet row {y}, x {b['l']+min(b['cols'])}..{b['l']+max(b['cols'])})")
 def inter(a,b):return a[0]<b[2] and a[2]>b[0] and a[1]<b[3] and a[3]>b[1]
 async def watch(pg,label,keep,own_expected):
   seen=set();owns=[]
@@ -71,6 +97,7 @@ async def main():
         for s in r['spr']:check(abs(s['x']-s['l'])<=0.5 and abs(s['y']-s['t'])<=0.5,f"{bio}: {s['file'][-40:]} ({s['surf']}) renders at its anchor placement ({s['x']:.1f},{s['y']:.1f}) vs ({s['l']},{s['t']})")
         if bio=='woodland':check(any(s['surf']=='perch' and s['l']<90 for s in r['spr']),'woodland: the bird perches on the left tree branch (below the tagline)')
       check(await pg.locator('.ttown').count()==0,f'{bio}: new player (no save): no own Echo on the title, wild ones only')
+      await perch_on_art(pg,f'{bio} new',bio!='cove')
       keep=await ink(pg);check(len(keep)==3,f'{bio}: tagline ink measured ({[[round(v) for v in k] for k in keep]})')
       await watch(pg,f'{bio} new',keep,False)
       await pg.screenshot(path=f'/tmp/title_{bio}.png');await ctx.close()
@@ -97,6 +124,7 @@ async def main():
       check(got['own']==1,f"return {bio}: the player's own Echo is on the title ({got['own']})")
       check(got['wild']>=1,f"return {bio}: wild Echoes around it ({got['wild']})")
       check(got['bio']!='cove' and (bio!='cove' or got['bio'] in ('woodland','pasture')),f"return {bio}: shown biome {got['bio']} has dry ground for the own Echo")
+      await perch_on_art(pg,f'return {bio}',False)
       keep=await ink(pg)+([got['panel']] if got['panel'] else [])
       S,owns=await watch(pg,f'return {bio}',keep,True)
       check(len(owns)>0,f'return {bio}: own Echo measured')
