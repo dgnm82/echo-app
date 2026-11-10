@@ -31,18 +31,18 @@ async def main():
     await pg.evaluate("document.querySelector('.orcard[data-a=snowleopard]').scrollIntoView()");await pg.screenshot(path=f'{OUT}/e1-picker.png')
     await pick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900)
     check('Do you want to ask it to come with you?' in await txt(),'E2 invite line');await pg.screenshot(path=f'{OUT}/e2-invite.png')
-    await T('#orinv');await T('#orinv',3000);t=await txt()
+    await T('#orinv',3000);t=await txt()
     check("I'm a Purrling! I'm the Echo of a cat, big and small!" in t,'E3 family line');check('Your snow leopard is glowing with its song! The more you play together, the bigger and brighter its song will glow!' in t,'E4 keep line')
     await pg.screenshot(path=f'{OUT}/e3-e4-family.png')
-    await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500);await pg.evaluate(SPY)
+    await T('#ornm',400);await T('#orkeep',1500);await pg.evaluate(SPY)
     # E5: answer the setup talk, pick "Can you sing me your song?"
     sang=False
     for _ in range(150):
       c=pg.locator('.choices button',has_text='Can you sing me your song?')
       if await c.count():
-        check(not await pg.locator('.choices button',has_text='still sing').count(),'old choice gone');await c.first.click();await c.first.click();break
+        check(not await pg.locator('.choices button',has_text='still sing').count(),'old choice gone');await c.first.click();break
       if await pg.locator('.choices button').count():
-        try:x=pg.locator('.choices button').first;await x.click(timeout=800);await x.click(timeout=800)
+        try:x=pg.locator('.choices button').first;await x.click(timeout=800)
         except Exception:pass
       await pg.wait_for_timeout(200)
     for _ in range(60):
@@ -64,16 +64,16 @@ async def main():
     for i in range(4):
       await pg.evaluate(CLEAN+";__echo.state.napUntil=0;Object.assign(__echo.state.needs,{food:70,rest:90,play:30});__echo.home()");await pg.wait_for_timeout(900);await pg.evaluate(CLEAN)
       await T('#play',500);L=await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent)");check(any('Cozy Pairs' in l for l in L),f'E7 game {i+1} picker opens')
-      b0=await pg.evaluate("__echo.state.bond");c=pg.locator('.choices button',has_text='Cozy Pairs').first;await c.click();await c.click();await pg.wait_for_timeout(1200)
+      b0=await pg.evaluate("__echo.state.bond");c=pg.locator('.choices button',has_text='Cozy Pairs').first;await c.click();await pg.wait_for_timeout(1200)
       if i>=2:check(await pg.evaluate("__echo.funOnly()"),f'E7 game {i+1} is just for fun')
       else:check(not await pg.evaluate("__echo.funOnly()"),f'E7 game {i+1} gives bond')
       await T('#quit',2500)
       if i>=2:check(await pg.evaluate("__echo.state.bond")==b0,f'E7 game {i+1}: no bond')
     # E8: tower trims fall in world space and leave quickly
     await pg.evaluate(CLEAN+";__echo.state.bond=CONFIG.unlock.stack+5;__echo.state.lowfx=false;__echo.home()");await pg.wait_for_timeout(900);await pg.evaluate(CLEAN)
-    await T('#play',500);c=pg.locator('.choices button',has_text='Cushion Tower').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+    await T('#play',500);c=pg.locator('.choices button',has_text='Cushion Tower').first;await c.click();await pg.wait_for_timeout(1500)
     if await pg.locator('.choices button').count():
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(800)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(800)
     await pg.evaluate("__stack.sx=__stack.top+(__stack.w/3);__stackPress()");w=await pg.evaluate("__stackBits()");check(len(w)>=1,'E8 a trim piece')
     await pg.wait_for_timeout(200);w2=await pg.evaluate("__stackBits()");check(w2 and w2[0]['wy']>w[0]['wy'] and w2[0]['a']<1,'E8 falls + fades '+str((w,w2)))
     await pg.screenshot(path=f'{OUT}/e8-trim.png');await pg.wait_for_timeout(1500);check(await pg.evaluate("__stackBits().length")==0,'E8 gone within ~1.7 s')

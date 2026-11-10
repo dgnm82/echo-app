@@ -39,10 +39,10 @@ async def main():
     await pg.screenshot(path=f'{OUT}/picker.png')
     await T(pg,'.orcard[data-a=testcat]');await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={chip}]',900)
     check(await pg.locator('#orlf .px-echo').count()==1,'invite shows a stand-in sprite')
-    await T(pg,'#orinv');await T(pg,'#orinv',3000)
+    await T(pg,'#orinv',3000)
     line=await pg.evaluate("(document.querySelector('.orfamline')||{}).textContent||''");check('Testling' in line,'family line uses the manifest label: '+line)
     await pg.screenshot(path=f'{OUT}/arrival.png')
-    await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1500)
+    await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
     for i in range(12):
       if await pg.locator('#cr .px-echo').count():break
       bt=pg.locator('.choices button')
@@ -58,7 +58,7 @@ async def main():
     await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
     await pg.wait_for_timeout(3000);await pg.evaluate("document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pg.wait_for_timeout(400)
     labels=await pg.locator('.choices button').all_inner_texts();check(any('Moonlight Pairs' in l for l in labels),'Play list from the manifest titles: %s'%labels)
-    c=pg.locator('.choices button',has_text='Moonlight Pairs').first;await c.click();await c.click();await pg.wait_for_timeout(800)
+    c=pg.locator('.choices button',has_text='Moonlight Pairs').first;await c.click();await pg.wait_for_timeout(800)
     items=await pg.evaluate("window.__mem?[...new Set(__mem.cards.map(c=>c.item))]:null");check(items and set(items)<=set(m['games']['memoryDeck']),'Pairs deck from the manifest: %s'%items)
     await pg.screenshot(path=f'{OUT}/pairs.png')
     check(not errs,'no page errors: %s'%errs[:3]);check(not b404,'no 404s: %s'%b404[:5])

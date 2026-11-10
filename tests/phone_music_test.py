@@ -8,7 +8,7 @@ async def run(b,p,kind,errs):
   pg.on('response',lambda r:reqs.__setitem__(r.url.split('/echo-app/')[-1].split('8765/')[-1],r.status))
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
   await pg.evaluate("CONFIG.ambientMin=999;document.getElementById('overlay').innerHTML='';document.querySelectorAll('.full').forEach(f=>f.remove())")
   sp='slyte' if kind=='fox' else 'whimber'
   await pg.click('#cr');await pg.wait_for_timeout(2500)

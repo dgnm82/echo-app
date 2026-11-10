@@ -23,7 +23,7 @@ async def origin(b,p,animal,chip,errs,b404,fam=None):
   if fam:await T(pg,f'.orfam[data-f={fam}]')
   await T(pg,f'.orchip[data-c={chip}]',900)
   inv=await pg.evaluate("(document.querySelector('#orlf .px-echo')||{}).outerHTML||''")
-  await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1500)
+  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
   return pg,inv
 async def main():
   async with async_playwright() as p:
@@ -50,7 +50,7 @@ async def main():
     ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);pg.on('response',lambda r:r.status>=400 and b404.append(r.url))
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush');await pg.wait_for_timeout(4500)
-    c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+    c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(1500)
     S=await pg.evaluate("window.__echo.state");bg=await pg.evaluate("document.querySelector('#cr .px-echo').style.backgroundImage")
     import re;check('look' not in S['g'] and re.search(r'px/slyte_(mint-teal|violet-rose|sunset-gold|rose-sapphire|teal-gold|sky-periwinkle)_f\d\.png',bg),'old save: today\'s sheet '+bg)
     # missing look sheet falls back to the family sheet

@@ -6,7 +6,7 @@ async def run(b,p,kind,low):
   pg=await b.new_page(**p.devices['iPhone 13']);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status==404 and errs.append('404 '+r.url))
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(500)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2500)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(2500)
   name='Den Dig' if kind=='fox' else 'Nest Weave'
   await pg.evaluate(f"document.getElementById('overlay').innerHTML='';const S=__echo.state;S.lowfx={1 if low else 0};S.bond=300;S.needs.play=0")
   for gi in range(2):

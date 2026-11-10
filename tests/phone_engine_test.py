@@ -10,7 +10,7 @@ async def main():
     errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
     await pg.goto(URL);await pg.evaluate('window.__wiped=1;localStorage.clear();localStorage.setItem("echo-nosetup","1")');await pg.reload()
     await pg.uncheck('#voice');await pg.click('#go');await pg.click('#bush');await pg.wait_for_timeout(3800)
-    c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2600)
+    c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(2600)
     await pg.evaluate("""window.__said=[];new MutationObserver(()=>{const b=document.getElementById('b');if(b&&b.style.display!=='none'&&window.__said[window.__said.length-1]!==b.textContent)window.__said.push(b.textContent)}).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true});
       CONFIG.ambientMin=999;CONFIG.ambientMax=999;Dialogue.cfg.carryOnMs=1500;Dialogue.cfg.lostThoughtChance=0;Dialogue.cfg.driftChances=[1,0,0];window.__d=0""")
     # dialogue_v3: weather idle (except puddle) needs bondMin ≥70; at bond 0 after nosetup there is nothing to drift to
@@ -22,7 +22,7 @@ async def main():
       if await pg.evaluate('window.__d===1'):break
       await pg.evaluate("Dialogue.waiting&&Dialogue.waiting()&&Dialogue.advance()");await pg.wait_for_timeout(250)
     assert await pg.evaluate('window.__d===1'),'carry-on conversation never ended'
-    # 2) drift: the child answers every question (two taps), engine then drifts to a linked topic
+    # 2) drift: the child answers every question (one tap), engine then drifts to a linked topic
     await pg.evaluate("Dialogue.cfg.carryOnMs=600000;window.__d=0;window.__echo.runConv('slyte_puddle_talk',()=>window.__d=1)")
     for _ in range(80):
       if await pg.evaluate('window.__d===1'):break

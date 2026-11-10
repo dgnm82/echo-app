@@ -490,14 +490,13 @@ function orColours(fid){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family
 const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
 function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
   const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):'',family_echo:(f.ui&&f.ui.echoOf)||''}}
-// P3 hum + invite (tap to hear, tap again; never timed)
+// P3 hum + invite (one tap hears and asks; never timed)
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);if(window.MusicFX)setTimeout(()=>MusicFX.homeSound(o.animal),500);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
   obScene('orinvite meadow',`<div class="obpanel small">${U('ui_or_hum')}</div><div class="orlightform" id="orlf">${obSprite(fid,seed,o.ramp,1)}<i class="ornote a">♪</i><i class="ornote b">♫</i></div>
    <div class="obbub" id="obb" style="display:none"></div><div class="obpanel small orask">${U('ui_or_invite_ask')}</div><button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
   setTimeout(()=>{const l=orLine('invite_hum');if(l)obTalk(l)},700);
-  let armed=false;$('#orinv').onclick=()=>{SFX('ui_tap');if(!armed){armed=true;$('#orinv').classList.add('sel');say(U('ui_or_invite_btn'));return}
-    if(orDeclines())orNotToday();else orYes()}}
+  pickTap($('#orinv'),()=>say(U('ui_or_invite_btn')),()=>{if(orDeclines())orNotToday();else orYes()})}
 function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
   if(!l)return null;return {text:obFill(l.text),expr:l.expr||'happy',react:l.react}}
 function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
@@ -522,14 +521,14 @@ function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+
   $('#orff').onclick=()=>{SFX('ui_tap');orSeen()}}
 // P5 naming: 6 names (seeded order), More, Type it (onboarding filter), Just "{family}"
 function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const dn=F.animals[o.animal].default_name||f.default_name;S.vars.default_name=dn;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
-  const six=L.slice((page*6)%L.length,(page*6)%L.length+6);let sel=null;
+  const six=L.slice((page*6)%L.length,(page*6)%L.length+6);
   obScene('orname meadow',`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="orlightform small">${obSprite(o.family,o.seed,o.ramp,1)}</div>
    <div class="ornames">${six.map(n=>`<button class="btn small ornm" data-n="${n}">${n}</button>`).join('')}</div>
    <div class="row obrow"><button class="btn small" id="ormore">${U('ui_or_name_more')}</button><button class="btn small" id="ortype">${U('ui_or_name_type')}</button></div>
-   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{default_name:dn})}</button><div class="hint">Tap to hear · tap again to choose</div>`);
-  app.querySelectorAll('.ornm').forEach(b=>b.onclick=()=>{SFX('ui_tap');if(sel===b.dataset.n)return orFinish(sel,false);sel=b.dataset.n;app.querySelectorAll('.ornm').forEach(x=>x.classList.toggle('sel',x===b));say(sel)});
+   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{default_name:dn})}</button><div class="hint">${U('ui_pick_hint')||'Tap to choose'}</div>`);
+  app.querySelectorAll('.ornm').forEach(b=>pickTap(b,()=>say(b.dataset.n),()=>orFinish(b.dataset.n,false)));
   $('#ormore').onclick=()=>{SFX('ui_tap');orName(page+1)};
-  $('#orkeep').onclick=()=>{SFX('ui_tap');if(sel==='__keep')return orFinish(dn,true);sel='__keep';app.querySelectorAll('.ornm').forEach(x=>x.classList.remove('sel'));$('#orkeep').classList.add('sel');say(dn)};
+  pickTap($('#orkeep'),()=>say(dn),()=>orFinish(dn,true));
   $('#ortype').onclick=()=>{SFX('ui_tap');const d=full(`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="obfield"><input id="ortn" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" aria-label="Echo's name"></div><p class="obsmall" id="orth"></p><div class="row"><button class="btn" id="ortok">Next &gt;</button><button class="btn" id="ortx">${U('ui_ob_yes_change',1)}</button></div>`);
     d.querySelector('#ortx').onclick=()=>d.remove();d.querySelector('#ortok').onclick=()=>{const c=obNameCheck(d.querySelector('#ortn').value);if(!c.ok){SFX('ui_back');d.querySelector('#ortn').value='';d.querySelector('#orth').textContent=U('ui_ob_name_again');return}d.remove();orFinish(c.name,false)}}}
 // P6: the Echo exists now. named_reply -> Home -> *_where_from_v2 -> tip. S.setupDone = 1.
@@ -897,10 +896,17 @@ function chipLift(){const sc=document.getElementById('sc'),scr=document.getEleme
     if(g)d=Math.max(0,Math.min(CHIP_LIFT_MAX,Math.ceil(g+CHIP_LAWN-vis)))}
   if(d!==cur){sc.dataset.lift=d;sc.style.setProperty('--chip-lift',(-d)+'px');sc.classList.toggle('chiplift',d>0)}return d}
 try{new MutationObserver(()=>chipLift()).observe(ov,{childList:true,subtree:true});setInterval(()=>{if(ov.querySelector('.choices'))chipLift()},400)}catch(e){}
-// two-tap reply choices (S9)
+// one-tap reply choices (S9): readout may play, the same tap selects. No armed/confirm state.
+const PICK_DRAG=10;
+function pickTap(el,hear,choose){
+  if(!el||el._pickWired)return;el._pickWired=1;let pt=null,drag=0,done=0;
+  el.addEventListener('pointerdown',e=>{pt={x:e.clientX,y:e.clientY};drag=0});
+  el.addEventListener('pointermove',e=>{if(!pt)return;if(Math.hypot(e.clientX-pt.x,e.clientY-pt.y)>PICK_DRAG)drag=1});
+  el.addEventListener('pointerup',()=>{pt=null});el.addEventListener('pointercancel',()=>{pt=null;drag=0});
+  el.onclick=()=>{if(done||drag){drag=0;return}done=1;SFX('ui_tap');if(hear)hear();choose()}}
 function choices(list,cb,opts){
-  let sel=-1;opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">Tap to hear · tap again to choose</div></div>`;
-  ov.querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;SFX('ui_tap');opts.onTap&&opts.onTap(i);if(sel===i){ov.innerHTML='';cb(i);return}sel=i;ov.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');say(list[i][1])});
+  opts=opts||{};ov.innerHTML=`<div class="choices">${list.map((c,i)=>`<button class="btn" data-i="${i}">${PI(c[0],c[2])}<span class="lbl">${c[1]}</span></button>`).join('')}<div class="hint">${U('ui_pick_hint')||'Tap to choose'}</div></div>`;
+  ov.querySelectorAll('button').forEach(b=>pickTap(b,()=>{const i=+b.dataset.i;opts.onTap&&opts.onTap(i);say(list[i][1])},()=>{const i=+b.dataset.i;ov.innerHTML='';cb(i)}));
   chDismiss(ov.querySelector('.choices'),opts.onDismiss);
 }
 // a tap anywhere outside an open choice list closes it (play, feed, hug, talk ...); that tap does nothing else (no scene tap, no button)
@@ -1003,7 +1009,7 @@ function kind(id,quiet){if(asleep())return;const touch=id==='groom',hf=touch&&S.
 function needMet(st){if(window.NeedSelect&&NeedSelect.mem.on[st])NeedSelect.satisfied(st)}   // H1: a met need mutes its cues and queues one afterglow line
 function pet(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');hop();if(window.Alive)Alive.petFx();talk(B(hf?'hug_full':'pet'),1800)}
 function needMetComfort(){if(window.NeedSelect){NeedSelect.pressures(S.needs,CID(),tod());needMet('cuddly')}}
-function hug(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // E1 press-and-hold hug
+function hug(){if(asleep())return;const hf=S.needs.comfort>=NeedsV2.full;SFX('care_pet_sparkle',{gap:400});needMetComfort();S.needs.comfort=clamp(S.needs.comfort+C.restore.pet);addBond(0,false,'pet');save();   // hug starts as soon as the chip is tapped
   const q=window.NeedSelect&&NeedSelect.mem.queue,i=q?q.indexOf('after_hug'):-1;if(hf)talk(B('hug_full'),1800);else if(i>=0){q.splice(i,1);talk(B('after_hug'),2600)}else talk(B('pet'),1800)}   // hugs are never refused
 function rest(){
   const e=E(); if(sess.naps>=C.sessionLimits.naps&&!NeedsV2.wants(S.needs,'rest',sess.wantShown))return talk(B('not_sleepy_play'));   // E7; Nov 3 (LIST #2): a sleepy Echo (the moon bubble's own rule) always naps

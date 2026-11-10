@@ -10,10 +10,10 @@ async def main():
     pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
     shot=lambda n:pg.screenshot(path=f'{OUT}/{n}.png')
     async def pick(t):
-      c=pg.locator('.choices button',has_text=t).first;await c.wait_for(timeout=40000);await c.click();await c.click()
+      c=pg.locator('.choices button',has_text=t).first;await c.wait_for(timeout=40000);await c.click()
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush');await pg.wait_for_timeout(4500)
-    c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+    c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
     await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
     await pg.click('#play');await pg.wait_for_timeout(300);await shot('picker')
     labels=await pg.locator('.choices button').all_inner_texts();assert any('Shiny Pairs' in l for l in labels) and any('Den Dig' in l for l in labels) and not any('Shiny Search' in l for l in labels),labels

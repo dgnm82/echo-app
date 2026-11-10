@@ -48,7 +48,7 @@ One-shot line picked at random (weighted) from the pool for a key, after filteri
   - `next` + `wait` (ms): move on automatically when there are no choices.
   - `branch`: a list of `{cond, goto}`; the first match wins, otherwise `next`.
   - `set` / `memory` / `memoryTag` / `bond`: effects applied when the node or choice runs.
-- Choices are tap-to-hear, tap-again-to-choose, and never timed.
+- Choices are one tap to choose (the readout may play on that same tap), and never timed.
 
 ## Conditions (`cond`, all optional, AND-ed)
 `mood: ["happy","ok","sad","sleep"]`, `bondMin`, `bondMax`, `stageMin`, `stageMax` (1–9), `time: ["morning","day","evening","night"]`, `talent: "Radar Ears"`, `hasMemory` / `notMemory` (memoryTag), `var: {k: v}`, `varSet: "k"`, `varUnset: "k"`, `notSeen: "<conversation id>"`, `any: [cond, ...]` (OR).

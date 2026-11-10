@@ -32,7 +32,7 @@ async def home(b,p,kind,errs):
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.evaluate(SPY)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML='';document.querySelectorAll('.full').forEach(f=>f.remove())")
   fam='slyte' if kind=='fox' else 'whimber'
   await pg.click('#cr');await pg.wait_for_timeout(2500)
@@ -63,7 +63,7 @@ async def home(b,p,kind,errs):
     await pg.evaluate("CONFIG.sessionLimits.games=99;__echo.state.needs.rest=100;__echo.state.needs.food=100");await pg.evaluate("document.getElementById('overlay').innerHTML='';document.querySelectorAll('.full').forEach(f=>f.remove())")
     await pg.click('#play');await pg.wait_for_timeout(300);cb=pg.locator('.choices button',has_text=word).first
     if not await cb.count():await pg.screenshot(path=f'{OUT}/nogame_{word}.png');print('choices',await pg.locator('.choices button').all_inner_texts(),await pg.locator('#gs').count())
-    await cb.click();await cb.click();await pg.wait_for_selector(sel,timeout=6000);await pg.wait_for_timeout(500)
+    await cb.click();await pg.wait_for_selector(sel,timeout=6000);await pg.wait_for_timeout(500)
   async def leave():
     for i in range(3):
       if not await pg.locator('#gs').count():break

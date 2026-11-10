@@ -17,7 +17,7 @@ async def onboard(pg,age=1):
 async def to_home(b,p,animal,hour=11):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await onboard(pg);await pick(pg,animal);await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={CHIP[animal]}]',900)
-  await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1500)
+  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
   for _ in range(40):   # tap through any intro bubbles (H13 tap-to-advance)
     w=await pg.evaluate("!!(window.Dialogue&&Dialogue.waiting&&Dialogue.waiting()&&(Dialogue.advance(),1))")
     if not w and await pg.locator('#sc').count():break

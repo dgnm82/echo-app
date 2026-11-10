@@ -33,12 +33,12 @@ async def main():
         if await pg.locator('#obnm').count():break
         await T('.scene.ob',200)
       await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('9-10')")   # 9-10: Echo It Back starts at 6 notes
-      await orpick(pg,'fox');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
-      await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
+      await orpick(pg,'fox');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv',3000)
+      await T('#ornm',400);await T('#orkeep',1500)
       for _ in range(150):
         if not await pg.locator('.choices button').count() and await pg.locator('#play').count():break
         if await pg.locator('.choices button').count():
-          try:x=pg.locator('.choices button').first;await x.click(timeout=800);await x.click(timeout=800)
+          try:x=pg.locator('.choices button').first;await x.click(timeout=800)
           except Exception:pass
         await pg.wait_for_timeout(200)
       await pg.wait_for_timeout(1200);await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999");await home()
@@ -47,7 +47,7 @@ async def main():
       for ln in (6,8):
         await home()
         if ln==8:await pg.evaluate("(()=>{const b=JSON.parse(localStorage.getItem('echo-songbook-v1'));b.progress[__echo.state.kidId].len=8;localStorage.setItem('echo-songbook-v1',JSON.stringify(b))})()")
-        await T('#play',500);c=pg.locator('.choices button',has_text='Echo It Back').first;await c.click();await c.click()
+        await T('#play',500);c=pg.locator('.choices button',has_text='Echo It Back').first;await c.click()
         if await pg.locator('#eibsame').count():await T('#eibsame')
         check(await wait("EchoBack.cur&&EchoBack.cur.phase==='child'",25000),tag+f' EIB {ln}: your turn')
         if await pg.locator('#eibsame').count()==0 and await pg.evaluate("!!document.querySelector('.eibtiles:not([hidden])')"):await T('#eibsame')
@@ -81,7 +81,7 @@ async def main():
       for _ in range(30):
         await pg.evaluate(CLEAN);await T('#comfort',350)
         if await pg.locator('.choices button',has_text='Sit').count():break
-      c=pg.locator('.choices button',has_text='Sit').first;await c.click();await c.click()
+      c=pg.locator('.choices button',has_text='Sit').first;await c.click()
       check(await wait("!!document.querySelector('.choices.sitting')",3000),tag+' sitting together shown');await pg.wait_for_timeout(700)   # after the slide-up
       h=(await pg.evaluate(VR,'.choices.sitting .hint'))[0];print(tag,'sit label',h,await pg.evaluate("(()=>{const o=document.getElementById('overlay');return [o.getBoundingClientRect().toJSON(),document.getElementById('screen').getBoundingClientRect().toJSON(),o.innerHTML.slice(0,200),scrollY]})()"))
       check(320-h[3]>=8,tag+f' sit label >= 8 px above the bottom edge ({320-h[3]})')
@@ -100,7 +100,7 @@ async def main():
             await pg.evaluate(CLEAN);await T('#play',500)
             if await pg.locator('.choices button',has_text='Pairs').count():break
             print(tag,'picker',await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent).join('|')"));await home()
-          c=pg.locator('.choices button',has_text='Pairs').first;await c.click();await c.click();await wait("!!window.__mem&&!!document.getElementById('mg')",5000)
+          c=pg.locator('.choices button',has_text='Pairs').first;await c.click();await wait("!!window.__mem&&!!document.getElementById('mg')",5000)
           check(await pg.evaluate("__mem.stage")==st and await pg.evaluate("document.getElementById('gs').classList.contains('mem-'+__mem.morph.face)"),tag+f' pairs stage {st} board')
           await pg.evaluate("__os.length=0");i0=0;j=await pg.evaluate("(()=>{const c=__mem.cards;return c.findIndex((x,k)=>k>0&&x.item!==c[0].item)})()")
           await pg.evaluate("__memTap(0)");await pg.wait_for_timeout(450)

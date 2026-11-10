@@ -29,7 +29,7 @@ async def setup(b,kw,animal='dog'):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
   await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pick(pg,animal);await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-  await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1200)
+  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1200)
   await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());CONFIG.ambientMin=999;CONFIG.ambientMax=999")
   return ctx,pg,errs
 # ---------------------------------------------------------------- 1: Echo It Back layout (two-row tune, 8 pads, solfège labels, a long line)
@@ -197,7 +197,7 @@ async def bye_part(b):
       for _ in range(150):
         if await pg.locator('.choices button').count():
           try:
-            c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
+            c=pg.locator('.choices button').first;await c.click(timeout=800)
           except Exception:pass
         elif await pg.evaluate("!!(Dialogue.waiting&&Dialogue.waiting())"):await pg.evaluate("Dialogue.advance()")
         quiet=quiet+1 if await pg.evaluate("!document.getElementById('overlay').innerHTML.trim()&&!(Dialogue.waiting&&Dialogue.waiting())") else 0

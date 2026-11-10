@@ -309,7 +309,7 @@ if URL:
         await pg.evaluate("window.__echo&&__echo.setBand&&__echo.setBand('7-8')")
         from origin_pick import pick as _pick
         await _pick(pg,'fox'); await T('#ornext',300); await T('.orchip >> nth=0',900)
-        await T('#orinv'); await T('#orinv',3000); await T('#ornm',400); await T('#orkeep'); await T('#orkeep',1500)
+        await T('#orinv',3000); await T('#ornm',400); await T('#orkeep',1500)
       await pg.wait_for_timeout(400); await pg.close()
       async def open_return(day, hour):
         pg=await ctx.new_page(); await nocam(pg)

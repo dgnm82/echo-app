@@ -10,7 +10,7 @@ async def main():
     pg.on('response',lambda r:r.status>=400 and bad.append(r.url));pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
     shot=lambda n:pg.screenshot(path=f'{OUT}/{n}.png')
     async def pick(t):
-      c=pg.locator('.choices button',has_text=t).first;await c.wait_for(timeout=40000);await c.click();await c.click()
+      c=pg.locator('.choices button',has_text=t).first;await c.wait_for(timeout=40000);await c.click()
     novec="!document.querySelector('#app svg')"
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(600)
     assert await pg.locator('.tslot.owl .px-echo.owl').count()==1 and await pg.evaluate(novec),'setup card owl is pixel';await shot('setup')
@@ -24,7 +24,7 @@ async def main():
     assert (1,True) in seen and any(x[0]==2 for x in seen if isinstance(x,tuple)),seen   # C2: the arrival forms from notes (NoteFX.arrive), no ev0 light frames
     assert 'whimber_' in await pg.evaluate("document.querySelector('#cr .px-echo').style.backgroundImage")
     await pg.wait_for_timeout(1500);await shot('arrival-end')
-    c=pg.locator('.choices button').first;await c.wait_for(timeout=40000);await c.click();await c.click();await pg.wait_for_timeout(3000)
+    c=pg.locator('.choices button').first;await c.wait_for(timeout=40000);await c.click();await pg.wait_for_timeout(3000)
     await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.getElementById('overlay').innerHTML=''")
     assert await pg.locator('#sc .px-echo.owl').count()==1 and await pg.locator('.fortprop.hollow').count()==0 and await pg.evaluate(novec),('home pixel owl, carved hollow (no Hollow Builder overlay on the v2 branch)',await pg.locator('#sc .px-echo.owl').count(),await pg.locator('.fortprop.hollow').count(),await pg.evaluate(novec),await pg.evaluate('__echo.state.scene'));await shot('home')
     # care frames: feed -> eat columns, hug -> pet columns

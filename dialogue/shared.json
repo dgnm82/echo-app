@@ -802,6 +802,13 @@
         "short": "Just \"."
       }
     ],
+    "ui_pick_hint": [
+      {
+        "text": "Tap to choose",
+        "expr": "happy",
+        "short": "Tap to choose"
+      }
+    ],
     "ui_or_cam_ask": [
       {
         "text": "Show me an animal!",

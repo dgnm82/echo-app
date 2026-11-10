@@ -16,7 +16,7 @@ async def main():
       pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)))
       await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.click(sel);await pg.wait_for_timeout(3800)
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
       await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;__echo.state.bondShown=5;__echo.state.bond=300;__echo.state.badges.push('place');"+CLEAN+";__echo.home()");await pg.wait_for_timeout(600)
       cases=[('talent card',"__echo.milestone('talent4')",'.full.milestone'),('Memory Book',"document.getElementById('book').click()",'.book'),
              ('How am I',"document.getElementById('how').click()",'.panel'),('game picker',"document.getElementById('play').click()",'#overlay .choices'),

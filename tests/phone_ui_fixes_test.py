@@ -6,7 +6,7 @@ async def setup(b,p,kind):
   pg=await b.new_page(**p.devices['iPhone 13']);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(500)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2500)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(2500)
   await pg.evaluate("document.getElementById('overlay').innerHTML='';const S=__echo.state;S.bond=400;S.bondShown=5;S.needs.food=20;S.napUntil=0;CONFIG.ambientMin=999;CONFIG.ambientMax=999;__echo.home()");await pg.wait_for_timeout(1200)
   await pg.evaluate("document.getElementById('b').style.display='none'");return pg,errs
 async def main():
@@ -33,7 +33,7 @@ async def main():
         assert await pg.evaluate("Alive.log.length")==n0,(btn,'outside tap was also a scene tap')
         assert await pg.evaluate("document.getElementById('b').style.display")=='none',(btn,'no tap reaction line')
       # a tap ON the list still works (does not dismiss)
-      await pg.click('#play');await pg.wait_for_timeout(300);await pg.locator('#overlay .choices button').first.click();await pg.wait_for_timeout(200);assert await pg.locator('#overlay .choices').count()==1,'tap inside keeps it open'
+      await pg.click('#play');await pg.wait_for_timeout(300);await pg.locator('#overlay .choices button').first.click();await pg.wait_for_timeout(200);assert await pg.locator('#overlay .choices').count()==0,'tap inside chooses'
       await pg.mouse.click(10,200);await pg.wait_for_timeout(300)
       # conversation choices: tapping away = nobody answered -> carry-on line now, the talk goes on to its end
       cid='whimber_puddle_talk' if kind=='owl' else 'slyte_puddle_talk'

@@ -7,7 +7,7 @@ async def newecho(b,p,kind,errs):
   pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('console',lambda m:m.type=='error' and errs.append(m.text))
   await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;"+CLEAN);return pg
 async def reopen(pg,mins=30,extra=''):
   await pg.evaluate("__echo.state.last=Date.now()+(__echo.state.clockOffset||0)-%d*6e4;__echo.state.napUntil=0;%slocalStorage.setItem('echo-proto-v1',JSON.stringify(__echo.state));window.__wiped=1"%(mins,extra))

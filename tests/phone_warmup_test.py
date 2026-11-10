@@ -26,7 +26,7 @@ async def onboard(pg,speed,ex=''):
   check(not await pg.locator('.obagebtn').count(),'no age step after naming')
   await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes')
   await pick(pg,'dog');await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-  await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',600)
+  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',600)
   await pg.wait_for_selector('.wu',timeout=8000)
 async def turn(pg,timeout=30):   # the cue shows "your turn" (finger frames)
   t0=time.time()
@@ -113,7 +113,7 @@ async def run_invite(b,p):   # an existing child without a warm-up gets the igno
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
   await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pick(pg,'owl');await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-  await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1500)
+  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
   check(not await pg.locator('.wu').count(),'echo-dev-wu=0: no warm-up')
   await pg.evaluate("localStorage.setItem('echo-dev-wu','1')");await pg.reload();await pg.wait_for_timeout(500)
   try:await pg.wait_for_selector('.wuinv',timeout=15000);ok=True

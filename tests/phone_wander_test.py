@@ -9,7 +9,7 @@ async def main():
       pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status==404 and errs.append('404 '+r.url))
       await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.wait_for_timeout(300);await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(4500)
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
       await pg.evaluate("document.getElementById('overlay').innerHTML=''");await pg.wait_for_timeout(300)
       for dx,fast,want in ((-24,False,'walk' if kind=='fox' else 'hop'),(70,False,'trot' if kind=='fox' else 'fly')):
         x0=await pg.evaluate("__echo.lvPos()&&__echo.lvPos()[0]");await pg.evaluate(f"(()=>{{const p=__echo.lvPos();__echo.lvMove([p[0]+({dx}),p[1]])}})()")

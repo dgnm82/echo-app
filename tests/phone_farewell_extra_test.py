@@ -12,7 +12,7 @@ async def main():
       pg.on('pageerror',lambda e:errs.append(str(e)))
       await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(3800)
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(3000)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(3000)
       await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;CONFIG.farewell={calmAfterMs:0,lineMs:220};__echo.state.bondShown=5")
       await pg.wait_for_timeout(500)
       # pause: state grace, a new day would count -> must not

@@ -24,7 +24,7 @@ async def main():
     await pg.route('**/music/tunes.json*',nosongbook)
     async def T(sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
     async def pick(label,ms=900):
-      c=pg.locator('.choices button',has_text=label).first;await c.click();await c.click();await pg.wait_for_timeout(ms)
+      c=pg.locator('.choices button',has_text=label).first;await c.click();await pg.wait_for_timeout(ms)
     async def wait(js,ms=8000):
       for _ in range(ms//100):
         if await pg.evaluate(js):return True
@@ -35,12 +35,12 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
     await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
-    await orpick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv');await T('#orinv',3000)
-    await T('#ornm',400);await T('#orkeep');await T('#orkeep',1500)
+    await orpick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv',3000)
+    await T('#ornm',400);await T('#orkeep',1500)
     for _ in range(150):   # answer the setup talk
       if not await pg.locator('.choices button').count() and await pg.locator('#play').count():break
       if await pg.locator('.choices button').count():
-        try:x=pg.locator('.choices button').first;await x.click(timeout=800);await x.click(timeout=800)
+        try:x=pg.locator('.choices button').first;await x.click(timeout=800)
         except Exception:pass
       await pg.wait_for_timeout(200)
     await pg.wait_for_timeout(1500);await pg.evaluate(CLEAN+";CONFIG.ambientMin=999;CONFIG.ambientMax=999;CONFIG.sessionLimits.games=99");await pg.evaluate(SPY)

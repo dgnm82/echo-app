@@ -28,7 +28,7 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T(pg,'.scene.ob',200)
     await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pick(pg,'dog');await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-    await T(pg,'#orinv');await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep');await T(pg,'#orkeep',1200)
+    await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1200)
     await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());CONFIG.ambientMin=999;CONFIG.ambientMax=999;window.__msnFast=1")
     # first session: a game ends, Home -> no card (first session)
     await pg.evaluate("__msn.sess().afterGame=1;__msn.home()");await pg.wait_for_timeout(900)

@@ -14,14 +14,14 @@ async def main():
       pg.on('console',lambda m:m.type=='error' and errs.append('console '+m.text))
       await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.click(sel);await pg.wait_for_timeout(3800)
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2500)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(2500)
       await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;const s=__echo.state;s.bond=80;s.bondShown=2;s.run={best:{},runs:1};s.best={run:{easy:{score:5},standard:{score:5},bigkid:{score:5}}};s.v2={run:{games:0,short:0}};document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';__echo.home()")
       await pg.wait_for_timeout(800);await pg.click('#play');await pg.wait_for_selector('.choices button');await pg.wait_for_timeout(400)
       labels=await pg.locator('.choices button').all_inner_texts();print(kind,'picker',labels)
       assert any(name in l for l in labels) and not any(('Trail' in l or 'Parade' in l or 'Connect' in l) for l in labels),labels
       await pg.screenshot(path=f'{OUT}/{sp}-picker.png')
       b0=await pg.evaluate("__echo.state.bond")
-      cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
+      cb=pg.locator('.choices button',has_text=name).first;await cb.click()
       await pg.wait_for_selector('#rc',state='attached',timeout=5000)
       assert await pg.evaluate("!window.__runHome"),"no home rest stop before the place badge"
       await pg.wait_for_timeout(1200);await pg.screenshot(path=f'{OUT}/{sp}-start.png')
@@ -54,7 +54,7 @@ async def main():
       assert s['run']['runs']==2 and s['best']['score']>=30 and s['gc'].get('run')==1,s
       # second run: HUD shows the best, Done at once books 1 round and shows "Best N"
       await pg.wait_for_timeout(800);await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';__echo.state.needs.rest=100");await pg.click('#play');await pg.wait_for_selector('.choices button')
-      cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click();await pg.wait_for_selector('#rc',state='attached',timeout=5000)
+      cb=pg.locator('.choices button',has_text=name).first;await cb.click();await pg.wait_for_selector('#rc',state='attached',timeout=5000)
       assert await pg.locator('#g2best').count()
       await pg.wait_for_timeout(300);await pg.click('#quit');await pg.wait_for_selector('.g2card',timeout=5000);card=await pg.inner_text('.g2card')
       assert 'Best' in card and await pg.evaluate("__g2rounds")==1,card
@@ -70,7 +70,7 @@ async def main():
     pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)))
     await pg.goto(URL);await pg.evaluate("window.__wiped=1;localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
     await pg.fill('#nick','Dani');await pg.click('#go');await pg.click('#bush');await pg.wait_for_timeout(3800)
-    c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+    c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(1500)
     await pg.evaluate("const s=__echo.state;s.trail={games:3};s.connect={games:9};s.connectLevel='easy';s.vars.connect5=true;s.gameCounts={connect:9,trail:3,pairs:2};s.memories.push({text:'We gathered big bunches of berries together',tag:'connect_big',t:Date.now()});delete s.gv;localStorage.setItem('echo-save-v1',JSON.stringify(s))")
     key=await pg.evaluate("Object.keys(localStorage).find(k=>{try{return JSON.parse(localStorage.getItem(k)).kind}catch(e){return false}})")
     await pg.evaluate(f"const s=__echo.state;localStorage.setItem('{key}',JSON.stringify(s))");await pg.reload();await pg.wait_for_timeout(2500)

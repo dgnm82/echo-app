@@ -31,10 +31,10 @@ async def main():
         check(len(set(ic))==7,'each cat has its own tile art')
         await pg.screenshot(path=f'{OUT}/picker.png')
       await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
-      await T('#orinv');await T('#orinv',3000)
+      await T('#orinv',3000)
       fl=await pg.evaluate("(document.querySelector('.orfamline')||{}).textContent||''");check('Purrling' in fl and await pg.evaluate(FITS+"('.orfamline')"),f'{animal} family line fits: {fl}')
       if i==0:await pg.screenshot(path=f'{OUT}/origin-family-line.png')
-      await T('#ornm',400);await T('#orkeep');await T('#orkeep',3000)
+      await T('#ornm',400);await T('#orkeep',3000)
       S=await pg.evaluate("__echo.state");check(S['kind']=='cat' and S['g']['name']==name and S['g'].get('look')==animal,f"{animal} -> {S['kind']} {S['g'].get('name')} {S['g'].get('look')} (want {name})")
       if i==0:
         # setup talk: the origin lines fit the bubble on the phone
@@ -45,7 +45,7 @@ async def main():
             if k in t and k not in seen:await pg.wait_for_timeout(700);seen[k]=await pg.evaluate(FITS+"('#b')");await pg.screenshot(path=f"{OUT}/origin-line-{'songs' if 'songs' in k else 'cat'}.png")
           if len(seen)==2:break
           if await pg.locator('.choices button').count():
-            try:c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
+            try:c=pg.locator('.choices button').first;await c.click(timeout=800)
             except Exception:pass
           await pg.wait_for_timeout(150)
         check(seen.get('cat songs') and seen.get('Cat, lion'),'origin lines shown and fit the bubble '+str(seen))
@@ -70,9 +70,9 @@ async def main():
         labels=await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent)")
         check(all(any(t in l for l in labels) for t in ('Cozy Pairs','Yarn Tumble','Meadow Dash','Snack Catch','Cushion Tower')),'cat games menu '+str(labels))
         await pg.screenshot(path=f'{OUT}/games-menu.png')
-        c=pg.locator('.choices button',has_text='Yarn Tumble').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+        c=pg.locator('.choices button',has_text='Yarn Tumble').first;await c.click();await pg.wait_for_timeout(1500)
         if await pg.locator('.choices button').count():
-          c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+          c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(1500)
         top=await pg.evaluate("(document.querySelector('.top b')||{}).textContent||''");cap=await pg.evaluate("(document.querySelector('.dgcap')||{}).textContent||''")
         check(top=='Yarn Tumble' and cap=='cozier' and (await pg.evaluate("__echo.state.gameCounts||{}")).get('dig')==1,f'Yarn Tumble opens: {top} / {cap}')
         await pg.screenshot(path=f'{OUT}/yarn-tumble.png');await pg.click('#quit');await pg.wait_for_timeout(2500)
@@ -83,9 +83,9 @@ async def main():
           await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML='';CONFIG.sessionLimits.games=99;Object.assign(__echo.state,{bond:CONFIG.unlock.stack+5,bondShown:3,napUntil:0});Object.assign(__echo.state.needs,{food:80,play:20,rest:90,comfort:80});__echo.home()");await pg.wait_for_timeout(800);await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''");await pg.click('#play');await pg.wait_for_timeout(500)
           L=await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent)")
           if not any(title in l for l in L):check(False,f'{title} in menu {L} bond {await pg.evaluate("__echo.state.bond")}');continue
-          c=pg.locator('.choices button',has_text=title).first;await c.click();await c.click();await pg.wait_for_timeout(1200)
+          c=pg.locator('.choices button',has_text=title).first;await c.click();await pg.wait_for_timeout(1200)
           if await pg.locator('.choices button').count():
-            c=pg.locator('.choices button').first;await c.click();await c.click()
+            c=pg.locator('.choices button').first;await c.click()
           await pg.wait_for_timeout(2500);await pg.mouse.click(195,500);await pg.wait_for_timeout(800);await pg.screenshot(path=f'{OUT}/{shot}.png')
           for k in keys:check(await pg.evaluate(RES+f"('{k}')"),f'{title} loaded {k}')
           check(not await pg.evaluate(RES+"('/slyte_run')"),f'{title}: no fox runner frames')

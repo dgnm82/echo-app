@@ -7,7 +7,7 @@ async def setup(b,p,kind,errs):
   pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status>=400 and errs.append('404 '+r.url))
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
   await pg.fill('#nick','Dani');await pg.click('#go');await pg.click('#bush' if kind=='fox' else '#tree');await pg.wait_for_timeout(3800)
-  c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(2000)
+  c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(2000)
   await pg.evaluate("CONFIG.ambientMin=999;CONFIG.ambientMax=999;document.querySelectorAll('.full').forEach(f=>f.remove());document.getElementById('overlay').innerHTML=''")
   return pg
 async def main():
@@ -17,7 +17,7 @@ async def main():
       pg=await setup(b,p,kind,errs)
       await pg.evaluate("__echo.state.bond=19");assert name not in await pg.evaluate("__echo.games()")
       await pg.evaluate("__echo.state.bond=20");assert name in await pg.evaluate("__echo.games()")
-      await pg.click('#play');cb=pg.locator('.choices button',has_text=name).first;await cb.click();await cb.click()
+      await pg.click('#play');cb=pg.locator('.choices button',has_text=name).first;await cb.click()
       await pg.wait_for_selector('#cc',timeout=5000);b0=await pg.evaluate("__echo.state.bond")
       await pg.wait_for_timeout(600);mu=await pg.evaluate("Music.playing||'nomusic'");print(kind,'music',mu);assert mu in ('nomusic',f"game_{'berry_catch' if kind=='fox' else 'starfall_catch'}_loop")
       # C4: quick left-then-right touch drag (real touches via CDP) + a held-finger wobble: one turn each way, no facing/position jitter

@@ -9,7 +9,7 @@ async def main():
       pg=await b.new_page(**p.devices['iPhone 13']);pg.on('pageerror',lambda e:errs.append(str(e)))
       await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload()
       await pg.fill('#nick','Dani');await pg.click('#go');await pg.click(sel);await pg.wait_for_timeout(3800)
-      c=pg.locator('.choices button').first;await c.click();await c.click();await pg.wait_for_timeout(1500)
+      c=pg.locator('.choices button').first;await c.click();await pg.wait_for_timeout(1500)
       await pg.evaluate("Music.home(__echo.state.kind)")
       for _ in range(60):
         if await pg.evaluate("!!Music.playing"):break

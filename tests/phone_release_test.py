@@ -17,14 +17,14 @@ async def run(b,dev,vp,errs,full=True):
   st=lambda:pg.evaluate("__echo.state")
   async def pick(txt=None,t=30000):
     loc=pg.locator('.choices button',has_text=txt) if txt else pg.locator('.choices button')
-    await loc.first.wait_for(timeout=t);await loc.first.click();await loc.first.click()
+    await loc.first.wait_for(timeout=t);await loc.first.click()
   async def answer_conv(until,t=40):   # answer any choices until the condition holds
     for _ in range(t*5):
       if await pg.evaluate(until):return True
       await pg.evaluate("window.Dialogue&&Dialogue.waiting&&Dialogue.waiting()&&Dialogue.advance()")   # Batch H / H13: lines stay up >= 6.5 s; tap-to-advance
       if await pg.locator('.choices button').count():
         try:
-          c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
+          c=pg.locator('.choices button').first;await c.click(timeout=800)
         except Exception:pass
       await pg.wait_for_timeout(200)
     print('answer_conv timed out on',until,'| screen:',(await pg.evaluate("(document.getElementById('app')||{}).innerText||''"))[:300].replace('\n',' / '),'| fw:',await pg.evaluate("JSON.stringify((__echo.state||{}).fw||null)"),'| dbg:',await pg.evaluate("JSON.stringify({needs:__echo.state.needs,bond:__echo.state.bond,shown:__echo.state.bondShown,nap:__echo.state.napUntil>Date.now(),full:[...document.querySelectorAll('.full,.book,.bondup')].map(e=>e.className),solar:(document.getElementById('sc')||{dataset:{}}).dataset.solar,hr:new Date(Date.now()+(__echo.state.clockOffset||0)).getHours(),feed:!!document.getElementById('feed')})"));await pg.screenshot(path=OUT+'answer-timeout.png')
@@ -138,9 +138,9 @@ async def origin_cat(pg,animal='lion',chip='golden'):   # the real onboarding: p
     await T('.scene.ob',200)
   await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
   await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
-  await T('#orinv');await T('#orinv',3000);await T('#ornm',400);await T('#orkeep');await T('#orkeep',3000)
+  await T('#orinv',3000);await T('#ornm',400);await T('#orkeep',3000)
 async def pick_first(pg):
-  c=pg.locator('.choices button').first;await c.wait_for(timeout=20000);await c.click();await c.click()
+  c=pg.locator('.choices button').first;await c.wait_for(timeout=20000);await c.click()
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]
