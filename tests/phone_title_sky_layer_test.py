@@ -6,7 +6,9 @@
 # must not be referenced by the title diorama.
 #
 # Fails on 01b9143d (opaque bg + sun baked into the alive overlay above the trees).
-# Passes after title_biomes.json + titleDio point at px/title_layers/.
+# Fails on 24651bbd for the later disc placement: woodland dusk still a sliver,
+# woodland/pasture tops at y=151 overlap the measured 28px return panel, cove
+# discs overlap the tagline. Passes after the y=161 / cove y=131 recopy.
 import json,os,re,sys
 from pathlib import Path
 from PIL import Image
@@ -113,49 +115,51 @@ for bio in BIOS:
       print(f'  {bio}/{tod}/{fr}: sparkle_ok sun/moon={sun}')
 
 # --- wiring + composite of what the app actually points at ---
-print('== sun/moon fully visible over front/fg (woodland dusk is the known peek) ==')
-PEEK={('woodland','dusk')}  # Daniel's case: Pixal did not move this sun
+def disc_cells(bio,tod):
+  """Open-sky sun/moon: sky != original opaque bg, and front+fg are clear."""
+  sky=load(LAYERS/f'sky_{bio}_{tod}.png')
+  front=load(LAYERS/f'front_{bio}_{tod}.png')
+  fg=load(TITLE/f'biome_{bio}_{tod}_fg.png')
+  bg=load(TITLE/f'biome_{bio}_{tod}.png')
+  sp,fp,gp,bp=sky.load(),front.load(),fg.load(),bg.load()
+  vis=[]
+  for y in range(320):
+    for x in range(180):
+      if sp[x,y]!=bp[x,y] and fp[x,y][3]==0 and gp[x,y][3]==0:
+        vis.append((x,y))
+  full=0
+  for fr in ('f0','f1'):
+    old=load(TITLE/f'biome_{bio}_{tod}_{fr}.png')
+    neu=load(LAYERS/f'alive_{bio}_{tod}_{fr}.png')
+    o,q=old.load(),neu.load()
+    nsun=sum(1 for y in range(320) for x in range(180) if o[x,y][3]==255 and q[x,y][3]==0)
+    full=max(full,nsun)
+  return vis, full
+
+def box_hits(cells, box):
+  """box is [l,t,r,b) in art px (or a dict with left/top/right/bottom)."""
+  if not box: return []
+  if isinstance(box, dict):
+    import math
+    l,t,r,b=math.floor(box['left']),math.floor(box['top']),math.ceil(box['right']),math.ceil(box['bottom'])
+  else:
+    l,t,r,b=box
+  return [(x,y) for x,y in cells if l<=x<r and t<=y<b]
+
+print('== sun/moon fully visible over front/fg and clear of logo/tagline/tap ==')
+KEEP=json.loads((TITLE/'title_biomes.json').read_text()).get('ui_keepouts') or {}
+DISCS={}
 for bio in BIOS:
   for tod in TODS:
-    sky=load(LAYERS/f'sky_{bio}_{tod}.png')
-    front=load(LAYERS/f'front_{bio}_{tod}.png')
-    fg=load(TITLE/f'biome_{bio}_{tod}_fg.png')
-    bg=load(TITLE/f'biome_{bio}_{tod}.png')
-    sp,fp,gp,bp=sky.load(),front.load(),fg.load(),bg.load()
-    # sun/moon now in the sky layer: open-sky pixels where sky != the original opaque bg
-    vis=[]; hid_front=[]; hid_fg=[]
-    for y in range(320):
-      for x in range(180):
-        if sp[x,y]==bp[x,y]:
-          continue
-        # only count pixels that belong to the sky (not a mismatch under an opaque front cell:
-        # under front, sky is the hidden sky-band and is *supposed* to differ from old bg/trees)
-        if fp[x,y][3]==0 and gp[x,y][3]==0:
-          vis.append((x,y))
-        elif fp[x,y][3]==255 or gp[x,y][3]==255:
-          # A sun pixel still sitting under front/fg would also appear as sky!=old_bg
-          # only if we looked at the sky file itself vs old bg at a front-opaque cell —
-          # that comparison is invalid (old bg is the tree). Use the alive-split sun
-          # only as a size check below; visibility is "open-sky sun count vs full sun count".
-          pass
-    full=0
-    for fr in ('f0','f1'):
-      old=load(TITLE/f'biome_{bio}_{tod}_{fr}.png')
-      neu=load(LAYERS/f'alive_{bio}_{tod}_{fr}.png')
-      o,q=old.load(),neu.load()
-      nsun=0
-      for y in range(320):
-        for x in range(180):
-          if o[x,y][3]==255 and q[x,y][3]==0:
-            nsun+=1
-      full=max(full,nsun)
-    if (bio,tod) in PEEK:
-      check(0<len(vis)<full, f'{bio}/{tod}: woodland dusk keeps a visible peek ({len(vis)}/{full} px in open sky, rest still in the canopy)')
-    else:
-      check(len(vis)==full and full>0, f'{bio}/{tod}: sun/moon fully visible, not covered by front/fg ({len(vis)}/{full} in open sky)')
+    vis,full=disc_cells(bio,tod)
+    DISCS[(bio,tod)]=vis
+    check(len(vis)==full and full>0, f'{bio}/{tod}: sun/moon fully visible, 0 px under front/fg ({len(vis)}/{full} in open sky)')
+    for name,box in KEEP.items():
+      hit=box_hits(vis, box)
+      check(len(hit)==0, f'{bio}/{tod}: sun/moon clear of ui_keepouts.{name} {box} ({len(hit)} px) sample={hit[:4]}')
     if vis:
-      top=min(y for x,y in vis)
-      print(f'  {bio}/{tod}: visible={len(vis)}/{full} top_y={top}')
+      xs=[x for x,_ in vis]; ys=[y for _,y in vis]
+      print(f'  {bio}/{tod}: visible={len(vis)}/{full} bbox=[{min(xs)}, {min(ys)}, {max(xs)+1}, {max(ys)+1})')
 
 print('== production no longer references sun-baked alive overlays ==')
 
@@ -262,7 +266,36 @@ if URL:
           check('biome_' not in (info.get('alive') or '') or 'title_layers' in (info.get('alive') or ''),
                 f'live {bio} {tod}: alive is not the old sun-baked overlay ({info.get("alive")})')
         await ctx.close()
-      # return title: .obpanel (top 131, ~18px) vs sun/moon (moved tops at y=151)
+      # first-visit title: measure the rendered logo / tagline / tap pill (don't hardcode keepouts)
+      ctx=await brw.new_context(**p.devices['iPhone 13']); pg=await ctx.new_page(); await nocam(pg)
+      await pg.add_init_script(init_script(6,1))
+      await pg.goto(URL); await pg.evaluate("window.__wiped=1;localStorage.clear()"); await pg.reload()
+      for _ in range(25):
+        ok=await pg.evaluate("!!document.querySelector('.scene.ttl.biome')")
+        if ok: break
+        await pg.wait_for_timeout(200)
+      ui=await pg.evaluate("""()=>{
+        const sc=document.querySelector('.scene.ttl'); if(!sc) return {err:'no sc'};
+        const R=sc.getBoundingClientRect(),k=R.width/180;
+        const box=el=>{if(!el)return null; const r=el.getBoundingClientRect();
+          return {left:(r.left-R.left)/k, top:(r.top-R.top)/k, right:(r.right-R.left)/k, bottom:(r.bottom-R.top)/k};};
+        const a=box(sc.querySelector('.oblogo')), g=box(sc.querySelector('.oblogo-glow'));
+        let logo=a;
+        if(g&&a) logo={left:Math.min(a.left,g.left),top:Math.min(a.top,g.top),right:Math.max(a.right,g.right),bottom:Math.max(a.bottom,g.bottom)};
+        else if(g) logo=g;
+        return {logo, tagline:box(sc.querySelector('.obtag')), tap:box(sc.querySelector('.obtap, #obgo'))};
+      }""")
+      print('live UI boxes', ui)
+      check(bool(ui and ui.get('logo') and ui.get('tagline') and ui.get('tap')), f'first-visit title rendered logo/tagline/tap (got {ui})')
+      if ui and not ui.get('err'):
+        for bio in BIOS:
+          for tod in TODS:
+            vis=DISCS.get((bio,tod)) or []
+            for name in ('logo','tagline','tap'):
+              hit=box_hits(vis, ui.get(name))
+              check(len(hit)==0, f'{bio}/{tod}: sun/moon clear of rendered {name} {ui.get(name)} ({len(hit)} px) sample={hit[:4]}')
+      await ctx.close()
+      # return title: onboard once, then measure the real .obpanel and check cove handoff
       ctx=await brw.new_context(**p.devices['iPhone 13']); pg=await ctx.new_page(); await nocam(pg)
       async def T(sel,ms=250):
         await pg.locator(sel).first.click(); await pg.wait_for_timeout(ms)
@@ -278,53 +311,47 @@ if URL:
         await _pick(pg,'fox'); await T('#ornext',300); await T('.orchip >> nth=0',900)
         await T('#orinv'); await T('#orinv',3000); await T('#ornm',400); await T('#orkeep'); await T('#orkeep',1500)
       await pg.wait_for_timeout(400); await pg.close()
-      # woodland dusk return, then rewrite the panel with the longest 10-letter name
-      pg=await ctx.new_page(); await nocam(pg)
-      await pg.add_init_script("(()=>{Date.now=()=>6*864e5+1*3600e3;})()")
-      await pg.add_init_script("setTimeout=(f=>(fn,ms,...a)=>f(fn,ms===3000?6e5:ms,...a))(setTimeout)")
-      await pg.goto(URL)
-      for _ in range(25):
-        ok=await pg.evaluate("!!(document.querySelector('.scene.ttl.biome')&&document.querySelector('.obpanel'))")
-        if ok: break
-        await pg.wait_for_timeout(200)
+      async def open_return(day, hour):
+        pg=await ctx.new_page(); await nocam(pg)
+        await pg.add_init_script(init_script(day,hour))
+        await pg.add_init_script("setTimeout=(f=>(fn,ms,...a)=>f(fn,ms===3000?6e5:ms,...a))(setTimeout)")
+        await pg.goto(URL)
+        for _ in range(25):
+          ok=await pg.evaluate("!!document.querySelector('.scene.ttl.biome')")
+          if ok: break
+          await pg.wait_for_timeout(200)
+        return pg
+      # woodland dusk return: measure the panel (don't hardcode Pixal's 131/18/151)
+      pg=await open_return(6,1)
       meas=await pg.evaluate("""()=>{
         const sc=document.querySelector('.scene.ttl'); if(!sc) return {err:'no sc'};
         const R=sc.getBoundingClientRect(),k=R.width/180;
         const box=el=>{if(!el)return null; const r=el.getBoundingClientRect();
-          return {top:(r.top-R.top)/k, bottom:(r.bottom-R.top)/k, height:r.height/k, left:(r.left-R.left)/k, right:(r.right-R.left)/k};};
+          return {left:(r.left-R.left)/k, top:(r.top-R.top)/k, right:(r.right-R.left)/k, bottom:(r.bottom-R.top)/k, height:r.height/k};};
         const p=sc.querySelector('.obpanel');
         const natural=p?p.textContent.trim():'';
         const one=box(p);
-        // longest legal Echo name is 10 letters (input maxlength=10)
-        const lines=[
-          'Wimmertail is playing nearby!',
-          'MMMMMMMMMM is playing nearby!'
-        ];
-        const out={natural, one, wrapped:{}};
-        for(const s of lines){
-          if(p) p.textContent=s;
-          out.wrapped[s]=box(p);
-        }
-        return out;
+        const long='Wimmertail is playing nearby!';
+        if(p) p.textContent=long;
+        const wrapped=box(p);
+        return {natural, one, long, wrapped, bio:sc.dataset.biome};
       }""")
       print('obpanel measure', meas)
-      def art_box(b):
-        return b and {k:round(b[k],2) for k in b}
-      one=meas.get('one') or {}
-      check(one and abs(one.get('top',-1)-131)<1.5, f'return .obpanel top is 131 art px (got {art_box(one)})')
-      # sun tops at y=151 for the 7 moved skies. Report margin; do not fail the wiring
-      # test if the live two-line panel (taller than Pixal's ~18px assumption) overlaps.
-      SUN_TOP=151
-      if one:
-        margin=SUN_TOP-one['bottom']
-        print(f'  natural {meas.get("natural")!r} panel bottom={one["bottom"]:.2f} height={one["height"]:.2f} margin to sun y={SUN_TOP} is {margin:.2f}px')
-        if margin<0:
-          print(f'  NOTE: return .obpanel overlaps the y={SUN_TOP} sun/moon by {-margin:.2f}px (panel is {one["height"]:.1f}px tall, not the assumed 18px)')
-      for s,b in (meas.get('wrapped') or {}).items():
-        if not b: continue
-        m=SUN_TOP-b['bottom']
-        taller=b['height']>one.get('height',0)+1
-        print(f'  name {s!r} height={b["height"]:.2f} bottom={b["bottom"]:.2f} margin={m:.2f}px taller_than_natural={taller}')
+      panel=meas.get('wrapped') or meas.get('one')
+      check(bool(panel), f'return title rendered an .obpanel (got {meas})')
+      if panel:
+        print(f'  measured panel top={panel["top"]:.2f} bottom={panel["bottom"]:.2f} height={panel["height"]:.2f} natural={meas.get("natural")!r}')
+        # woodland + pasture return show this panel; cove does not (handoff)
+        for bio,tod in DISCS:
+          if bio=='cove': continue
+          hit=box_hits(DISCS[(bio,tod)], panel)
+          check(len(hit)==0, f'return {bio}/{tod}: sun/moon clear of measured .obpanel (bottom={panel["bottom"]:.2f}, {len(hit)} px overlap) sample={hit[:4]}')
+      await pg.close()
+      # cove return must hand off to a dry biome (woodland is next in crossfade.order)
+      pg=await open_return(8,1)
+      got=await pg.evaluate("document.querySelector('.scene.ttl')&&document.querySelector('.scene.ttl').dataset.biome")
+      print(f'  cove return handed off to biome={got!r}')
+      check(got=='woodland', f'cove return hands off to woodland (got {got!r})')
       await pg.close(); await ctx.close()
       await brw.close()
   asyncio.run(live())
