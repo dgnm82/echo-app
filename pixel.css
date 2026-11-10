@@ -437,6 +437,12 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 #sc.pxscene.chiplift{transform:translateY(var(--chip-lift,0px))}
 @media (prefers-reduced-motion:reduce){#sc.pxscene{transition:none}}
 .calm #sc.pxscene{transition:none}
+/* Face rows (title_frames peek notes, top edge ~row 30) paint above fg; body stays in .ttsprites under fg. z=3 with DOM after fg and before .ttown/.alive so own Echo and sparkles stay on top. */
+.ttl .ttface{position:absolute;width:48px;height:30px;background-repeat:no-repeat;image-rendering:pixelated;pointer-events:none;z-index:3}
+.ttl .ttface.flip{transform:scaleX(-1)}
+.scene.ttl>.ttface{position:absolute!important;margin:0!important;width:48px;height:30px;z-index:3!important;pointer-events:none}
+.scene.ttl>.ttface.flip{transform:scaleX(-1)!important}
+.scene.ttl>.ttface:not(.flip){transform:none!important}
 /* PM round 2 (Kai): a returning player's own Echo on the title, grounded on the path, in front of the wild cast and the fg plants */
 .scene.ttl>.ttown{position:absolute!important;width:48px;height:48px;margin:0!important;transform:none!important;z-index:3!important;pointer-events:none}
 .ttl:not(.biome) .ttown{display:none}

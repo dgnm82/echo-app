@@ -291,6 +291,8 @@ function titleOwnOn(sc){return !!(sc&&sc.classList.contains('obreturn')&&S&&S.ki
 function titleGroundPath(b){const A=b&&(b.anchors||b);return ((A&&A.ground_paths)||[]).find(g=>(g.kinds||[]).includes('ground'))||null}
 // tagline line boxes in art px [l,t,r,b) (fallback when the DOM is not there; titleRun measures the live text)
 const TITLE_TAG=[[17,94,163,105],[25,105,152,116],[25,116,154,127]],TITLE_SAFE=2,TITLE_OWN_X=100,TITLE_FLOAT_SINK=3;
+// title_frames peek notes: "put the bush/rock layer IN FRONT, top edge ~row 30 of the frame". Face = opaque rows above that edge; a .ttface slice paints them over fg so the peek/walk pose can stay behind the cover while the whole face stays visible.
+const TITLE_FACE_ROW=30;
 // PM (Oct 25): every title Echo stands, perches or floats ON a surface from Pixal anchors (feet = the strip foot anchor row):
 // a ground walker on a ground path, a bird on a sky perch (branch / fence post / rock ledge) or a duck floating on the water
 // perch. Nothing glides or hovers in mid-air any more. Pure (no DOM) so tools/test-batch-h-final.js can check every biome and day.
@@ -362,8 +364,10 @@ function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
   const ob=r[r.length-1];
   const actors=titleCast(b,Fm,Math.floor(Date.now()/864e5),{box,keep:titleKeep(sc),seat:titleSeat(wood,feet),own:ownEl?{box:ob||[0,0,48,48]}:null}).map(a=>a.own?Object.assign(a,{el:ownEl}):Object.assign(a,{el:mk(a.st),f:0,t:0}));
   if(ownEl&&!actors.some(a=>a.own))ownEl.remove();
+  const faceOf=a=>{if(a.own||(a.kind!=='ground'&&a.kind!=='seat'))return null;if(!a.face){a.face=document.createElement('i');a.face.className='ttface';a.face.style.height=TITLE_FACE_ROW+'px';(fg||sp).after(a.face)}return a.face};
   const place=a=>{a.el.style.left=Math.round(a.left!=null&&!a.moving?a.left:a.x-24)+'px';a.el.style.top=a.y+'px';a.el.dataset.surface=a.kind;if(a.own){a.el.dataset.surf=a.surf;return}
-    a.el.style.backgroundPosition=`${-a.f*48}px 0`;a.el.classList.toggle('flip',PIXEL.flipFor(a.st.look,a.dir));a.el.dataset.dir=a.dir};
+    a.el.style.backgroundPosition=`${-a.f*48}px 0`;a.el.classList.toggle('flip',PIXEL.flipFor(a.st.look,a.dir));a.el.dataset.dir=a.dir;
+    const fe=faceOf(a);if(!fe)return;fe.style.left=a.el.style.left;fe.style.top=a.el.style.top;fe.style.backgroundImage=a.el.style.backgroundImage;fe.style.backgroundSize=a.el.style.backgroundSize;fe.style.backgroundPosition=a.el.style.backgroundPosition;fe.classList.toggle('flip',a.el.classList.contains('flip'))};
   sc.dataset.cast=actors.length;
   if(low){actors.forEach(a=>{if(a.moving)a.x=Math.max(a.x0,Math.min(a.x1,56));place(a)});return}
   let k=0;const T=setInterval(()=>{if(!sc.isConnected)return clearInterval(T);k++;if(k%Math.round(fps/2)===0&&v.alive[1])al.style.backgroundImage=`url(${v.alive[(k/Math.round(fps/2))%2|0]})`;
