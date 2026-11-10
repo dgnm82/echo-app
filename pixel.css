@@ -409,9 +409,9 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 @keyframes denpeek{to{background-position:-128px 0}}
 @media (prefers-reduced-motion:reduce){.home .hsleep.on{animation:none}.home-den .htail.denpeek,.home-den_wild .htail.denpeek{animation:none;background-position:-32px 0}}
 .calm .home .hsleep.on{animation:none}.calm .home-den .htail.denpeek,.calm .home-den_wild .htail.denpeek{animation:none;background-position:-32px 0}
-/* H7 title diorama (Pixal biomes + Cole frames): bg -> sprites -> fg -> alive overlay -> UI; old hill/moon retire when a biome loads */
+/* H7 title diorama (Pixal sky/front split): sky -> front (trees/ground) -> sprites -> existing fg -> sparkle-only alive -> UI. Sun/moon lives in the sky layer, behind front. */
 .ttl .ttbio{position:absolute;left:0;top:0;width:180px;height:320px;background:0 0/180px 320px no-repeat;pointer-events:none;image-rendering:pixelated}
-.ttl .ttbio.bg{z-index:0}.ttl .ttsprites{position:absolute;inset:0;z-index:1;pointer-events:none}.ttl .ttbio.fg{z-index:2}.ttl .ttbio.alive{z-index:3}
+.ttl .ttbio.bg,.ttl .ttbio.front{z-index:0}.ttl .ttsprites{position:absolute;inset:0;z-index:1;pointer-events:none}.ttl .ttbio.fg{z-index:2}.ttl .ttbio.alive{z-index:3}
 .ttl.biome .tthill,.ttl.biome .ttmoon{display:none}
 .ttl .ttspr{position:absolute;width:48px;height:48px;background-repeat:no-repeat;image-rendering:pixelated}
 .ttl .ttspr.flip{transform:scaleX(-1)}
@@ -447,6 +447,7 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 .scene.ttl>.ttown{position:absolute!important;width:48px;height:48px;margin:0!important;transform:none!important;z-index:3!important;pointer-events:none}
 .ttl:not(.biome) .ttown{display:none}
 .scene.ttl>.ttbio{position:absolute!important;left:0!important;top:0!important;margin:0!important;transform:none!important}   /* PM round 2: the generic .scene.ob>* rule made fg / alive relative (offset in the flex column) */
+.scene.ttl>.ttbio.front{z-index:0!important}   /* beat .scene.ob>*:not(.bg){z-index:2} so trees stay behind the Echo sprites */
 .scene.ttl.biome .obpanel{top:131px}   /* PM round 2: the return title's name panel sits right under the tagline, clear of the branch perches and the cast */
 /* LIST2 #9: the "sitting together" label sits a little higher, clear of the bottom edge and of any home-indicator safe area (--px-safe-b, pixel.js fit) */
 .choices.sitting{box-sizing:border-box;min-height:calc(38px + var(--px-safe-b,0px));padding:3px 3px calc(3px + var(--px-safe-b,0px));align-content:center}

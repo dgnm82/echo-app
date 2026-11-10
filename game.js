@@ -282,8 +282,8 @@ function titleDio(){const sc=document.querySelector('.scene.ttl');if(!sc||sc._di
     let bio=ord[d0%ord.length];if(own){for(let k=0;k<ord.length;k++){const n=ord[(d0+k)%ord.length];if(titleGroundPath(B.biomes[n])){bio=n;break}}}
     const b=B.biomes[bio],v=b&&b.variants&&b.variants[titleTod()];if(!v)return;
     const lay=(cls,u)=>{const e=document.createElement('i');e.className='ttbio '+cls;e.style.backgroundImage=`url(${u})`;return e};
-    const bg=lay('bg',v.bg),fg=lay('fg',v.fg),al=lay('alive',v.alive[0]),sp=document.createElement('div');sp.className='ttsprites';
-    const im=new Image();im.onload=()=>{if(!sc.isConnected)return;const bgs=sc.querySelectorAll(':scope>.bg'),first=bgs[bgs.length-1]||sc.firstChild;first.after(bg,sp,fg,al);sc.classList.add('biome');sc.dataset.biome=bio;
+    const bg=lay('bg',v.bg),fr=v.front?lay('front',v.front):null,fg=lay('fg',v.fg),al=lay('alive',v.alive[0]),sp=document.createElement('div');sp.className='ttsprites';
+    const im=new Image();im.onload=()=>{if(!sc.isConnected)return;const bgs=sc.querySelectorAll(':scope>.bg'),first=bgs[bgs.length-1]||sc.firstChild;first.after(...[bg,fr,sp,fg,al].filter(Boolean));sc.classList.add('biome');sc.dataset.biome=bio;
       const tag=sc.querySelector('.obtag');if(tag){tag.style.setProperty('--tt-ink',v.tagline_ink);tag.style.setProperty('--tt-shadow',v.tagline_shadow||'transparent')}
       titleRun(sc,sp,al,v,b,Fm,fg,own)};im.src=v.bg}).catch(()=>{})}
 // PM (Oct 25, Kai): the returning player's own Echo joins the title cast (new players, no save: wild Echoes only)
@@ -338,7 +338,7 @@ function titleFeet(url,fw,fh){return new Promise(res=>{const im=new Image();im.o
   const D=x.getImageData(0,0,fw,fh).data,low={};for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++)if(D[(y*fw+xx)*4+3]>0)low[xx]=y;
   const Y=Math.max(-1,...Object.values(low));res(Y<0?null:{Y,cols:Object.keys(low).map(Number).filter(c=>low[c]>=Y-1)})}catch(e){res(null)}};im.onerror=()=>res(null);im.src=url})}
 function titleSurf(v){const L=u=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=u});
-  return Promise.all([L(v.bg),v.fg?L(v.fg):null]).then(([a,b])=>{if(!a)return null;try{const c=document.createElement('canvas');c.width=180;c.height=320;const x=c.getContext('2d');x.drawImage(a,0,0);if(b)x.drawImage(b,0,0);
+  return Promise.all([L(v.bg),v.front?L(v.front):null,v.fg?L(v.fg):null]).then(([a,fr,b])=>{if(!a)return null;try{const c=document.createElement('canvas');c.width=180;c.height=320;const x=c.getContext('2d');x.drawImage(a,0,0);if(fr)x.drawImage(fr,0,0);if(b)x.drawImage(b,0,0);
     const D=x.getImageData(0,0,180,320).data,W=new Set((v.palette||[]).slice(10,13).map(h=>h.toUpperCase()));
     return (px,py)=>{if(px<0||py<0||px>=180||py>=320)return false;const i=(py*180+px)*4;return W.has('#'+[D[i],D[i+1],D[i+2]].map(n=>n.toString(16).padStart(2,'0')).join('').toUpperCase())}}catch(e){return null}})}
 function titleSeat(wood,feet){return (st,xy)=>{const f=feet[st.file];if(!wood||!f)return null;const left=xy[0]-st.anchor[0];

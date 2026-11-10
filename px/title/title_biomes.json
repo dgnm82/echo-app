@@ -25,10 +25,11 @@
   ]
  },
  "z_order": [
-  "bg",
+  "sky (px/title_layers/sky_*; replaces opaque bg; sun/moon lives here)",
+  "front (px/title_layers/front_*; trees/ground, occludes sun/moon)",
   "echo sprites (feet on anchors)",
-  "fg",
-  "f0/f1 overlay (500 ms alternate)",
+  "fg (px/title/biome_*_*_fg.png, unchanged)",
+  "f0/f1 sparkle-only overlay (px/title_layers/alive_*; 500 ms alternate)",
   "weather fx (px/scenes/fx/weather_*)",
   "logo/tagline/tap UI"
  ],
@@ -60,11 +61,12 @@
   "woodland": {
    "variants": {
     "dawn": {
-     "bg": "px/title/biome_woodland_dawn.png",
+     "bg": "px/title_layers/sky_woodland_dawn.png",
+     "front": "px/title_layers/front_woodland_dawn.png",
      "fg": "px/title/biome_woodland_dawn_fg.png",
      "alive": [
-      "px/title/biome_woodland_dawn_f0.png",
-      "px/title/biome_woodland_dawn_f1.png"
+      "px/title_layers/alive_woodland_dawn_f0.png",
+      "px/title_layers/alive_woodland_dawn_f1.png"
      ],
      "palette": [
       "#6E5C9C",
@@ -90,11 +92,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "day": {
-     "bg": "px/title/biome_woodland_day.png",
+     "bg": "px/title_layers/sky_woodland_day.png",
+     "front": "px/title_layers/front_woodland_day.png",
      "fg": "px/title/biome_woodland_day_fg.png",
      "alive": [
-      "px/title/biome_woodland_day_f0.png",
-      "px/title/biome_woodland_day_f1.png"
+      "px/title_layers/alive_woodland_day_f0.png",
+      "px/title_layers/alive_woodland_day_f1.png"
      ],
      "palette": [
       "#5FA4DC",
@@ -120,11 +123,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "dusk": {
-     "bg": "px/title/biome_woodland_dusk.png",
+     "bg": "px/title_layers/sky_woodland_dusk.png",
+     "front": "px/title_layers/front_woodland_dusk.png",
      "fg": "px/title/biome_woodland_dusk_fg.png",
      "alive": [
-      "px/title/biome_woodland_dusk_f0.png",
-      "px/title/biome_woodland_dusk_f1.png"
+      "px/title_layers/alive_woodland_dusk_f0.png",
+      "px/title_layers/alive_woodland_dusk_f1.png"
      ],
      "palette": [
       "#4A3A7A",
@@ -150,11 +154,12 @@
      "tagline_shadow": "#3B2A5C"
     },
     "night": {
-     "bg": "px/title/biome_woodland_night.png",
+     "bg": "px/title_layers/sky_woodland_night.png",
+     "front": "px/title_layers/front_woodland_night.png",
      "fg": "px/title/biome_woodland_night_fg.png",
      "alive": [
-      "px/title/biome_woodland_night_f0.png",
-      "px/title/biome_woodland_night_f1.png"
+      "px/title_layers/alive_woodland_night_f0.png",
+      "px/title_layers/alive_woodland_night_f1.png"
      ],
      "palette": [
       "#1E1A44",
@@ -369,11 +374,12 @@
   "pasture": {
    "variants": {
     "dawn": {
-     "bg": "px/title/biome_pasture_dawn.png",
+     "bg": "px/title_layers/sky_pasture_dawn.png",
+     "front": "px/title_layers/front_pasture_dawn.png",
      "fg": "px/title/biome_pasture_dawn_fg.png",
      "alive": [
-      "px/title/biome_pasture_dawn_f0.png",
-      "px/title/biome_pasture_dawn_f1.png"
+      "px/title_layers/alive_pasture_dawn_f0.png",
+      "px/title_layers/alive_pasture_dawn_f1.png"
      ],
      "palette": [
       "#6E5C9C",
@@ -399,11 +405,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "day": {
-     "bg": "px/title/biome_pasture_day.png",
+     "bg": "px/title_layers/sky_pasture_day.png",
+     "front": "px/title_layers/front_pasture_day.png",
      "fg": "px/title/biome_pasture_day_fg.png",
      "alive": [
-      "px/title/biome_pasture_day_f0.png",
-      "px/title/biome_pasture_day_f1.png"
+      "px/title_layers/alive_pasture_day_f0.png",
+      "px/title_layers/alive_pasture_day_f1.png"
      ],
      "palette": [
       "#5FA4DC",
@@ -429,11 +436,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "dusk": {
-     "bg": "px/title/biome_pasture_dusk.png",
+     "bg": "px/title_layers/sky_pasture_dusk.png",
+     "front": "px/title_layers/front_pasture_dusk.png",
      "fg": "px/title/biome_pasture_dusk_fg.png",
      "alive": [
-      "px/title/biome_pasture_dusk_f0.png",
-      "px/title/biome_pasture_dusk_f1.png"
+      "px/title_layers/alive_pasture_dusk_f0.png",
+      "px/title_layers/alive_pasture_dusk_f1.png"
      ],
      "palette": [
       "#4A3A7A",
@@ -459,11 +467,12 @@
      "tagline_shadow": "#3B2A5C"
     },
     "night": {
-     "bg": "px/title/biome_pasture_night.png",
+     "bg": "px/title_layers/sky_pasture_night.png",
+     "front": "px/title_layers/front_pasture_night.png",
      "fg": "px/title/biome_pasture_night_fg.png",
      "alive": [
-      "px/title/biome_pasture_night_f0.png",
-      "px/title/biome_pasture_night_f1.png"
+      "px/title_layers/alive_pasture_night_f0.png",
+      "px/title_layers/alive_pasture_night_f1.png"
      ],
      "palette": [
       "#1E1A44",
@@ -939,11 +948,12 @@
   "cove": {
    "variants": {
     "dawn": {
-     "bg": "px/title/biome_cove_dawn.png",
+     "bg": "px/title_layers/sky_cove_dawn.png",
+     "front": "px/title_layers/front_cove_dawn.png",
      "fg": "px/title/biome_cove_dawn_fg.png",
      "alive": [
-      "px/title/biome_cove_dawn_f0.png",
-      "px/title/biome_cove_dawn_f1.png"
+      "px/title_layers/alive_cove_dawn_f0.png",
+      "px/title_layers/alive_cove_dawn_f1.png"
      ],
      "palette": [
       "#6E5C9C",
@@ -969,11 +979,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "day": {
-     "bg": "px/title/biome_cove_day.png",
+     "bg": "px/title_layers/sky_cove_day.png",
+     "front": "px/title_layers/front_cove_day.png",
      "fg": "px/title/biome_cove_day_fg.png",
      "alive": [
-      "px/title/biome_cove_day_f0.png",
-      "px/title/biome_cove_day_f1.png"
+      "px/title_layers/alive_cove_day_f0.png",
+      "px/title_layers/alive_cove_day_f1.png"
      ],
      "palette": [
       "#5FA4DC",
@@ -999,11 +1010,12 @@
      "tagline_shadow": "#FFF6E6"
     },
     "dusk": {
-     "bg": "px/title/biome_cove_dusk.png",
+     "bg": "px/title_layers/sky_cove_dusk.png",
+     "front": "px/title_layers/front_cove_dusk.png",
      "fg": "px/title/biome_cove_dusk_fg.png",
      "alive": [
-      "px/title/biome_cove_dusk_f0.png",
-      "px/title/biome_cove_dusk_f1.png"
+      "px/title_layers/alive_cove_dusk_f0.png",
+      "px/title_layers/alive_cove_dusk_f1.png"
      ],
      "palette": [
       "#4A3A7A",
@@ -1029,11 +1041,12 @@
      "tagline_shadow": "#3B2A5C"
     },
     "night": {
-     "bg": "px/title/biome_cove_night.png",
+     "bg": "px/title_layers/sky_cove_night.png",
+     "front": "px/title_layers/front_cove_night.png",
      "fg": "px/title/biome_cove_night_fg.png",
      "alive": [
-      "px/title/biome_cove_night_f0.png",
-      "px/title/biome_cove_night_f1.png"
+      "px/title_layers/alive_cove_night_f0.png",
+      "px/title_layers/alive_cove_night_f1.png"
      ],
      "palette": [
       "#1E1A44",

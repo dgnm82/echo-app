@@ -101,6 +101,7 @@ PAINT="""async()=>{
     x.restore();
   };
   const bg=sc.querySelector('.ttbio.bg'); if(bg) await blit(bg);
+  const front=sc.querySelector('.ttbio.front'); if(front) await blit(front);
   for(const e of sc.querySelectorAll('.ttsprites .ttspr')) await blit(e,48);
   const fgEl=sc.querySelector('.ttbio.fg'); if(fgEl) await blit(fgEl);
   for(const e of sc.querySelectorAll(':scope>.ttface')) await blit(e,30);
@@ -110,7 +111,7 @@ PAINT="""async()=>{
   const m=bgU.match(/_(dawn|day|dusk|night)(?:_fg|_f\\d)?(?:\\.png)?/i);
   return {
     bio:sc.dataset.biome,
-    shownTod: (bgU.match(/biome_[a-z]+_(dawn|day|dusk|night)/)||[])[1]||'',
+    shownTod: (bgU.match(/(?:biome|sky)_[a-z]+_(dawn|day|dusk|night)/)||[])[1]||'',
     hasFace:sc.querySelectorAll('.ttface').length,
     pixels:Array.from(D),
     spr:spr.map(e=>{

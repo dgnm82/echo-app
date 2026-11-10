@@ -53,7 +53,7 @@ FEET="""async()=>{const sc=document.querySelector('.scene.ttl');const R=sc.getBo
   const bp=cs.backgroundPosition.split(' ').map(parseFloat),r=e.getBoundingClientRect(),l=Math.round((r.left-R.left)/k),t=Math.round((r.top-R.top)/k),flip=(e.classList.contains('flip')||/matrix\\(-1/.test(cs.transform));
   const low={};for(let y=0;y<48;y++)for(let x=0;x<48;x++){const sx=x-bp[0],sy=y-bp[1];if(sx<0||sy<0||sx>=I.w||sy>=I.h)continue;if(I.d[(sy*I.w+sx)*4+3]>0){const X=flip?47-x:x;low[X]=Math.max(low[X]??-1,y)}}
   const Y=Math.max(...Object.values(low));out.push({file:u.split('/').pop(),l,t,Y,cols:Object.keys(low).map(Number).filter(c=>low[c]>=Y-1)})}
- return {bg:(sc.querySelector('.ttbio.bg').style.backgroundImage.match(/biome_(\\w+?)_(\\w+?)\\.png/)||[]).slice(1),birds:out}}"""
+ return {bg:(sc.querySelector('.ttbio.bg').style.backgroundImage.match(/(?:biome|sky)_(\\w+?)_(\\w+?)\\.png/)||[]).slice(1),birds:out}}"""
 async def perch_on_art(pg,label,need):
   F=await pg.evaluate(FEET);bio,tod=(F['bg']+[None,None])[:2]
   check(bio in TB,f'{label}: biome variant read ({F["bg"]})')
