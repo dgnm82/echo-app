@@ -56,3 +56,45 @@ Offline decay/daily rules require trusted time. Configure the fixed UTC offset (
 920f3ccaa0699ddb26878be2c853e1222a5e0fd4fa5d578e676a3360a1f15a95  echo_35c_core_preview_app.bin
 63a6b0d98aeff752ed6f9f6cd6e527c9163f2c75981e5a8cc98b58d2d75accbb  echo_35c_core_preview_core.bin
 ```
+
+# 3.5C Full-screen preview (touch, layout, font) — v0v5b
+
+**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `2be6c686ae9de57ce3344a0d9307405dc822232c` (visual-v0v1 / v0v5b). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Added as a **new installer option**; the care/home preview, bench, and other existing entries are unchanged. Local-only until the install-page commit is reviewed and pushed.
+
+**NOT verified on the board.**
+
+## Recommend four-part UPDATE — keep saves and NVS
+
+Use **UPDATE — Full-screen preview (touch, layout, font)** in `flash/index.html` on an HTTPS or local-development installer in Chrome/Edge desktop. Not the 2-inch installer, not the care/home preview buttons, and not Start fresh. Use a USB-C data cable. Download mode: hold BOOT, tap RESET, release BOOT. Holding PWR about 6s turns off, not download mode.
+
+| Offset | Part | Bytes | SHA256 |
+|---|---|---:|---|
+| `0x0` | `echo_35c_visual_v0v5b_bootloader.bin` | 22320 | `0505444fc0fd9d5dbfc9abbb2f6a485ba851b54f1ef2cb0d9c959d2f810593f3` |
+| `0x8000` | `echo_35c_visual_v0v5b_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
+| `0x20000` | `echo_35c_visual_v0v5b_app.bin` | 728944 | `3963042d04523b8e48639f5c1e4acb199d576ed2a1877553392071aa25bcf06d` |
+| `0x330000` | `echo_35c_visual_v0v5b_core.bin` | 6291456 | `39dcb969df8cb3a5bcb86f6a360af19c1e6904eb5be614ce1a2e5c33cb4a7734` |
+
+`flash/manifest_35c_visual_v0v5b.json` has these four parts; `flash/SHA256SUMS_visual_v0v5b` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
+
+Manual four-part update from `flash/` (port selection omitted):
+
+```sh
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v5b_bootloader.bin 0x8000 echo_35c_visual_v0v5b_partitions.bin 0x20000 echo_35c_visual_v0v5b_app.bin 0x330000 echo_35c_visual_v0v5b_core.bin
+```
+
+## Destructive alternatives — NOT UPDATE
+
+- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v5b_fresh.json` labels this erasure.
+- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v5b.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `ed716be644298493bd5957a843e73ba812e253ed9bbc3d4c6b77fe50fc8eb204`.
+
+The care/home preview **Start fresh** button still installs the care/home preview, not this build.
+
+## Part SHA256s
+
+```text
+0505444fc0fd9d5dbfc9abbb2f6a485ba851b54f1ef2cb0d9c959d2f810593f3  echo_35c_visual_v0v5b_bootloader.bin
+3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v5b_partitions.bin
+3963042d04523b8e48639f5c1e4acb199d576ed2a1877553392071aa25bcf06d  echo_35c_visual_v0v5b_app.bin
+39dcb969df8cb3a5bcb86f6a360af19c1e6904eb5be614ce1a2e5c33cb4a7734  echo_35c_visual_v0v5b_core.bin
+043e238a765f7cfbc62596a50e53c8ffb6b188a99357b0ebede251725d67589f  echo_35c_blank_saves.bin
+```
