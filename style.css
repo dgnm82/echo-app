@@ -301,5 +301,5 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 }
 
 .scene.ob.orconvo.orname .ornames{position:absolute;left:8px;right:8px;top:48px;max-width:none;justify-content:center;z-index:3}
-.scene.ob.orconvo.orname .obrow{position:absolute;left:8px;right:8px;bottom:78px;justify-content:center;z-index:3;margin:0}
+.scene.ob.orconvo.orname .obrow{position:absolute;left:8px;right:8px;top:148px;bottom:auto;justify-content:center;z-index:3;margin:0}
 .scene.ob.orconvo.orname .orbr .hint{color:#fff6e6;font-size:8px;text-shadow:1px 1px 0 #23183a;text-align:right}
