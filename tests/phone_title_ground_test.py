@@ -34,7 +34,7 @@ BOX="""async()=>{const sc=document.querySelector('.scene.ttl');const R=sc.getBou
 async def ink(pg):
   """tagline ink box per line (art px) = pixels that change when the tagline is hidden, cast hidden"""
   R=await pg.evaluate("(()=>{const r=document.querySelector('.scene.ttl').getBoundingClientRect();return [r.left,r.top,r.width,window.devicePixelRatio]})()");k=R[2]/180*R[3]
-  await pg.add_style_tag(content='.ttsprites,.ttown,.ttbio.alive,.oblogo-glow,.mfx-tnotes{visibility:hidden!important}*{animation-play-state:paused!important}')
+  await pg.add_style_tag(content='.ttsprites,.ttown,.ttface,.ttbio.alive,.oblogo-glow,.mfx-tnotes{visibility:hidden!important}*{animation-play-state:paused!important}')
   a=Image.open(io.BytesIO(await pg.screenshot())).convert('RGB')
   await pg.evaluate("document.querySelector('.obtag').style.visibility='hidden'")
   c=Image.open(io.BytesIO(await pg.screenshot())).convert('RGB')
@@ -61,9 +61,9 @@ async def perch_on_art(pg,label,need):
   wood=set(TB[bio]['variants'][tod]['palette'][10:13])
   if need:check(len(F['birds'])>=1,f'{label}: a bird perches on the {bio} title')
   R=await pg.evaluate("(()=>{const r=document.querySelector('.scene.ttl').getBoundingClientRect();return [r.left,r.top,r.width,window.devicePixelRatio]})()");k=R[2]/180*R[3]
-  await pg.add_style_tag(content='.ttsprites,.ttown,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel{visibility:hidden!important}')
+  await pg.add_style_tag(content='.ttsprites,.ttown,.ttface,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel{visibility:hidden!important}')
   im=Image.open(io.BytesIO(await pg.screenshot())).convert('RGB')
-  await pg.evaluate("document.querySelectorAll('style').forEach(s=>{if(s.textContent.includes('.ttsprites,.ttown,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel'))s.remove()})")
+  await pg.evaluate("document.querySelectorAll('style').forEach(s=>{if(s.textContent.includes('.ttsprites,.ttown,.ttface,.ttbio.alive,.oblogo-glow,.mfx-tnotes,.obpanel'))s.remove()})")
   px=lambda x,y:'#%02X%02X%02X'%im.getpixel((int(R[0]*R[3]+(x+.5)*k),int(R[1]*R[3]+(y+.5)*k)))[:3]
   for b in F['birds']:
     y=b['t']+b['Y'];held=[c for c in b['cols'] if px(b['l']+c,y+1) in wood and px(b['l']+c,y-1) not in wood]
