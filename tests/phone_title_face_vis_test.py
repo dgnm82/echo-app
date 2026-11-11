@@ -15,7 +15,7 @@ import asyncio,sys,os,io,json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image
 from playwright.async_api import async_playwright
-from origin_pick import pick,nocam
+from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 TB=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','px','title','title_biomes.json')))['biomes']
 FACE_ROW=30  # cover top edge, title_frames peek notes
@@ -181,7 +181,7 @@ async def main():
       await pg.fill('#obnm','Mia'); await T('#obnext'); await T('#obyes')
       await pg.evaluate("window.__echo&&__echo.setBand&&__echo.setBand('7-8')")
       await pick(pg,'fox'); await T('#ornext',300); await T('.orchip >> nth=0',900)
-      await T('#orinv',3000); await T('#ornm',400); await T('#orkeep',1500)
+      await through_invite(pg,'name'); await T('#orkeep',1500)
     await pg.wait_for_timeout(400); await pg.close()
     for day,bio,tod in [(6,'woodland','dusk'),(7,'pasture','dusk'),(8,'cove','dusk')]:
       pg=await ctx.new_page(); await nocam(pg)

@@ -48,7 +48,7 @@ async def main():
     pick_early=await pg.evaluate("(()=>{const p=document.getElementById('orpick'),m=document.getElementById('orcammiss'),r=document.getElementById('orretry');const vis=el=>!!(el&&!el.hidden&&el.offsetParent!==null);return {pick:vis(p),miss:vis(m),retry:vis(r)}})()")
     check(pick_early.get('pick') and not pick_early.get('miss') and not pick_early.get('retry'),'A: Pick your Echo is visible at <=1.5s; miss + retry stay hidden until a miss')
     await common(pg,'A window')
-    try:await pg.wait_for_selector('#orcammiss:not([hidden]),#orinv',timeout=20000)
+    try:await pg.wait_for_selector('#orcammiss:not([hidden]),#orinv,#orgo,.scene.orinvite',timeout=20000)
     except Exception:pass
     if await pg.locator('#orcammiss:not([hidden])').count():
       check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','7-8'),'A: miss copy (7-8, one band)')
@@ -66,10 +66,10 @@ async def main():
     await ctx.close()
     # B) a confident vision label -> straight to the invite with that animal
     ctx,pg=await to_origin(b,p,errs,reqs,VISION)
-    try:await pg.wait_for_selector('#orinv,#orcammiss:not([hidden])',timeout=20000)
+    try:await pg.wait_for_selector('#orinv,#orgo,.scene.orinvite,#orcammiss:not([hidden])',timeout=20000)
     except Exception:pass
     o=await pg.evaluate("__echo.state.origin||{}")
-    if await pg.locator('#orinv').count():
+    if await pg.locator('#orinv,#orgo,.scene.orinvite').count():
       check(o.get('animal')=='fox' and o.get('src')=='camera' and o.get('family')=='slyte','B: a vision match goes straight to the invite as a fox ('+json.dumps({k:o.get(k) for k in ('animal','family','src')})+')')
       await pg.locator('#screen').screenshot(path=f'{OUT}/b-invite.png')
     else:

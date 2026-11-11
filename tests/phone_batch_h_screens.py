@@ -3,7 +3,7 @@
 import asyncio,sys,os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from playwright.async_api import async_playwright
-from origin_pick import pick,nocam
+from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/workspace/echo/phone_app_review/batch_H_screens';os.makedirs(OUT,exist_ok=True)
 CHIP={'fox':'ginger','cat':'ginger','owl':'brown'}
 async def T(pg,sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
@@ -17,7 +17,7 @@ async def onboard(pg,age=1):
 async def to_home(b,p,animal,hour=11):
   ctx=await b.new_context(**p.devices['iPhone 13']);pg=await ctx.new_page();await nocam(pg);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await onboard(pg);await pick(pg,animal);await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={CHIP[animal]}]',900)
-  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
+  await through_invite(pg,'name');await T(pg,'#orkeep',1500)
   for _ in range(40):   # tap through any intro bubbles (H13 tap-to-advance)
     w=await pg.evaluate("!!(window.Dialogue&&Dialogue.waiting&&Dialogue.waiting()&&(Dialogue.advance(),1))")
     if not w and await pg.locator('#sc').count():break

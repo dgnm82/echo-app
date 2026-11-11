@@ -2,7 +2,7 @@
 # Usage: python3 tests/phone_batchf_test.py [url] [outdir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick as orpick,nocam
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick as orpick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/batchf';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -35,7 +35,7 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
     await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
-    await orpick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900);await T('#orinv',3000)
+    await orpick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900);await through_invite(pg,'glow')
     await T('#ornm',400);await T('#orkeep',1500)
     for _ in range(150):   # answer the setup talk
       if not await pg.locator('.choices button').count() and await pg.locator('#play').count():break

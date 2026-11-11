@@ -12,7 +12,7 @@ import asyncio,sys,os,io,json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image,ImageChops
 from playwright.async_api import async_playwright
-from origin_pick import pick,nocam
+from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 bad=[];n=[0]
 def check(c,m):
@@ -109,7 +109,7 @@ async def main():
       if await pg.locator('#obnm').count():break
       await T('.scene.ob',200)
     await pg.fill('#obnm','Mia');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
-    await pick(pg,'fox');await T('#ornext',300);await T('.orchip >> nth=0',900);await T('#orinv',3000);await T('#ornm',400);await T('#orkeep',1500)
+    await pick(pg,'fox');await T('#ornext',300);await T('.orchip >> nth=0',900);await through_invite(pg,'name');await T('#orkeep',1500)
     await pg.wait_for_timeout(500);await pg.close()
     for day,bio in [(0,'woodland'),(1,'pasture'),(2,'cove')]:
       pg=await ctx.new_page();await pg.add_init_script(DAY%day);await pg.add_init_script("setTimeout=(f=>(fn,ms,...a)=>f(fn,ms===3000?6e5:ms,...a))(setTimeout)")   # hold the return title (it auto-advances after 3 s)

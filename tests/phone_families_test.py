@@ -1,7 +1,7 @@
 # Families v1: animal -> look sheets (home, events, fly), fox/owl unchanged, old saves, aria-labels, colour budget. Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/famtest';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -23,7 +23,7 @@ async def origin(b,p,animal,chip,errs,b404,fam=None):
   if fam:await T(pg,f'.orfam[data-f={fam}]')
   await T(pg,f'.orchip[data-c={chip}]',900)
   inv=await pg.evaluate("(document.querySelector('#orlf .px-echo')||{}).outerHTML||''")
-  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
+  await through_invite(pg,'name');await T(pg,'#orkeep',1500)
   return pg,inv
 async def main():
   async with async_playwright() as p:

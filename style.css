@@ -270,36 +270,36 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 
 /* intro-convo: one dusk layout for invite beats, decline, and naming.
    96px Echo bottom-left, bubble tail down, buttons/hint bottom-right, no tree/ground. */
-.scene.ob.orconvo{display:block;overflow:hidden;padding:0}
+.scene.ob.orconvo{position:absolute;inset:0;display:block;overflow:hidden;padding:0;width:auto;height:auto}
 .scene.ob.orconvo>.bg{position:absolute;inset:0;z-index:0}
-.scene.ob.orconvo>*:not(.bg){position:relative;z-index:2}
-.orconvo .ortop{position:absolute;left:6px;right:6px;top:6px;z-index:3}
-.orconvo .ortop .obpanel{max-width:none;width:auto;text-align:left;margin:0}
-.orconvo .ortop .obpanel[hidden]{display:none}
-.orconvo .orlightform{position:absolute;left:8px;bottom:8px;width:96px;height:96px;margin:0;transform:none;transition:none;z-index:2}
-.orconvo.orwing .orlightform{bottom:12px}
-.orconvo .orlightform.small{height:96px;margin:0;transform:none}
-.orconvo .orsprite{position:absolute;left:0;bottom:0;width:48px;height:48px;transform:scale(2);transform-origin:bottom left;z-index:1;filter:none}
-.orconvo .orlightform .px-echo{filter:none;mix-blend-mode:normal}
-.orconvo .orshadow{position:absolute;left:16px;bottom:2px;width:48px;height:8px;background:rgba(35,24,58,.35);border-radius:50%;z-index:0;pointer-events:none}
-.orconvo .orperch{position:absolute;left:4px;bottom:-8px;width:80px;height:5px;background:#7A4A30;box-shadow:0 2px 0 #5A3424;z-index:0;pointer-events:none}
-.orconvo .orperch::after{content:"";position:absolute;right:8px;top:-3px;width:4px;height:6px;background:#7A4A30;box-shadow:1px 0 0 #5A3424}
-.orconvo .obbub{position:absolute;left:8px;bottom:112px;margin:0;max-width:164px;z-index:3}
-.orconvo.orwing .obbub{bottom:116px}
-.orconvo .obbub::before{top:auto;bottom:-6px;left:22px;margin-left:0;border:4px solid transparent;border-bottom:0;border-top:6px solid #3b2a5c}
-.orconvo .obbub::after{top:auto;bottom:-4px;left:23px;margin-left:0;border:3px solid transparent;border-bottom:0;border-top:5px solid #fff6e6}
-.orconvo .orbr{position:absolute;right:6px;bottom:6px;left:112px;text-align:right;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.orconvo .orbr .btn,.orconvo .orbr .obnextbtn{position:static!important;margin:0;min-width:0}
-.orconvo .orbr .obhint{background:none;border:0;color:#fff6e6;font:inherit;font-size:8px;line-height:10px;text-shadow:1px 1px 0 #23183a;padding:4px 2px;cursor:pointer;text-align:right}
-.orconvo .orstamp{align-self:flex-end}
-.orconvo .ornote.a{left:-4px;top:4px}
-.orconvo .ornote.b{right:-4px;top:0}
-.orconvo .orlightform.drift{transition:transform 1.6s ease-in,opacity 1.6s ease-in}
+.scene.ob.orconvo>*:not(.bg){z-index:2}
+.scene.ob.orconvo .ortop{position:absolute;left:6px;right:6px;top:6px;z-index:3}
+.scene.ob.orconvo .ortop .obpanel{max-width:none;width:auto;text-align:left;margin:0}
+.scene.ob.orconvo .ortop .obpanel[hidden]{display:none}
+.scene.ob.orconvo .orlightform{position:absolute;left:8px;bottom:8px;width:96px;height:96px;margin:0;transform:none;transition:none;z-index:2}
+.scene.ob.orconvo.orwing .orlightform{bottom:12px}
+.scene.ob.orconvo .orlightform.small{height:96px;margin:0;transform:none}
+.scene.ob.orconvo .orsprite{position:absolute;left:0;bottom:0;width:48px;height:48px;transform:scale(2);transform-origin:bottom left;z-index:1;filter:none}
+.scene.ob.orconvo .orlightform .px-echo{filter:none;mix-blend-mode:normal}
+.scene.ob.orconvo .orshadow{position:absolute;left:16px;bottom:2px;width:48px;height:8px;background:rgba(35,24,58,.35);border-radius:50%;z-index:0;pointer-events:none}
+.scene.ob.orconvo .orperch{position:absolute;left:4px;bottom:-8px;width:80px;height:5px;background:#7A4A30;box-shadow:0 2px 0 #5A3424;z-index:0;pointer-events:none}
+.scene.ob.orconvo .orperch::after{content:"";position:absolute;right:8px;top:-3px;width:4px;height:6px;background:#7A4A30;box-shadow:1px 0 0 #5A3424}
+.scene.ob.orconvo .obbub{position:absolute;left:8px;bottom:112px;margin:0;max-width:164px;z-index:3}
+.scene.ob.orconvo.orwing .obbub{bottom:116px}
+.scene.ob.orconvo .obbub::before{top:auto;bottom:-6px;left:22px;margin-left:0;border:4px solid transparent;border-bottom:0;border-top:6px solid #3b2a5c}
+.scene.ob.orconvo .obbub::after{top:auto;bottom:-4px;left:23px;margin-left:0;border:3px solid transparent;border-bottom:0;border-top:5px solid #fff6e6}
+.scene.ob.orconvo .orbr{position:absolute;right:6px;bottom:6px;left:112px;text-align:right;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.scene.ob.orconvo .orbr .btn,.scene.ob.orconvo .orbr .obnextbtn{position:static!important;margin:0;min-width:0}
+.scene.ob.orconvo .orbr .obhint{background:none;border:0;color:#fff6e6;font:inherit;font-size:8px;line-height:10px;text-shadow:1px 1px 0 #23183a;padding:4px 2px;cursor:pointer;text-align:right}
+.scene.ob.orconvo .orstamp{align-self:flex-end}
+.scene.ob.orconvo .ornote.a{left:-4px;top:4px}
+.scene.ob.orconvo .ornote.b{right:-4px;top:0}
+.scene.ob.orconvo .orlightform.drift{transition:transform 1.6s ease-in,opacity 1.6s ease-in}
 @media (max-height:420px){
   .orinvite.orconvo .orlightform{transform:none;margin:0}
   .orinvite.orconvo .orlightform.drift{transform:translate(40px,-120px) scale(.35)}
 }
 
-.orconvo.orname .ornames{position:absolute;left:8px;right:8px;top:48px;max-width:none;justify-content:center;z-index:3}
-.orconvo.orname .obrow{position:absolute;left:8px;right:8px;bottom:78px;justify-content:center;z-index:3;margin:0}
-.orconvo.orname .orbr .hint{color:#fff6e6;font-size:8px;text-shadow:1px 1px 0 #23183a;text-align:right}
+.scene.ob.orconvo.orname .ornames{position:absolute;left:8px;right:8px;top:48px;max-width:none;justify-content:center;z-index:3}
+.scene.ob.orconvo.orname .obrow{position:absolute;left:8px;right:8px;bottom:78px;justify-content:center;z-index:3;margin:0}
+.scene.ob.orconvo.orname .orbr .hint{color:#fff6e6;font-size:8px;text-shadow:1px 1px 0 #23183a;text-align:right}

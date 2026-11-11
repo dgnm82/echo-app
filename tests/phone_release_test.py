@@ -4,7 +4,7 @@
 # Usage: python3 tests/phone_release_test.py [base-url] [prefix] [out-dir-prefix]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';PFX=sys.argv[2] if len(sys.argv)>2 else '';OUT=(sys.argv[3] if len(sys.argv)>3 else '/tmp/relpt-')+PFX
 KIND=os.environ.get('ECHO','fox');SEL='#tree' if KIND=='owl' else '#bush';SP={'owl':'whimber','cat':'twitchel'}.get(KIND,'slyte')   # ECHO=cat: a Purrling (lion) made through the origin picker, walks like the fox
 os.makedirs(os.path.dirname(OUT) or '.',exist_ok=True)
@@ -138,7 +138,7 @@ async def origin_cat(pg,animal='lion',chip='golden'):   # the real onboarding: p
     await T('.scene.ob',200)
   await pg.fill('#obnm','Dani');await T('#obnext');await T('#obyes');await pg.evaluate("__echo.setBand('7-8')")
   await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
-  await T('#orinv',3000);await T('#ornm',400);await T('#orkeep',3000)
+  await through_invite(pg,'name');await T('#orkeep',3000)
 async def pick_first(pg):
   c=pg.locator('.choices button').first;await c.wait_for(timeout=20000);await c.click()
 async def main():

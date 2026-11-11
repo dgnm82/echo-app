@@ -2,7 +2,7 @@
 # bond-up burst, basket home, scenes borrowed (basket door, no chasing), no dairy, look chirps load. Usage: [base-url] [shot-dir]
 import asyncio,sys,os,re
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/purrtest';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -31,10 +31,10 @@ async def main():
         check(len(set(ic))==7,'each cat has its own tile art')
         await pg.screenshot(path=f'{OUT}/picker.png')
       await pick(pg,animal);await T('#ornext',300);await T(f'.orchip[data-c={chip}]',900)
-      await T('#orinv',3000)
+      await through_invite(pg,'who')
       fl=await pg.evaluate("(document.querySelector('.orfamline')||{}).textContent||''");check('Purrling' in fl and await pg.evaluate(FITS+"('.orfamline')"),f'{animal} family line fits: {fl}')
       if i==0:await pg.screenshot(path=f'{OUT}/origin-family-line.png')
-      await T('#ornm',400);await T('#orkeep',3000)
+      await through_invite(pg,'name');await T('#orkeep',3000)
       S=await pg.evaluate("__echo.state");check(S['kind']=='cat' and S['g']['name']==name and S['g'].get('look')==animal,f"{animal} -> {S['kind']} {S['g'].get('name')} {S['g'].get('look')} (want {name})")
       if i==0:
         # setup talk: the origin lines fit the bubble on the phone

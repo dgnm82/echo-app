@@ -3,7 +3,7 @@
 # Usage: python3 tests/phone_nov3_test.py [URL] [SHOTDIR]
 import asyncio,sys,os,json,time
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 SHOT=sys.argv[2] if len(sys.argv)>2 else '/tmp/nov3_shots';os.makedirs(SHOT,exist_ok=True)
 ONLY=os.environ.get('NOV3_ONLY','')
@@ -29,7 +29,7 @@ async def setup(b,kw,animal='dog'):
     if await pg.locator('#obnm').count():break
     await T(pg,'.scene.ob',200)
   await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pick(pg,animal);await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-  await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1200)
+  await through_invite(pg,'name');await T(pg,'#orkeep',1200)
   await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());CONFIG.ambientMin=999;CONFIG.ambientMax=999")
   return ctx,pg,errs
 # ---------------------------------------------------------------- 1: Echo It Back layout (two-row tune, 8 pads, solfège labels, a long line)

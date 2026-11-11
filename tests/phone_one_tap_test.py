@@ -4,7 +4,7 @@ import asyncio, os, re, sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 try:
-  from origin_pick import pick, nocam
+  from origin_pick import pick, nocam, to_ask, through_invite
 except Exception:
   async def pick(pg, animal, ms=250):
     pass
@@ -125,19 +125,19 @@ async def live():
       await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes')
       await pg.evaluate("window.__echo&&__echo.setBand&&__echo.setBand('7-8')")
       await pick(pg,'fox');await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-    # invite: one tap must proceed (button gone, not merely .sel)
+    # invite: one tap must proceed (button gone, not merely .sel) into the yes beat, not naming
+    await to_ask(pg)
     await pg.locator('#orinv').wait_for(timeout=8000)
     await T(pg,'#orinv',400)
     inv=await pg.evaluate("(()=>{const b=document.getElementById('orinv');return b?{sel:b.classList.contains('sel'),on:1}: {on:0}})()")
     print('invite after one tap',inv)
     check(inv.get('on')==0, f'invite: one tap selects (button still up={inv})')
+    named=await pg.evaluate("!!document.getElementById('orkeep')||!!document.querySelector('.scene.orname')")
+    beat=await pg.evaluate("((document.querySelector('.scene.ob')||{}).dataset||{}).beat||''")
+    check(not named and beat=='yes', f'invite: one tap enters the yes beat, not naming (beat={beat}, named={named})')
     if inv.get('on'):  # baseline bootstrap so the name check can still fail
-      await T(pg,'#orinv',3000)
-    else:
-      await pg.wait_for_timeout(3000)
-    # name step
-    if await pg.locator('#ornm').count():
-      await T(pg,'#ornm',500)
+      await T(pg,'#orinv',400)
+    await through_invite(pg,'name')
     await pg.locator('#orkeep').wait_for(timeout=8000)
     await T(pg,'#orkeep',500)
     still=await pg.evaluate("!!document.getElementById('orkeep')||!!document.querySelector('.scene.orname')")

@@ -9,7 +9,7 @@
 import asyncio,sys,os,json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from playwright.async_api import async_playwright
-from origin_pick import pick,nocam
+from origin_pick import pick,nocam, through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 bad=[];n=[0];depth={}
 def check(c,m):
@@ -58,7 +58,7 @@ async def one(b,p,a,sem):
         await T(pg,'.scene.ob',200)
       await pg.fill('#obnm','Mia');await T(pg,'#obnext');await T(pg,'#obyes');await pg.evaluate("__echo.setBand('7-8')")
       await pick(pg,a);await T(pg,'#ornext',300);await T(pg,'.orchip >> nth=0',900)
-      await T(pg,'#orinv',3000);await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
+      await through_invite(pg,'name');await T(pg,'#orkeep',1500)
       await pg.evaluate("(()=>{const s=__echo.state,d=new Date(Date.now()+(s.clockOffset||0));s.clockOffset=(s.clockOffset||0)+((11-d.getHours()+24)%24)*36e5;s.weatherOn=false})()")
       await pg.evaluate("document.querySelectorAll('.full').forEach(f=>f.remove());__echo.home()");await pg.wait_for_timeout(1200)
       for _ in range(30):

@@ -3,7 +3,7 @@
 # Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json,subprocess,tempfile,shutil
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family, through_invite, to_ask
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/thirdfam';os.makedirs(OUT,exist_ok=True)
 R=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..');tmp=tempfile.mkdtemp();fd=os.path.join(tmp,'families');shutil.copytree(os.path.join(R,'families'),fd)
 m=json.load(open(os.path.join(fd,'whimber.json')))
@@ -39,10 +39,10 @@ async def main():
     await pg.screenshot(path=f'{OUT}/picker.png')
     await T(pg,'.orcard[data-a=testcat]');await T(pg,'#ornext',300);await T(pg,f'.orchip[data-c={chip}]',900)
     check(await pg.locator('#orlf .px-echo').count()==1,'invite shows a stand-in sprite')
-    await T(pg,'#orinv',3000)
+    await through_invite(pg,'who')
     line=await pg.evaluate("(document.querySelector('.orfamline')||{}).textContent||''");check('Testling' in line,'family line uses the manifest label: '+line)
     await pg.screenshot(path=f'{OUT}/arrival.png')
-    await T(pg,'#ornm',400);await T(pg,'#orkeep',1500)
+    await through_invite(pg,'name');await T(pg,'#orkeep',1500)
     for i in range(12):
       if await pg.locator('#cr .px-echo').count():break
       bt=pg.locator('.choices button')

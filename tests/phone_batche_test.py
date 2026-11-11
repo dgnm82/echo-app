@@ -2,7 +2,7 @@
 # E6 no "undefined" in the comfort menu (snow leopard), E7 games always playable (3rd = just for fun) + full/not-sleepy explain, E8 tower trims fall in world space.
 import asyncio,sys,os
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family, through_invite, to_ask
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/batche';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -30,9 +30,12 @@ async def main():
     sl=[x for x in sp if x[0]=='Snow leopard'][0];one=[x for x in sp if x[0]=='Cat'][0];check(sl[3]==2 and one[3]==1,'Snow leopard wraps to 2 lines '+str((sl,one)))
     await pg.evaluate("document.querySelector('.orcard[data-a=snowleopard]').scrollIntoView()");await pg.screenshot(path=f'{OUT}/e1-picker.png')
     await pick(pg,'snowleopard');await T('#ornext',300);await T('.orchip[data-c=white]',900)
+    await to_ask(pg)
     check('Do you want to ask it to come with you?' in await txt(),'E2 invite line');await pg.screenshot(path=f'{OUT}/e2-invite.png')
-    await T('#orinv',3000);t=await txt()
-    check("I'm a Purrling! I'm the Echo of a cat, big and small!" in t,'E3 family line');check('Your snow leopard is glowing with its song! The more you play together, the bigger and brighter its song will glow!' in t,'E4 keep line')
+    await through_invite(pg,'who');t=await txt()
+    check("I'm a Purrling! I'm the Echo of a cat, big and small!" in t,'E3 family line')
+    await through_invite(pg,'glow');t=await txt()
+    check('Your snow leopard is glowing with its song! The more you play together, the bigger and brighter its song will glow!' in t,'E4 keep line')
     await pg.screenshot(path=f'{OUT}/e3-e4-family.png')
     await T('#ornm',400);await T('#orkeep',1500);await pg.evaluate(SPY)
     # E5: answer the setup talk, pick "Can you sing me your song?"

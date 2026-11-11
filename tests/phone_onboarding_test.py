@@ -1,7 +1,7 @@
 # Onboarding v1 + Origin v2 phone v1 + grown-ups corner. Usage: [base-url] [shot-dir]
 import asyncio,sys,os,json
 from playwright.async_api import async_playwright
-sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam,to_family,to_ask,through_invite
 URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';OUT=sys.argv[2] if len(sys.argv)>2 else '/tmp/obtest';os.makedirs(OUT,exist_ok=True)
 ok=0;bad=[]
 def check(c,m):
@@ -55,15 +55,23 @@ async def main():
     await shot(pg,'ob07_colours')
     await T(pg,'.orchip[data-c=golden]',1200)
     check(await pg.locator('.orchip').count()==0,'one pick advances')
+    await pg.locator('#orgo').wait_for(timeout=8000)
     await shot(pg,'ob08_invite')
+    await to_ask(pg)
     await pg.evaluate("window.__arrSeen=0;new MutationObserver(()=>{if(document.querySelector('canvas.notearrive'))__arrSeen=1}).observe(document.body,{childList:true,subtree:true})")
-    await T(pg,'#orinv',3200)
-    check(await pg.locator('#ornm').count()==1,'first Echo says yes')
+    await T(pg,'#orinv',400)
+    await pg.wait_for_timeout(1200)
+    check(await pg.locator('#ornm').count()==0 and await pg.locator('.orstrip').count()==0 and await pg.locator('.orfamline').count()==0,'glow and family are not on the yes beat')
+    await pg.wait_for_timeout(2000)
     ar=await pg.evaluate("({seen:window.__arrSeen,st:window.__arrive,left:!!document.querySelector('canvas.notearrive'),vis:(document.querySelector('#orlf .px-echo')||{style:{}}).style.visibility,motes:document.querySelectorAll('.ormote').length,halo:getComputedStyle(document.querySelector('#orlf')).filter})")
     check(ar['seen']==1 and ar['st']==2 and not ar['left'] and ar['vis']!='hidden' and ar['motes']==0 and ar['halo'] in ('none',''),'C2 arrival forms from notes (no light motes/halo) '+str(ar))
+    await shot(pg,'ob09_yes')
+    await through_invite(pg,'who')
     t=await pg.locator('.orfamline').inner_text();check(t=="I'm a Howling! I'm the Echo of a dog, wild and tame!" and await pg.locator('.orfamline.obbub').count()==1,'ui_or_family '+t)
     t=await pg.locator('.scene.ob').inner_text();check('Slyte' not in t and 'Whimber' not in t,'no old family word in origin UI')
-    await shot(pg,'ob09_yes')
+    check(await pg.locator('#ornm').count()==0,'glow Next is not on the who-I-am beat')
+    await through_invite(pg,'glow')
+    check(await pg.locator('#ornm').count()==1 and await pg.locator('.orstrip').count()==1,'first Echo says yes (glow beat before naming)')
     await T(pg,'#ornm',400)
     check(await pg.locator('.ornm').count()==6,'6 names')
     keep=await pg.locator('#orkeep').inner_text();check(keep=='Just "Thrumble"','dog default name: '+keep)
@@ -132,15 +140,15 @@ async def main():
     check(await pg3.evaluate("window.__echo.state.child")=='friend','skip name')
     await pg3.evaluate("window.__echo.state.originIdx=1;window.__echo.state.origin=null")
     s=await pg3.evaluate("(()=>{for(let s=1;s<9999;s++){if(window.__echo.hash(s+'|1|0')<.12)return s}})()");await pg3.evaluate(f"window.__echo.state.oseed={s}")
-    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv',1600)
+    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await to_ask(pg3);await T(pg3,'#orinv',800)
     check(await pg3.locator('#orff').count()==1,'not today shows Find a friend')
     txt=await pg3.locator('.scene.ob').inner_text();check('Song heard' in txt,'song stamp')
     check(await pg3.evaluate("JSON.parse(localStorage.getItem('echo-proto-v1')).origin.declined")==True,'declined saved at once')
-    check(await pg3.locator('.scene.ob .obpanel').count()==0,'decline: one bubble, no UI box')
+    check(await pg3.locator('.scene.ob .obpanel:visible').count()==0,'decline: one bubble, no UI box')
     await shot(pg3,'ob17_not_today')
     await T(pg3,'#orff');check(await pg3.locator('.orfamcard').count()==3,'Find a friend -> P1 (family step)')
     await pg3.reload();await pg3.wait_for_timeout(900);check(await pg3.locator('.orfamcard').count()==3,'reopen mid-origin -> P1 (family step)')
-    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await T(pg3,'#orinv',3000)
+    await pick(pg3,'owl');await T(pg3,'#ornext');await T(pg3,'#orunsure',1000);await through_invite(pg3,'glow')
     check(await pg3.locator('#ornm').count()==1,'next invite after a decline says yes')
     # data-only rename (Wingsong via the duck card; no borrowed colours any more)
     async def rename(route):
@@ -149,7 +157,7 @@ async def main():
     pg4=await fresh(b,p,errs,reqs,rename);await run_to_seen(pg4,'Leo')
     await pick(pg4,'duck');await T(pg4,'#ornext',400)
     check(await pg4.locator('.orborrow,.orfam').count()==0,'no borrow screen');check(await pg4.locator('.orchip').count()==11,'Wingsong 11 chips (white+grey share dove-mist)');await T(pg4,'.orchip[data-c=green]',1000)
-    await T(pg4,'#orinv',3000);await T(pg4,'#ornm',400)
+    await through_invite(pg4,'name')
     check(await pg4.locator('#orkeep').inner_text()=='Just "Quackaby"','duck default name');await T(pg4,'#orkeep',1500)
     S=await pg4.evaluate("window.__echo.state");check(S['g']['name']=='Quackaby' and S['g']['family']=='Skylark' and S['origin']['src']=='chips' and S['origin']['animal']=='duck' and S['g']['pal']=='mint-aurora-solid' and S['kind']=='owl','renamed Wingsong origin '+json.dumps([S['g'].get('name'),S['g'].get('pal'),S['g'].get('family'),S['origin'],S['kind']]))
     check(await pg4.evaluate("CREATURES.owl.name")=='Skylark','config family label from data')
