@@ -68,7 +68,7 @@ async def main():
     sn=await pg.evaluate("__sn");lad=await pg.evaluate("MusicFX.stackLadder('slyte')")
     check(len(sn)>=2 and [k for k,_ in sn]==list(range(len(sn))) and all(n==lad[k%len(lad)] for k,n in sn),f'Stack: layer k plays ladder note k ({sn})')
     for _ in range(30):
-      if await pg.evaluate("!!document.querySelector('.endcard,.g2end,.gend')") or await pg.evaluate("__sp>0"):break
+      if await pg.evaluate("!!document.querySelector('.endcard,.g2end,.gend,.g2card')") or await pg.evaluate("__sp>0"):break
       await pg.locator('#stc').tap();await pg.wait_for_timeout(120)
     await wait(pg,"__sp>0",4000);sp=await pg.evaluate("__sp");check(sp>0,f'Stack end: the tower plays back as a rising tune ({sp} layers)')
     await pg.evaluate("document.querySelectorAll('#gs,.full').forEach(e=>e.remove());__echo.home()");await pg.wait_for_timeout(600)
