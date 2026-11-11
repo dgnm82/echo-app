@@ -549,11 +549,13 @@ function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+
   $('#orff').onclick=()=>{SFX('ui_tap');orSeen()}}
 // P5 naming: 6 names (seeded order), More, Type it (onboarding filter), Just "{family}"
 function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const dn=F.animals[o.animal].default_name||f.default_name;S.vars.default_name=dn;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
-  const six=L.slice((page*6)%L.length,(page*6)%L.length+6);
-  obScene('orname meadow',`<div class="obpanel"><b>${U('ui_or_name_ask')}</b></div><div class="orlightform small">${obSprite(o.family,o.seed,o.ramp,1)}</div>
-   <div class="ornames">${six.map(n=>`<button class="btn small ornm" data-n="${n}">${n}</button>`).join('')}</div>
-   <div class="row obrow"><button class="btn small" id="ormore">${U('ui_or_name_more')}</button><button class="btn small" id="ortype">${U('ui_or_name_type')}</button></div>
-   <button class="btn" id="orkeep">${U('ui_or_name_keep',0,{default_name:dn})}</button><div class="hint">${U('ui_pick_hint')||'Tap to choose'}</div>`);
+  const six=L.slice((page*6)%L.length,(page*6)%L.length+6),wing=orWing(f,o.family);
+  obScene(`orconvo orname${wing?' orwing':''}`,`<div class="ortop"><div class="obpanel" id="orpanel"><b>${U('ui_or_name_ask')}</b></div></div>
+    <div class="orlightform" id="orlf">${wing?'<i class="orperch" aria-hidden="true"></i>':''}<i class="orshadow" aria-hidden="true"></i><div class="orsprite">${obSprite(o.family,o.seed,o.ramp,1)}</div></div>
+    <div class="ornames">${six.map(n=>`<button class="btn small ornm" data-n="${n}">${n}</button>`).join('')}</div>
+    <div class="row obrow"><button class="btn small" id="ormore">${U('ui_or_name_more')}</button><button class="btn small" id="ortype">${U('ui_or_name_type')}</button></div>
+    <div class="orbr"><button class="btn" id="orkeep">${U('ui_or_name_keep',0,{default_name:dn})}</button><div class="hint">${U('ui_pick_hint')||'Tap to choose'}</div></div>`);
+  orSetBeat('name');
   app.querySelectorAll('.ornm').forEach(b=>pickTap(b,()=>say(b.dataset.n),()=>orFinish(b.dataset.n,false)));
   $('#ormore').onclick=()=>{SFX('ui_tap');orName(page+1)};
   pickTap($('#orkeep'),()=>say(dn),()=>orFinish(dn,true));
