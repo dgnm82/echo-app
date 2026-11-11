@@ -68,7 +68,7 @@ async def main():
     check(await pg.locator('.ornm').count()==6,'6 names')
     keep=await pg.locator('#orkeep').inner_text();check(keep=='Just "Thrumble"','dog default name: '+keep)
     await shot(pg,'ob10_naming')
-    n=await pg.locator('.ornm').first.get_attribute('data-n');await T(pg,'.ornm >> nth=0');await T(pg,'.ornm >> nth=0',1500)
+    n=await pg.locator('.ornm').first.get_attribute('data-n');await T(pg,'.ornm >> nth=0',1500)
     S=await pg.evaluate("window.__echo.state")
     check(S['kind']=='fox' and S['g']['name']==n and S['g']['pal']=='sunset-gold-solid' and S['setupDone']==1,'echo made '+json.dumps([S.get('kind'),S['g'].get('name'),S['g'].get('pal')]))
     check(S['origin']['animal']=='dog' and S['origin']['src']=='chips' and S['origin']['ramp']=='sunset-gold-solid' and S['origin']['accent'] is None and not S['origin']['declined'] and S['vars']['origin_animal']=='dog','origin saved')

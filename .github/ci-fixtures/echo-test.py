@@ -1,5 +1,6 @@
 import asyncio
 from playwright.async_api import async_playwright
+URL=__import__('sys').argv[1] if len(__import__('sys').argv)>1 else 'http://localhost:8765/'
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
@@ -11,14 +12,14 @@ async def main():
         if await pg.locator('.full button').count(): await pg.locator('.full button').first.click();await pg.wait_for_timeout(800)
         else: break
     async def choose(txt,timeout=40000):
-      c=pg.locator('.choices button',has_text=txt).first;await c.wait_for(timeout=timeout);await c.click();await c.click()
+      c=pg.locator('.choices button',has_text=txt).first;await c.wait_for(timeout=timeout);await c.click()
     async def clearov(): await pg.evaluate("document.getElementById('overlay').innerHTML=''")
     async def dev(btn):
       await dismiss();await clearov()
       if not await pg.locator('#dbg').count(): print('NOHOME',(await pg.inner_text('#app'))[:300]);await pg.screenshot(path='/workspace/shots/fail.png')
       await pg.click('#dbg');await pg.click(btn);await pg.wait_for_timeout(600)
     for kind,sel in [('fox','#bush'),('owl','#tree')]:
-      await pg.goto('http://localhost:8765/');await pg.evaluate('window.__wiped=1;localStorage.clear();localStorage.setItem("echo-nosetup","1")');await pg.reload()
+      await pg.goto(URL);await pg.evaluate('window.__wiped=1;localStorage.clear();localStorage.setItem("echo-nosetup","1")');await pg.reload()
       await pg.fill('#nick','Dani');await pg.uncheck('#voice');await pg.click('#go')
       await pg.click(sel);await pg.wait_for_timeout(4500);await choose('Hi');await pg.wait_for_timeout(2600)
       await pg.screenshot(path=f'/workspace/shots/{kind}-1home.png')
@@ -45,7 +46,7 @@ async def main():
           for i in range(n):
             try: await pg.locator('.star').nth(i).click(timeout=4000)
             except Exception as ex: print('FAIL',i,await pg.inner_text('#app'));await pg.screenshot(path='/workspace/shots/fail.png');raise
-          await pg.wait_for_timeout(300);c=pg.locator('.choices button').first;await c.click();await c.click()
+          await pg.wait_for_timeout(300);c=pg.locator('.choices button').first;await c.click()
         if r==0: await pg.screenshot(path=f'/workspace/shots/{kind}-2game.png')
         await pg.wait_for_timeout(2500)
       await pg.wait_for_timeout(800);await dismiss()
@@ -64,7 +65,7 @@ async def main():
           if await pg.evaluate("!!(window.Dialogue&&Dialogue.waiting&&Dialogue.waiting())"):await pg.evaluate("Dialogue.advance()")   # Batch H / H13: lines stay up >= 6.5 s; tap-to-advance like a kid would
           if await pg.locator('.choices button').count():
             try:
-              c=pg.locator('.choices button').first;await c.click(timeout=800);await c.click(timeout=800)
+              c=pg.locator('.choices button').first;await c.click(timeout=800)
             except Exception:pass
           await pg.wait_for_timeout(200)
         raise AssertionError(until)

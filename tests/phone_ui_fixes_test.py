@@ -1,7 +1,7 @@
 # Oct 14 fixes: (3) speech bubble never covers the Echo at any perch; (6) a tap outside any open choice list closes it and does nothing else
-import asyncio,json
+import asyncio,json,sys
 from playwright.async_api import async_playwright
-URL='http://localhost:8765/'
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 async def setup(b,p,kind):
   pg=await b.new_page(**p.devices['iPhone 13']);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
@@ -34,9 +34,13 @@ async def main():
         assert await pg.evaluate("document.getElementById('b').style.display")=='none',(btn,'no tap reaction line')
       # a tap ON the list still works (does not dismiss)
       await pg.click('#play');await pg.wait_for_timeout(300);await pg.locator('#overlay .choices button').first.click();await pg.wait_for_timeout(200);assert await pg.locator('#overlay .choices').count()==0,'tap inside chooses'
+      # one-tap starts the game on that first pick; leave it so the puddle talk can show choices (runConv will not paint talk choices over #gs)
+      if await pg.locator('#gs,#quit').count():
+        await pg.evaluate("document.querySelectorAll('#gs,.full').forEach(e=>e.remove());document.getElementById('overlay').innerHTML='';__echo.home()")
+        await pg.wait_for_timeout(800);await pg.evaluate("document.getElementById('b').style.display='none'")
       await pg.mouse.click(10,200);await pg.wait_for_timeout(300)
       # conversation choices: tapping away = nobody answered -> carry-on line now, the talk goes on to its end
-      cid='whimber_puddle_talk' if kind=='owl' else 'slyte_puddle_talk'
+      cid='whimber_puddle_drop' if kind=='owl' else 'slyte_puddle_talk'
       await pg.evaluate(f"window.__said=[];window.__d=0;new MutationObserver(()=>{{const b=document.getElementById('b');if(b&&b.style.display!=='none'&&__said[__said.length-1]!==b.textContent)__said.push(b.textContent)}}).observe(document.body,{{subtree:true,childList:true,characterData:true,attributes:true}});Dialogue.cfg.lostThoughtChance=0;Dialogue.cfg.driftChances=[0,0,0];const c=Dialogue.lib.conversations.find(c=>c.trigger!=='x'&&c.nodes&&Object.values(c.nodes).some(n=>n.choices));__echo.runConv(Dialogue.lib.conversations.find(x=>x.id==='{cid}')?'{cid}':c.id,()=>window.__d=1)")
       await pg.wait_for_selector('#overlay .choices',timeout=8000);await pg.wait_for_timeout(300)
       await pg.mouse.click(20,250);await pg.wait_for_timeout(300);assert await pg.locator('#overlay .choices').count()==0,'conv choices closed'
