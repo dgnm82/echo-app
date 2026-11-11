@@ -1,6 +1,6 @@
 {
   "name": "Echo handheld \u2014 Full-screen preview (touch, layout, font) \u2014 ERASES ALL CHILD/ECHO SAVES",
-  "version": "3.5C full-screen preview v0v9c test d2002a6",
+  "version": "3.5C full-screen preview v0v9e test a4bb870",
   "home_assistant_domain": "",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,19 +8,19 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "echo_35c_visual_v0v9c_bootloader.bin",
+          "path": "echo_35c_visual_v0v9e_bootloader.bin",
           "offset": 0
         },
         {
-          "path": "echo_35c_visual_v0v9c_partitions.bin",
+          "path": "echo_35c_visual_v0v9e_partitions.bin",
           "offset": 32768
         },
         {
-          "path": "echo_35c_visual_v0v9c_app.bin",
+          "path": "echo_35c_visual_v0v9e_app.bin",
           "offset": 131072
         },
         {
-          "path": "echo_35c_visual_v0v9c_core.bin",
+          "path": "echo_35c_visual_v0v9e_core.bin",
           "offset": 3342336
         },
         {

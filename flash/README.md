@@ -24,13 +24,13 @@ USB-C data cable; download mode: hold BOOT, tap RESET, release BOOT. PWR about6s
 esptool.py --chip esp32s3 write_flash 0x0 echo_35c_core_preview_bootloader.bin 0x8000 echo_35c_core_preview_partitions.bin 0x20000 echo_35c_core_preview_app.bin 0x330000 echo_35c_core_preview_core.bin
 ```
 
-## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9c test, d2002a6)
+## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9e test, a4bb870)
 
-Replaces v0v9a as the Full-screen preview installer option, alongside the care/home preview above. **v0v9c test: live phone intro, title and return title stacked like the phone (logo, tagline, cast), cast uncovered.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9c`.
+Replaces v0v9c as the Full-screen preview installer option, alongside the care/home preview above. **v0v9e test: live phone intro with the title, pickers (animal family on one page) and invite screens laid out like the phone.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9e`.
 
 | Button | Parts |
 |---|---|
-| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9c_{bootloader,partitions,app,core}.bin` |
+| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9e_{bootloader,partitions,app,core}.bin` |
 | Start fresh — Full-screen preview (ERASES ALL SAVES) | The four parts plus `0xF80000 echo_35c_blank_saves.bin`; erases child/Echo/music/book/progress; keeps NVS |
 
 UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never update a device that should keep saves with a 16 MiB factory image: it blanks NVS and saves. The existing care/home preview, W4, bench, and 2-inch entries are unchanged.
@@ -38,7 +38,7 @@ UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never
 Manual keep-saves update from this folder:
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9c_bootloader.bin 0x8000 echo_35c_visual_v0v9c_partitions.bin 0x20000 echo_35c_visual_v0v9c_app.bin 0x330000 echo_35c_visual_v0v9c_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9e_bootloader.bin 0x8000 echo_35c_visual_v0v9e_partitions.bin 0x20000 echo_35c_visual_v0v9e_app.bin 0x330000 echo_35c_visual_v0v9e_core.bin
 ```
 
 The rest of this note is for the 2-inch board.
