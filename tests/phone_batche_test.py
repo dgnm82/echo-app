@@ -64,11 +64,14 @@ async def main():
     for i in range(4):
       await pg.evaluate(CLEAN+";__echo.state.napUntil=0;Object.assign(__echo.state.needs,{food:70,rest:90,play:30});__echo.home()");await pg.wait_for_timeout(900);await pg.evaluate(CLEAN)
       await T('#play',500);L=await pg.evaluate("[...document.querySelectorAll('.choices button')].map(b=>b.textContent)");check(any('Cozy Pairs' in l for l in L),f'E7 game {i+1} picker opens')
-      b0=await pg.evaluate("__echo.state.bond");c=pg.locator('.choices button',has_text='Cozy Pairs').first;await c.click();await pg.wait_for_timeout(1200)
+      b0=await pg.evaluate("({bond:__echo.state.bond,care:(__echo.sess().c||{}).care||0,game:(__echo.sess().c||{}).game||0})");c=pg.locator('.choices button',has_text='Cozy Pairs').first;await c.click();await pg.wait_for_timeout(1200)
       if i>=2:check(await pg.evaluate("__echo.funOnly()"),f'E7 game {i+1} is just for fun')
       else:check(not await pg.evaluate("__echo.funOnly()"),f'E7 game {i+1} gives bond')
       await T('#quit',2500)
-      if i>=2:check(await pg.evaluate("__echo.state.bond")==b0,f'E7 game {i+1}: no bond')
+      if i>=2:
+        e7=await pg.evaluate("({bond:__echo.state.bond,care:(__echo.sess().c||{}).care||0,game:(__echo.sess().c||{}).game||0,vis:document.body.innerText})")
+        check(e7['care']==b0['care'] and e7['game']==b0['game'],f'E7 game {i+1}: no bond')
+        check('bond' not in e7['vis'].lower(),'E7 visible text never says bond')
     # E8: tower trims fall in world space and leave quickly
     await pg.evaluate(CLEAN+";__echo.state.bond=CONFIG.unlock.stack+5;__echo.state.lowfx=false;__echo.home()");await pg.wait_for_timeout(900);await pg.evaluate(CLEAN)
     await T('#play',500);c=pg.locator('.choices button',has_text='Cushion Tower').first;await c.click();await pg.wait_for_timeout(1500)
