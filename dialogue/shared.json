@@ -732,6 +732,13 @@
         "short": "Shh..."
       }
     ],
+    "ui_or_invite_hello": [
+      {
+        "text": "Shh... listen. Something is humming!",
+        "expr": "happy",
+        "short": "Shh..."
+      }
+    ],
     "ui_or_invite_ask": [
       {
         "text": "Do you want to ask it to come with you?",

@@ -382,7 +382,8 @@ function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
   let k=0;const T=setInterval(()=>{if(!sc.isConnected)return clearInterval(T);k++;if(k%Math.round(fps/2)===0&&v.alive[1])al.style.backgroundImage=`url(${v.alive[(k/Math.round(fps/2))%2|0]})`;
     actors.forEach(a=>{if(a.own)return;const tk=a.st.ticks||[];if(++a.t>=(tk[a.f]||2)){a.t=0;a.f=(a.f+1)%a.st.frames}if(a.moving){a.x+=a.dir*a.speed;if(a.x>a.x1||a.x<a.x0){a.dir=-a.dir;a.x=Math.max(a.x0,Math.min(a.x1,a.x))}}place(a)})},Math.round(1000/fps));
   actors.forEach(place)})}
-function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${cls&&cls.includes('meadow')?'discover':'night'}"></div>${inner}</div>`)}
+function obSceneBg(cls){return cls&&cls.includes('orconvo')?'dusk':cls&&cls.includes('meadow')?'discover':'night'}
+function obScene(cls,inner){h(`<div class="scene ob ${cls||''}${lowFx()?' calm':''}"><div class="bg pxbg pxbg-${obSceneBg(cls)}"></div>${inner}</div>`)}
 function obLock(pos){return `<button class="oblock ${pos||'br'}" id="oblock" aria-label="Grown-ups corner: press and hold"><i style="background-image:url(px/origin/lock.png)"></i><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/></svg></button>`}
 function obWireLock(back){const b=document.getElementById('oblock');if(!b)return;let t=null,t0=0;
   const down=e=>{e.preventDefault();e.stopPropagation();t0=Date.now();b.classList.add('hold');t=setTimeout(()=>{b.classList.remove('hold');pcGate(back)},OBC.gate.holdMs)};
@@ -500,34 +501,51 @@ function orColours(fid){const F=FAM(),f=F[fid];S.origin.family=fid;S.vars.family
 const artA=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
 function orFamVars(fid){const F=FAM(),f=F[fid],A=F.animals||{},ws=(F.animalOrder||Object.keys(A)).filter(k=>A[k]&&A[k].family===fid).map(k=>A[k].word);
   const list=ws.length>1?ws.slice(0,-1).join(', ')+' or '+ws[ws.length-1]:(ws[0]||'');return {family:f.label,family_plural:f.plural,family_a:artA(f.label),family_animals:list?artA(list):'',family_echo:(f.ui&&f.ui.echoOf)||''}}
-// P3 hum + invite (one tap hears and asks; never timed)
+// P3 invite conversation: five one-tap beats on one dusk layout (Echo mounted once at 96px)
+function orWing(f,fid){return (f&&f.profile&&f.profile.locomotion==='flyer')||fid==='whimber'}
+function orSetBeat(b){const sc=$('.scene.ob');if(sc)sc.dataset.beat=b}
+function orSetPanel(html){const p=$('#orpanel');if(!p)return;if(!html){p.hidden=true;p.innerHTML='';p.classList.remove('orkeep');return}p.hidden=false;p.innerHTML=html}
+function orSetBr(html){const b=$('#orbr');if(b)b.innerHTML=html}
+function orGoOn(next){orSetBr(`<button class="obhint" id="orgo" type="button">Tap to go on</button>`);pickTap($('#orgo'),null,next)}
+function orMount(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid],wing=orWing(f,fid);
+  obScene(`orconvo orinvite${wing?' orwing':''}`,`<div class="ortop"><div class="obpanel small" id="orpanel" hidden></div></div>
+     <div class="obbub" id="obb" style="display:none"></div>
+     <div class="orlightform" id="orlf">${wing?'<i class="orperch" aria-hidden="true"></i>':''}<i class="orshadow" aria-hidden="true"></i><div class="orsprite">${obSprite(fid,o.seed,o.ramp,1)}</div><i class="ornote a">♪</i><i class="ornote b">♫</i></div>
+     <div class="orbr" id="orbr"></div>`)}
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);if(window.MusicFX)setTimeout(()=>MusicFX.homeSound(o.animal),500);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
-  obScene('orinvite meadow',`<div class="obpanel small">${U('ui_or_hum')}</div><div class="orlightform" id="orlf">${obSprite(fid,seed,o.ramp,1)}<i class="ornote a">♪</i><i class="ornote b">♫</i></div>
-   <div class="obbub" id="obb" style="display:none"></div><div class="obpanel small orask">${U('ui_or_invite_ask')}</div><button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
-  setTimeout(()=>{const l=orLine('invite_hum');if(l)obTalk(l)},700);
-  pickTap($('#orinv'),()=>say(U('ui_or_invite_btn')),()=>{if(orDeclines())orNotToday();else orYes()})}
+  orMount();orBeatHello()}
+function orBeatHello(){orSetBeat('hello');orSetPanel(U('ui_or_invite_hello'));const l=orLine('invite_hum');if(l)obTalk(l);orGoOn(orBeatAsk)}
+function orBeatAsk(){orSetBeat('ask');orSetPanel(U('ui_or_invite_ask'));const b=$('#obb');if(b)b.style.display='none';
+  orSetBr(`<button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
+  pickTap($('#orinv'),()=>say(U('ui_or_invite_btn')),()=>{if(orDeclines())orNotToday();else orBeatYes()})}
+function orBeatYes(){orSetBeat('yes');orSetPanel('');const F=FAM(),o=S.origin,f=F[o.family],el=document.querySelector('#orlf .px-echo');
+  SFX(f.music.arrival);if(el&&window.PIXEL){el.dataset.stage=1;obArrive(el,f.kind)}
+  const show=()=>{const l=orLine('invite_yes');if(l)obTalk(l);orGoOn(orBeatWho)};if(lowFx())show();else setTimeout(show,900)}
+function orBeatWho(){orSetBeat('who');orSetPanel('');const fid=S.origin.family,b=$('#obb');
+  if(b){b.style.display='';b.classList.add('orfamline');b.textContent=U('ui_or_family',0,orFamVars(fid));say(b.textContent)}orGoOn(orBeatGlow)}
+function orBeatGlow(){orSetBeat('glow');const F=FAM(),o=S.origin,fid=o.family,f=F[fid],b=$('#obb');if(b){b.style.display='none';b.classList.remove('orfamline')}
+  const lk=(o.animal&&F.animals[o.animal]&&F.animals[o.animal].look)||f.look_default,fl=window.PIXEL?PIXEL.variant(o.seed,f.sprite,o.ramp,o.fluff).fluff:0;
+  orSetPanel(`${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l,lk,fl)}</span>`).join('')}</div>`);
+  const p=$('#orpanel');if(p)p.classList.add('orkeep');orSetBr(`<button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
+  obGlowPaint();if(!PIXEL.AURA)setTimeout(obGlowPaint,600);$('#ornm').onclick=()=>{SFX('ui_tap');orName()}}
+function orFill(t,x){x=x||{};const v=Object.assign({},(S&&S.vars)||{},x);
+  if(window.Dialogue&&Dialogue.subst)return Dialogue.subst(String(t),(m,k,a)=>{if(k==='var')return v[a]!=null?String(v[a]):'';if(k==='child')return S&&S.vars&&('child_named' in S.vars)?S.child:'friend';if(k==='name')return (S&&S.g&&S.g.name)||(x.name||'');return v[k]!=null?String(v[k]):null});
+  return obFill(t,x)}
 function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
-  if(!l)return null;return {text:obFill(l.text),expr:l.expr||'happy',react:l.react}}
+  if(!l)return null;return {text:orFill(l.text),expr:l.expr||'happy',react:l.react}}
 function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
 // C2: the Echo arrives as notes that converge and resolve it paws-up (NoteFX.arrive); without NoteFX it just appears
 function obArrive(el,kind){window.__arrive=0;const go=()=>{window.__arrive=1;if(window.NoteFX&&NoteFX.arrive)NoteFX.arrive({el,fam:FID(kind),pal:el.dataset.pal,seed:(S.g&&S.g.seed||1)*3+1,lowfx:lowFx(),onDone:()=>{window.__arrive=2}});else window.__arrive=2};requestAnimationFrame(go)}
-// P4a yes: arrival (notes), keep-colours line, growth strip
-function orYes(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];const el=document.querySelector('#orlf .px-echo');
-  $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();
-  SFX(f.music.arrival);if(el&&window.PIXEL){el.dataset.stage=1;obArrive(el,f.kind)}   // C2: forms from notes (colour motes removed)
-  setTimeout(()=>{const l=orLine('invite_yes');if(l)obTalk(l)},900);
-  setTimeout(()=>{const hp=document.querySelector('.orinvite>.obpanel.small');if(hp)hp.remove();   // compact: the hum line has done its job
-    const lk=(o.animal&&F.animals[o.animal]&&F.animals[o.animal].look)||f.look_default,fl=window.PIXEL?PIXEL.variant(o.seed,f.sprite,o.ramp,o.fluff).fluff:0;app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="obbub orfamline">${U('ui_or_family',0,orFamVars(fid))}</div><div class="obpanel small orkeep">${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l,lk,fl)}</span>`).join('')}</div></div><button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
-    obGlowPaint();if(!PIXEL.AURA)setTimeout(obGlowPaint,600);$('#ornm').onclick=()=>{SFX('ui_tap');orName()}},2600)}
+function orYes(){orBeatYes()}
 // P4b not today: shy/happy bow, light drifts up as sparkles, ONE bubble, a song stamp, ONE button -> P1 at once
 function orNotToday(){const o=S.origin;o.declined=true;o.attempt=(o.attempt||0)+1;obSong();save();   // saved the moment it shows
-  $('#orinv').remove();const ask=document.querySelector('.orask');if(ask)ask.remove();const hum=document.querySelector('.orinvite .obpanel');if(hum)hum.remove();
+  orSetBeat('decline');orSetPanel('');
   const el=document.querySelector('#orlf .px-echo');if(el&&window.PIXEL){try{PIXEL.react(el,'happy')}catch(e){}}
   $('#orlf').classList.add('bow');setTimeout(()=>$('#orlf').classList.add('drift'),1400);
   const l=orLine('invite_not_today');if(l)obTalk(l);
   const A=FAM().animals[o.animal];
-  app.querySelector('.scene.ob').insertAdjacentHTML('beforeend',`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div><button class="btn obnextbtn" id="orff">${U('ui_or_find_friend')}</button>`);
+  orSetBr(`<div class="orstamp">${PIXEL.icon('sparkle')}<span>${U('ui_or_song_heard')} ${/^[aeiou]/i.test(A.word)?'an':'a'} ${A.word}</span></div><button class="btn obnextbtn" id="orff">${U('ui_or_find_friend')}</button>`);
   $('#orff').onclick=()=>{SFX('ui_tap');orSeen()}}
 // P5 naming: 6 names (seeded order), More, Type it (onboarding filter), Just "{family}"
 function orName(page){const F=FAM(),o=S.origin,f=F[o.family];page=page||0;const dn=F.animals[o.animal].default_name||f.default_name;S.vars.default_name=dn;const r=rnd(o.seed||1),L=f.names.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[L[i],L[j]]=[L[j],L[i]]}

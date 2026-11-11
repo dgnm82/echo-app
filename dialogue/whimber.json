@@ -4874,7 +4874,7 @@
     ],
     "invite_hum": [
       {
-        "text": "…You saw an owl. I'm the little song it hums.",
+        "text": "…You saw a {var:origin_animal}. I'm the little song it hums.",
         "expr": "curious",
         "short": "Ah… hello.",
         "gesture": "light-form, slow blink, 2 notes"

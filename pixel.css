@@ -12,6 +12,7 @@ html,body{background:#2E2452}
 .pxbg-night{background-image:url(px/bg_night_f0.png);animation:pxtw 1000ms steps(1) infinite}
 @keyframes pxtw{50%{background-image:url(px/bg_night_f1.png)}}
 .pxbg-discover{background-image:url(px/bg_discover.png)}
+.pxbg-dusk{background-color:#7A5592;background-image:linear-gradient(to bottom,#7A5592 0,#B676A6 21.875%,#E796A6 46.875%,#ECAAB0 100%);background-size:100% 100%;background-repeat:no-repeat;animation:none}
 .top b{font-weight:normal}
 .btn{min-height:26px;min-width:26px;border:1px solid #3B2A5C;background:#FFD27A;color:#3B2A5C;font-size:8px;font-weight:normal;padding:2px 3px;box-shadow:0 2px 0 #3B2A5C;line-height:10px;gap:1px}
 .btn:active{transform:translateY(2px);box-shadow:none;background:#F2A65A}
