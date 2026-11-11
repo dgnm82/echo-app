@@ -57,9 +57,9 @@ Offline decay/daily rules require trusted time. Configure the fixed UTC offset (
 63a6b0d98aeff752ed6f9f6cd6e527c9163f2c75981e5a8cc98b58d2d75accbb  echo_35c_core_preview_core.bin
 ```
 
-# 3.5C Full-screen preview (touch, layout, font) — v0v9a test
+# 3.5C Full-screen preview (touch, layout, font) — v0v9c test
 
-**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `182b428` (v0v9a test: live phone intro, crisp 2× pixels, clipping fixes). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v8 as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
+**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `d2002a6` (v0v9c test: live phone intro, title and return title stacked like the phone (logo, tagline, cast), cast uncovered). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9a as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
 
 **NOT verified on the board.**
 
@@ -69,32 +69,32 @@ Use **UPDATE — Full-screen preview (touch, layout, font)** in `flash/index.htm
 
 | Offset | Part | Bytes | SHA256 |
 |---|---|---:|---|
-| `0x0` | `echo_35c_visual_v0v9a_bootloader.bin` | 22320 | `c96d7ec95a4a2fecf75dc62cb39f4f6d8cc6a0b64976a0df0bdca925a5463b6a` |
-| `0x8000` | `echo_35c_visual_v0v9a_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
-| `0x20000` | `echo_35c_visual_v0v9a_app.bin` | 738032 | `36494fa76053bdeb6f5e5fa4fbd23ca02fceb2ca01fd2f1b98fd4b22461222b5` |
-| `0x330000` | `echo_35c_visual_v0v9a_core.bin` | 6291456 | `652904e86ac3ff4dcf583770e935d9cc6f2d9acbeb4e72fc5b07712ce8cda082` |
+| `0x0` | `echo_35c_visual_v0v9c_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
+| `0x8000` | `echo_35c_visual_v0v9c_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
+| `0x20000` | `echo_35c_visual_v0v9c_app.bin` | 741344 | `04ff543f3a8dee670fa133233cc3f32d507d2a57dd1be14c096751c3ee8937cd` |
+| `0x330000` | `echo_35c_visual_v0v9c_core.bin` | 6291456 | `9455b0310462469fd601a3c66cf3fe504f8fee6e3da5251bb986130372ef785d` |
 
-`flash/manifest_35c_visual_v0v9a.json` has these four parts; `flash/SHA256SUMS_visual_v0v9a` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
+`flash/manifest_35c_visual_v0v9c.json` has these four parts; `flash/SHA256SUMS_visual_v0v9c` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
 
 Manual four-part update from `flash/` (port selection omitted):
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9a_bootloader.bin 0x8000 echo_35c_visual_v0v9a_partitions.bin 0x20000 echo_35c_visual_v0v9a_app.bin 0x330000 echo_35c_visual_v0v9a_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9c_bootloader.bin 0x8000 echo_35c_visual_v0v9c_partitions.bin 0x20000 echo_35c_visual_v0v9c_app.bin 0x330000 echo_35c_visual_v0v9c_core.bin
 ```
 
 ## Destructive alternatives — NOT UPDATE
 
-- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9a_fresh.json` labels this erasure.
-- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v9a.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `67ee65bb97bf1c37a06112756be3461b6c32e6d123fedd5c2d28f40c02a856a9`.
+- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9c_fresh.json` labels this erasure.
+- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v9c.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `0836cac18e74b34c4fd441ddfbc63fda565539d4331131c9150a6c683492819d`.
 
 The care/home preview **Start fresh** button still installs the care/home preview, not this build.
 
 ## Part SHA256s
 
 ```text
-c96d7ec95a4a2fecf75dc62cb39f4f6d8cc6a0b64976a0df0bdca925a5463b6a  echo_35c_visual_v0v9a_bootloader.bin
-3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9a_partitions.bin
-36494fa76053bdeb6f5e5fa4fbd23ca02fceb2ca01fd2f1b98fd4b22461222b5  echo_35c_visual_v0v9a_app.bin
-652904e86ac3ff4dcf583770e935d9cc6f2d9acbeb4e72fc5b07712ce8cda082  echo_35c_visual_v0v9a_core.bin
+84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9c_bootloader.bin
+3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9c_partitions.bin
+04ff543f3a8dee670fa133233cc3f32d507d2a57dd1be14c096751c3ee8937cd  echo_35c_visual_v0v9c_app.bin
+9455b0310462469fd601a3c66cf3fe504f8fee6e3da5251bb986130372ef785d  echo_35c_visual_v0v9c_core.bin
 043e238a765f7cfbc62596a50e53c8ffb6b188a99357b0ebede251725d67589f  echo_35c_blank_saves.bin
 ```
