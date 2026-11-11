@@ -106,23 +106,28 @@ function decide(frames,maxFrames){const V=voter();let n=0,person=0,doubt=0;const
   return {animal:null,reason:person>n/2?'person':doubt>n/2?'doubt':'timeout',frames:n}}
 // ---------- live session (browser only). cb: {onState(s), onMatch({animal,family,chip,conf}), onUnmatched(reason), onPerson(bool)}
 function supported(){return !!(W.navigator&&W.navigator.mediaDevices&&W.navigator.mediaDevices.getUserMedia)}
-function start(video,families,cb){cb=cb||{};let stream=null,timer=null,dead=false,t0=Date.now(),nFr=0,nDoubt=0;const V=voter();
+function start(video,families,cb){cb=cb||{};let stream=null,timer=null,scanTo=null,dead=false,nFr=0,nDoubt=0;const V=voter();
   const cv=W.document.createElement('canvas');cv.width=SIZE;cv.height=SIZE;const cx=cv.getContext('2d',{willReadFrequently:true});
   const FD=W.FaceDetector?new W.FaceDetector({fastMode:true,maxDetectedFaces:1}):null;
-  function stop(){dead=true;clearInterval(timer);if(stream)stream.getTracks().forEach(t=>{try{t.stop()}catch(e){}});stream=null;if(video){try{video.srcObject=null}catch(e){}}try{cx.clearRect(0,0,SIZE,SIZE)}catch(e){}}
+  // One deadline, armed here and cleared in stop(): independent of getUserMedia, readyState, person/doubt, and classify await.
+  // Simpler than a top-of-tick check, which would still miss a hung getUserMedia (the interval is only armed after it resolves).
+  function stop(){dead=true;if(timer){clearInterval(timer);timer=null}if(scanTo){clearTimeout(scanTo);scanTo=null}if(stream)stream.getTracks().forEach(t=>{try{t.stop()}catch(e){}});stream=null;if(video){try{video.srcObject=null}catch(e){}}try{cx.clearRect(0,0,SIZE,SIZE)}catch(e){}}
+  function unmatched(why){if(dead)return;stop();cb.onUnmatched&&cb.onUnmatched(why)}
   async function tick(){if(dead||!video||video.readyState<2)return;
     const vw=video.videoWidth,vh=video.videoHeight,s=Math.min(vw,vh);cx.drawImage(video,(vw-s)/2,(vh-s)/2,s,s,0,0,SIZE,SIZE);
     let faces=0;if(FD){try{faces=(await FD.detect(cv)).length}catch(e){}}
+    if(dead)return;
     const img=cx.getImageData(0,0,SIZE,SIZE),f=features(img.data,SIZE,SIZE);
     if(personGate(f,faces)){nFr++;nDoubt++;cx.clearRect(0,0,SIZE,SIZE);V.reset();cb.onPerson&&cb.onPerson(true);return}   // dropped immediately, never analysed further
     cb.onPerson&&cb.onPerson(false);nFr++;if(doubtful(f)){nDoubt++;cx.clearRect(0,0,SIZE,SIZE);V.reset();return}   // H1: in doubt -> no vote
     let r=null;if(W.ECHO_VISION&&W.ECHO_VISION.classify){try{const out=await W.ECHO_VISION.classify(img);r=mapLabels(out&&out.labels,families.animals)}catch(e){r=null}}
+    if(dead)return;
     if(!r)r=classify(f);cx.clearRect(0,0,SIZE,SIZE);
-    const hit=V.push(r);if(hit&&nDoubt/Math.max(1,nFr)>DOUBT_MAX){stop();cb.onUnmatched&&cb.onUnmatched('doubt');return}if(hit){const A=families.animals[hit],fam=families[A.family],sn=snapChip(fam,f.dom);stop();cb.onMatch&&cb.onMatch({animal:hit,family:A.family,chip:sn&&sn.chip,conf:r.conf});return}
-    if(Date.now()-t0>SCAN_TIMEOUT_MS){stop();cb.onUnmatched&&cb.onUnmatched('timeout')}}
+    const hit=V.push(r);if(hit&&nDoubt/Math.max(1,nFr)>DOUBT_MAX){unmatched('doubt');return}if(hit){const A=families.animals[hit],fam=families[A.family],sn=snapChip(fam,f.dom);if(dead)return;stop();cb.onMatch&&cb.onMatch({animal:hit,family:A.family,chip:sn&&sn.chip,conf:r.conf})}}
+  scanTo=setTimeout(()=>unmatched('timeout'),SCAN_TIMEOUT_MS);
   W.navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:640},height:{ideal:640}},audio:false}).then(s=>{if(dead){s.getTracks().forEach(t=>t.stop());return}stream=s;video.srcObject=s;video.setAttribute('playsinline','');video.muted=true;
     const p=video.play();if(p&&p.catch)p.catch(()=>{});cb.onState&&cb.onState('scanning');timer=setInterval(tick,Math.round(1000/FPS))})
-   .catch(e=>{dead=true;cb.onUnmatched&&cb.onUnmatched(e&&e.name==='NotAllowedError'?'denied':'no_camera')});
+   .catch(e=>{unmatched(e&&e.name==='NotAllowedError'?'denied':'no_camera')});
   return {stop,get live(){return !dead}}}
 const API={oklab,okHex,dE,hex2rgb,TAXONOMY,mapLabels,PROTO,features,classify,patternOf,shapeOf,snapChip,personGate,voter,supported,start,
   CONF_MIN,STREAK,SCAN_TIMEOUT_MS,FPS,SIZE,SKIN_GATE,DOUBT_SKIN,DOUBT_MAX,doubtful,decide};

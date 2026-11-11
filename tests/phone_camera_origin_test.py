@@ -45,16 +45,19 @@ async def main():
     check((await pg.inner_text('#orcamhint')).strip()==band('ui_or_cam_hint','7-8'),'A: hint copy is the 7-8 line (one band)')
     await pg.wait_for_timeout(1500);live=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return !!(v&&v.srcObject&&v.srcObject.getTracks().some(t=>t.readyState==='live'))})()")
     check(live,'A: the fake camera stream is live in the window');await pg.locator('#screen').screenshot(path=f'{OUT}/a-window.png')
+    pick_early=await pg.evaluate("(()=>{const p=document.getElementById('orpick'),m=document.getElementById('orcammiss'),r=document.getElementById('orretry');const vis=el=>!!(el&&!el.hidden&&el.offsetParent!==null);return {pick:vis(p),miss:vis(m),retry:vis(r)}})()")
+    check(pick_early.get('pick') and not pick_early.get('miss') and not pick_early.get('retry'),'A: Pick your Echo is visible at <=1.5s; miss + retry stay hidden until a miss')
     await common(pg,'A window')
-    try:await pg.wait_for_selector('#orcamctl:not([hidden]),#orinv',timeout=20000)
+    try:await pg.wait_for_selector('#orcammiss:not([hidden]),#orinv',timeout=20000)
     except Exception:pass
-    if await pg.locator('#orcamctl:not([hidden])').count():
+    if await pg.locator('#orcammiss:not([hidden])').count():
       check((await pg.inner_text('#orcammiss')).strip()==band('ui_or_cam_miss','7-8'),'A: miss copy (7-8, one band)')
       check(band('ui_or_cam_retry','7-8') in await pg.inner_text('#orretry') and 'Pick' in await pg.inner_text('#orpick'),'A: retry + pick buttons')
       st=await pg.evaluate("(()=>{const v=document.getElementById('orvid');return v?!!v.srcObject:false})()");check(not st,'A: the camera is stopped after a miss')
       await pg.locator('#screen').screenshot(path=f'{OUT}/a-miss.png');await common(pg,'A miss')
-      await T(pg,'#orretry',800);check(await pg.locator('#orvid').count()==1 and await pg.locator('#orcamctl[hidden]').count()==1,'A: retry re-opens the Magic Window')
-      try:await pg.wait_for_selector('#orcamctl:not([hidden])',timeout=20000)
+      await T(pg,'#orretry',800);retry_st=await pg.evaluate("(()=>{const v=document.getElementById('orvid'),p=document.getElementById('orpick'),m=document.getElementById('orcammiss'),r=document.getElementById('orretry');const vis=el=>!!(el&&!el.hidden&&el.offsetParent!==null);return {vid:!!v,pick:vis(p),miss:vis(m),retry:vis(r)}})()")
+      check(retry_st.get('vid') and retry_st.get('pick') and not retry_st.get('miss') and not retry_st.get('retry'),'A: retry re-opens the Magic Window (Pick still visible; miss + retry hidden)')
+      try:await pg.wait_for_selector('#orcammiss:not([hidden])',timeout=20000)
       except Exception:pass
       await T(pg,'#orpick',600);check(await pg.locator('.orfamcard').count()==3,'A: Pick your Echo -> the family-first picker (3 families)')
       check(await pg.evaluate("!document.getElementById('orvid')"),'A: the window is gone on the picker')
@@ -63,7 +66,7 @@ async def main():
     await ctx.close()
     # B) a confident vision label -> straight to the invite with that animal
     ctx,pg=await to_origin(b,p,errs,reqs,VISION)
-    try:await pg.wait_for_selector('#orinv,#orcamctl:not([hidden])',timeout=20000)
+    try:await pg.wait_for_selector('#orinv,#orcammiss:not([hidden])',timeout=20000)
     except Exception:pass
     o=await pg.evaluate("__echo.state.origin||{}")
     if await pg.locator('#orinv').count():

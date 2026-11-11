@@ -42,7 +42,7 @@ ok(/id="orretry"/.test(game)&&/id="orpick"/.test(game),'H2: unmatched scan -> re
   ok(game.includes("L.find(v=>bandOf(v)===b)||L.find(v=>bandOf(v)==='all')||L[OR_BANDS.indexOf(b)]||L[1]||L[0]"),'H1 copy: UB() picks by age band, else [1]');
   const oc=game.slice(game.indexOf('function orCamera()'),game.indexOf('// Stage 3: freeze'));for(const k of K.filter(k=>k!=='ui_or_cam_found'))ok(oc.includes(`UB('${k}')`),`H1 copy: Magic Window uses ${k}`);
   ok(!/Show me an animal!|'Try again'|'Pick an Echo'/.test(oc),'H1 copy: no hard-coded camera strings left');
-  ok(/id="orcamhint"/.test(oc)&&/class="orcamctl"[^>]*hidden><p class="orcammiss"[^`]*id="orretry"[^`]*id="orpick"/.test(oc),'H1 copy: hint under the window; miss shown with retry + pick');
+  ok(/id="orcamhint"/.test(oc)&&/id="orcamctl"/.test(oc)&&!/class="orcamctl"[^>]*\bhidden\b/.test(oc)&&/id="orcammiss"[^>]*\bhidden\b/.test(oc)&&/id="orretry"[^>]*\bhidden\b/.test(oc)&&/id="orpick"/.test(oc),'H1 copy: hint under the window; Pick visible from the start; miss + retry after a miss');
   ok(/UB\('ui_or_cam_found'\)/.test(game.slice(game.indexOf('function orCamMatched'),game.indexOf('function orCamMatched')+1400)),"H1 copy: 'found' at the shimmer");
   ok(/<div class="orbadge" id="orbadge" hidden aria-hidden="true">🐾 \+ 🧸<\/div>/.test(oc),'H1: person badge stays wordless (🐾 + 🧸)')}
 // ---------------- H1 conservative person gate
@@ -52,7 +52,7 @@ ok(/id="orretry"/.test(game)&&/id="orpick"/.test(game),'H2: unmatched scan -> re
   ok(C.decide([fr(0,0),fr(.2,0),fr(0,0),fr(0,0),fr(0,0)]).animal===null||C.decide([fr(0,0),fr(.2,0),fr(0,0),fr(0,0),fr(0,0)]).frames>=5,'a doubtful frame breaks the streak');
   ok(C.decide([fr(.5,0),fr(0,0),fr(0,0),fr(0,0),fr(0,0)]).animal===null,'1 person frame in 5 -> picker (doubt share > 15%)');
   ok(C.decide(Array.from({length:30},()=>fr(.5,0))).reason==='person','a person-only scan -> picker');
-  ok(/nDoubt\/Math\.max\(1,nFr\)>DOUBT_MAX\)\{stop\(\);cb\.onUnmatched&&cb\.onUnmatched\('doubt'\)/.test(rd('camera_match.js')),'live loop: doubt -> unmatched (picker)')}
+  ok(/nDoubt\/Math\.max\(1,nFr\)>DOUBT_MAX\)\{unmatched\('doubt'\)/.test(rd('camera_match.js')),'live loop: doubt -> unmatched (picker)')}
 ok(/orCamMatched[\s\S]{0,900}src:'camera'[\s\S]{0,700}orInvite\(\)/.test(game),'H2: a match goes straight to orInvite with animal + ramp');
 ok(/function orSeenFamily\(\)/.test(game)&&/function orSeenAnimal\(fid\)/.test(game)&&/id="orback"/.test(game),'H3: family first, then the Echo within the family, with Back');
 {const F=W.FAMILIES;ok(F.order.length===3&&F.animalOrder.filter(a=>F.animals[a].family==='twitchel').length===7,'H3: Purrlings step shows exactly the 7 Purrlings')}

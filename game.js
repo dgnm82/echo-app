@@ -456,15 +456,16 @@ function orCamera(){const F=FAM();orCamStop();
   obScene('orcam',`<div class="obpanel small"><b id="orcamask">${UB('ui_or_cam_ask')}</b></div>
    <div class="orwin" id="orwin"><video id="orvid" playsinline muted autoplay aria-label="Magic Window"></video><div class="orscan"></div><div class="orbadge" id="orbadge" hidden aria-hidden="true">🐾 + 🧸</div><div class="ornotes" id="ornotes"></div></div>
    <p class="orcamhint" id="orcamhint">${UB('ui_or_cam_hint')}</p>
-   <div class="orcamctl" id="orcamctl" hidden><p class="orcammiss" id="orcammiss">${UB('ui_or_cam_miss')}</p><button class="btn" id="orretry">${PI('✨')}<span>${UB('ui_or_cam_retry')}</span></button><button class="btn" id="orpick">${PI('🐾')}<span>${UB('ui_or_cam_pick')}</span></button></div>`);
+   <div class="orcamctl" id="orcamctl"><p class="orcammiss" id="orcammiss" hidden>${UB('ui_or_cam_miss')}</p><button class="btn" id="orretry" hidden>${PI('✨')}<span>${UB('ui_or_cam_retry')}</span></button><button class="btn" id="orpick">${PI('🐾')}<span>${UB('ui_or_cam_pick')}</span></button></div>`);
   const vid=$('#orvid'),badge=$('#orbadge');
+  const armPick=()=>{const p=$('#orpick');if(p)p.onclick=()=>{SFX('ui_tap');orSeenPicker()}};armPick();
   const unmatched=why=>{orCamera.sess=null;orCamera.misses=(orCamera.misses||0)+1;if(why==='denied'||why==='no_camera')return orSeenPicker();   // no camera / declined -> straight to the picker
-    const h=$('#orcamhint');if(h)h.hidden=true;const c=$('#orcamctl');if(!c)return;c.hidden=false;$('#orretry').onclick=()=>{SFX('ui_tap');orCamera()};$('#orpick').onclick=()=>{SFX('ui_tap');orSeenPicker()}};
+    const h=$('#orcamhint');if(h)h.hidden=true;const miss=$('#orcammiss'),retry=$('#orretry');if(miss)miss.hidden=false;if(retry){retry.hidden=false;retry.onclick=()=>{SFX('ui_tap');orCamera()}}armPick()};
   orCamera.sess=CamMatch.start(vid,F,{onPerson:on=>{if(badge)badge.hidden=!on},onUnmatched:unmatched,
     onMatch:m=>orCamMatched(m,vid)})}
 // Stage 3: freeze 120 ms -> 24 glowing notes within 450 ms -> home sound + family motif -> orInvite() with family, animal, ramp
 function orCamMatched(m,vid){const F=FAM(),A=F.animals[m.animal],f=F[m.family];if(!A||!f)return orSeenPicker();
-  try{if(vid)vid.pause()}catch(e){}const win=$('#orwin');if(win)win.classList.add('frozen');
+  try{if(vid)vid.pause()}catch(e){}const ctl=$('#orcamctl');if(ctl)ctl.hidden=true;const win=$('#orwin');if(win)win.classList.add('frozen');
   S.origin.animal=m.animal;S.vars.origin_animal=A.word;S.origin.family=m.family;S.vars.family=f.label;S.vars.family_plural=f.plural;
   const c=m.chip||f.chips.find(x=>x.real);Object.assign(S.origin,{ramp:c.ramp,accent:null,chip:c.id,src:'camera'});save();
   setTimeout(()=>{if(win)win.classList.add('dissolve');const box=$('#ornotes');{const h=$('#orcamhint'),q=$('#orcamask'),t=UB('ui_or_cam_found');if(h){h.hidden=false;h.textContent=t;h.classList.add('found')}if(q)q.textContent=t}   // H1: 'found' at the shimmer

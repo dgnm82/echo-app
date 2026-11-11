@@ -393,7 +393,7 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 .orcam .orcamnote{position:absolute;color:#FFD27A;font-size:9px;opacity:0;animation:orcamnote 700ms steps(7,end) forwards}
 @keyframes orcamnote{0%{opacity:0;transform:translateY(4px)}30%{opacity:1}100%{opacity:0;transform:translateY(-18px)}}
 .orcam .orcamctl{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
-.orcam .orcamctl[hidden],.orcam .orcamhint[hidden]{display:none}
+.orcam .orcamctl[hidden],.orcam .orcamhint[hidden],.orcam .orcammiss[hidden],.orcam #orretry[hidden]{display:none}
 .orcam .orcamhint{margin:4px 8px 0;text-align:center;font-size:8px;line-height:10px;color:#FFF6DD;text-shadow:1px 1px 0 #2A1E3A}
 .orcam .orcamhint.found{color:#FFD27A}
 .orcam .orcammiss{flex-basis:100%;margin:2px 8px;text-align:center;font-size:8px;line-height:10px;color:#FFF6DD;text-shadow:1px 1px 0 #2A1E3A}
