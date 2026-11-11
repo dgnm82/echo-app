@@ -507,24 +507,25 @@ function orSetBeat(b){const sc=$('.scene.ob');if(sc)sc.dataset.beat=b}
 function orSetPanel(html){const p=$('#orpanel');if(!p)return;if(!html){p.hidden=true;p.innerHTML='';p.classList.remove('orkeep');return}p.hidden=false;p.innerHTML=html}
 function orSetBr(html){const b=$('#orbr');if(b)b.innerHTML=html}
 function orGoOn(next){orSetBr(`<button class="obhint" id="orgo" type="button">Tap to go on</button>`);pickTap($('#orgo'),null,next)}
+function orBubShow(on){const b=$('#obb'),w=$('#obbwrap');if(b)b.style.display=on?'':'none';if(w)w.style.display=on?'':'none'}
 function orMount(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid],wing=orWing(f,fid);
   obScene(`orconvo orinvite${wing?' orwing':''}`,`<div class="ortop"><div class="obpanel small" id="orpanel" hidden></div></div>
-     <div class="obbub" id="obb" style="display:none"></div>
+     <div class="obbubwrap" id="obbwrap" style="display:none"><div class="obbub" id="obb"></div></div>
      <div class="orlightform" id="orlf">${wing?'<i class="orperch" aria-hidden="true"></i>':''}<i class="orshadow" aria-hidden="true"></i><div class="orsprite">${obSprite(fid,o.seed,o.ramp,1)}</div><i class="ornote a">♪</i><i class="ornote b">♫</i></div>
      <div class="orbr" id="orbr"></div>`)}
 async function orInvite(){const F=FAM(),o=S.origin,fid=o.family,f=F[fid];await Dialogue.load(f.dialogue);if(window.MusicFX)setTimeout(()=>MusicFX.homeSound(o.animal),500);
   const seed=(S.oseed+o.idx*7919+o.attempt*104729)>>>0||1;o.seed=seed;
   orMount();orBeatHello()}
 function orBeatHello(){orSetBeat('hello');orSetPanel(U('ui_or_invite_hello'));const l=orLine('invite_hum');if(l)obTalk(l);orGoOn(orBeatAsk)}
-function orBeatAsk(){orSetBeat('ask');orSetPanel(U('ui_or_invite_ask'));const b=$('#obb');if(b)b.style.display='none';
+function orBeatAsk(){orSetBeat('ask');orSetPanel(U('ui_or_invite_ask'));orBubShow(0);
   orSetBr(`<button class="btn orinv" id="orinv">${U('ui_or_invite_btn')}</button>`);
   pickTap($('#orinv'),()=>say(U('ui_or_invite_btn')),()=>{if(orDeclines())orNotToday();else orBeatYes()})}
 function orBeatYes(){orSetBeat('yes');orSetPanel('');orSetBr('');const F=FAM(),o=S.origin,f=F[o.family],el=document.querySelector('#orlf .px-echo');
   SFX(f.music.arrival);if(el&&window.PIXEL){el.dataset.stage=1;obArrive(el,f.kind)}
   const show=()=>{const l=orLine('invite_yes');if(l)obTalk(l);orGoOn(orBeatWho)};if(lowFx())show();else setTimeout(show,900)}
 function orBeatWho(){orSetBeat('who');orSetPanel('');const fid=S.origin.family,b=$('#obb');
-  if(b){b.style.display='';b.classList.add('orfamline');b.textContent=U('ui_or_family',0,orFamVars(fid));say(b.textContent)}orGoOn(orBeatGlow)}
-function orBeatGlow(){orSetBeat('glow');const F=FAM(),o=S.origin,fid=o.family,f=F[fid],b=$('#obb');if(b){b.style.display='none';b.classList.remove('orfamline')}
+  if(b){orBubShow(1);b.classList.add('orfamline');b.textContent=U('ui_or_family',0,orFamVars(fid));say(b.textContent)}orGoOn(orBeatGlow)}
+function orBeatGlow(){orSetBeat('glow');const F=FAM(),o=S.origin,fid=o.family,f=F[fid],b=$('#obb');if(b){orBubShow(0);b.classList.remove('orfamline')}
   const lk=(o.animal&&F.animals[o.animal]&&F.animals[o.animal].look)||f.look_default,fl=window.PIXEL?PIXEL.variant(o.seed,f.sprite,o.ramp,o.fluff).fluff:0;
   orSetPanel(`${U('ui_or_keep_colours')}<div class="orstrip">${[1,2,3,5].map(l=>`<span>${obGlow(fid,o.seed,o.ramp,l,lk,fl)}</span>`).join('')}</div>`);
   const p=$('#orpanel');if(p)p.classList.add('orkeep');orSetBr(`<button class="btn obnextbtn" id="ornm">&gt; Next</button>`);
@@ -534,7 +535,7 @@ function orFill(t,x){x=x||{};const v=Object.assign({},(S&&S.vars)||{},x);
   return obFill(t,x)}
 function orLine(k){const L=(Dialogue.lib&&Dialogue.lib.barks[k])||[];const ok=L.filter(l=>Dialogue.check(l.cond,{vars:S.vars}));const l=ok[Math.floor(Math.random()*ok.length)];
   if(!l)return null;return {text:orFill(l.text),expr:l.expr||'happy',react:l.react}}
-function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;b.style.display='';say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>{b.style.display='none'},ms)}
+function obTalk(l,ms){const b=$('#obb');if(!b)return;b.textContent=l.text;orBubShow(1);say(l.text,l.expr);clearTimeout(obTalk.t);if(ms)obTalk.t=setTimeout(()=>orBubShow(0),ms)}
 // C2: the Echo arrives as notes that converge and resolve it paws-up (NoteFX.arrive); without NoteFX it just appears
 function obArrive(el,kind){window.__arrive=0;const go=()=>{window.__arrive=1;if(window.NoteFX&&NoteFX.arrive)NoteFX.arrive({el,fam:FID(kind),pal:el.dataset.pal,seed:(S.g&&S.g.seed||1)*3+1,lowfx:lowFx(),onDone:()=>{window.__arrive=2}});else window.__arrive=2};requestAnimationFrame(go)}
 function orYes(){orBeatYes()}

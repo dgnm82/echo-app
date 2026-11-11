@@ -284,10 +284,12 @@ input{font-size:20px;padding:12px;border-radius:12px;border:0;width:220px;text-a
 .scene.ob.orconvo .orshadow{position:absolute;left:16px;bottom:2px;width:48px;height:8px;background:rgba(35,24,58,.35);border-radius:50%;z-index:0;pointer-events:none}
 .scene.ob.orconvo .orperch{position:absolute;left:4px;bottom:-8px;width:80px;height:5px;background:#7A4A30;box-shadow:0 2px 0 #5A3424;z-index:0;pointer-events:none}
 .scene.ob.orconvo .orperch::after{content:"";position:absolute;right:8px;top:-3px;width:4px;height:6px;background:#7A4A30;box-shadow:1px 0 0 #5A3424}
-.scene.ob.orconvo .obbub{position:absolute;left:8px;bottom:112px;margin:0;max-width:164px;z-index:3}
-.scene.ob.orconvo.orwing .obbub{bottom:116px}
-.scene.ob.orconvo .obbub::before{top:auto;bottom:-6px;left:22px;margin-left:0;border:4px solid transparent;border-bottom:0;border-top:6px solid #3b2a5c}
-.scene.ob.orconvo .obbub::after{top:auto;bottom:-4px;left:23px;margin-left:0;border:3px solid transparent;border-bottom:0;border-top:5px solid #fff6e6}
+.scene.ob.orconvo .obbubwrap{position:absolute;left:8px;bottom:112px;margin:0;max-width:164px;z-index:3}
+.scene.ob.orconvo.orwing .obbubwrap{bottom:116px}
+.scene.ob.orconvo .obbubwrap .obbub{position:relative;left:auto;bottom:auto;margin:0}
+.scene.ob.orconvo .obbubwrap .obbub::before,.scene.ob.orconvo .obbubwrap .obbub::after{content:none}
+.scene.ob.orconvo .obbubwrap::before{content:"";position:absolute;top:auto;bottom:-6px;left:22px;margin-left:0;border:4px solid transparent;border-bottom:0;border-top:6px solid #3b2a5c}
+.scene.ob.orconvo .obbubwrap::after{content:"";position:absolute;top:auto;bottom:-4px;left:23px;margin-left:0;border:3px solid transparent;border-bottom:0;border-top:5px solid #fff6e6}
 .scene.ob.orconvo .orbr{position:absolute;right:6px;bottom:6px;left:112px;text-align:right;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .scene.ob.orconvo .orbr .btn,.scene.ob.orconvo .orbr .obnextbtn{position:static!important;margin:0;min-width:0}
 .scene.ob.orconvo .orbr .obhint{background:none;border:0;color:#fff6e6;font:inherit;font-size:8px;line-height:10px;text-shadow:1px 1px 0 #23183a;padding:4px 2px;cursor:pointer;text-align:right}

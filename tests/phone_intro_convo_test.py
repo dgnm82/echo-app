@@ -23,7 +23,7 @@ ART="""(()=>{const sc=document.getElementById('app')||document.getElementById('s
   const lf=document.getElementById('orlf');
   const bub=document.getElementById('obb');
   const vis=el=>!!(el&&el.getClientRects().length&&getComputedStyle(el).display!=='none'&&!el.hidden);
-  const tail=(()=>{if(!vis(bub))return null;const s=getComputedStyle(bub,'::before');
+  const tail=(()=>{const host=document.getElementById('obbwrap')||bub;if(!vis(bub))return null;const s=getComputedStyle(host,'::before');
     return {top:parseFloat(s.borderTopWidth)||0,bottom:parseFloat(s.borderBottomWidth)||0,topC:s.borderTopColor,botC:s.borderBottomColor}})();
   return {beat:((document.querySelector('.scene.ob')||{}).dataset||{}).beat||'',
     bg:bg?{cls:bg.className,img:getComputedStyle(bg).backgroundImage}:null,
