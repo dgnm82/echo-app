@@ -1,6 +1,6 @@
 {
   "name": "Echo handheld \u2014 Full-screen preview (touch, layout, font) \u2014 UPDATE (keeps saves/NVS)",
-  "version": "3.5C full-screen preview v0v6 e6bc253",
+  "version": "3.5C full-screen preview v0v8 97de344",
   "home_assistant_domain": "",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,19 +8,19 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "echo_35c_visual_v0v6_bootloader.bin",
+          "path": "echo_35c_visual_v0v8_bootloader.bin",
           "offset": 0
         },
         {
-          "path": "echo_35c_visual_v0v6_partitions.bin",
+          "path": "echo_35c_visual_v0v8_partitions.bin",
           "offset": 32768
         },
         {
-          "path": "echo_35c_visual_v0v6_app.bin",
+          "path": "echo_35c_visual_v0v8_app.bin",
           "offset": 131072
         },
         {
-          "path": "echo_35c_visual_v0v6_core.bin",
+          "path": "echo_35c_visual_v0v8_core.bin",
           "offset": 3342336
         }
       ]
