@@ -1,0 +1,33 @@
+{
+  "name": "Echo handheld \u2014 Live intro preview (v0v9i: Games 1 - the games play in phone-core, 4-button home bar with the phone icons, Play list on one screen, phone end card + saved per-level bests, EiB invite, Pairs pictures, gold glow, header icon buttons, Catch HUD ×N; phone 4e44b31f) \u2014 ERASES ALL CHILD/ECHO SAVES",
+  "version": "3.5C live-intro preview v0v9i daf9d1e",
+  "home_assistant_domain": "",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "echo_35c_visual_v0v9i_bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "echo_35c_visual_v0v9i_partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "echo_35c_visual_v0v9i_app.bin",
+          "offset": 131072
+        },
+        {
+          "path": "echo_35c_visual_v0v9i_core.bin",
+          "offset": 3342336
+        },
+        {
+          "path": "echo_35c_blank_saves.bin",
+          "offset": 16252928
+        }
+      ]
+    }
+  ]
+}
