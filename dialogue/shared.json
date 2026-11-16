@@ -431,7 +431,7 @@
     ],
     "ui_ob_name_hint": [
       {
-        "text": "A first name or a nickname. A grown-up can help!",
+        "text": "A first name or a nickname.",
         "expr": "happy",
         "short": "A first name or a nickname."
       }
