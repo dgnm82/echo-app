@@ -57,9 +57,9 @@ Offline decay/daily rules require trusted time. Configure the fixed UTC offset (
 63a6b0d98aeff752ed6f9f6cd6e527c9163f2c75981e5a8cc98b58d2d75accbb  echo_35c_core_preview_core.bin
 ```
 
-# 3.5C Full-screen preview (touch, layout, font) — v0v9i test
+# 3.5C Full-screen preview (touch, layout, font) — v0v9k test
 
-**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `daf9d1e` (live-intro; v0v9i test: Games 1 (4-button home bar, all games on one Play screen, Pairs/Catch/Meadow Dash/Stack/Echo It Back playable, end cards and best scores; in-game art is still simple placeholder art); phone 4e44b31f). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9h as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
+**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `2c81df8` (live-intro; v0v9k test: speech bubbles use the phone's text size and wrapping and sit near the Echo; in-game top bar with Done; phone backgrounds and item art for Catch and Stack; 240 framing fixes. Run, Pairs and the Purrlings Catch scene still use simple art; phone 83d74e80). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9i as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
 
 **NOT verified on the board.**
 
@@ -69,32 +69,32 @@ Use **UPDATE — Full-screen preview (touch, layout, font)** in `flash/index.htm
 
 | Offset | Part | Bytes | SHA256 |
 |---|---|---:|---|
-| `0x0` | `echo_35c_visual_v0v9i_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
-| `0x8000` | `echo_35c_visual_v0v9i_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
-| `0x20000` | `echo_35c_visual_v0v9i_app.bin` | 813008 | `098314dcbe1dafbc26136719a58ccb8c60e11fe12d822feb60e268adc1872f6b` |
-| `0x330000` | `echo_35c_visual_v0v9i_core.bin` | 6291456 | `e34cccee220c3f56ccc3f4b67d2a79474a81d9c98e1fa30d510453daaf4dab1c` |
+| `0x0` | `echo_35c_visual_v0v9k_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
+| `0x8000` | `echo_35c_visual_v0v9k_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
+| `0x20000` | `echo_35c_visual_v0v9k_app.bin` | 820112 | `1d536e2e64ad3bdb8528e4d582b6660d51989333f50d3416de44d364eb1a0c59` |
+| `0x330000` | `echo_35c_visual_v0v9k_core.bin` | 6291456 | `fcde9fc7853226bd6179b251045ef0d660219a10fd25041e7faed7b40ebc68cc` |
 
-`flash/manifest_35c_visual_v0v9i.json` has these four parts; `flash/SHA256SUMS_visual_v0v9i` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
+`flash/manifest_35c_visual_v0v9k.json` has these four parts; `flash/SHA256SUMS_visual_v0v9k` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
 
 Manual four-part update from `flash/` (port selection omitted):
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9i_bootloader.bin 0x8000 echo_35c_visual_v0v9i_partitions.bin 0x20000 echo_35c_visual_v0v9i_app.bin 0x330000 echo_35c_visual_v0v9i_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9k_bootloader.bin 0x8000 echo_35c_visual_v0v9k_partitions.bin 0x20000 echo_35c_visual_v0v9k_app.bin 0x330000 echo_35c_visual_v0v9k_core.bin
 ```
 
 ## Destructive alternatives — NOT UPDATE
 
-- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9i_fresh.json` labels this erasure.
-- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v9i.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `ad7cb8b01da8b54ec551eeea94e4017148c0e0539497c9289122c889b7b2cfab`.
+- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9k_fresh.json` labels this erasure.
+- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v9k.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `45d632f3ee539f0c795f737b229b29cc2de68d80d8467d185e01e97a849fdbe5`.
 
 The care/home preview **Start fresh** button still installs the care/home preview, not this build.
 
 ## Part SHA256s
 
 ```text
-84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9i_bootloader.bin
-3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9i_partitions.bin
-098314dcbe1dafbc26136719a58ccb8c60e11fe12d822feb60e268adc1872f6b  echo_35c_visual_v0v9i_app.bin
-e34cccee220c3f56ccc3f4b67d2a79474a81d9c98e1fa30d510453daaf4dab1c  echo_35c_visual_v0v9i_core.bin
+84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9k_bootloader.bin
+3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9k_partitions.bin
+1d536e2e64ad3bdb8528e4d582b6660d51989333f50d3416de44d364eb1a0c59  echo_35c_visual_v0v9k_app.bin
+fcde9fc7853226bd6179b251045ef0d660219a10fd25041e7faed7b40ebc68cc  echo_35c_visual_v0v9k_core.bin
 043e238a765f7cfbc62596a50e53c8ffb6b188a99357b0ebede251725d67589f  echo_35c_blank_saves.bin
 ```

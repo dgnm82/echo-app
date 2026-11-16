@@ -1,0 +1,29 @@
+{
+  "name": "Echo handheld \u2014 Live intro preview (v0v9k: speech bubbles use the phone's text size and wrapping and sit near the Echo; in-game top bar with Done; phone backgrounds and item art for Catch and Stack; 240 framing fixes. Run, Pairs and the Purrlings Catch scene still use simple art; phone 83d74e80) \u2014 UPDATE (keeps saves/NVS)",
+  "version": "3.5C live-intro preview v0v9k 2c81df8",
+  "home_assistant_domain": "",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "echo_35c_visual_v0v9k_bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "echo_35c_visual_v0v9k_partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "echo_35c_visual_v0v9k_app.bin",
+          "offset": 131072
+        },
+        {
+          "path": "echo_35c_visual_v0v9k_core.bin",
+          "offset": 3342336
+        }
+      ]
+    }
+  ]
+}
