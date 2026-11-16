@@ -417,6 +417,7 @@ canvas.den-motes{position:absolute;left:-8px;top:-8px;width:196px;height:336px;z
 .ttl .ttspr{position:absolute;width:48px;height:48px;background-repeat:no-repeat;image-rendering:pixelated}
 .ttl .ttspr.flip{transform:scaleX(-1)}
 .ttl.biome .obtag span:not(.gold){color:var(--tt-ink,inherit);text-shadow:1px 1px 0 var(--tt-shadow,transparent)}
+.ttl.biome .obtag span.gold{text-shadow:1px 1px 0 #3B2A5C}
 /* Pixal follow-up 2: den bell-vine tap while napping -> tail-peek twitch (2 x 120 ms, 1 px), no new art */
 #home .htail.denpeek.twitch{animation:denpeek 1s steps(4) infinite,denTwitch 120ms steps(1) 2}
 @keyframes denTwitch{0%{translate:0 -1px}50%{translate:0 0}}
