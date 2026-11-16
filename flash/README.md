@@ -24,13 +24,13 @@ USB-C data cable; download mode: hold BOOT, tap RESET, release BOOT. PWR about6s
 esptool.py --chip esp32s3 write_flash 0x0 echo_35c_core_preview_bootloader.bin 0x8000 echo_35c_core_preview_partitions.bin 0x20000 echo_35c_core_preview_app.bin 0x330000 echo_35c_core_preview_core.bin
 ```
 
-## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9k test, 2c81df8)
+## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9n test, 66b1695)
 
-Replaces v0v9i as the Full-screen preview installer option, alongside the care/home preview above. **v0v9k test: speech bubbles use the phone's text size and wrapping and sit near the Echo; in-game top bar with Done; phone backgrounds and item art for Catch and Stack; 240 framing fixes. Run, Pairs and the Purrlings Catch scene still use simple art; phone 83d74e80. Firmware 2c81df8, live-intro.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9k`.
+Replaces v0v9k as the Full-screen preview installer option, alongside the care/home preview above. **v0v9n test: fresh onboarding uses the phone's dark panel; colours centred; glow row matches the phone; Home is crisp 2× with the whole den on screen for every animal and scene; the Echo naps inside its home at Bye; gold "Can you hear it?" shadow; the naming hint line is removed; 3 s build-info hold at boot. Still open: high Echo and "dizzy." after Bye, the 2-column colour grid, touch lag, run legs and finger offset, title animation, and Echo It Back look; phone cf9a2ae4. Firmware 66b1695, live-intro.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9n`.
 
 | Button | Parts |
 |---|---|
-| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9k_{bootloader,partitions,app,core}.bin` |
+| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9n_{bootloader,partitions,app,core}.bin` |
 | Start fresh — Full-screen preview (ERASES ALL SAVES) | The four parts plus `0xF80000 echo_35c_blank_saves.bin`; erases child/Echo/music/book/progress; keeps NVS |
 
 UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never update a device that should keep saves with a 16 MiB factory image: it blanks NVS and saves. The existing care/home preview, W4, bench, and 2-inch entries are unchanged.
@@ -38,7 +38,7 @@ UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never
 Manual keep-saves update from this folder:
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9k_bootloader.bin 0x8000 echo_35c_visual_v0v9k_partitions.bin 0x20000 echo_35c_visual_v0v9k_app.bin 0x330000 echo_35c_visual_v0v9k_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9n_bootloader.bin 0x8000 echo_35c_visual_v0v9n_partitions.bin 0x20000 echo_35c_visual_v0v9n_app.bin 0x330000 echo_35c_visual_v0v9n_core.bin
 ```
 
 The rest of this note is for the 2-inch board.
