@@ -429,13 +429,6 @@
         "short": "What should."
       }
     ],
-    "ui_ob_name_hint": [
-      {
-        "text": "A first name or a nickname.",
-        "expr": "happy",
-        "short": "A first name or a nickname."
-      }
-    ],
     "ui_ob_name_presets": [
       {
         "text": "Or pick a nickname:",

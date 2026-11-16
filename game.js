@@ -407,15 +407,16 @@ function obWelcome(){const words=U('ui_tagline').split(' '),beats=UA('ui_or_welc
   $('.scene.ob').onclick=()=>{if(i<words.length){clearTimeout(tm);i=words.length;el.textContent=words.join(' ');return}
     if(step<beats.length){el.textContent=beats[step++];return}obName()}}
 function obName(val){
-  obScene('obname',`<div class="obpanel"><b>${U('ui_ob_name_ask')}</b><br><small id="obnh">${U('ui_ob_name_hint')}</small></div>
+  obScene('obname',`<div class="obpanel"><b>${U('ui_ob_name_ask')}</b><small id="obnh" hidden></small></div>
    <div class="obfield"><input id="obnm" maxlength="10" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text" enterkeyhint="next" aria-label="Name or nickname" value="${(val||'').replace(/"/g,'')}"><span id="obct">0/10</span></div>
    <div class="obsmall">${U('ui_ob_name_presets')}</div><div class="obchips">${UA('ui_ob_presets').map(p=>`<button class="btn small obchip" data-n="${p}">${p}</button>`).join('')}</div>
    <div class="row obrow"><button class="btn" id="obskip">${U('ui_ob_skip')}</button><button class="btn" id="obnext">Next &gt;</button></div>`);
-  const inp=$('#obnm'),ct=()=>{$('#obct').textContent=inp.value.length+'/10';$('#obnh').textContent=/\s/.test(inp.value.trim())?U('ui_ob_name_short'):U('ui_ob_name_hint')};inp.oninput=ct;ct();
+  const inp=$('#obnm'),hint=m=>{const el=$('#obnh');el.textContent=m||'';el.hidden=!m};
+  const ct=()=>{$('#obct').textContent=inp.value.length+'/10';hint(/\s/.test(inp.value.trim())?U('ui_ob_name_short'):'')};inp.oninput=ct;ct();
   app.querySelectorAll('.obchip').forEach(b=>b.onclick=()=>{SFX('ui_tap');inp.value=b.dataset.n;ct()});
   $('#obskip').onclick=()=>{SFX('ui_tap');obSetChild(null);orSeen()};
   $('#obnext').onclick=()=>{const r=obNameCheck(inp.value);if(!inp.value.trim())return obSetChild(null),orSeen();
-    if(!r.ok){SFX('ui_back');inp.value='';ct();$('#obnh').textContent=U('ui_ob_name_again');return}obConfirm(r.name)}}
+    if(!r.ok){SFX('ui_back');inp.value='';ct();hint(U('ui_ob_name_again'));return}obConfirm(r.name)}}
 function obConfirm(n){
   obScene('obconfirm',`<div class="obpanel big">${((OBL.ui_ob_name_confirm||[])[0]||{text:'{child}?'}).text.replace('{child}',n)}</div><div class="row obrow"><button class="btn" id="obyes">${U('ui_ob_yes_change',0)}</button><button class="btn" id="obch">${U('ui_ob_yes_change',1)}</button></div>`);
   $('#obyes').onclick=()=>{SFX('bond_meter_tick');obSetChild(n);orSeen()};$('#obch').onclick=()=>{SFX('ui_back');obName(n)}}
