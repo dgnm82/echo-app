@@ -3,7 +3,7 @@ import asyncio,sys
 from playwright.async_api import async_playwright
 import os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from origin_pick import pick,nocam, through_invite
-URL='http://localhost:8765/'
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 async def T(pg,sel,ms=250):await pg.locator(sel).first.click();await pg.wait_for_timeout(ms)
 async def run(b,vp,animal):
   ctx=await b.new_context(viewport=vp,device_scale_factor=2,has_touch=True);pg=await ctx.new_page();await nocam(pg)

@@ -1,7 +1,7 @@
 # affection v2: Hug shows 3 (touch + words), each choice plays a line from its pool, comfort +5, bond capped by the pet daily cap
-import asyncio
+import asyncio,sys
 from playwright.async_api import async_playwright
-URL='http://localhost:8765/'
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/'
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);errs=[]

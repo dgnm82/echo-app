@@ -1,7 +1,7 @@
 # Den Dig / Nest Weave: list names, fill to the top -> happy end -> card (points/rows/level), NEW BEST on 2nd game, flat reward, no fail words; lowfx pass
 import asyncio,sys,re
 from playwright.async_api import async_playwright
-URL='http://localhost:8765/';BAD=re.compile(r'game over|\blose\b|\blost\b|fail|try again|tetri|top out',re.I)
+URL=sys.argv[1] if len(sys.argv)>1 else 'http://localhost:8765/';BAD=re.compile(r'game over|\blose\b|\blost\b|fail|try again|tetri|top out',re.I)
 async def run(b,p,kind,low):
   pg=await b.new_page(**p.devices['iPhone 13']);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('response',lambda r:r.status==404 and errs.append('404 '+r.url))
   await pg.goto(URL);await pg.evaluate("localStorage.clear();localStorage.setItem('echo-nosetup','1')");await pg.reload();await pg.wait_for_timeout(500)
