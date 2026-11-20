@@ -18,6 +18,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  # Title and solar-time checks assume Pacific Time (01:00 UTC = 17:00 PT = dusk).
+  TZ: America/Los_Angeles
   PLAYWRIGHT_VERSION: "1.63.0"
   PILLOW_VERSION: "13.0.0"
 
