@@ -1,0 +1,149 @@
+# Phone checks via tools/verify.sh --phone (static gate + 52 Playwright tests).
+# Device QEMU is omitted: it needs Espressif qemu and the firmware repo, which
+# is not in echo-app. The known-flaky .fwlist playthrough (echo-test.py) is
+# retried once when it is the only failure, so that flake does not fail CI.
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_VERSION: "1.63.0"
+  PILLOW_VERSION: "13.0.0"
+
+jobs:
+  phone:
+    name: tools/verify.sh --phone
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Cache pip + Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/ms-playwright
+          key: pip-pw${{ env.PLAYWRIGHT_VERSION }}-pil${{ env.PILLOW_VERSION }}-${{ runner.os }}
+
+      - name: Install Python deps
+        run: python3 -m pip install "playwright==${PLAYWRIGHT_VERSION}" "pillow==${PILLOW_VERSION}"
+
+      - name: Install Chrome and emoji fonts
+        run: |
+          if [ ! -x /usr/bin/google-chrome ]; then python3 -m playwright install --with-deps chrome; fi
+          /usr/bin/google-chrome --version
+          sudo apt-get install -y -qq fonts-noto-color-emoji >/dev/null || true
+
+      - name: Box layout and CI fixtures
+        run: |
+          # Tests and the static gate read the same /workspace paths as the local box.
+          sudo mkdir -p /workspace/shots /workspace/echo /tmp/results
+          sudo chown -R "$USER" /workspace
+          ln -sfn "$GITHUB_WORKSPACE" /workspace/echo-app
+          F="$GITHUB_WORKSPACE/.github/ci-fixtures"
+          for p in echo-test.py echo/batch_H/H1_camera_copy.json echo/ios_design/batch_h/h_followup_hotspots_for_jay.json; do
+            if [ -f "$F/$p" ]; then
+              mkdir -p "$(dirname "/workspace/$p")"
+              cp "$F/$p" "/workspace/$p"
+            else
+              echo "::error::missing CI fixture .github/ci-fixtures/$p"
+              exit 1
+            fi
+          done
+          mkdir -p /workspace/echo/ios_design
+          cp scenes_hotspots.json /workspace/echo/ios_design/scene_hotspots.json
+
+      - name: Run tools/verify.sh --phone
+        run: |
+          set +e
+          bash tools/verify.sh --phone
+          rc=$?
+          set -e
+          results=tools/verify-logs/latest/results.tsv
+          if [[ ! -f "$results" ]]; then
+            echo "verify.sh did not write $results"
+            exit "${rc:-1}"
+          fi
+          if [[ "$rc" -eq 0 ]]; then
+            exit 0
+          fi
+          # Keep the known-flaky .fwlist playthrough (echo-test.py) from failing
+          # the run: retry it once when it is the only failure.
+          mapfile -t fails < <(awk -F'\t' '$1 != "PASS" { print $2 }' "$results")
+          if [[ "${#fails[@]}" -eq 1 && "${fails[0]}" == "echo-test.py" ]]; then
+            echo "echo-test.py failed (known-flaky .fwlist). Retrying once."
+            logdir=tools/verify-logs/latest
+            retry_log="$logdir/echo-test.py.retry.log"
+            port=$(python3 -c 'import socket;s=socket.socket();s.bind(("127.0.0.1",0));print(s.getsockname()[1]);s.close()')
+            python3 -m http.server "$port" --bind 127.0.0.1 >"$logdir/echo-test.py.retry.server.log" 2>&1 &
+            spid=$!
+            url="http://127.0.0.1:${port}/"
+            ready=0
+            for _ in $(seq 30); do
+              if curl -sf -o /dev/null "$url"; then ready=1; break; fi
+              sleep 1
+            done
+            if [[ "$ready" -ne 1 ]]; then
+              echo "retry http.server on :$port did not become ready" | tee "$retry_log"
+              kill "$spid" 2>/dev/null || true
+              wait "$spid" 2>/dev/null || true
+              exit 1
+            fi
+            export PHONE_URL="$url" ECHO_URL="$url" TITLE_SKY_URL="$url"
+            set +e
+            python3 .github/ci-fixtures/echo-test.py "$url" >"$retry_log" 2>&1
+            rrc=$?
+            set -e
+            cat "$retry_log"
+            kill "$spid" 2>/dev/null || true
+            wait "$spid" 2>/dev/null || true
+            if [[ "$rrc" -eq 0 ]]; then
+              echo "echo-test.py passed on retry; not failing the run for the known-flaky .fwlist test."
+              exit 0
+            fi
+            echo "echo-test.py failed again on retry."
+            exit 1
+          fi
+          echo "verify.sh failed (not only the known-flaky echo-test.py)."
+          exit "$rc"
+
+      - name: Job summary
+        if: ${{ !cancelled() }}
+        run: |
+          {
+            if [[ -f tools/verify-logs/latest/results.tsv ]]; then
+              python3 tools/verify-summary.py tools/verify-logs/latest/results.tsv tools/verify-logs/latest/start_s || true
+            fi
+            if [[ -f tools/verify-logs/latest/echo-test.py.retry.log ]]; then
+              echo
+              echo "echo-test.py was retried once (known-flaky .fwlist). See echo-test.py.retry.log in the artifact."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: verify-logs
+          path: tools/verify-logs/
+          retention-days: 7
+          if-no-files-found: warn
