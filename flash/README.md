@@ -24,13 +24,13 @@ USB-C data cable; download mode: hold BOOT, tap RESET, release BOOT. PWR about6s
 esptool.py --chip esp32s3 write_flash 0x0 echo_35c_core_preview_bootloader.bin 0x8000 echo_35c_core_preview_partitions.bin 0x20000 echo_35c_core_preview_app.bin 0x330000 echo_35c_core_preview_core.bin
 ```
 
-## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9p test, f13bbd1)
+## 3.5-inch board — Full-screen preview (touch, layout, font) (v0v9q test, ab3bed7)
 
-Replaces v0v9o as the Full-screen preview installer option, alongside the care/home preview above. **v0v9p test: the family lines game replaces the old Dig runner: Den Dig, Nest Weave or Yarn Tumble by family, with the same rules, tuning, art and words; the Play list fits all six games on one screen; the first two Dig games are warm-ups, then the child's music-level dial sets Dig's difficulty, and the short-run easier rule applies to every game; a v1 save's progress is kept on an app-only update. Still open: Dig uses stand-in tones; no Echo in the game at 320; plain backdrop instead of a scene; no in-game talk bubbles; the dial only drives Dig; the first dial value is the band's starting value; Games 1 end-card extra lines are still half-size; hotspot glow may sit slightly off; no decline stamp; no Book icon; Home bubble flush under the header; touch lag, run legs and finger offset, title animation, and Echo It Back look; phone eb22ab01. Firmware f13bbd1, Games 2.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9p`.
+Replaces v0v9p as the Full-screen preview installer option, alongside the care/home preview above. **v0v9q test: this is a test build that plays a 20 s welcome melody at every boot from a FAT32 microSD card (exFAT not supported) with /ECHO/sd_test.wav at the root (unzip echo_sd_test_ab3bed7.zip onto the card); without a card it plays a 3-note chime; Grown-ups > Diagnostics > SD WAV replays it. All sounds now go through 32 kHz output, so listen for anything off in the normal game and Home sounds too. Also fixes the name-keyboard letters and makes end-card extra lines full size. Includes Games 2: the family lines game replaces the old Dig runner: Den Dig, Nest Weave or Yarn Tumble by family, with the same rules, tuning, art and words; the Play list fits all six games on one screen; the first two Dig games are warm-ups, then the child's music-level dial sets Dig's difficulty, and the short-run easier rule applies to every game; a v1 save's progress is kept on an app-only update. Still open: Dig uses stand-in tones; no Echo in the game at 320; plain backdrop instead of a scene; no in-game talk bubbles; the dial only drives Dig; the first dial value is the band's starting value; hotspot glow may sit slightly off; no decline stamp; no Book icon; Home bubble flush under the header; touch lag, run legs and finger offset, title animation, and Echo It Back look; phone eb22ab01. Firmware ab3bed7, SD sound test.** **UPDATE — Full-screen preview (touch, layout, font)** writes four parts and preserves saves/NVS. **Start fresh — Full-screen preview** adds blank saves at `0xF80000` and **ERASES ALL SAVES**. DIO / 80 MHz / 16 MB. **Not board verified.** Checksums: [FLASH.md](../FLASH.md) (Full-screen preview section) and `SHA256SUMS_visual_v0v9q`. Download the SD card clip: [echo_sd_test_ab3bed7.zip](echo_sd_test_ab3bed7.zip).
 
 | Button | Parts |
 |---|---|
-| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9p_{bootloader,partitions,app,core}.bin` |
+| UPDATE — Full-screen preview (touch, layout, font) | `0x0` bootloader, `0x8000` partitions, `0x20000` app, `0x330000` core; `echo_35c_visual_v0v9q_{bootloader,partitions,app,core}.bin` |
 | Start fresh — Full-screen preview (ERASES ALL SAVES) | The four parts plus `0xF80000 echo_35c_blank_saves.bin`; erases child/Echo/music/book/progress; keeps NVS |
 
 UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never update a device that should keep saves with a 16 MiB factory image: it blanks NVS and saves. The existing care/home preview, W4, bench, and 2-inch entries are unchanged.
@@ -38,7 +38,7 @@ UPDATE never touches NVS `0x9000..0x19000` or saves `0xF80000..0x1000000`. Never
 Manual keep-saves update from this folder:
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9p_bootloader.bin 0x8000 echo_35c_visual_v0v9p_partitions.bin 0x20000 echo_35c_visual_v0v9p_app.bin 0x330000 echo_35c_visual_v0v9p_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9q_bootloader.bin 0x8000 echo_35c_visual_v0v9q_partitions.bin 0x20000 echo_35c_visual_v0v9q_app.bin 0x330000 echo_35c_visual_v0v9q_core.bin
 ```
 
 The rest of this note is for the 2-inch board.
