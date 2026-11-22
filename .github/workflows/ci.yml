@@ -6,9 +6,7 @@
 name: CI
 
 on:
-  push:
-    branches-ignore: [gh-pages]
-  pull_request:
+  # checks.yml now runs on push and PRs
   workflow_dispatch:
 
 permissions:
