@@ -186,7 +186,7 @@ function step(el){if(!el)return;if(el._ev)return evStep(el);if(el._sleep)return 
         if(--s.nt<=0){s.q.push([FR.tail1,2],[FR.tail2,2],[FR.tail1,1]);s.nt=rand(60,120)}
         if(++s.hold>=IDLE_T[s.i]*(sleepy?1.4:1)){s.hold=0;s.i=(s.i+1)%6}col=FR.idle[s.i]}
   if(ds.light&&(!ex||ex==='neutral'))col=FR.idle[s.i];
-  el.style.backgroundPosition=`${-col*N}px 0px`;el._col=col;auraSync(el,col,0)}
+  el.style.backgroundPosition=`${-col*N}px 0px`;el._col=col;auraSync(el,col,0);if(el._pinFeet)el._pinFeet()}
 const rand=(a,b)=>a+Math.floor(Math.random()*(b-a));
 setInterval(()=>document.querySelectorAll('.px-echo').forEach(step),TICK);
 // ---- integer scaling: 180x320 virtual phone screen, largest whole device-pixel multiple, letterboxed

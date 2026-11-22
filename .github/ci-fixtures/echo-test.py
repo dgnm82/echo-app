@@ -51,10 +51,16 @@ async def main():
         await pg.wait_for_timeout(2500)
       await pg.wait_for_timeout(800);await dismiss()
       await dev('#b2')
-      for _ in range(60):   # the 4->5 bond-up celebration plays first on Home; tap through it
-        await pg.wait_for_timeout(500)
+      # #b2 leaves bondShown at 4 so the 4->5 celebration can play first; it may start a beat late.
+      # fwCalm will not open the farewell list until bond-up has finished (bondTarget <= bondShown).
+      for _ in range(10):
+        if await pg.evaluate("!!document.querySelector('canvas.bondup')"):break
+        await pg.wait_for_timeout(200)
+      for _ in range(80):
+        await pg.wait_for_timeout(300)
         if not await pg.evaluate("!!document.querySelector('canvas.bondup')"):break
         await pg.mouse.click(200,300)
+      await pg.wait_for_timeout(500)
       await dismiss(30);await clearov()
       await pg.evaluate("CONFIG.farewell={calmAfterMs:0,lineMs:200,thanksWindowMs:800};(()=>{const d=new Date();__echo.state.clockOffset=(__echo.state.clockOffset||0)+((11-d.getHours()+24)%24)*36e5})()")
       async def calm():

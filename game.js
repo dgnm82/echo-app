@@ -348,6 +348,9 @@ function titleSeat(wood,feet){return (st,xy)=>{const f=feet[st.file];if(!wood||!
 function titleBox(url,frames,fw,fh){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas'),W=fw*frames;c.width=W;c.height=fh;const x=c.getContext('2d');x.drawImage(im,0,0);
   const D=x.getImageData(0,0,W,fh).data;let U=null;for(let f=0;f<frames;f++)for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++){if(D[(y*W+f*fw+xx)*4+3]>0){if(!U)U=[xx,y,xx+1,y+1];else{U[0]=Math.min(U[0],xx);U[1]=Math.min(U[1],y);U[2]=Math.max(U[2],xx+1);U[3]=Math.max(U[3],y+1)}}}
   res(U)}catch(e){res(null)}};im.onerror=()=>res(null);im.src=url})}
+// lowest opaque row per frame of a sheet (idle/blink/tail frames differ by 1-2 px). Used to keep the title own Echo's feet on the path.
+function titleSheetFeet(url,fw,fh){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const frames=Math.max(1,Math.floor(im.naturalWidth/fw)||1),c=document.createElement('canvas');c.width=frames*fw;c.height=fh;const x=c.getContext('2d');x.drawImage(im,0,0);
+  const D=x.getImageData(0,0,c.width,fh).data,feet=[];for(let f=0;f<frames;f++){let Y=-1;for(let y=0;y<fh;y++)for(let xx=0;xx<fw;xx++)if(D[(y*c.width+f*fw+xx)*4+3]>0)Y=y;feet.push(Y)}res(feet)}catch(e){res(null)}};im.onerror=()=>res(null);im.src=url})}
 // UI the cast must never cover: the tagline lines (text width x line box) and, on the return title, its name panel
 function titleKeep(sc){const t=sc.querySelector('.obtag'),R=sc.getBoundingClientRect(),k=R.width/180;if(!t||!k)return TITLE_TAG;const out=[];
   t.querySelectorAll('span').forEach(s=>{const r=document.createRange();r.selectNodeContents(s);const a=r.getBoundingClientRect(),l=s.getBoundingClientRect();if(!a.width)return;
@@ -363,8 +366,8 @@ function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
   const fgUrl=fg&&((getComputedStyle(fg).backgroundImage.match(/url\("?([^")]+)"?\)/)||[])[1]);
   let fgMask=null;   // 180x320 fg alpha; the face slice only paints where fg would hide it
   const fgReady=fgUrl?new Promise(res=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=180;c.height=320;const x=c.getContext('2d');x.drawImage(im,0,0);fgMask=x.getImageData(0,0,180,320).data;res()};im.onerror=()=>res();im.src=fgUrl}):Promise.resolve();
-  Promise.all([titleSurf(v).then(w=>{wood=w}),...strips.filter(st=>st.anim==='perch_idle').map(st=>titleFeet(st.file,48,48).then(f=>{if(f)feet[st.file]=f})),...strips.map(st=>titleBox(st.file,st.frames,48,48).then(q=>{if(q)box[st.file]=q})),ownUrl?titleBox(ownUrl,1,48,48):Promise.resolve(null),fgReady]).then(r=>{if(!sc.isConnected)return;
-  const ob=r[r.length-2];
+  Promise.all([titleSurf(v).then(w=>{wood=w}),...strips.filter(st=>st.anim==='perch_idle').map(st=>titleFeet(st.file,48,48).then(f=>{if(f)feet[st.file]=f})),...strips.map(st=>titleBox(st.file,st.frames,48,48).then(q=>{if(q)box[st.file]=q})),ownUrl?titleSheetFeet(ownUrl,48,48):Promise.resolve(null),fgReady]).then(r=>{if(!sc.isConnected)return;
+  const ownFeet=r[r.length-2],ob=ownFeet&&ownFeet[0]>=0?[0,0,48,ownFeet[0]+1]:[0,0,48,48];
   const actors=titleCast(b,Fm,Math.floor(Date.now()/864e5),{box,keep:titleKeep(sc),seat:titleSeat(wood,feet),own:ownEl?{box:ob||[0,0,48,48]}:null}).map(a=>a.own?Object.assign(a,{el:ownEl}):Object.assign(a,{el:mk(a.st),f:0,t:0}));
   if(ownEl&&!actors.some(a=>a.own))ownEl.remove();
   const faceOf=a=>{if(a.own||(a.kind!=='ground'&&a.kind!=='seat'))return null;if(!a.face){a.face=document.createElement('i');a.face.className='ttface';a.face.style.height=TITLE_FACE_ROW+'px';(fg||sp).after(a.face)}return a.face};
@@ -374,10 +377,11 @@ function titleRun(sc,sp,al,v,b,Fm,fg,own){const low=lowFx(),fps=Fm.fps||12;
     // CSS .flip scaleX(-1) is applied after the mask, so a flipped face pre-mirrors the fg window to keep holes in scene space
     for(let y=0;y<TITLE_FACE_ROW;y++)for(let i=0;i<48;i++){const sx=L+(flip?47-i:i),sy=T+y;if(sx<0||sy<0||sx>=180||sy>=320)continue;d.data[(y*48+i)*4+3]=fgMask[(sy*180+sx)*4+3]}
     x.putImageData(d,0,0);const u='url('+c.toDataURL()+')';fe.style.webkitMaskImage=fe.style.maskImage=u;fe.style.webkitMaskSize=fe.style.maskSize='48px '+TITLE_FACE_ROW+'px';fe.style.webkitMaskRepeat=fe.style.maskRepeat='no-repeat';fe.style.webkitMaskPosition=fe.style.maskPosition='0 0'};
-  const place=a=>{a.el.style.left=Math.round(a.left!=null&&!a.moving?a.left:a.x-24)+'px';a.el.style.top=a.y+'px';a.el.dataset.surface=a.kind;if(a.own){a.el.dataset.surf=a.surf;return}
+  const place=a=>{a.el.style.left=Math.round(a.left!=null&&!a.moving?a.left:a.x-24)+'px';a.el.dataset.surface=a.kind;if(a.own){const px=a.el.querySelector('.px-echo'),col=(px&&typeof px._col==='number')?px._col:0,foot=(ownFeet&&ownFeet[col]>=0)?ownFeet[col]:a.st.anchor[1];a.el.style.top=(a.surf-foot)+'px';a.el.dataset.surf=a.surf;return}a.el.style.top=a.y+'px';
     a.el.style.backgroundPosition=`${-a.f*48}px 0`;a.el.classList.toggle('flip',PIXEL.flipFor(a.st.look,a.dir));a.el.dataset.dir=a.dir;
     const fe=faceOf(a);if(!fe)return;const L=parseFloat(a.el.style.left)||0,T=parseFloat(a.el.style.top)||0;fe.style.left=a.el.style.left;fe.style.top=a.el.style.top;fe.style.backgroundImage=a.el.style.backgroundImage;fe.style.backgroundSize=a.el.style.backgroundSize;fe.style.backgroundPosition=a.el.style.backgroundPosition;fe.classList.toggle('flip',a.el.classList.contains('flip'));maskFace(fe,L,T,fe.classList.contains('flip'))};
   sc.dataset.cast=actors.length;
+  if(ownPx)ownPx._pinFeet=()=>actors.forEach(a=>{if(a.own)place(a)});
   if(low){actors.forEach(a=>{if(a.moving)a.x=Math.max(a.x0,Math.min(a.x1,56));place(a)});return}
   let k=0;const T=setInterval(()=>{if(!sc.isConnected)return clearInterval(T);k++;if(k%Math.round(fps/2)===0&&v.alive[1])al.style.backgroundImage=`url(${v.alive[(k/Math.round(fps/2))%2|0]})`;
     actors.forEach(a=>{if(a.own)return;const tk=a.st.ticks||[];if(++a.t>=(tk[a.f]||2)){a.t=0;a.f=(a.f+1)%a.st.frames}if(a.moving){a.x+=a.dir*a.speed;if(a.x>a.x1||a.x<a.x0){a.dir=-a.dir;a.x=Math.max(a.x0,Math.min(a.x1,a.x))}}place(a)})},Math.round(1000/fps));
