@@ -51,15 +51,22 @@ async def main():
         await pg.wait_for_timeout(2500)
       await pg.wait_for_timeout(800);await dismiss()
       await dev('#b2')
-      # #b2 leaves bondShown at 4 so the 4->5 celebration can play first; it may start a beat late.
-      # fwCalm will not open the farewell list until bond-up has finished (bondTarget <= bondShown).
-      for _ in range(10):
-        if await pg.evaluate("!!document.querySelector('canvas.bondup')"):break
-        await pg.wait_for_timeout(200)
-      for _ in range(80):
+      # #b2 leaves bondShown at 4 and home() starts the 4->5 celebration ~400ms later.
+      # playBondUp sets bondShown=5 immediately, then snapshots Home before the canvas appears,
+      # which can take several seconds under CI load. fwCalm also refuses while .bondup is on
+      # screen, so wait until the canvas has actually been seen and gone.
+      seen=False;held=0
+      for _ in range(100):
+        has=await pg.evaluate("!!document.querySelector('canvas.bondup')")
+        shown=await pg.evaluate("(__echo.state.bondShown||1)")
+        if has:
+          seen=True;held=0;await pg.mouse.click(200,300)
+        elif seen:
+          break
+        elif shown>=5:
+          held+=1
+          if held>=30:break   # ~9s after bondShown=5 with no canvas
         await pg.wait_for_timeout(300)
-        if not await pg.evaluate("!!document.querySelector('canvas.bondup')"):break
-        await pg.mouse.click(200,300)
       await pg.wait_for_timeout(500)
       await dismiss(30);await clearov()
       await pg.evaluate("CONFIG.farewell={calmAfterMs:0,lineMs:200,thanksWindowMs:800};(()=>{const d=new Date();__echo.state.clockOffset=(__echo.state.clockOffset||0)+((11-d.getHours()+24)%24)*36e5})()")
