@@ -57,9 +57,9 @@ Offline decay/daily rules require trusted time. Configure the fixed UTC offset (
 63a6b0d98aeff752ed6f9f6cd6e527c9163f2c75981e5a8cc98b58d2d75accbb  echo_35c_core_preview_core.bin
 ```
 
-# 3.5C Full-screen preview (touch, layout, font) — v0v9n test
+# 3.5C Full-screen preview (touch, layout, font) — v0v9o test
 
-**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `66b1695` (live-intro; v0v9n test: fresh onboarding uses the phone's dark panel; colours centred; glow row matches the phone; Home is crisp 2× with the whole den on screen for every animal and scene; the Echo naps inside its home at Bye; gold "Can you hear it?" shadow; the naming hint line is removed; 3 s build-info hold at boot. Still open: high Echo and "dizzy." after Bye, the 2-column colour grid, touch lag, run legs and finger offset, title animation, and Echo It Back look; phone cf9a2ae4). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9k as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
+**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `08e36d2` (shared-layout; v0v9o test: shared layout from the phone for onboarding, Home, Play, Hug, Feed and Bye; colours and intro/Bye timings come from the phone's data; after Come along?, Tap to go on waits for the Echo's line; the Echo drifts off when a child turns the invite down; the Home name is centred; Feed is a food sheet over Home; scene hotspots and How am I? close match the phone; a long Just name wraps at 240. Game feel is unchanged. Still open: hotspot glow may sit slightly off; no decline stamp; Dig stays the runner; no Book icon; Home bubble flush under the header; touch lag, run legs and finger offset, title animation, and Echo It Back look; phone eb22ab01). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9n as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
 
 **NOT verified on the board.**
 
@@ -69,32 +69,32 @@ Use **UPDATE — Full-screen preview (touch, layout, font)** in `flash/index.htm
 
 | Offset | Part | Bytes | SHA256 |
 |---|---|---:|---|
-| `0x0` | `echo_35c_visual_v0v9n_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
-| `0x8000` | `echo_35c_visual_v0v9n_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
-| `0x20000` | `echo_35c_visual_v0v9n_app.bin` | 836688 | `93e77af1aafc82c7db3cb0a01bde2c483446a11a8e084961caebcd11be0b17b5` |
-| `0x330000` | `echo_35c_visual_v0v9n_core.bin` | 6291456 | `93b3da744eea04711da8c9afec4826ae150bf74d2294a6de6d764c36882f6c49` |
+| `0x0` | `echo_35c_visual_v0v9o_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
+| `0x8000` | `echo_35c_visual_v0v9o_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
+| `0x20000` | `echo_35c_visual_v0v9o_app.bin` | 840976 | `5f608994a415d618a53b06b951d890a05eb6f8adca06335aab6e72247bff5b5b` |
+| `0x330000` | `echo_35c_visual_v0v9o_core.bin` | 6291456 | `4b3c279dfd437ced471eec762d63dc2359556f3a9c6ff4df9f41a48bbb5d9132` |
 
-`flash/manifest_35c_visual_v0v9n.json` has these four parts; `flash/SHA256SUMS_visual_v0v9n` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
+`flash/manifest_35c_visual_v0v9o.json` has these four parts; `flash/SHA256SUMS_visual_v0v9o` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
 
 Manual four-part update from `flash/` (port selection omitted):
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9n_bootloader.bin 0x8000 echo_35c_visual_v0v9n_partitions.bin 0x20000 echo_35c_visual_v0v9n_app.bin 0x330000 echo_35c_visual_v0v9n_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9o_bootloader.bin 0x8000 echo_35c_visual_v0v9o_partitions.bin 0x20000 echo_35c_visual_v0v9o_app.bin 0x330000 echo_35c_visual_v0v9o_core.bin
 ```
 
 ## Destructive alternatives — NOT UPDATE
 
-- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9n_fresh.json` labels this erasure.
-- `/workspace/echo/firmware_35c_test/echo_35c_visual_v0v9n.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `27b2ff5277cfdfcdf88272075482695dd4dbcfa1fcec04c1404e769565208f3f`.
+- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9o_fresh.json` labels this erasure.
+- `/workspace/echo/firmware_35c_test/echo_35c_shared_layout_08e36d2.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `4f1c900c5018b898ad56dd1b1dac504c6427c3c6d380c85711f281bc62b5a1b7`.
 
 The care/home preview **Start fresh** button still installs the care/home preview, not this build.
 
 ## Part SHA256s
 
 ```text
-84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9n_bootloader.bin
-3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9n_partitions.bin
-93e77af1aafc82c7db3cb0a01bde2c483446a11a8e084961caebcd11be0b17b5  echo_35c_visual_v0v9n_app.bin
-93b3da744eea04711da8c9afec4826ae150bf74d2294a6de6d764c36882f6c49  echo_35c_visual_v0v9n_core.bin
+84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9o_bootloader.bin
+3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9o_partitions.bin
+5f608994a415d618a53b06b951d890a05eb6f8adca06335aab6e72247bff5b5b  echo_35c_visual_v0v9o_app.bin
+4b3c279dfd437ced471eec762d63dc2359556f3a9c6ff4df9f41a48bbb5d9132  echo_35c_visual_v0v9o_core.bin
 043e238a765f7cfbc62596a50e53c8ffb6b188a99357b0ebede251725d67589f  echo_35c_blank_saves.bin
 ```
