@@ -57,9 +57,9 @@ Offline decay/daily rules require trusted time. Configure the fixed UTC offset (
 63a6b0d98aeff752ed6f9f6cd6e527c9163f2c75981e5a8cc98b58d2d75accbb  echo_35c_core_preview_core.bin
 ```
 
-# 3.5C Full-screen preview (touch, layout, font) — v0v9r test
+# 3.5C Full-screen preview (touch, layout, font) — v0v9s test
 
-**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `2a9a84e` (SD sound fix; v0v9r test: this is a test build that plays a 20 s welcome melody at every boot from a FAT32 microSD card (exFAT not supported) with /ECHO/sd_test.wav at the root (unzip echo_sd_test_ab3bed7.zip onto the card); without a card it plays a 3-note chime; Grown-ups > Diagnostics > SD WAV replays it. Fixes the melody cutting back to the old music and the intro restarting (reset loop). No melody autoplay after a crash, watchdog or brownout reset (Diagnostics still plays it). Serial log prints `ECHO-BOOT boot=N reason=R` each boot (expect boot=1 then boot=2 reason=3 once on cold power-on, then no more) and `reader exit done pulled=639999`. All sounds now go through 32 kHz output, so listen for anything off in the normal game and Home sounds too. Also fixes the name-keyboard letters and makes end-card extra lines full size. Includes Games 2: the family lines game replaces the old Dig runner: Den Dig, Nest Weave or Yarn Tumble by family, with the same rules, tuning, art and words; the Play list fits all six games on one screen; the first two Dig games are warm-ups, then the child's music-level dial sets Dig's difficulty, and the short-run easier rule applies to every game; a v1 save's progress is kept on an app-only update. Still open: Dig uses stand-in tones; no Echo in the game at 320; plain backdrop instead of a scene; no in-game talk bubbles; the dial only drives Dig; the first dial value is the band's starting value; hotspot glow may sit slightly off; no decline stamp; no Book icon; Home bubble flush under the header; touch lag, run legs and finger offset, title animation, and Echo It Back look; phone eb22ab01). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9q as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
+**Waveshare ESP32-S3-Touch-LCD-3.5-C only.** Firmware `b08322d` (intro and chat fix; v0v9s test: intro screens no longer show the home scene underneath; chat text wraps and opens on its first page. SD sound test is unchanged: this is a test build that plays a 20 s welcome melody at every boot from a FAT32 microSD card (exFAT not supported) with /ECHO/sd_test.wav at the root (unzip echo_sd_test_ab3bed7.zip onto the card); without a card it plays a 3-note chime; Grown-ups > Diagnostics > SD WAV replays it. Fixes the melody cutting back to the old music and the intro restarting (reset loop). No melody autoplay after a crash, watchdog or brownout reset (Diagnostics still plays it). Serial log prints `ECHO-BOOT boot=N reason=R` each boot (expect boot=1 then boot=2 reason=3 once on cold power-on, then no more) and `reader exit done pulled=639999`. All sounds now go through 32 kHz output, so listen for anything off in the normal game and Home sounds too. Also fixes the name-keyboard letters and makes end-card extra lines full size. Includes Games 2: the family lines game replaces the old Dig runner: Den Dig, Nest Weave or Yarn Tumble by family, with the same rules, tuning, art and words; the Play list fits all six games on one screen; the first two Dig games are warm-ups, then the child's music-level dial sets Dig's difficulty, and the short-run easier rule applies to every game; a v1 save's progress is kept on an app-only update. Still open: Dig uses stand-in tones; no Echo in the game at 320; plain backdrop instead of a scene; no in-game talk bubbles; the dial only drives Dig; the first dial value is the band's starting value; hotspot glow may sit slightly off; no decline stamp; no Book icon; Home bubble flush under the header; touch lag, run legs and finger offset, title animation, and Echo It Back look; phone eb22ab01). DIO / 80 MHz / 16 MB, unchanged W4/care-home-preview partition bytes. Replaces v0v9r as the Full-screen preview installer option; the care/home preview, bench, and other existing entries are unchanged.
 
 **NOT verified on the board.**
 
@@ -69,35 +69,35 @@ Use **UPDATE — Full-screen preview (touch, layout, font)** in `flash/index.htm
 
 | Offset | Part | Bytes | SHA256 |
 |---|---|---:|---|
-| `0x0` | `echo_35c_visual_v0v9r_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
-| `0x8000` | `echo_35c_visual_v0v9r_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
-| `0x20000` | `echo_35c_visual_v0v9r_app.bin` | 881104 | `1e746a4b4e26666c728cf8738e7be7adb3fe0d1fae62d8cb3a7ad6746f9e0e4c` |
-| `0x330000` | `echo_35c_visual_v0v9r_core.bin` | 6291456 | `53bd5be02862c13a71d91a0efdd8d7a57251cdd04b040f2f3529d43779238faa` |
+| `0x0` | `echo_35c_visual_v0v9s_bootloader.bin` | 22320 | `84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab` |
+| `0x8000` | `echo_35c_visual_v0v9s_partitions.bin` | 3072 | `3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c` |
+| `0x20000` | `echo_35c_visual_v0v9s_app.bin` | 881648 | `32674d1557f302b35a2148a66deb2b8e651bf821440060ec39d181759c518333` |
+| `0x330000` | `echo_35c_visual_v0v9s_core.bin` | 6291456 | `53bd5be02862c13a71d91a0efdd8d7a57251cdd04b040f2f3529d43779238faa` |
 
-`flash/manifest_35c_visual_v0v9r.json` has these four parts; `flash/SHA256SUMS_visual_v0v9r` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
+`flash/manifest_35c_visual_v0v9s.json` has these four parts; `flash/SHA256SUMS_visual_v0v9s` authenticates them. None of their 4 KiB erase/write-sector ranges touches **NVS `[0x9000,0x19000)`** or **saves `[0xF80000,0x1000000)`**. No global erase.
 
 SD card clip: download [`flash/echo_sd_test_ab3bed7.zip`](flash/echo_sd_test_ab3bed7.zip) (SHA256 `32cf6df1e32a3267eadbb13e52b847a561ad20efab6fc86385d6a85a61712d03`). Unzip onto a FAT32 microSD card so the card has `/ECHO/sd_test.wav` at its root. exFAT is not supported.
 
 Manual four-part update from `flash/` (port selection omitted):
 
 ```sh
-esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9r_bootloader.bin 0x8000 echo_35c_visual_v0v9r_partitions.bin 0x20000 echo_35c_visual_v0v9r_app.bin 0x330000 echo_35c_visual_v0v9r_core.bin
+esptool.py --chip esp32s3 write_flash 0x0 echo_35c_visual_v0v9s_bootloader.bin 0x8000 echo_35c_visual_v0v9s_partitions.bin 0x20000 echo_35c_visual_v0v9s_app.bin 0x330000 echo_35c_visual_v0v9s_core.bin
 ```
 
 ## Destructive alternatives — NOT UPDATE
 
-- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9r_fresh.json` labels this erasure.
-- `/workspace/echo/firmware_35c_test/parts_sd_fix_2a9a84e/echo_35c_sd_fix_2a9a84e_merged.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `da6f3b83612aa14a5e17d80b0bb76217e8d3962a77e941426880e6804b0803b9`.
+- **Start fresh — Full-screen preview (erases all saves)** adds `echo_35c_blank_saves.bin` at `0xF80000`: irreversibly erases **ALL child/Echo/music/book/progress saves**, unlike firmware Echo-only delete. NVS remains. `manifest_35c_visual_v0v9s_fresh.json` labels this erasure.
+- `/workspace/echo/firmware_35c_test/parts_introdlg_b08322d/echo_35c_introdlg_b08322d_merged.bin` is a **16 MiB FACTORY image** with blank NVS/saves. It is **not staged in `flash/`**. **Never use it to update a device that should keep saves.** UPDATE does not reference it. Full-image SHA256: `3226ad4dfa3ce3287e617882f89bd3e0a79e6138fcf8e51c31413d694190baa7`.
 
 The care/home preview **Start fresh** button still installs the care/home preview, not this build.
 
 ## Part SHA256s
 
 ```text
-84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9r_bootloader.bin
-3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9r_partitions.bin
-1e746a4b4e26666c728cf8738e7be7adb3fe0d1fae62d8cb3a7ad6746f9e0e4c  echo_35c_visual_v0v9r_app.bin
-53bd5be02862c13a71d91a0efdd8d7a57251cdd04b040f2f3529d43779238faa  echo_35c_visual_v0v9r_core.bin
+84db85da12b3f5f11c3ac47634a71a4b9a6a7cf295116bc622cfedab73950cab  echo_35c_visual_v0v9s_bootloader.bin
+3d99bd6ff8f3e1f2fcc437f788f6a38da209864e0cc1dca10180b99c18fabb3c  echo_35c_visual_v0v9s_partitions.bin
+32674d1557f302b35a2148a66deb2b8e651bf821440060ec39d181759c518333  echo_35c_visual_v0v9s_app.bin
+53bd5be02862c13a71d91a0efdd8d7a57251cdd04b040f2f3529d43779238faa  echo_35c_visual_v0v9s_core.bin
 043e238a765f7cfbc62596a50e53c8ffb6b188a99357b0ebede251725d67589f  echo_35c_blank_saves.bin
 32cf6df1e32a3267eadbb13e52b847a561ad20efab6fc86385d6a85a61712d03  echo_sd_test_ab3bed7.zip
 ```
