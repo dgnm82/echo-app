@@ -1,6 +1,6 @@
 {
-  "name": "Echo handheld \u2014 Live intro preview v0v9s \u2014 ERASES ALL CHILD/ECHO SAVES",
-  "version": "3.5C live-intro preview v0v9s b08322d",
+  "name": "Echo handheld \u2014 Live intro preview v0v9t \u2014 ERASES ALL CHILD/ECHO SAVES",
+  "version": "3.5C live-intro preview v0v9t 8d5a5f0",
   "home_assistant_domain": "",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,19 +8,19 @@
       "chipFamily": "ESP32-S3",
       "parts": [
         {
-          "path": "echo_35c_visual_v0v9s_bootloader.bin",
+          "path": "echo_35c_visual_v0v9t_bootloader.bin",
           "offset": 0
         },
         {
-          "path": "echo_35c_visual_v0v9s_partitions.bin",
+          "path": "echo_35c_visual_v0v9t_partitions.bin",
           "offset": 32768
         },
         {
-          "path": "echo_35c_visual_v0v9s_app.bin",
+          "path": "echo_35c_visual_v0v9t_app.bin",
           "offset": 131072
         },
         {
-          "path": "echo_35c_visual_v0v9s_core.bin",
+          "path": "echo_35c_visual_v0v9t_core.bin",
           "offset": 3342336
         },
         {
